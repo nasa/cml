@@ -1,0 +1,416 @@
+\documentclass[11pt,fleqn]{report}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{cml}
+\lstnewenvironment{codeXML}
+    {\lstset{basicstyle=\small\ttfamily,
+             language=XML,
+             xleftmargin=0.0in,
+             xrightmargin=0.0in,
+             backgroundcolor=\color{Orchid!60}, % 60% orchid, 40% white
+             escapeinside={\%*}{*)}, %  .tex file characters inside %*...*) are
+                                     %  treated as Tex commands.
+            }
+    }
+    { }
+
+\newcommand{\ModelName}{CML Message Publisher}
+\newcommand{\ModelAuthor}{Gary Turner}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{March 2023}
+\pagestyle{plain}
+\usepackage[parfill]{parskip}
+\usepackage[margin=1.5cm]{caption}
+\usepackage{subfig}
+
+\begin{document}
+\titlePage
+\clearpage % Reset page number
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\ \hline
+ \hline
+1 & March 2023 & Gary Turner & Initial Version \\ \hline
+ \hline
+2 & August 2025 & Alexandre Masset & V\&V and Adding Status to Tests and Docs \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagenumbering{arabic} % Start text with arabic 1
+The CML Message Publishing model is an upgrade from the JEOD MessageHandler
+model. Like the JEOD version, this implementation includes a set of tunable
+message levels:
+\begin{itemize}
+\item Fail represents a critical failure. The sim switches off. This level
+cannot be ignored.
+\item Error represents the case where a significant error has been detected.
+This is not terminal, the sim can continue to run without seg-faulting, but all
+data beyond the publishing of this error message is suspect.
+\item Warning respresents the case where a data anomaly has been detected.
+Typically, the code has logic to bypass the problem but users should be aware
+of the potential for data invalidation, and should fix the situation /
+configuration.
+\item Status represents a message sent to the screen to inform the user of some activity 
+with abbreviated logs. The line and file are not provided in this case.
+\item Inform represents a message sent to the screen to inform the user of some
+activity within the simulation. This does not mean there has been and adverse
+impact on the simulation data, it is for informational purposes only.
+\item Debug are comments included to assist with debugging only. This level is
+rarely used.
+\end{itemize}
+The model can be tuned so that only messages more severe than some level
+actually get published.
+
+\chapter {Requirements}
+Requirements are taken from the ANTARES requirements document, section B.7
+(as of 2023, this location may move).
+\begin{enumerate}
+\item Reports shall be generated with sufficient speed to avoid
+      adversely affecting simulation performance or real time operations. 
+\item Reports shall include: 
+  \begin{enumerate}
+  \item a message significance/priority classification
+        (e.g. critical fault, error, warning, etc.); 
+  \item a timestamp indicating a reproduceable clock value
+        (e.g. Dynamic-time) at which they were generated; 
+  \item location information on the source of the message,
+        including the file name and line number; 
+  \end{enumerate}
+\item The simulation shall provide a mechanism to block messages below a
+      user-settable priority threshold.
+\end{enumerate}
+
+
+
+\chapter {Model Specification}
+\section{Message Importance}
+The model contains an enumeration of the 6 levels of message importance. This
+can be extended if more levels are deemed necessary.
+The model includes an instance of this enumeration and a setter method to allow
+the user to show (or hide) messages more (or less) significant than some
+desired threshold level of importance.
+
+\section{Message Publishing}
+The model provides a single method using the variadic template to publish a
+message. It takes the following arguments:
+\begin{itemize}
+\item The importance of the message being sent
+\item the filename from which the message was generated
+\item the line number within the file where the message was generated
+\item any number of arguments of any data type that can be interepreted by the
+string-stream C++ capabilities.
+\end{itemize}
+Note that \textit{CMLMessage::publish} does not cover \textit{CMLMessage::Status}. As Status results in a different 
+print-out, it has its own function \textit{CMLMessage::status()}. If a user attempts 
+to create a Status with \textit{CMLMessage::publish}, a Debug is created by default.
+
+The model also provides interface methods that effectively alias this 
+common method and support omission of the first argument:
+\begin{itemize}
+\item \textit{CMLMessage::fail(...)} calls
+      \textit{CMLMessage::publish( CMLMessage::Fail, ...)}.
+\item \textit{CMLMessage::error(...)} calls
+      \textit{CMLMessage::publish( CMLMessage::Error, ...)}.
+\item \textit{CMLMessage::warn(...)} calls
+      \textit{CMLMessage::publish( CMLMessage::Warning, ...)}.
+\item \textit{CMLMessage::inform(...)} calls
+      \textit{CMLMessage::publish( CMLMessage::Inform, ...)}.
+\item \textit{CMLMessage::debug(...)} calls
+      \textit{CMLMessage::publish( CMLMessage::Debug, ...)}.
+\item \textit{CMLMessage::status(...)} \textbf{has no equivalent} 
+      \textit{CMLMessage::publish( CMLMessage::Status, ...)}
+\end{itemize}
+These aliases appear very similar to the method calls supported by JEOD's
+MessageHandler class. Thus transitioning from existing JEOD messaging to
+CML messaging should be possible by changing the header file include
+statement, and replacing \textit{MessageHandler} with \textit{CMLMessage}.
+
+This model also comprises a static method \textit{CMLMessage::printf\_fmt} to print
+outputs formatted like a printf statement. This method is not associated with any specific
+message type.
+
+\section {Termination}
+The method \textit{terminate(...)} is called internally when a message is
+published with Fail (critical fault) level. For Trick-based simulations, this
+results in a shutdown of the simulation.
+
+\chapter {User's Guide}
+\section {Implementation}
+The model's contents are static; the intention is that no instantiation of this
+model is needed. The two static data members (\textit{publish\_level} and
+\textit{message\_description}) are instantiated as part of the compilation. For
+a Trick simulation, this is automatic, the instantiations are found in
+\textit{src/cml\_message.cc}.
+
+\section{Initialization}
+The model has no initialization requirement.
+
+\section {Routine Execution}
+The model's \textit{publish(...)} method gets called from a model upon
+detection of some feature or anomaly worth reporting. Typically, the arguments
+are as outline above (and repeated here):
+\begin{itemize}
+\item The importance of the message being sent
+\item the filename from which the message was generated
+\item the line number within the file where the message was generated
+\item any number of arguments of any data type that can be interepreted by the
+string-stream C++ capabilities.
+\end{itemize}
+
+For example:
+\begin{codeC}
+  CMLMessage::publish( CMLMessage::Error,
+                       __FILE__,
+                       __LINE__,
+                       "Some message about variable ", var.name,
+                       " whose value ", var.value, " is larger than some "
+                       "threshold, ",var.threshold);
+\end{codeC}
+
+Alternatively, the interface methods can be used; the following call has the
+same effect:
+\begin{codeC}
+  CMLMessage::error( __FILE__,
+                     __LINE__,
+                     "Some message about variable ", var.name,
+                     " whose value ", var.value, " is larger than some "
+                     "threshold, ",var.threshold);
+\end{codeC}
+
+\textbf{Notes:}
+\begin{itemize}
+\item In the arguments, a single string argument may be spaced across
+multiple lines without needing comma separation. In the examples above, the
+string \textit{" is larger than some threshold, "} is split across two lines.
+
+\item Spacing between arguments in the final collation of arguments must be
+manually provided. In the examples above, the string \textit{" whose value "}
+starts and ends with a space to create a separation between it and the
+values \textit{var.name} before it, and \textit{var.value} after it.
+\end{itemize}
+
+The verification simulation includes the following code:
+\begin{codeC}
+    int ii = 4;
+    std::string part2 = "is a collection of ";
+    CMLMessage::publish(
+        CMLMessage::Error,
+        __FILE__, __LINE__,
+        "This ",part2,ii," arguments");
+\end{codeC}
+which produces:
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.6]{graphics/Error_message.png}
+  \label{fig:example_message}
+\end{figure}
+
+The \textit{CMLMessage::printf\_fmt(std::string format, Args... args)} can be used
+to print formatted string. Typical use is as follows:
+\begin{codeC}
+      CMLMessage::printf_fmt("%12.6g  %14.12g  %18.12E  %15.3f   %6d", 
+                                    x,       x,       x,      x,     ii);
+\end{codeC}
+
+This method can be combined with the \textit{publish(...)} method as in:
+\begin{codeC}
+      CMLMessage::debug(
+          __FILE__, __LINE__,
+          "Testing printf_fmt: ",
+          CMLMessage::printf_fmt("%12.6g  %14.12g  %18.12E  %15.3f   %6d",
+                                    x,       x,       x,      x,     ii),
+          "\nUnformatted value of x:",x);
+\end{codeC}
+
+\newpage
+
+\section {Optional Execution}
+The threshold level for message publishing can be set using
+the \textit{set\_publish\_level( PublishLevel)} method
+\begin{codePython}
+trick.CMLMessage.set_publish_level (trick.CMLMessage.Warning)
+\end{codePython}
+
+\section {Extension}
+The model provides the same five severity-level categories traditionally used
+by the JEOD message-handler system. A new message category \textbf{Status} was also added. These categories can be further extended.
+Suppose we want to introduce a new message category, let's call it
+\textbf{Alert}. This can be acomplished with the following steps;
+\begin{itemize}
+\item Decide the hierarchy of where \textbf{Alert} fits with the other
+categories, e.g. between \textit{Error} and \textit{Warning}.
+\item Insert the new category into the \textit{PublishLevel} enumeration.
+Recall that the hierarchy is used to identify which messages
+should be published to standard out so it is essential that the new category
+has appropriate placing. If it is simply (and possibly erroneously) placed
+at the end, then setting the publish-level to \textit{Debug} would block
+messages identified with \textbf{Alert}.
+\begin{codeC}
+  enum PublishLevel {
+    Fail = 0,
+    Error,
+    Alert,
+    Warning,
+    Status,
+    Inform,
+    Debug
+  };
+\end{codeC}
+\item Increase the size of the \textit{message\_description} array.
+\begin{codeC}
+  static const std::array<std::string,6> message_description;
+\end{codeC}
+\item In \textit{cml\_message.cc}, add the description for the new category.
+This description is used as a preamble to any message issued with this
+category. It must be included, but could be an empty string. It must be
+included in the right place, this array is accessed by index according to the
+enumerated value in \textit{PublishLevel}. Colorization of the string may be
+provided by the ColorString model (or any other process). In this example,
+I'm going to color it cyan -- this isn't a great choice without also
+specifying a background because cyan is difficult to read on pale screens,
+it is just an example.
+\begin{codeC}
+const std::array< std::string,5>   CMLMessage::message_description =
+{ColorString::yellow( ColorString::red_background("Critical Failure")),
+ ColorString::red("Non-critical Error"),
+ ColorString::cyan("Alert"),
+ ColorString::magenta("Anomaly Warning"),
+ ColorString::green("Informational Notice"),
+ "Debug Point"};
+\end{codeC}
+\item (optional) provide an interface method if desired.
+\begin{codeC}
+  template<typename... Args>
+  static void alert( std::string file,
+                     int         line,
+                     Args...     args)
+  {
+    publish(PublishLevel::Alert, file, line, args...);
+  }
+\end{codeC}
+\end{itemize}
+
+\chapter{Verification}
+\section{Code Coverage}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{graphics/coverage.png}
+  \caption{Code Coverage}
+  \label{fig:Code Coverage}
+\end{figure}
+
+\subsection{Exceptions}
+
+The model code is entirely found in the header file; the file
+\textit{cml\_message.cc} contains only the definition of the static data
+members.
+
+\begin{itemize}
+      \item \textbf{Lines 57-58}: Constructor and destructor are not covered. The constructor is empty and not used
+      since the class content is static. The destructor is missed because the coverage tool
+      exits before the executable contents are destroyed. See Figure \ref{fig:destr_constr_coverage}.
+      \item \textbf{Lines 226-228}: See line 225 in Figure \ref{fig:errormsg_coverage}.
+      \item \textbf{Line 129}: Not reached because line 128 causes termination of the executable. See Figure \ref{fig:129_coverage}.
+\end{itemize}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{graphics/uncovered_2.png}
+  \caption{Code Coverage of lines 57-58}
+  \label{fig:destr_constr_coverage}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{graphics/uncovered_1.png}
+  \caption{Code Coverage of lines 226-228}
+  \label{fig:errormsg_coverage}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{graphics/uncovered_3.png}
+  \caption{Code Coverage of line 129}
+  \label{fig:129_coverage}
+\end{figure}
+
+
+
+\section{SIM\_verif}
+The model includes a simple verification simulation, and a standalone source
+file for compiling and using the message publisher outside Trick.
+The verification simulation has three runs; there is no verification data
+because the model's purpose is entirely to publish data to standard-out.
+
+\subsection{Model Capability}
+For the two main runs, on each of the 5 timesteps a "sample model" sends the
+same 7 messages to the Message Publisher, one message for each category and three for debug. 
+These additional Debug messages are used to test \textit{CMLMessage::printf\_fmt} method.
+
+The publishing threshold is gradually made more inclusive:
+\begin{itemize}
+\item t=0 Only Fail messages are published; no output.
+\item t=1 The threshold is set to Error. The Error message is published and the
+rest ignored.
+\item t=2 The threshold is set to Warning. The Error and Warning messages are
+published and the rest ignored.
+\item t=3 The threshold is set to Status. The Error, Warning and Status messages
+are published and the rest ignored.
+\item t=4 The threshold is set to Inform. The Error, Warning, Inform and Status messages
+are published and only the Debug message ignored.
+\item t=5 The threshold is set to Debug. All 7 messages are published. The three debug 
+messages include two different formats and an error test where the format is invalid.
+\end{itemize}
+
+Also at t=5, a message is sent with level Fail. the simulation is terminated
+by this message.
+
+The last round of outputs is shown in Figure \ref{fig:verif_output}.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{graphics/output.png}
+  \caption{Sim Output}
+  \label{fig:verif_output}
+\end{figure}
+
+The first run (\textit{RUN\_1}) uses the \textit{CMLMessage::publish(...)}
+method for each message, with the severity specified within each call.
+The second run (\textit{RUN\_2}) uses the interface methods to
+\textit{CMLMessage::publish(...)}
+for each message, with the severity implicit in the selection of the
+interface method.
+Except for the line numbers, the outputs from both runs are identical. 
+Note that since status has no \textit{publish} equivalent, here the same function is used twice
+for consistency.
+
+\clearpage
+
+\subsection{Model speed}
+One of the requirements addresses the need for the message publisher to
+process sufficiently quickly to avoid impacting simulation speed.
+
+The run 
+\textit{RUN\_speed\_test} simply processes through a for loop, sending an
+error message 10,000 times. This processes all messages in 
+approximately 3 seconds per the linux \textit{time} utility. This
+satisfactorily meets the requirement; it is not expected that any simulation
+would be producing that many messages.
+
+For comparison, the same exercise was processed with the JEOD message
+handler. It runs marginally faster (2.5 seconds for the same 10,000
+messages). With the number of messages reduced to 1,000, the JEOD Message
+Handler runs a little slower (0.5 seconds) than this model (0.4 seconds).
+\end{document}

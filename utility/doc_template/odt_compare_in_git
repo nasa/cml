@@ -1,0 +1,14 @@
+git show <rev>:./<filename>.odt > old.odt
+
+<rev> is previous branch, tag, hash, etc.
+
+then open the odt file.
+
+Edit -> Track Changes -> Compare Document -> old.odt
+
+
+****
+Alternative:
+Add odt2txt (public git repo) to available path for git diff, and this
+should show up in MRs.
+***

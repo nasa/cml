@@ -1,0 +1,115 @@
+/*****************************************************************************
+PURPOSE: (Verify the Commandable-action model)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (Feb 2022) (Antares) (initial verification))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "include/sample_set.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+
+ public:
+  // Framework (leave this alone)
+  UnitTestFramework framework;
+  // support variables:
+  // input:
+  bool trigger1;
+  bool trigger2;
+  bool trigger3;
+  bool trigger4;
+  // output:
+  FswBus indirect_bus;
+  FswBus direct_bus;
+  bool reset_fsw_values;
+
+  // Model for testing:
+  IndirectCommandableActionSet indirect_set;
+  DirectCommandableActionSet   direct_set;
+
+
+
+  AntaresUnitTestSimObject()
+    :
+    indirect_set(),
+    direct_set( direct_bus)
+  {
+    // Framework
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    (1.0,"scheduled") sim_triggers();
+    (1.0,"scheduled") indirect_set.update();
+    (2.0,"scheduled") fsw_interface();
+    (1.0,"scheduled") direct_set.update();
+  }
+
+ private:
+  void sim_triggers()
+  {
+    // separate out the values set in Unit-data from the command_now variables
+    // only set command_now when the trigger-values in unit-data go to 1.
+    if (trigger1) {
+      indirect_set.act1.command_now =
+      direct_set.act1.command_now = true;
+    }
+    if (trigger2) {
+      indirect_set.act2.command_now =
+      direct_set.act2.command_now = true;
+    }
+    if (trigger3) {
+      indirect_set.act3.command_now =
+      direct_set.act3.command_now = true;
+    }
+    if (trigger4) {
+      indirect_set.act4.command_now =
+      direct_set.act4.command_now = true;
+    }
+  }
+
+  void fsw_interface()
+  {
+    if (reset_fsw_values) {
+      indirect_bus.reset_values();
+      direct_bus.reset_values();
+    }
+    if (!indirect_set.status_is_send()) {
+      return;
+    }
+
+    switch( indirect_set.command_type) {
+    case IndirectCommandableActionSet::ACT1:
+      indirect_bus.fsw1 = true;
+      break;
+    case IndirectCommandableActionSet::ACT2:
+      indirect_bus.fsw2 = true;
+      break;
+    case IndirectCommandableActionSet::ACT3:
+      indirect_bus.fsw3 = true;
+      break;
+    case IndirectCommandableActionSet::ACT4:
+      indirect_bus.fsw4 = true;
+      break;
+    default:
+      // no-op
+      break;
+    }
+
+    indirect_set.flag_command_processed();
+  }
+
+
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject test;

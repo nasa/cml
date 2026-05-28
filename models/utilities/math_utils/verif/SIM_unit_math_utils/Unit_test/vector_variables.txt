@@ -1,0 +1,6 @@
+mutil_verif.vector1[0]
+mutil_verif.vector1[1]
+mutil_verif.vector1[2]
+mutil_verif.vector2[0]
+mutil_verif.vector2[1]
+mutil_verif.vector2[2]

@@ -1,0 +1,82 @@
+/*****************************************************************************
+PURPOSE: (Tests the convert-String utility)
+PROGRAMMERS:
+    (
+     ((Daniel Ghan) (OSR) (Mar 2022) (initial))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+
+/*****************************************************************************
+ConvertStringSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "cml/models/utilities/convert_string/include/convert_string.hh"
+
+class ConvertStringSimObject: public Trick::SimObject {
+
+ public:
+  float              f;
+  double             d;
+  int                i;
+  unsigned int       ui;
+  long               l;
+  unsigned long      ul;
+  long long          ll;
+  unsigned long long ull;
+  size_t             s;
+  bool               bt1;
+  bool               bt2;
+  bool               bt3;
+  bool               bf1;
+  bool               bf2;
+  bool               bf3;
+
+  ConvertStringSimObject()
+
+
+  {
+    // Framework
+    ("initialization")  convert_string();
+
+  }
+
+  void convert_string()
+  {
+    std::string str_f = "12345.6789";
+    std::string str_i = "12345";
+    std::string str_true_1 = "true";
+    std::string str_true_2 = "True";
+    std::string str_true_3 = "TRUE";
+    std::string str_false_1 = "false";
+    std::string str_false_2 = "False";
+    std::string str_false_3 = "FALSE";
+
+    f = ConvertString::convert<float>(NULL);
+
+    f = ConvertString::convert<float>(str_f);
+    d = ConvertString::convert<double>(str_f);
+    i = ConvertString::convert<int>(str_i);
+    ui = ConvertString::convert<unsigned int>(str_i);
+    l = ConvertString::convert<long>(str_i);
+    ul = ConvertString::convert<unsigned long>(str_i);
+    ll = ConvertString::convert<long long>(str_i);
+    ull = ConvertString::convert<unsigned long long>(str_i);
+    s = ConvertString::convert<size_t>(str_i);
+    bt1 = ConvertString::convert<bool>(str_i);
+    bt1 = ConvertString::convert<bool>(str_true_1);
+    bt2 = ConvertString::convert<bool>(str_true_2);
+    bt3 = ConvertString::convert<bool>(str_true_3);
+    bf1 = ConvertString::convert<bool>(str_false_1);
+    bf2 = ConvertString::convert<bool>(str_false_2);
+    bf3 = ConvertString::convert<bool>(str_false_3);
+  }
+
+ private:
+  ConvertStringSimObject (const ConvertStringSimObject&);
+  ConvertStringSimObject & operator = (const ConvertStringSimObject&);
+};
+ConvertStringSimObject test;

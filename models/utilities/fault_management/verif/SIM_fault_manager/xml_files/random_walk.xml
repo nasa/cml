@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Gaussian Random-Walk Fault" enabled="true" type="RANDOMWALK" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <RandValue distribution="GAUSSIAN" std_dev="1" seed="3"></RandValue>
+  <TriggerGroup>
+    <Trigger name="random-walk trigger" variable="test_object.current_time" compare="GE" value="0"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Uniform Random-Walk Fault" enabled="true" type="RANDOMWALK" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <RandValue distribution="FLAT" min="-1.732" max="1.732" seed="6"></RandValue>
+  <TriggerGroup>
+    <Trigger reuse_name="random-walk trigger"></Trigger>
+    <Trigger name="pause start" variable="test_object.current_time" compare="LE" value="8.0"></Trigger>
+  </TriggerGroup>
+  <TriggerGroup>
+    <Trigger name="pause end" variable="test_object.current_time" compare="GE" value="9.0"></Trigger>
+  </TriggerGroup>
+</Fault>
+</FaultManager>

@@ -1,0 +1,65 @@
+#include "sim_objects/default_trick_sys.sm"
+
+/*****************************************************************************
+EnvUtilsObject
+Purpose:(The sim)
+*****************************************************************************/
+
+#define bad_env_variable "fhglkjdehglk"
+
+// Include headers for classes that this class contains:
+##include "cml/models/utilities/env_utils/include/env_utils.h"
+##include <stdexcept>
+
+
+
+class EnvUtilsObject: public Trick::SimObject 
+{
+  public:
+
+  bool test1=false;
+  bool test2=false;
+  bool test3=false;
+  bool test4=false;
+
+  static void fake_exit(int code) 
+  {
+      (void)code; // Mark code as intentionally unused
+      throw std::runtime_error("exit called");
+  }
+
+  EnvUtilsObject()
+  {
+    ("initialization")  run_tests();
+  }
+
+  void run_tests()
+  {
+    test1 = (getenv_or_default("PWD", "nowhere") != "nowhere");
+    test2 = (getenv_or_default(bad_env_variable, "nobody") == "nobody");
+
+    try 
+    {
+      getenv_or_exit(bad_env_variable, EnvUtilsObject::fake_exit);
+    }
+    catch(std::runtime_error const &ex)
+    {
+      test3 = (std::string(ex.what()) == "exit called");
+    }
+
+    try
+    {
+      getenv_or_throw(bad_env_variable);
+    }
+    catch(std::runtime_error const &ex)
+    {
+      test4 = (std::string(ex.what()) == "Error: Environment variable \"fhglkjdehglk\" is not set.");
+    }
+  }
+
+ private:
+  EnvUtilsObject (const EnvUtilsObject&);
+  EnvUtilsObject & operator = (const EnvUtilsObject&);
+};
+
+EnvUtilsObject test;

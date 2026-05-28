@@ -1,0 +1,107 @@
+//==========================  TRICK HEADER  ================================
+// PURPOSE: (Perform unit-simulation-test of the math utilities model)
+//==========================================================================
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+
+#define DYNAMICS 1.0
+
+#include "time_TAI_UTC_UT1_TT_GMST.sm"
+#include "dynamics.sm"
+#include "environment.sm"
+#include "earth_basic.sm"
+
+//***************************************************************
+// CLASS: (OrbElemsSimObject)
+// PURPOSE:
+//***************************************************************
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+
+##include "../../include/orb_elem_subset.hh"
+
+class OrbElemsSimObject: public Trick::SimObject {
+public:
+   UnitTestFramework framework;
+
+   bool correct_j2;
+   bool gen_cartesian_inrtl;
+   bool pfix_z_values;
+
+   OrbElemSubset        orb_elems;
+   jeod::DynBody    body;
+
+   OrbElemsSimObject( const jeod::RefFrameTrans & inrtl_state_in,
+                      jeod::DynManager & dyn_mgr_in,
+                      const jeod::Planet & earth_in,
+                      const double & grav_mu)
+      :
+      orb_elems( inrtl_state_in, earth_in, grav_mu),
+      dyn_manager( dyn_mgr_in),
+      earth( earth_in)
+   {
+      ("initialization")   framework.initialize();
+      (1.0, "environment") framework.update();
+
+
+      ("initialization")    body.initialize_model(dyn_manager);
+
+      ("initialization")    orb_elems.initialize();
+      (1.0, "scheduled")    reset_values();
+      (1.0, "scheduled")    check_pfix();
+      (1.0, "scheduled")    orb_elems.update();
+      (1.0, "scheduled")    check_j2();
+      (1.0, "scheduled")    orb_elems.compute_eccentricities();
+      (1.0, "scheduled")    orb_elems.compute_true_anomaly();
+      (1.0, "scheduled")    orb_elems.compute_arg_periapsis();
+      (1.0, "scheduled")    orb_elems.compute_line_of_nodes();
+      (1.0, "scheduled")    orb_elems.compute_mean_motion();
+      (1.0, "scheduled")    check_cart_inrtl();
+   }
+
+private:
+   void reset_values() {
+     // Set public double class variables to default value
+     orb_elems.position_mag = 0.0;
+     orb_elems.vel_vertical_scalar = 0.0;
+     orb_elems.semi_major_axis = 0.0;
+     orb_elems.semi_parameter = 0.0;
+     orb_elems.ecc_mag = 0.0;
+     orb_elems.ecc_anomaly = 0.0;
+     orb_elems.true_anomaly = 0.0;
+     orb_elems.arg_periapsis = 0.0;
+     orb_elems.mean_motion = 0.0;
+     orb_elems.cos_true_anomaly = 0.0;
+     orb_elems.node_angle = 0.0;
+     orb_elems.sinI_sinL = 0.0;
+     orb_elems.sinI_cosL = 0.0;
+     orb_elems.sin_sq_I = 0.0;
+     orb_elems.e_sinE = 0.0;
+     orb_elems.e_cosE = 0.0;
+     orb_elems.j2_delta = 0.0;
+     orb_elems.j2_correction = 0.0;
+   };
+   void check_j2() {
+     if (correct_j2) { orb_elems.correct_for_j2(); };
+   };
+   void check_cart_inrtl() {
+     if (gen_cartesian_inrtl) { orb_elems.generate_cartesian_inertial(); };
+   };
+   void check_pfix() { orb_elems.use_pfix_z_values = pfix_z_values; };
+
+   OrbElemsSimObject (const OrbElemsSimObject&);
+   OrbElemsSimObject & operator = (const OrbElemsSimObject&);
+
+protected:
+   jeod::DynManager & dyn_manager;
+   const jeod::Planet & earth;
+
+};
+OrbElemsSimObject oe_verif( oe_verif.body.composite_body.state.trans,
+                            dynamics.dyn_manager,
+                            earth.planet,
+                            earth.gravity_source.mu);
+

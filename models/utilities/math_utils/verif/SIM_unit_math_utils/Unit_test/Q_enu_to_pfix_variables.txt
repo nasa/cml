@@ -1,0 +1,2 @@
+mutil_verif.latitude
+mutil_verif.longitude

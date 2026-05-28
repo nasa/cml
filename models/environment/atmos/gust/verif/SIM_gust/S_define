@@ -1,0 +1,42 @@
+// PURPOSE:
+/* ========================================================================= -
+ -  This simulation defines the baseline starting point for Gust  Model      -
+ -  simulation development.  The following simulation objects are defined in -
+ -  this sim:                                                                -
+ -                                                                           -
+ -           sys - Trick runtime executive and data recording routines.      -
+ -       gust_unit - unit object for the gust model                          -
+ -                                                                           -
+ - ========================================================================= */
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+//***************************************************************
+// CLASS: (GustUnitTestSimObject)
+// PURPOSE:(Test the Gust model to ensure it works as intended.)
+//***************************************************************
+##include "../../include/gust.hh"
+
+class Gust_unitSimObject: public Trick::SimObject {
+
+  public:
+    double    time;
+    GustModel gust;
+
+    //Constructor
+    Gust_unitSimObject()
+      :
+      time(0.0),
+      gust(time)
+    {
+      (0.5, "environment") gust.update();
+      (0.5, "environment") incr_time();
+    }
+
+  private:
+    Gust_unitSimObject (const Gust_unitSimObject&);
+    Gust_unitSimObject & operator = (const Gust_unitSimObject&);
+    void incr_time(){time += 0.5;};
+
+};
+Gust_unitSimObject gust_unit;

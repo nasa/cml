@@ -1,0 +1,2 @@
+test.point_of_interest[0]
+test.point_of_interest[1]

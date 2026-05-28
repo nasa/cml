@@ -1,0 +1,59 @@
+/*****************************************************************************
+PURPOSE: (Verification simulation for the Solid Rocket Motors Model))
+PROGRAMMERS:
+  (
+   ((Brenton Caughron) (OSR) (Jan 2018) (Antares) (IV&V Code Review))
+  )
+*****************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Rocket Motor sim object
+*****************************************************************************/
+
+//CML headers
+##include "cml/models/fhw/effectors/rocket_motors/include/rocket_motor_basic.hh"
+// JEOD header:
+##include "dynamics/mass/include/mass_properties_init.hh"
+
+class RocketMotorSimObject : public Trick::SimObject {
+  public:
+    RocketMotor_Basic        basic_motor;
+    RocketMotor_Basic        no_cm_motor;
+    double                   dynamic_time;
+    double                   vehicle_com[3];
+    DynamicMassBody          motor_prop;
+    jeod::MassPropertiesInit mass_init;
+
+    RocketMotorSimObject()
+    :
+    basic_motor(motor_prop,
+                dynamic_time,
+                vehicle_com),
+    no_cm_motor(motor_prop,
+                dynamic_time,
+                NULL)
+    {
+      (0.0025, "effector") dynamic_time = exec_get_sim_time();
+
+      ("initialization")   motor_prop.initialize_mass(mass_init, {});
+      ("initialization")   basic_motor.initialize();
+      
+      (0.005, "effector")  basic_motor.update();
+    };
+
+    void null_dispersions()
+    {
+      double *pos = NULL;
+      double (*T)[3] = NULL;
+      basic_motor.dispersions.apply_dispersions(pos, basic_motor.T_struc_to_motor_frame);
+      basic_motor.dispersions.apply_dispersions(basic_motor.position, T);
+    }
+
+  private:
+    RocketMotorSimObject( const RocketMotorSimObject&);
+    RocketMotorSimObject & operator = ( const RocketMotorSimObject&);
+
+};
+RocketMotorSimObject rocket_motor;

@@ -1,0 +1,6 @@
+This is a validation test using a pre-set trajectory.
+But there is no validation data immediately available for what the relative
+state values should be.
+
+If the validation data are not available, this SIM is pointless.  If they can
+be found, they should be added to this test case under validation_data.

@@ -1,0 +1,64 @@
+/************************************TRICK HEADER************************************************
+PURPOSE:  (S_define header)
+***********************************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "cml/models/utilities/double_to_words/include/convert_double_to_words.hh"
+##include "cml/models/utilities/cml_message/include/cml_message.hh"
+##include <vector>
+
+class ConvertDoubleToWordsSimObject : public Trick::SimObject {
+  public:
+    UnitTestFramework framework;
+    double convert_value;      // (--)
+    double resolution;         // (--)
+    unsigned int bit_size;     // (--)
+    unsigned int warray[4]; // (--)
+
+    ConvertDoubleToWordsSimObject()
+    :
+    convert_value(546),
+    resolution(200),
+    bit_size(16)
+    {
+      // Framework (leave this alone)
+      ("initialization")  framework.initialize();
+      (1.0, "environment") framework.update();
+
+      // test-specific jobs:
+      (1.0,"scheduled") convert_double_to_uint_words ( convert_value,
+                                                       resolution,
+                                                       warray,
+                                                       4,
+                                                       bit_size);
+    }
+
+    void test_errors() {
+      convert_double_to_uint_words( convert_value,
+                                    resolution,
+                                    NULL,
+                                    4,
+                                    bit_size);
+
+      convert_double_to_uint_words( convert_value,
+                                    resolution,
+                                    warray,
+                                    0,
+                                    bit_size);
+      convert_double_to_uint_words( convert_value,
+                                    resolution,
+                                    warray,
+                                    4,
+                                    33);
+    }
+
+
+
+  private:
+    ConvertDoubleToWordsSimObject (const ConvertDoubleToWordsSimObject&);
+    ConvertDoubleToWordsSimObject & operator = (const ConvertDoubleToWordsSimObject&);
+};
+
+ConvertDoubleToWordsSimObject convert_double_words ;

@@ -1,0 +1,562 @@
+\documentclass[11pt,fleqn]{report}
+
+\usepackage{cml}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\newcommand{\ModelName}{Polygon Enclosure}
+\newcommand{\ModelAuthor}{Gary Turner}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{May 2024}
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+\begin{document}
+\pagestyle{empty}
+\titlePage
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\
+\hline \hline
+1 & May 2024 & Gary Turner & Initial Version \\ \hline
+\end{tabular}
+\end{center}
+}
+
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagestyle{plain}
+\pagenumbering{arabic} % Start text with arabic 1
+The Polygon Enclosure model provides a mechanism for determining whether a point
+lies within a bounding polygon.
+
+There are two implementations: one for a flat Euclidean plane and one for a
+spherical surface. At the time of writing, each implementation had slightly
+different target requirements and the implementations were tailored to those
+specific purposes. Consequently, there are substantive differences between the
+two implementations that go beyond the difference in geometry.
+At some time, it may be desirable to implement both geometries with a consistent
+underlying architecture, but at the time this model was written, there was not
+time or sufficient priority to do so. This is left as a future exercise.
+
+
+
+\chapter{Requirements}
+\begin{enumerate}
+  \item The model shall quickly and efficiently identify whether a point on a
+    Euclidean plane lies within a convex polygon prescribed within that plane.
+  \begin{itemize}
+    \item The model shall provide an input interface to support user-definition
+      of the posiitons of the polygon vertices.
+    \item The algorithm may assume the polygon is convex, but must verify the
+      user-defined vertices form a convex polygon if such an assumption is
+      used.
+  \end{itemize}
+  \item The model shall quickly and efficiently identify whether each of a
+    set of points on the surface of a unit-sphere lie within a convex
+    polygon prescribed on that spherical surface.
+  \begin{itemize}
+    \item The model shall provide an input interface to support user-definition
+      of the posiitons of the polygon vertices in both Cartesian
+      coordinates and angular coordinates.
+    \item The algorithm may assume the polygon is convex, but must verify the
+      user-defined vertices form a convex polygon if such an assumption is
+      used.
+  \end{itemize}
+\end{enumerate}
+
+%******************************************************************************
+%******************************************************************************
+%******************************************************************************
+%******************************************************************************
+\chapter{Model Specification}
+\section{Code Structure}
+\subsection{Polygon Enclosure (Planar)}
+Signature: \texttt{PolygonEnclosure::in\_polygon()}
+
+The planar implementation is provided by the class-template
+\textit{PolygonEnclosure}.
+
+\subsection{Polygon Enclosure (Unit Sphere)}
+Signature: \texttt{PolygonEnclosureSphere::in\_polygon( double position[3])}
+
+The spherical implementation is provided by the class-template
+\textit{PolygonEnclosureSphere}.
+
+%******************************************************************************
+%******************************************************************************
+%******************************************************************************
+\section{Mathematical Formulation}
+
+\subsection{Polygon Enclosure (Planar)}
+
+The implementation works with an operational assumption that the vertices of
+the polygon are defined and fixed within the plane, and we routinely wish to
+identify whether a dynamic point of interest lies within that fixed polygon.
+Because we are working on a plane, we can consider
+our points -- for the purposes of this derivation -- as lying in the x-y
+plane.
+
+The vertices of the polygon are defined in a sequential order, with the
+perimeter of the polygon being that sequence of lines joining adjacent
+vertices. The line joining the first and last vertex completes the
+perimeter.
+
+At model initialization, the the $N$ vertices are tested to ensure that they
+form a convex polygon (i.e. no interior angles are greater than 180
+degrees).
+
+To verify the convex nature, we take the cross-product between adjoining
+line segments, and consider the sign of the z-component of the resulting
+vector (the x- and y-components will be 0 by definition of cross product of
+two co-planar vectors). If the sign of the z-component is not consistent
+across all adjacent line-segment pairings, the polygon is not convex, and
+cannot be used for this model.
+
+\begin{figure}[h!]
+  \begin{center}
+    \label{fig:polygon_fault}
+    \includegraphics[scale=0.5]{Figs/non_convex_polygon.png}
+    \caption{Illustration of the detection of a non-convex polygon}
+  \end{center}
+\end{figure}
+
+As an illustrative example, in the diagram below, $\vec a \times \vec b$
+would be ``out of the page'', as would $\vec b \times \vec c$.
+However, $\vec c \times \vec d$ would be ``into the page''. This sign
+change means the polygon is not convex. Note that having three adjacent
+vertices on a line does not violate the convex test, but it is both
+redundant (the middle point can be eliminated) and risky (if the middle
+point numerically rounds to the wrong side of that line, the entire polygon
+will be rejected).
+
+Also during initialization, we evaluate the minimum and maximum x- and y-
+coordinate values of all vertices and can use these to draw a rectangle
+around the polygon.
+\begin{figure}[h!]
+  \begin{center}
+    \label{fig:polygon_convex}
+    \includegraphics[scale=0.5]{Figs/polygon_convex_with_box.png}
+    \caption{Illustration of a convex polygon and its bounding box.}
+  \end{center}
+\end{figure}
+
+With the polygon initialized, we can now apply a similar algorithm as
+necessary to identify whether a point lies within the polygon. First though,
+if the point is outside the bounding box, it is outside the polygon. This is
+an easy check to make and saves testing multiple vertices. If it is inside
+the bounding box, we need to test each vertex.
+
+Consider the point of interest at $\vec r$; we can generate a vector
+$\vec r_i = \vec R_i - \vec r$ from vertex $i$ (at position $\vec R_i$)
+to the point of interest for each vertex.
+
+If the cross product of these vectors from adjacent vertices produces the
+same sign as that identified during the convex test, then the point is
+``inside'' the polygon edge joining those two vertices.
+If the point is ``inside'' all polygon edges, it is inside the polygon.
+Otherwise, it is outside the polygon.
+
+Rather than computing the relative coordinates from each vertex to the point
+of interest, we can simplify this process. Note that:
+\begin{equation*}
+  (\vec R_i - \vec r) \times (\vec R_{i+1} - \vec r) =
+  \vec R_i \times \vec R_{i+1} - \vec r \times (\vec R_{i+1} - \vec R_i)
+\end{equation*}
+
+$\vec R_i \times \vec R_{i+1}$ and $\vec R_{i+1} - \vec R_i$ are both fixed
+for all time (unique to each vertex), so this approach avoids
+computing the vertex-to-point vectors for each vertex.
+
+%******************************************************************************
+\subsection{Polygon Enclosure (Unit Sphere)}
+Much like the planar case, there are three phases to identify whether a
+point lies within a bounding convex polygon:
+\begin{itemize}
+  \item Confirm that the vertices make a convex polygon.
+  \item Bound the polygon with a simple min/max box to streamline
+    identification of points that are clearly outside the polygon.
+  \item Evaluate whether the point lies within the simple min/max bounds and,
+    if it does, evaluate whether it lies within the polygon.
+\end{itemize}
+
+\subsubsection{Testing for Convex}
+
+To verify the convex nature, we compare the vector-products between adjoining
+line segments as we did for the planar case. However, there are two
+important considerations that distinguish the spherical case from the planar
+case:
+\begin{itemize}
+  \item In the planar case, the vertices were all in the same Euclidean plane;
+    the vector-product between adjacent edges all had a component along the
+    vector perpendicular to that plane (the Cartesian z-axis), which was
+    consistent for all polygon edges.
+    In the spherical case, the vertices are distributed in three dimensions
+    and the polygon formed from the Euclidean straight-line segments
+    between vertices is, in general (for more than 3 vertices), a skew
+    polygon not a planar polygon.
+  \item Because the vertices are restricted the unit spherical surface, the
+    polygon can still be described in two non-Euclidean dimensions,
+    but the polygon edges
+    must be arcs of the great-circles passing through adjacent vertices.
+    The radial vector to the surface is analogous to the z-axis from the
+    planar case; however, it is important to recognize that, when working
+    in Cartesian coordinates, the radial vector varies from vertex-to-vertex.
+\end{itemize}
+
+
+Consider a polygon comprising $N$ vertices, $V_i$, $i \in [1,N]$ on a
+unit-sphere with center at point $O$. For each pair of adjacent vertices,
+we can define a plane with point $O$; the intersection of this plane with
+the unit-sphere surface defines the great-circle line segment between the
+two vertices. Each vertex $V_i$ has a corresponding radial vector
+$\vec R_i$. The plane defining the polygon line segment between $V_i$ and
+$V_{i+1}$ is defined by the perpendicular vector
+$\vec S_i = \vec R_i \times \vec R_{i+1}$. The convex nature of the polygon
+can be evaluated by taking the vector product of adjacent vectors
+$\vec S_{i-1} \times \vec S_{i}$ and comparing the direction against the
+radial vector $\vec R_i$ to the common vertex $V_i$.
+
+\begin{equation*}
+  \alpha = \left( \vec S_{i-1} \times \vec S_{i} \right) \cdot \vec R_i
+\end{equation*}
+If this value has the same sign for every vertex, the polygon is convex. For
+example, if this value is negative, the two $\vec S$ vectors point ``outward''
+and the polygon progresses clockwise as viewed from outside the sphere;
+if the value is negative for \textit{every} vertex, then all $\vec S$
+vectors point ``outward'' and the polygon is therefore convex.
+
+This can be simplified using vector quadruple and triple product rules:
+\begin{align*}
+ \alpha & = \left( \left( \vec R_{i-1} \times \vec R_{i} \right) \times
+                   \left( \vec R_{i} \times \vec R_{i+1} \right)
+            \right)
+            \cdot \vec R_i \\
+ {} &= \left( \left( \vec R_{i-1} \cdot
+                     \left( \vec R_{i} \times \vec R_{i+1} \right)
+              \right) \vec R_i -
+              \left( \vec R_{i-1} \cdot
+                     \left( \vec R_{i} \times \vec R_{i} \right)
+              \right) \vec R_{i+1}
+       \right) \cdot \vec R_i  \\
+ {} &= \left( \vec R_{i} \cdot \left( \vec R_{i+1} \times \vec R_{i-1} \right) -
+              [0]
+       \right) \vec R_i \cdot \vec R_i  \\
+ {} &= \left( \vec R_{i} \cdot
+              \left( \vec R_{i+1} \times \vec R_{i-1} \right)
+       \right)
+\end{align*}
+
+Notes:
+\begin{itemize}
+  \item The value of $\alpha$ is not truly important, only its sign is
+    significant. This is represented by \textit{direction\_sign} in the code.
+  \item For simpler evaluation of scalar- and vector-products,
+    the coordinates of the vertices are represented in three-dimensional
+    Cartesian coordinates. The vertices may be specified in either
+    two-dimensional angular coordinates or three-dimensional Cartesian
+    coordinates, but for the inner working of the model, any provided
+    angular coordinates will be internally converted to Cartesian coordinates.
+\end{itemize}
+
+
+\subsubsection{Bounding the Polygon}
+
+Bounding the polygon using a Cartesian-coordinate representation for
+the vertices is more challenging for the spherical geometry than for the
+planar geometry because of the curvature of the polygon edges, and because
+the bounding box must be a three-dimesnional right-rectangular prism, rather
+than a planar rectangle.
+
+Creation of the bounding box is non-trivial and may not be a valuable
+endeavor in all situations. For cases where few points will be rejected for
+being outside the bounding box (either because few points will be tested
+for each definition of vertices, or because the bounding box encloses most of
+the sphere) it may be more efficient to simply test
+all points against the polygon edges that to bound the polygon. The model
+provides a Boolean \textit{apply\_bounding\_box} flag that may be set to
+\textit{false} to circumvent the generation and application of the bounding box.
+
+The process for defining the upper and lower limits of the bounding box is
+symmetric for all three axes. This process seems more intuitive for the
+z-axis (possibly influenced by our visualization of long-range aircraft
+trajectories), so the z-axis is used for illustrative purposes. Furthermore,
+identification of the lower bound on each axis follows a similar process as
+the indentification of the upper bound; only the upper bound is presented
+here.
+
+\begin{itemize}
+  \item We start by testing whether the polar vector $[0,0,1]$ lies within the
+    polygon. If it does, the upper limit of the bounding box is the pole. We
+    set the upper limit to $2$ (being an easily-identifiable  value larger
+    than $1$) in this case.
+
+    Note -- for purposes of testing whether the pole lies within the polygon,
+    we have to switch off the \textit{apply\_bounding\_box} flag to prevent
+    the pole from inadvertently being rejected for lying outside of an
+    as-yet-undefined bounding box.
+
+  \item If the pole is not enclosed within the polygon, the next step is to
+    find the maaximum z-value from the set of vertices. The bounding box
+    must include all of these values, so this is a first -- but incomplete
+    -- step.
+
+  \item In general, the polygon edges will extend beyond the z-values of the
+    vertices, due to the polygon edges being great-circles between the
+    vertices.
+
+    Consider, as a simple illustrative example, two mid-latitude
+    vertices separated in longitude by 180 degrees. The great-circle passing
+    through these points passes through the pole, so the polygon -- and
+    therefore the bounding box -- must enclose the pole. Capping the
+    bounding box at the highest vertex z-coordinate will result in rejecting
+    points for being outside the box that are within the polygon.
+
+    Consequently, we need to evaluate the peak z-value of the polygon edges
+    as well as the peak z-values of each vertex. There are some exceptions:
+    \begin{itemize}
+      \item If all vertices have z-values $< 0$, there are no edges that could
+        set a new maximum z-value above that of the value set by the vertices.
+      \item Only those edges along the upper part of the polygon can set a
+        new maximum z-value. These edges have a $\vec S$ vector with a
+        positive z-component if $\alpha <0$ or a negative z-component if
+        $\alpha >0$. In either case, $\alpha \vec S_{i,z} < 0$ for suitable
+        edges.
+      \item It may also be possible, under
+        certain polygon construction limitations, to assume that the edge
+        that reaches the highest z-value is one of the two edges associated
+        with the vertex at the highest z-value, and limit this search to just
+        two edges. However, this is not universally true so is not assumed in
+        the baseline implementation.
+    \end{itemize}
+    The algorithm for computing the peak z-value of an edge follows.
+\end{itemize}
+
+Consider two adjacent vertices $V_i$ and $V_{i+1}$ and their corresponding
+plane-vector $\vec S_i = \vec R_i \times \vec R_{i+1}$, as defined above.
+The term \textit{vertex-plane}  is used to identify the plane perpendicular
+to vector $\vec S_i$.
+Recall, the intersection of this vertex-plane with the unit spherical
+surface defines one polygon edge.
+
+The vector passing through the peak z-values is perpendicular to
+\begin{itemize}
+  \item The vector defined by the intersection of the vertex-plane and the
+    x-y plane; that vector is perpendicular to $\vec S_i$ and $\hat k$.
+  \item $\vec S_i$, as are all vectors in the vertex-plane.
+\end{itemize}
+Call this vector $\vec T_i$.
+
+\begin {equation*}
+\vec T_i = \left( \vec S_i \times \hat k \right)\times \vec S_i
+\end {equation*}
+
+Note that the code uses this general form; it may be further simplified as
+follows, but the simplified form is more difficult to generalize to multiple
+axes and directions.
+\begin {align*}
+\vec T_i 
+       &= (\vec S_i \cdot \vec S_i) \hat k - (\vec S_i \cdot \hat k) \vec S_i \\
+       &= [-S_{i,x} S_{i,z}, -S_{i,y} S_{i,z}, (S_{i,x}^2 + S_{i,y}^2)]
+\end {align*}
+
+
+The polygon edge is some arc of that great circle which may or may not
+include the the peak z-value identified by $\vec T_i$.
+Note that the peak z-value forms a turning-point; if the arc does not
+include a turning point then it is monotonic and bounded by its ends,
+which are the vertices. We have already
+evaluated the peak z-value from the vertices, so we need only consider the
+peak value of the great circle if $\vec T_i$ lies between $\vec V_i$ and
+$\vec V_{i+1}$ in the vertex-plane. This can be tested by evaluating
+$\left( \vec V_i \times \vec T \right) \cdot \vec S_i$.
+
+Because $\vec T_i$ lies in the vertex-plane, $\vec V_i \times \vec T$ must be
+aligned with $\vec S_i$.
+
+Thus $\left( \vec V_i \times \hat T \right) \cdot \vec S_i$ is a measure of the
+angle in the vertex plane between $\vec V_i$ and $\vec T_i$. Similarly,
+$\left( \vec V_i \times \vec V_{i+1} \right) \cdot \vec S_i =
+\lVert\vec S_i \rVert$ is an equivalent measure of the angle between
+$\vec V_i$ and
+$\vec V_{i+1}$.
+
+Thus:
+\begin{itemize}
+  \item $\left( \vec V_i \times \vec T \right) \cdot \vec S_i > 0$ implies the
+    angle to $\vec T_i$ is in the same direction as that to $\vec V_{i+1}$, and
+  \item $\left( \vec V_i \times \vec T \right) \cdot \vec S_i <
+    \lVert\vec S_i \rVert \lVert \vec T_i \rVert$ implies the angle to $\vec T_i$
+    is smaller than that to $\vec V_{i+1}$
+\end{itemize}
+With both conditions satisfied, we know the peak z-value from the great circle
+lies between the two vertices and we need to consider this value as a potential
+maximum z-value for the bounding box..
+
+Normalizing $\vec T_i$ (i.e. to unit magnitude) provides the Cartesian
+coordinates of the extreme-latitude points of the great-circle, so the peak
+z-value obtained by the great circle is $(\hat T)_z$.
+
+
+\subsubsection{Determining Whether a Point is Within the Polygon}
+
+As with the planar case, a point $P$ lies within the polygon edges if the
+vector-product of adjacent vertex-to-P vectors all point in the same general
+direction. For the planar case, this general direction was the Cartesian
+z-axis. For the spherical case, it is the radial vector associated with
+point $P$.
+
+For each vertex $V_i$ with position vectors $\vec R_i$, we can set a vector
+from the vertex to the point of interest,
+$\vec r_i = \vec R_P - \vec R_i$. For the point to be within the polygon,
+$\forall i, \beta_i  = (\vec r_i \times \vec r_{i+1}) \cdot \vec R_P$
+has the same sign.
+
+That scalar-product actually simplifies nicely: as with the planar case,
+we don't need to difference the vectors to the vertex and the point
+for each vertex because:
+\begin{align*}
+\beta_i &=
+     (\vec r_i \times \vec r_{i+1} ) \cdot \vec R_P) \\
+{}&= ((\vec R_P - \vec R_i) \times (\vec R_P - \vec R_{i+1})) \cdot \vec R_P \\
+{}&= (-(\vec R_P \times \vec R_{i+1}) - (\vec R_i \times \vec R_P ) +
+        (\vec R_i \times \vec R_{i+1} )) \cdot \vec R_P \\
+{}&= (\vec R_i \times \vec R_{i+1} )) \cdot \vec R_P
+\end{align*}
+
+As with the planar case, we can simplify the identification of whether a
+point lies within the polygon by computing and reusing a value that is a
+function of the geometry of the polygon, and then including the coordinates of
+the point as a simple calculation with this value.
+
+The spherical symmetry produces a result simpler than the planar case. For
+this spherical case, we need only the cross product between adjacent
+vertices.
+
+Additional notes:
+\begin{itemize}
+\item If point $P$ lies in any vertex-plane, $\beta = 0$ for that plane.
+  Point $P$ lies in that plane if and only if it lies on the polygon edge.
+  This is considered within the polygon.
+\item The analysis above was performed using Euclidian geometry, but applies
+  equally to a spherical geometry. Because the polygon is convex (already
+  demonstrated), when dealing with spherical geometry we could evaluate the
+  vector-product of the Euclidean vectors representing the
+  perpendiculars to the planes defined by the vertex $V_i$ and points $P$ and
+  $O$ (instead of the vector products of the vectors $r_i$).
+  The vector-product of these vectors simplifies down to the same result.
+\end{itemize}
+
+%******************************************************************************
+%******************************************************************************
+%******************************************************************************
+%******************************************************************************
+\chapter{User's Guide}
+
+\subsection{Polygon Enclosure (Planar)}
+The Polygon Enclosure Method is best implemented as a class member; the
+capability is implemented as a class-template, requiring the number of
+vertices:
+\begin{code}
+#include "cml/models/utilities/polygon_enclosure/include/polygon_enclosure.hh"
+...
+PolygonEnclosure<6> enclosure;
+\end{code}
+
+The constructor for the model takes 2 arguments:
+\begin{enumerate}
+\item A reference to the x-coordinate of the point of interest.
+\item A reference to the y-coordinate of the point of interest.
+\end{enumerate}
+
+\begin{code}
+enclosure ( x, y)
+\end{code}
+
+The polygon is configured with the \textit{set\_xy(...)} method.
+The argument passed to \textit{set\_xy(...)} is a $N \times 2$ C-style array.
+\begin{code}
+double enclosure_vertices[6][2] = {...};
+...
+enclosure.set_xy{ enclosure_vertices);
+\end{code}
+
+The model must be initialized prior to use, and after the vertices have been
+set. This checks the polygon for being convex and establishes the
+rectangular box around the polygon.
+\begin{code}
+enclosure.initialize();
+\end{code}
+
+To test whether the point at coordinates provided at construction lies
+within the polygon defined with the coordinates provided by
+\textit{set\_xy(...)}, call \textit{in\_polygon}.
+\begin{code}
+bool within_polygon = enclosure.in_polygon();
+\end{code}
+
+
+%******************************************************************************
+\subsection{Polygon Enclosure (Unit Sphere)}
+The Polygon Enclosure Method is best implemented as a class member; the
+capability is implemented as a class-template, requiring the number of
+vertices:
+\begin{code}
+#include "cml/models/utilities/polygon_enclosure/include/polygon_enclosure_sphere.hh"
+...
+PolygonEnclosureSphere<6> enclosure;
+\end{code}
+
+The polygon is configured with the \textit{set\_vertices(...)} method.
+The argument passed to \textit{set\_vertices(...)} can be either:
+\begin{itemize}
+  \item a $N \times 2$ C-style array representing the $[\lambda, \phi]$ coordinates
+    for each vertex.
+  \item a $N \times 3$ C-style array representing the $[x,y,z]$ coordinates
+    for each vertex.
+\end{itemize}
+
+\begin{code}
+double enclosure_vertices[6][2] = {...};
+...
+enclosure.set_vertices{ enclosure_vertices);
+\end{code}
+
+The model must be initialized prior to use, and after the vertices have been
+set. This checks the polygon for being convex and establishes the
+rectangular box around the polygon.
+\begin{code}
+enclosure.initialize();
+\end{code}
+
+To test whether the point at coordinates provided at construction lies
+within the polygon defined with the coordinates provided by
+\textit{set\_vertices(...)}, call \textit{in\_polygon(...)}.
+The argument passed to \textit{in\_polygon(...)} can be either:
+\begin{itemize}
+  \item a 2-element array representing the $[\lambda, \phi]$ coordinates of
+     the point.
+  \item a 3-element C-style array representing the $[x,y,z]$ coordinates
+    of the point.
+\end{itemize}
+
+
+\begin{code}
+bool within_polygon = enclosure.in_polygon( R_point);
+\end{code}
+
+
+%******************************************************************************
+%******************************************************************************
+%******************************************************************************
+%******************************************************************************
+\chapter{Inspection, Verification and Validation}
+TBD
+\end{document}

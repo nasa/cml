@@ -1,0 +1,93 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "time_TAI_UTC_UT1_TT.sm"
+#include "dynamics.sm"
+#include "environment.sm"
+#include "earth_basic.sm"
+#include "sun_basic.sm"
+#include "moon_basic.sm"
+
+/*****************************************************************************
+Planet Planet State Sim Object
+*****************************************************************************/
+
+##include "../../include/planet_planet_state.hh"
+
+class PlanetPlanetStateSimObject : public Trick::SimObject {
+  public:
+   bool     call_initialize;
+   bool     call_subscribe;
+   
+   double   position_mag_name;   /* (m) */
+   double   position_mag_direct; /* (m) */
+   double   velocity_mag_name;   /* (m/s) */
+   double   velocity_mag_direct; /* (m/s) */
+
+   PlanetPlanetState        relstate_name;
+   PlanetPlanetState        relstate_direct;
+
+
+  PlanetPlanetStateSimObject( jeod::DynManager & dyn_mgr_in ,
+                              jeod::RefFrame & to_frame_in, 
+                              jeod::RefFrame & from_frame_in )
+      :
+      relstate_name ( dyn_mgr_in),
+      relstate_direct( dyn_mgr_in, 
+                       to_frame_in,
+                       from_frame_in ),
+      dyn_manager (dyn_mgr_in),
+      to_frame (to_frame_in),
+      from_frame (from_frame_in)
+  {
+    ("initialization")      model_initialize(); 
+    (1.0, "scheduled")      relstate_name.update();
+    (1.0, "scheduled")      relstate_direct.update();
+    (1.0, "scheduled")      process_state();
+  }; 
+
+  private:
+    void model_initialize() {
+      if (call_initialize) { 
+        relstate_name.initialize(); 
+        relstate_direct.initialize();
+      };
+      if (call_subscribe) { 
+        relstate_name.subscribe(); 
+        relstate_direct.subscribe();
+      };
+    };
+    void process_state() {
+      position_mag_name = jeod::Vector3::vmag(relstate_name.state.trans.position);
+      position_mag_direct = jeod::Vector3::vmag(relstate_direct.state.trans.position);
+
+      velocity_mag_name = jeod::Vector3::vmag(relstate_name.state.trans.velocity);
+      velocity_mag_direct = jeod::Vector3::vmag(relstate_direct.state.trans.velocity);
+    };
+
+    PlanetPlanetStateSimObject( const PlanetPlanetStateSimObject&);
+    PlanetPlanetStateSimObject & operator= ( const PlanetPlanetStateSimObject&);
+
+  protected:
+    jeod::DynManager & dyn_manager;
+    jeod::RefFrame & to_frame;
+    jeod::RefFrame & from_frame;
+    
+
+};
+PlanetPlanetStateSimObject planet_rel_state( dynamics.dyn_manager,
+                                             earth.planet.inertial,
+                                             sun.planet.inertial );
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

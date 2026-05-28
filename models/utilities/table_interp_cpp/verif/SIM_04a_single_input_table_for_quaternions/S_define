@@ -1,0 +1,190 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Test sim object
+*****************************************************************************/
+##include "../../include/simple_table_lookup.hh"
+##include "../../include/table_lookup_set.hh"
+
+class TestingModelSimObject : public Trick::SimObject {
+  public:
+    double  independent;      // (--) value of the independent variable
+    double  indep_incr;       // (--) increment per cycle.
+    int     frame_count;      // (--) simple counter
+    int     reverse_on_count; // (--) allows reversal to verify with decreasing data
+
+    // A simple table-lookup; table and its output:
+    double  output_quaternion_simple[4];
+    SimpleTableLookup simple_table;
+
+    // SingleInputTableForQuaternions instances are typically used to
+    // provide components of a larger data set, so require a TableLookupSet and
+    // an independent variable:
+    TableLookupSet                  tab_set;
+    TableIndependentVariable        tiv;
+
+    // A test-table to use with spherical interpolation using default constructor
+    double output_quaternion_default[4];
+    SingleInputTableForQuaternions  interpolation_table_default;
+
+    // A test-table to use with spherical interpolation using Quaternion constructor
+    jeod::Quaternion                      output_quaternion_Quaternion;
+    SingleInputTableForQuaternions  interpolation_table_Quaternion;
+
+    // A test-table to use with spherical interpolation using array constructor
+    double output_quaternion_array[4];
+    SingleInputTableForQuaternions  interpolation_table_array;
+
+    // A test-table to use with linear interpolation (using array constructor)
+    // NOTE - linear interpolation does not produce a line; the quaternion
+    //        components are interpolated linearly, but then the quaternion
+    //        itself gets normalized which moves the values away from a pure
+    //        linear interpolation.
+    double output_quaternion_linear[4];
+    SingleInputTableForQuaternions  interpolation_table_linear;
+
+    // A test-table to use with spherical interpolation using vector constructor
+    // Note - this is only used to test the constructor.
+    double dummy_output_quaternion_ptrvec;
+    std::vector<double *> output_quaternion_ptrvec;
+    SingleInputTableForQuaternions  interpolation_table_ptrvec;
+
+    // A malformed test-table without 4 elements
+    SingleInputTableForQuaternions  interpolation_table_error;
+
+
+    int data_case; // (--) Supports switching between sets of calibrated data.
+
+    TestingModelSimObject()
+      :
+      independent(0.0),
+      indep_incr(0.2),
+      frame_count(0),
+      reverse_on_count(6),
+
+      output_quaternion_simple(),
+      simple_table(),
+
+      tab_set(),
+      tiv(independent, TableIndependentVariable::Linear),
+
+      output_quaternion_default(),
+      interpolation_table_default(),
+
+      output_quaternion_Quaternion(),
+      interpolation_table_Quaternion( output_quaternion_Quaternion),
+
+      output_quaternion_array(),
+      interpolation_table_array( output_quaternion_array, 4),
+
+      output_quaternion_linear(),
+      interpolation_table_linear( output_quaternion_linear, 4),
+
+      dummy_output_quaternion_ptrvec(0.0),
+      output_quaternion_ptrvec(4, &dummy_output_quaternion_ptrvec),
+      interpolation_table_ptrvec( output_quaternion_ptrvec),
+
+      interpolation_table_error( output_quaternion_array, 3),
+
+      data_case(0)
+    {
+      ("initialization") configure();
+      ("initialization") init();
+      (1.0, "scheduled") update();
+    };
+
+  private:
+    TestingModelSimObject( const TestingModelSimObject&);
+    TestingModelSimObject& operator = ( const TestingModelSimObject&);
+
+    void configure()
+    {
+      // data represents 2 quaternions, one identity and one representing
+      // a rotation of 120 degrees.  The second quaternion is represented as
+      // either all positive or all negative, which are equivalent.
+      double scratch_indep[2]     = {0,1};
+      double scratch_depend[4][2]  = {{1.0,  0.5},{0.0, 0.866},{0.0,0.0},{0.0,0.0}};
+      double scratch_dep_neg[4][2] = {{1.0, -0.5},{0.0,-0.866},{0.0,0.0},{0.0,0.0}};
+
+      // configure the simple-table.
+      simple_table.load_independent_data( independent, scratch_indep, 2);
+      simple_table.load_dependent_data( output_quaternion_simple,
+                                        4,
+                                        &scratch_depend[0][0], 2,
+                                        AbstractTableLookup::Quaternion);
+
+      // configure the table-independent-variable
+      tiv.load_data(scratch_indep,2);
+
+      // set the size-vector for configuring the regular tables:
+      std::vector<size_t> size;
+      size.push_back(4);
+      size.push_back(2);
+
+      // configure the tables -- switch identifies which data set to use
+      // in the interpolation.
+      interpolation_table_default.add_dependent(output_quaternion_default[0]);
+      interpolation_table_default.add_dependent(output_quaternion_default[1]);
+      interpolation_table_default.add_dependent(output_quaternion_default[2]);
+      interpolation_table_default.add_dependent(output_quaternion_default[3]);
+      switch(data_case) {
+      case 0: // use good data
+        interpolation_table_default.load_data(&scratch_depend[0][0], size);
+        interpolation_table_Quaternion.load_data(&scratch_depend[0][0], size);
+        interpolation_table_array.load_data(&scratch_depend[0][0], size);
+        interpolation_table_linear.load_data(&scratch_depend[0][0], size);
+        break;
+      case 1: // use_negative_quaternion
+        interpolation_table_default.load_data(&scratch_dep_neg[0][0], size);
+        interpolation_table_Quaternion.load_data(&scratch_dep_neg[0][0], size);
+        interpolation_table_array.load_data(&scratch_dep_neg[0][0], size);
+        interpolation_table_linear.load_data(&scratch_dep_neg[0][0], size);
+        break;
+      case 2: // use_zero quaternion in slot 1
+        double dep_zero1[4][2] = {{0,1},{0,1},{0,1},{0,0}};
+        double dep_zero2[4][2] = {{1,0},{1,0},{0,0},{0,0}};
+        double dep_zero3[4][2] = {{0,0},{0,0},{0,0},{0,0}};
+        interpolation_table_default.load_data(&dep_zero1[0][0], size);
+        interpolation_table_Quaternion.load_data(&dep_zero2[0][0], size);
+        interpolation_table_array.load_data(&dep_zero3[0][0], size);
+        interpolation_table_linear.load_data(&dep_zero1[0][0], size);
+        break;
+      }
+      interpolation_table_linear.set_spherical_interp(false);
+
+      // load up the table-manager
+      tab_set.add_independent_variable( tiv);
+
+      tab_set.add_table(interpolation_table_default);
+      tab_set.associate_table_and_independent();
+
+      tab_set.add_table(interpolation_table_Quaternion);
+      tab_set.associate_table_and_independent();
+
+      tab_set.add_table(interpolation_table_array);
+      tab_set.associate_table_and_independent();
+
+      tab_set.add_table(interpolation_table_linear);
+      tab_set.associate_table_and_independent();
+    }
+
+    void init()
+    {
+      simple_table.initialize();
+      tab_set.initialize();
+    }
+
+    void update()
+    {
+      independent += indep_incr;
+      frame_count++;
+      if (frame_count == reverse_on_count) {
+        indep_incr *= -1;
+      }
+      simple_table.update();
+      tab_set.update();
+    }
+};
+
+TestingModelSimObject test;

@@ -1,0 +1,37 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+
+/* ============================================================================== */
+/* ================== Trick Executive Systems Sim Object. ======================= */
+/* ============================================================================== */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/****************************************************************************
+Verif sim object
+*****************************************************************************/
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/trick_logging.hh"
+
+class VerifSimObject : public Trick::SimObject {
+    public:
+        TrickLogging dr_groups;
+        UnitTestFramework input1;
+
+        double group1_var;      /* (--) Group 1 dummy variable */
+        double group2_var;      /* (--) Group 2 dummy variable */
+
+        VerifSimObject()
+        {
+            ("initialization") input1.initialize();
+            (1.0,"environment") input1.update();
+        };
+    private:
+        VerifSimObject (const VerifSimObject&);
+        VerifSimObject & operator = (const VerifSimObject&);
+};
+VerifSimObject trick_logging_verif;

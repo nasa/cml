@@ -1,0 +1,104 @@
+/*****************************************************************************
+PURPOSE: (Tests the operation of the PointingRefFrame)
+PROGRAMMERS:
+    (
+     ((Gary Turner, Michael McCarthy) (OSR) (June 2019) (Antares) (initial))
+    )
+*****************************************************************************/
+#define DYNAMICS 1.0
+#define LOW_RATE_ENV 100.0
+
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+*****************************************************************************/
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "cml/models/dynamics/state_descriptors/pointing_ref_frame/include/pointing_ref_frame.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+ private:
+  jeod::DynManager    & dyn_manager;
+ public:
+  // Framework
+  UnitTestFramework framework;
+  // Model for testing:
+  PointingRefFrame  pointing_ref_frame;
+  // Reference Frames
+  jeod::RefFrame frame_a;
+  jeod::RefFrame frame_b;
+  bool set_frames;
+
+  AntaresUnitTestSimObject(jeod::DynManager    & dyn_manager_in)
+    :
+    dyn_manager (dyn_manager_in),
+    framework(),
+    pointing_ref_frame(),
+    frame_a(),
+    frame_b(),
+    set_frames(true)
+  {
+    // Framework
+    ("initialization")   framework.initialize();
+    (DYNAMICS, "environment") framework.update();
+    // setup
+    ("initialization") setup_tree();
+    // test-specific jobs:
+    ("initialization") pointing_ref_frame.initialize();
+    (DYNAMICS, "environment") pointing_ref_frame.update();
+   }
+
+  void setup_tree()
+  {
+    jeod::RefFrame * space = dyn_manager.find_ref_frame("Space.inertial");
+    space->add_child(frame_a);
+    space->add_child(frame_b);
+  }
+
+ private:
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject frame( dynamics.dyn_manager);
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+// JEOD headers:
+##include "dynamics/dyn_body/include/dyn_body.hh"
+##include "dynamics/body_action/include/dyn_body_init_trans_state.hh"
+##include "dynamics/body_action/include/dyn_body_init_rot_state.hh"
+##include "dynamics/derived_state/include/relative_derived_state.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+ private:
+  jeod::DynManager & dyn_manager;
+ public:
+  jeod::DynBody               body;
+  jeod::DynBodyInitTransState trans_init;
+  jeod::DynBodyInitRotState   rot_init;
+  jeod::RelativeDerivedState  rel_state;
+
+  VehicleSimObject( jeod::DynManager & dyn_mgr_in)
+   :
+   dyn_manager (dyn_mgr_in)
+  {
+    P_ENV ("initialization")  body.initialize_model( dyn_manager);
+    ("initialization")        rel_state.initialize( body,
+                                                    dyn_manager);
+    (DYNAMICS, "environment") rel_state.update();
+  };
+ private:
+   VehicleSimObject( const VehicleSimObject&);
+   VehicleSimObject & operator= ( const VehicleSimObject&);
+};
+VehicleSimObject vehicle(dynamics.dyn_manager);

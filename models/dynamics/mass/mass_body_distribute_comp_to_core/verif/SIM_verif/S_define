@@ -1,0 +1,55 @@
+/*******************************TRICK HEADER******************************
+PURPOSE: (Verification sim for initializing mass with core-dispersions)
+
+PROGRAMMERS:
+  (((Gary Turner) (OSR) (Apr 2018) (Antares) (initial)))
+***********************************************************************/
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "default_priority_settings.sm"
+#include "time_dyntime_only.sm"
+#include "dynamics_init_only.sm"
+
+/*****************************************************************************
+mass body disp sim object
+This sim object provides 3 mass bodies, attached in sequence, starting with
+index 0 as the root.
+
+The main apply method is not called from the S_define, instead it is called
+out of the input files to facilitate testing different combinations of
+target-body and adjustable-body specifications.
+*****************************************************************************/
+
+##include "jeod/models/dynamics/mass/include/mass.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/body_attach_matrix.hh"
+
+##include "../../include/mass_body_distribute_comp_to_core.hh"
+
+class MassBodyDistributeSimObject : public Trick::SimObject {
+ public:
+  jeod::MassBody                   body[3];
+  jeod::MassBodyInit               mass_init[3];
+  jeod::BodyAttachMatrix           attach[2];
+  jeod::MassProperties             new_properties;
+
+  MassBodyDistributeCompToCore adjust_0_0;
+  MassBodyDistributeCompToCore adjust_0_1;
+  MassBodyDistributeCompToCore adjust_2_0;
+  MassBodyDistributeCompToCore adjust_2_1;
+
+  MassBodyDistributeSimObject()
+    :
+    adjust_0_0( body[0], body[0]),
+    adjust_0_1( body[0], body[1]),
+    adjust_2_0( body[2], body[0]),
+    adjust_2_1( body[2], body[1])
+  { };
+ private:
+  MassBodyDistributeSimObject( const MassBodyDistributeSimObject&);
+  MassBodyDistributeSimObject & operator= (const MassBodyDistributeSimObject&);
+};
+MassBodyDistributeSimObject so;

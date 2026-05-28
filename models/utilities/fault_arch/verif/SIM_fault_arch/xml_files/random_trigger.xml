@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Test Fault 1" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Overwrite value="150"></Overwrite>
+   <TriggerGroup>
+      <Trigger name = "trigger 1" variable="test_object.current_time" compare="GE">
+         <RandValue mean="7.5" rel_min="2" rel_max = "2" distribution="FLAT" seed="1"></RandValue>
+   </Trigger>
+   </TriggerGroup>
+</Fault>
+</FaultManager>

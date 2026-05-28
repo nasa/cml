@@ -1,0 +1,114 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+#define LOW_RATE_ENV 5.0
+
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_TAI_UTC_UT1_TT_GMST.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_GGM02C.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/environment/gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh"
+##include "../../include/range_from_pfix_reference.hh"
+##include "../../include/range_to_pfix_reference.hh"
+
+
+class VehicleSimObject : public Trick::SimObject {
+  public:
+   jeod::DynBody                         body;
+   jeod::MassBodyInit                    mass_init;
+   StateInitialize                       state_initialize;
+   SphericalHarmonicsFastGravityControls grav_controls_earth;
+   jeod::PlanetFixedPosition             pfix_position;  // (--) pfix position of moving vehicle
+   RangeFromPfixReference                range_from_pfix;
+   RangeToPfixReference                  range_to_pfix;
+   Earth_GGM02C_SimObject              * earth;
+   double pfix_rel_vel[3];  // (m/s) Planet-relative velocity (expressed in pfix)
+   double relative_vel[3];  // (m/s) Planet-relative velocity (expressed in inrtl)
+
+
+
+  VehicleSimObject(jeod::DynManager & dyn_mgr_in,
+                   Earth_GGM02C_SimObject & earth_simobj_in  )
+      :
+      pfix_position(),
+      range_from_pfix(pfix_position),
+      range_to_pfix(pfix_position, pfix_rel_vel),
+      earth(&earth_simobj_in),
+      dyn_manager (dyn_mgr_in)
+  {
+    P_ENV ("initialization")  body.initialize_model( dyn_manager);
+    P_ENV ("initialization")  pfix_position.initialize(&(earth->planet));
+    P_ENV ("initialization")  range_to_pfix.initialize(earth->planet);
+    P_ENV ("initialization")  range_from_pfix.initialize(earth->planet);
+
+    (DYNAMICS, "environment") update_pfix_state();
+    // Update the planet-fixed position to be at the location of the vehicle
+    (DYNAMICS, "environment") pfix_position.update_from_cart(pfix_position.cart_coords);
+    (DYNAMICS, "environment") range_to_pfix.update();
+    (DYNAMICS, "environment") range_from_pfix.update();
+  };
+  private:
+    VehicleSimObject( const VehicleSimObject&);
+    VehicleSimObject & operator= ( const VehicleSimObject&);
+
+    // Calculate the position and velocity in the pfix frame
+    void update_pfix_state()
+        {
+            // Update the pfix_position by transforming the inertial position into pfix
+            jeod::Vector3::transform(earth->planet.pfix.state.rot.T_parent_this,
+                               body.composite_body.state.trans.position,
+                               pfix_position.cart_coords);
+
+
+            // Planet rotation vector:
+            double pl_rot_vec_inrtl[3]; /* rad/s Rotation of planet in inrtl frame (omega) */
+            jeod::Vector3::transform_transpose(earth->planet.pfix.state.rot.T_parent_this,
+                                         earth->planet.pfix.state.rot.ang_vel_this,
+                                         pl_rot_vec_inrtl);
+
+            // velocity vector of co-rotating point at this position
+            double omega_cross_r[3];
+            jeod::Vector3::cross( pl_rot_vec_inrtl,
+                            body.composite_body.state.trans.position,
+                            omega_cross_r);
+
+            // Vehicle velocity relative to co-rotating point (inertial)
+            jeod::Vector3::diff( body.composite_body.state.trans.velocity,
+                           omega_cross_r,
+                           relative_vel);
+
+            // Vehicle velocity relative to co-rotating point (pfix)
+            // NOTE - needed by range_safety_calculation and ground_resist model.
+            jeod::Vector3::transform(earth->planet.pfix.state.rot.T_parent_this,
+                               relative_vel,
+                               pfix_rel_vel);
+        };
+
+  protected:
+    jeod::DynManager & dyn_manager;
+
+};
+VehicleSimObject vehicle(dynamics.dyn_manager, earth);
+
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics, earth;

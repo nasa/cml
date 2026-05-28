@@ -1,0 +1,53 @@
+include(AddCMLLibrary)
+add_cml_library(
+    NAME
+        environment
+
+    HEADERS
+        EGM2008/include/egm_2008.hh
+        atmos/atmos_exec/include/atmosphere_exec.hh
+        atmos/atmos_exec/include/atmosphere_exec_atmos_base.hh
+        atmos/atmos_exec/include/atmosphere_exec_drwp.hh
+        atmos/atmos_exec/include/atmosphere_exec_gram.hh
+        atmos/atmos_exec/include/atmosphere_exec_interface.hh
+        atmos/atmos_exec/include/atmosphere_exec_out.hh
+        atmos/atmos_exec/include/atmosphere_exec_simple_winds.hh
+        atmos/atmos_exec/include/atmosphere_exec_std.hh
+        atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh
+        atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh
+        atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh
+        atmos/atmosphere_models/std_atmos_1976/src/std_atmos_formula.h
+        atmos/first_order_hold/include/first_order_hold.hh
+        atmos/gust/include/gust.hh
+        atmos/lagged_atmosphere/include/lagged_atmos_payload_data.hh
+        atmos/lagged_atmosphere/include/lagged_atmos_wind.hh
+        atmos/secondary_chute_atmosphere/include/secondary_chute_atmosphere.hh
+        eclipse_calculator/include/eclipse_calculator.hh
+        ephemerides/planet_planet_state/include/planet_planet_state.hh
+        gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh
+        gravity/gravity_fidelity_manager/include/gravity_fidelity_manager.hh
+        gravity/lunar_GRGM900C/data/include/GRGM900C_lunar_gravity.hh
+
+    SOURCES
+        EGM2008/src/egm_2008.cc
+        EGM2008/src/egm_2008_data.cc
+        atmos/atmos_exec/src/atmosphere_exec.cc
+        atmos/atmos_exec/src/atmosphere_exec_drwp.cc
+        atmos/atmos_exec/src/atmosphere_exec_gram.cc
+        atmos/atmos_exec/src/atmosphere_exec_interface.cc
+        atmos/atmos_exec/src/atmosphere_exec_simple_winds.cc
+        atmos/atmos_exec/src/atmosphere_exec_std.cc
+        atmos/atmosphere_models/DRWP_atmos/src/lookup_winds.cc
+        atmos/atmosphere_models/simple_lookup_wind/src/simple_lookup_wind.cc
+        atmos/atmosphere_models/std_atmos_1976/src/std_atmos_1976.cc
+        atmos/atmosphere_models/std_atmos_1976/src/std_atmos_1976_dd.cc
+        atmos/first_order_hold/src/first_order_hold.cc
+        atmos/gust/src/gust.cc
+        atmos/lagged_atmosphere/src/lagged_atmos_wind.cc
+        atmos/secondary_chute_atmosphere/src/secondary_chute_atmosphere.cc
+        eclipse_calculator/src/eclipse_calculator.cc
+        ephemerides/planet_planet_state/src/planet_planet_state.cc
+        gravity/fast_gravity/src/spherical_harmonics_fast_gravity_controls.cc
+        gravity/gravity_fidelity_manager/src/gravity_fidelity_manager.cc
+        gravity/lunar_GRGM900C/data/src/GRGM900C_lunar_gravity.cc
+)

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="FaultManager compatible" enabled="true" type="FUNCTION" loc="UPSTREAM">
+   <SimVar name="test_object.constant_value"></SimVar>
+   <Function type="SINEWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Amplitude nominal="1"></Amplitude>
+      <Frequency nominal="0.125"></Frequency>
+      <PhaseOffset nominal="0"></PhaseOffset>>
+   </Function>
+   <TriggerGroup>
+      <Trigger name = "trigger 1" variable="test_object.current_time" compare="GE" value="2"></Trigger>
+   </TriggerGroup>
+</Fault>
+
+
+<Fault ID="No Frequency" enabled="true" type="FUNCTION" loc="UPSTREAM">
+   <SimVar name="test_object.constant_value"></SimVar>
+   <Function type="SINEWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Amplitude nominal="1"></Amplitude>
+      <PhaseOffset nominal="0"></PhaseOffset>>
+   </Function>
+   <TriggerGroup>
+      <Trigger reuse_name = "trigger 1"></Trigger>
+   </TriggerGroup>
+</Fault>
+
+
+<Fault ID="Parameter Frequency Unset" enabled="true" type="FUNCTION" loc="UPSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="SINEWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters Amplitude="1" phase="0"></Parameters>
+   </Function>
+   <TriggerGroup>
+      <Trigger reuse_name = "trigger 1"></Trigger>
+   </TriggerGroup>
+</Fault>
+
+
+<Fault ID="Parameter VarAmplitude Unset" enabled="true" type="FUNCTION" loc="UPSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="SINEWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters Amplitude="1" frequency="0.125" phase="0"></Parameters>
+      <VarAmplitude></VarAmplitude>
+   </Function>
+   <TriggerGroup>
+      <Trigger reuse_name = "trigger 1"></Trigger>
+   </TriggerGroup>
+</Fault>
+
+
+<Fault ID="Default IndVar on variable Amplitude" enabled="true" type="FUNCTION" loc="UPSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="SINEWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters Amplitude="1" frequency="0.125" phase="0"></Parameters>
+      <VarAmplitude scalar="1"></VarAmplitude>
+   </Function>
+   <TriggerGroup>
+      <Trigger reuse_name = "trigger 1"></Trigger>
+   </TriggerGroup>
+</Fault>
+
+
+<Fault ID="Invalid IndVar on variable Amplitude" enabled="true" type="FUNCTION" loc="UPSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="SINEWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters Amplitude="1" frequency="0.125" phase="0"></Parameters>
+      <VarAmplitude scalar="1">
+          <IndVariable></IndVariable>
+      </VarAmplitude>
+   </Function>
+   <TriggerGroup>
+      <Trigger reuse_name = "trigger 1"></Trigger>
+   </TriggerGroup>
+</Fault>
+
+
+<Fault ID="Normal distro with no std-dev" enabled="true" type="WHITENOISE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <RandValue mean="0.0" seed="1"></RandValue>
+   <TriggerGroup>
+      <Trigger reuse_name = "trigger 1"></Trigger>
+   </TriggerGroup>
+</Fault>
+
+
+<Fault ID="Normal distro with no mean" enabled="true" type="WHITENOISE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <RandValue std_dev="1.0" seed="1"></RandValue>
+   <TriggerGroup>
+      <Trigger reuse_name = "trigger 1"></Trigger>
+   </TriggerGroup>
+</Fault>
+
+
+<Fault ID="Uniform distro with no error" enabled="true" type="WHITENOISE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <RandValue min="0.0" max="2" distribution="FLAT" seed="1"></RandValue>
+   <TriggerGroup>
+      <Trigger reuse_name = "trigger 1"></Trigger>
+   </TriggerGroup>
+</Fault>
+
+
+<Fault ID="Uniform distro with no bounds" enabled="true" type="WHITENOISE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <RandValue distribution="FLAT" seed="1"></RandValue>
+   <TriggerGroup>
+      <Trigger reuse_name = "trigger 1"></Trigger>
+   </TriggerGroup>
+</Fault>
+</FaultManager>

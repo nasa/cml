@@ -1,0 +1,3 @@
+mass_test.string.mass_consumed_step
+mass_test.tank_a.dynamic_properties.mass_consumed_step
+mass_test.tank_b.dynamic_properties.mass_consumed_step

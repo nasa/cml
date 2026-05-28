@@ -1,0 +1,101 @@
+/*****************************************************************************
+PURPOSE: (Verifies the simple lift/drag interface to the aero-executive
+PROGRAMMERS:
+  (
+   ((Jeremy Rea) (OSR) (August 2025) (Antares) (Starting with all tests from the simple model ))
+  )
+*****************************************************************************/
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+// NOTE - for JEOD 3.2.1 and earlier, this line can be used to substitute for
+// needing a dynamics sim object and everything that entails.  For JEOD 3.3 and
+// later, this line is not needed.
+##include "dynamics/dyn_manager/include/dynamics_integration_group.hh"
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
+
+// This model:
+##include "../../include/aero_interface_simple_lift_drag.hh"
+##include <iostream>
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+ public:
+  // Framework (leave this alone)
+  UnitTestFramework framework;
+  // support of support:
+  double             time;
+  jeod::DynBody      body;
+  ExtendedPlanetaryDerivedState planet_rel;
+  AtmosphereExecInterface    atmos_exec;
+  // support
+  AtmosRelativeState atmos_rel;
+  double geodetic_altitude;
+  double T_inrtl_struc[3][3];
+  double mass;
+  unsigned int drag_type_in;
+
+  // Model for testing:
+  AeroInterfaceSimpleLiftDrag interface;
+
+  //Constructor
+  AntaresUnitTestSimObject()
+    :
+    body(),
+    planet_rel(),
+    atmos_exec( time,
+                planet_rel,
+                body),
+    atmos_rel( body,
+               planet_rel,
+               atmos_exec),
+    geodetic_altitude(0.0),
+    T_inrtl_struc(),
+    mass(1.0),
+
+    interface( atmos_rel,
+               geodetic_altitude,
+               T_inrtl_struc,
+               mass)
+
+
+  {
+    // Framework
+    ("initialization") framework.initialize();
+    (1.0, "environment") framework.update();
+
+    //Support:
+    ("initialization") atmos_rel.initialize();
+
+    // Configure
+    ("default_data") set_support_data();
+
+    // Test
+    // Note: Run interface.executive.initialize every cycle to pick up different bank angle inputs
+    ("initialization")   interface.initialize();
+    (1.0, "environment") interface.executive.initialize();
+    (1.0, "environment") interface.update();
+  }
+
+ private:
+  void set_support_data()
+  {
+   T_inrtl_struc[0][0] =
+   T_inrtl_struc[1][1] =
+   T_inrtl_struc[2][2] = 1.0;
+  };
+
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+
+};
+AntaresUnitTestSimObject aero;

@@ -1,0 +1,142 @@
+\documentclass[11pt,fleqn]{report}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+
+\usepackage{cml}
+\lstnewenvironment{codeXML}
+    {\lstset{basicstyle=\small\ttfamily,
+             language=XML,
+             xleftmargin=0.0in,
+             xrightmargin=0.0in,
+             backgroundcolor=\color{Orchid!60}, % 60% orchid, 40% white
+             escapeinside={\%*}{*)}, %  .tex file characters inside %*...*) are
+                                     %  treated as Tex commands.
+            }
+    }
+    { }
+
+\newcommand{\ModelName}{Convert String}
+\newcommand{\ModelAuthor}{Daniel Ghan \\ Gary Turner}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{July 2022}
+\pagestyle{plain}
+\usepackage[parfill]{parskip}
+\usepackage[margin=1.5cm]{caption}
+\usepackage{subfig}
+
+\begin{document}
+\titlePage
+\clearpage % Reset page number
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\ \hline
+ \hline
+1 & July 2022 & Gary Turner & Initial Version \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagenumbering{arabic} % Start text with arabic 1
+The Convert String model supports the conversion of numeric data read in
+as a string, or char-array into a numeric data type. This model was written
+to support the fault-injection / fault-management CML model which parses
+XML data and generates numeric data from those data.
+
+
+\chapter {Requirements}
+The model shall support conversion to the following data types:
+\begin{itemize}
+  \item float
+  \item double
+  \item int
+  \item unsigned int
+  \item long
+  \item unsigned long
+  \item long long
+  \item unsigned long long
+  \item size\_t
+  \item bool
+\end{itemize}
+
+
+\chapter {Model Specification}
+The model is written to provide a single user-interface templated method,
+convert which can take either a STL-string or \textit{char} pointer as its
+single argument and returns the converted value.
+
+For example:
+\begin{codeC}
+double d = ConvertString::convert<double>("12345.6789")
+\end{codeC}
+
+or, more commonly:
+\begin{codeC}
+std::string s = "12345.6789"
+double d = ConvertString::convert<double>(s)
+\end{codeC}
+Note that no effort has been made to support or evaluate SWIG compatibility
+(e.g. for calling this method from a Trick input file).
+There is no known use-case at this time to require such support.
+
+
+\chapter {User's Guide}
+The model provides only the \textit{convert}
+method presented in the previous section.
+\chapter{Verification}
+
+\section{Code Coverage}
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.4]{graphics/code_coverage.png}
+  \caption{Code Coverage}
+  \label{fig:coverage}
+\end{figure}
+Note -- there is a sanity check in
+\textit{ConvertString::convert(const char* str)} that prevents calls going
+to \textit{convert\_numeric<T>} in the case that $T$ is a non-arithmetic type.
+However, to the extent of verification testing, there appears to be no type
+$T$ that is both non-arithmetic and allows model compilation;
+see notes in the header file to explain this.
+
+This is a template function so for every available $T$, the test
+\textit{is\_arithmetic<T>} passes unambiguously and the compiler considers
+only the path following success of the sanity check.
+
+Thus, the escape
+path and error message that would be executed upon failing the sanity check
+\textit{does not even get compiled}.
+
+Consequently, this code is unreachable; indeed, it is
+\textit{non-compilable}. It
+does not show up as non-executed code in the code-coverage because it is
+not compiled into the executive, and is bypassed as a comment would be.
+
+\newpage
+\section {Verification Tests}
+The model provides a single test case, at \textit{SIM\_verif/RUN\_verif}.
+This test case exercises conversion to all of the required data types.
+The Boolean type is tested with "true", "FALSE", and a numerical
+conversion which generates an error message as an invalid argument,
+and converted to false. An additional error test case investigates
+the detection of a call using a NULL pointer. Both errors produce
+messages as expected.
+The single pass is recorded for regression testing in
+\textit{verif\_data/RUN\_verif}.
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{graphics/convert_string_verif.PNG}
+\end{figure}
+
+Note that the value for \textit{test.f} (a float) is truncated from
+the value for \textit{test.d} (a double).
+
+\end{document}

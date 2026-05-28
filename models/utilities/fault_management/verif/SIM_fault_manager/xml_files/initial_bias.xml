@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager>
+<Fault ID="Bias Fault Float" enabled="true" type="BIAS" loc="INIT">
+  <SimVar name="test_object.var_float"></SimVar>
+  <Bias value="2.5"></Bias>
+  <TriggerGroup>
+     <Trigger name="trigger" variable="test_object.current_time" compare="GE" value="0"></Trigger>
+  </TriggerGroup>
+</Fault>
+</FaultManager>

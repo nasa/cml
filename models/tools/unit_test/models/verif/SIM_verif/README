@@ -1,0 +1,79 @@
+This sim provides 4 methods of doing exactly the same thing
+
+var1 can take values in {2.0, 3.0, 3.1}
+va 2 can take values in {5.0, 4.0, 3.0, 2.2}
+
+Cycle through these data such taht for each value of var2, the three values of
+var1 are tested.
+
+*********************************************
+
+Method1 - specified in file
+===========================
+Traditional file format. Enter all 12 combinations manually
+2.0   5.0
+3.0   5.0
+3.1   5.0
+2.0   4.0
+3.0   4.0
+3.1   4.0
+2.0   3.0
+3.0   3.0
+3.1   3.0
+2.0   2.2 
+3.0   2.2
+3.1   2.2
+
+
+Method2 - sweep
+===============
+Sweep method.  
+Set var1 to sweep from 2.0 to 3.1 in increments of 1.0
+Set var2 to sweep from 5.0 to 2.2 in increments of -1.0
+
+test.sweep_var1( 2.0, 3.1, 1.0)
+test.sweep_var2( 5.0, 2.2 ,-1.0)
+
+
+
+Method3 - dual framework
+========================
+Put var2 on a test-framework running at 3* the time interval of var1.  And set
+var1 to cycle indefinitely.
+
+
+
+
+
+Method4 - independent specifications
+====================================
+Specify the set for var1 and var2 in independent files connected in
+linked_variables.txt:
+
+test.var2   Unit_test_data/var2.txt
+test.var1   Unit_Test_Data/var1.txt
+
+Then specify the data for var1 and var2 in their own files:
+2.0
+3.0
+3.1
+
+5.0
+4.0
+3.0
+2.2
+
+
+
+
+
+**************************************************************
+Results:
+The first 12 data points -- the ones that are specified - are identical.
+Thereafter, the behaviors diverge.
+
+method 1 just holds its last values, it has not more input
+method 2 continues to cycle var1 while var2 gets held
+method 3 returns to its original values after sweeping off the end of the
+range, and then holds those
+method 4 matches method 1.

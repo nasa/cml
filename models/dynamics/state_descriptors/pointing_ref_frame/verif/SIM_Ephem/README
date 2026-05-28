@@ -1,0 +1,9 @@
+This sim serves 2 purposes:
+1. It tests the functionality of the EphemBasedPointingRefFrame class.  This
+   class is a very simple inheritance from PointingRefFrame.  Testing of the
+   PointingRefFrame is conducted in SIM_verif; this test is limited to the very
+   small difference between the two classes.
+2. It illustrates the potential pitfalls of using a PointingRefFrame
+   instance rather than an EphemPointingRefFrame instance when the
+   reference-frames are managed by the Ephemerides Manager.  See RUN_13 and
+   RUN_14 for easy mistakes to avoid.

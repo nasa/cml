@@ -1,0 +1,79 @@
+/*****************************************************************************
+PURPOSE: (Verification of the Twist Sway model)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (Mar 2018) (Antares-CML) (V&V))
+    )
+*****************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#define CALL_PERIOD 0.1
+
+/*****************************************************************************
+TwistSway sim object
+*****************************************************************************/
+
+##include "../../include/twist_sway.hh"
+
+class TwistSwaySimObject : public Trick::SimObject {
+  public:
+   double time;
+   double end_time;
+   bool evaluate_ecef;
+   double ts_x_in_enu[3];
+   double ts_y_in_enu[3];
+   double ts_z_in_enu[3];
+   double ts_x_in_ecef[3];
+   double ts_y_in_ecef[3];
+   double ts_z_in_ecef[3];
+
+   TwistSwayMagnitudes test_mags;
+   double call_period;
+
+   TwistSway    ts;
+
+
+  TwistSwaySimObject()
+      :
+      time(0.0),
+      end_time(300.0),
+      evaluate_ecef(false),
+      call_period(CALL_PERIOD),
+      ts(time)
+  {
+    ("initialization") initialize();
+    (CALL_PERIOD, "environment") update();
+  };
+ private:
+  void initialize() {
+    ts.initialize(end_time);
+    ts.subscribe();
+  }
+
+  void update() {
+    time += CALL_PERIOD;
+    ts.update();
+    jeod::Quaternion Q_ts_to_enu;
+    ts.Q_enu_to_ts.conjugate( Q_ts_to_enu);
+    double test_vec_x[3] = {1,0,0};
+    double test_vec_y[3] = {0,1,0};
+    double test_vec_z[3] = {0,0,1};
+    Q_ts_to_enu.left_quat_transform(test_vec_x, ts_x_in_enu);
+    Q_ts_to_enu.left_quat_transform(test_vec_y, ts_y_in_enu);
+    Q_ts_to_enu.left_quat_transform(test_vec_z, ts_z_in_enu);
+
+    if (evaluate_ecef) {
+      ts.update_ecef();
+      jeod::Quaternion Q_ts_to_ecef;
+      ts.Q_ecef_to_ts.conjugate( Q_ts_to_ecef);
+      Q_ts_to_ecef.left_quat_transform(test_vec_x, ts_x_in_ecef);
+      Q_ts_to_ecef.left_quat_transform(test_vec_y, ts_y_in_ecef);
+      Q_ts_to_ecef.left_quat_transform(test_vec_z, ts_z_in_ecef);
+    }
+  }
+
+  TwistSwaySimObject( const TwistSwaySimObject&);
+  TwistSwaySimObject & operator= ( const TwistSwaySimObject&);
+};
+TwistSwaySimObject ts_so;

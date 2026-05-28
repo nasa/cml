@@ -1,0 +1,69 @@
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "time_dyntime_only.sm"
+#include "dynamics_init_only.sm"
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_rot_state.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+
+##include "../../include/contact_state_override.hh"
+
+class ContactSimObject : public Trick::SimObject {
+ public:
+  UnitTestFramework framework;
+  ContactStateOverride contact;
+  jeod::DynBody ref;
+  jeod::DynBody override;
+  jeod::MassBodyInit mass_init_ref;
+  jeod::MassBodyInit mass_init_override;
+  jeod::DynBodyInitTransState trans_init_ref;
+  jeod::DynBodyInitRotState rot_init_ref;
+  jeod::DynBodyInitTransState trans_init_override;
+  jeod::DynBodyInitRotState rot_init_override;
+
+  jeod::Quaternion contact_quat;
+  double     contact_mx[3][3];
+
+ protected:
+  jeod::DynManager& dyn_manager;
+
+ public:
+  ContactSimObject(jeod::DynManager& dyn_manager_in)
+  :
+    contact(ref, override),
+    dyn_manager(dyn_manager_in)
+  {
+    P_ENV ("initialization") ref.initialize_model(dyn_manager);
+    P_ENV ("initialization") override.initialize_model(dyn_manager);
+          ("initialization") framework.initialize();
+          ("initialization") contact.initialize();
+        (1.0, "environment") update_states();
+      (1.0, 0.1, "effector") contact.update();
+  }
+
+ private:
+  void update_states()
+  {
+    framework.update();
+    ref.composite_body.state.rot.Q_parent_this.left_quat_to_transformation(
+                                   ref.composite_body.state.rot.T_parent_this);
+    override.composite_body.state.rot.Q_parent_this.left_quat_to_transformation(
+                               override.composite_body.state.rot.T_parent_this);
+    ref.propagate_state();
+    override.propagate_state();
+  }
+
+  ContactSimObject(const ContactSimObject&);
+  ContactSimObject& operator = (const ContactSimObject&);
+};
+ContactSimObject contact_obj(dynamics.dyn_manager);
+
+//IntegLoop sim_integ_loop (DYNAMICS) dynamics;

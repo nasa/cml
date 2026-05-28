@@ -1,0 +1,122 @@
+/*****************************************************************************
+PURPOSE: (Verification of the Atmos-rel-state model)
+PROGRAMMERS:
+    (
+     ((Robert Phillips) (OSR) (Mar 2019) (Antares) (initial))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+// Included to bring in necessary dependencies.  Not needed for JEOD 3.4
+##include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+##include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_interface.hh"
+##include "atmos_rel_state_test.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject
+{
+ public:
+ // Framework (leave this alone)
+  UnitTestFramework             framework;
+
+ // support variables:
+  double                        dyn_time;
+  double                        ref_len;
+  jeod::DynBody                 body;
+  ExtendedPlanetaryDerivedState planet_rel_state;
+  AtmosphereExecInterface       atmos_exec;
+
+ // Model for testing:
+  AtmosRelStateTest             atmos_test;
+
+  AntaresUnitTestSimObject()
+    :
+    dyn_time(0.0),
+    ref_len(5.0),
+    body(),
+    planet_rel_state(),
+    atmos_exec(dyn_time, planet_rel_state, body),
+    atmos_test( body, planet_rel_state, atmos_exec)
+  {
+    // Framework (leave this alone)
+    ("initialization")   framework.initialize();
+    ("initialization")   framework.update();
+    (1.0, "environment") framework.update();
+
+    ("initialization") testing_data();
+    ("initialization") atmos_exec.initialize();
+    ("initialization") add_ref_length();
+    ("initialization") subscribe_model();
+    ("initialization") testing_data();
+
+    ("initialization") atmos_test.initialize();
+    (1.0, "scheduled") update();
+  }
+
+ private:
+
+  void add_ref_length() 
+  {
+    atmos_test.set_reference_length( &ref_len);
+  }
+
+  void subscribe_model()
+  {
+    atmos_test.subscribe();
+  }
+
+  void testing_data()
+  {
+    double scratch_Tb[3][3] = {{0,1,0},{0,0,1},{1,0,0}};
+    jeod::Matrix3x3::copy(scratch_Tb,
+                    body.composite_body.state.rot.T_parent_this);
+    double scratch_Tp[3][3] = {{0,1,0},{-1,0,0},{0,0,1}};
+    jeod::Matrix3x3::copy(scratch_Tp,
+                    planet_rel_state.topodetic.T_inrtl_to_this);
+
+    jeod::Vector3::unit(0, atmos_exec.out.wind_velocity_eci);
+    jeod::Vector3::scale( 100.0, atmos_exec.out.wind_velocity_eci);
+
+    atmos_exec.out.speed_of_sound = 300.0;
+    atmos_exec.out.density = 2.0E-8;
+    atmos_exec.out.dynamic_viscosity = 2.0E-5;
+  }
+
+  void update()
+  {
+    convert_t_body();
+    atmos_test.compute_euler_angles();
+  }
+
+
+  // For this test, we need to get NaN values read into T_traj_body. Since putting 
+  // NaN (or nan, NAN, std::sqrt(-1), etc.) in the data file causes the data file
+  // to not read, we decided to have the values in the data file be the square of 
+  // the desired values. So, 1->1, 0->0, and -1->NaN.
+  void convert_t_body()
+  {
+    for ( int ii = 0; ii < 3; ii++ )
+    {
+        for ( int jj = 0; jj < 3; jj++ )
+        {
+          atmos_test.T_traj_body[ii][jj] = std::sqrt( atmos_test.T_traj_body[ii][jj] );
+        }
+    }
+  }
+
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+
+};
+AntaresUnitTestSimObject atmos_test_verif ;

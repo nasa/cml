@@ -1,0 +1,53 @@
+/*****************************************************************************
+PURPOSE: (Verification of the Doppler Radar Wind Pairs model)
+PROGRAMMERS:
+    (
+     ((Scott Schuh) (NASA) (October 2014))
+     ((Brian Birmingham) (OSR) (April 2022))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+DRWP_UnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/lookup_winds.hh"
+
+
+class DRWP_UnitTestSimObject: public Trick::SimObject {
+
+ public:
+  //  Unit Test class
+  UnitTestFramework framework;
+  //  the model to be tested
+  LookupAtmosWinds  lookup_table_winds;
+  // support variables
+  double altitude;
+
+  DRWP_UnitTestSimObject()
+    :
+    framework(),
+    lookup_table_winds()
+  {
+
+    // Framework
+    ("initialization")  framework.add_sweep(altitude, -3000, 187000, 2000);
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    // DRWP
+    ("initialization")   lookup_table_winds.initialize();
+    (1.0, "environment") lookup_table_winds.update(altitude);
+  }
+
+ private:
+  DRWP_UnitTestSimObject (const DRWP_UnitTestSimObject&);
+  DRWP_UnitTestSimObject & operator = (const DRWP_UnitTestSimObject&);
+};
+DRWP_UnitTestSimObject luwinds ;

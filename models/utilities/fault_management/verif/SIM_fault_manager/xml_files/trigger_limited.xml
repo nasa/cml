@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager>
+<Fault ID="Overwrite Fault Float" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <Overwrite value="2"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="trigger" variable="test_object.current_time" compare="GE" value="0.2" fire_limit="5"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault Double" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Overwrite value="3"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+</FaultManager>

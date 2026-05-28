@@ -1,0 +1,17 @@
+DRWP_no_w_comp.bin:
+profiles 1,2,3,1771 from external large data file
+
+DRWP_no_w_comp__prof_1771.csv:
+A csv format of profile 1771 from DRWP_no_w_comp.bin
+
+DRWP_w_comp.bin:
+profiles 1,2,3,1771 from external large data file
+
+DRWP_w_comp__prof_2.csv:
+A csv format of profile 2 from DRWP_w_comp.bin
+
+corrupt_binaries:
+contains additional files used to test the binary reader fault detections.
+
+ConvertBinToCsv.cpp:
+Reads the binaries and writes a specific profile to a csv file.

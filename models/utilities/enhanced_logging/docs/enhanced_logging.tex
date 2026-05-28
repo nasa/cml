@@ -1,0 +1,370 @@
+\documentclass[11pt,fleqn]{report}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+
+\usepackage{cml}
+\lstnewenvironment{codeXML}
+    {\lstset{basicstyle=\small\ttfamily,
+             language=XML,
+             xleftmargin=0.0in,
+             xrightmargin=0.0in,
+             backgroundcolor=\color{Orchid!60}, % 60% orchid, 40% white
+             escapeinside={\%*}{*)}, %  .tex file characters inside %*...*) are
+                                     %  treated as Tex commands.
+            }
+    }
+    { }
+
+\newcommand{\ModelName}{Enhanced Logging}
+\newcommand{\ModelAuthor}{Gary Turner}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{February 2024}
+\pagestyle{plain}
+\usepackage[parfill]{parskip}
+\usepackage[margin=1.5cm]{caption}
+\usepackage{subfig}
+
+\begin{document}
+\titlePage
+\clearpage % Reset page number
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\ \hline
+ \hline
+1 & February 2024 & Gary Turner & Initial Version \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagenumbering{arabic} % Start text with arabic 1
+The CML Enhanced Logging model is derived from the logging capabilities
+provided by the Data-Collection component of the GNC-PAR package, developed for
+the Artemis program -- specifically for the ANTARES and OrionSim simulations.
+The GNC-PAR Data-Collection package was developed tp provide additional
+logging capabilities -- beyond those provided by the Trick simulation engine
+-- that would be desirable to support the process of verifying the Orion
+vehicle performance.
+
+During the verification process of this GNC-PAR package, these logging
+capabilities that had built up over many years were consolidated into this
+new package; this effort included:
+
+\begin{itemize}
+  \item thorough review of the existing code, updating as needed and
+        writing within a consistent framework;
+  \item identification of the implicit requirements that had led to the
+        development of the package capabilities;
+  \item formalization and documentation of those implicit requirements to
+        make them explicit;
+  \item verification of the internal data processing capabilities;
+  \item overall model documentation;
+  \item relocation of the updated model from an Orion-specific location
+        (GNC-PAR) to the EG-wide CML library.
+\end{itemize}
+Two closely-related but independent packages were created in this process:
+
+\begin{itemize}
+  \item \textbf{Enhanced Logging} provides the interface to use the enhanced
+        logging capabilities while generating continuous data files.
+  \item \textbf{Summary Logging} provides the interface to generate only
+        summary logs of data created using the enhanced logging
+        capabilities.
+        See \textit{CML: models/utilities/summary\_logging} for details.
+\end{itemize}
+
+This document describes the former of these packages.
+
+\chapter {Requirements}
+\section{Nomenclature and Concepts}\label{sec:2:concepts}
+
+The following concepts are drawn from the CML \textit{Compound-Event} model
+upon which this model is built:
+(see \textit{CML: vehicle\_management/compound\_events\_manager})
+\begin{itemize}
+  \item \textbf{Action Triggers:}
+        An \textit{event} may include a set of one or more
+        \textit{action-triggers}; when these triggers
+        are collectively satisfied, the event is considered \textit{triggered}.
+  \item \textbf{Arm / Arming Triggers:}
+        An \textit{event} may include an arming phase, which provides
+        a set of one or more  \textit{arming-triggers}; when these triggers
+        are collectively satisfied, the event is considered armed.
+        After an event is armed, or if it does not have an arming phase, it
+        will start monitoring its \textit{action-triggers} and
+        \textit{disarming-triggers}.
+  \item \textbf{Disarm / Disarming Triggers:}
+        An \textit{event} may include a disarming option, which provides
+        a set of one or more  \textit{disarming-triggers}. These triggers
+        are monitored after the \textit{arming-triggers} have been satisfied
+        and the event consequently in an \textit{armed} state. When the
+        \textit{disarming-triggers}
+        are collectively satisfied, the  \textit{armed} status of the
+        associated event is removed.
+        After an event is disarmed, the arming phase is re-entered, and the
+        arming requirements must be satisfied again before the event starts
+        monitoring its  \textit{action-triggers} again.
+  \item \textbf{Event:}
+        An event is an encapsulation of arming-triggers, disarming-triggers,
+        and action-triggers that, collectively, lead to the prescribed
+        actions in response to the conditions of those triggers being
+        satisfied. Available actions that are built-in to each event
+        include (see CML Events-manager \textit{CML:
+        models/vehicle\_management/events\_manager} for more details):
+  \begin{itemize}
+    \item Setting of a boolean flag \textit{event\_triggered} to true. All
+          events set this flag; it is commonly used by other models as an
+          indication of the completion of some event.
+    \item Posting of a message to standard-out.
+    \item Assignment of values to other variables elsewhere in the
+          simulation.
+    \item Add or remove subscriptions to/from other models in the
+          simulation, potentially affecting their \textit{active} status.
+    \item Disable other models elsewhere in the simulation, forcing their
+          active status to false regardless of their use by other models.
+    \item Execute additional methods to apply additional algorithms. These
+          additional algorithms are defined outside the structure of the
+          event; the event provides only the interface to them making them
+          effectively limitless in capability.
+  \end{itemize}
+  \item \textbf{Trigger (noun):} A trigger is a logical comparison that is
+        used to define event conditions and consequently identify when event
+        conditions have been satisfied.
+  \item \textbf{Trigger (verb):} An object is considered \textit{triggered}
+        when its logical tests have been satisfied. An event may include
+        multiple triggers, compounded with AND and OR logic in multiple ways.
+\end{itemize}
+
+The following concepts are introduced for this model. These concepts are
+interrelated and can only be truly understood as a collective. There isn't
+really an obvious starting point so they are presented in alphabetical
+order, with concepts identified within each description by italicized text.
+\begin{itemize}
+  \item \textbf{Condition:} Each \textit{logging-group} has a set of
+        \textit{conditions}, each of which has an effective true/false status.
+        If a \textit{condition} is true, the
+        current values of the group's \textit{simulation-variables} will be
+        \textit{processed} to determine whether to  \textit{record} any of the
+        current values of the group's \textit{simulation-variables} in the
+        group's \textit{logging-variables}.
+  \item \textbf{Log:} Logging is the explicit writing of a set of values
+        contained within each logging-variable to an output files.
+        When logging, the model may be configured to log the contents of each
+        \textit{logging-group} into its own output file, or to consolidate
+        all contents into one file.
+        There is no finer division for logging than the \textit{logging-group}.
+  \item \textbf{Logging-group:} A logging group encapsulates a set of
+        \textit{logging-variables} and a linked set of \textit{conditions}. Each
+        \textit{logging-variable} maintains space for a \textit{recorded}
+        value for each of the  \textit{conditions} within the logging-group.
+  \item \textbf{Logging-variables:} Logging-variables are a component of the
+        model. Each \textit{logging-variable} is associated with a single
+        \textit{simulation-variable}. Each maintains a set of
+        \textit{recorded} values based on the values of the associated
+        \textit{simulation-variable} at the time(s) that each of the associated
+        \textit{conditiosn} were satisfied.
+        Each \textit{condition} in the \textit{logging-group} has a dedicated
+        slot for an associated \textit{recorded} value in each of the
+        \textit{logging-variable}'s set of recorded values.
+  \item \textbf{Processing a variable:} When one or more \textit{conditions}
+        are satsified, the values of the \textit{simulation-variables} will be
+        \textit{processed}. The algorithm applied is determined by the
+        \textit{record-type} of the satisfied condition(s) and includes
+        consideration of the current value \textit{recorded} by the
+        corresponding
+        \textit{logging-variable} in the slot(s) reserved for the satisfied
+        \textit{condition(s)}.
+  \item \textbf{Record:} Recording is the internal storage of a value from
+        a simulation-variable into one of the slots in the corresponding
+        logging-variable. The associated condition that led to the
+        recording determines which slot to use.
+  \item \textbf{Record-type:} The record-type is a configuration setting in
+        each \textit{condition} that determines how each
+        \textit{simulation-variable's} value should be
+        \textit{processed} when the \textit{condition} is satisfied.
+  \begin{itemize}
+    \item For example, one of the record-types (see \ref{sec:3:FIXME}
+          for a complete list) instructs the model to \textit{record}
+          the maximum
+          value of a variable. When this condition is satisfied, the values
+          of each simulation-variable in the same group are compared against
+          the \textit{recorded} values of each logged-variable for this specific
+          condition. For those variables for which the new values of the
+          simulation-variables are
+          greater than the corresponding recorded values, the recorded
+          values are replaced. New values less than (or equal to) the
+          corresponding recorded values are ignored.
+  \end{itemize}
+  \item \textbf{Simulation-variables:} Simulation-variables are those variables
+        found in the simulation; the overall goal of this model is to
+        \textit{log} a selected set of data based on values that the
+        \textit{simulation-variables} have
+        been \textit{recorded} as having at some point.
+\end{itemize}
+
+\section{Requirements}
+
+TBD
+
+\chapter {Model Specification}
+See section \ref{sec:2:concepts} for fundamental concepts and nomenclature.
+These will be used throughout this section without further clarification.
+
+\section {Architectural Considerations}
+
+\subsection {Existing and Additional Capabilities}
+This model is designed to supplement the logging capabilities already
+provided by the Trick simulation engine, and the CML model
+\textit{Trick-logging} that provides a management-interface to control those
+logging capabilities. As such, any logging operations that would be
+considered routine or regularly scheduled are not duplicated by this model.
+
+The CML model \textit{Summary-logging} provides highly capable summary data
+but is limited to creating reports at simulation termination. The model
+described hereinn uses couples many of thosse same capabilities with the
+underlying concepts from Trick-logging to create logs of evolving data (like
+Trick-logging) with the enhanced data processing capabilities found in
+Summary-logging.
+
+Within Trick-logging, there is a central “logging manager” which contains a
+set of logging groups, with each group specifying a set of variables for
+logging.
+Each group executes at its own user-configurable frequency and produces its own
+output data file, which can be configured as an ASCII (CSV) file, a binary file
+using Trick’s native binary format (TRK), or binary file using the general
+purpose \textit{Hierarchical Data Format 5} (HDF5) format.
+Groups typically produce a complete log of all variables within
+the group at the specified frequency. It is also possible to configure a group
+to log only when the value of some watched variable changes.
+
+The CML-Trick-logging extension to Trick logging (see
+\textit{cml/models/utilities/trick-logging}),
+already provides the interface to easily manipulate specialty logging
+configurations, including:
+
+\begin{itemize}
+  \item trigger events-based logging (“log now” events) for specific groups,
+        or all groups;
+  \item activation and deactivation of specific groups in response to current
+        simulation state or simulation events.
+  \item modification of the logging frequency for specific groups, or for all
+        groups, again in response to simulation state or events.
+\end{itemize}
+
+The additional capabilities provided by this model include:
+\begin{itemize}
+  \item Regular logging configurations of traditional variables:
+  \begin{itemize}
+    \item The ability is added to instantiate and configure multiple
+          logging managers. One of the shortcomings of the Trick-logging
+          manager is the difficulty in applying extensive reconfigurations
+          at major simulation boundaries. With the ability to handle multiple
+          logging managers, large reconfigurations could be implemented as
+          wholesale swap-out between pre-configured managers used to control
+          the logging for a specific flight phase.
+    \begin{itemize}
+      \item Note – it would be feasible to run multiple managers concurrently,
+            and may be desirable to do so during brief periods of “hand-over”.
+            However, it is not the primary intent of this capability to
+            support long-term concurrent use of multiple managers, and
+            configuring multiple managers to run concurrently is
+            probably more challenging than utilizing other configuration
+            options within a single manager.
+    \end{itemize}
+    \item The ability to add and remove variables from a group during
+          initial configuration. Typically with Trick logging, the logging
+          specifications are handled via SWIG and there is no access to a
+          data-record group after it has been configured. With this model,
+          data record groups can be instantiated and configured independently
+          of the logging manager, and even if they are instantiated from
+          within the logging manager, they can be accessed after initial
+          configuration. This allows a default data recording group to be
+          loaded, then modified before use.
+    \begin{itemize}
+      \item Note – modifications to the contents of a data record group
+            can only be made up to the point at which the data record file
+            has been opened.  This ensures that the contents of the data
+            file are consistent throughout its population.
+    \end{itemize}
+  \end{itemize}
+  \item Logging of STL-strings. Trick logging can have issues with
+        logging STL string content. The new model is able to log STL
+        string values.
+  \item Application of conditional logging.
+        Using the CML-Trick-logging interface, events had to be added
+        to the simulation events framework to bring about changes to
+        the logging configuration, or to trigger “log-now” effects.
+        This model still supports that capability, but also adds a
+        simple internal mechanism to support easy configuration for
+        tracking conditional logging events. Because the new
+        conditionals-configuration is limited to managing logging,
+        it is less capable than a full events-management capability
+        and so is easier to configure. Examples of the types of
+        conditionals that are supported follow:
+  \begin{itemize}
+    \item log the contents of a group whenever some variable changes value
+    \item log the contents of a group whenever some variable exceeds some
+          threshold
+    \item log the contents of a group whenever some variable reaches a new
+          maximum value.
+  \end{itemize}
+        These conditionals can be combined with either OR, or AND logic,
+        but the model does not support compound logic (at this time).
+  \begin{itemize}
+    \item A AND B AND C is supported.
+    \item A OR B OR C is supported.
+    \item A AND (B OR C) is not supported.
+  \end{itemize}
+  \item Summary logging. In many situations, it is not really necessary
+        to know the current value of a variable, but instead to know the average
+        value or maximum value, or similar. With Trick logging, these are
+        typically acquired by either: adding a new variable and logic into
+        the model itself to generate the summary value, or logging all values
+        and post-processing the results to obtain the desired summary value
+        from the logged raw values. This model provides logic to create a
+        logging-group to record a summary including the average, or maximum,
+        or minimum, etc. of each of the variables within the group.
+  \begin{itemize}
+    \item Note – the specification of whether to log average, maximum,
+          minimum, etc. is a group-level specification, and ALL variables
+          within that group will have a corresponding value logged.
+          It was considered to make this a variable-level specification,
+          but the potential for misinterpretation when a group is
+          recording the average of X and the maximum of Y, etc.
+          within one data file makes such a capability more dangerous
+          than useful.
+    \item Note – It is easy to confuse, for example, a record of the
+          maximum values of a set of variables, and the values of a set
+          of variables associated with some specific point in time, such
+          as when a specific variable reaches its maximum value.
+          The values recorded to represent the maximum values of a
+          set of variables are not necessarily temporally coincident
+          (e.g. when recording atmospheric temperature and altitude,
+          it is unlikely that the maximum temperature would be reached
+          at the maximum altitude). A coincident data set from the
+          point at which some variable reaches a maximum value can
+          be acquired by setting a logging conditional to record only
+          when that variable reaches its maximum value.
+  \end{itemize}
+\end{itemize}
+
+\section {Mathematical Formulations}
+
+\chapter {User's Guide}
+\section {Implementation}
+\section {Initialization}
+\section {Routine Execution}
+\section {Optional Execution}
+\section {Configuration}
+
+\chapter{Verification}
+
+\end{document}

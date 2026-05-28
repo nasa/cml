@@ -1,0 +1,65 @@
+/*****************************************************************************
+PURPOSE: ( Test the EclipseCalculator model)
+PROGRAMMERS:
+    (
+      ((Gary Turner) (OSR) (July 2019) (Antares) (initial))
+    )
+*****************************************************************************/
+#define DYNAMICS 1000.0
+
+#include "default_priority_settings.sm"
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "time_TAI_UTC_UT1_TT.sm"
+#include "dynamics.sm"
+#include "environment.sm"
+#include "earth_basic.sm"
+#include "moon_basic.sm"
+#include "sun_basic.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+
+##include "../../include/eclipse_calculator.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+ protected:
+  jeod::DynManager & dyn_manager;
+ public:
+  jeod::DynBody      body;
+  jeod::MassBodyInit mass_init;
+  StateInitialize    state_initialize;
+
+  EclipseCalculator  eclipse;
+
+
+  VehicleSimObject( jeod::DynManager & dyn_mgr_in,
+                    const double & time_in)
+    :
+    dyn_manager (dyn_mgr_in),
+    body(),
+    eclipse(time_in,
+            dyn_manager,
+            body.composite_body)
+  {
+    P_ENV ("initialization")  body.initialize_model( dyn_manager);
+
+    P_DYN ("initialization") eclipse.initialize();
+    (DYNAMICS, "environment") eclipse.update();
+  };
+ private:
+  VehicleSimObject( const VehicleSimObject&);
+  VehicleSimObject & operator= ( const VehicleSimObject&);
+};
+VehicleSimObject vehicle( dynamics.dyn_manager,
+                          jeod_time.time_manager.dyn_time.seconds);
+
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

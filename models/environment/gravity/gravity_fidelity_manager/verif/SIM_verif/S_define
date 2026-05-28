@@ -1,0 +1,103 @@
+/*****************************************************************************
+PURPOSE: (TO BE COMPLETED)
+PROGRAMMERS:
+    (
+     ((Name) (Org) (Date) (Project) (purpose))
+    )
+*****************************************************************************/
+#define DYNAMICS 1.0
+#define LOW_RATE_ENV 100.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+
+
+#include "time_TAI_UTC_UT1_TT_GMST.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_GGM02C.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/environment/gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+ protected:
+  jeod::DynManager & dyn_manager;
+
+ public:
+  jeod::DynBody                         body;
+  jeod::MassBodyInit                    mass_init;
+  StateInitialize                       state_initialize;
+  SphericalHarmonicsFastGravityControls grav_controls_earth;
+
+  VehicleSimObject(jeod::DynManager & dyn_mgr_in)
+    :
+    dyn_manager (dyn_mgr_in)
+  {
+    P_ENV ("initialization")   body.initialize_model( dyn_manager);
+  };
+ private:
+  VehicleSimObject( const VehicleSimObject&);
+  VehicleSimObject & operator= ( const VehicleSimObject&);
+};
+VehicleSimObject vehicle(dynamics.dyn_manager);
+
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/gravity_fidelity_manager.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+
+ public:
+  // Framework (leave this alone)
+  UnitTestFramework framework;
+
+  // Model for testing:
+  GravityFidelityManager  gravity_manager;
+
+  AntaresUnitTestSimObject(
+    jeod::SphericalHarmonicsGravityControls & grav_controls,
+    const jeod::RefFrame                    & earth_inrtl_frame,
+    const jeod::RefFrame                    & vehicle_body_frame)
+    :
+    gravity_manager( grav_controls,
+                     earth_inrtl_frame,
+                     vehicle_body_frame)
+  {
+    // Framework (leave this alone)
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    // test-specific jobs:
+    ("default_data") defaults();
+    ("initialization")  gravity_manager.initialize();
+    (1.0, "environment") gravity_manager.update();
+
+  }
+
+ private:
+  void defaults()
+  {
+    gravity_manager.distance_data = {0, 1E7, 2E7, 3E7};
+    gravity_manager.deg_ord_data = {10,   5,   2,   0};
+  };
+
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject test( vehicle.grav_controls_earth,
+                               earth.planet.inertial,
+                               vehicle.body.composite_body);

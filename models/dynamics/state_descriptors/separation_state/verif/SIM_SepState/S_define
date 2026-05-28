@@ -1,0 +1,177 @@
+//==========================  TRICK HEADER  ================================
+// PURPOSE:(Tests the separation-state model)
+// =========================================================================
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+
+
+//***************************************************************
+// CLASS: (SepStateSimObject)
+// PURPOSE:
+//***************************************************************
+##include "../../include/separation_state.hh"
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/mass/include/mass_point_init.hh"
+
+class SepStateSimObject: public Trick::SimObject
+{
+ protected: // external references
+  jeod::DynManager     &  dyn_manager;
+ public:
+  // Framework (leave this alone)
+  UnitTestFramework framework;
+
+  // support variables:
+  jeod::DynBody       source;
+  jeod::DynBody       subject;
+  jeod::MassPointInit source_init;
+  jeod::MassPointInit subject_init;
+  unsigned int        initialization_option;
+
+  // Model for testing:
+  SeparationState   sep_state;
+
+  //Constructor
+  SepStateSimObject( jeod::DynManager & dyn_mngr_in)
+    :
+    dyn_manager(dyn_mngr_in),
+    source(),
+    subject(),
+    initialization_option(0),
+    sep_state("Separation_State_Example")
+  {
+    // Framework (leave this alone)
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    // test-specific jobs:
+    P_BODY ("initialization") source.add_mass_point( source_init);
+    P_BODY ("initialization") subject.add_mass_point( subject_init);
+    P_ENV ("initialization") source.initialize_model( dyn_manager);
+    P_ENV ("initialization") subject.initialize_model( dyn_manager);
+
+    // make sure the states are set, and then propagate the state through
+    // the bodies to get the state of the points.
+    ("initialization") source.set_state( jeod::RefFrameItems::Pos_Vel_Att_Rate,
+                                          source.composite_body.state,
+                                          source.composite_body);
+    ("initialization") subject.set_state( jeod::RefFrameItems::Pos_Vel_Att_Rate,
+                                          subject.composite_body.state,
+                                          subject.composite_body);
+    ("initialization") source.propagate_state();
+    ("initialization") subject.propagate_state();
+
+
+    // pick the initialization option:
+    ("initialization") initialize();
+
+
+    // on each cycle, set the state per the unit-test data and push the new
+    // state through the tree to update the points.  Then update the sep-state.
+    (1.0, "environment") subject.set_state( jeod::RefFrameItems::Pos_Vel_Att_Rate,
+                                           subject.composite_body.state,
+                                           subject.composite_body);
+    (1.0, "environment") subject.propagate_state();
+    (1.0, "environment") sep_state.update();
+  }
+
+ private:
+  void initialize() {
+    jeod::BodyRefFrame * source_frame, * subject_frame;
+    source_frame = const_cast<jeod::BodyRefFrame *>(source.find_vehicle_point("source-point"));
+    subject_frame = const_cast<jeod::BodyRefFrame *>(subject.find_vehicle_point("subject-point"));
+
+    switch (initialization_option) {
+    default:
+    case 0: // no initialization, model should not be activated.
+      break;
+    case 1: // composite-body to composite-body
+      sep_state.initialize( source.composite_body,
+                            subject.composite_body);
+      break;
+    case 2: // source-composite-body to subject-point
+      sep_state.initialize( source.composite_body,
+                            *subject_frame);
+      break;
+    case 3: // source-point to subject-composite-body
+      sep_state.initialize( *source_frame,
+                            subject.composite_body);
+      break;
+    case 4: // source-point to subject-point
+      sep_state.initialize( *source_frame,
+                            *subject_frame);
+      break;
+
+    // 3-argument methods (body, frame, name)
+    case 24:
+      sep_state.initialize( source,
+                            *subject_frame,
+                            "source-point");
+      break;
+    case 22:
+      sep_state.initialize( source,
+                            *subject_frame
+                            /* defaults to composite-body*/);
+      break;
+
+
+
+    // 3-argument methods (frame, body, name)
+    case 34:
+      sep_state.initialize( *source_frame,
+                            subject,
+                            "subject-point");
+      break;
+    case 33:
+      sep_state.initialize( *source_frame,
+                            subject
+                            /* defaults to composite-body*/);
+      break;
+
+    // 4-argument methods (body, body, name, name)
+    case 44:
+      sep_state.initialize( source,
+                            subject,
+                            "source-point",
+                            "subject-point");
+      break;
+    case 43:
+      sep_state.initialize( source,
+                            subject,
+                            "source-point"
+                            /* defaults to composite-body*/);
+      break;
+    case 41:
+      sep_state.initialize( source,
+                            subject
+                            /* defaults to composite-body*/
+                            /* defaults to composite-body*/);
+      break;
+    case 91: // Failure case
+      sep_state.initialize( source,
+                            subject,
+                            "undefined",
+                            "subject-point");
+      break;
+    case 92: // Failure case
+      sep_state.initialize( source,
+                            subject,
+                            "source-point",
+                            "undefined");
+      break;
+    };
+  }
+
+  SepStateSimObject (const SepStateSimObject&);
+  SepStateSimObject & operator = (const SepStateSimObject&);
+};
+SepStateSimObject test_sep(dynamics.dyn_manager);
+

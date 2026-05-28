@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+
+<Fault ID="Linear Fault Char" enabled="true" type="FUNCTION" loc="UPSTREAM">
+  <SimVar name="test_object.var_char"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Parameters nominal="0" rate="10"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger name="trigger" variable="test_object.current_time" compare="GE" value="5"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault UChar" enabled="true" type="FUNCTION" loc="INTERMEDIATE_1">
+  <SimVar name="test_object.var_uchar"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Parameters initial="0" rate="-10"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault Short" enabled="true" type="FUNCTION" loc="INTERMEDIATE_2">
+  <SimVar name="test_object.var_sint"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Parameters initial="200" rate="10"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault UShort" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_usint"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.offset_time" relative="true"></IndVariable>
+    <Parameters rate="10"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault Int" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_int"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.offset_time" relative="false"></IndVariable>
+    <Parameters initial="0" rate="10"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Square Fault UInt" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uint"></SimVar>
+  <Function type="SQUAREWAVE">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Amplitude nominal="4"></Amplitude>
+    <Frequency nominal="0.1"></Frequency>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Square Fault Long" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_lint"></SimVar>
+  <Function type="SQUAREWAVE">
+    <IndVariable name="test_object.current_time" relative="false"></IndVariable>
+    <Amplitude nominal="4"></Amplitude>
+    <Frequency nominal="0.1"></Frequency>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+
+</Fault>
+<Fault ID="Square Fault ULong" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ulint"></SimVar>
+  <Function type="SQUAREWAVE">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Amplitude nominal="4"></Amplitude>
+    <Frequency nominal="0.1"></Frequency>
+    <PhaseOffset nominal = "-2.49999999"></PhaseOffset>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Square Fault LongLong" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_llint"></SimVar>
+  <Function type="SQUAREWAVE">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Amplitude nominal="4"></Amplitude>
+    <Frequency nominal="0.1"></Frequency>
+    <PhaseOffset nominal = "-2.49999999" rate = "0.1"></PhaseOffset>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Square Fault ULongLong Const-override" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit = "1">
+  <SimVar name="test_object.constant_ullint"></SimVar>
+  <Overwrite value="400"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Square Fault ULongLong Var-override" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit = "1">
+  <SimVar name="test_object.var_ullint"></SimVar>
+  <Overwrite value="400"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Square Fault ULongLong" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ullint"></SimVar>
+  <Function type="SQUAREWAVE">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Amplitude nominal="400" rate = "-5">></Amplitude>
+    <Frequency nominal="0.35" rate="0.01">
+      <IndVariable name="test_object.negative_time" relative="true"></IndVariable>
+    </Frequency>
+    <PhaseOffset nominal = "-2.49999999"></PhaseOffset>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Trianglewave Fault Float" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <Function type="TRIANGLEWAVE">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Amplitude nominal="4"></Amplitude>
+    <Frequency nominal="0.1"></Frequency>
+    <PhaseOffset nominal = "-2.49999999"></PhaseOffset>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Sinewave Fault Double" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="SINEWAVE">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Amplitude nominal="4"></Amplitude>
+    <Frequency nominal="0.1"></Frequency>
+    <PhaseOffset nominal = "-2.49999999"></PhaseOffset>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Squarewave Fault Double" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="SQUAREWAVE">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Amplitude nominal="1"></Amplitude>
+    <Frequency nominal="0.05"></Frequency>
+  </Function>
+  <TriggerGroup>
+    <Trigger name="trigger2" variable="test_object.current_time" compare="GE" value="35"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+</FaultManager>

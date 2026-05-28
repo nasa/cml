@@ -1,0 +1,66 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+
+/* ============================================================================== */
+/* ================== Trick Executive Systems Sim Object. ======================= */
+/* ============================================================================== */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Verif sim object
+*****************************************************************************/
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "cml/models/utilities/trick_logging/include/trick_logging.hh"
+
+##include "../include/verif_vehicle_events_manager_with_actions.hh"
+
+class VerifSimObject : public Trick::SimObject {
+ public:
+  UnitTestFramework framework;
+  VerifVehicleEventsManager   manager;
+  TrickLogging logging_groups;
+
+  double sim_time; /* (--) Simple simulation time */
+  double position; /* (--) Arbitrary values to use as a watch variable */
+  double xx1;      /* (--) Variable whose value is to be assigned.*/
+  double xx2;      /* (--) Variable whose value is to be assigned.*/
+  double xx_in;    /* (--) Value to be used in the assignment.*/
+  int ii;          /* (--) Variable whose value is to be assigned.*/
+  bool sim_off;    /* (--) Bool to activate the sim_stop_verif event */
+  bool base_bool;  /* (--) Intermediate bool to demonstrate the
+                           base_bool_verif event */
+  bool dyn_flag;   /* (--) controls whether sim-stop event shuts down
+                           the whole sim. */
+  float base_float; /* (--) Float value meant to be used as a watch variable */
+  unsigned int base_uint; /* (--) used to check incomplete data types.*/
+
+  VerifSimObject()
+      :
+      manager(logging_groups,
+              sim_time),
+      base_bool(false)
+
+  {
+      ("default_data") configure_events();
+
+      (0.1, "environment") copy_sim_time();
+
+      ("initialization")  framework.initialize();
+      (1.0, "environment") framework.update();
+
+      ("initialization") manager.initialize();
+      (0.1, "scheduled") manager.update();
+  };
+ protected:
+  #include "S_modules/configure_events.sm"
+  void copy_sim_time(){sim_time = exec_get_sim_time();} //confirmation that the sim object shut off
+ private:
+  VerifSimObject (const VerifSimObject&);
+  VerifSimObject & operator = (const VerifSimObject&);
+};
+VerifSimObject events_manager_verif;

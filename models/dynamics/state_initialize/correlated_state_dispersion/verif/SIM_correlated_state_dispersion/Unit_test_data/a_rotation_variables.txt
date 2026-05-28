@@ -1,0 +1,4 @@
+verif.rot_base.composite_body.state.rot.Q_parent_this.scalar
+verif.rot_base.composite_body.state.rot.Q_parent_this.vector[0]
+verif.rot_base.composite_body.state.rot.Q_parent_this.vector[1]
+verif.rot_base.composite_body.state.rot.Q_parent_this.vector[2]

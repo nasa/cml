@@ -1,0 +1,2 @@
+test.latitude_deg
+test.longitude_deg

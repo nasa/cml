@@ -1,0 +1,35 @@
+Koviz
+
+PLOTS:
+  Page 1: ""
+
+    Plot 1: ""
+      x_variable: "sys.exec.out.time"
+        units: "s"
+      y_variable: "ts_so.ts.sway_normal"
+        units: "m"
+      y_variable: "ts_so.copy_fast_mag.normal"
+        units: "--"
+      y_variable: "ts_so.copy_slow_mag.normal"
+        units: "m"
+
+    Plot 2: ""
+      x_variable: "sys.exec.out.time"
+        units: "s"
+      y_variable: "ts_so.ts.sway_parallel"
+        units: "m"
+      y_variable: "ts_so.copy_fast_mag.parallel"
+        units: "--"
+      y_variable: "ts_so.copy_slow_mag.parallel"
+        units: "--"
+
+    Plot 3: ""
+      x_variable: "sys.exec.out.time"
+        units: "s"
+      y_variable: "ts_so.ts.twist_angle"
+        units: "rad"
+      y_variable: "ts_so.copy_fast_mag.twist"
+        units: "--"
+      y_variable: "ts_so.copy_slow_mag.twist"
+        units: "--"
+

@@ -1,0 +1,328 @@
+/*******************************TRICK HEADER******************************
+PURPOSE: ()
+
+PROGRAMMERS:
+  (((Gary Turner) (OSR) (2016) (Antares) (initial)))
+***********************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "jeod/models/utils/math/include/vector3.hh"
+##include "jeod/models/utils/math/include/matrix3x3.hh"
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/subsonic_wake.hh"
+
+
+class WakeEffectsSimObject: public Trick::SimObject {
+
+public:
+  double bodyA_inertial_pos[3];
+  double bodyA_inertial_vel[3];
+  double bodyA_CoM_wrt_struc[3];
+  double bodyA_T_inrtl_to_body[3][3];
+  double bodyA_T_struc_to_body[3][3];
+
+  double bodyB_inertial_pos[3];
+  double bodyB_inertial_vel[3];
+  double bodyB_T_inrtl_to_body[3][3];
+  double bodyB_T_struc_to_body[3][3];
+
+  double bodyB_area;
+  double freestream_vel_bodyA[3];
+  double freestream_mach;
+  double freestream_density;
+  double total_alpha;
+  double total_alpha_deg;
+
+  bool set_attitude_by_attack;
+  bool invalid_construct1;
+  bool invalid_construct2;
+
+  UnitTestFramework        framework;
+
+  WakeParams               params;
+  WakeEffectsOut           output;
+  WakeGeneratingBody       objectA;
+  SubsonicWakeNoForce      wake_no_force;
+  SubsonicWakeWithForce    wake_with_force;
+
+  WakeEffectsSimObject()
+     :
+     bodyB_area(5.0),
+
+     freestream_mach(0.2),
+     freestream_density(1.0),
+     total_alpha_deg(180),
+     set_attitude_by_attack(false),
+
+     output(),
+     objectA( bodyA_inertial_pos,
+              bodyA_inertial_vel,
+              bodyA_CoM_wrt_struc,
+              bodyA_T_inrtl_to_body,
+              bodyA_T_struc_to_body,
+              freestream_vel_bodyA,
+              freestream_mach,
+              freestream_density,
+              total_alpha),
+     wake_no_force( bodyB_area,
+                            bodyB_inertial_pos,
+                            bodyB_inertial_vel,
+                            params,
+                            objectA,
+                            output),
+     wake_with_force( bodyB_area,
+                              bodyB_inertial_pos,
+                              bodyB_inertial_vel,
+                              bodyB_T_inrtl_to_body,
+                              bodyB_T_struc_to_body,
+                              params,
+                              objectA,
+                              output)
+ {
+
+   ("default_data") configure();
+   ("default_data") populate_tables( wake_no_force);
+   ("default_data") populate_tables( wake_with_force);
+
+   ("initialization") invalid_constructs();
+   ("initialization") framework.initialize();
+   ("initialization") set_att_vel();
+
+   (1.0, "scheduled") framework.update();
+   (1.0, "scheduled") set_att_vel();
+
+
+   ("initialization") wake_no_force.initialize();
+   ("initialization") wake_with_force.initialize();
+   (1.0,"effector")   wake_no_force.update();
+   (1.0,"effector")   wake_with_force.update();
+
+ }
+
+private:
+  void set_att_vel()
+  {
+    // NOTE -- to simplify the visualizations, we will define the "inertial"
+    //         frame (for purposes of testing) to have origin at the CoM of
+    //         objectA and x-axis aligned with the freestream velocity of
+    //         objectA.
+    //         That means the orientation of objectA relative to this inertial
+    //         frame is defined by the angle-of-attack, which is an input in some
+    //         test cases.  Therefore, for those test cases, we need to generate
+    //         the transformation matrix describing the orientation of objectA.
+    total_alpha = total_alpha_deg * M_PI / 180.0;
+    if (set_attitude_by_attack) {
+      double cosa = std::cos(total_alpha);
+      double sina = std::sin(total_alpha);
+      bodyA_T_inrtl_to_body[0][0] =  cosa;
+      bodyA_T_inrtl_to_body[0][1] =  sina;
+      bodyA_T_inrtl_to_body[1][0] = -sina;
+      bodyA_T_inrtl_to_body[1][1] =  cosa;
+    }
+    // Construct the freestream velocity from the inertial velocity and the
+    // orientation of objectA.  Wlog make the wind be whatever is necessary to
+    // cancel out the y- and z-components of the inertial velocity, leaving the
+    // freestream velocity along the x-axis only.
+    jeod::Vector3::initialize(freestream_vel_bodyA);
+    freestream_vel_bodyA[0] = bodyA_inertial_vel[0]; // in inertial
+    freestream_mach = freestream_vel_bodyA[0] / 100;
+    jeod::Vector3::transform( bodyA_T_inrtl_to_body,
+                              freestream_vel_bodyA);
+  }
+
+
+  void configure()
+  {
+    jeod::Vector3::initialize( bodyA_inertial_pos);
+
+    jeod::Vector3::initialize( bodyA_inertial_vel);
+    bodyA_inertial_vel[0] = 20.0;
+
+    jeod::Vector3::initialize( bodyA_CoM_wrt_struc);
+    bodyA_CoM_wrt_struc[0] = 0.5;
+
+    jeod::Matrix3x3::identity( bodyA_T_inrtl_to_body);
+    bodyA_T_inrtl_to_body[0][0] =
+    bodyA_T_inrtl_to_body[1][1] = -1.0;
+
+    jeod::Matrix3x3::identity( bodyA_T_struc_to_body);
+    bodyA_T_struc_to_body[0][0] =
+    bodyA_T_struc_to_body[1][1] = -1.0;
+
+    bodyB_inertial_pos[0] = -10.0;
+    bodyB_inertial_pos[1] =   2.0;
+    bodyB_inertial_pos[2] =   0.0;
+
+    jeod::Vector3::initialize( bodyB_inertial_vel);
+
+    jeod::Matrix3x3::initialize( bodyB_T_inrtl_to_body);
+    bodyB_T_inrtl_to_body[0][1] =  1.0;
+    bodyB_T_inrtl_to_body[1][0] = -1.0;
+    bodyB_T_inrtl_to_body[2][2] =  1.0;
+
+    jeod::Matrix3x3::identity( bodyB_T_struc_to_body);
+    bodyB_T_struc_to_body[0][0] =
+    bodyB_T_struc_to_body[1][1] = -1.0;
+
+
+    params.grid_origin[0] = -2.5;
+    params.mach_off       = 0.1 ;
+
+    /* Diameter of the wake producing body */
+    params.main_body_diameter = 4;
+
+    /* Recirculation zone boundary parameters */
+    params.rev_flow.start_dist = 0.1 ;
+    params.rev_flow.stop_dist = 15;
+    params.rev_flow.radial_dist = 15.0 ;
+
+    /* Pressure Recovery Fraction zone boundary parameters */
+    params.prf.start_dist = 5;
+    params.prf.stop_dist = 20;
+    params.prf.radial_dist = 20;
+
+    wake_no_force.use_prf_model = true;
+    wake_no_force.use_rev_flow  = true;
+    wake_with_force.use_prf_model = true;
+    wake_with_force.use_rev_flow  = true;
+
+    wake_with_force.objectB.Cd = 0.2;
+    wake_with_force.objectB.set_generate_force( true);
+  }
+
+  void populate_tables( SubsonicWake & wake_effects)
+  {
+    // Vehicle X-axis Offset b/w Wake Origin and Rev Flow Origin
+    wake_effects.rev_flow.grid_offset = 2.0;
+
+    // Rev-flow tables
+    wake_effects.rev_flow.offset_trail_dist_axis = {
+      0.0,  0.5,  1.0,  3.0,  5.0, 10.0};
+    wake_effects.rev_flow.Qrev_table = {
+      0.1,  0.2,  0.3,  0.2,  0.1,  0.0};
+    wake_effects.rev_flow.data_loaded = true;
+
+    // Pressure recovery tables
+    wake_effects.prf_model.grid_offset = -1.0 ;
+    wake_effects.prf_model.mach_axis = { 0.2, 0.30, 0.50, 0.70};
+    wake_effects.prf_model.alpha_axis = { 0, 1, 2, 3}; // radians
+    wake_effects.prf_model.trail_diam_axis = {2.0, 5.0,  10.0,  20.0};
+    wake_effects.prf_model.effective_diam_axis =
+                                          {1.0, 3.0, 7.0};
+
+    // Note -- alpha-axis values should be in radians because the
+    // angle-of-attack coming in from the external model is going to be in
+    // radians.  However, for this unit-test, we can leave them in degrees and
+    // feed numerical values with degree-like values into the model from the
+    // unit-test framework.
+
+    wake_effects.prf_model.prf_table = { // 4x4x4x3 table
+        0.6,  0.65,  0.7, // [0][0][0][0-2]
+        0.7,  0.75,  0.8,
+        0.8,  0.85,  0.9,
+        0.9,  0.95,  1,   // [0][0][3][0-2]
+
+        0.5,  0.55,  0.6, // [0][1][0][0-2]
+        0.6,  0.65,  0.7,
+        0.7,  0.75,  0.8,
+        0.8,  0.85,  0.9,
+
+        0.4,  0.45,  0.5,
+        0.5,  0.55,  0.6,
+        0.6,  0.65,  0.7,
+        0.7,  0.75,  0.8,
+
+        0.3,  0.35,  0.4,
+        0.4,  0.45,  0.5,
+        0.5,  0.55,  0.6,
+        0.6,  0.65,  0.7, // [0][3][3][0-2]
+
+
+        0.4,  0.45,  0.5, // [1][0][0][0-2]
+        0.5,  0.55,  0.6,
+        0.6,  0.65,  0.7,
+        0.7,  0.75,  0.8,
+
+        0.3,  0.35,  0.4,
+        0.4,  0.45,  0.5,
+        0.5,  0.55,  0.6,
+        0.6,  0.65,  0.7,
+
+        0.2,  0.25,  0.3,
+        0.3,  0.35,  0.4,
+        0.4,  0.45,  0.5,
+        0.5,  0.55,  0.6,
+
+        0.1,  0.15,  0.2,
+        0.2,  0.25,  0.3,
+        0.3,  0.35,  0.4,
+        0.4,  0.45,  0.5,
+
+
+        0.2,  0.25,  0.3, // [2][0][0][0-2]
+        0.3,  0.35,  0.4,
+        0.4,  0.45,  0.5,
+        0.5,  0.55,  0.6,
+
+        0.1,  0.15,  0.2,
+        0.2,  0.25,  0.3,
+        0.3,  0.35,  0.4,
+        0.4,  0.45,  0.5,
+
+        0,    0.05,  0.1,
+        0.1,  0.15,  0.2,
+        0.2,  0.25,  0.3,
+        0.3,  0.35,  0.4,
+
+       -0.1, -0.05,  0,
+        0,    0.05,  0.1,
+        0.1,  0.15,  0.2,
+        0.2,  0.25,  0.3,
+
+
+        0,    0.05,  0.1, // [3][0][0][0-2]
+        0.1,  0.15,  0.2,
+        0.2,  0.25,  0.3,
+        0.3,  0.35,  0.4,
+
+       -0.1, -0.05,  0,
+        0,    0.05,  0.1,
+        0.1,  0.15,  0.2,
+        0.2,  0.25,  0.3,
+
+       -0.2, -0.15, -0.1,
+       -0.1, -0.05,  0,
+        0,    0.05,  0.1,
+        0.1,  0.15,  0.2,
+
+       -0.3, -0.25, -0.2,
+       -0.2, -0.15, -0.1,
+       -0.1, -0.05,  0,
+        0,    0.05,  0.1};
+    wake_effects.prf_model.data_loaded = true;
+  }
+
+  void invalid_constructs()
+  {
+    if (invalid_construct1) {
+      WakeGeneratingBody fault( NULL, NULL, NULL,
+                                bodyB_T_inrtl_to_body, bodyB_T_inrtl_to_body,
+                                NULL,
+                                total_alpha, total_alpha, total_alpha);
+    }
+    if (invalid_construct2) {
+      WakeFollowingBodyNoForce fault( total_alpha,
+                                      NULL, NULL,
+                                      objectA,
+                                      NULL);
+    }
+  }
+
+  // copy-constructor and operator= unimplemented and private.
+  WakeEffectsSimObject (const WakeEffectsSimObject&);
+  WakeEffectsSimObject & operator = (const WakeEffectsSimObject&);
+};
+
+WakeEffectsSimObject test;

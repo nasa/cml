@@ -1,0 +1,60 @@
+#define DYNAMICS 1.0
+#define LOW_RATE_ENV 10.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+#include "time_TAI_UTC_UT1_TT_GMST.sm"
+#include "dynamics.sm"
+#include "environment.sm"
+#include "earth_GGM02C_MET_RNP.sm"
+#include "vehicle_basic.sm"
+
+##include "../../include/apsides_predictor.hh"
+
+##include "jeod/models/dynamics/derived_state/include/planetary_derived_state.hh"
+##include "jeod/models/environment/planet/include/planet.hh"
+##include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
+
+class ApsidesPredictor_SimObject: public Trick::SimObject {
+
+ public:
+  ApsidesPredictor apsides;
+  jeod::PlanetaryDerivedState planet_rel_state;
+ protected:
+  jeod::DynManager & dyn_manager;
+  jeod::DynBody & body;
+
+ public:
+  ApsidesPredictor_SimObject( const jeod::RefFrameTrans & ref_frame_trans,
+                              const jeod::Planet & planet,
+                              const double & grav_mu,
+                              jeod::DynManager & dyn_manager_in,
+                              jeod::DynBody & body_in)
+    :
+    apsides(ref_frame_trans,
+            planet,
+            grav_mu),
+    dyn_manager(dyn_manager_in),
+    body(body_in)
+  {
+    ("initialization") apsides.initialize();
+    ("initialization") planet_rel_state.initialize( body,
+                                                    dyn_manager);
+
+    (DYNAMICS, "environment") planet_rel_state.update();
+    (DYNAMICS, "environment") apsides.update();
+  }
+
+ private:
+  ApsidesPredictor_SimObject (const ApsidesPredictor_SimObject&);
+  ApsidesPredictor_SimObject & operator = (const ApsidesPredictor_SimObject&);
+};
+ApsidesPredictor_SimObject apsides_predictor(
+                               vehicle.dyn_body.composite_body.state.trans,
+                               earth.planet,
+                               earth.gravity_source.mu,
+                               dynamics.dyn_manager,
+                               vehicle.dyn_body);
+
+IntegLoop sim_integ_loop  (DYNAMICS) dynamics, earth;

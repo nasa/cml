@@ -1,0 +1,57 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "time_TAI_UTC_UT1_TT.sm"
+#include "dynamics.sm"
+#include "environment.sm"
+#include "earth_basic.sm"
+#include "sun_basic.sm"
+#include "moon_basic.sm" // necessary to get earth and sun in same tree
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_lvlh_rot_state.hh"
+
+##include "cml/models/environment/gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh"
+##include "../../include/state_initialize.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+ public:
+  jeod::DynBody                           body;
+  jeod::MassBodyInit                      mass_init;
+  StateInitialize                         state_initialize;
+  jeod::DynBodyInitLvlhRotState           rot_init_slvlh;
+  SphericalHarmonicsFastGravityControls   grav_controls_earth;
+  TR_ParameterSet                         param_set;
+
+  VehicleSimObject(jeod::DynManager & dyn_mgr_in)
+  :
+    dyn_manager (dyn_mgr_in)
+  {
+    P_ENV ("initialization")      body.initialize_model( dyn_manager);
+  };
+
+ private:
+  VehicleSimObject( const VehicleSimObject&);
+  VehicleSimObject & operator = ( const VehicleSimObject&);
+
+ protected:
+  jeod::DynManager & dyn_manager;
+};
+VehicleSimObject vehicle(dynamics.dyn_manager);
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

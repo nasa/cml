@@ -1,0 +1,7 @@
+The cpp files and corresponding makefile provide utilities for reading and
+writing to binary files. This may have been made obsolete by the
+ConvertBinToCsv.cpp code found in ../Binaries.
+
+THe compare_sls_winds.py python script and associated slsenv python folder
+provide an independent manual data comparison mechanism to compare the
+interpolations made by the model code with interpolations made by Python.

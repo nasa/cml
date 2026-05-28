@@ -1,0 +1,104 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Test sim object
+*****************************************************************************/
+##include "../../include/generic_multi_input_table.hh"
+##include "../../include/table_independent_variable.hh"
+##include "../../include/table_lookup_set.hh"
+
+class TestingModelSimObject : public Trick::SimObject {
+ public:
+   double dependent;
+   double independent;
+   TableIndependentVariable tiv_name;   // (--) a named TIV
+   TableIndependentVariable tiv_noname; // (--) an unnamed TIV
+   TableIndependentVariable tiv_error;  // (--) a TIV for testing errors
+   TableIndependentVariable tiv_bias;   // (--) a TIV for testing biasing
+   GenericMultiInputTable   table;
+   TableLookupSet           table_set;
+
+   TestingModelSimObject()
+     :
+     dependent(0.0),
+     independent(-3.0),
+     tiv_name( "named", independent,
+       TableIndependentVariable::WrapAround, 1.0E-1),
+     tiv_noname(independent, TableIndependentVariable::WrapAround),
+     tiv_error(independent, TableIndependentVariable::WrapAround),
+     tiv_bias( independent, TableIndependentVariable::WrapAround),
+     table(dependent),
+     table_set()
+   {
+     ("default_data") configure();
+     ("initialization") table_set.initialize();
+     (1.0, "scheduled") update();
+   }
+
+   void configure()
+   {
+     std::vector<size_t> dim_list;
+     dim_list.push_back(1); // There is only 1 dependent
+     dim_list.push_back(3); // independent tiv_name has 3 values
+     dim_list.push_back(3); // independent tiv_noname has 3 values
+
+     double dep_data[3][3] = {{0,10,0},{1,11,1},{0,10,0}};
+     table.load_data(&dep_data[0][0], dim_list);
+
+     load_independent_data();
+
+     table_set.add_table(table);
+     table_set.add_independent_variable( tiv_name);
+     table_set.associate_table_and_independent();
+     table_set.add_independent_variable( tiv_noname);
+     table_set.associate_table_and_independent();
+   }
+
+   void load_independent_data()
+   {
+     double indep_data_arr[3] = {0,1,2};
+     tiv_name.load_data(indep_data_arr, 3);
+
+     std::vector<double> indep_data_vec;
+     indep_data_vec.push_back(2);
+     indep_data_vec.push_back(0);
+     indep_data_vec.push_back(-2);
+     tiv_noname.load_data(indep_data_vec);
+   }
+
+   void load_bias_data()
+   {
+     double indep_bias[5] = { 2, 4, 6, 8, 9 };
+     tiv_bias.load_data( indep_bias, 5 );
+   }
+
+   void load_error_data()
+   {
+     std::vector<double> indep_data_vec(1,0);
+     tiv_error.load_data(indep_data_vec);
+     tiv_error.initialize();
+     tiv_error.update();
+   }
+
+   void update()
+   {
+     independent += 0.5;
+     table_set.update();
+   }
+
+   void print_tiv_bias()
+   {
+     std::cout << "tiv_bias data: [";
+     for (size_t ii = 0; ii < tiv_bias.data.size(); ++ii) {
+       std::cout << tiv_bias.data[ii] << "  ";
+     }
+     std::cout << "]\n";
+   }
+
+  private:
+   TestingModelSimObject( const TestingModelSimObject&);
+   TestingModelSimObject& operator = ( const TestingModelSimObject&);
+};
+
+TestingModelSimObject test;

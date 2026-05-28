@@ -1,0 +1,49 @@
+# State body translational params
+dummy_veh_launcher_verif.state_body.composite_body.state.trans.position[0] = 100.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.trans.position[1] = -10.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.trans.position[2] = 200.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.trans.velocity[0] = 2.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.trans.velocity[1] = -1.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.trans.velocity[2] = 5.0;
+dummy_veh_launcher_verif.state_body.derivs.trans_accel[0] = 2.0;
+dummy_veh_launcher_verif.state_body.derivs.trans_accel[1] = -5.0;
+dummy_veh_launcher_verif.state_body.derivs.trans_accel[2] = 10.0;
+dummy_veh_launcher_verif.state_body.derivs.non_grav_accel[0] = -1.0;
+dummy_veh_launcher_verif.state_body.derivs.non_grav_accel[1] = 1.0;
+dummy_veh_launcher_verif.state_body.derivs.non_grav_accel[2] = 2.0;
+
+# State body rotational params
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.ang_vel_this[0] = 0.4;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.ang_vel_this[1] = 0.5;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.ang_vel_this[2] = 0.4;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.Q_parent_this.vector[0] = 0.3;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.Q_parent_this.vector[1] = 0.4;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.Q_parent_this.vector[2] = 0.6;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.Q_parent_this.scalar = 5.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.T_parent_this[0][0] = 0.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.T_parent_this[0][1] = 1.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.T_parent_this[0][2] = 2.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.T_parent_this[1][0] = 3.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.T_parent_this[1][1] = 4.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.T_parent_this[1][2] = 5.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.T_parent_this[2][0] = 6.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.T_parent_this[2][1] = 7.0;
+dummy_veh_launcher_verif.state_body.composite_body.state.rot.T_parent_this[2][2] = 8.0;
+dummy_veh_launcher_verif.state_body.derivs.rot_accel[0] = 10.0;
+dummy_veh_launcher_verif.state_body.derivs.rot_accel[1] = 10.0;
+dummy_veh_launcher_verif.state_body.derivs.rot_accel[2] = 10.0;
+
+# Mass body
+dummy_veh_launcher_verif.mass_body.composite_properties.mass = 100.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.position[0] = 7000000.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.position[1] = 1.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.position[2] = 2.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.inertia[0][0] = 1.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.inertia[0][1] = 0.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.inertia[0][2] = 0.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.inertia[1][0] = 0.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.inertia[1][1] = 1.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.inertia[1][2] = 0.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.inertia[2][0] = 0.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.inertia[2][1] = 0.0;
+dummy_veh_launcher_verif.mass_body.composite_properties.inertia[2][2] = 1.0;

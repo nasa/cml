@@ -1,0 +1,214 @@
+/*********************************TRICK HEADER**********************************
+PURPOSE:  (S_define Header)
+*******************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "../../include/color_string.hh"
+##include <string>
+##include <iostream>
+##include <ostream>
+##include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+class ColorStringSimObject : public Trick::SimObject {
+
+  public:
+    std::string input;
+    ColorString color;
+
+    //Constructor
+    ColorStringSimObject()
+    :
+    input("Line of text")
+
+    {
+      ("scheduled") color_test();
+    }
+
+  private:
+    enum colors {BLACK,RED,GREEN,YELLOW,BLUE,MAGENTA,CYAN,WHITE,
+                 BRIGHT_YELLOW,
+                 BLACK_BACKGROUND,RED_BACKGROUND,GREEN_BACKGROUND,
+                 YELLOW_BACKGROUND,BLUE_BACKGROUND,MAGENTA_BACKGROUND,
+                 CYAN_BACKGROUND,WHITE_BACKGROUND};
+    void check_for_ascii_markers(std::string input_string, 
+                                 colors expected_color)
+    {
+      bool fail_test = 0;
+      switch(expected_color){
+        case BLACK :
+          if (input_string.find("\033[30m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case RED :
+          if (input_string.find("\033[31m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case GREEN :
+          if (input_string.find("\033[32m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case YELLOW :
+          if (input_string.find("\033[33m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case BLUE :
+          if (input_string.find("\033[34m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case MAGENTA :
+          if (input_string.find("\033[35m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case CYAN :
+          if (input_string.find("\033[36m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case WHITE :
+          if (input_string.find("\033[37m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case BRIGHT_YELLOW :
+          if (input_string.find("\033[93m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case BLACK_BACKGROUND :
+          if (input_string.find("\033[40m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case RED_BACKGROUND :
+          if (input_string.find("\033[41m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case GREEN_BACKGROUND :
+          if (input_string.find("\033[42m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case YELLOW_BACKGROUND :
+          if (input_string.find("\033[43m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case BLUE_BACKGROUND :
+          if (input_string.find("\033[44m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case MAGENTA_BACKGROUND :
+          if (input_string.find("\033[45m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case CYAN_BACKGROUND :
+          if (input_string.find("\033[46m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        case WHITE_BACKGROUND :
+          if (input_string.find("\033[47m") == std::string::npos) {
+            fail_test = 1;
+          }
+          break;
+        default:
+          fail_test = 1;
+      }
+      if (input_string.find("\033[0m") == std::string::npos) {
+        fail_test = 1;
+      }
+      if (fail_test == 1) {
+        CMLMessage::fail(
+          __FILE__,__LINE__,"color_test::check_error\n",
+          "The given color does not match the expected ascii characters. "
+          "Failing test. \n");
+      }
+    }
+    void color_test()
+    {
+      std::string color_scratch;
+
+      // This section will have the output text colored in order of the
+      // colors available in the model.
+      color_scratch = color.black(input);
+      check_for_ascii_markers(color_scratch, BLACK);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.red(input);
+      check_for_ascii_markers(color_scratch, RED);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.green(input);
+      check_for_ascii_markers(color_scratch, GREEN);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.yellow(input);
+      check_for_ascii_markers(color_scratch, YELLOW);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.blue(input);
+      check_for_ascii_markers(color_scratch, BLUE);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.magenta(input);
+      check_for_ascii_markers(color_scratch, MAGENTA);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.cyan(input);
+      check_for_ascii_markers(color_scratch, CYAN);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.white(input);
+      check_for_ascii_markers(color_scratch, WHITE);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.bright_yellow(input);
+      check_for_ascii_markers(color_scratch, BRIGHT_YELLOW);
+      std::cout << color_scratch << std::endl;
+      
+      // This section will have the output text background colored in order
+      // of the colors available in the model.
+      color_scratch = color.black_background(input);
+      check_for_ascii_markers(color_scratch, BLACK_BACKGROUND);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.red_background(input);
+      check_for_ascii_markers(color_scratch, RED_BACKGROUND);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.green_background(input);
+      check_for_ascii_markers(color_scratch, GREEN_BACKGROUND);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.yellow_background(input);
+      check_for_ascii_markers(color_scratch, YELLOW_BACKGROUND);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.blue_background(input);
+      check_for_ascii_markers(color_scratch, BLUE_BACKGROUND);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.magenta_background(input);
+      check_for_ascii_markers(color_scratch, MAGENTA_BACKGROUND);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.cyan_background(input);
+      check_for_ascii_markers(color_scratch, CYAN_BACKGROUND);
+      std::cout << color_scratch << std::endl;
+
+      color_scratch = color.white_background(input);
+      check_for_ascii_markers(color_scratch, WHITE_BACKGROUND);
+      std::cout << color_scratch << std::endl;
+    }
+};
+ColorStringSimObject colorstring;

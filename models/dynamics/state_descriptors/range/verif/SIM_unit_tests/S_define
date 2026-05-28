@@ -1,0 +1,138 @@
+/*****************************************************************************
+PURPOSE:(Unit test the RangeFromPfixReference and RangeToPfixReference
+         models by feeding them planet fixed position and velocity data)
+PROGRAMMERS:
+    (
+     ((Dan Jordan) (Jacobs JETS) (05/25/2017) (Antares) (Initial sim creation))
+     ((Daniel Ghan) (OSR) (Aug 2020) (Antares) (Improved code coverage))
+    )
+*****************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+RangeUnitTestSimObject
+Purpose:(Unit test the RangeFromPfixReference and RangeToPfixReference
+         models by feeding them planet fixed position and velocity data)
+*****************************************************************************/
+
+##include <cmath>
+##include "jeod/models/environment/planet/include/planet.hh"
+##include "jeod/models/environment/gravity/include/gravity_source.hh"
+##include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
+##include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/alt_lat_long_state.hh"
+##include "jeod/models/utils/ref_frames/include/ref_frame_state.hh" // RefFrameTrans
+##include "jeod/models/utils/math/include/vector3.hh"
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/range_from_pfix_reference.hh"
+##include "../../include/range_to_pfix_reference.hh"
+
+class RangeUnitTestSimObject: public Trick::SimObject {
+   public:
+    // Framework
+    UnitTestFramework framework;
+
+    // Model for testing
+    RangeFromPfixReference range_from_pfix;
+    RangeToPfixReference   range_to_pfix;
+    RangeToPfixReference   range_to_pfix_internal_ref;
+
+    // support variables
+    jeod::DynManager             dyn_manager;
+    jeod::Planet                 earth;
+    jeod::GravitySource          gravity_source;
+    jeod::AltLatLongState        reference_position; /* (--)
+        reference latitude/longitude/altitude; unit test framework will set this */
+    jeod::PlanetFixedPosition    vehicle_position;   /* (--)
+        pfix position of vehicle; unit test framework will set the ellip_coords */
+    double                       pfix_rel_vel[3]; /* (m/s)
+        Planet-relative velocity (expressed in pfix); unit test data will set this */
+    double                       azimuth;
+    jeod::RefFrameTrans          trans; /* (--) Used in RUN_error for code coverage */
+
+    RangeUnitTestSimObject()
+        :
+      range_from_pfix(vehicle_position),
+      range_to_pfix(vehicle_position, pfix_rel_vel),
+      range_to_pfix_internal_ref(vehicle_position),
+      dyn_manager(),
+      earth(),
+      gravity_source(),
+      reference_position(),
+      vehicle_position()
+    {
+      // Framework
+      ("initialization")   framework.initialize();
+      (1.0, "environment") framework.update();
+
+      // support variable jobs
+      ("initialization") earth.register_model(gravity_source, dyn_manager);
+      ("initialization") earth.initialize();
+      ("initialization") vehicle_position.initialize(&earth);
+
+      // Normally, no jobs would be scheduled for reference_data because it is initialized and
+      // updated by the RangeComputation model. Normally, the reference position is fixed. Here, we want
+      // test multiple reference positions with multiple runs using different coordinate options. The
+      // reference position must be updated before the RangeComputation model is re-initialized and,
+      // because we use update_from_ellip() to update the reference position, it must be initialized first.
+      ("initialization") range_from_pfix.reference_data.initialize(&earth);
+      ("initialization") range_to_pfix.reference_data.initialize(&earth);
+      ("initialization") range_to_pfix_internal_ref.reference_data.initialize(&earth);
+      (1.0, "scheduled") update_reference_point(range_from_pfix.reference_data);
+      (1.0, "scheduled") update_reference_point(range_to_pfix.reference_data);
+      (1.0, "scheduled") update_reference_point(range_to_pfix_internal_ref.reference_data);
+
+      // test-specific jobs:
+      // Update spherical and Cartesian vehicle position (ellip position is updated by unit sim framework)
+      (1.0, "scheduled") vehicle_position.update_from_ellip(vehicle_position.ellip_coords);
+
+      // Since the reference_data is input from Unit_test_data, we need to run
+      // initialize at every scheduled frame, normally this is only done once
+      // in an integrated sim
+      (1.0, "scheduled") range_to_pfix.initialize(earth);
+      (1.0, "scheduled") range_to_pfix_internal_ref.initialize(earth);
+      (1.0, "scheduled") range_from_pfix.initialize(earth);
+
+      // Update the range model
+      (1.0, "scheduled") range_to_pfix.update();
+      (1.0, "scheduled") range_to_pfix_internal_ref.update();
+      (1.0, "scheduled") range_from_pfix.update();
+    }
+
+  private:
+    void update_reference_point(PfixReferencePoint & point) {
+      // Regardless of position_type, the reference position will be the same.
+      point.update_from_spher(reference_position);
+
+      switch (point.position_type) {
+       case PfixReferencePoint::topodetic:
+        point.longitude = point.ellip_coords.longitude;
+        point.latitude = point.ellip_coords.latitude;
+        point.altitude = point.ellip_coords.altitude;
+        point.azimuth = azimuth;
+        break;
+       case PfixReferencePoint::topocentric:
+        point.longitude = point.sphere_coords.longitude;
+        point.latitude = point.sphere_coords.latitude;
+        point.altitude = point.sphere_coords.altitude;
+        point.azimuth = azimuth;
+        break;
+       case PfixReferencePoint::pfix:
+        jeod::Vector3::copy(point.cart_coords, point.position);
+        jeod::Vector3::copy(pfix_rel_vel, point.direction);
+        break;
+       case PfixReferencePoint::inertial:
+        jeod::Vector3::transform_transpose( point.planet->pfix.state.rot.T_parent_this,
+                                      point.cart_coords,
+                                      point.position);
+        jeod::Vector3::copy(pfix_rel_vel, point.direction);
+        break;
+       default:
+        break;
+      }
+    }
+
+    RangeUnitTestSimObject (const RangeUnitTestSimObject&);
+    RangeUnitTestSimObject & operator = (const RangeUnitTestSimObject&);
+};
+RangeUnitTestSimObject test ;

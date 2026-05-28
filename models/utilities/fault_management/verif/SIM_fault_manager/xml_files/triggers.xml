@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Trigger Tests">
+<Fault ID="Bool Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_bool"></SimVar>
+  <Overwrite value="true"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="string trigger unequal" variable="test_object.command" compare="NE" value="hold"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Char Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_char"></SimVar>
+  <Overwrite value="100"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="bool trigger" variable="test_object.var_bool" compare="EQ" value="true"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="UChar Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_uchar"></SimVar>
+  <Overwrite value="5"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="char trigger" variable="test_object.var_char" compare="GT" value="99"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Short Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_sint"></SimVar>
+  <Overwrite value="6"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="uchar trigger" variable="test_object.var_uchar" compare="EQ" value="5"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="UShort Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_usint"></SimVar>
+  <Overwrite value="0"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="short trigger" variable="test_object.ref_sint" compare="NE" value="2"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Int Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_int"></SimVar>
+  <Overwrite value="1"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="ushort trigger" variable="test_object.var_usint" compare="LE" value="1"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="UInt Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_uint"></SimVar>
+  <Overwrite value="9"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="int trigger" variable="test_object.var_int" compare="LT" value="2"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Long Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_lint"></SimVar>
+  <Overwrite value="10"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="uint trigger" variable="test_object.var_uint" compare="GE" value="8"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="ULong Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_ulint"></SimVar>
+  <Overwrite value="11"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="long trigger" variable="test_object.var_lint" compare="GE" value="10"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="LLong Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_llint"></SimVar>
+  <Overwrite value="12"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="ulong trigger" variable="test_object.var_ulint" compare="GE" value="11"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="ULLong Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_ullint"></SimVar>
+  <Overwrite value="13"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="llong trigger" variable="test_object.var_llint" compare="GE" value="12"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Float Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_float"></SimVar>
+  <Overwrite value="0.10001"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="ullong trigger" variable="test_object.var_ullint" compare="GE" value="60"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Double Fault" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_double"></SimVar>
+  <Overwrite value="0.3"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="float trigger" variable="test_object.var_float" compare="NE" value="0.1"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Bool Fault 2" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_bool"></SimVar>
+  <Overwrite value="false"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="double trigger" variable="test_object.var_double" compare="EQ" value="0.3"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="UChar Overflow" enabled="true" type="OVERWRITE" loc="DOWNSTREAM" fire_limit="1">
+  <SimVar name="test_object.constant_uchar"></SimVar>
+  <Overwrite value="265"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="string trigger equal" variable="test_object.command" compare="EQ" value="stop"></Trigger>
+  </TriggerGroup>
+</Fault>
+</FaultManager>

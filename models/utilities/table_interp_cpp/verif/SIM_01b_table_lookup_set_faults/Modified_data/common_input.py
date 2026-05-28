@@ -1,0 +1,11 @@
+test.load_dependent_data()
+test.load_independent_data()
+test.generic_table.add_independent( test.tiv_2)
+test.generic_table.add_independent( test.tiv_3)
+test.manager.add_independent_variable( test.tiv_1)
+test.manager.add_independent_variable( test.tiv_2)
+test.manager.add_independent_variable( test.tiv_3)
+test.manager.add_table( test.generic_table)
+test.manager.initialize()
+
+trick.stop(10)

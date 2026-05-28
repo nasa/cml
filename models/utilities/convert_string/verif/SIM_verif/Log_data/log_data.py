@@ -1,0 +1,21 @@
+dr_group = trick.sim_services.DRAscii("test_data")
+dr_group.set_cycle(1.0)
+dr_group.freq = trick.sim_services.DR_Always
+trick.add_data_record_group(dr_group, trick.DR_Buffer)
+
+
+dr_group.add_variable("test.f")
+dr_group.add_variable("test.d")
+dr_group.add_variable("test.i")
+dr_group.add_variable("test.ui")
+dr_group.add_variable("test.l")
+dr_group.add_variable("test.ul")
+dr_group.add_variable("test.ll")
+dr_group.add_variable("test.ull")
+dr_group.add_variable("test.s")
+dr_group.add_variable("test.bt1")
+dr_group.add_variable("test.bt2")
+dr_group.add_variable("test.bt3")
+dr_group.add_variable("test.bf1")
+dr_group.add_variable("test.bf2")
+dr_group.add_variable("test.bf3")

@@ -1,0 +1,7 @@
+test.lagged_altitude
+test.payload.planetodetic_altitude
+test.payload.density
+test.payload.speed_of_sound
+test.payload.planetodetic_wind_velocity[0]
+test.payload.planetodetic_wind_velocity[1]
+test.payload.planetodetic_wind_velocity[2]

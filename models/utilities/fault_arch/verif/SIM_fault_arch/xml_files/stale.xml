@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Test Fault 1" enabled="true" type="STALE" loc="DOWNSTREAM">
+   <SimVar name="test_object.linear_value"></SimVar>
+   <TriggerGroup>
+      <Trigger name = "trigger 1" variable="test_object.current_time" compare="GE" value="1"></Trigger>
+      <Trigger name = "trigger 2" variable="test_object.current_time" compare="LE" value="2"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 2" enabled="true" type="STALE" loc="DOWNSTREAM">
+   <SimVar name="test_object.linear_value"></SimVar>
+   <TriggerGroup>
+      <Trigger name = "trigger 3" variable="test_object.current_time" compare="GE" value="3"></Trigger>
+      <Trigger name = "trigger 4" variable="test_object.current_time" compare="LE" value="4"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 3" enabled="true" type="STALE" loc="DOWNSTREAM">
+   <SimVar name="test_object.counting_int"></SimVar>
+   <TriggerGroup>
+      <Trigger name = "trigger 5" variable="test_object.current_time" compare="GE" value="6"></Trigger>
+      <Trigger name = "trigger 6" variable="test_object.current_time" compare="LE" value="7"></Trigger>
+   </TriggerGroup>
+</Fault>
+</FaultManager>

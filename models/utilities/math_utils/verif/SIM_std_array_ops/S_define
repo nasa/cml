@@ -1,0 +1,173 @@
+/******************************** TRICK HEADER *********************************
+PURPOSE: (Unit test CML Math)
+PROGRAMMERS: (((Matt Elmer) (OSR) (Jun 2023) (ANTARES V&V)))
+*******************************************************************************/
+
+#include "trick/sim_objects/default_trick_sys.sm"
+
+##include <iomanip>
+##include "cml/models/utilities/math_utils/include/std_array_ops.hh"
+##include "cml/models/utilities/math_utils/include/math_utils.hh"
+
+class VerifSimObject: public Trick::SimObject {
+ public:
+  std::array<double,3> in_array_A3;
+  std::array<double,3> in_array_B3;
+  std::array<double,4> in_array_A4;
+  std::array<double,4> in_array_B4;
+
+  double in_vec_3[3];
+  double in_vec_4[4];
+
+  double scalar_out;
+  int test_id;
+  
+  std::array<double,3> out_array_3;
+  std::array<double,4> out_array_4;
+  double out_scalar;
+
+  
+  VerifSimObject()
+  {
+    (1, "scheduled") run_test();
+  }
+
+  void report( std::string test)
+  {
+    std::cout << std::left <<
+                 std::setw(26) << test << " | " <<
+                 std::setw(7)  << scalar_out << " | " <<
+                 out_array_3 << "    |    " <<
+                 out_array_4 << "\n";
+  }
+
+  void run_test() {
+    std::cout << "**********************************************\n"
+     "Test # " << test_id << "\n"
+     "Operation                  | scalar  |      out_3       |         out_4\n";
+    
+    out_array_3 = std_copy( in_vec_3);
+    out_array_4 = std_copy( in_vec_4);
+    report("std_copy");
+
+    in_array_A3 = out_array_3;
+    in_array_A4 = out_array_4;
+
+    out_array_3 += in_array_A3;
+    out_array_4 += in_array_A4;
+    report("+= array");
+
+    out_array_3 += std::array<double, 3> {1.0,2.0,3.0};
+    out_array_4 += std::array<double, 4> {1.0,2.0,3.0,4.0};
+    report("+= array&&");
+    
+    in_array_B3 = out_array_3;
+    in_array_B4 = out_array_4;
+    
+    out_array_3 -= in_array_A3;
+    out_array_4 -= std::array<double, 4> {1.5,2.5,3.5,4.5};
+    report("-=");
+    
+    out_array_3 = in_array_B3 - in_array_A3;
+    out_array_4 = in_array_B4 - in_array_A4;
+    report("a - b");
+
+    out_array_3 *= 3;
+    out_array_4 *= 3;
+    report("*=3");
+
+    out_array_3 *= in_array_A3 * 2;
+    out_array_4 *= in_array_A4 * 2;
+    report("= array * 2");
+
+    out_array_3 *= in_array_A3;
+    out_array_4 *= in_array_A4;
+    report("*= array");
+
+    out_array_3 = in_array_B3 * in_array_A3;
+    out_array_4 = in_array_B4 * in_array_A4;
+    report("= a * b");
+
+    out_array_3 = in_array_B3 / in_array_A3;
+    out_array_4 = in_array_B4 / in_array_A4;
+    report("= a / b");
+
+    scalar_out = MathUtils::vector_scalar_product( in_array_B3,
+                                                   in_array_A3);
+    report("= vector_scalar_product(3)");
+
+    scalar_out = MathUtils::vector_scalar_product( in_array_B4,
+                                                   in_array_A4);
+    report("= vector_scalar_product(4)");
+
+    out_array_3 = MathUtils::vector_cross_product( in_array_B3,
+                                                   in_array_A3);
+    report("= vector_cross_product(3)");
+
+    out_array_3 = MathUtils::vector_cross_product( in_array_B3,
+                                                   in_vec_3);
+    report("= vector_cross_product(3)");
+
+    out_array_3 = MathUtils::vector_cross_product( in_vec_3,
+                                                   in_array_B3);
+    report("= vector_cross_product(3)");
+
+    out_array_3 = MathUtils::vector_cross_product( in_vec_3,
+                                                   in_vec_3);
+    report("= vector_cross_product(3)");
+
+    scalar_out = MathUtils::vec_mag_sq( in_array_A4);
+    report("= vec_mag_sq(4)");
+
+    scalar_out = MathUtils::vec_mag( in_array_A4);
+    report("= vec_mag(4)");
+
+    scalar_out = MathUtils::vec_mag_xy( in_array_A3);
+    report("= vec_mag_xy(3)");
+
+    scalar_out = MathUtils::vec_mag_xy( in_vec_3);
+    report("= vec_mag_xy(3)");
+
+    scalar_out = MathUtils::vec_mag_xz( in_array_A3);
+    report("= vec_mag_xz(3)");
+
+    scalar_out = MathUtils::vec_mag_xz( in_vec_3);
+    report("= vec_mag_xz(3)");
+
+    scalar_out = MathUtils::vec_mag_yz( in_array_A3);
+    report("= vec_mag_yz(3)");
+
+    scalar_out = MathUtils::vec_mag_yz( in_vec_3);
+    report("= vec_mag_yz(3)");
+
+    out_array_3 = MathUtils::unit_vector( in_array_A3);
+    out_array_4 = MathUtils::unit_vector( in_array_A4);
+    report("unit_vector");
+
+    std::array<double, 3> zero_array_A3 = {0.0, 0.0, 0.0};
+    out_array_3 = MathUtils::unit_vector( zero_array_A3);
+    report("unit_vector");
+
+    MathUtils::zero_vector( out_array_3);
+    MathUtils::zero_vector( out_array_4);
+    report("zero_vector");
+
+    out_array_3 = MathUtils::vector_elementwise_sqrt( in_array_A3);
+    out_array_4 = MathUtils::vector_elementwise_sqrt( in_array_A4);
+    report("vector_elementwise_sqrt");
+
+    out_array_3 = MathUtils::diff(in_vec_3, in_vec_3);
+    report("diff");
+    
+    out_array_3 = MathUtils::sum(in_vec_3, in_vec_3);
+    report("sum");
+
+    std::cout << "**********************************************\n\n";
+    test_id++;
+  }
+  
+ private:
+  VerifSimObject(const VerifSimObject&);
+  VerifSimObject& operator=(const VerifSimObject&);
+};
+VerifSimObject test;

@@ -1,0 +1,110 @@
+include(AddCMLLibrary)
+add_cml_library(
+    NAME
+        dynamics
+
+    HEADERS
+        actions/mass_body_detach_impulsive/include/mass_body_detach_impulsive.hh
+        integration/accumulated_absolute_deltas/include/accumulated_absolute_deltas.hh
+        integration/scalar_integrable_object/include/scalar_integrable_object.hh
+        integration/vector3_integrable_object/include/restartable_vector3_1st_order_integrator.hh
+        integration/vector3_integrable_object/include/vector3_integrable_object.hh
+        mass/dynamic_mass/include/dynamic_mass_body.hh
+        mass/dynamic_mass/include/dynamic_mass_body_interpolation.hh
+        mass/dynamic_mass/include/dynamic_mass_body_nominal_properties.hh
+        mass/dynamic_mass/include/dynamic_mass_body_properties.hh
+        mass/dynamic_mass/include/dynamic_mass_group.hh
+        mass/dynamic_mass/include/dynamic_mass_string.hh
+        mass/mass_body_dispersed_init/include/mass_body_composite_dispersions.hh
+        mass/mass_body_dispersed_init/include/mass_body_dispersed_init.hh
+        mass/mass_body_dispersed_init/include/mass_properties_dispersions.hh
+        mass/mass_body_distribute_comp_to_core/include/mass_body_distribute_comp_to_core.hh
+        mass_derivative_dynamics/include/mass_derivative_dynamics.hh
+        state_descriptors/atmos_rel_state/include/atmos_relative_state.hh
+        state_descriptors/atmos_rel_state/verif/SIM_nan_verif/atmos_rel_state_test.hh
+        state_descriptors/earth_moon_rotating_frame/include/earth_moon_rotating_frame.hh
+        state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh
+        state_descriptors/extended_planetary_derived_state/include/point_to_point.hh
+        state_descriptors/extended_planetary_derived_state/include/range_safety_data.hh
+        state_descriptors/extended_planetary_derived_state/include/topo_container.hh
+        state_descriptors/extended_planetary_derived_state/include/velocity_set.hh
+        state_descriptors/orb_elem_subset/include/orb_elem_subset.hh
+        state_descriptors/pointing_ref_frame/include/ephem_based_pointing_ref_frame.hh
+        state_descriptors/pointing_ref_frame/include/pointing_ref_frame.hh
+        state_descriptors/range/data/include/range_default_data.hh
+        state_descriptors/range/include/pfix_reference_point.hh
+        state_descriptors/range/include/range_computation.hh
+        state_descriptors/range/include/range_from_pfix_reference.hh
+        state_descriptors/range/include/range_to_pfix_reference.hh
+        state_descriptors/separation_state/include/lvlh_separation_state.hh
+        state_descriptors/separation_state/include/separation_state.hh
+        state_descriptors/simple_planet_rel_state/include/simple_planet_rel_state.hh
+        state_initialize/correlated_state_dispersion/include/correlated_state_dispersion.hh
+        state_initialize/correlated_state_dispersion/verif/SIM_cholesky_unit_test/include/test_class.hh
+        state_initialize/state_initialize/include/monte_carlo_state_dispersion.hh
+        state_initialize/state_initialize/include/state_initialize.hh
+        state_initialize/state_initialize/include/state_initialize_with_propagation.hh
+        state_initialize/target_relative_parameters/include/TR_parameter_ref_frame.hh
+        state_initialize/target_relative_parameters/include/TR_state_param.hh
+        state_initialize/target_relative_parameters/include/TR_state_parameter_set.hh
+        state_initialize/target_relative_parameters/include/TR_state_parameters.hh
+        state_initialize/target_relative_parameters/include/TR_state_parameters_alt.hh
+        state_overrides/contact/include/contact_state_override.hh
+        state_overrides/twist_sway/include/twist_sway.hh
+        state_predictors/apsides_predictor/include/apsides_predictor.hh
+        state_predictors/impact_point/include/impact_point.hh
+
+    SOURCES
+        actions/mass_body_detach_impulsive/src/mass_body_detach_impulsive.cc
+        integration/accumulated_absolute_deltas/src/accumulated_absolute_deltas.cc
+        integration/scalar_integrable_object/src/scalar_integrable_object.cc
+        integration/vector3_integrable_object/src/vector3_integrable_object.cc
+        mass/dynamic_mass/src/dynamic_mass_body.cc
+        mass/dynamic_mass/src/dynamic_mass_body_interpolation.cc
+        mass/dynamic_mass/src/dynamic_mass_body_properties.cc
+        mass/dynamic_mass/src/dynamic_mass_group.cc
+        mass/dynamic_mass/src/dynamic_mass_string.cc
+        mass/mass_body_dispersed_init/src/mass_body_composite_dispersions.cc
+        mass/mass_body_dispersed_init/src/mass_body_dispersed_init.cc
+        mass/mass_body_dispersed_init/src/mass_properties_dispersions.cc
+        mass/mass_body_distribute_comp_to_core/src/mass_body_distribute_comp_to_core.cc
+        mass_derivative_dynamics/src/mass_derivative_dynamics.cc
+        state_descriptors/atmos_rel_state/src/atmos_relative_state.cc
+        state_descriptors/earth_moon_rotating_frame/src/earth_moon_rotating_frame.cc
+        state_descriptors/extended_planetary_derived_state/src/extended_planetary_derived_state.cc
+        state_descriptors/extended_planetary_derived_state/src/point_to_point.cc
+        state_descriptors/extended_planetary_derived_state/src/range_safety_data.cc
+        state_descriptors/extended_planetary_derived_state/src/topo_container.cc
+        state_descriptors/extended_planetary_derived_state/src/velocity_set.cc
+        state_descriptors/orb_elem_subset/src/orb_elem_subset.cc
+        state_descriptors/pointing_ref_frame/src/pointing_ref_frame.cc
+        state_descriptors/range/data/src/range_default_data.cc
+        state_descriptors/range/src/pfix_reference_point.cc
+        state_descriptors/range/src/range_computation.cc
+        state_descriptors/range/src/range_from_pfix_reference.cc
+        state_descriptors/range/src/range_to_pfix_reference.cc
+        state_descriptors/separation_state/src/lvlh_separation_state.cc
+        state_descriptors/separation_state/src/separation_state.cc
+        state_descriptors/simple_planet_rel_state/src/simple_planet_rel_state.cc
+        state_initialize/correlated_state_dispersion/src/correlated_state_dispersion.cc
+        state_initialize/state_initialize/src/monte_carlo_state_dispersion.cc
+        state_initialize/state_initialize/src/state_initialize.cc
+        state_initialize/state_initialize/src/state_initialize_with_propagation.cc
+        state_initialize/target_relative_parameters/src/TR_parameter_ref_frame.cc
+        state_initialize/target_relative_parameters/src/TR_state_param.cc
+        state_initialize/target_relative_parameters/src/TR_state_parameters.cc
+        state_initialize/target_relative_parameters/src/TR_state_parameters_alt.cc
+        state_overrides/contact/src/contact_state_override.cc
+        state_overrides/twist_sway/src/twist_sway.cc
+        state_predictors/apsides_predictor/src/apsides_predictor.cc
+        state_predictors/impact_point/src/impact_point.cc
+)
+
+include(AddCMLTests)
+add_cml_tests(
+    NAME
+        dynamics
+
+    SOURCES
+        mass_derivative_dynamics/tests/test_mass_derivative_dynamics.cpp
+)

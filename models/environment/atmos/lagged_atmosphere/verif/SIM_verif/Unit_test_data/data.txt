@@ -1,0 +1,11 @@
+110   100  10.0  310.0   1.0  0.0  0.0
+ 90   100  10.0  310.0   1.0  0.0  0.0
+100    90   9.0  309.0   2.0  1.0  0.0
+ 90    90   9.0  309.0  12.0 11.0 10.0 # repeat the 90 data point - should be ignored
+ 85    80   8.0  308.0   3.0  2.0  1.0 # set 80, test interpolation
+ 50    40   4.0  304.0   4.0  3.0  2.0 # set 40, test interpolation, pop off the 100 data point
+ 90    80   8.0  308.0  13.0 12.0 11.0 # repeat the 80 data point - should be ignored
+ 50    40   4.0  304.0  14.0 13.0 12.0 # confirm the 80 data point was not rewritten
+ 30    40   4.0  304.0  14.0 13.0 12.0 # below-table error
+ 70    70  74.0  704.0  74.0 73.0 72.0 # Verify that nodes cannot be inserted above the minimum
+ 30    30   3.0  303.0   5.0  4.0  3.0 # One last point after setting the min_delta large

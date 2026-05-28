@@ -1,0 +1,129 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Test sim object
+*****************************************************************************/
+##include "../../include/generic_multi_input_table.hh"
+##include "../../include/table_independent_variable.hh"
+##include "../../include/table_lookup__transpose_data.hh"
+
+class TestingModelSimObject : public Trick::SimObject {
+ public:
+  // General variables
+  double  independent;
+  double  indep_incr;   // (--) increment per cycle.
+  double  dependent[4]; // (--) target variable
+  std::list< std::vector< double > > list_vec;
+  std::vector<double> data_line;
+
+  // Model suppoort variables
+  TableIndependentVariable TIV_1; // (--) a TIV to use with manager (optional)
+
+  TableLookupTransposeDataSet_TableConfig config1;
+
+  // Class for testing:
+  TableLookupTransposeDataSet manager;
+
+  TestingModelSimObject()
+      :
+      independent(0.0),
+      indep_incr(5.0),
+      TIV_1(independent, TableIndependentVariable::Linear),
+      config1()
+  {
+    ("default_data")   defaults();
+  };
+
+  //*********************
+  // initialize the model
+  //*********************
+  void initialize()
+  {
+    manager.initialize();
+    manager.subscribe();
+  }
+
+  //*************
+  // set the data
+  //*************
+  void set_internal_data()
+  {
+    list_vec.clear();
+    data_line.resize(5);
+    data_line[0] = 0;
+    data_line[1] = 1;
+    data_line[2] = 2;
+    data_line[3] = 3;
+    data_line[4] = 4;
+    list_vec.push_back( data_line);
+
+    data_line[0] = 10;
+    data_line[1] = 11;
+    data_line[2] = 12;
+    data_line[3] = 13;
+    data_line[4] = 14;
+    list_vec.push_back( data_line);
+
+    data_line[0] = 20;
+    data_line[1] = 21;
+    data_line[2] = 22;
+    data_line[3] = 23;
+    data_line[4] = 24;
+    list_vec.push_back( data_line);
+  }
+  //********************************
+  // process data from compiled code
+  //********************************
+  void process_data()
+  {
+    set_internal_data();
+    manager.process_data(list_vec);
+  }
+
+  void add_config1()
+  {
+    manager.add_config(config1);
+  }
+
+  void test_get_config()
+  {
+    const char config_name[10] = "var1";
+    std::string config_name_str("var1");
+
+    TableLookupTransposeDataSet_TableConfig * config_ptr =
+                                     manager.get_config( config_name );
+    std::cout << "****Testing get-config; index-low should = 3*****\n";
+    std::cout << "config index-low = " << config_ptr->index_low << "\n";
+    // reset and try again:
+    config_ptr = NULL;
+    config_ptr = manager.get_config( config_name_str );
+    std::cout << "config index-low = " << config_ptr->index_low <<"\n";
+  }
+
+ private:
+  //**********************
+  // default configuration
+  //**********************
+  void defaults()
+  {
+    manager.independent_var = &independent;
+    manager.populate_independent_from_file = true;
+    manager.indep_index = 1;
+
+    config1.name = "var1";
+    config1.index_low = 3;
+    config1.index_high = 4;
+    config1.dependent_variables.push_back(&dependent[0]);
+    config1.dependent_variables.push_back(&dependent[1]);
+
+    add_config1();
+  }
+
+
+  TestingModelSimObject( const TestingModelSimObject&);
+  TestingModelSimObject& operator= ( const TestingModelSimObject&);
+
+};
+
+TestingModelSimObject test;

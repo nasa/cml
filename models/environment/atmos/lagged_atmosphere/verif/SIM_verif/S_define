@@ -1,0 +1,60 @@
+/*****************************************************************************
+PURPOSE:
+    (Verification of the LaggedAtmosWind / LaggedAtmosPayloadData combination)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (June 2021) (Antares) (initial))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+
+##include "../../include/lagged_atmos_wind.hh"
+##include "../../include/lagged_atmos_payload_data.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+
+ public:
+  // Framework (leave this alone)
+  UnitTestFramework framework;
+  // support variables:
+  std::string            name;           /* (--) test name*/
+  double                 lagged_altitude;/* (m) altitude of interpolated point*/
+  LaggedAtmosPayloadData payload;        /* (--) data for recording. */
+
+  // Model for testing:
+  LaggedAtmosWind lagged_data_noname; /* (--) tests the constructor only*/
+  LaggedAtmosWind lagged_data;        /* (--) test instance */
+
+
+  AntaresUnitTestSimObject()
+    :
+    name("lag-data"),
+    lagged_altitude(0.0),
+    payload(),
+    lagged_data_noname(),
+    lagged_data(name)
+  {
+    // Framework
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    // test-specific jobs:
+    (1.0, "environment") lagged_data.update_history(payload);
+    (1.0, "environment") lagged_data.compute( lagged_altitude);
+  }
+
+ private:
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject test;

@@ -1,0 +1,4 @@
+test.trigger1
+test.trigger2
+test.trigger3
+test.trigger4

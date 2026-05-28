@@ -1,0 +1,156 @@
+//==========================  TRICK HEADER  ================================
+/*****************************************************************************
+PURPOSE: (Verifies the simple interface to the aero-executive
+PROGRAMMERS:
+  (
+   ((Gary Turner) (OSR) (July 2018) (Antares) (Cleanup of obsolete S-define))
+  )
+*****************************************************************************/
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
+
+// This model:
+##include "../../include/aero_interface_table.hh"
+##include "include/example_tables.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+ public:
+  // Framework
+  UnitTestFramework framework;
+  // support of support:
+  double                        time;
+  jeod::DynBody                 body;
+  ExtendedPlanetaryDerivedState planet_rel;
+  AtmosphereExecInterface       atmos_exec;
+  // support
+  AtmosRelativeState  atmos_rel;
+  double geodetic_altitude;
+  double cg[3];
+  double body_rates[3];
+  double T_struc_body[3][3];
+  double indep_generic;
+
+  // control
+  unsigned int table_select;
+
+  // Model for testing:
+  AeroInterfaceTable             interface;
+  SimpleAeroTableSet_SYM_LDm     table_SYM_LDm;
+  SimpleAeroTableSet_SYM_ANm     table_SYM_ANm;
+  SimpleAeroTableSet_XYZ         table_XYZ;
+  SimpleAeroTableSet_AYN         table_AYN;
+  SimpleAeroTableSet_AYN_unc     table_AYN_unc;
+  SimpleAeroTableSet_DSL         table_DSL;
+  ExampleTableSet1               example_table;
+
+  // Semi-populated instances of a AeroExecutiveTable and AeroTableSetBase
+  // for testing configuration error-checking:
+  AeroExecutiveTable            empty_executive;
+  SimpleAeroTableSet_Incomplete incomplete_table;
+  AeroTableSetBase              empty_table;
+
+
+  //Constructor
+  AntaresUnitTestSimObject()
+    :
+    body(),
+    planet_rel(),
+    atmos_exec( time,
+                planet_rel,
+                body),
+    atmos_rel( body,
+               planet_rel,
+               atmos_exec),
+    geodetic_altitude(0.0),
+    cg(),
+    body_rates(),
+    T_struc_body(),
+
+    interface( atmos_rel,
+               geodetic_altitude,
+               cg,
+               body_rates,
+               T_struc_body),
+    table_SYM_LDm( interface.executive,
+                   indep_generic),
+    table_SYM_ANm( interface.executive,
+                   indep_generic),
+    table_XYZ( interface.executive,
+               indep_generic),
+    table_AYN( interface.executive,
+               indep_generic),
+    table_AYN_unc( interface.executive,
+                   indep_generic),
+    table_DSL( interface.executive,
+               indep_generic),
+    example_table( interface.executive,
+                   atmos_rel.mach_number,
+                   atmos_rel.angle_of_attack,
+                   atmos_rel.angle_of_sideslip),
+
+    empty_executive( interface.output,
+                     interface.environment,
+                     interface.disable_aero_moments,
+                     interface.disable_aero_damping,
+                     T_struc_body),
+    incomplete_table( interface.executive,
+                      indep_generic),
+    empty_table( "example_table", // deliberately same name as example_table
+                  empty_executive.coefficients,
+                  empty_executive.uncertainty)
+
+  {
+    // Framework
+    ("initialization") framework.initialize();
+    (1.0, "environment") framework.update();
+
+    //Support:
+    ("initialization") atmos_rel.initialize();
+
+    // Test
+    ("initialization")   interface.initialize();
+    (1.0, "environment") interface.update();
+  }
+
+  // Methods used for testing purposes, called from input files
+  void null_cg_fail() {
+    AeroEnvironment junk( atmos_rel.dynamic_pressure,
+                          atmos_rel.mach_number,
+                          atmos_rel.total_angle_of_attack,
+                          atmos_rel.angle_of_attack,
+                          atmos_rel.angle_of_sideslip,
+                          atmos_rel.phi_roll,
+                          atmos_rel.free_stream_vel_mag,
+                          NULL,
+                          body_rates);
+  }
+  void null_rates_fail() {
+    AeroEnvironment junk( atmos_rel.dynamic_pressure,
+                          atmos_rel.mach_number,
+                          atmos_rel.total_angle_of_attack,
+                          atmos_rel.angle_of_attack,
+                          atmos_rel.angle_of_sideslip,
+                          atmos_rel.phi_roll,
+                          atmos_rel.free_stream_vel_mag,
+                          cg,
+                          NULL);
+  }
+
+
+ private:
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+
+};
+AntaresUnitTestSimObject aero;

@@ -1,0 +1,188 @@
+// define initialization priorities and calling rates.
+#include "default_priority_settings.sm"
+#define P_REL P70
+#define DYNAMICS 1.0
+
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_TAI_UTC_UT1_TT.sm"
+#include "dynamics.sm"
+#include "environment.sm"
+
+//=============================================================================
+// SIM_OBJECT: earth
+// This sim object models Earth using the GGM02C gravity model, and RNP model.
+//=============================================================================
+
+##include "jeod/models/environment/planet/include/planet.hh"
+##include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
+##include "cml/models/environment/atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh"
+##include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
+##include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
+
+// Headers for default data
+##include "jeod/models/environment/planet/data/include/earth.hh"
+##include "jeod/models/environment/gravity/data/include/earth_GGM02C.hh"
+//##include "cml/models/aero/data/include/AERO_DISP__aero_disperse__default_data.hh";
+
+class EarthSimObject : public Trick::SimObject {
+
+protected:
+   // External models
+   jeod::GravityManager & grav_manager;
+   jeod::DynManager   & dyn_manager;
+public:
+   jeod::Planet               planet;
+   jeod::SphericalHarmonicsGravitySource          gravity_source;
+   GramInterface      gram_i;   // (--) Only used to test improper usage of GramInterface
+
+   // Combined atmosphere/winds:
+   LookupAtmosWinds  DRWP_atmos;  /* (--) Binary atmosphere-winds data reader
+                                          based on Doppler Radar Wind values*/
+
+   // Atmosphere only:
+   STD1976      std76;       // (--) Standard 1976 atmosphere structure
+
+   // Simple winds
+   SimpleLookupWind simple_wind;
+
+   // Default data instances
+   jeod::Planet_earth_default_data                          earth_planet_init;
+   jeod::SphericalHarmonicsGravitySource_earth_GGM02C_default_data  earth_gravity_init;
+
+   EarthSimObject(
+        jeod::GravityManager & grav_in,
+        jeod::DynManager   & dyn_manager_in)
+     :
+     grav_manager(grav_in),
+     dyn_manager(dyn_manager_in),
+     simple_wind()
+   {
+
+     ("default_data") earth_planet_init.initialize( &planet );
+     ("default_data") earth_gravity_init.initialize( &gravity_source );
+
+      //
+      // Initialization jobs
+      //
+      P_ENV ("initialization") gravity_source.initialize_body( );
+      P_ENV ("initialization") grav_manager.add_grav_source( gravity_source );
+      P_ENV ("initialization") planet.register_model (gravity_source,dyn_manager);
+
+      P_EPH ("initialization") planet.initialize( );
+   }
+
+  private:
+   // This object is not copyable
+   EarthSimObject & operator =(const EarthSimObject &);
+
+};
+
+EarthSimObject earth (env.gravity_manager,
+                      dynamics.dyn_manager);
+
+/*****************************************************************************
+AtmosphericSubvehicleSimObject
+Purpose:(This is a copy of the relevant components of the
+         Antares AtmosphericSubvehicleSimObject)
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/body_attach_matrix.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+##include "cml/models/environment/gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh"
+##include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
+##include "../../include/atmosphere_exec.hh"
+
+
+class AtmosphericSubvehicleSimObject : public Trick::SimObject {
+
+ protected:
+
+  jeod::DynManager     & dyn_manager;
+  jeod::TimeStandard   & time;
+ public:
+  jeod::DynBody          body;
+  jeod::MassBodyInit     mass_init;
+  StateInitialize        state_init;
+  jeod::BodyAttachMatrix body_attach;
+  ExtendedPlanetaryDerivedState         planet_rel_state;
+  SphericalHarmonicsFastGravityControls grav_controls_earth;
+
+  AtmosphereExec     atmos_exec;
+
+  AtmosphericSubvehicleSimObject(
+                  jeod::DynManager       & dynamics_in,
+                  double                 & dynamic_time_in,
+                  jeod::TimeStandard     & time_in, // usually UT1
+                  EarthSimObject         & earth_simobj_in)
+     :
+     dyn_manager (dynamics_in),
+     time(time_in),
+
+     atmos_exec(earth_simobj_in.DRWP_atmos,
+                earth_simobj_in.std76,
+                earth_simobj_in.simple_wind,
+                dynamic_time_in,
+                planet_rel_state,
+                body)
+  {
+    // Initialization
+    P_ENV ("initialization") body.initialize_model( dyn_manager);
+
+    P_DYN ("initialization") planet_rel_state.initialize( body,
+                                                          dyn_manager);
+
+
+    P_REL("initialization")   atmos_exec.initialize( time);
+
+    (10.0, "environment") atmos_exec.update();
+
+    (DYNAMICS, "environment")     atmos_exec.wind_hold.update();
+    (DYNAMICS, "environment")     planet_rel_state.update();
+  };
+
+ private:
+  AtmosphericSubvehicleSimObject (const AtmosphericSubvehicleSimObject&);
+  AtmosphericSubvehicleSimObject & operator = (
+                                  const AtmosphericSubvehicleSimObject&);
+
+};
+
+// veh1 is at the first location.  It has 2 "clones":
+//  - veh1a has an independent GRAM instance,
+//  - veh1b has a GRAM instance that is initialized from veh1's GRAM
+AtmosphericSubvehicleSimObject veh1 (dynamics.dyn_manager,
+                                     jeod_time.time_manager.dyn_time.seconds,
+                                     jeod_time.time_utc,
+                                     earth);
+AtmosphericSubvehicleSimObject veh1a (dynamics.dyn_manager,
+                                      jeod_time.time_manager.dyn_time.seconds,
+                                      jeod_time.time_utc,
+                                      earth);
+AtmosphericSubvehicleSimObject veh1b (dynamics.dyn_manager,
+                                      jeod_time.time_manager.dyn_time.seconds,
+                                      jeod_time.time_utc,
+                                      earth);
+
+// veh2 is at the second location.  It has 1 "clone":
+//  - veh2a has a GRAM instance that is initialized from veh1's GRAM, NOT ON veh2!!!!
+AtmosphericSubvehicleSimObject veh2 (dynamics.dyn_manager,
+                                     jeod_time.time_manager.dyn_time.seconds,
+                                     jeod_time.time_utc,
+                                     earth);
+AtmosphericSubvehicleSimObject veh2a (dynamics.dyn_manager,
+                                      jeod_time.time_manager.dyn_time.seconds,
+                                      jeod_time.time_utc,
+                                      earth);
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

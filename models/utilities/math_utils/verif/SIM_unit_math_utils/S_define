@@ -1,0 +1,299 @@
+//==========================  TRICK HEADER  ================================
+// PURPOSE: (Perform unit-simulation-test of the math utilities model)
+//==========================================================================
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+//***************************************************************
+// CLASS: (MathUtilsSimObject)
+// PURPOSE: Sim object to be unit tested with sim unit test framework
+//***************************************************************
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/math_utils.hh"
+##include "jeod/models/utils/quaternion/include/quat.hh"
+
+class MathUtilsSimObject: public Trick::SimObject {
+public:
+  UnitTestFramework framework;
+
+  // Frame Transformation Inputs and Outputs
+  double      T_inrtl_lvlh[3][3];
+  double      T_inrtl_uvw[3][3];
+  double      T_inrtl_reference[3][3];
+  double      T_inrtl_vnc[3][3];
+  double      T_pfix_enu[3][3];
+  jeod::Quaternion  Q_enu_pfix;
+  double      vector1[3];
+  double      vector2[3];
+  double      latitude;
+  double      longitude;
+
+  // Calculus Inputs and Outputs
+  size_t      size;
+  double      size_d;   // (--) Framework sweeps only support doubles.
+  double      backward_diff;
+  double      back_diff_vals[6];
+  double      unit_vec_deriv[3];
+
+  // Matrix Inputs and Outputs
+  double      vec8[8];
+  double      arr43[2][4][3];
+  double      arr42[3][4][2];
+  double      arr34[3][4];
+  double      arr33[11][3][3];
+  double      arr32[3][2];
+  double      arr24[2][4];
+  double      arr23[2][3];
+  double      arr22[3][2][2];
+  double      arr66[2][6][6];
+  bool        inv_fail_on_error;
+  
+  // Test Flags
+  bool        test_inertial_to_lvlh;
+  bool        test_inertial_to_uvw;
+  bool        test_inertial_to_reference;
+  bool        test_inertial_to_vnc;
+  bool        test_T_pfix_to_enu;
+  bool        test_Q_enu_to_pfix;
+  bool        test_T_NULL;
+  bool        test_unit_vec_deriv;
+  bool        test_backward_difference;
+  bool        test_matrices;
+  bool        test_pv_covariance_matrix;
+  bool        test_correlation_coefficients;
+
+  MathUtilsSimObject()
+    :
+    inv_fail_on_error(false),
+    test_inertial_to_lvlh(false),
+    test_inertial_to_uvw(false),
+    test_inertial_to_reference(false),
+    test_inertial_to_vnc(false),
+    test_T_pfix_to_enu(false),
+    test_Q_enu_to_pfix(false),
+    test_T_NULL(false),
+    test_unit_vec_deriv(false),
+    test_backward_difference(false),
+    test_matrices(false),
+    test_pv_covariance_matrix(false),
+    test_correlation_coefficients(false)
+  {
+    // For inertial to LVLH, UVW, and VNC, vector1 is position and vector2 is velocity
+    // For inertial to reference, vector1 is x_axis_inrtl and vector2 is position
+    ("initialization")   set_sweeps();
+    ("initialization")   framework.initialize();
+    (1.0, "environment") framework.update();
+
+    (1.0,"scheduled") generate_inertial_to_lvlh();
+
+    (1.0,"scheduled") generate_inertial_to_uvw();
+
+    (1.0,"scheduled") generate_inertial_to_reference();
+    
+    (1.0,"scheduled") generate_inertial_to_vnc();
+
+    (1.0,"scheduled") generate_T_pfix_to_enu();
+
+    (1.0,"scheduled") generate_Q_enu_to_pfix();
+
+    (1.0,"scheduled") generate_T_null();
+
+    (1.0,"scheduled") compute_unit_vec_deriv();
+
+    (1.0,"scheduled") compute_backward_difference();
+
+    (1.0,"scheduled") compute_matrices();
+
+    (1.0,"scheduled") compute_pv_covariance_matrix();
+    
+    (1.0,"scheduled") compute_correlation_coefficients();
+
+  }
+
+private:
+  void set_sweeps() {
+    if (test_backward_difference) {
+      framework.add_sweep(size_d, 0, 6, 1);
+    }
+  }
+
+  void generate_inertial_to_lvlh() {
+    if (test_inertial_to_lvlh) {
+      MathUtils::generate_inertial_to_lvlh( vector1,
+                                            vector2,
+                                            T_inrtl_lvlh);
+    }
+  }
+
+  void generate_inertial_to_uvw() {
+    if (test_inertial_to_uvw) {
+      MathUtils::generate_inertial_to_uvw( vector1,
+                                           vector2,
+                                           T_inrtl_uvw);
+    }
+  }
+
+  void generate_inertial_to_reference() {
+    if (test_inertial_to_reference) {
+      MathUtils::generate_inrtl_to_reference( vector1,
+                                              vector2,
+                                              T_inrtl_reference);
+    }
+  }
+
+  void generate_inertial_to_vnc() {
+    if (test_inertial_to_vnc) {
+      MathUtils::generate_inrtl_to_vnc( vector1,
+                                        vector2,
+                                        T_inrtl_vnc);
+    }
+  }
+
+  void generate_T_pfix_to_enu() {
+    if (test_T_pfix_to_enu) {
+      MathUtils::generate_T_pfix_to_enu( vector1,
+                                         T_pfix_enu);
+    }
+  }
+
+  void generate_T_null() {
+    if (test_T_NULL) {
+      MathUtils::generate_inertial_to_lvlh( vector1,
+                                            vector2,
+                                            NULL);
+      MathUtils::generate_inertial_to_lvlh( NULL,
+                                            vector2,
+                                            T_inrtl_lvlh);
+      MathUtils::generate_inertial_to_lvlh( vector1,
+                                            NULL,
+                                            T_inrtl_lvlh);
+      MathUtils::generate_inertial_to_uvw( vector1,
+                                           vector2,
+                                           NULL);
+      MathUtils::generate_inertial_to_uvw( NULL,
+                                           vector2,
+                                           T_inrtl_uvw);
+      MathUtils::generate_inertial_to_uvw( vector1,
+                                           NULL,
+                                           T_inrtl_uvw);
+      MathUtils::generate_inrtl_to_reference( vector1,
+                                              vector2,
+                                              NULL);
+      MathUtils::generate_inrtl_to_reference( NULL,
+                                              vector2,
+                                              T_inrtl_reference);
+      MathUtils::generate_inrtl_to_reference( vector1,
+                                              NULL,
+                                              T_inrtl_reference);
+      MathUtils::generate_T_pfix_to_enu( vector1,
+                                         NULL);
+      MathUtils::generate_T_pfix_to_enu( NULL,
+                                         T_pfix_enu);
+    }
+  }
+
+  void generate_Q_enu_to_pfix() {
+    if (test_Q_enu_to_pfix) {
+      MathUtils::generate_Q_enu_to_pfix( longitude,
+                                         latitude,
+                                         Q_enu_pfix);
+    }
+  }
+
+  void compute_unit_vec_deriv() {
+    if (test_unit_vec_deriv) {
+      MathUtils::compute_unit_vector_derivative( vector1,
+                                                 vector2,
+                                                 unit_vec_deriv);
+    }
+  }
+
+  void compute_backward_difference() {
+    if (test_backward_difference) {
+      size = static_cast<size_t>( size_d);
+      std::list<double> history(back_diff_vals, back_diff_vals + size);
+      backward_diff = MathUtils::compute_backward_difference(history);
+    }
+  }
+
+  void compute_matrices() {
+    if (test_matrices) {
+      // arr42[0] is populated in unit-test data
+      for (size_t ii = 0; ii < 4; ++ii) {
+        arr43[0][ii][0] = arr42[0][ii][0];
+        arr43[0][ii][1] = arr42[0][ii][1];
+        arr43[0][ii][2] = 1;
+        for (size_t jj = 0; jj < 2; ++jj) {
+          vec8[2*ii + jj] = arr42[0][ii][jj];
+        }
+      }
+      MathUtils::matrix_trans( arr42[0], arr24); 
+      MathUtils::matrix_mult_left_trans( arr43[0], arr42[0], arr32);
+      MathUtils::matrix_mult_right_trans( arr32, arr42[0], arr34);
+      MathUtils::matrix_mult_trans_trans( arr42[0], arr34, arr23);
+      MathUtils::matrix_mult( arr42[0], arr23, arr43[1]);
+      MathUtils::col_maj_vec_to_matrix(vec8, arr42[1]);
+      MathUtils::row_maj_vec_to_matrix(vec8, arr42[2]);
+
+      // arr33[0] is populated in unit-test data
+      MathUtils::matrix_inv_using_cholesky( arr33[0], arr33[1], inv_fail_on_error);
+      MathUtils::matrix_copy( arr33[1], arr33[2]);
+      MathUtils::matrix_incr( arr33[0], arr33[2]);  // [2] = [0] + [1]
+      MathUtils::matrix_copy( arr33[2], arr33[3]);
+      MathUtils::matrix_decr( arr33[0], arr33[3]); // [3] = [2] - [0] = [1]
+      MathUtils::matrix_transformation( arr33[0], arr33[1], arr33[4]);
+      MathUtils::matrix_inverse_transformation( arr33[1], arr33[1], arr33[5]);
+      // arr33[3] should = arr33[1]
+      // arr33[4] should = arr33[0] if arr33[0] is symmetric
+      // arr33[4] should = arr33[1] if arr33[0] is a transformation matrix.
+      
+      MathUtils::zero_matrix(arr33[6]); // [6] = zeros
+      MathUtils::matrix_copy( arr33[1], arr33[7]);
+      MathUtils::matrix_scale(2.5, arr33[7]); // [7] = 2.5 * [1]
+
+      // fill arr22[0-2] and arr33[8-10] with elements of 100 to see behavior for over- or under-copying
+      for (size_t ii = 0; ii < 3; ++ii) {
+        for (size_t jj = 0; jj < 3; ++jj) {
+          arr33[8][ii][jj] = 100;
+          if (ii < 2 && jj < 2) {
+            arr22[0][ii][jj] = 100;
+          }
+        }
+      }
+      MathUtils::matrix_copy(arr22[0], arr22[1]);
+      MathUtils::matrix_copy(arr22[0], arr22[2]);
+      MathUtils::matrix_copy(arr33[8], arr33[9]);
+      MathUtils::matrix_copy(arr33[8], arr33[10]);
+
+      MathUtils::matrix_copy_submatrix_out(arr42[0], arr22[0], 2, 0);
+      MathUtils::matrix_copy_submatrix_out(arr42[0], arr22[1], 2, 1);
+      MathUtils::matrix_copy_submatrix_out(arr42[0], arr22[2], 3, 0);
+      
+      MathUtils::matrix_copy_submatrix_in(arr22[0], arr33[8], 1, 1);
+      MathUtils::matrix_copy_submatrix_in(arr22[0], arr33[9], 1, 2);
+      MathUtils::matrix_copy_submatrix_in(arr22[0], arr33[10], 2, 1);
+    }
+  }
+
+  void compute_pv_covariance_matrix() {
+    if (test_pv_covariance_matrix) {
+      MathUtils::transform_pv_matrix(arr33[0], 
+                                     arr66[0], 
+                                     arr66[1]);
+    }
+  }
+
+  void compute_correlation_coefficients() {
+    if (test_correlation_coefficients) {
+      MathUtils::extract_correlation_coefficients(arr33[0],
+                                                  arr33[1]);
+    }
+  }
+
+  MathUtilsSimObject (const MathUtilsSimObject&);
+  MathUtilsSimObject & operator = (const MathUtilsSimObject&);
+
+};
+MathUtilsSimObject mutil_verif;

@@ -1,0 +1,421 @@
+/*******************************TRICK HEADER******************************
+PURPOSE: ()
+
+PROGRAMMERS:
+  (((Gary Turner) (OSR) (October 2023) (ANTARES)
+   (Based on logic in DATA_COLLECTION_TRIGGER and DC_TRIGGER_PRIMAL,
+    after stripping out the risky parts and picking up the existingi
+    capabilities in CML))
+  )
+**********************************************************************/
+#ifndef GROK_EVENT_TRIGGER_HH
+#define GROK_EVENT_TRIGGER_HH
+
+
+#include "event_trigger_base.hh"
+
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+
+/*****************************************************************************
+EventTrigger
+Purpose: A templated extension of EventTriggerBase
+*****************************************************************************/
+template <typename watchType>
+class EventTrigger : public EventTriggerBase {
+ protected:
+  const watchType * variable_ptr;   /* (--) variable being watched*/
+  const watchType * reference_ptr;  /* (--) variable value to test against.*/
+  watchType variable;               /* (--) value of variable_ptr*/
+  watchType variable_prev;          /* (--) previous value of variable_ptr*/
+  watchType reference;              /* (--) fixed value to test against*/
+  watchType variable_at_activation; /* (--)
+    value of variable at event activation*/
+
+ public:
+  EventTrigger( const double & time)
+     :
+     EventTriggerBase(time),
+     variable_ptr(nullptr),
+     reference_ptr(nullptr),
+     variable(), // no value; this is of watchType.
+     variable_prev(),
+     reference(),
+     variable_at_activation()
+  {};
+  virtual ~EventTrigger(){};
+
+/*****************************************************************************
+set_watch
+Purpose:
+  Sets the variable and the reference against which it will be compared
+*****************************************************************************/
+  // ** reference is fixed-value **
+  // ************************************************************************
+  void set_watch( const watchType & var, watchType   ref) {
+    variable_ptr = &var;
+    reference = ref;
+    reference_is_variable = false;
+    return;
+  };
+  //**************************************************************************
+  //  ** reference is a variable-value **
+  //**************************************************************************
+  void set_watch( const watchType & var, const watchType * ref) {
+    variable_ptr = &var;
+    reference_ptr = ref;
+    reference_is_variable = true;
+    return;
+  };
+  //**************************************************************************
+  //  ** These methods are here for use with primitives only
+  //     (e.g. double, int, bool, etc.)
+  //     Trick/SWIG is unable to pass references to primitives out of the
+  //     input-file user-interface.
+  //     These methods, coupled with trick.get_address("<full-variable-name>")
+  //     facilitate input-file user-interaction.
+  //     This process is inherently unsafe and should be used as a last
+  //     resort and only after double checking that the specified variable is
+  //     of the correct type.  Type-checking is not possible.**
+  //**************************************************************************
+  void set_watch_primitives( const void * var, watchType ref) {
+    const watchType * new_ptr = set_watch_primitives_test_ref_val( var);
+    set_watch( *new_ptr, ref);
+  };
+  /*************************************************************************/
+  void set_watch_primitives( const void * var, const void * ref) {
+    const watchType * new_ptr = set_watch_primitives_test_ref_var( var,ref);
+    const watchType * new_ref = reinterpret_cast<const watchType *>(ref);
+    set_watch( *new_ptr, new_ref);
+  };
+  /*************************************************************************/
+  const watchType * set_watch_primitives_test_ref_val( const void * var)
+  {
+    if (var == nullptr) {
+      CMLMessage::fail(
+      __FILE__,__LINE__,"Critical failure in calling set_watch\n",
+      "Trick was unable to find the specified watch variable.\n"
+      "The pointer passed into the set_watch_primitives method is nullptr.\n"
+      "Check the variable for the correct name.\n");
+    }
+    CMLMessage::warn(
+      __FILE__,__LINE__,"Unsafe method call set_watch_primitives\n",
+      "The void pointer(s) returned by 'get_address' and passed into "
+      "set_watch_primitives\nis about to be reinterpret_cast to the type "
+      "associated with the event.\n"
+      "If the specified variable is not of the correct type, subsequent "
+      "behavior will be undefined. \n"
+      "Double check the variable type.\n");
+    return reinterpret_cast<const watchType *>(var);
+  };
+  /*************************************************************************/
+  const watchType * set_watch_primitives_test_ref_var( const void * var, const void * ref)
+  {
+    if (var == nullptr && ref != nullptr) {
+      CMLMessage::fail(
+      __FILE__,__LINE__,"Critical failure in calling set_watch\n",
+      "Trick was unable to find the specified watch variable.\n"
+      "The pointer passed into the set_watch_primitives method is nullptr.\n"
+      "Check the variable for the correct name.\n");
+    }
+    else if (var != nullptr && ref == nullptr) {
+      CMLMessage::fail(
+      __FILE__,__LINE__,"Critical failure in calling set_watch\n",
+      "Trick was unable to find the specified reference variable.\n"
+      "The pointer passed into the set_watch_primitives method is nullptr.\n"
+      "Check the variable for the correct name.\n");
+    }
+    else if (var == nullptr && ref == nullptr) {
+      CMLMessage::fail(
+      __FILE__,__LINE__,"Critical failure in calling set_watch\n",
+      "Trick was unable to find the specified watch and reference variables.\n"
+      "The pointers passed into the set_watch_primitives method are nullptr.\n"
+      "Check the variables for the correct names.\n");
+    }
+    CMLMessage::warn(
+      __FILE__,__LINE__,"Unsafe method call set_watch_primitives\n",
+      "The void pointer(s) returned by 'get_address' and passed into "
+      "set_watch_primitives\nis about to be reinterpret_cast to the type "
+      "associated with the event.\n"
+      "If the specified variable is not of the correct type, subsequent "
+      "behavior will be undefined. \n"
+      "Double check the variable type.\n");
+    return reinterpret_cast<const watchType *>(var);
+  };
+
+
+/*****************************************************************************
+set_reference
+Purpose:(Sets the reference value.  Used for changing default or previously
+         defined values.)
+*****************************************************************************/
+  void set_reference(watchType ref) {
+    reference = ref;
+    return;
+  };
+
+/*****************************************************************************
+test_crossing
+Purpose:(tests for crossing of reference)
+Returns: An indicator of whether there has been a change to the vehicle-status
+NOTE - "virtual" ends here.  Classes deriving from here should not override
+       this method.  The method is virtual in EventTriggerCore because it
+       has to be there to be accessed through the EventTriggerCore lists,
+       but it is pure-virtual there.  This is the only true implementation of
+       this method
+******************************************************************************/
+  virtual bool test_crossing() {
+    // Sanity check, although this can only be in the array if it is active.
+    if (!active) {
+      return false;
+    }
+
+    if (in_delay) {
+      event_triggered = (time > trigger_time);
+      if (event_triggered) {
+        in_delay = false;
+        active = multi_shot;
+      }
+      return event_triggered;
+    }
+
+    event_triggered = false;
+
+    // De-reference the "reference" if using a variable "reference".
+    if (reference_is_variable) {
+      if (relative_to_activation_protected) {
+        set_reference_relative_to_activation(variable_ptr);
+      }
+      else {
+        reference = *reference_ptr;
+      }
+    }
+    variable = *variable_ptr;
+    modify_variable();
+
+    switch (discrete_logic) {
+    default:
+      CMLMessage::error(__FILE__,__LINE__,
+        "Invalid comparator specified : ", discrete_logic,".\n"
+        "Disabling trigger.\n");
+        deactivate();
+      return false;
+    case EQ:
+      event_triggered = (variable == reference);
+      break;
+    case NE:
+      event_triggered = (variable != reference);
+      break;
+    case GT:
+      event_triggered = (variable > reference);
+      break;
+    case LT:
+      event_triggered = (variable < reference);
+      break;
+    case GE:
+      event_triggered = (variable >= reference);
+      break;
+    case LE:
+      event_triggered = (variable <= reference);
+      break;
+    case OC:
+    case Change:
+      event_triggered = (variable != variable_prev);
+      break;
+    case Crossing:
+      double this_delta =  variable - reference;
+      event_triggered = (this_delta * delta_record < 0);
+      if (std::abs(this_delta) > 0.0) {
+        delta_record = this_delta;
+      }
+      break;
+    }
+
+    if (event_triggered) {
+      switch(direction_limit) {
+      default:
+        break;
+      case Increasing:
+        event_triggered = variable >= variable_prev;
+        break;
+      case Decreasing:
+        event_triggered = variable <= variable_prev;
+        break;
+      }
+    }
+
+    variable_prev = variable;
+
+    if (event_triggered && time_delay > 0) {
+      /* We know in_delay = false because the method would have
+       * already returned otherwise.*/
+      in_delay = true;
+      trigger_time = time + time_delay;
+      event_triggered = false;
+    }
+
+    // set the active flag in the case that a crossing was detected.
+    if (event_triggered) {
+      active = multi_shot;
+    }
+    return event_triggered;
+  };
+
+
+/*****************************************************************************
+activate
+Purpose:(Completes the activation sequence, including verification that the
+         appropriate data and pointers have been set in a compatible manner.)
+Note:
+   Using a relative-to-activation setting and applying a function-modifier
+   to the variable-value produces results that may be unexpected.
+   The reference value is applied outside the applied function
+      Threshold value = f(v_0) + delta
+   So we will be testing, e.g: f(v) > f(v_0) + delta
+ ******************************************************************************/
+  void activate() {
+    if (variable_ptr == nullptr) {
+      CMLMessage::error ( __FILE__, __LINE__,
+        "Invalid Event/Watch activation: nullptr variable:\n",
+        "An attempt was made to activate a WatchValue instance with a nullptr\n"
+        "variable to watch.\n  Attempt failed.\n");
+      return;
+    }
+
+    if (discrete_logic == Undefined) {
+      CMLMessage::error(__FILE__,__LINE__,
+        "Invalid comparator. Comparator remains on the default 'Undefined'.\n"
+        "There is no comparison available to result in a triggering.\n"
+        "Trigger activation failed.\n");
+      return;
+    }
+    variable = *variable_ptr;
+    modify_variable();
+    variable_prev = variable;
+
+    if (relative_to_activation) {
+      relative_to_activation_protected = true;
+      variable_at_activation = variable; // (modified-variable if modified)
+      set_reference_relative_to_activation( variable_ptr);
+    }
+    active = true;
+  };
+
+ protected:
+/*****************************************************************************
+modify_variable
+Purpose: Applies a function to the value of "variable"
+Note -- potential unexpected behavior if variable is not a float or double
+        sin(true) = true; sin(false) = false; cos(false) = true.
+*****************************************************************************/
+  void modify_variable() {
+    switch (function_modifier) {
+    default:
+      break;
+    case Absolute:
+         variable = std::abs( variable);
+         break;
+    case Sine:
+         variable = std::sin( variable);
+         break;
+    case Cosine:
+         variable = std::cos( variable);
+         break;
+    case Tan:
+         variable = std::tan( variable);
+         break;
+    case AbsSine:
+         variable = std::abs( std::sin( variable));
+         break;
+    case AbsCosine:
+         variable = std::abs( std::cos( variable));
+         break;
+    case AbsTan:
+         variable = std::abs( std::tan( variable));
+         break;
+    }
+  }
+
+/*****************************************************************************
+set_reference_relative_to_activation
+Purpose:(Internal activation sub-method for case where reference is relative\
+         to variable-value at activation.
+         Process is slightly different if data type is bool.)
+*****************************************************************************/
+  // ** bool type **
+  // *************************************************************************
+  void set_reference_relative_to_activation(const bool*)
+  {
+    if (reference == variable_at_activation) {
+        CMLMessage::warn(
+          __FILE__,__LINE__,"Possible unintended behavior with bool event\n",
+          "An event based on a boolean variable has relative_to_activation\n "
+          "set to True, but the value of the watch variable at activation\n "
+          "is equal to the reference value. The reference value will be\n "
+          "flipped so that the event will trigger when the watch variable\n "
+          "flips value relative to its value at activation.\n");
+    }
+    reference = !variable_at_activation;
+    return;
+  };
+  //*****************************************************************************
+  //  ** int **
+  //*****************************************************************************
+  void set_reference_relative_to_activation(const int*)
+  { increment_reference();}
+  //*****************************************************************************
+  //  ** double **  same behavior as int
+  //*****************************************************************************
+  void set_reference_relative_to_activation(const double*)
+  { increment_reference();}
+  //*****************************************************************************
+  //  ** float **  same behavior as int
+  //*****************************************************************************
+  void set_reference_relative_to_activation(const float*)
+  { increment_reference();}
+  //*****************************************************************************
+  //  ** all other data types **
+  //*****************************************************************************
+  template<typename varType>
+  void set_reference_relative_to_activation(varType*)
+  {
+    CMLMessage::error (
+      __FILE__, __LINE__, "Invalid Event/Watch activation: undefined behavior:\n",
+      "A watch was activated with the flag to watch for a value to be\n"
+      "determined relative to the current value.\n"
+      "No method has been provided to modify the current value.\n"
+      "Using the originally specified reference value instead.\n");
+      relative_to_activation = false;
+  };
+
+/*****************************************************************************
+increment_reference
+Purpose: Generates the new reference value.
+Note:
+  It seems counter-intuitive to be incrementing some current value with the
+  recorded value from activation -- intuition says we should be differencing
+  these two values -- but it does make sense in a convoluted way.
+  We want to compare the current value of "variable" against the value of
+  ("variable-at-activation" + "delta-threshold"). That "delta-threshold", the
+  extent to which we can drift from "variable-at-activation" withouti
+  triggering the event -- is stored as the class member "reference".
+  , and "reference" is also used as the value against which the current
+  value of "variable" is tested. So by incrementing "reference" by
+  "variable-at-activation", we are setting the new "reference" value to
+  compare against the active value of "variable"
+*****************************************************************************/
+  void increment_reference()
+  {
+    // Evaluate the intended offset if necessary
+    if (reference_is_variable) {
+      reference = * reference_ptr;
+    }
+    // Increment the current value with the intended offset.
+    reference += variable_at_activation;
+  };
+
+ private:
+  EventTrigger (const EventTrigger& rhs);
+  EventTrigger& operator = (const EventTrigger& rhs);
+};
+#endif

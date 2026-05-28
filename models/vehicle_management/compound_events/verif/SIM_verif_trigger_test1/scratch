@@ -1,0 +1,24 @@
+mkdir ERROR_1a_Undefined
+mkdir RUN_1b_EQ
+mkdir RUN_1c_NE
+mkdir RUN_1d_GT
+mkdir RUN_1e_LT
+mkdir RUN_1f_GE
+mkdir RUN_1g_LE
+mkdir RUN_1h_ABS_EQ
+mkdir RUN_1i_ABS_GT
+mkdir RUN_1j_ABS_GE
+mkdir RUN_1k_ABS_LT
+mkdir RUN_1l_ABS_LE
+mkdir RUN_1m_OC
+mkdir RUN_1n_Change
+mkdir RUN_1o_Crossing
+mkdir RUN_1p_MAX
+mkdir RUN_1q_MIN
+mkdir RUN_1s_ABS_MAX
+mkdir RUN_1t_ABS_MIN
+mkdir RUN_1u_MAX_CONDITIONAL
+mkdir RUN_1v_MIN_CONDITIONAL
+mkdir RUN_1w_ABS_MAX_CONDITIONAL
+mkdir RUN_1x_ABS_MIN_CONDITIONAL
+

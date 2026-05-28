@@ -1,0 +1,60 @@
+#include "sim_objects/default_trick_sys.sm"
+
+##include "../../include/sSensorFaults.hh"
+class FaultArchTestSimObject: public Trick::SimObject {
+
+public:
+  sSensorFaults faults;
+
+  double constant_value;           /* (--) constant value */
+  double constant_value_replaced;  /* (--) constant value replaced */
+  double internal_constant_value;  /* (--) internal constant value */
+  double linear_value;             /* (--) linear value */
+  double linear_value_a;           /* (--) linear value a (ax + b) */
+  double linear_value_b;           /* (--) linear value b (ax + b) */
+  int    counting_int;             /* (--) incrementing count */
+  double current_time;             /* (--) current time */
+  double negative_time;            /* (--) negative time */
+
+  FaultArchTestSimObject() :
+    constant_value(3.14159),
+    constant_value_replaced(8.675309),
+    internal_constant_value(8.675309),
+    linear_value_a(1.0),
+    linear_value_b(0.0),
+    counting_int(-1),
+    current_time(-1.0)
+  {
+
+    ("initialization") initialize();
+
+    (1, "scheduled") update_internals();
+    (1, "scheduled") faults.Injection(sSFault::UPSTREAM);
+    (1, "scheduled") faults.Injection(sSFault::INTERMEDIATE_1);
+    (1, "scheduled") faults.Injection(sSFault::INTERMEDIATE_2);
+    (1, "scheduled") faults.Injection(sSFault::DOWNSTREAM);
+
+  }
+
+  void initialize() {
+    faults.enabled = true;
+    faults.Init();
+    faults.Injection(sSFault::INIT);
+  }
+
+  void update_internals() {
+    ++counting_int;
+    current_time = counting_int;
+    negative_time = -current_time;
+    linear_value = linear_value_a * current_time + linear_value_b;
+    constant_value_replaced = internal_constant_value;
+  }
+
+private:
+
+  FaultArchTestSimObject ( const FaultArchTestSimObject&);
+  FaultArchTestSimObject & operator = (const FaultArchTestSimObject&);
+
+};
+
+FaultArchTestSimObject test_object;

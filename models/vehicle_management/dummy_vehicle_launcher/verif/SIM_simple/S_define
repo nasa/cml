@@ -1,0 +1,38 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+
+/* ============================================================================== */
+/* ================== Trick Executive Systems Sim Object. ======================= */
+/* ============================================================================== */
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/* =============== Events Manager Verification Simulation ========================== */
+/* ================================================================================= */
+/*                      sys - Trick runtime executive and data recording routines.   */
+/* dummy_veh_launcher_verif - Dummy vehicle launcher verif object                    */
+/* ================================================================================= */
+
+##include "../../include/dummy_vehicle_launcher.hh"
+
+class VerifSimObject : public Trick::SimObject {
+    public:
+        DummyVehicleLauncher launcher; // makes the vehicle active
+        jeod::DynBody        state_body;
+        jeod::MassBody       mass_body;
+        jeod::DynBody        launch_body;
+
+        VerifSimObject()
+            :
+            launcher(launch_body,
+                     mass_body,
+                     state_body)
+        {};
+    
+    private:
+        VerifSimObject (const VerifSimObject&);
+        VerifSimObject & operator = (const VerifSimObject&);
+};
+VerifSimObject dummy_veh_launcher_verif;

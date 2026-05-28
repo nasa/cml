@@ -1,0 +1,15 @@
+drg = trick.DRAscii("test_data")
+drg.set_cycle(1)
+drg.freq = trick.DR_Always
+trick.add_data_record_group(drg, trick.DR_Buffer)
+
+drg.add_variable("verif.sim_data.time")
+drg.add_variable("verif.sim_data.sim_int")
+drg.add_variable("verif.sim_data.sim_bool")
+drg.add_variable("verif.sim_data.action_assgt")
+drg.add_variable("verif.manager.trigger_i.reference_dbl")
+drg.add_variable("verif.manager.event.status")
+drg.add_variable("verif.manager.event.event_triggered")
+drg.add_variable("verif.manager.event.action_triggers.event_triggered")
+drg.add_variable("verif.manager.trigger_i.event_triggered")
+drg.add_variable("verif.manager.trigger_b.event_triggered")

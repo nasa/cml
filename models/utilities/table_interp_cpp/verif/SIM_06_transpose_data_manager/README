@@ -1,0 +1,3 @@
+RUN_0* are nominal runs
+RUN_1* test warnings and error messages
+RUN_2* test critical misconfigurations

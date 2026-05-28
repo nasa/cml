@@ -1,0 +1,33 @@
+/*****************************************************************************
+PURPOSE: (Test the CMLSimpleRingBuffer implementation)
+PROGRAMMERS:
+    (
+        ((Gary Turner) (OSR) (Sep 2023) (ANTARES) (initial))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+
+
+##include "sample_class.hh"
+
+class CMLUnitTestSimObject: public Trick::SimObject {
+
+ public:
+  SampleModel       sample;
+
+  CMLUnitTestSimObject()
+  {
+    (1.0, "environment") input_update();
+    (1.0, "scheduled")   sample.update();
+  }
+  void input_update()
+  {
+    sample.instance.x += 1.0;
+    sample.instance.i += 2;
+  }
+ private:
+  CMLUnitTestSimObject (const CMLUnitTestSimObject&);
+  CMLUnitTestSimObject & operator = (const CMLUnitTestSimObject&);
+};
+CMLUnitTestSimObject test;

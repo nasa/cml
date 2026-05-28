@@ -1,0 +1,1 @@
+mass_test.tank.dynamic_properties.mass_consumed_step

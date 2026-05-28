@@ -1,0 +1,59 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+#include "default_priority_settings.sm"
+#define DYNAMICS 0.005
+#define LOW_RATE_ENV 600.0
+
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_TAI_UTC_UT1_TT_GMST.sm"
+#include "dynamics.sm"
+#include "environment.sm"
+#include "earth_GGM02C.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+ public:
+  jeod::DynBody                     body;
+
+  jeod::MassBodyInit                mass_init;
+  StateInitialize                   state_initialize;
+  SphericalHarmonicsGravityControls grav_controls_earth;
+
+  VehicleSimObject(jeod::DynManager & dyn_mgr_in)
+      :
+      dyn_manager (dyn_mgr_in)
+  {
+
+    P_ENV ("initialization")      body.initialize_model( dyn_manager);
+
+  }; 
+  private:
+    VehicleSimObject( const VehicleSimObject&);
+    VehicleSimObject & operator= ( const VehicleSimObject&);
+
+  protected:
+    jeod::DynManager & dyn_manager;
+
+};
+VehicleSimObject vehicle(dynamics.dyn_manager);
+
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics, earth;

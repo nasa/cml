@@ -1,0 +1,5 @@
+test.total_alpha_deg
+test.bodyB_T_inrtl_to_body[0][0]
+test.bodyB_T_inrtl_to_body[0][1]
+test.bodyB_T_inrtl_to_body[1][0]
+test.bodyB_T_inrtl_to_body[1][1]

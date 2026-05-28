@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager>
+<Fault ID="Bias Fault Char" enabled="true" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_char"></SimVar>
+  <Bias value="2"></Bias>
+  <TriggerGroup>
+    <Trigger name="bias trigger" variable="test_object.current_time" compare="GE" value="1.0"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault UChar" enabled="true" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uchar"></SimVar>
+  <Bias value="96"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="bias trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault Short" enabled="true" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.ref_sint"></SimVar>
+  <Bias value="150"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="bias trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault UShort" enabled="true" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_usint"></SimVar>
+  <Bias value="150"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="bias trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault Int" enabled="true" type="BIAS" loc="DOWNSTREAM" fire_limit="9">
+  <SimVar name="test_object.var_int"></SimVar>
+  <Bias value="150"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="bias trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault UInt" enabled="true" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uint"></SimVar>
+  <Bias value="150"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="bias trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault Long" enabled="true" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_lint"></SimVar>
+  <Bias value="150"></Bias>
+  <TriggerGroup>
+    <Trigger name="periodic trigger" variable="test_object.current_time" compare="GE" value="1" trigger_period="3" trigger_length="1.5"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault ULong" enabled="true" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ulint"></SimVar>
+  <Bias value="150"></Bias>
+  <TriggerGroup>
+    <Trigger name="negative periodic trigger" variable="test_object.negative_time" compare="LE" value="-1" trigger_period="3" trigger_length="1.5"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault LongLong" enabled="true" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_llint"></SimVar>
+  <Bias value="150"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="bias trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault ULongLong" enabled="true" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ullint"></SimVar>
+  <Bias value="150"></Bias>
+  <TriggerGroup>
+    <Trigger name="random trigger" variable="test_object.current_time" compare="GE">
+      <RandValue distribution="FLAT" min="1.5" max="5.5" seed="1"></RandValue>
+    </Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault Float" enabled="false" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <Bias value="150"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="bias trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Bias Fault Double" enabled="true" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Bias value="150"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="bias trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+</FaultManager>

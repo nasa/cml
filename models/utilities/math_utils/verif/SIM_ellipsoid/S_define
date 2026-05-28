@@ -1,0 +1,57 @@
+/*#####################TRICK HEADER#############################################
+
+PURPOSE:
+  ( Test the capabilities of Ellipsoid Intersection)
+
+AUTHOR:
+   (
+    ((Gary Turner) (OSR) (June 2023) (ANTARES V&V))
+   )
+
+##############################################################################*/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/ellipsoid_intersection.hh"
+
+class UnitSimObject: public Trick::SimObject {
+
+ public:
+  UnitTestFramework framework;
+  double source[3];
+  double target[3];
+
+  double root1[3];
+  double root2[3];
+
+  EllipsoidIntersection ellipsoid_intersection;
+
+  UnitSimObject()
+    :
+    ellipsoid_intersection (source,
+                            target,
+                            2,
+                            3,
+                            4)
+  {
+    ("initialization") framework.initialize();
+    (1, "environment") framework.update();
+
+    (1, "scheduled") ellipsoid_intersection.update();
+    (1, "scheduled") to_C_arr();
+  }
+  
+  void to_C_arr()
+  {
+    for (int ii = 0; ii < 3; ++ii) {
+      root1[ii] = ellipsoid_intersection.root1[ii];
+      root2[ii] = ellipsoid_intersection.root2[ii];
+    }
+  }  
+
+ private:
+  UnitSimObject (const UnitSimObject&);
+  UnitSimObject & operator = (const UnitSimObject&);
+};
+UnitSimObject test;

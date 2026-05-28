@@ -1,0 +1,392 @@
+\documentclass[11pt,fleqn]{report}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+
+\usepackage{cml}
+\lstnewenvironment{codeXML}
+    {\lstset{basicstyle=\small\ttfamily,
+             language=XML,
+             xleftmargin=0.0in,
+             xrightmargin=0.0in,
+             backgroundcolor=\color{Orchid!60}, % 60% orchid, 40% white
+             escapeinside={\%*}{*)}, %  .tex file characters inside %*...*) are
+                                     %  treated as Tex commands.
+            }
+    }
+    { }
+
+\newcommand{\ModelName}{Fault-Arch Legacy Interface}
+\newcommand{\ModelAuthor}{Gary Turner}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{Sept 2022}
+\pagestyle{plain}
+\usepackage[parfill]{parskip}
+\usepackage[margin=1.5cm]{caption}
+\usepackage{subfig}
+
+\begin{document}
+\titlePage
+\clearpage % Reset page number
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\ \hline
+ \hline
+1 & Sept 2022 & Gary Turner & Initial Version \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagenumbering{arabic} % Start text with arabic 1
+The Fault-Arch Legacy Interface model provides an interface to models using
+the now-defunct \textit{FaultArch} model for their fault-injection
+architecture. The \textit{FaultArch} model has been replaced with this
+interface to the updated \textit{Fault Management} model.
+
+For the most part, this new interface allows for the use of
+the XML configuration files formerly used for a \textit{FaultArch}
+implementation to still be used in the new \textit{Fault Management} model.
+
+To the extent that we were able to identify features of the (undocumented)
+\textit{FaultArch} model, those features have been tested in the new
+\textit{Fault Management} model.
+
+\chapter {Requirements}
+The only requirement for this model is that it supports, with as little
+intervention as possible, the use of legacy XML configuration files with the
+new \textit{Fault Management} model.
+
+
+\chapter {Model Specification}
+The model provides a whole new definition for the legacy
+\textit{sSensorFaults} class. The new implementation of
+\textit{sSensorFaults}:
+\begin{itemize}
+\item inherits from the \textit{FaultManager} class in the \textit{Fault
+Management} model
+\item replaces the methods in the old \textit{sSensorFaults} with new
+implementations that access methods in \textit{FaultManager}.
+\item implements additional capabilities to translate syntax that has been
+deprecated in \textit{FaultManager}.
+\end{itemize}
+
+
+\chapter {User's Guide}
+This is intended to be a plug-and-play interface to support legacy XML files
+configuring legacy fault-injection implementations.
+
+There is no User's Guide for this model because the model is intentionally
+not supposed to be ``used'' in any manual sense. To implement a
+fault-injection system, use the \textit{FaultManager} model directly.
+
+
+\chapter{Verification}
+There will likely be some syntax or features that were used in the legacy
+model that this interface does not support. The original model had no
+documentation and it is impossible to guarantee that this model provides a
+comprehensive coverage of the old model without knowledge of the syntax and
+functional capabilities of the old model.
+
+For model verification, we take a set of legacy XML files and use them to
+configure the \textit{FaultManager} model via the new \textit{sSensorFaults}
+implementation.
+
+The legacy XML files that we tested work with the
+\textit{FaultManager} model via this interface.
+
+The \textit{ERROR\_code\_coverage} test uses \textit{xml\_files/error.xml},
+which was NOT a legacy XML file; it was created to specifically test the
+fault-detection capabilities of this interface. It will generate several
+error messages.
+
+\section{Code Coverage}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/code_coverage.png}
+  \caption{Code Coverage}
+  \label{fig:coverage}
+\end{figure}
+
+The verification comprises the following runs:
+\begin{enumerate}
+\item \textbf{RUN\_bias} applies 3 biases to 2 variables, starting at t=3,
+      (+50 bias), t=5 (+100 bias), and t=8 (+150 bias).
+      Bias faults accumulate when more than one is applied to the
+      same variable, in this case the first and third are applied to the same
+      variable to create a net bias of +200.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/bias.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_linear} applies a linear walk-off starting at t=6.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/linear.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_linear\_fault1} results in an error message and no fault
+      applied.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/linear_fault.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_linear\_fault2} results in an error message and no fault
+      applied.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/linear_fault.png}
+  \caption{}
+\end{figure}
+
+\newpage
+\item \textbf{RUN\_linear\_fault3} tests the automatic assignment when
+      \textit{b} (from $y = ax+b$) is omitted from the specification.
+      This should result in the assumption of $b=0$ and data matching those
+      from \textit{RUN\_linear}.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/linear.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_linear\_repeated} tests the effect of having multiple
+      triggers and multiple trigger groups. A linear walk-off is applied for
+      $5 \leq t \leq 10$ (triggers $t \geq 5$ and $t \leq 10$
+      are both satisfied in first trigger-group) and $t \geq 15$
+      (solitary trigger satisfied in second trigger-group).
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/linear_repeat.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_negative\_periodic} applies an overwrite error when
+      \textit{negative\_time} is less than -5 (i.e. $time \geq 5$). The
+      overwrite is assigned for 1.5 seconds every 3 seconds thereafter.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/periodic.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_overwrite} applies 3 different overwrite faults to 2
+      variables. When two overwrite faults are applied to the same variable,
+      only the second one ``sticks''. The three overwrites use the same
+      specifications as were used for the earlier bias test, namely:
+      for $t \geq 3$, a +50 overwrite, for $t \geq 5$, a +100 overwrite, and
+      for $t \geq 8$, a +150 overwrite.
+      The first and third overwrites are applied to the same variable, so the
+      first is overwritten by the third for $t \geq 8$.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/overwrite.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_periodic} matches \textit{RUN\_negative\_periodic} using
+      a trigger monitoring positive time.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/periodic.png}
+  \caption{}
+\end{figure}
+\newpage
+\item \textbf{RUN\_persistence\_trigger} applies a set of four overwrite
+      faults to a single variable. Normally, this would result in only the
+      last applied overwrite remaining (as in the previous test case).
+      In this case, however, the respective
+      triggers are given progressively shorter fire-limits, so we see the
+      fire limits restrict each trigger and the overwrite value return back
+      through the set of overwrites as the later overwrites (with their shorter
+      fire-times) expire in reverse order.
+      The last fault remaining is the first fault applied, with a +100
+      overwrite; when its trigger reaches its
+      fire-limit, the variable is returned to its nominal value with no
+      further faults to apply.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/persistence.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_random} applies white-noise to the variable. The random
+      distribution parameters are set by the recommended practice for the
+      \textit{FaultManager} class.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/random.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_random\_overwrite} generates a random value for an
+      overwrite fault, then applies it consistently.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/random_ow.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_random\_trigger} applies a fixed overwrite, starting at a
+      random time. The random time aspect is confirmed by running several
+      times with different seeds.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/random_trig.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_random\_walk} applies a random walk fault.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/random_walk.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_reset\_overwrite} tests the ability to change a parameter
+      in the input file; the XML file sets the overwrite value to 50, and
+      the input file sets it to 40. The results confirms the 40 is applied.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/reset_overwrite.png}
+  \caption{}
+\end{figure}
+
+\newpage
+\item \textbf{RUN\_reuse\_trigger} confirms that the same trigger can be
+      used for multiple faults.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/reuse_trig.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_scale} tests the scaling of some value. Three tests are
+      included with three faults. The first test uses the variable
+      presented in the middle column below; it scales the target variable
+      by $\times 10$ and because this variable does not get reset
+      externally, it keeps increasing by a factor of 10.
+
+      The second test applies to the variable presented in the right-hand
+      column below. It, too, applies a scaling factor of 10 but its target
+      variable does get reset externally each cycle (to 8.675309), and then
+      re-scaled (to 86.75309), resulting in the same faulted value each
+      cycle.
+
+      The third also applies a scaling of $\times 10$ to the variable in the
+      right-hand column for $t \geq 8$. This scaling compounds with that
+      from the second test, resulting in the scaled value (86.75309) being
+      further scaled to 867.5309.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/scale.png}
+  \caption{}
+\end{figure}
+
+\newpage
+\item \textbf{RUN\_sinewave} applies a sinewave bias to the variable with a
+      period of 8 seconds and amplitude 1.0.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/sine.png}
+  \caption{}
+\end{figure}
+
+\newpage
+\item \textbf{RUN\_sinewave\_var} applies three faults in sequence, with
+      varying parameters:
+  \begin{enumerate}
+  \item frequency ($2 \leq t \leq 10$) -- oscillations become
+        closer as the frequency increases;
+  \item amplitude ($12 \leq t \leq 20$) -- oscillations maintain constant
+        frequency but the amplitude grows linearly
+  \item phase-offset ($t \geq 22$) -- osciallations are twice as fast as they
+        would be otherwise as the phase offset increases at the same rate as
+        the natural phase, effectively doubling the rate at which the net
+        phase evolves.
+  \end{enumerate}
+\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.5]{graphics/sine_var.png}
+  \caption{}
+\end{figure}
+
+\clearpage
+\item \textbf{RUN\_sinewave\_var\_repeated} applies the same three faults
+      as the previous test case, then applies them again. The second set of
+      applications matches the first. This confirms that the independent
+      variable is being considered relative to its value at triggering;
+      if its absolute value was being used, the second pass through each
+      fault would be different from the first.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/sine_repeat.png}
+  \caption{}
+\end{figure}
+
+\clearpage
+\item \textbf{RUN\_squarewave} applies a bias with value from a squarewave
+      function.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/square.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_squarewave\_var} applies three faults in sequence, with
+      varying frequency, amplitude, and phase-offset respectively. This is
+      similar to the application of an evolving fault in
+      \textit{RUN\_sinewave\_var} but for a squarewave rather than a
+      sinewave. Note that the squarewave levels are not constant when the
+      amplitude is varying.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/square_var.png}
+  \caption{}
+\end{figure}
+
+\newpage
+\item \textbf{RUN\_stale} applies stale-value overrides to
+      \textit{counting\_int} and \textit{linear\_value} (the two values in
+      the far right columns below).
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/stale.png}
+  \caption{}
+\end{figure}
+
+\item \textbf{RUN\_turnofffaults} repeats \textit{RUN\_sinewave\_var} but
+      with all three faults switched off in the input file. None get
+      applied.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/turnoff.png}
+  \caption{}
+\end{figure}
+
+\newpage
+\item \textbf{RUN\_turnofftriggers} repeats \textit{RUN\_sinewave\_var} but
+      with all five triggers switched off in the input file. No faults get
+      applied.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/turnoff.png}
+  \caption{}
+\end{figure}
+\end{enumerate}
+
+
+
+\end{document}

@@ -1,0 +1,67 @@
+/*****************************************************************************
+PURPOSE: (TO BE COMPLETED)
+PROGRAMMERS:
+    (
+     ((Name) (Org) (Date) (Project) (purpose))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+// Needed for JEOD 3.3 and earlier (missing dependency)
+##include "dynamics/dyn_manager/include/dynamics_integration_group.hh"
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "cml/models/dynamics/mass_derivative_dynamics/include/mass_derivative_dynamics.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+
+   public:
+   // Framework (leave this alone)
+    UnitTestFramework framework;
+   // support variables:
+    double time;
+    double mass;
+    double inertia[3][3];
+    double R_nozzle[3];
+    double R_propellant[3];
+    jeod::DynBody body;
+   // Model for testing:
+    MassDerivativeDynamics  test_dyn;
+
+    AntaresUnitTestSimObject()
+      :
+      test_dyn( time,
+                mass,
+                inertia,
+                R_propellant,
+                R_nozzle,
+                body)
+    {
+
+    // Framework (leave this alone)
+      ("initialization")  framework.initialize();
+      ("initialization") framework.update();
+      (1.0, "environment") framework.update();
+    // test-specific jobs:
+      ("initialization") test_dyn.initialize();
+      (1.0, "scheduled") update();
+    }
+
+  private:
+   void update() {
+     time += 1.0;
+     test_dyn.update();
+   }
+    AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+    AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+
+};
+AntaresUnitTestSimObject test ;

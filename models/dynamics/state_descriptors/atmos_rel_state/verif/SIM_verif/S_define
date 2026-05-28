@@ -1,0 +1,106 @@
+/*****************************************************************************
+PURPOSE: (Verification of the Atmos-rel-state model)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (Sep 2018) (Antares) (initial))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+// Included to bring in necessary dependencies.  Not needed for JEOD 3.4
+##include "dynamics/dyn_manager/include/dyn_manager.hh"
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+##include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_interface.hh"
+##include "../../include/atmos_relative_state.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject
+{
+ public:
+ // Framework (leave this alone)
+  UnitTestFramework framework;
+ // support variables:
+  bool null_ref_length;
+  bool subscribe;
+  double Lref_Re;
+  double dyn_time;
+  jeod::DynBody body;
+  ExtendedPlanetaryDerivedState planet_rel_state;
+  AtmosphereExecInterface  atmos_exec;
+
+ // Model for testing:
+  AtmosRelativeState atmos_rel;
+
+  AntaresUnitTestSimObject()
+    :
+    null_ref_length(false),
+    subscribe(false),
+    Lref_Re(0.0),
+    dyn_time(0.0),
+    body(),
+    planet_rel_state(),
+    atmos_exec(dyn_time,
+               planet_rel_state,
+               body),
+    atmos_rel( body,
+               planet_rel_state,
+               atmos_exec)
+  {
+    // Framework (leave this alone)
+    ("initialization")   framework.initialize();
+    ("initialization")   framework.update();
+    (1.0, 1.0, "environment") framework.update();
+
+    ("initialization") testing_data();
+    ("initialization") atmos_exec.initialize();
+    ("initialization") add_ref_length();
+    ("initialization") subscribe_model();
+    ("initialization") testing_data();
+
+    ("initialization") atmos_rel.initialize();
+    (1.0, "scheduled") atmos_rel.update();
+  }
+
+ private:
+  void add_ref_length() {
+    if (!null_ref_length) {
+      atmos_rel.set_reference_length( &Lref_Re);
+    }
+  }
+  void subscribe_model() {
+    if (subscribe) {
+      atmos_rel.subscribe();
+    }
+  }
+  void testing_data() {
+    double scratch_Tb[3][3] = {{0,1,0},{0,0,1},{1,0,0}};
+    jeod::Matrix3x3::copy(scratch_Tb,
+                    body.composite_body.state.rot.T_parent_this);
+    double scratch_Tp[3][3] = {{0,1,0},{-1,0,0},{0,0,1}};
+    jeod::Matrix3x3::copy(scratch_Tp,
+                    planet_rel_state.topodetic.T_inrtl_to_this);
+
+    jeod::Vector3::unit(0, atmos_exec.out.wind_velocity_eci);
+    jeod::Vector3::scale( 100.0, atmos_exec.out.wind_velocity_eci);
+
+    atmos_exec.out.speed_of_sound = 300.0;
+    atmos_exec.out.density = 2.0E-8;
+    atmos_exec.out.dynamic_viscosity = 2.0E-5;
+  }
+
+
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+
+};
+AntaresUnitTestSimObject atmos_rel_verif ;

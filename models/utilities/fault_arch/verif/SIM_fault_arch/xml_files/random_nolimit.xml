@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Test Fault 1" enabled="true" type="WHITENOISE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <RandValue mean="0.0" std_dev=".25" distribution="GAUSSIAN" seed="1"></RandValue>
+   <TriggerGroup>
+       <Trigger name = "trigger 1" variable="test_object.current_time" compare="GE" value="5"></Trigger>
+   </TriggerGroup>
+</Fault>
+</FaultManager>

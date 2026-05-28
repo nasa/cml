@@ -1,0 +1,68 @@
+/*****************************************************************************
+PURPOSE: (
+   Test the computation of the height difference between the EGM2008
+   geoid and the WGS84 ellipsoid.
+
+PROGRAMMERS:
+  (
+   ((Gary Turner) (OSR) (Feb 2021) (Antares) (initial)
+  )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/egm_2008.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+
+ public:
+  UnitTestFramework framework;
+  double longitude_deg; /* (degree) populated by unit-test framework*/
+  double longitude_rad; /* (rad) used by egm model. */
+  double latitude_deg;  /* (degree) populated by unit-test framework*/
+  double latitude_rad;  /* (rad) used by egm model. */
+
+  EGM2008_WGS84 egm;
+
+  AntaresUnitTestSimObject()
+    :
+    egm( latitude_rad,
+         longitude_rad)
+  {
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    ("initialization")  egm.initialize();
+    (1.0, "environment") update();
+  }
+
+  void update()
+  {
+    longitude_rad = longitude_deg / 57.29577951308231;
+    latitude_rad =  latitude_deg  / 57.29577951308231;
+    egm.update();
+  }
+
+  void lat_lon_sweep(double lat_step_deg,
+                     double lon_step_deg)
+  {
+    framework.add_sweep(longitude_deg,
+                         0.0,    360, lon_step_deg);
+    framework.add_sweep(latitude_deg,
+                        -90, 90, lat_step_deg);
+  }
+
+
+ private:
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject test ;

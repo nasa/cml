@@ -1,0 +1,42 @@
+/*#####################TRICK HEADER#############################################
+
+PURPOSE:
+  ( Test the capabilities of EventManager)
+
+AUTHOR:
+   (
+    ((Gary Turner) (OSR) (October 2023) (ANTARES V&V))
+   )
+
+##############################################################################*/
+#include "sim_objects/default_trick_sys.sm"
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "include/sample_sim_data.hh"
+##include "include/verif_events_manager.hh"
+
+class EventUnitSimObject: public Trick::SimObject {
+
+ public:
+  UnitTestFramework framework;
+  SampleSimData sim_data;
+  VerifCompoundEventsManager manager;
+
+  EventUnitSimObject()
+    :
+    sim_data(),
+    manager(sim_data)
+  {
+
+    ("initialization") framework.initialize();
+    (1, "environment") framework.update();
+
+    ("initialization") manager.initialize();
+    (1, "scheduled")   manager.update();
+  }
+
+ private:
+  EventUnitSimObject (const EventUnitSimObject&);
+  EventUnitSimObject & operator = (const EventUnitSimObject&);
+};
+EventUnitSimObject verif;

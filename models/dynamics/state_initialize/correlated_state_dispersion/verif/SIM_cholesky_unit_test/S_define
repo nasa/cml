@@ -1,0 +1,20 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "include/test_class.hh"
+class SimpleSimObject : public Trick::SimObject {
+ public:
+  TestCorrelatedStateDispersion test;
+
+  SimpleSimObject()
+  {
+    ("initialization") test.construct_covariance();
+    ("initialization") test.cholesky_decomposition();
+    ("initialization") test.reconstruct_mx();
+    ("initialization") test.difference();
+  }
+ private:
+  SimpleSimObject( const SimpleSimObject&);
+  SimpleSimObject & operator= ( const SimpleSimObject&);
+};
+SimpleSimObject simple_so;

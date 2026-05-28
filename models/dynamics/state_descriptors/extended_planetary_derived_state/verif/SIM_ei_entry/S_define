@@ -1,0 +1,65 @@
+#include "sim_objects/default_trick_sys.sm"
+
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+#include "jeod_sys.sm"
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+
+/*****************************************************************************
+PlanetRelStateSimObject
+*****************************************************************************/
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/extended_planetary_derived_state.hh"
+
+##include "jeod/models/environment/planet/include/planet.hh"
+##include "jeod/models/environment/gravity/include/gravity_source.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+
+class PlanetRelStateSimObject: public Trick::SimObject {
+
+public:
+   UnitTestFramework framework;
+   ExtendedPlanetaryDerivedState earth_rel;
+
+   jeod::DynBody body;
+   jeod::Planet earth;
+   jeod::GravitySource gravity_source;
+
+   PlanetRelStateSimObject(jeod::DynManager& dyn_manager)
+     :
+     earth_rel(),
+     body(),
+     earth(),
+     gravity_source(),
+     dyn_manager(dyn_manager)
+   {
+      ("initialization") framework.initialize();
+      ("initialization") framework.update();
+      (1.0, "scheduled") framework.update();
+
+      ("initialization") earth.register_model(gravity_source, dyn_manager);
+      ("initialization") earth.initialize();
+      ("initialization") body.initialize_model(dyn_manager);
+      ("initialization") earth_rel.initialize(body, dyn_manager);
+
+      // Fully populate the earth-pfix frame-state and the body frame-state
+      //from the partial state information provided via the unit-test data input
+      (1.0, "scheduled") earth.pfix.state.rot.compute_quaternion();
+      (1.0, "scheduled") earth.pfix.state.rot.compute_ang_vel_products();
+      (1.0, "scheduled") body.composite_body.state.rot.compute_quaternion();
+      (1.0, "scheduled") body.composite_body.state.rot.compute_ang_vel_products();
+
+      // Compute the planet-relative state.
+      (1.0, "scheduled") earth_rel.update();
+   }
+
+private:
+   jeod::DynManager& dyn_manager;
+
+   PlanetRelStateSimObject (const PlanetRelStateSimObject&);
+   PlanetRelStateSimObject & operator = (const PlanetRelStateSimObject&);
+
+};
+
+PlanetRelStateSimObject prs_verif(dynamics.dyn_manager);

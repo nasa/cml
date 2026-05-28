@@ -1,0 +1,6 @@
+The data for the 3 runs in this sim have not been verified.
+
+They should be somewhat similar to the data in the corresponding runs in
+SIM_verif.
+
+Once the verification data are created, remeber to add them to .unit_sims.

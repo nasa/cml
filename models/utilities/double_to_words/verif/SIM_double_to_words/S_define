@@ -1,0 +1,48 @@
+/*******************************TRICK HEADER************************************************
+PURPOSE:  (S_define header)
+***************************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+
+##include <stdio.h>
+##include "cml/models/utilities/double_to_words/include/double_to_words.h"
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+class DoubleToWordsSimObject : public Trick::SimObject {
+  public:
+    UnitTestFramework framework;
+    double convert_value;           /* (--) convert value */
+    double resolution;              /* (--) resolution value */
+    unsigned int words[4];          /* (--) words */
+    unsigned int array_size;        /* (--) array size */
+    unsigned int bit_size;          /* (--) bit size */
+    bool null_check;                /* (--) null_check flag */
+
+    DoubleToWordsSimObject()
+    :
+    convert_value(546),
+    resolution(200),
+    array_size(4),
+    bit_size(16),
+    null_check(false)
+    {
+      //Framework (leave this alone)
+      ("initialization")  framework.initialize();
+      (1.0, "environment") framework.update();
+
+      // test-specific jobs:
+      (1.0,"scheduled") double_to_uint_words (convert_value,resolution,words,array_size,bit_size);
+      (1.0,"scheduled") words_null_check();
+    }
+
+  private:
+    void words_null_check() {
+      if (null_check) {
+        double_to_uint_words(convert_value,resolution,NULL,array_size,bit_size);
+      }
+    }
+    DoubleToWordsSimObject (const DoubleToWordsSimObject&);
+    DoubleToWordsSimObject & operator = (const DoubleToWordsSimObject&);
+};
+
+DoubleToWordsSimObject double_words ;

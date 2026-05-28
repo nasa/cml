@@ -1,0 +1,3 @@
+RUN_1* test aspects of the table manager
+RUN_2* test aspects of the generic-table
+RUN_3* test aspects of the independent variable

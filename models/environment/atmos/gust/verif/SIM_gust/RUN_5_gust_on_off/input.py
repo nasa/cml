@@ -1,0 +1,16 @@
+exec(open("RUN_0_verif/input.py").read())
+
+gust_unit.gust.activate()
+trick.add_read(5.5, "gust_unit.gust.deactivate()")
+trick.add_read(5.5, "gust_unit.gust.activate()")
+trick.add_read(11,  """
+gust_unit.gust.deactivate()
+print('*******************************************************')
+print(' Turned off gust to reset it')
+print('is-active:', gust_unit.gust.is_active())
+gust_unit.gust.activate()
+print(' Turned gust back on, reset')
+print('is-active:', gust_unit.gust.is_active())
+print('*******************************************************')
+""")
+trick.add_read(16,  "gust_unit.gust.deactivate()")

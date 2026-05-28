@@ -1,0 +1,127 @@
+##include <string>
+
+// Create and register all the events that SIM_verif will test
+void configure_events()
+{
+    std::string simobj ("events_manager_verif");
+
+    manager.sim_stop_var_verif.set_watch(position, 2.501);
+    manager.sim_stop_var_verif.set_direction(-1); //decreasing
+    manager.sim_stop_var_verif.message="Stop sim now event triggered";
+    manager.register_watch(manager.sim_stop_var_verif);
+
+    manager.sim_stop_verif.set_watch(sim_off, true);
+    manager.sim_stop_verif.message = "Stop sim now event-2 triggered";
+    manager.sim_stop_verif.trans_dyn_flags.push_back(&dyn_flag);
+    manager.register_watch(manager.sim_stop_verif);
+
+    manager.relative_to_activation_double_verif.set_watch(sim_time, &xx1);
+    manager.relative_to_activation_double_verif.set_direction(1);
+    manager.relative_to_activation_double_verif.relative_to_activation = true;
+    manager.relative_to_activation_double_verif.message = "Rel-double triggered";
+    manager.register_watch(manager.relative_to_activation_double_verif);
+
+    manager.deact_sim_obj_verif.set_watch(sim_time, 4.999);
+    manager.deact_sim_obj_verif.set_direction(1); //increasing
+    manager.deact_sim_obj_verif.simobj_name = simobj;
+    manager.deact_sim_obj_verif.message = "Sim-object deactivation event";
+    manager.register_watch(manager.deact_sim_obj_verif);
+
+    manager.adjust_log_verif.set_watch(sim_time, 3.599);
+    manager.adjust_log_verif.set_direction(1);
+    manager.adjust_log_verif.log_cycle = 0.2;
+    manager.adjust_log_verif.add_to_ext_bool_off(base_bool);
+    manager.adjust_log_verif.add_to_unsubscribe(manager.deact_sim_obj_verif);
+    manager.adjust_log_verif.message = "Logging-adjust event triggered";
+    manager.register_watch(manager.adjust_log_verif);
+
+    manager.log_now_verif.set_watch(sim_time, 5.5);
+    manager.log_now_verif.set_direction(1);
+    manager.log_now_verif.message = "Log-now event triggered";
+    manager.register_watch(manager.log_now_verif);
+
+    // This pairing causes a cascade effect.  When the position passes 8m,
+    // three actions are taken:
+    //  - the state is logged immediately
+    //  - the base_bool_verif event is activated
+    //  - the base_bool variable is flipped to true
+
+    // base_bool_verif is watching base_bool. When it is flipped to true,
+    // it activates the sim_stop_verif watch and flips the sim_off flag.
+
+    // sim_stop_verif is watching that flag and shuts the sim down.
+    manager.base_double_verif.set_watch(position, 8.0);
+    manager.base_double_verif.set_direction(0); //either direction
+    manager.base_double_verif.message = "Base-double event triggered";
+    manager.base_double_verif.add_assignment( xx1, 1.1);
+    manager.base_double_verif.add_assignment( ii, 3);
+    manager.base_double_verif.add_assignment_ref( xx2, xx_in);
+    manager.base_double_verif.add_to_subscribe(manager.base_bool_verif);
+    manager.base_double_verif.add_to_subscribe(manager.log_now_verif);
+    manager.base_double_verif.add_to_ext_bool_on(base_bool);
+    manager.register_watch(manager.base_double_verif);
+
+    manager.base_bool_verif.set_watch(base_bool, true);
+    manager.base_bool_verif.add_to_subscribe(manager.sim_stop_verif);
+    manager.base_bool_verif.message = "Base-bool event triggered";
+    manager.register_watch(manager.base_bool_verif);
+
+    manager.reference_var_verif.set_watch(sim_time, &position);
+    manager.reference_var_verif.set_direction(1);
+    manager.reference_var_verif.multi_shot = true;
+    manager.reference_var_verif.message = "Reference-var-verif triggered";
+    manager.register_watch(manager.reference_var_verif);
+
+    manager.bad_variable_verif.set_watch(xx1, 5.0);
+    manager.register_watch(manager.bad_variable_verif);
+
+    manager.relative_to_activation_int_verif.set_watch(ii, 3);
+    manager.relative_to_activation_int_verif.relative_to_activation = true;
+    manager.relative_to_activation_int_verif.message = "Rel-int triggered";
+    manager.register_watch(manager.relative_to_activation_int_verif);
+
+    manager.relative_to_activation_bool_verif.set_watch(base_bool, true);
+    manager.relative_to_activation_bool_verif.relative_to_activation = true;
+    manager.relative_to_activation_bool_verif.message = "Rel-bool triggered";
+    manager.register_watch(manager.relative_to_activation_bool_verif);
+
+    manager.relative_to_activation_float_verif.set_watch(base_float, 3.0);
+    manager.relative_to_activation_float_verif.set_direction(1);
+    manager.relative_to_activation_float_verif.relative_to_activation = true;
+    manager.relative_to_activation_float_verif.message = "Rel-float triggered";
+    manager.register_watch(manager.relative_to_activation_float_verif);
+
+    manager.two_variable_check_and.watch_a.set_watch(sim_time,0.5);
+    manager.two_variable_check_and.watch_a.set_direction(1);
+    manager.two_variable_check_and.watch_b.set_watch(base_bool, true);
+    manager.two_variable_check_and.require_all = true;
+    manager.two_variable_check_and.message = "Two-trigger 'AND' event triggered";
+    manager.register_watch(manager.two_variable_check_and);
+
+    manager.two_variable_check_or.watch_a.set_watch(sim_time,0.5);
+    manager.two_variable_check_or.watch_a.set_direction(1);
+    manager.two_variable_check_or.watch_b.set_watch(base_bool, true);
+    manager.two_variable_check_or.require_all = false;
+    manager.two_variable_check_or.message = "Two-trigger 'OR' event triggered";
+    manager.register_watch(manager.two_variable_check_or);
+
+    manager.delayed_check.set_watch(ii, 3);
+    manager.delayed_check.delay_offset = 1.3;
+    manager.delayed_check.message = "Delayed_response triggered";
+    manager.delayed_check.add_assignment(xx1, 123.456);
+    manager.register_watch(manager.delayed_check);
+
+    manager.relative_to_activation_uint_verif.set_watch(base_uint, 1);
+    manager.relative_to_activation_uint_verif.relative_to_activation = true;
+    manager.relative_to_activation_uint_verif.message = "Rel-uint triggered";
+    manager.register_watch(manager.relative_to_activation_uint_verif);
+
+    manager.base_bool_ff.set_watch(base_bool, true);
+    manager.flip_flop.add_assignment(xx1, 1.23);
+    manager.flip_flop.add_down_assignment(xx1, -1.34);
+    manager.flip_flop.message = "Flip-flop event triggered";
+    manager.register_watch(manager.flip_flop);
+
+
+    manager.register_watch(manager.unconfigured_event);
+};

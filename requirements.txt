@@ -1,0 +1,4 @@
+gcovr
+numpy
+PyYAML
+psutil

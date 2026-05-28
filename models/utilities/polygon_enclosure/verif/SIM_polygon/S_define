@@ -1,0 +1,70 @@
+/*#####################TRICK HEADER#############################################
+
+PURPOSE:
+  ( Test the capabilities of Polygon Enclosure)
+
+AUTHOR:
+   (
+    ((Name Gary Turner) (OSR) (June 2023) (ANTARES V&V))
+   )
+
+##############################################################################*/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/polygon_enclosure.hh"
+
+class UnitSimObject: public Trick::SimObject {
+
+ public:
+  UnitTestFramework framework;
+  double point_of_interest[2];
+
+  PolygonEnclosure<4> rectangle;
+  PolygonEnclosure<6> irreg_hex;
+  PolygonEnclosure<4> invalid;
+
+  bool in_rectangle;
+  bool in_hex;
+
+  UnitSimObject()
+    :
+    rectangle( point_of_interest[0], point_of_interest[1]),
+    irreg_hex( point_of_interest[0], point_of_interest[1]),
+    invalid(   point_of_interest[0], point_of_interest[1])
+  {
+    ("default_data") vertices();
+
+    ("initialization") framework.initialize();
+    (1, "environment") framework.update();
+
+    ("initialization") rectangle.initialize();
+    ("initialization") irreg_hex.initialize();
+    (1, "scheduled") test();
+  }
+
+  void vertices()
+  {
+    double r[4][2] = {{0,0},{0,1},{2,1},{2,0}};
+    rectangle.set_xy(r);
+
+    double ih[6][2] = {{0,0},{0,1},{2,1},{3,0},{2,-1},{1,-1}};
+    irreg_hex.set_xy(ih);
+
+    double inv[4][2] = {{0,0},{0,1},{2,1},{1,0.8}};
+    invalid.set_xy(inv);
+  }
+
+  void test()
+  {
+    in_rectangle = rectangle.in_polygon();
+    in_hex       = irreg_hex.in_polygon();
+  }
+
+  private:
+    UnitSimObject (const UnitSimObject&);
+    UnitSimObject & operator = (const UnitSimObject&);
+
+};
+UnitSimObject test;

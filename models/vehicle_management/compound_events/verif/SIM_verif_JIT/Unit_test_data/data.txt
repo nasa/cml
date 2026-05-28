@@ -1,0 +1,11 @@
+0.0  0.0  4.0    3.0  3.0  3.0     3.0  3.0  3.0 # no arming
+1.2  0.0  4.0    3.0  3.0  3.0     3.0  3.0  3.0 # arm with ix 0, disarm
+1.0  3.0  3.0    3.0  3.0  4.0     1.0  1.0  3.0 # arm with ix 1,2, no action
+0.0  0.0  4.0    3.0  3.0  4.0     3.0  3.0  3.0 # no arming (remains armed)
+1.0  3.0  4.0    3.0  3.0  3.0     1.0  1.0  3.0 # arm with ix 1, disarm
+1.0  3.0  3.0    3.0  3.0  4.0     3.0  3.0  3.0 # arm with 1,2, no disarm, action 0,1 but not 2
+1.0  3.0  3.0    3.0  3.0  4.0     3.0  3.0  3.0 # arm with 1,2, no disarm, action 0,1 but not 2
+1.0  3.0  3.0    3.0  3.0  4.0     3.0  3.0  3.1 # arm, all actions -> event triggers time delay
+0.0  0.0  0.0    3.0  3.0  3.0     3.0  3.0  3.0 #unarm
+0.0  0.0  0.0    3.0  3.0  3.0     3.0  3.0  3.0
+0.0  0.0  0.0    3.0  3.0  3.0     3.0  3.0  3.0

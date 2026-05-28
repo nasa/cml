@@ -1,0 +1,21 @@
+### For the entire SIM_cholesky_decomposition unit test directory ###
+
+The S_define was set up to create a randomized 10x10 matrix.
+Since the seeding is the same everytime for the matrix generation
+it'll be the same for every single run even though it's random.
+
+The "random seed matrix" is a lower diagonal of a 10x10 ranging in
+values from 0 -> 3 with 4 significant digits.
+
+The "random seed matrix" is multiplied by its transpose in order to
+make "A-matrix (generated)".
+
+Specific runs modify the "A-matrix (generated)" in specific ways in
+order to create "A-matrix (modified)".
+
+The cholesky decomposition is applied to "A-matrix (modified)" which
+then creates "sqrt-A matrix".
+
+The "sqrt-A matrix" is multiplied by its transpose in order to create
+"B-matrix". If decomposition was done correctly then the "B-matrix"
+should match "A-matrix (modified)".

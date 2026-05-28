@@ -1,0 +1,4202 @@
+\documentclass[11pt,fleqn]{report}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+
+\usepackage{cml}
+\lstnewenvironment{codeXML}
+    {\lstset{basicstyle=\small\ttfamily,
+             language=XML,
+             xleftmargin=0.0in,
+             xrightmargin=0.0in,
+             backgroundcolor=\color{Orchid!60}, % 60% orchid, 40% white
+             escapeinside={\%*}{*)}, %  .tex file characters inside %*...*) are
+                                     %  treated as Tex commands.
+            }
+    }
+    { }
+
+\setcounter{secnumdepth}{4}
+
+\newcommand{\ModelName}{Fault Management}
+\newcommand{\ModelAuthor}{Daniel Ghan \\ Gary Turner}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{April 2022}
+
+\pagestyle{plain}
+\usepackage[parfill]{parskip}
+\usepackage[margin=1.5cm]{caption}
+\usepackage{subfig}
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep}
+
+
+\begin{document}
+\titlePage
+\clearpage % Reset page number
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\ \hline
+ \hline
+1 & April 2022 & Daniel Ghan & Initial Version \\ \hline
+2 & September 2022 & Gary Turner & Extended Description and Verification \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagenumbering{arabic} % Start text with arabic 1
+\par The Fault Management model is designed primarily to support injecting
+faults into simulated sensor readings; it may also be used for faulting
+other models, including effectors.
+The faults and their trigger conditions can be instantiated either at compile
+time (directly in simulation objects) or at run time (by instantiating a fault
+manager and defining the faults and triggers in an XML file).
+
+\par This chapter summarizes the features and limitations of the Fault
+Management model; details on how to implement it can be found in the User's
+Guide (Chapter \ref{sec:UG}).
+
+\section{Conceptual Elements} \label{intro_concept}
+\subsection {Fault}
+\par A Fault (see Section \ref{sec:intro:faults}) is some modification that is
+applied to the value of a specified
+simulation variable. In general, the Fault Management model supports ongoing
+modification of the specified variable with a value that may evolve in time.
+While a Fault may be used to apply an isolated, single modification (e.g. flip a
+boolean flag), such a capability may also be implemented as an event (see CML
+events-manager model), or a discrete event (see CML trajectory model). The
+strength of the Fault Management capability lies in being able to consistently
+apply values to, for example, apply white noise, or a walk-off error, etc. to
+the evolving state of some variable.
+\subsection{Trigger}
+\par A trigger is a logical condition that \textbf{can} lead to the
+application of a fault. The connection between triggers and Faults is
+not direct; triggers and Faults are connected through the concept of a
+trigger-group, explored in the next section.
+
+A trigger typically comprises a \textit{trigger-variable}, a
+\textit{trigger-value}, and a logical comparator.
+The trigger is considered \textit{triggered} when the value of the
+\textit{trigger-variable} satisfies the specified logical comparison with the
+\textit{trigger-value}.
+For example, a trigger set to compare the vehicle altitude against some
+specified height (e.g. some ceiling) may be used to initiate a Fault that
+applies noise to a signal when the
+vehicle passes below that threshold height.
+
+A trigger also has an \textit{enabled} property. A trigger that is not enabled
+plays no role in determining whether a fault is applied. An enabled trigger
+\textbf{may} influence the application of a Fault via a trigger-group.
+
+\subsection{Trigger Group}
+\par As may be expected from the name, a trigger-group is a collection of
+(one or more) triggers. Triggers are collected into a trigger-group using the
+boolean AND logic:
+a \textbf{trigger group is \textit{triggered}} when ALL of its \textit{enabled}
+triggers are \textit{triggered}. Note -- the \textit{triggered} status of any
+non-enabled triggers in the group are not considered.
+
+Each Fault uses one or more trigger-groups, collected using the boolean OR
+logic: a \textbf{Fault is \textit{triggered}} when ANY of its trigger-groups are
+\textit{triggered}.
+
+A \textit{triggered} Fault will apply its modification to
+the target variable.
+
+
+\section{Faults} \label{sec:intro:faults}
+\par Each Fault consists of a reference to a simulation variable, at least one
+trigger group, and some parameters specific to the nature of the fault being
+applied.
+When the Fault is triggered (i.e. when at least one of its associated trigger
+groups is triggered),
+the simulation variable is modified in some way.
+
+\subsubsection{Fault Types}
+\par The model includes 7 types of Faults:
+\begin{itemize}
+  \item Bias Faults
+  \item Scale Faults
+  \item Overwrite Faults
+  \item Stale-value Faults
+  \item White-noise Faults
+  \item Random-walk Faults
+  \item Function Faults \begin{itemize}
+    \item Linear Faults
+    \item Sine-Wave Faults
+    \item Square-Wave Faults
+    \item Triangle-Wave Faults
+  \end{itemize}
+\end{itemize}
+See section \ref{sec:formulation:fault:fault_type} for descriptions of these
+types.
+
+\subsubsection{Supported Data-types}
+Each of these 7 types has its own template class (the different types of
+function faults are options within the same class).
+They have all been tested on the following variable types:
+\begin{itemize}
+  \item Integers \begin{itemize}
+    \item \verb"char" (treated as an 8-bit integer)
+    \item \verb"unsigned char"
+    \item \verb"short"
+    \item \verb"unsigned short"
+    \item \verb"int"
+    \item \verb"unsigned int"
+    \item \verb"long"
+    \item \verb"unsigned long"
+    \item \verb"long long"
+    \item \verb"unsigned long long"
+  \end{itemize}
+  \item Floating-point Numbers \begin{itemize}
+    \item \verb"float"
+    \item \verb"double"
+  \end{itemize}
+  \item Boolean values (Overwrite and Stale-value faults only)
+\end{itemize}
+The Fault Manager only allows these types of variables (and references to them)
+to be faulted; of particular note, pointers (to any data type) are not a
+legitimate variable type.
+
+
+
+
+
+
+\chapter {Requirements}
+
+\section{Fault Effects}
+\subsection {Profiles}
+The model shall support the ability to modify a simulation variable with
+either, or both:
+\begin{enumerate}
+ \item introduce a one-time initial Fault to modify the initial value of
+       some variable, applied during model initialization.
+ \item introduce a time-evolving profile that is consistent with commonly
+       seen faults. These include, at a minimum:
+ \begin{enumerate}
+  \item Holding a variable to a pre-determined value
+  \item Incrementing the nominal evolution of a variable with some fixed bias
+  \item Scaling the nominal evolution of a variable by some fixed scale-factor
+  \item Setting a value from a variable's current value, and holding the
+        variable to that value.
+  \item Introducing a noise signature over a variable's nominal evolution
+  \item Introducing a walk-off signature over a variable's nominal evolution
+  \item Introducing a random-walk accumulation over a variable's nominal
+        evolution.
+  \item Introducing a periodic-fluctuation signal over a variable's nominal
+        evolution. See below for additional requirements on this capability.
+ \end{enumerate}
+\end{enumerate}
+The model shall also provide an extensible framework to support user-defined
+Fault signatures not currently required.
+
+\subsection {Periodic Profiles}
+ The last item of the list above introduced the requirement for periodic
+ profiles, which have their own set of requirements.
+ These periodic functions shall use some independent variable -- that is not
+ necessarily associated with time -- to
+ control the evolution of the periodic signature.
+\begin{itemize}
+ \item The signatures shall include, at a minimum:
+  \begin{itemize}
+   \item sine-wave
+   \item triangular-wave, a linear approximation to a sine-wave
+   \item square-wave, a discrete approximation to a sine-wave.
+  \end{itemize}
+ \item The independent variables shall be selectable from a variety of data
+       types, including:
+  \begin{itemize}
+   \item integer of multiple forms (int, unsigned int, etc.)
+   \item floating-point values of multiple forms (float, double, etc.)
+   \item character-based variables (including individual character and string)
+  \end{itemize}
+ \item The parameters defining the periodic profile shall be configurable.
+ \item The parameters defining the periodic profile shall be representable as
+       their own independent functions.
+\end{itemize}
+
+\subsection{Compounding Faults}
+The Fault signatures identified in the previous section shall be compoundable --
+that is the model shall support combinations of these effects. For example, a
+particular Fault might completely overwrite the evolution of some variable into
+a noisy signature about some constant value.
+
+\subsection {On and Off}
+The model shall provide the ability to turn the Fault on and off repeatedly.
+This could be either:
+\begin{itemize}
+ \item periodically, with the fault signature being applied for pre-determined
+ durations at regular intervals during the simulation
+ \item ad-hoc or quasi-randomly, with the fault signature being applied as
+ needed
+\end{itemize}
+
+\subsection{Monte Carlo Support for Random Faults}
+The model shall provide a mechanism that supports Monte Carlo based distribution
+of the fault parameters. This is particularly important for dispersing the seed
+when representing faults that naturally use random number generation, such as
+introducing white-noise to a variable.
+
+\subsection{Modifying Faults}
+The model shall provide the capability to modify the signature of a Fault while
+it is being applied. A simple example of this might be to change the value to
+which a variable is being held.
+
+\section{ Fault Causes and Triggers}
+\subsection{Logical Operators}
+The model shall support a wide set options for determining when a fault should
+be applied. These tests shall support the following logical comparators (and
+their near-inverses):
+\begin{itemize}
+ \item is equal to / is not equal to
+ \item is greater than / is less than or equal to
+ \item is less than / is greater than or equal to
+\end{itemize}
+
+\subsection{Logical Combinations}
+The model shall provide control for triggering a Fault subject to multiple
+constraints, with the ability to combine constraints with both AND and OR
+logical operations, applied to single constraints and to groups. For example
+\begin{itemize}
+ \item A and B
+ \item A or B
+ \item (A and B) or (C and D)
+\end{itemize}
+
+\subsection{Triggering Variables}
+\begin{enumerate}
+ \item The model shall support a wide set of variable types to use as triggering
+   mechanisms, including:
+  \begin{itemize}
+   \item boolean
+   \item integer of multiple forms (int, unsigned int, etc.)
+   \item floating-point values of multiple forms (float, double, etc.)
+   \item character-based variables (including individual character and string)
+  \end{itemize}
+  Note -- this requirement is best achieved by making the trigger mechanism be
+  template-based. While this is not a requirement per-se, it is a natural
+  solution
+  to the actual requirement.
+ \item The model shall provide the capability to configure and later modify the
+   value of the trigger-variable that results in the trigger-condition being
+   satisfied.
+\end{enumerate}
+
+\subsection {Triggering Controls}
+The model shall provide additional mechanisms for controlling recognition of a
+successful trigger, including:
+\begin{itemize}
+ \item Enabling and disabling specific triggers (when a Fault has multiple
+ triggers)
+ \item Limiting the number of times a trigger can ``fire''
+ \item Limiting the duration of an active trigger in terms of its independent
+   variable advancing, making a trigger periodic such that it fires for a
+   defined interval followed by an interval of not firing, repeated cyclically
+   and indefinitely.
+ \item Allowing a trigger to fire every time the trigger-condition is
+   satisfied, for an indefinite period.
+ \end{itemize}
+
+\section {Fault Application}
+The model shall support modifying any fundamental data type with an
+appropriately configured Fault. Data types will include, at a minimum:
+\begin{itemize}
+ \item boolean
+ \item integer of multiple forms (int, unsigned int, etc.)
+ \item floating-point values of multiple forms (float, double, etc.)
+ \item character-based variables (including individual character and string)
+\end{itemize}
+
+The model shall also provide an extensible framework to support application to
+user-defined data-types.
+
+\section {Fault Implementation and Configuration}
+The previous requirements have addressed the necessary flexibility in
+configuring the specific behavior of a Fault. This section addresses the
+implementation of the Fault-management model within a simulation, and its
+interface to both the user and the simulation. These are two separate
+considerations:
+\begin{itemize}
+  \item how the faults are introduced into, and applied within,
+  the simulation (i.e. the interface between the Fault instance and the model
+  data it is affecting), and
+  \item how the Fault instances are created and configured (i.e. the interface
+  between the Fault instance and the simulation developer/user).
+\end{itemize}
+
+There are two distinct design patterns for how the faults may be implemented
+in the simulation architecture, and two patterns for the
+configuration-interface to those faults.
+
+Because the implementation and configuration are separable aspects of
+introducing faults, the Fault-management model shall support the use of either
+implementation method with either configuration method.
+We will look at these in turn -- the
+implementation options and then the configuration options.
+
+\subsection{Fault Implementation / Execution}
+The Fault-management model shall support implementation of faults as:
+\begin{itemize}
+ \item an integrated component of a model, built into the
+ design of the model, compiled with the rest of the model code, and executed
+ in-line with the routine updates of that model.
+ \begin{itemize}
+  \item This requires that there be some
+  mechanism to identify which Fault instances should be applied at which
+  points within a model's routine update process to achieve the desired
+  fault signature.
+ \end{itemize}
+ \item a component or set of components at the top-level of the simulation,
+ instantiated independently of the instantiations of the models to which
+ the faults will be applied. Execution of
+ such a component will result in the application of its associated Fault
+ instances to their associated variables.
+ \begin{itemize}
+  \item This requires that the Fault model have access to those variables to
+  which the fault will be applied; these will be located elsewhere within
+  the simulation.
+ \end{itemize}
+\end{itemize}
+
+Note that these are mutually incompatible for a given fault and its
+associated Fault instance, but not between faults (or Fault instances)
+within a simulation. The model shall provide the flexibility to support
+using both of these options within a single simulation.
+
+The first of these implementation options provides a greater degree of
+flexibility as to
+the specific location of the application of a fault within the model's internal
+algorithms. This is typically the option preferred by model developers. For
+example, it might be found in sensor models where a fault may reside
+in the input data, another in the processing of the input data, and another in
+the output from the model.
+
+The second of these implementation options provides a non-invasive capability
+to support injection of faults in an otherwise-established simulation. This is
+typically the option preferred by simulation managers and trainers, especially
+where models have been constructed and compiled without an
+integral fault mechanism. In these situations, it would be unreasonably onerous
+to break the wrapper on a verified model to introduce a fault to it, so the
+fault mananagement model must provide the capability to inject a fault into
+the input, output, or some internal variable of the target model without being
+invasive to the model execution. For example,
+this implementation might be found at the interface between the simulation
+environment and the flight-software environment, allowing faults to be applied
+to sensor data flowing from the simulation to flight-software, and to the
+responsive instructions flowing back to the simulation from flight-software.
+
+\subsection {Fault Configuration}
+The Fault-management model shall support configuration of faults via:
+\begin{enumerate}
+ \item Direct access to separately instantiated Fault instances.
+ \item Indirect access via a fault-manager.
+\end{enumerate}
+
+Notes on interpretation:
+\begin{itemize}
+ \item unlike the implementation options, these are \textbf{not} conceptually
+   incompatible for a given fault.
+   CML contains several examples of models (unrelated to this Fault-management
+   model) that include a manager-class to manage separately instantiated
+   entities, each of which gets registered with the manager. The same
+   architecture could be implemented here, to have individually instantiated
+   Fault instances be registered with a fault-manager, thereby allowing access
+   through the manager and to the individual instantiations directly.
+ \item However, that instantiate-and-register operational paradigm is not
+   specifically called out in these requirements, and has not been implemented
+   in the Fault management model at this time.
+ \item The model does provide a fault-manager, which does maintain a
+   list (STL-\textit{list}) of the faults for which it is responsible. This
+   fault-manager is responsible for creating those Fault instances for which
+   it is responsible. The model \textit{does
+   not} provide a mechanism for registering separately instantiated Fault
+   instances with a manager.
+ \item The implemented interpretation of this requirement ties together the
+   instantiation and management, i.e. a Fault shall be either
+   instantiated and managed individually, or instantiated and managed by the
+   manager.
+ \item Within a single simulation, there may simultaneously be a Fault-manager
+   and individual Fault instances independent of that manager. There may be
+   multiple managers, each responsible for multiple dependent Fault instances,
+   and multiple independent Fault instances.
+ \item This point may be revisited at some point in the future.
+\end{itemize}
+
+\chapter {Formulation}
+\section{Definitions}
+\begin{itemize}
+  \item \textit{\textbf{triggered}} This is an overloaded term:
+  \begin{itemize}
+    \item A \textit{Trigger} is described as triggered when its logical
+      conditions are satisfied.
+    \item A \textit{Trigger-group} is described as triggered when all of its
+      associated \textit{enabled} Trigger instances are individually triggered.
+      Any Trigger that has been disabled in a Trigger-group is not included
+      in th evaluation of whether that Trigger-group is triggered.
+    \item A \textit{Fault} is described as triggered when any of its associated
+      Trigger-group instances are triggered AND the Fault is enabled.
+    \end{itemize}
+
+  \item \textit{\textbf{reset}} A Fault is reset whenever it transitions from
+    being not-triggered to being triggered. This is typically a consequence of
+    the transition of one of its Trigger-groups, but could also as a consequence
+    of enabling the Fault while the Trigger-group conditionals are satisfied.
+  \item \textit{\textbf{target-variable}} This refers to the variable -- found
+    elsewhere in the simulation -- to which we want to apply a fault. The value
+    of this variable will be modified by the application of the fault.
+  \item \textit{\textbf{modifier}} When the fault being applied is additive,
+    i.e. it adds some value to the nominal value of the target-variable, the
+    modifier is the value that is added to the nominal value of the
+    target-variable.
+  \item \textit{\textbf{trigger-variable}} This refers to the variable -- found
+    elsewhere in the simulation -- that will be monitored for determining when
+    the fault is applied.
+  \item \textit{\textbf{trigger-value}} This is the value of the
+    trigger-variable that results in the application of the fault.
+    The Fault instance representing the desired fault may be
+    configured to trigger when the value of the trigger-variable is related in
+    some specified way (e.g. equal to, or less than, or greater than, etc.) the
+    trigger-value.
+  \item \textit{\textbf{firing / activating}} In places in this document, the
+    act of having a Fault modify the target variable is referred to as the
+    Fault firing or activating.
+  \item \textit{\textbf{fire-count}} This is a count of how many times some
+    Fault has fired or of how many times some Trigger has triggered.
+\end{itemize}
+
+\section {Fault Supporting-concepts}
+
+\subsection{Limiting Number of Fault Applications}
+\label{sec:formulation:fault_support:fire_count}
+Faults have an option to limit the number of times they ``fire'', i.e.
+apply a modification to the target variable.
+If this option is enabled, the Fault counts how many times it applies a
+modification and disables itself when the count reaches a certain limit. Note:
+\begin{itemize}
+ \item This is a count limit, not a time period; if the intent is to apply
+   the Fault for some period of time, a better strategy would be to add a
+   time-dependent trigger and close out the fault through the trigger mechanism;
+   using the count brings in an undesirable dependency on the rate at
+   which the Fault instance is updated; unexpected consequences may be
+   observed if the update-rate is changed.
+ \item The count is zeroed whenever the Fault is reset. The count can be zeroed
+   any number of times.
+ \item After being disabled by reaching its count limit, the Fault can be
+   re-enabled manually. At that time, the Fault's \textit{triggered} status will
+   be re-evaluated and if it is still triggered, the Fault instance will be
+   reset and the
+   count zeroed (see previous bullet). Until the Fault is manually re-enabled,
+   the conditional tests associated with the triggers will not be evaluated.
+\end{itemize}
+
+\subsection{Limiting Number of Trigger Applications}
+\label{sec:formulation:fault_support:trigger_fire_count}
+Like a Fault, a Trigger can also be limited to the number of consecutive
+times it can be considered ``triggered''.
+If this option is enabled, the Trigger counts how many times it has been
+used with a positive status -- i.e. the number of times it has been tested
+against its threshold and found to meet the criterion for triggering.
+When the count reaches a user-specified limit, the Trigger reverts to a
+non-triggered state regardless of whether the triggering criterion continues
+to be satisfied.
+
+Note that:
+\begin{itemize}
+ \item This is a count limit, not a time period; if the intent is to apply
+   the Trigger for some period of time, a better strategy would be to add a
+   second trigger to the same group, with the criterion that time be less
+   than some value. Remember that all Triggers within a group must be
+   triggered for the group to be triggered.
+   Using the count brings in an undesirable dependency on the rate at
+   which the Trigger's conditional criterion is evaluated, and on the number
+   of Faults using the Trigger;
+   unexpected consequences may be observed if the update-rate is changed.
+ \item The count is zeroed if the Trigger returns a negative state for any
+   reason \textit{other than} the count exceeding the limit.
+ \item A Trigger blocked by an excessive count is still considered enabled;
+   it will block the \textit{TriggerGroup} from returning a positive state
+   and it will continue to be evaluated on every cycle.
+ \item Remember that a single Trigger can be used in multiple Faults.
+   Limiting a Trigger will potentially affect all of the Faults which use that
+   Trigger. Additionally, the Trigger will be tested by each Fault,
+   incrementing the use-count with each test. If the count-limit is not an
+   integer multiple of the number of Fault instances using the Trigger, at
+   some point there will be a cycle with some subset of the Fault instances
+   using this Trigger receive a positive response from the Trigger, while
+   others get a negative response after the Trigger has been count-limited.
+\end{itemize}
+
+\subsection{Fault Functions} \label{sec:formulation:concept:functionss}
+For some faults, the value of the modifier is a function of one or more
+independent variables, e.g. $y=mx+b$, $y=A sin(\omega t + \phi)$
+See Section \ref{sec:formulation:faults:function} for more details on the
+operation and configuration of Fault Functions. For now, we focus on the
+concepts.
+
+All Fault Functions are represented as an instance of a templated-type,
+\verb'FaultFunction', which inherits from the non-templated
+\verb'FaultFunctionBase', which in turn inherits from two classes:
+\begin{itemize}
+\item \textbf{Fault} A FaultFunction is a type of Fault, so inherits all the
+capabilities of a \verb'Fault'.
+\item \textbf{FaultFunctionParameter} requires a little more explanation.
+The parameters in some fault-functions (e.g. the
+amplitude $A$ in $y=A sin(\omega t + \phi)$) may themselves be linear
+functions of some (other) independent variable. In this case, the label
+\textit{``parameter''} is something of a misnomer; \textit{``variable''}
+would be a more accurate description, with the value of the
+\textit{``parameter''} being a
+linear function ($y=mx+b$) of two parameters (
+\verb'rate', $m$ ;  \verb'nominal', $b$) and an independent variable
+(\verb'ind_variable', $x$). We create a class \verb'FaultFunctionParameter'
+to provide this linear-function capability.
+
+Note, that the Fault Function itself must also have this linear
+function capability to represent linear functions so is, in effect, an
+extension of a \verb'FaultFunctionParameter'. Thus, we can use the
+\verb'FaultFunctionParameter' class as an integral component of the
+\verb'FaultFunction' class by making \verb'FaultFunctionParameter' be
+inherited into the \verb'FaultFunctionBase' class itself. The
+\verb'FaultFunction' class-template then uses the components of its inherited
+\verb'FaultFunctionParameter' to represent the core components of its
+function-nature, while using additional instances of
+\verb'FaultFunctionParameter' to
+represent the values of the parameters/variables associated with its function.
+\end{itemize}
+This gives rise to two more concepts, intrinsic to understanding fault-function
+-- that of the fault-function parameter, and the fault-function independent
+variable.
+
+
+
+\subsubsection{Fault-Function Parameters} \label{sec:formulation:concept:params}
+The parameters used for evaluating fault-functions are
+represented by the class \verb'FaultFunctionParameter'.
+
+This class includes the capability to evaluate a linear expression $y=mx+b$. In
+this expression, $m$, $x$, and $b$ are class members.
+\begin{itemize}
+ \item \verb'nominal' $b$
+ \item \verb'rate' $m$
+ \item \verb'ind_variable' $x$; this is an instance of
+   \verb'FaultFunctionIndependentVariable', described in the next section.
+\end{itemize}
+
+Note -- remember we are specifically discussing the
+\verb'FaultFunctionParameter'
+aspect of a fault-function, not the entire structure of the fault-function.
+Fault-functions are not limited to any specific type of function, but the value
+of its parameters is restricted to either being constant (i.e. a true parameter)
+or a linear expression. See section \ref{sec:formulation:faults:function} for
+more details on the operation and configuration of Fault Functions.
+
+More complicated fault-functions use other parameters; each of these can be a
+linear-function of an independent variable, not necessarily the same
+independent variable as used by the fault. Thus, each of these
+\textit{``parameters''}
+may be represented by an instance of \verb'FaultFunctionParameter'.
+
+For example, a fault might generate a modifier $y$ with a sine-function
+dependency on $x$:
+\begin{equation*}
+ y= Asin(\omega x + \phi)
+\end{equation*}
+
+The \textit{parameters} in this expression -- $A$, $\omega$, and $\phi$ --
+could each be an independent linear function of some other variable.
+Expanding each of these parameters into its own linear function
+yields:
+\begin{equation*}
+y= (m_A x_A + b_A) sin((m_\omega x_\omega + b_\omega)x +
+(m_\phi x_\phi + b_\phi))
+\end{equation*}
+
+This concept is explored in more detail, including the process for setting
+these parameters, in Section \ref{sec:formulation:fault:params}.
+
+\subsubsection{Independent Variables} \label{sec:formulation:indep_var}
+Independent variables are used in Fault-functions (see Section
+\ref{sec:formulation:faults:function}) to represent the independent-variable
+used in evaluating the modifier. In code, these are represented by instances of
+the class \verb"FaultFunctionIndependentVariable".
+Each instance of \verb"FaultFunctionIndependentVariable" accesses the value of a
+numeric
+variable residing elsewhere in the simulation; the nature of this access
+requires some explanation:
+\begin{itemize}
+  \item To support on-the-fly creation and population via XML,
+    \verb"FaultFunctionIndependentVariable" instances cannot be constructed with
+    a direct
+    reference to the independent-variable, the accessor must be a pointer,
+    assigned in a post-construction \textit{initialize(...)} method.
+  \item To support multiple data types, the pointer cannot be defined as
+    type-specific.
+  \item To support multiple data types \textit{and} delay the population of the
+    pointer to initialization, the pointer cannot even by typed from a template
+    (which would result in the type being specified at construction).
+  \item Instead, the \verb"FaultFunctionIndependentVariable" class uses the
+    \verb"UntypedVariableBase" class, and the template-class
+    \verb"UntypedVariable" that inherits from \verb'UntypedVariableBase'.
+    \begin{itemize}
+      \item The \verb"FaultFunctionIndependentVariable" class has a pointer
+        (called \verb'variable') of type \newline
+        \verb'UntypedVariableBase *'
+        that addresses some instance of
+        \verb'UntypedVariable'.
+      \item At initialization of the \verb"FaultFunctionIndependentVariable",
+        the argument
+        passed in is used as a template
+        parameter to create a \textbf{new} instance of \verb'UntypedVariable',
+        and the \verb'variable' pointer is assigned to that new
+        instance.
+      \item \verb'UntypedVariable' contains a reference (also called
+        \verb'variable') to the desired independent-variable found elsewhere in
+        the simulation. This independent-variable is passed as the argument to
+        \verb'FaultFunctionIndependentVariable::initialize(T &)') and from there
+        is passed as the argument to the constructor of the new
+        \verb'UntypedVariable' instance. \verb'UntypedVariable' can support a
+        reference to the
+        independent-variable because the details (type and address) of the
+        independent-variable are both known at the construction of the new
+        \verb'UntypedVariable'.
+      \item the memory-address of the new instance of
+        \verb'UntypedVariable' is not particularly important, and it certainly
+        does not have to be contiguous with the fault. We do need to maintain
+        access to this new instance; its address is recorded as the
+        \verb"variable" pointer found
+        in \verb"FaultFunctionIndependentVariable".
+    \end{itemize}
+    \item To obtain the value of the independent-variable, we use:
+      \begin{itemize}
+        \item \verb'(FaultFunctionIndependentVariable::get_value()' which calls
+        \item \verb'(FaultFunctionIndependentVariable::variable)->get_value()',
+          which accesses the appropriate instance of
+          \verb'UntypedVariable::get_value()'
+        \item \verb'UntypedVariable::get_value()' static-casts the value
+          of its \verb'variable' reference (to the actual independent-variable)
+          from its native type (determined by template parameter) to type
+          \verb'double', and returns that value to \newline
+          \verb'FaultFunctionIndependentVariable::get_value()'
+        \item \verb'FaultFunctionIndependentVariable::get_value()' branches
+          depending on
+          whether the variable is being treated as absolute or relative (see
+          discussion immediately following) and returns the resulting value to
+          the calling function.
+      \end{itemize}
+    \item Caveat: the template parameter used in the template-class
+      \verb'UntypedVariable' must support a static-cast to type \verb'double'.
+\end{itemize}
+
+A \verb"FaultFunctionIndependentVariable" instance can be configured to
+represent the value
+of the independent-variable as either its true value, or as a value relative to
+its initial value.
+\begin{itemize}
+  \item An \textit{absolute} configuration (\textit{relative\_value = false})
+    simply provides the current value of the independent-variable back to the
+    calling function.
+  \item A \textit{relative} configuration (\textit{relative\_value = true},
+    default) requires a record of the value of the independent-variable when
+    the fault was most recently reset. The value provided to the calling
+    function is then the difference between the current and recorded values
+    of the independent-variable.
+\end{itemize}
+
+
+
+
+\section {Fault Types} \label{sec:formulation:fault:fault_type}
+\subsection {Nomenclature}
+\begin{itemize}
+  \item $x$ represents the variable to which the fault is applied
+  \begin{itemize}
+    \item $x_i$ is the value of the variable at the point of interest
+    \item $x_0$ is the value of the variable at the point at which the fault was
+      most recently reset (both triggered and enabled).
+    \item $\Delta x$ is the modifier, the value added to the variable when
+      applying an additive fault.
+    \item $x'_i$ is the modified value of $x_i$; in some cases, $x'_i = x_i +
+      \Delta x$.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Bias Faults}
+\par When a bias fault is triggered, it adds a constant bias \textit{b} to the
+variable.
+\begin{equation}
+x'_i = x_i + b
+\end{equation}
+
+\subsection{Scale Faults}
+\par When a scale fault is triggered, it multiplies the variable by a scale
+value \textit{s}.
+\begin{equation}
+x'_i = s x_i
+\end{equation}
+
+\subsection{Overwrite Faults}
+\par When an overwrite fault is triggered, it overwrites the variable with some
+pre-determined value $x_f$.
+\begin{equation}
+x'_i = x_f
+\end{equation}
+
+\subsection{Stale-value Faults}
+\par When a stale-value fault is triggered, it holds the variable at its current
+value until it is no longer triggered.
+\begin{equation}
+x'_i = x_0
+\end{equation}
+
+\subsection{White-noise Faults}
+\par When a white-noise fault is triggered, it adds white noise $\eta$ to the
+variable. The noise may have a Gaussian or uniform distribution.
+\begin{equation}
+x'_i = x_i + \eta_i
+\end{equation}
+
+\subsection{Random-walk Faults} \label{sec:intro:randomwalk}
+\par When a random-walk fault is triggered, it adds random-walk error to the
+variable. Essentially, the fault contains a bias value \textit{w} that is
+initialized to 0 every time the fault is reset and is incremented by a random
+value $\eta$ every timestep the fault remains triggered.
+The random value $\eta$ may be configured to have a Gaussian or Uniform
+distribution.
+If the fault status changes to non-triggered, the bias value is reset to 0.
+\begin{equation*}
+w_i = w_{i-1} + \eta_i
+\end{equation*}
+\begin{equation}
+x'_i = x_i + w_i
+\end{equation}
+
+\subsection{Function Faults} \label{sec:formulation:faults:function}
+
+With Function Faults, the modifier $\Delta x$ is computed as some function of a
+second, independent variable. In this section, the independent variable is
+represented with the symbol $t$ because the most commonly used independent
+variable is time. However, it is important to comment that $t$ in this context
+does not represent time exclusively, it is simply convenient and could represent
+any variable.
+\begin{itemize}
+  \item $t_i$ is the value of the independent variable at the point of
+    interest
+  \item $t_0$ is the value of the variable at the point at which the fault was
+    most recently reset (both triggered and enabled).
+\end{itemize}
+
+\subsubsection{Linear Function Faults}
+\par Linear function faults use two parameters called \textit{rate, m} and
+\textit{nominal, b}.
+When the fault is triggered, the fault variable is biased by a linear function
+of the independent variable.
+\begin{equation*}
+\Delta x_i = m t_i + b
+\end{equation*}
+\begin{equation} \label{eqn:linfunc}
+x'_i = x_i + m t_i + b
+\end{equation}
+
+\subsubsection{Periodic Function Faults}
+\par Periodic function faults represent the modifier $\Delta x$ as a periodic
+function $g(\phi)$, i.e.:
+\begin{equation*}
+  \Delta x = A g(\phi)
+\end{equation*}
+where:
+\begin{itemize}
+ \item $g(\phi)$ is a normalized periodic function, with amplitude and period
+   both 1.0; i.e. $g(\phi) \in [-1.0, 1.0]; g(n + \phi) = g(\phi)$ with
+   $n \in \mathbb{Z}$.
+ \item $A$ represents the amplitude of the modifier and may itself be
+   variable, in which case $A$ would be better represented as $A_i$, the
+   amplitude at step $i$.
+ \item $\phi$ represents the phase of the function, and depends on the
+   independent variable and two additional variables:
+   \begin{itemize}
+     \item the function frequency, $f$ (which may also be variable, a linear
+       function of some other independent variable); this has
+       dimension that is inverse to the independent variable (e.g. with the
+       independent variable representing time with units of seconds, $f$ would
+       have units of Hz).
+     \item the phase offset $\psi$. This is typically constant with value
+       equal to $\phi_0$, the value of $\phi$ at the time the fault was most
+       recently reset. However, it could be (unusually) an independent
+       linear function of some other variable.
+    \end{itemize}
+    Note -- the phase and phase-offset in this model are based on
+    whole-cycles rather than a radian-based representation.
+    Cycles repeat with a phase difference
+    of $1.0$, \textbf{not} with a phase difference of $2 \pi$.
+\end{itemize}
+
+
+The value of $\phi$ is computed by integrating the frequency
+\begin{equation*}
+  \phi_i = \psi_i + \int_{t_0}^{t_i} f \mathrm{d}t
+\end{equation*}
+Then the modifier and final value for step $i$ are:
+\begin{align*}
+  \Delta x_i &= A_i g(\phi_i) \\
+  x'_i &= x_i + \Delta x_i
+\end{align*}
+
+As a simple example, consider $f$, $A$, and $\psi$ as constant, with $\psi =
+\phi_0 = f t_0$.
+Then we get the simple form:
+\begin{equation*}
+  x'_i = x_i + A g(f t_i)
+\end{equation*}
+
+\subsubsection{Periodicity Simplification}
+Because $g(\phi)$ is periodic, we only need to evaluate $g$ in the unit domain,
+$[-0.5, 0.5)$. For simplicity, we will work with
+$\phi' \in [-0.5,0.5)$,
+the difference betweeen $\phi$ and the closest integer. Algorithmically,
+\begin {equation*}
+  \phi' = \phi - round(\phi)
+\end {equation*}
+Note: we can write $g(\phi)$ as a function of $\phi'$, where $\phi$ is the
+unconstrained phase angle and $\phi'$ is its corresponding constrained
+value.
+
+Currently, the model supports three periodic functions:
+\begin{itemize}
+  \item \textbf{sine wave:}
+    \begin{equation*}
+      g(\phi) = sin(2 \pi \phi')
+    \end{equation*}
+
+ \item \textbf{square wave} is a discrete approximation to the sine wave,
+    taking a value either $\pm 1$.
+    \begin{equation*}
+      g(\phi) = \left\{ \begin{array}{ll}
+                 -1 & : \phi' < 0 \\
+                 +1 & : \phi' \geq 0 \\
+                \end{array} \right.
+    \end{equation*}
+
+  \item \textbf{triangle wave} is a linear approximation to the sine-wave,
+    \begin{equation*}
+      g(\phi) = \left\{ \begin{array}{ll}
+                       -4 \phi' - 2  & : \phi' < -0.25 \ \\
+                        4 \phi'      & : -0.25 \leq \phi' < 0.25 \\
+                       -4 \phi' + 2  & : \phi' \geq 0.25
+                     \end{array} \right.
+    \end{equation*}
+    This may also be thought of as a modulated absolute-value function, phase
+    shifted by 0.25 to the left before applying the $round$ function,
+    yielding the simpler form:
+    \begin{equation*}
+      g(\phi) = 4 |(\phi +0.25) - round( \phi+0.25) | -1
+    \end{equation*}
+\end{itemize}
+
+The periodic parameters (frequency, amplitude, and phase offset) can each be
+specified as a linear function of some independent variable.
+Their value is computed from the standard $y=mx+b$, with $x$ in this context
+represented by an instance of \textit{FaultFunctionIndependentVariable} (see
+section \ref{sec:formulation:indep_var}) and can be configured to represent
+either the value of the independent variable, or its value relative to its
+initial value. $m$ and $b$ in this context are identified as \textit{rate} and
+\textit{nominal} respectively and can be set with the \textit{set\_param}
+method (see Section \ref{sec:formulation:fault:params}).
+\begin{align*}
+  f &= f_0 + m_f t_f \\
+  A &= A_0 + m_A t_A \\
+  \psi &= {\psi_0} + m_{\psi} t_{\psi}
+\end{align*}
+
+If $f$ is constant, the phase
+\begin{equation*}
+  \phi_i = \psi_i + \int_{t_0}^{t_i} f \mathrm{d}t  \;=\;
+           \psi_i + f_0(t_i - t_0)
+\end{equation*}
+
+However, if $f$ is variable ($f=f_0 + m_f t_f$), the phase
+\begin{equation*}
+  \phi_i = \psi_i + \int_{t_0}^{t_i} f \mathrm{d}t  \;=\;
+           \psi_i + f_0(t_i - t_0) + m_f \int_{t_0}^{t_i} t_f \mathrm{d}t
+\end{equation*}
+which requires knowledge of the relationship between $t_f$ and $t$ (which are
+not necessarily the same variable). This is typically not available so the model
+uses a linear approximation between each timestep:
+\begin{equation} \label{eqn:tfinterp}
+t_f (t) \approx {t_f}_{i-1} + \frac{{t_f}_i - {t_f}_{i-1}}
+                                    {t_i - t_{i-1}}
+                                    (t - t_{i-1})
+        \;:\; t_{i-1} \leq t < t_i
+\end{equation}
+which allows the integral to be evaluated in pieces using trapezoids, with each
+trapezoid contributing:
+\begin{equation*}
+\int_{t_{i-1}}^{t_i} t_f \, \mathrm{d}t \approx \frac{{t_f}_i + {t_f}_{i-1}}{2}
+                                                (t_i - t_{i-1})
+\end{equation*}
+and consequently
+\begin{equation*}
+ \int_{t_{i-1}}^{t_i} f \, \mathrm{d}t
+    \approx \frac{f_i + f_{i-1}}{2}  (t_i - t_{i-1})
+\end{equation*}
+
+The numerically-integrated frequency can then be accumulated:
+\begin{align*}
+  F_i &= \int_{t_0}^{t_i} f \, \mathrm{d}t \\
+    &=  F_{i-1} + \int_{t_{i-1}}^{t_i} f \, \mathrm{d}t \\
+    &\approx F_{i-1} + \frac{f_i + f_{i-1}}{2}  (t_i - t_{i-1})
+\end{align*}
+The phase can then be expressed in terms of $F$:
+\begin{equation*}
+  \phi_i \approx \psi_i + F_{i-1} + \frac{f_i + f_{i-1}}{2}  (t_i - t_{i-1})
+\end{equation*}
+
+Indeed, to avoid excessive logical branching to check on the value of $m_f$
+(\verb'frequency.rate') at each cycle, this formulation is used in all cases,
+including those for which $f$ is constant (i.e. $m_f = 0$).
+
+\subsubsection {Negative Periodic Parameters}
+The computation of these parameters as linear functions introduces the potential
+for the parameters to take negative values.\textbf{No checks are made on the
+sign of these parameters}. The rationale to support this design decision is
+that, while we conventionally consider amplitude and frequency to be positive
+values, the formulation presented above does not preclude negative values.
+\begin{itemize}
+ \item \textit{phase\_offset} Can be permitted to be negative without
+   complication. Phase-offsets are periodic, with $\psi$ being equivalent to
+   $n+\psi, \forall n \in \mathbb{Z}$.
+ \item \textit{frequency} can be permitted to be negative because we use the
+   frequency to
+   advance the phase; a negative frequency combined with an increasing
+   independent
+   variable simply results in a decreasing phase. Note that this is equivalent
+   to having a positive frequency with a decreasing independent variable.
+ \item \textit{amplitude} can be permitted to be negative because a negative
+   amplitude simply means that the modifier has a different sign than it would
+   with a positive amplitude of the same magnitude. It could be argued that
+   changing the sign of the
+   amplitude would introduce a sign change in the value of the modifier which
+   could lead to an unexpected discontinuity. However, with the amplitude being
+   a linear function, it can only change sign by passing through 0, at which
+   point the value of the modifier goes to zero as well.
+\end{itemize}
+
+
+\subsection{Function Fault Parameters} \label{sec:formulation:fault:params}
+
+The parameters used for evaluating function-faults -- namely the nominal
+and rate values for a linear-function-fault, and the frequency, amplitude, and
+phase-offset for a periodic function-fault -- can be set directly, or via the
+\textit{FaultFunctionBase::set\_param(...)} method. This method takes two
+arguments, with an optional third argument that is explained below. The
+arguments are:
+
+\begin{itemize}
+ \item A character string, describing which parameter is to be set. These can be
+  \begin{itemize}
+   \item initial or nominal (these are equivalent)
+   \item rate
+   \item frequency
+   \item frequency\_rate
+   \item amplitude
+   \item amplitude\_rate
+   \item phase\_offset
+   \item phase\_offset\_rate
+  \end{itemize}
+ \item The new value for the specified variable.
+ \item (optional) A boolean flag indicating whether a new assignment to a rate
+   variable should result in an automatic adjustment to its corresponding
+   nominal value. This flag defaults to false if not provided.
+\end{itemize}
+
+In the case of setting the \textit{nominal} parameter, or setting the
+\textit{rate} parameter without the optional flag, the new value is simply
+pushed onto the variable. The optional flag is provided as a convenience when
+adjusting the rate mid-fault.
+
+The resulting value of the linear function -- whether it be the value of the
+modifier itself when the fault is configured to follow a linear function, or the
+value of one of the periodic parameters which also follow a linear function --
+is computed from $y = mx +b$, with $m$ being defined by \textit{rate}, $b$ being
+defined by \textit{nominal}, and $x$ being the associated independent variable.
+(see Section \ref{sec:formulation:concept:params}).
+If we change the rate $m$, the value $y$ will change accordingly unless the
+value $b$ is also changed; this would produce a discontinuity in the value (see
+the red line in Figure \ref{fig:Rate_change}).
+
+When changing the rate $m$, avoiding this discontinuity necessitates changing
+the nominal value $b$. However, this is not a universally
+desirable outcome, so the capability is provided to adjust $m$ with and without
+a corresponding change to $b$. The choice is identified by setting the optional
+flag.
+
+We have the output value $y$ (before modification) and $y'$ (after modification)
+written as
+\begin {align*}
+ y &= mx + b \\
+ y' &= m'x + b'
+\end {align*}
+
+If we want the modifier to be continuous, we require:
+\begin {align*}
+ y' &= y \\
+ b' &= y - m'x
+\end {align*}
+The consequences of adjusting the rate with and without the optional flag are
+shown in Figure \ref{fig:Rate_change}.
+
+\begin{figure}
+ \begin{center}
+ \includegraphics[scale=0.5]{graphics/Rate_change.png}
+ \caption{ The three dashed lines show reference linear functions:\newline
+    $y = x+100, y=-x+100, y=-x+200$.\newline
+    Consider a fault starting at $x=0$ with \textit{nominal} value $100$ and
+    \textit{rate} $1$. It is applied continually with these parameters until
+    $x=50$.
+    At $x=50$ the rate is changed from $+1$ to $-1$.\newline
+    The red line illustrates
+    the time evolution of this fault if the rate-change is made while leaving
+    the \textit{nominal} value unchanged (default).\newline
+    The black line illustrates the the time evolution of this fault if the
+    rate-change is made with the optional flag set, which results in
+    changing \textit{nominal} to $200$ in this case.}
+  \label{fig:Rate_change}
+  \end{center}
+\end{figure}
+
+
+If setting the parameters directly, the automatic adjustment to $b'$ is not
+available, that only happens when using
+\textit{FaultFunctionBase::set\_param(...)} with the 3rd argument \textit{true}.
+If using the Fault Manager architecture (see section
+\ref{sec:UG:FaultManager}), the method
+\textit{FaultManager::set\_fault\_param(...)}
+requires a preceding argument specifying the name of the fault, followed by the
+same 2 or 3 arguments specified above; the first argument identifies the fault
+and the remaining arguments are passed directly through to the corresponding
+\textit{FaultFunctionBase::set\_param(...)}.
+
+\section{Triggers} \label{intro_trigger}
+\par A trigger consists of a reference to a simulation variable; a value; and a
+comparison operator, which can be one of the following:
+\begin{center}\begin{tabular}{|l|c|c|} \hline
+\textbf{Operator} & \textbf{Symbol} & \textbf{TriggerBase Name} \\ \hline
+Less than                & <      & LT \\ \hline
+Less than or equal to    & $\leq$ & LE \\ \hline
+Equal to                 & =      & EQ \\ \hline
+Greater than or equal to & $\geq$ & GE \\ \hline
+Greater than             & >      & GT \\ \hline
+Not equal to             & $\neq$ & NE \\ \hline
+\end{tabular}\end{center}
+The trigger is triggered when the condition "(variable) (operator) (value)" is
+true.
+For example, if the variable is \textit{obj1.var}, operator is \textit{LT} and
+the value is $2$, the trigger is triggered
+when $obj1.var < 2$.
+
+\par Each fault contains pointers to at least one trigger group.
+Each trigger group contains pointers to at least one trigger.
+Each trigger in a trigger group can be enabled or disabled at any time (this is
+done at the trigger group level; if a trigger is used by multiple groups,
+disabling it in one group will not disable it in the others).
+The term "triggered" is overloaded here: a trigger group is triggered only
+when \textbf{all} of its \textbf{enabled} triggers are triggered; a fault is
+triggered when \textbf{any} of its trigger groups are triggered.
+
+\subsection{Variable Types}
+\par Triggers are implemented as a template class, \verb"Trigger".
+In theory, they should work for any type for which the <, <=, ==, >=, >, and !=
+operators are valid; however, this may not always have the expected behaviour.
+For example, if the trigger variable is a \verb"float*" (pointer to float), the
+value being compared is the address of a float, not the value stored at that
+address.
+
+\par The template has been specialized for strings (the type
+\verb"std::string").
+For string triggers, only the EQ and NE operators are valid.
+If the operator is EQ, the trigger is triggered when the variable string matches
+the value string exactly; if the operator is NE, the trigger is triggered when
+the strings don't match exactly.
+
+\par \verb"Trigger" has been tested on the following types:
+\begin{itemize}
+  \item Integers \begin{itemize}
+    \item \verb"char" (treated as an 8-bit integer)
+    \item \verb"unsigned char"
+    \item \verb"short"
+    \item \verb"unsigned short"
+    \item \verb"int"
+    \item \verb"unsigned int"
+    \item \verb"long"
+    \item \verb"unsigned long"
+    \item \verb"long long"
+    \item \verb"unsigned long long"
+  \end{itemize}
+  \item Floating-point Numbers \begin{itemize}
+    \item \verb"float"
+    \item \verb"double"
+  \end{itemize}
+  \item \verb"bool" (only makes sense if the operator is EQ or NE)
+  \item \verb"std::string"
+\end{itemize}
+The fault manager only allows these types of variables (and references to them)
+to be used as trigger variables; pointers are not allowed.
+
+\subsection{Periodic Triggers} \label{intro_periodic}
+
+The intent of periodic triggers is to make the fault appear at regular, periodic
+intervals, where
+period in this context is some specified difference between two values of the
+independent-variable. This is most commonly used when the independent variable
+is a measure of time, and period then is interpreted in its conventional sense
+-- as a specified separation in time -- but the same concept can equally apply
+to other variables such as distance (in which case ``period'' in this context
+would be better aligned with a conventional use of ``wavelength''), etc.
+
+Note that Periodic triggers can theoretically be used on most, but not all
+variable types. Of particular note, in the current implementation, triggers that
+use a STL-string as its independent variable do not support periodic triggers.
+The simple rationale is that it is difficult to conceptualize (unambiguously)
+how to define periodic behavior as a string (e.g. trigger when this string is
+``abc'', continue to trigger for ``def'', then every ``ghi'' thereafter).
+
+
+The parameters for a periodic trigger are the period and the trigger length,
+which both have the same units as the independent variable:
+every \textit{period} units, the fault is triggered for \textit{length}
+units. For example, every 5 seconds the fault is triggered for 2 seconds.
+
+\par In mathematical terms, making a trigger periodic adds an extra condition
+that must be met for the trigger to be considered \textit{triggered}.
+The first time the regular condition is met, the value of the trigger variable
+$s$ is saved as $s_0$; thereafter, the trigger will be considered
+\textit{triggered} when the regular condition is satisfied AND:
+\begin{equation*}
+  | (s- s_0) \% p | \leq l
+\end{equation*}
+where $p$ and $l$ are the period and length respectively.
+Note that the \verb"std::fmod" implementation ($\%$) returns a negative value
+when $s-s_0 < 0$, hence the need for taking the absolute value of the result.
+The trigger will be applied in the region of the period that is closest to
+$s_0$, this is visualized in the Figure \ref{fig:periodic_trigger}.
+
+\begin{figure*}[h!]
+  \includegraphics[scale=0.72]{graphics/periodic_trigger.png}
+  \caption{Conceptual triggering logic, with green representing conditions
+  satisfied, and red not-satisfied. The top line shows a hypothetical condition
+  that would be the result without periodic triggering; the middle line shows
+  the periodic triggering starting at $s_0$ with period $p=5$ and length
+  $l=2$; the
+  lower line shows the combined result. The upper plot is for an increasing
+  independent variable, and the lower plot for a decreasing independent
+  variable.}
+\end{figure*}\label{fig:periodic_trigger}
+
+\chapter{User's Guide} \label{sec:UG}
+\par Faults can be implemented in two ways: by coding them directly into the
+simulation or by implementing a fault manager and writing faults in an XML file.
+Generally, the XML approach is preferable, as it makes it very easy to add and
+configure faults; however, the direct approach makes it easier to see what is
+happening under the hood and may be simpler for adding just one or two faults.
+
+This User's Guide is presented in 3 sections:
+\begin{enumerate}
+ \item Overview of concepts
+ \item Implementation of concepts using the direct-implementation architecture
+ \item Implementation of concepts using the fault-manager and XML architecture
+\end{enumerate}
+
+
+\section {Overview of Concepts}
+\subsection{Components (Required and Optional)}
+\subsubsection{Location of Implementation}
+The model is usually implemented as a part of a model representing some sensor
+hardware. For the direct instantiation architecture, each piece is instantiated
+independently. For the fault-manager architecture, the pieces are created
+on-the-fly according to the provided specification.
+
+\subsubsection{ Trigger and Trigger Group}
+The model requires that each fault have at least one trigger group, and that
+each trigger group have at least one trigger. Details on the conceptual
+development of triggers and trigger-groups can be found in Section
+\ref{intro_trigger}.
+
+Trigger groups are added to a fault using the \textit{Fault::add\_trigger
+\_group(TriggerGroup\&)} method.
+Triggers are added to a trigger-group using the
+\textit{TriggerGroup::add\_trigger(TriggerBase\&)} method.
+If using the Fault Manager architecture, these methods are called automatically.
+
+An important concept, worth repeating, is that the relationship between
+faults and
+trigger-groups and between trigger-groups and triggers is many-to-many:
+a trigger can be added to multiple trigger groups, and a trigger group can be
+added to multiple faults; a fault can have multiple associated trigger-groups,
+and a trigger-group can have multiple associated triggers. A fault is triggered
+when at least one of its trigger groups is triggered; a
+trigger group is triggered when all of its triggers are triggered.
+All triggers must be given a variable, an operator, and a value.
+
+\subsubsection {Faults} \label{sec:UG:components:faults}
+\par For more details on any of the features described here, see Sections
+\ref{sec:intro:faults} and \ref{sec:formulation:fault:fault_type}.
+
+The Fault Management supports 7 different types of faults.
+Each of these types is represented by a different template class:
+\begin{center}\begin{tabular}{|l|l|l|} \hline
+\textbf{Fault Type} & \textbf{Class} & \textbf{XML Type Name} \\ \hline
+Bias & FaultBias & BIAS \\ \hline
+Scale & FaultScale & SCALE \\ \hline
+Overwrite & FaultOverwrite & OVERWRITE \\ \hline
+Stale Value & FaultStale & STALE \\ \hline
+White Noise & FaultWhiteNoise & WHITENOISE \\ \hline
+Random Walk & FaultRandomWalk & RANDOMWALK \\ \hline
+Function & FaultFunction & FUNCTION \\ \hline
+\end{tabular}\end{center}
+Regardless of type, all faults must have a variable and may have a name (the
+name is required if using a fault manager).
+
+\subsubsection {Fault Parameters}
+Each type of fault (except stale-value) has additional parameters specific to
+that type.
+Most of them can be modified in input files through the fault's
+\textit{set\_param} method, whose arguments are the name of the parameter (as a
+string) and the value to set the parameter to.
+The fault manager has a method called \textit{set\_fault\_param} that acts as a
+pass-through to \textit{set\_param}; its arguments are the name of the fault
+followed by the \textit{set\_param} arguments. See section
+\ref{sec:formulation:fault:params} for discussion of the consequences of setting
+parameters.
+
+
+
+\subsubsection{Independent Variables}
+Independent variables are used in function-faults; these must be associated with
+a simulation-variable before the initialization of the fault.
+
+\subsubsection {Random Number Generation}\label{sec:UG:random_node}
+Fault Management has its own class for generating random numbers, called
+\verb"FaultRandNumber".
+This class is used in some types of faults to generate noise and in the fault
+manager to set random trigger values and fault parameters.
+
+\par The user can configure an \verb"FaultRandNumber" directly or through the
+attributes of a node in XML called \verb"RandValue":
+\begin{center}\begin{tabular}{|p{3.1cm}|p{2.4cm}|p{8.5cm}|} \hline
+\textbf{RandNumber Member} & \textbf{RandValue Attribute} & \textbf{Description}
+\\ \hline
+distribution\_type & distribution & The type of distribution. Can be
+\verb"GAUSSIAN" (Normal) or \verb"FLAT" (Uniform). \\ \hline
+mean & mean & The mean of the Gaussian distribution. Defaults to 0. \\ \hline
+std\_dev & std\_dev & The standard deviation of the Gaussian distribution. \\
+\hline
+lower\_limit & min & The lower limit of the uniform distribution. \\ \hline
+upper\_limit & max & The upper limit of the uniform distribution. \\ \hline
+seed & seed & The seed for the random number generator. \textbf{
+              If this is not provided, OR SET TO 0, the model uses the
+              system time to generate a seed}. \\ \hline
+\end{tabular}\end{center}
+
+This random number generation capability is used in the following places:
+\begin{itemize}
+\item For setting the (per-cycle) value associated with the white-noise and
+      random-walk Faults. The white-noise and random-walk Faults have an
+      instance of \verb'FaultRandNumber' built into their classes;
+      \textit{FaultWhiteNoise::noise}, and \textit{FaultRandomWalk::rand}.
+      These two Faults will
+      generate a new random value according to their assigned random
+      distributions on every cycle for which the Fault is triggered.
+\item For setting the (static) value of a random overwrite Fault;
+      this value will be applied consistently on every cycle for which the
+      Fault is triggered, but with a different seed will generate a different
+      value on a different run. Because this type uses a single random number
+      per run, it does not need its own \verb'FaultRandNumber' instance and
+      can use one from elsewhere.
+\item For generating the value at which a Trigger triggers.
+      Like the overwrite-fault, because this use-case uses a single random
+      number per run, it does not need its own \verb'FaultRandNumber'
+      instance and can use one from elsewhere.
+\end{itemize}
+
+
+
+
+
+\subsection{Configuration Settings}
+The various components are configured differently depending on which
+architecture is used to implement the fault-management model. Details follow in
+these specific sections.
+
+
+
+
+
+\section{Architecture: Direct Instantiation} \label{sec:UG:DirectInstantiation}
+This architecture is well-suited to relatively simple fault-injection
+capabilities, and for quick testing. For more complex systems, the fault-manager
+would be better suited (see Section \ref{sec:UG:FaultManager}).
+
+\subsection{Top-level Instantiation and Methods}
+Faults can be instantiated directly into the code representing the operation of
+some sensor, and configured to introduce their respective errors inline with the
+model code. In the following simple example,
+we want to apply a bias-fault to a working variable in the processing of
+the sensor, and a scale-fault to the sensor output at the end of the
+processing.
+
+We need a trigger and trigger-group, and instances of the specific faults being
+applied:
+\begin{codeC}
+#include "cml/models/utilities/fault_management/include/fault_bias.hh"
+#include "cml/models/utilities/fault_management/include/fault_scale.hh"
+#include "cml/models/utilities/fault_management/include/trigger.hh"
+#include "cml/models/utilities/fault_management/include/trigger_group.hh"
+
+class Sensor {
+ public:
+  double working_variable; /* (--) some internal value in the class. */
+  double output; /* (--) the model output. */
+  Trigger<double> trigger;
+  TriggerGroup trigger_group;
+  FaultBias<double> early_fault;
+  FaultScale<double> later_fault;
+\end{codeC}
+
+The trigger and the fault must be passed their variables during construction.
+Note that the template argument of these classes must match the type of the
+variable being passed in.
+\begin{codeC}
+Sensor(double& sim_time) :
+  trigger(sim_time), // sim_time is the trigger variable.
+  early_fault(working_variable),
+  later_fault(output)
+{}
+\end{codeC}
+
+Each trigger group (in this example there is only 1) must be populated with its
+associated triggers; each trigger-group can have multiple triggers, and each
+trigger can be associated with multiple trigger-groups.
+
+Each fault must also be populated with its associated trigger-groups; each fault
+can have multiple groups, and each group can be associated with multiple faults.
+
+The corresponding methods -- \textit{add\_trigger} and
+\textit{add\_trigger\_group} -- may be called from the input file or from part
+of the sensor initialization routine.
+
+Each fault must be initialized \textbf{after} adding the trigger groups.
+\begin{codeC}
+void Sensor::initialize() {
+  trigger_group.add_trigger(&trigger);
+  early_fault.add_trigger_group(&trigger_group);
+  later_fault.add_trigger_group(&trigger_group);
+  early_fault.initialize();
+  later_fault.initialize();
+}
+\end{codeC}
+
+In the sensor-model update-code, we can now insert the points at which we want
+to apply faults.
+\begin{codeC}
+void Sensor::update() {
+  // Preliminary sensor processing
+  // working_variable = some function of inputs
+  ...
+  // Inject the fault (if the trigger condition is met) on working_variable
+    early_fault.update();
+
+  // More sensor processing
+  // output is generated as a function of the biased working_variable
+  ...
+  // Inject the second fault to output (if the trigger condition is met).
+  later_fault.update();
+}
+\end{codeC}
+
+Note -- in this example, we used \verb"FaultBias" and \verb"FaultScale" classes
+for our selected faults. Other classes are available for different types of
+faults.
+See Section \ref{sec:UG:components:faults} for a table listing the fault types
+and classes and for details on how to configure them. Examples of
+instantions follow (e.g. these might add to the instances found in the
+definition of the Sensor class above, then use similar construction
+requriements).
+\begin{codeC}
+  FaultBias<double> bias_fault;
+  FaultScale<double> scale_fault;
+  FaultOverwrite<double> overwrite_fault;
+  FaultStale<double> stale_fault;
+  FaultWhiteNoise<double> white_noise_fault;
+  FaultRandomWalk<double> random_walk_fault;
+  FaultFunction<double> function_fault;
+\end{codeC}
+
+\subsection{Independent Variables}
+Independent variables are used in function-faults; these must be associated with
+a simulation-variable before initializing the fault. Because of limitations of
+passing references via SWIG, it is difficult to make this connection via the
+input file; it is recommended that this association be defined in code, usually
+in the \textit{Sensor::initialize()} method.
+
+For example, suppose \textit{function\_fault} was included as an instance
+in the \textit{Sensor} class defintion, then somewhere in
+\textit{Sensor::initialize()} we might expect to see:
+\begin{codeC}
+function_fault.ind_variable.initialize(independent_variable);
+function_fault.initialize();
+\end{codeC}
+Note that this should be handled in compiled code rather than the Python
+input-processor because it relies on templates.
+
+Independent variables default to a \textit{relative} behavior by default
+(i.e. the value used is the value relative to the reference value recorded at
+triggering); they can be made \textit{absolute} by
+setting the \textit{relative\_value} flag to false.
+See section \ref{sec:formulation:indep_var} for discussion of absolute
+versus relative.
+
+This can be assigned in
+either the same coded method, or through the input file.
+\begin{codePython}
+ vehicle.sensor.function_fault.relative_value = False
+\end{codePython}
+
+
+\subsection{ Configuration -- Triggers}
+\label{sec:UG:DI:config_trigger}
+The trigger-variable must be assigned to the trigger during the
+\textbf{construction} of
+each trigger; the operator and value should be set either during
+initialization or in an input file.
+\begin{codePython}
+vehicle.sensor.trigger_A.Operator = trick.TriggerBase.GE
+vehicle.sensor.trigger_A.value = 50.0
+\end{codePython}
+It is also recommended to give each trigger a unique name.
+This allows triggers to be disabled within specific trigger groups.
+\begin{codePython}
+vehicle.sensor.trigger_A.name = "trigger A"
+\end{codePython}
+
+The enabled status of a trigger is specific to each trigger-group with which it
+is associated -- it can be enabled in one and disabled in another. This setting
+is modified with the \textit{set\_trigger\_enable} method:
+\begin{codePython}
+vehicle.sensor.trigger_group_X.set_trigger_enable("trigger A", False)
+\end{codePython}
+
+To make a trigger periodic (see Section \ref{intro_periodic}), use the
+\textit{set\_periodic} method.
+\begin{codePython}
+ vehicle.sensor.trigger_A.set_periodic(2.0, 5.0)
+\end{codePython}
+
+This can be undone by calling \textit{unset\_periodic}.
+\begin{codePython}
+ vehicle.sensor.trigger_A.unset_periodic()
+\end{codePython}
+
+To limit the number of consecutive times a Trigger can be used, use the
+\textit{set\_trigger\_count( number)} function.
+\begin{codePython}
+ vehicle.sensor.trigger_A.set_trigger_count( 5)
+\end{codePython}
+
+This can be undone by calling \textit{unset\_trigger\_count}.
+\begin{codePython}
+ vehicle.sensor.trigger_A.unset_trigger_count()
+\end{codePython}
+
+\subsection{Configuration - Faults}
+The variable to be modified by the fault is passed in during construction.
+
+\subsubsection{Parameters}
+\label{sec:UG:DI:config_fault:param}
+Each type of fault (except stale-value) has additional parameters specific to
+that type.
+Most of them can be modified in input files through the fault's
+\textit{set\_param} method, whose arguments are the name of the parameter (as a
+string) and the value to set the parameter to. Note that several sub-classes of
+the base class \textit{FaultFunctionBase} add new parameters; the
+\textit{set\_param} method for these sub-classes is extended accordingly.
+\begin{codePython}
+ vehicle.sensor.white_noise_fault.set_param(`max',10.0)
+\end{codePython}
+Alternatively, \textbf{some of} these parameters may be set by direct
+assignment, if the corresponding variable name is known:
+\begin{codePython}
+ vehicle.sensor.white_noise_fault.noise.max = 10.0
+\end{codePython}
+The difference between these techniques is one of safety. Different
+fault-types use different parameters, so if attempting tos et variables
+directly, it is important to confirm that the target fault does have the
+corresponding parameter. For example, a fault of type \textit{FaultOverwrite}
+has a \textit{"value"} parameter setting, internally identified as
+\textit{faulted\_value}. If an invalid
+parameter is assigned while using \textit{set\_param}, an error message will be
+posted, the assignment ignored, and the simulation will proceed.
+If an invalid parameter is assigned
+directly from the input file, the simulation will terminate.
+
+These two assignments are valid and equivalent:
+\begin{codePython}
+ vehicle.sensor.white_noise_fault.set_param(`max',10.0)
+ vehicle.sensor.white_noise_fault.noise.max = 10.0
+\end{codePython}
+as are these two:
+\begin{codePython}
+ vehicle.sensor.overwrite_fault.set_param(`value',10.0)
+ vehicle.sensor.overwrite_fault.faulted_value = 10.0
+\end{codePython}
+
+These assignments are invalid because these particular faults have no
+parameters by these names. Because these assignments are made using
+\textit{set\_param(...)}, they will result in an error message and be
+otherwise ignored.
+\begin{codePython}
+ vehicle.sensor.white_noise_fault.set_param(`value',10.0)
+ vehicle.sensor.overwrite_fault.set_param(`max',10.0)
+\end{codePython}
+
+These direct assignments are invalid because they use the wrong variable
+name for the target parameter. Because they are made by direct assignments,
+these will result in simulation termination:
+\begin{codePython}
+ vehicle.sensor.white_noise_fault.max = 10.0
+ vehicle.sensor.overwrite_fault.value = 10.0
+\end{codePython}
+These direct assignments are invalid because they use a parameter name that
+is valid only for a different type of fault, and is invalid for the
+specified fault type. These, too, will result in simulation termination:
+\begin{codePython}
+ vehicle.sensor.white_noise_fault.faulted_value = 10.0
+ vehicle.sensor.overwrite_fault.noise.max       = 10.0
+\end{codePython}
+
+
+
+\subsubsection{Example - Linear Function Faults}
+Linear functions are defined by a rate and a nominal value.
+These represent the values $m$ and $b$ respectively in $y=mx+b$.
+\begin{codePython}
+vehicle.sensor.function_fault.type = trick.FaultFunctionBase.Linear
+vehicle.sensor.function_fault.nominal = 2.0
+vehicle.sensor.function_fault.rate = -0.05
+\end{codePython}
+Or, equivalently:
+\begin{codePython}
+vehicle.sensor.function_fault.type = trick.FaultFunctionBase.Linear
+vehicle.sensor.function_fault.set_param('nominal',2.0)
+vehicle.sensor.function_fault.set_param('rate', -0.05)
+\end{codePython}
+
+\subsubsection{Periodic Function Faults}
+Three periodic functions are implemented: sine waves, square waves, and
+triangle waves.
+These are defined by a frequency, an amplitude, and a phase-offset.
+Each of these three parameters can be represented as a linear equation of some
+independent variable, using parameters \verb"nominal" and \verb'rate'.  If only
+the \verb"nominal" parameter is set for any of these three parameter, the
+respective parameter will be constant at that value.
+Alternatively, by defining a \verb"rate" and initializing the independent
+variable, these three controlling parameters become linear functions themselves.
+In the example below, we use a sine-wave function with constant frequency, an
+amplitude that starts at value 5.0 and ramps down linearly with \verb"sim_time",
+and a phase-offset that starts at 0.0 and ramps up linearly with another
+variable, \verb"other_variable".
+\begin{codeC}
+// Somewhere in Sensor::initialize()
+function_fault.ind_variable.initialize(sim_time);
+function_fault.amplitude.ind_variable.initialize(sim_time);
+function_fault.phase_offset.ind_variable.initialize(other_variable);
+function_fault.initialize();
+\end{codeC}
+Note that the initialization should be handled in compiled code rather than the
+Python input-processor because it relies on templates.
+
+The parameter values may be set in code or in the input-processor
+\begin{codePython}
+sensor_object.function_fault.type = trick.FaultFunctionBase.Sinewave
+sensor_object.function_fault.frequency.nominal = 2.0
+sensor_object.function_fault.amplitude.nominal = 5.0
+sensor_object.function_fault.amplitude.rate = -0.1
+sensor_object.function_fault.phase_offset.rate = 1.0
+\end{codePython}
+
+\subsubsection{Fire Limit}
+To set a fire limit (see Section
+\ref{sec:formulation:fault_support:fire_count}), set the
+\textit{is\_fire\_limited}
+flag to true and, if desired, set the number of times the fault will fire,
+\textit{fire\_limit} (the default is 1 frame).
+\begin{codePython}
+ vehicle.sensor.scale_fault.is_fire_limited = True
+ vehicle.sensor.scale_fault.fire_limit = 10
+\end{codePython}
+
+\subsubsection{Enabled} \label{sec:UG:DirectInstantiation:Config:Enabled}
+To enable/disable the fault, set the \verb"enabled" flag accordingly.
+\textbf{Faults are disabled by default.}
+\begin{codePython}
+ vehicle.sensor.scale_fault.enabled = True
+\end{codePython}
+
+The \verb'enabled' flag is public, so it is possible to disable and enable a
+fault from the input file. There is also a \textit{disable()} method that may be
+used to disable a fault; there is a subtle difference between setting
+\textit{enabled = False} and calling \textit{disable()}:
+\begin{itemize}
+ \item Disabling and later re-enabling the fault by directly setting
+   \textit{enabled} \textbf{will not} automatically reset the fault, which might
+   be the expected behaviour if the fault is in the triggered state when it is
+   both disabled and re-enabled.
+  \item calling \textit{disable()} and later (or immediately) re-enabling the
+    fault \textbf{will} result in the fault resetting.
+  \item The difference between these two operations lies in the logic that
+    triggers a reset -- a fault gets reset if it is in a triggered state with
+    the protected flag \textit{was\_triggered\_last\_pass} set to false. Simply
+    setting enabled to false does not (un)set
+    \textit{was\_triggered\_last\_pass},
+    but the \textit{disable()} method does assign
+    \textit{was\_triggered\_last\_pass = false}.
+\end{itemize}
+
+Note that if the fault is fire-limited, it will disable itself upon reaching the
+fire-count with the \textit{disable()} method, so will reset after being
+re-enabled.
+
+\subsection {Random Number Generation}
+The random-walk and white-noise faults have built-in instances of the model's
+random-number generation capability (see Section \ref{sec:UG:random_node}.
+These can be accessed directly to support
+the \verb'FaultRandNumber' methods \textit{initialize\_gaussian} and
+\textit{initialize\_flat}. The \verb'FaultRandNumber' instances are found at
+\textit{FaultWhiteNoise::noise} and \textit{FaultRandomWalk::rand}. Both
+methods take 2 or 3 arguments. In both cases the 3rd argument is optional
+and specifies the seed for the random number generator; if not specified,
+(or if specified to 0) the model will generate a seed.
+If reproducible results are desired, the 3rd
+argument is required (and be non-zero) because the generated seed will not
+be the same next time:
+\begin{itemize}
+\item \textit{initialize\_gaussian} {mean, standard-deviation, seed}
+\item \textit{initialize\_flat} {minimum, maximum, seed}
+\end{itemize}
+For example:
+\begin{codePython}
+vehicle.sensor.white_noise_fault.noise.initialize_gaussian(0.0, 2.0)
+vehicle.sensor.random_walk_fault.rand.initialize_flat(0.0, 2.0,5)
+\end{codePython}
+
+To randomize a trigger value or an overwrite-fault value (as discussed in
+Section \ref{sec:UG:random_node}), any random engine
+can be used to generate a random number and directly assign it to the
+respective
+Trigger's \textit{value} (see Section \ref{sec:UG:DI:config_trigger}) or the
+overwrite-fault's \textit{faulted\_value} (see Section
+\ref{sec:UG:DI:config_fault:param}) variable.
+
+
+\section{Architecture: Fault Manager} \label{sec:UG:FaultManager}
+For more complicated situations, it may be desirable to use the fault-manager
+design and the configure the faults with an XML file. This has the advantage of
+being a single instantiation, and the disadvantage of relying on dynamic memory
+allocation via the \textit{new/delete} process.
+This design pattern still requires that the sensor code have faults inlined into
+the model's standard execution, but the syntax for configuring these faults
+and for inserting them into the code
+is substantially different because the faults cannot be addressed directly.
+
+\subsection{Top-level Instantiation and Methods}
+\par The instantiation of a fault manager is handled within the class
+representing the sensor being faulted, but now we do not need triggers, trigger-
+groups, or specific faults.
+\begin{codeC}
+#include "cml/models/utilities/fault_management/include/FaultManager.hh"
+
+class Sensor {
+ public:
+  ...
+  FaultManager faults;
+\end{codeC}
+
+In the direct-instantiation architecture,
+the sensor model had direct access to each fault and could call them as needed,
+but that flexibility is not so easily available when using
+the fault-manager architecture. Instead, the fault-manager tags each of its
+faults with one of five ``locations'', breaking the faults into five sets, with
+each set applied at a specific point in the update cycle of the parent / sensor
+model. In this regard, the direct-instantiation architecture provides more
+flexibility because faults may be injected at any number of locations within
+the model, while the fault-manager architecture limits the locations to 5.
+In reality, this is not a significant issuel there are few algorithms that
+have more than 5 meaningful locations at which a fault could be applied.
+The fault-manager \textit{update()}
+method requires a single argument to identify which set of faults is to be
+applied. The five sets are:
+\begin{itemize}
+ \item \textit{\textbf{Init:}} \verb'INIT': faults in this set are applied at
+   initialization.
+ \item \textit{\textbf{Upstream:}} \verb'UPSTREAM': faults in this set are
+   applied at the top of a frame.
+ \item \textit{\textbf{Intermediate\_1:}} \verb'INTERMEDIATE_1': faults in this
+   set are applied part-way through the update to the sensor state.
+ \item \textit{\textbf{Intermediate\_2:}} \verb'INTERMEDIATE_2': faults in this
+   set are applied part-way through the update to the sensor state; these are
+   applied after the \textit{Intermediate\_1} set.
+ \item \textit{\textbf{Downstream:}} \verb'DOWNSTREAM': faults in this set are
+   typically applied after the sensor model has completed generating its output.
+ \item (Additional) \textit{\textbf{INVALID:}} is an error state, used for
+   debugging.
+\end{itemize}
+
+
+The fault-manager is initialized along with the sensor model whose values it is
+modifying. Any initialization-specific faults can be applied by calling the
+fault-manager \textit{update()} method with the \verb'Init' location.
+\begin{codeC}
+void initialize() {
+  faults.initialize();
+  ...
+  faults.update(FaultManager::Location::Init);
+}
+\end{codeC}
+
+The fault-manager's \textit{update()} method is called from the appropriate
+locations in the the sensor model's \textit{update()} method with the
+appropriate tag to identify which set of faults to apply.
+\begin{codeC}
+  void update() {
+    faults.update(FaultManager::Location::Upstream);
+    // Sensor processing
+    ...
+    faults.update(FaultManager::Location::Intermediate_1);
+    // More sensor processing
+    ...
+    faults.update(FaultManager::Location::Intermediate_2);
+    // More sensor processing
+    ...
+    faults.update(FaultManager::Location::Downstream);
+  }
+}
+\end{codeC}
+
+The fault manager is disabled by default; it must be enabled by setting a flag
+and providing the name of an XML file describing the faults.
+This is generally done in an input file.
+\begin{codePython}
+vehicle.sensor.faults.enabled = True
+vehicle.sensor.faults.fault_file = "fault_file.xml"
+\end{codePython}
+
+Note -- \textit{vehicle.sensor} is an instance of the Sensor class just defined.
+
+\subsection{Configuration - XML file}
+
+\subsubsection{XML Structure Primer}
+An XML file defines a set of nodes.
+Each node has a name, any number of attributes, and any number of child nodes.
+There is no limit to how many nodes or levels of nodes are defined in the file,
+but the top level must contain a single root node.
+
+Throughout this document, we will refer to \textbf{node-names} and
+\textbf{field-names}.
+\begin{itemize}
+\item node-name refers to the type of node; in the example below, this might
+      be \textit{Node1}, \textit{ChildNode1},
+      \textit{GrandchildNode1}, etc.
+\item field-name refers to the identifier associated with some attribute.
+      in the example below, this might be
+      \textit{child\_attribute} as a field-name of the \textit{ChildNode1}
+      node, or \textit{grandchild\_att} as a fileld-name of the
+      \textit{GrandchildNode1} node; the \textit{GrandchildNode2} node has
+      no field-names.
+\end{itemize}
+
+
+The general XML format looks like:
+\begin{codeXML}
+<?xml version="1.0" encoding="UTF-8">
+<RootNodeName root_attribute="">
+<Node1 attribute1="value1" attribute2="value2">
+  <ChildNode1 child_attribute="child value">
+    <GrandchildNode1 grandchild_att="another value"></GrandchildNode1>
+    <GrandchildNode2></GrandchildNode2>
+  </ChildNode1>
+  <ChildNode2></ChildNode2>
+</Node1>
+<Node2>
+  <!-- Et cetera. By the way, this is what a comment looks like. -->
+</Node2>
+</RootNodeName>
+\end{codeXML}
+
+\subsubsection{Fault Management XML Structure}
+A fault management XML file must have:
+\begin{itemize}
+\item a root node called \verb"FaultManager".
+\begin{codeXML}
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+\end{codeXML}
+\item which has one or more \verb'Fault' sub-nodes
+  \begin{codeXML}
+  <Fault ...>
+  ...
+  </Fault>
+\end{codeXML}
+\item Each \verb'Fault' node contains:
+  \begin{itemize}
+    \item A \verb'SimVar' sub-node specifying the simulation variable associated
+     with the fault:
+    \begin{codeXML}
+    <SimVar name="test_object.var_char"></SimVar>
+    \end{codeXML}
+    \item One or more \verb'TriggerGroup' sub-nodes identifying the trigger-
+      groups associated with the fault.
+    \begin{codeXML}
+    <TriggerGroup>
+    ...
+    </TriggerGroup>
+    \end{codeXML}
+    Each \verb'TriggerGroup' node contains one or more Trigger sub-nodes
+    identifying the triggers associated with the trigger-group
+      \begin{codeXML}
+      <Trigger ...> </Trigger>
+      \end{codeXML}
+  \end{itemize}
+\end{itemize}
+
+We will look at the structure of each of these node types, starting with
+Section \ref{sec:UG:FM:XML_config_fault_node}.
+
+\subsubsection{Case Sensitivity}
+\label{sec:UG:FM:Config_xml:case}
+In general the node-names and field-names as specified in this User's Guide
+are case-sensitive. The model will not find a node or field if its appearance
+in the XML file does not match with its expected name specified in this
+document. For example, we discuss the \textit{Fault} node in several places.
+The model is expecting to find XML content of the form
+\begin{codeXML}
+<Fault ...></Fault>
+\end{codeXML}
+
+The model will not recognize:
+\begin{codeXML}
+<fault ...></fault>
+\end{codeXML}
+or
+\begin{codeXML}
+<FAULT ...></FAULT>
+\end{codeXML}
+
+The only exception to this is for the field-name \textit{type}, found in a
+\textit{Fault} node or \textit{Function} node. For both cases, the
+field-name \textit{Type} will also be recognized. The XML-helper model, which is
+used by this model to parse the XML files, does have the option to ignore
+case on the first character of a field-name. This Fault Management model
+exercises that
+option for this  \textit{type / Type} field-name only; this is done to
+support some legacy inconsistencies. At some point, if it would be
+beneficial to do so, we could allow other
+field-name lookups to utilize the same option.
+
+Note -- this option requires editing the \textit{fault\_manager.cc} file
+to add a \textit{true} flag as the (optional) third argument in the
+respective \textit{XmlHelper::xml\_find\_value(...)} calls.
+
+\subsection {XML Configuration -- Random Values}
+As discussed in Section \ref{sec:UG:random_node}, random values may be used
+in different places throughout the configuration. Random distributions, from
+which the random values are drawn, are typically configured in a
+\textit{RandValue} node. A \textit{RandValue} node requires:
+\begin{itemize}
+\item a \textit{distribution} field, specifying what type of random
+      distribution to use. The model currently supports Normal distributions
+      (\textit{GAUSSIAN}), and Uniform distributions (\textit{FLAT}).
+\item values describing the characteristic shape of the distribution.
+\item (optional) a \textit{seed} value for seeding the random-number
+      generator. If this field is omitted, \textbf{OR if it is set to 0}, the
+      model will generate a seed from the system clock. While this field is
+      technically optional, if the results are to be repeatable, it is
+      required.`
+\end{itemize}
+
+\subsubsection {Normal Distribution}
+A Normal distribution is configured with the following fields:
+\begin{itemize}
+\item \textit{distribution="GAUSSIAN"}
+\item \textit{std\_dev} to specify the standard deviation.
+\item \textit{mean} to specify the mean value. This field is optional, it
+      defaults to 0.0 if not specified.
+\end{itemize}
+The model uses the \textit{normal\_distribution} from the C++
+\textit{<random>} library. This implementation expectes that the standard
+deviation be $>0$. The model may run if this is not
+satisfied, but it is not guaranteed.
+
+\subsubsection {Uniform Distribution}
+A Uniform distribution is configured with the following fields:
+\begin{itemize}
+\item \textit{distribution="GAUSSIAN"}
+\item minimum/maximum specifications using either:
+  \begin{itemize}
+  \item \textit{min}
+  \item \textit{max}
+  \end{itemize}
+  or
+  \begin{itemize}
+  \item \textit{rel\_min}
+  \item \textit{mean}
+  \item \textit{rel\_max}
+  \end{itemize}
+\end{itemize}
+With the first option (min/max), the distribution generates a value
+$x \in [min, max)$.
+Both fields must be specified to use this option. This is the default
+option; if both fields are specified, the model will not parse the contents
+for the second option.
+
+With the second option, the distribution generates a value
+$x \in [mean - |rel\_min|, mean + rel\_max)$. Note that \textit{rel\_min}
+can be specified as positive or negative; its absolute-value will be
+subtracted from the \textit{mean}. All three fields must be specified to use
+this option.
+
+The model uses the \textit{real\_uniform\_distribution} from the C++
+\textit{<random>} library. This implementation expectes that the lower bound
+will be less than the upper bound. The model may run if this is not
+satisfied, but it is not guaranteed.
+
+\begin{codeXML}
+<RandValue><distribution="GAUSSIAN" mean="1.0" std_dev="2.0"></RandValue>
+...
+<RandValue><distribution="FLAT" min="-1.0" max="1.0" seed="1"></RandValue>
+\end{codeXML}
+
+
+\subsection {XML Configuration -- Fault Nodes (Common)}
+\label{sec:UG:FM:XML_config_fault_node}
+Fault nodes contain the following attributes:
+\begin{itemize}
+ \item \verb'ID' is a name for the fault
+ \item \verb'enabled' sets the enabled status of this fault. If not specified,
+   this defaults to false.
+ \item \verb'type' identifies the type of fault -- e.g. STALE, FUNCTION.
+   Note -- \verb'Type' is equivalent to \verb'type' (see Section
+   \ref{sec:UG:FM:Config_xml:case}).
+ \item \verb'loc' identifies the location of where the fault will be applied.
+\end{itemize}
+\begin{codeXML}
+<Fault ID="Bias Fault" type="BIAS" loc="DOWNSTREAM">
+  ...
+</Fault>
+\end{codeXML}
+
+For each type of fault-node, there may be specific additional configurations;
+these are explored below.
+
+\subsection{XML Configuration -- Bias Fault Nodes}
+\par There is one parameter specific to bias faults: the bias.
+This is the \verb"bias" member of the class.
+It is specified by field-name \verb'value' in a \verb'Bias' node.
+\begin{codeXML}
+<Fault ID="Bias Fault" type="BIAS" loc="DOWNSTREAM">
+  <Bias value="100"></Bias>
+  ...
+</Fault>
+\end{codeXML}
+
+\subsection{XML Configuration -- Scale Fault Nodes}
+\par There is one parameter specific to scale faults: the scale factor.
+This is the \verb"scale_factor" member of the class.
+It is specified by field-name \verb'value' in a \verb'Scale' node.
+\begin{codeXML}
+<Fault ID="Scale Fault" type="SCALE" loc="DOWNSTREAM">
+  <Scale value="10"></Scale>
+  ...
+</Fault>
+\end{codeXML}
+
+\subsection{XML Configuration -- Overwrite Fault Nodes}
+\par There is one parameter specific to overwrite faults: the overwrite value.
+This is the \linebreak \verb"overwrite_value" member of the class.
+It is usually specified by field-name \verb'value' in a \verb'Overwrite' node.
+
+\begin{codeXML}
+<Fault ID="Overwrite Fault" type="OVERWRITE" loc="DOWNSTREAM">
+  <Overwrite value="100"></Overwrite>
+  ...
+</Fault>
+\end{codeXML}
+
+The overwrite value may be also be configured to be a randomized value;
+the distribution for the random number generation is
+set up using a RandValue node (see Section \ref{sec:UG:random_node}).
+\begin{codeXML}
+<Fault ID="Random Overwrite Fault" type="OVERWRITE" loc="DOWNSTREAM">
+  <RandValue distribution="GAUSSIAN" mean="150" std_dev="10" seed="1">
+  </RandValue>
+</Fault>
+\end{codeXML}
+
+\subsection{XML Configuration -- White-Noise and Random-Walk Fault Nodes}
+\par The noise in white-noise and random-walk faults is generated by
+\verb"FaultRandNumber" instances, configured in \verb'RandValue' nodes.
+See Section \ref{sec:UG:random_node} for information on how to configure them.
+\begin{codeXML}
+<Fault ID="White-Noise Fault" type="WHITENOISE" loc="DOWNSTREAM">
+  <RandValue distribution="GAUSSIAN" std_dev="5" seed="1"></RandValue>
+  ...
+</Fault>
+\end{codeXML}
+
+\subsection{XML Configuration -- Function Fault Nodes}
+When a function fault is triggered, it biases its variable by some function
+of some independent variable. This type of fault is identified by the
+\verb'type="FUNCTION"', and the specific type of function is specified by the
+\verb"type" member of the \verb'Function' sub-node, using an enumeration from
+\verb"FunctionType". Available function types are:
+\begin{itemize}
+ \item LINEAR
+ \item SINEWAVE
+ \item TRIANGLEWAVE
+ \item SQUAREWAVE
+\end{itemize}
+
+\begin{codeXML}
+  <Fault ID=... type="FUNCTION" loc= ...>
+    ...
+    <Function type="LINEAR">
+    ...
+    </Function>
+  </Fault>
+\end{codeXML}
+
+\subsubsection{Independent Variables}
+Independent variables must be initialized with a variable reference. In XML
+files, independent variables are represented by a \verb"IndVariable" node with
+\verb"name" and \verb"relative" attributes, embedded as a sub-node in the
+\verb'Function' node.
+The \verb"relative" attribute is optional (default is true).
+Like a trigger variable or fault variable, an independent variable can be any
+variable in the simulation, even if it is private or const, as long as the type
+is valid.
+\begin{codeXML}
+  <Fault ID=... type="FUNCTION" loc= ...>
+    ...
+    <Function type=...>
+      <IndVariable name="time.sim_seconds" relative="true"></IndVariable>
+      ...
+    </Function>
+    ...
+  </Fault>
+\end{codeXML}
+
+\subsubsection{Parameters}
+The \textit{nominal} and \textit{rate} variables within a function-fault are
+set with a \verb'Parameters' sub-node of the \verb'Function' node. Note that
+these parameters are only used for a linear function fault.
+
+The two values are the $m$ (\textit{rate}) and $b$ (\textit{nominal}) in
+$y=mx+b$.
+
+
+\begin{codeXML}
+ <Fault ID=... type="FUNCTION" loc= ...>
+    ...
+    <Function type="LINEAR"...>
+      <IndVariable ...></IndVariable>
+      <Parameters nominal="2.0" rate="-0.05"></Parameters>
+    </Function>
+    ...
+</Fault>
+\end{codeXML}
+
+The \textit{initial} keyword can also be used as a substitute for
+\textit{nominal} to represent the y-intercept. Neither is a particularly good
+name -- nominal might be interpreted as "no-fault", and initial might be
+interpreted as the first application of the fault, which is only valid if the
+first application has $x=0$.
+
+\begin{codeXML}
+      ...
+      <Parameters initial="2.0" rate="-0.05"></Parameters>
+      ...
+\end{codeXML}
+If \textit{nominal} and \textit{initial} are both specified, \textit{nominal}
+takes precedence. If neither is specitied, it defaults to 0.0 and the linear
+equation becomes $y=mx$. Note that specification of \textit{rate} is required.
+
+\subsection{XML Configuration -- Periodic Function Fault Nodes}
+Three periodic functions are implemented: sine waves, square waves, and
+triangle waves.
+These are defined by a frequency, an amplitude, and a phase-offset, represented
+as separate sub-nodes of the \verb'Function' node.
+Each of these three parameters can be represented as a linear equation of some
+independent variable, using parameters \verb"nominal" and \verb'rate', and sub-
+node \verb'IndVariable'.
+\begin{itemize}
+ \item If only the \verb"nominal" parameter is set for any of these three
+ parameters, the respective parameter will be constant at that value.
+ \item If the \verb"nominal" parameter is not set, it will default to 0.0.
+ \item If one of these nodes contains a \verb"rate" attribute but not an
+ \verb"IndVariable" sub-node, it will use the same independent variable as the
+ function itself.
+\end{itemize}
+
+In the example below, we use a sine-wave function with constant frequency; an
+amplitude that starts at value 5.0 and ramps down linearly with \verb"sim_time",
+the same variable used as the independent variable for the sine-wave itself;
+and a phase-offset that starts at 0.0 and ramps up linearly with another
+variable, \verb"other_variable".
+
+\begin{codeXML}
+<Fault ...>
+  ...
+  <Function type="SINEWAVE">
+    <IndVariable name="sim_time" relative="true"></IndVariable>
+    <Frequency nominal="2.0"></Frequency>
+    <Amplitude nominal="5.0" rate="-0.1"></Amplitude>
+    <PhaseOffset rate="1.0">
+      <IndVariable name="sim_object.other_variable"></IndVariable>
+    </PhaseOffset>
+  </Function>
+  ...
+</Fault>
+\end{codeXML}
+
+\subsection {XML Configuration -- SimVar Nodes}
+The SimVar node has a single attribute, \verb'name', which specifies the
+simulation address of the faulted variable.
+\begin{codeXML}
+<Fault ...>
+  <SimVar name="test_object.var_char"></SimVar>
+  ...
+</Fault>
+\end{codeXML}
+
+\subsection {XML Configuration -- TriggerGroup Nodes}
+Trigger-groups are unique to a fault. They may be replicated, but not re-used.
+Trigger-group nodes comprise only a set of Trigger sub-nodes and no additional
+attitubutes.
+\begin{codeXML}
+<Fault ...>
+  ...
+  <TriggerGroup>
+    ...
+  </TriggerGroup>
+</Fault>
+\end{codeXML}
+
+\subsection {XML Configuration -- Trigger Nodes}
+Trigger nodes are embedded within the trigger-group node for a specific fault.
+The first time a trigger appears in the file, its node must have the following
+attributes:
+\begin{itemize}
+ \item \verb"name" should be unique; this name can be used later to associate
+   this trigger with another trigger-group.
+ \item \verb"variable" is the simulation address of the trigger-variable (i.e.
+   the variable whose value is being monitored for triggering the fault). Note
+   that the variable can be any variable in the simulation, even if it is
+   private or const, as long as the data-type is supported.
+ \item \verb"compare" is the operator being used to compare the value of the
+   trigger variable against the trigger value threshold.
+ \item Either:
+ \begin{itemize}
+  \item \verb"value" provides the trigger-value, or
+  \item a \verb"RandValue" sub-node (see Section \ref{sec:UG:random_node}), used
+    if the trigger-value is determined by a random variable.
+ \end{itemize}
+ \item (optional) A Trigger can be made periodic (see Section
+   \ref{intro_periodic}) by adding the
+   \verb'trigger_period' and \verb'trigger_length' attributes.
+ \item (optional) A Trigger can be limited to triggering no more than some
+   number of consecutive times (see Section
+   \ref{sec:formulation:fault_support:trigger_fire_count}
+   by adding the
+   \verb'fire_limit' attribute.
+\end{itemize}
+\begin{codeXML}
+<Fault ...>
+  ...
+  <TriggerGroup>
+    <Trigger name="trigger XYZ" variable="sim_object.sim_variable"
+      compare="GE" value="5"></Trigger>
+    ...
+  </TriggerGroup>
+</Fault>
+\end{codeXML}
+
+When a trigger is being used in another trigger-group, the syntax is simpler,
+containing only one attribute:
+\begin{itemize}
+ \item \verb"reuse_name" identifies which of the previously defined
+   trigger-nodes to use in this trigger-group.
+\end{itemize}
+\begin{codeXML}
+<Fault ...>
+  ...
+  <TriggerGroup>
+    <Trigger reuse_name="trigger_XYZ"></Trigger>
+    ...
+  </TriggerGroup>
+</Fault>
+\end{codeXML}
+
+
+\subsection{Example}
+\begin{codeXML}
+<Fault ID="Discrete Noise" type="FUNCTION" loc="DOWNSTREAM">>
+  <SimVar name="vehicle.sensor_X.output"></SimVar>
+  <Function type="SQUAREWAVE">
+    <IndVariable name="time.sim_time" relative="true"></IndVariable>
+    <Frequency nominal="2.0"></Frequency>
+    <Amplitude nominal="5.0" rate="-0.1"></Amplitude>
+    <PhaseOffset rate="1.0">
+      <IndVariable name="sim_object.other_variable"></IndVariable>
+    </PhaseOffset>
+  </Function>
+  <TriggerGroup>
+    <Trigger name="trigger ABC" variable="sim_object.sim_variable"
+      compare="GE" value="5" trigger_period="2" trigger_length="0.5"
+      fire_limit="10">
+    </Trigger>
+    <Trigger reuse_name="trigger_XYZ"></Trigger>
+  </TriggerGroup>
+</Fault>
+\end{codeXML}
+
+
+
+
+\subsection{Post-XML Modifications}
+With the direct-instantiation architecture, modifying a component of the
+fault-model after initialization is straightforward because we have direct
+access to
+each of the components. With the fault-management architecture, we need to gain
+access via the component's name and the fault-manager's lookup methods:
+\begin{itemize}
+ \item \verb'Fault * get_fault( name)'
+   returns a pointer to the fault with the specified name, or ID.
+ \item \verb'TriggerBase * get_trigger(name)'
+   returns a pointer to the trigger with the specified name.
+ \item \verb'set_fault_enabled(fault_name, enable_flag)'
+   sets the enabled flag on the fault with the specified name.
+ \item \verb'set_fault_trigger_enabled(fault_name, trigger_name, enable_flag)'
+   sets the
+   enabled status of the specified trigger in all trigger groups the specified
+   fault. Recall, a trigger can be enabled independently per trigger-group for
+   each trigger-group in which it is embedded; this method sets the enabled flag
+   for the specified trigger for all trigger-groups in the fault.
+ \item \verb'set_fault_param( fault_name, param_name, double value)'
+   sets the parameter with the specified name in the fault with the speciied
+   name to the specified
+   value.
+ \item \verb'set_trigger_value( trigger_name, double value)' sets the trigger-
+   value for the specified trigger.
+\end{itemize}
+
+\textbf{Important Note} -- The use of \textit{set\_fault\_param} and
+\textit{set\_trigger\_value} in the input file, to be processed with the
+rest of the input file, will take precedence over values specified in the
+XML file. It is \textbf{NOT} necessary to delay modifications to
+configurations introduced via the input file until after
+the simulation has been fully initialized. When these methods are executed
+before the XML file is parsed, the settings are cached and applied at
+initialization (after parsing the XML file and applying its settings).
+
+
+
+
+
+
+
+
+\chapter{Verification}
+\par Fault Management is verified by two unit simulations: \textit{SIM\_fault}
+and \textit{SIM\_fault\_manager}.
+In \textit{SIM\_fault\_manager}, the faults are all implemented and
+configured via the XML file interface following the patterns described in
+Section \ref{sec:UG:FaultManager}.
+In \textit{SIM\_fault} the faults are all implemented and configured as
+independent instantiations following the patterns described in Section
+\ref{sec:UG:DirectInstantiation}.
+
+In many cases, the simulation time is used as a fault's trigger variable and
+independent variable.
+
+\section{ Requirement-to-Test Mapping}
+
+\par Here is an index of features and where they are tested:
+\begin{flushleft}
+\begin{enumerate}
+ \item \textbf{Fault Effects}
+  \begin{enumerate}
+   \item \textbf{Profile Types}
+    \begin{enumerate}
+
+     \item \textbf{Holding}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_overwrite}
+         (Section \ref{sec:verif:FM:overwrite})
+       \item \textit{SIM\_fault\_manager : RUN\_triggers}
+         (Section \ref{sec:verif:FM:triggers})
+      \end{itemize}
+
+     \item \textbf{Fixed bias}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_bias}
+         (Section \ref{sec:verif:FM:bias})
+       \item \textit{SIM\_fault\_manager : RUN\_function}
+         (Section \ref{sec:verif:FM:function})
+      \end{itemize}
+
+     \item \textbf{Fixed-scale}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_scale}
+         (Section \ref{sec:verif:FM:scale})
+      \end{itemize}
+
+     \item \textbf{Stale-data}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_stale}
+         (Section \ref{sec:verif:FM:stale})
+      \end{itemize}
+
+     \item \textbf{Noise}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_white\_noise}
+         (Section \ref{sec:verif:FM:white_noise})
+       \item \textit{SIM\_fault : RUN\_noise\_*}
+         (Section \ref{sec:verif:DI:noise})
+      \end{itemize}
+
+     \item \textbf{Walk-off}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_function}
+         (Section \ref{sec:verif:FM:function:linear}).
+       \item \textit{SIM\_fault : RUN\_linear}
+         (Section \ref{sec:verif:DI:function:linear})
+      \end{itemize}
+
+     \item \textbf{Random-walk}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_random\_walk}
+         (Section \ref{sec:verif:FM:randomwalk})
+      \end{itemize}
+
+     \item \textbf{Periodic-fluctuation}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_function}
+         (Section \ref{sec:verif:FM:function})
+      \end{itemize}
+
+     \item \textbf{Initial Fault}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_initial\_bias}
+         (Section \ref{sec:verif:FM:initial_fault})
+      \end{itemize}
+    \end{enumerate}
+   \end{enumerate}
+
+
+   \item \textbf{Periodic Profiles}
+    \begin{enumerate}
+     \item \textbf{Shaped profiles}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_function}
+         (Section \ref{sec:verif:FM:function})
+      \end{itemize}
+
+     \item \textbf{Independent data types}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_function2}
+         (Section \ref{sec:verif:FM:function2})
+       \item \textit{SIM\_fault : RUN\_linear\_int})
+         (Section \ref{sec:verif:DI:function:linear})
+      \end{itemize}
+
+     \item \textbf{Configurable Parameters}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_function}
+        (Section \ref{sec:verif:FM:function})
+       \item \textit{SIM\_fault\_manager : RUN\_function2}
+        (Section \ref{sec:verif:FM:function2})
+       \item \textit{SIM\_fault : RUN\_linear\_int}
+         (Section \ref{sec:verif:DI:function:linear})
+      \end{itemize}
+
+     \item \textbf{Function Parameters}
+      \begin{itemize}
+       \item \textit{SIM\_fault : RUN\_sinewave}
+         (Section \ref{sec:verif:DI:sinewave})
+      \end{itemize}
+    \end{enumerate}
+
+
+   \item \textbf{Compounding Faults}
+    \begin{itemize}
+     \item \textit{SIM\_fault\_manager : RUN\_function}
+       (Section \ref{sec:verif:FM:function:superimposed},
+       using \verb'var_double')
+     \item \textit{SIM\_fault\_manager : RUN\_function2}
+       (Section \ref{sec:verif:FM:function2}, using \verb'var_double')
+    \end{itemize}
+
+   \item \textbf{Faults On and Off}
+    \begin{itemize}
+     \item using \textit{set\_fault\_enabled}:
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_bias}
+         (Section \ref{sec:verif:FM:bias})
+       \item \textit{SIM\_fault\_manager : RUN\_stale}
+         (Section \ref{sec:verif:FM:stale}).
+      \end{itemize}
+
+     \item using \textit{disable()}:
+      \begin{itemize}
+       \item \textit{SIM\_fault : RUN\_disable\_*\_indirect}
+         (Section \ref{sec:verif:DI:disable})
+      \end{itemize}
+
+     \item using \textit{enabled} flag directly:
+      \begin{itemize}
+       \item \textit{SIM\_fault : RUN\_disable\_*}
+         (Section \ref{sec:verif:DI:disable})
+      \end{itemize}
+    \end{itemize}
+
+   \item \textbf{Monte Carlo Support}
+    \begin{itemize}
+     \item \textit{SIM\_fault\_manager : RUN\_white\_noise}
+       (Section \ref{sec:verif:FM:white_noise})
+     \item \textit{SIM\_fault\_manager : RUN\_random\_walk}
+       (Section \ref{sec:verif:FM:randomwalk})
+     \item \textit{SIM\_fault\_manager : ERROR\_no\_random\_seed\_specified}
+       (Section \ref{sec:verif:FM:randomwalk})
+    \end{itemize}
+
+   \item \textbf{Modifying Faults}
+    \begin{itemize}
+     \item \textit{SIM\_fault : RUN\_sinewave}
+       (Section \ref{sec:verif:DI:sinewave})
+     \item \textit{SIM\_fault : RUN\_new\_rate}
+       (Section \ref{sec:verif:DI:new_rate})
+     \item \textit{SIM\_fault\_manager} has examples in multiple runs.
+    \end{itemize}
+  \end{enumerate}
+
+ \item \textbf{Fault Causes and Triggers}
+  \begin{enumerate}
+   \item \textbf{Comparators}
+    \begin{itemize}
+     \item \textit{SIM\_fault\_manager : RUN\_triggers}
+       (Section \ref{sec:verif:FM:triggers})
+    \end{itemize}
+
+   \item \textbf{Compound Logical Comparisons}
+    \begin{itemize}
+     \item \textit{SIM\_fault\_manager : RUN\_stale}
+       (Section \ref{sec:verif:FM:stale:multigroup})
+     \item \textit{SIM\_fault\_manager : RUN\_random\_walk}
+       (Section \ref{sec:verif:FM:randomwalk} using \verb'var_double')
+    \end{itemize}
+
+   \item \textbf{Triggering Variables}
+    \begin{enumerate}
+     \item \textbf{Data Types}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_triggers}
+         (Section \ref{sec:verif:FM:triggers})
+       \item \textit{SIM\_fault : RUN\_string\_trigger}
+         (Section \ref{sec:verif:DI:string_trigger})
+      \end{itemize}
+     \item \textbf{Configure Trigger-Values}
+      \begin{itemize}
+       \item using \textit{set\_trigger\_value}
+        \begin{itemize}
+         \item \textit{SIM\_fault\_manager : RUN\_triggers}
+           (Section \ref{sec:verif:FM:triggers})
+         \item \textit{SIM\_fault\_manager : RUN\_bias}
+           (Section \ref{sec:verif:FM:bias})
+        \end{itemize}
+       \item setting value directly:
+        \begin{itemize}
+         \item \textit{SIM\_fault : all runs} (Section \ref{sec:verif:DI})
+        \end{itemize}
+      \end{itemize}
+    \end{enumerate}
+
+   \item \textbf{Trigger Controls}
+    \begin{enumerate}
+     \item \textbf{Enabling / Disabling triggers}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_bias}
+        (Section \ref{sec:verif:FM:bias})
+      \end{itemize}
+
+     \item \textbf{Limited Firing}
+      \begin{itemize}
+       \item \textit{SIM\_fault\_manager : RUN\_triggers}
+         (Section \ref{sec:verif:FM:triggers})
+       \item \textit{SIM\_fault\_manager : RUN\_bias}
+         (Section \ref{sec:verif:FM:bias})
+       \item \textit{SIM\_fault\_manager : RUN\_stale}
+         (Section \ref{sec:verif:FM:stale})
+      \end{itemize}
+     \item \textbf{Periodic Triggers}
+      \begin{itemize}
+       \item \textit{SIM\_fault : RUN\_linear\_periodic}
+         (Section \ref{sec:verif:DI:function:linear})
+       \item \textit{SIM\_fault\_manager : RUN\_bias}
+         (Section \ref{sec:verif:FM:bias})
+      \end{itemize}
+     \item \textbf{Multiple Firings}
+      \begin{itemize}
+      \item \textit{SIM\_fault\_manager : RUN\_bias}
+       (Section \ref{sec:verif:FM:bias})
+      \item \textit{SIM\_fault\_manager : RUN\_stale}
+       (Section \ref{sec:verif:FM:stale})
+      \item \textit{SIM\_fault\_manager : RUN\_random\_walk}
+       (Section \ref{sec:verif:FM:randomwalk})
+      \end{itemize}
+    \end{enumerate} % end of Trigger Controls
+  \end {enumerate} % end of Fault Causes
+
+
+ \item \textbf{Fault Application}. Confirmation that the target-variable can
+   be any of the specified data types is handled in all runs within
+   \textit{SIM\_fault\_manager}. The manager is configured to provide a fault
+   for each data-type of target variable.
+
+ \item \textbf{Fault Implementation}
+  \begin{enumerate}
+   \item \textbf{Model-based Implementation}
+     The encapsulation of faults within a class is seen in the
+     \textit{FaultArchitectureTestSimObject} class in both
+     \textit{SIM\_fault} (Section \ref{sec:verif:DI}), and
+     \textit{SIM\_fault\_manager} (Section \ref{sec:verif:FM}).
+     These examples are structured to emulate the way in which faults
+     might be implemented in a model class.
+
+   \item \textbf{Simulation-based Implementation} Both test simulations also
+     demonstrate that the model can be implemented within a simulation.
+     The only significant difference between a model-based implementation
+     and implementation at the top-level of a simulation is access to data.
+     In \textit{SIM\_fault\_manager : RUN\_triggers} (Section
+     \ref{sec:verif:FM:triggers}), the faults are configured to
+     act on private and const variables, and can adjust the values of
+     variables with these protections.
+
+   \item \textbf{Independent Faults} The structure found in \textit{SIM\_fault}
+     (Section \ref{sec:verif:DI}) uses the architecture of independently
+     instantiated, configured, and executed faults.
+
+   \item \textbf{Managed Faults} The structure found in
+     \textit{SIM\_fault\_manager} (Section \ref{sec:verif:FM})
+     uses the XML-file-based definition and the fault-manager architecture to
+     instantiate, configure, and execute faults.
+     Of particular note, \textit{RUN\_function} tests the application of faults
+     using the four identifying locations for regular updates:
+     \begin{itemize}
+      \item UPSTREAM
+      \item INTERMEDIATE\_1
+      \item INTERMEDIATE\_2
+      \item DOWNSTREAM
+     \end{itemize}
+     and \textit{RUN\_initial\_bias} test the application of a fault using the
+     identifying location for a Fault to be applied at initialization.
+     \begin{itemize}
+      \item INIT
+     \end{itemize}
+ \end{enumerate}
+
+Additional model features are mapped out here:
+\begin{itemize}
+ \item Making trigger values randomized:
+  \begin{itemize}
+   \item \textit{SIM\_fault\_manager : RUN\_bias}
+     (Section \ref{sec:verif:FM:bias})
+  \end{itemize}
+ \item Handling of invalid XML files or invalid entries in the XML file:
+  \begin{itemize}
+   \item \textit{SIM\_fault\_manager : RUN\_errors}
+     (Section \ref{verif_errors})
+   \item \textit{SIM\_fault\_manager : FAIL\_invalid\_xml}
+      (Section \ref{verif_fails})
+   \item \textit{SIM\_fault\_manager : FAIL\_bad\_filename}
+     (Section \ref{verif_fails})
+  \end{itemize}
+\end{itemize}
+\end{flushleft}
+
+\section{Code Coverage}
+
+Code coverage is illustrated in Figure \ref{fig:coverage}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.45]{graphics/code_coverage.png}
+  \caption{Code Coverage}
+  \label{fig:coverage}
+\end{figure}
+
+\subsection{Exceptions}
+\begin{itemize}
+ \item \textbf{fault\_function.hh} (3 lines). False flag with the situation
+       in which the function type is undefined (switch case \textit{default}).
+       \newline These lines are all exercised in
+       \textit{SIM\_fault/ERROR\_invalid\_function\_type}.
+       Execution of this run as part of unit-testing has been confirmed.
+       The cause of this false flag is unknown.
+ \item \textbf{independent\_variable.hh} (1 line). False flag with the situation
+       in the the independent variable is initialized twice (line 59).
+       The test case \textit{SIM\_fault/ERROR\_double\_initialization} is
+       specifically configured to hit this line.
+       Execution of this run as part of unit-testing has been confirmed.
+       The cause of this false flag is unknown.
+ \item \textbf{trigger.hh} (5 lines)
+ \begin{itemize}
+   \item Destructors (3 lines).
+         Standard omission of destructor execution due to testing process.
+   \item False flag (1 line) in \textit{bool compare()} (line 183) with the
+         default case of the Operator switch).
+         This line is exercised in
+         \textit{SIM\_fault/RUN\_string\_trigger\_GT}; this may
+         have been optimized out because it has no effect, setting
+         \textit{success} to the same value it was previously assigned.
+   \item False flag in \textit{bool Trigger<T>::compare()} (line 240) with
+         the default case of the Operator switch). This line
+         is exercised in \textit{SIM\_fault/RUN\_linear\_invalid\_comparator};
+         this may have been optimized out for the same reason as the previous
+         false flag.
+ \end{itemize}
+ \item \textbf{fault\_manager.cc} (9 lines):
+ \begin{itemize}
+   \item Destructor (8 lines)
+       Standard omission of recording the execution of destructors,
+       this is a known issue with the testing process.  This method has been
+       manually verified in gdb.
+   \item Sanity check (1 line) in \textit{FaultManager::parse()} (line 281).
+         This is
+         an unreachable sanity-check error message, used to detect an error
+         whereby an XML file is specified but has no XML content. It is left in
+         place in case there are unknown methods for corrupting the XML file
+         that could cause a failure here.
+         It has been manually tested in gdb.
+ \end{itemize}
+ \item \textbf{fault\_bias.hh, fault\_overwrite.hh, fault\_scale.hh,
+       fault\_stale.hh} (1 line each).
+       Standard omission of recording the execution of (empty) destructors,
+       this is a known issue with the testing process, but these methods are all
+       empty.
+\end{itemize}
+
+
+
+\section{SIM\_fault\_manager} \label{sec:verif:FM}
+\par RUN\_fault\_manager tests each type of fault on all the valid variable
+types listed in Section \ref{sec:intro:faults}:
+\begin{codeC}
+char               var_char;
+unsigned char      var_uchar;
+short              var_sint;
+unsigned short     var_usint;
+int                var_int;
+unsigned int       var_uint;
+long               var_lint;
+unsigned long      var_ulint;
+long long          var_llint;
+unsigned long long var_ullint;
+float              var_float;
+double             var_double;
+bool               var_bool;
+\end{codeC}
+
+The fault-types are investigated one at a time in the associated runs:
+\begin{enumerate}
+\item RUN\_bias
+\item RUN\_scale
+\item RUN\_overwrite
+\item RUN\_stale
+\item RUN\_white\_noise
+\item RUN\_random\_walk
+\item RUN\_function
+\end{enumerate}
+
+The following runs complete the testing for this run, testing general model
+functionality rather than specific fault-types.
+\begin{enumerate}[resume]
+\item RUN\_function2
+\item RUN\_initial\_bias
+\item RUN\_errors
+\item RUN\_triggers
+\item RUN\_trigger\_limited
+\end{enumerate}
+
+In most runs, the variables are each assigned a constant value every timestep.
+Unless a variable is actively being faulted, it will retain that value, and
+deviations from it indicate application of a fault.
+In \textit{RUN\_stale}, \textit{RUN\_initial\_bias}, and \textit{RUN\_triggers},
+we make an exception to this pattern
+because these runs require the non-faulted values to vary by known increments
+in order to demonstrate the success of the fault.
+
+For logging purposes, the variable \verb"var_char" is cast to an
+\textit{int} variable called \verb"var_char_numeric" to ensure
+it is logged as a number instead of an ASCII character.
+
+\subsection{RUN\_bias} \label{sec:verif:FM:bias}
+\par In RUN\_bias, a bias fault is created for each of the valid types. The
+faults are defined in the file \textit{bias.xml}.
+
+\subsubsection{ Regular Triggers}
+Most faults use the trigger called \textit{bias trigger}, which is set to
+trigger when $t=1$. These faults should therefore show a bias being
+applied at $t=1$, and holding thereafter.
+In the input file, this trigger has its
+trigger-value reset to 4.0 at $t=3.0$. All faults using this trigger should
+therefore return to their non-triggered state at $t=3.0$, re-trigger at $t=4.0$,
+and hold this state to the end of the run.
+\verb"var_char", \verb"var_uchar", \verb"var_usint", \verb"var_llint", and
+\verb"var_double" show this behaviour without any modification.
+Faults that use other modifications and triggers are discussed below.
+Results of these tests are shown in Figure \ref{fig:verif:FM:bias}
+
+\subsubsection {Modified Parameters}
+The \textit{set\_param} method is exercised via the manager's
+\textit{set\_fault\_param} method.
+First, the method is given an invalid parameter name, which causes an error to
+be printed to the console.
+
+\verb"var_sint" uses trigger \textit{bias trigger} as discussed above, but at
+$t=5$, the \textit{set\_fault\_param} method is used to modify the \textit{bias}
+parameter from 150 to 100. \verb"var_sint" should show the same on/off pattern
+as seen in the other variables using \textit{bias trigger}, but the output value
+should show a step function at $t=5$ as the modifier is adjusted from $150$
+to $100$.
+
+\subsubsection{Disable Fault}
+\verb"var_float"'s fault uses trigger \textit{bias trigger} as discussed above;
+this fault is disabled at the beginning of the run and enabled at $t=5$. This
+fault is applied at $t=5$, with the triggering criterion also being satisfied at
+$t=5$.
+
+\subsubsection{Disable Trigger}
+\verb"var_uint"'s fault uses trigger \textit{bias trigger} as discussed above;
+at the beginning of the run, the \textit{bias trigger} trigger is disabled in
+this fault with the \verb'set_fault_trigger_enabled' function. Note that this
+does not affect the operation of \textit{bias trigger} in any other fault. At
+$t=5$, this trigger is re-enabled using the same function. Disabling the fault's
+only trigger should have the same effect as disabling the fault in the
+previous example; this fault should similarly trigger only at $t=5$.
+
+
+\subsubsection {Fire Limit}
+\verb"var_int"'s fault uses trigger \textit{bias trigger} as discussed above,
+but is given a fire limit of 9.
+Because the simulation updates at 10 Hz, this fault should only be triggered for
+0.9 seconds.
+
+\subsubsection {Periodic Triggers}
+\par The faults corresponding to \verb"var_lint" and \verb"var_ulint" use
+periodic triggers.
+The trigger for \verb"var_lint" has a trigger-value of 1, a period of 3, and a
+length of 1.5. It should trigger at $t=1$ and remain triggered until
+$t=1+1.5=2.5$. It should re-trigger at $t=1+3=4$ and remain triggered until
+$t=4+1.5=5.5$.
+
+The fault for \verb"var_ulint" demonstrates how periodic triggers behave when
+the trigger variable has a negative value, and follows a decreasing function.
+This fault uses the trigger called \textit{negative periodic trigger}, which
+uses \verb"negative_time" as its trigger variable, and triggers when this
+variable is $\leq -1$. \verb"negative_time" is simply the
+negative value of the simulation time. As before, this fault uses values for
+period of $3$, and length of $1.5$.
+Because periodic triggers use the absolute-value of \verb"std::fmod" to evaluate
+the fractional position within a period, the sign change has no effect and
+\verb"var_ulint" should behave the same way as \verb"var_lint".
+For $t_- =-(3n + \Delta)$, we have the application of \verb'fmod' yielding
+$|t_- \% 3| = |-\Delta| = \Delta$, the same result from applying the modulo function
+to the positive time: $|t_+ \%3| = |(3n + \Delta) \%3| = \Delta$
+
+\subsubsection {Random Trigger}
+\par The fault corresponding to \verb"var_ullint" has a trigger with a random
+trigger value.
+The distribution is flat with a minimum of 1.5 and maximum of 5.5, so the fault
+should be triggered somewhere between those two times. Note -- for
+reproducibility we use a fixed seed, which means for this test the fault always
+triggers at the same time; but the output has been manually reviewed using
+different seeds to confirm that the trigger-time does fluctuate.
+
+\par The results of RUN\_bias are shown in Figure \ref{fig:verif:FM:bias}.
+All the variables show the expected behaviour described in this section.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_bias.png}
+  \caption{RUN\_bias Results}
+  \label{fig:verif:FM:bias}
+\end{figure}
+\clearpage
+
+\subsection{RUN\_scale} \label{sec:verif:FM:scale}
+\par In RUN\_scale, a scale fault is created for each of the valid types.
+These faults all use the same trigger, which has a value of 1.
+
+\par The \textit{set\_param} method is exercised via the manager's
+\textit{set\_fault\_param} method.
+First, the method is given an invalid parameter name, which causes an error to
+be printed to the console.
+Later, at $t=2$, it is used to change \verb"var_sint"'s fault's scale factor
+from 150 to 100.
+
+\par The results of RUN\_scale are shown in Figure \ref{fig:scale}.
+All the variables show the expected behaviour.
+(Note that \verb"var_char" has an unfaulted value of 97 and its fault has a
+scale factor of 2.
+\verb"char"s can be between -128 and 127, so the faulted value overflows and is
+interpreted as -62 instead of 194.)
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[scale = 0.58]{graphics/verif_scale.png}
+  \caption{RUN\_scale Results}
+  \label{fig:scale}
+\end{figure}
+\clearpage
+
+\subsection{RUN\_overwrite} \label{sec:verif:FM:overwrite}
+\par In RUN\_overwrite, an overwrite fault is created for each of the valid
+types.
+These faults all use the same trigger, which triggers at $t=1$.
+
+For most faults, the overwrite parameter is configured in the XML file
+\textit{xml\_files/overwrite.xml} to have a value of 150. The exceptions are:
+\begin{itemize}
+ \item \verb'var_char' which has an overwrite value of -62.
+ \item \verb'var_uchar' which has an overwrite value of 96.
+ \item \verb'var_float' which takes a random value with mean of 150 and
+ standard-deivation 10; with the specified seed, this generates a
+ pseudo-random value of $144.50253$
+ \item \verb"var_ullint" starts at 150 then at $t=2$ the
+ \textit{set\_fault\_param} method is called from the input file to reset this
+ parameter to 40.
+ \item \verb"var_bool" which has an override value of 1 (true).
+\end{itemize}
+
+Within this run, we also exercise the \textit{set\_fault\_param} method
+with invalid parameter name. This causes the printing of an error
+to the console.
+
+
+\par The results of \textit{RUN\_overwrite} are shown in Figure
+\ref{fig:verif:FM:overwrite}.
+All the variables show the expected behaviour.
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_overwrite.png}
+  \caption{RUN\_overwrite Results}
+  \label{fig:verif:FM:overwrite}
+\end{figure}
+\clearpage
+
+\subsection{RUN\_stale} \label{sec:verif:FM:stale}
+\par In RUN\_stale, a stale-value fault is created for each of the valid types.
+These faults all use the same trigger, which triggers at $t=1$.
+When a stale-value fault is triggered, it maintains its variable at a constant
+value.
+To observe this effect, this run nominally changes each of the variables
+\verb'var_*' at the beginning of each timestep: the numeric values are
+incremented by $1$ and the Boolean variable \verb'var_bool' is flipped each
+cycle. When the stale fault is applied, these changes will be overridden by the
+fault.
+
+\subsubsection{Single Trigger}
+The fault corresponding to most variables use a single trigger. For most
+variables, their values will increase until $t=1.0$, then hold constant
+after its fault has triggered.
+
+Note that \verb'var_bool' will oscillate between $0$ and $1$ for $t<1$
+(rather than increasing with the other variables) and
+hold constant thereafter.
+
+\subsubsection{Multiple triggers}
+\par The fault corresponding to \verb"var_uchar" is given an additional
+trigger in the same trigger-group; this second trigger is triggered for $t
+\leq 2.0$. Because all triggers in a group must be triggered for the group
+to be triggered, this trigger-group reverts to non-triggered  when the
+second trigger reverts to non-triggered at $t>2$, resulting in the fault
+being removed at that time.
+
+\subsubsection{Multiple trigger-groups} \label{sec:verif:FM:stale:multigroup}
+\verb'var_sint' is configured with two trigger-groups; the first group is
+identical to that used in the Multiple Triggers test (\verb"var_uchar"),
+as outlined above.
+The second trigger-group adds a new trigger with constraint $t\geq3$.
+As with the Multiple Trigger test (\verb"var_uchar"), the fault is
+triggered at $t=1$ and reverted at $t=2$ as the first trigger-group is triggered
+and reverted. With the triggering of the second trigger-group at $t=3$, the
+fault is re-triggered because a fault is triggered when \textit{any} of its
+trigger-groups are triggered.
+
+\subsubsection{ Disable and Re-enable}
+The fault corresponding to \verb"var_usint" uses a single trigger (with
+characteristics matching those of the single-trigger identified above) but it
+is disabled at $t=2$ and re-enabled at $t=3$ using the \verb'set_fault_enabled'
+function. Note that this
+function call when disabling a fault forwards to the fault's \textit{disable()}
+method, which results in the fault resetting when it is re-enabled. This is one
+step more than simply setting \textit{enabled=false}, which would not result in
+a reset but requires direct access to the fault.
+
+Note also the potentially unexpected visual at $t=2$: the fault is disabled
+at the very top of the frame; within the frame, the value of \verb"var_usint"
+is incremented, then the fault is tested and applied. At $t=2.0$, the value of
+\verb"var_usint" is incremented from its value at $t=1.9$, then this
+incremented value is not reset to its faulted
+value because the fault has already been disabled. Consequently, the last
+faulted data point is at $t=1.9$, and by $t=2.0$ the variable is already in
+its increasing phase; the `corner' of the plotted evolution of
+\verb"var_usint" is seen at $t=1.9$, not $t=2.0$.
+Re-enabling the fault at $t=3$ results in the fault-value being
+recorded when it is first processed, at $t=3.0$. Consequently,
+\verb"var_usint" after $t=3.0$ retains the value from $t=3.0$; the
+`corner' of the plotted evolution of \verb"var_usint" as it is re-enabled is
+seen at $t=3.0$.
+
+\subsubsection {Fire Limit}
+The fault applied to \verb"var_int" also uses the single trigger outlined
+above, with the additional configuration of being given a fire
+limit of 7. In a simulation updating at 10 Hz, this translates to 0.7 seconds,
+resulting in the fault disabling itself at $t=1.7$. The fault is re-enabled in
+the input file at $t=2.5$.
+It should disable itself again at $t=3.2$.
+The same `corner` explanation from the previous test applies here, with the
+corners in the data appearing at $t=1.0, 1.6, 2.5, 3.1$.
+
+\subsubsection {Parameter Setting}
+\par The \textit{set\_param} method is exercised via the manager's
+\textit{set\_fault\_param} method.
+Stale-value faults have no settable parameters, so the method simply prints an
+error to the console.
+
+The results of RUN\_stale are shown in Figure \ref{fig:verif:FM:stale}.
+All the variable show the expected behaviour described in this section.
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.58]{graphics/verif_stale.png}
+  \caption{RUN\_stale Results}
+  \label{fig:verif:FM:stale}
+\end{figure}
+\clearpage
+
+\subsection{RUN\_white\_noise} \label{sec:verif:FM:white_noise}
+In RUN\_white\_noise, white-noise faults are created for \verb"var_float"
+and \verb"var_double".
+These faults both use a trigger with a threshold \textit{value} of 0,
+so they are triggered the entire run.
+
+The fault for \verb"var_float" uses a Gaussian distribution.
+The noise has a mean of $0.0$ and a standard deviation of $0.25$ in the
+first half of
+the run and a mean of $0.3$ and standard deviation of $0.02$ in the second
+half.  The unfaulted value of \verb"var_float" is 0.1 so the faulted
+variable value should have a mean of $0.1$ during the first half, and $0.4$
+during the second half.
+
+The fault for \verb"var_double" uses uniform distribution.
+The noise has a range of $[-1, 1]$ in the first half of the run and
+$[0.45, 0.55]$ in the second half. The first range is specified as a
+(\textit{rel\_min, mean, rel\_max}) set.
+The unfaulted value of \verb"var_double" is 0.2 so the faulted
+variable value should fall between $[-0.8, 1.2]$ during the first half, and
+$[0.65, 0.75]$ during the second half.
+
+\textit{set\_param} (via \textit{set\_fault\_param}) is used to change the
+distribution parameters halfway through the run.
+An additional call to \textit{set\_param} uses an invalid parameter name,
+which causes an error to be printed to the console.
+
+For further testing, a set of 10 runs were collected, with each run using a
+different seed for the random number generators. This exercise demonstrates
+the feasibility of using the Monte Carlo engine to distribute the
+white=-noise faults; the setting of the seed in the input file (or
+monte-input file) takes precedence over the setting of the seed in the XML
+file.
+
+The results of RUN\_white\_noise are shown in Figures
+\ref{fig:verif:FM:whitenoise}, \ref{fig:verif:FM:whitenoise2}, and
+\ref{fig:verif:FM:whitenoise3}.
+Both variables behave as expected.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_white_noise.png}
+  \caption{Single-run RUN\_white\_noise Results}
+  \label{fig:verif:FM:whitenoise}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_white_noise_MC.png}
+  \caption{10-run RUN\_white\_noise Results}
+  \label{fig:verif:FM:whitenoise2}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_white_noise_MC2.png}
+  \caption{10-run RUN\_white\_noise Results}
+  \label{fig:verif:FM:whitenoise3}
+\end{figure}
+\clearpage
+
+\subsection{RUN\_random\_walk} \label{sec:verif:FM:randomwalk}
+\par In RUN\_random\_walk, random-walk faults are created for \verb"var_float"
+and \verb"var_double".
+The triggers are set up such that \verb"var_float"'s fault is always triggered
+and \verb"var_double"'s is always triggered except when $8<t<9$.
+The random variables used in the random-walk function (see Section
+\ref{sec:intro:randomwalk}) have a Gaussian distribution in
+\verb"var_float"'s fault
+and a uniform distribution in \verb"var_double"'s fault.
+
+The random variable in \verb"var_float"'s fault starts with a mean of 0 and
+a standard deviation of 1.
+At $t=6$, the mean is changed to 0.5 and the standard deviation to 0.
+After this point, \verb"var_float" should increase linearly by 0.5 every
+cycle (at 10Hz, that equates to an increase of 5 per second).
+
+The random variable in \verb"var_double"'s fault starts with a range of
+$[-1.732, 1.732]$.
+This is approximately $\pm\sqrt{3}$, which makes the standard deviation
+approximately 1.
+At $t=6$, the range is changed to $[0.45, 0.55]$; after this point,
+\verb"var_double" should increase by approximately 5 per second.
+When the fault is no longer triggered, it should reset the random walk to 0 and
+start from that point when it is re-triggered.
+
+\textit{set\_param} (via \textit{set\_fault\_param}) is used to change the
+distribution parameters at $t=6$.
+An additional call to \textit{set\_param} uses an invalid parameter name,
+which causes an error to be printed to the console.
+
+For further testing, a set of 10 runs were collected, with each run using a
+different seed for the random number generators. This exercise demonstrates
+the feasibility of using the Monte Carlo engine to distribute the
+random-walk faults; the setting of the seed in the input file (or
+monte-input file) takes precedence over the setting of the seed in the XML
+file.
+
+The results of RUN\_random\_walk are shown in Figures
+\ref{fig:verif:FM:randomwalk}, \ref{fig:verif:FM:randomwalk2}, and
+\ref{fig:verif:FM:randomwalk3}.
+Both variables behave as expected.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_random_walk.png}
+  \caption{Single-run RUN\_random\_walk Results}
+  \label{fig:verif:FM:randomwalk}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_random_walk_MC.png}
+  \caption{10-run RUN\_random\_walk Results}
+  \label{fig:verif:FM:randomwalk2}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_random_walk_MC2.png}
+  \caption{10-run RUN\_random\_walk Results}
+  \label{fig:verif:FM:randomwalk3}
+\end{figure}
+
+The run \textit{ERROR\_no\_random\_seed\_specified} is a derivative of
+\textit{RUN\_random\_walk}, for which the seed is specified to $0$.
+Setting the seed to $0$ is functionally equivalent to not setting it at all
+because the default value is also $0$.
+With $seed=0$, the model will generate a seed from the
+system clock. This is not truly an error test-case, but it is labeled as such
+because it is not suitable for regression testing --
+the output from this run changes with every execution, as expected.
+\clearpage
+
+
+\subsection{RUN\_function} \label{sec:verif:FM:function}
+\par In RUN\_function, a function fault is created for each of the valid types.
+
+One of two independent variables is used for each function:
+\begin {itemize}
+  \item \textit{current\_time} $(t)$ has a domain $[0,70]$
+  \item \textit{offset\_time} $t'=t-30$ is offset from \textit{current\_time}
+    and has domain $[-30,40]$. This supports testing of the sign-transition in
+    the independent variable (when its value is configured to be
+    \textit{absolute}, if it is configured to be \textit{relative}, it will
+    start from $0$ and be positive thereafter).
+\end{itemize}
+
+This run utilizes 12 of the 13 variables (excluding \verb'var_bool')
+to cover a broad distribution of the
+available function options. A description of the mapping between function
+configurations and specific variables follows. The results of all 12
+variables are shown in Figures \ref{fig:function1} and \ref{fig:function2}
+following the description.
+
+
+\begin{enumerate}
+\subsubsection{Linear Function} \label{sec:verif:FM:function:linear}
+ \item \verb'var_char' (logged as \verb'var_char_numeric') uses the trigger
+   simply named \textit{trigger}, which triggers when $t\geq5$. This fault uses:
+
+   \begin {itemize}
+     \item \textit{current\_time} $(t)$ as its independent variable, with
+       parameters:
+     \item nominal value 0
+     \item rate 10
+   \end{itemize}
+   The output value starts to ramp up at $t=5$; the variable overflows at $127$
+   and wraps back to $-128$, producing a saw-tooth profile.
+
+ \item \verb'var_uchar' uses the same configuration as \verb'var_char', except
+   the rate is set to $-10$ and the \textit{nominal} keyword is switched for the
+   \textit{initial} keyword in setting the parameters (these two keywords
+   are interchangeable). It produces a similar
+   profile, except the saw-tooth
+   pattern is reversed by the sign of the rate, and the unsigned nature of the
+   variable shifts the range to non-negative values, $[0,255]$.
+
+ \item \verb'var_sint' uses the same configuration as \verb'var_char', except
+   the nominal value is set to $200$. This fault introduces a step at $t=5$ and
+   smooth slope thereafter.
+
+ \item \verb'var_usint' is also based on the configuration of \verb'var_char',
+   but uses \textit{test\_object.offset\_time} as the independent
+   variable for the linear-function, set to be used in a \textit{relative}
+   configuration. In its relative configuration, this will be interpreted as
+   starting from $0$ and produce a smooth transition to the linear ramp.
+   Additionally, for this configuration, neither \textit{nominal} nor
+   \textit{initial} keywords were used to specify the zero value of the
+   y-intercept. This value defaults to zero without specification.
+
+ \item \verb'var_int' also uses \textit{test\_object.offset\_time} as the
+   independent variable but in an absolute configuration. At $t=5$,
+   $t'-5-30=-25$ and the fault function will have a value $f=0+10(-25)=-250$.
+   The output should step down, then transition to its smooth up-ramp.
+
+\subsubsection{Periodic Functions}
+Note -- for periodic functions, the difference between treating the independent
+variable as \textit{absolute} or \textit{relative} is largely moot.
+The function is evaluated
+indirectly from the independent variable, with the independent variable used to
+generate the phase of the periodic function, and the phase used to generate its
+value. This phase
+is always incremented (approximation to being numerically integrated) based on
+the difference between the current and previous values of the independent
+variable; additionally, the incremented/integrated component of the phase always
+starts at $0.0$. In a sense then, the independent value is always treated as
+being \textit{relative} when using periodic functions. Consequently, without
+loss of generality, we can always use \textit{current\_time} (rather than
+\textit{offset\_time} as the independent variable, and must apply an initial
+phase offset to introduce a sign-change in the value of phase.
+
+\subsubsection{Square Wave}
+ \item \verb'var_uint' uses the standard \textit{trigger} with
+   \textit{test\_object.current\_time} as the
+   independent variable, in a relative configuration. The square-wave is
+   configured to have an amplitude of $4$ and frequency of $0.1$ (i.e. period
+   is $10$). At $t=5$, the square-wave should initiate and continue for the
+   duration of the run, starting with a step up at phase $0.0$. Note on
+   verification data, not seen in plots for lack of resolution: the steps taken
+   at phase = $\phi = {0, 0.5}$ may be offset by one frame from expectation
+   based on the rounding associated with numerical integration to these critical
+   values. The result for
+   $\phi=0.499999999$ and
+   $\phi=0.500000001$ are well defined and distinct, making the result for
+   $\phi=0.500000000$ ambiguous depending on which side of the line the
+   approximated value falls.
+
+\subsubsection{Absolute Independent Variable}
+ \item \verb'var_lint' uses a square-wave fault configured similarly to the
+   previous case, except that it uses \textit{test\_object.current\_time} as
+   the independent variable in an absolute configuration. As discussed above
+   (under \textit{Periodic Functions}), this should make no difference and the
+   results from this fault should mirror those from \verb'var_uint' (albeit
+   shifted up by 1 because the nominal value of \verb`var_lint` prior to
+   application of the fault is 1 larger than that of \verb'var_uint').
+
+\subsubsection{Offset Parameter / Zero-crossing}
+ \item \verb'var_ulint' is similar to  \verb'var_uint' except that the phase
+   is now provided a phase-offset of $-2.5$ (actually, $-2.49999999$ to avoid
+   the ambiguity of the step function that is applied at a half-integer phase).
+   This fault should replicate a similar square-wave pattern, this time
+   verifying that the square-wave correctly computes as the phase changes sign -
+   (it starts negative due to the phase-offset and continues to increase through
+   zero).
+   Note also that because the phase starts at $-2.49999999$ (or equivalently,
+   at $+0.50000001$), the square-wave should start at its lower value, with a
+   step-down.
+
+\subsubsection{Evolving Parameters}
+ \item \verb'var_llint' is similar to  \verb'var_ulint' except that the phase
+   offset is now also given a rate of $0.1$, meaning that the phase-offset
+   continually increases. This should increase the rate at which the phase
+   advances, effectively doubling the frequency (the phase advances by 0.1 per
+   second due to integrating the constant frequency, and by another 0.1 per
+   second because the phase-offset is increasing by that rate).
+
+\subsubsection{Evolving Parameters with Overwrites and Independent
+               Independent-Variable}
+ \item \verb'var_ullint' returns the phase-offset to a constant but applies a
+   rate to the amplitude and frequency. The amplitude is progressively decreased
+   from $400$ with a rate of $-5$. The frequency is also set to decrease from an
+   initial value of $0.35$ with a rate of $+0.01$ using
+   \textit{negative\_time} as the independent variable for frequency.
+   At $t=40$, the sign of the frequency rate is reversed (using the
+   optional flag, see Section \ref{sec:formulation:fault:params}).
+   For $5<t<40$, the width of the square-wave pattern should broaden as the
+   frequency drops towards zero; for $40<t<70$, the width of the
+   square-wave pattern should narrow as the frequency increases in magnitude
+   again as it becomes increasingly negative.
+   Throughout the run (for $t>5$), the amplitude decreases.
+
+   Note that this variable (\verb'var_ullint') is an integer, so to make this
+   pattern appear less discrete, we needed to increase the amplitude of this
+   square wave. But it is also an unsigned integer, and simply increasing
+   the amplitude would have pushed the resulting value negative, wrapping
+   around to a large positive value.
+   To overcome this problem, we apply fire-limited overwrites (single-shot,
+   limited with \textit{fire\_limit = 1} to both \verb'constant\_ullint'
+   and \verb'var\_ullint' using the same trigger. Consequently, the study of
+   this pattern
+   required an additional 2 faults to prepare it.
+
+  \subsubsection {Triangle Wave}
+  \item \verb'var_float' is similar to \verb'var_ulint' except that the function
+    pattern is switched to a triangle-wave.
+
+  \subsubsection {Sine Wave}
+  \item \verb'var_double' uses a similar configuration, but with a sine-wave.
+  This simple pattern is retained until $t=35$
+
+  \subsubsection {Superimposed Functions} \label{sec:verif:FM:function:superimposed}
+  \verb'var_double' continues for $t>35$ with the application of a second
+    fault, this time a square-wave with a period double that of the sine-wave.
+    This applies a $\pm1$ shift to the sine-wave, alternating between subsequent
+    periods of the sine-wave.
+
+\end{enumerate}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.55]{graphics/verif_function1.png}
+  \caption{RUN\_function Results (Part I)}
+  \label{fig:function1}
+\end{figure}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.55]{graphics/verif_function2.png}
+  \caption{RUN\_function Results (Part II)}
+  \label{fig:function2}
+\end{figure}
+
+
+The results of RUN\_function are shown in Figure \ref{fig:function1} and
+\ref{fig:function2}.
+All the variables show the expected behaviour described in this section.
+
+\clearpage
+
+\subsection{RUN\_function2} \label{sec:verif:FM:function2}
+\textit{RUN\_function2} is a simpler set of tests than \textit{RUN\_function},
+targeted at evaluating the template nature of the independent variables. As in
+\textit{RUN\_function}, a set of linear function faults is established to apply
+to the different variable types. In \textit{RUN\_function}, the independent
+variable for the faults was simply the simulation time, allowing the focus
+to be on evaluating the function behavior. For this set of tests, we
+want to test the ability to use different independent variables; for each
+fault-function, we assign the independent variable to be the output of one of
+the faulted variables.
+
+To keep the situation analytically verifiable, most linear functions are either
+$y=2x$ or $y=0.5x$, resulting in the step-by-step changes being in powers of 2.
+
+The configuration of the test is shown in Table \ref{tbl:function2} and the
+results in Table \ref{tbl:function2_results}. Because this test is only
+evaluating whether different variables can be used as independent variables,
+it is only run for a few steps to confirm the expected pattern.
+
+\begin{table}[ht]
+\centering
+\caption{RUN\_function2 Configuration} \label{tbl:function2}
+\begin{tabular}{|l|c|c|c|} \hline
+\textbf{variable} & \textbf{independent variable} & \textbf{rate} &
+\textbf{step-difference} \\ \hline
+var\_char & current\_time & 1 & 1 \\ \hline
+var\_uchar & var\_char & 2 & 2 \\ \hline
+var\_sint & var\_uchar & 2 & 4 \\ \hline
+var\_usint & var\_sint & 2 & 8 \\ \hline
+var\_int & var\_usint & 0.5 & 4 \\ \hline
+var\_uint & var\_int & 0.5 & 2 \\ \hline
+var\_lint & var\_uint & 0.5 & 1 \\ \hline
+var\_ulint & var\_lint & 2 & 2 \\ \hline
+var\_llint & var\_ulint & 2 & 4 \\ \hline
+var\_ullint & var\_llint & 2 & 8 \\ \hline
+var\_float & var\_ullint & 0.5 & 4 \\ \hline
+var\_double & var\_float & 0.5 & 2 \\ \hline
+var\_double & var\_double & 10 & 20 \\ \hline
+var\_double & var\_bool & 2 & XXX \\ \hline
+\end{tabular}
+\end{table}
+Note - \verb'var_double' is given 3 faults:
+\begin {itemize}
+ \item one using \verb'var_float'. This produces steps of 2.
+ \item one using itself, \verb'var_double' to test tests whether a fault can be
+       self- referential. With a rate of 10, this produces steps of 20 (10 times
+       the 2 from the first fault)
+ \item one using \verb'var_bool', a boolean variable. Boolean variables cannot be
+       used as independent variables, this fault generates an error message.
+\end {itemize}
+The two valid faults combine to produce steps of 22 between each data point.
+
+
+\begin{table}[ht]
+\centering
+\caption{RUN\_function2 Results} \label{tbl:function2_results}
+\begin{tabular}{|l|c|c|c|c|c|c|c|} \hline
+\textbf{current\_time}	 & \textbf{0.00} & \textbf{1.00} & \textbf{2.00} &
+\textbf{3.00000} & \textbf{4.00000} & \textbf{5.00000} & Delta \\ \hline
+var\_char	   & 98.00 & 99.00 & 100.00 & 101.00 & 102.00 & 103.00 & 1 \\ \hline
+var\_uchar	 & 1.00  & 3.00  & 5.00   & 7.00   & 9.00   & 11.00  & 2 \\ \hline
+var\_sint	   & 2.00  & 6.00  & 10.00  & 14.00  & 18.00  & 22.00  & 4 \\ \hline
+var\_usint	 & 3.00  & 11.00 & 19.00  & 27.00  & 35.00  & 43.00  & 8 \\ \hline
+var\_int	   & 5.00  & 9.00  & 13.00  & 17.00  & 21.00  & 25.00  & 4 \\ \hline
+var\_uint	   & 5.00  & 7.00  & 9.00   & 11.00  & 13.00  & 15.00  & 2 \\ \hline
+var\_lint	   & 8.00  & 9.00  & 10.00  & 11.00  & 12.00  & 13.00  & 1 \\ \hline
+var\_ulint	 & 7.00  & 9.00  & 11.00  & 13.00  & 15.00  & 17.00  & 2 \\ \hline
+var\_llint	 & 8.00  & 12.00 & 16.00  & 20.00  & 24.00  & 28.00  & 4 \\ \hline
+var\_ullint	 & 9.00  & 17.00 & 25.00  & 33.00  & 41.00  & 49.00  & 8 \\ \hline
+var\_float	 & 0.10  & 4.10  & 8.10   & 12.10  & 16.10  & 20.10  & 4 \\ \hline
+var\_double	 & 0.20  & 22.20 & 44.20  & 66.20  & 88.20  & 110.20 & 22\\ \hline
+\end{tabular}
+\end{table}
+
+\clearpage
+
+\subsection{RUN\_initial\_bias} \label{sec:verif:FM:initial_fault}
+In this run, we are testing the fault location \textit{INIT}, which should only
+be applied during initialization. For this scenario, we use the file
+\textit{xml\_files/initial\_bias.xml} to configure a Fault to
+bias \verb'var_float' by $+2.5$ at initialization, with no other faults
+registered. The scenario uses the natural incremental progression of the sim
+variables rather than the typical reset-to-constant; this allows the initial
+bias to be preserved. The scenario logs the affected variable \verb'var_float'
+and \verb'var_double' as a control.
+We should epect to see:
+\begin{itemize}
+\item \verb'var_float' initially incremented from its initial value of $0.1$ by
+      $2.5$ from the bias; by the end of the first cycle, the incremental
+      progression adds an additional $1.0$ to produce an initial logged value
+      of $0.1+2.5+1.0 = 3.6$. Thereafter, the value should increase by $+1.0$
+      per cycle, or $+10.0$ per second.
+\item \verb'var_double' is used as the control. It starts at $0.2$ and is
+      subject to the same natural progression, but without the initial bias.
+      \verb'var_double' should therefore always log a value that is $2.4$ lower
+      than \verb'var_float'.
+\end{itemize}
+These expectations are confirmed in Figure \ref{fig:verif:init_bias}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_init_bias.png}
+  \caption{RUN\_initial\_bias Results}
+  \label{fig:verif:init_bias}
+\end{figure}
+
+
+
+\subsection{RUN\_triggers} \label{sec:verif:FM:triggers}
+\par RUN\_triggers tests all the valid types of triggers (including string
+triggers) and all of the possible operators.
+The faults all act on the constant
+values that are used to replace the variable values at the beginning of every
+timestep. This confirms that faults can be applied to protected and const
+variables. Each fault is also given a fire limit of 1; while the fault will
+disable after a single application, there is no mechanism for changing the value
+of these const variables so they remain in their faulted state.
+
+The triggers are listed in Table \ref{tbl:triggers}.
+\begin{table}[htb]
+\centering
+\caption{RUN\_trigger Faults} \label{tbl:triggers}
+\begin{tabular}{|l|c|c|} \hline
+\textbf{\#} & \textbf{Trigger Condition} & \textbf{Action} \\ \hline
+1 & command $\neq$ "hold"  & constant\_bool = true \\ \hline
+2 & var\_bool = true       & constant\_char = 100 \\ \hline
+3 & var\_char > 99         & constant\_uchar = 5 \\ \hline
+4 & var\_uchar = 5         & constant\_sint = 6 \\ \hline
+5 & var\_sint $\neq$ 2     & constant\_usint = 0 \\ \hline
+6 & var\_usint $\leq$ 1    & constant\_int = 1 \\ \hline
+7 & var\_int < 2           & constant\_uint = 9 \\ \hline
+8 & var\_uint $\geq$ 8     & constant\_lint = 10 \\ \hline
+9 & var\_lint $\geq$ 10    & constant\_ulint = 11 \\ \hline
+10 & var\_ulint $\geq$ 11  & constant\_llint = 12 \\ \hline
+11 & var\_llint $\geq$ 12  & constant\_ullint = 13 \\ \hline
+   &                       &                       \\ \hline
+12 & var\_ullint $\geq$ 60 & constant\_float = 1.0001 \\ \hline
+13 & var\_float $\neq$ 0.1 & constant\_double = 0.3 \\ \hline
+14 & var\_double = 0.3     & constant\_bool = false \\ \hline
+   &                       &                       \\ \hline
+15 & command = "stop"      & constant\_uchar = 265 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+ \item \verb"command" is a std::string that is only used by this run; it is
+   initialized to the value "hold". At $t=0.3$, it is changed to "go",
+   triggering the first fault in Table \ref{tbl:triggers}. This fault sets
+   \verb"constant_bool" to true.
+ \item On the next timestep ($t=0.4$), the value of \verb"constant_bool" is
+   copied to \verb"var_bool", leading to the triggering of the second fault
+   which sets \verb"constant_char" to $100$.
+ \item At $t=0.5$, \verb"constant_char" is copied to \verb"var_char" and the
+   third fault is triggered.
+ \item The faults continue to cascade, stopping at fault 11, which sets
+   \verb"constant_ullint" to $13$, which is copied to \verb"var_ullint" at
+   $t=1.4$. Fault 12 is monitoring for \verb"var_ullint" being $\geq 60$, which
+   is not satisfied.
+ \item at $t=1.7$, the trigger-value for the next value is reduced to $10.0$
+   using the method \newline
+   \textit{set\_trigger\_value(...)}. This continues the
+   cascade of
+   faults, triggering faults 13 and 14 in subsequent timesteps.
+ \item At $t=1.9$, \verb"command" is assigned the string ``stop'', triggering
+   fault 15. This fault sets \newline
+   \verb'constant_uchar' to an out-of-domain value
+   ($265$), which is wrapped back to $9$.
+\end{itemize}
+
+The results for this run are shown in Figure \ref{fig:triggers}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_triggers.png}
+  \caption{RUN\_triggers Results}
+  \label{fig:triggers}
+\end{figure}
+
+\clearpage
+
+\subsection{RUN\_trigger\_limited}
+\textit{RUN\_trigger\_limited} is used to test the \textit{fire\_limit}
+specification on the trigger-count.
+
+The scenario is configured to apply two Overwrite-Faults, both using the same
+Trigger.
+The Trigger is first triggered at $t=0.2$, with a fire-limit, or
+trigger-count-limit of 5.
+
+Both Faults utilize the Trigger at $t=0.2$ and at $t=0.3$. At $t=0.4$, the
+first Fault exercises the Trigger for the 5th time, and it hits its
+trigger-count-limit. The second Fault sees the Trigger as non-triggered and
+the Fault is not applied.
+
+At $t=0.7$, the limiting trigger-count is removed, allowing the Fault to
+reapply to both variables.
+
+Results are confirmed in Figure
+\ref{fig:trigger_limited}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_trigger_limited.png}
+  \caption{RUN\_trigger\_limited Results}
+  \label{fig:trigger_limited}
+\end{figure}
+
+
+\subsection{RUN\_errors} \label{verif_errors}
+\textit{RUN\_errors} hits all the non-fatal errors in FaultManager.
+Each of these errors produces an error message unless otherwise stated.
+\begin{itemize}
+\item Invalid trigger specification in the XML file
+  \begin{itemize}
+  \item Empty trigger group (no error message)
+  \item Attempt to reuse a trigger that hasn't been defined earlier in the
+        file (invalid reuse\_name)
+  \item Missing trigger name
+  \item Duplicate trigger name
+  \item Missing assignment for variable
+  \item Variable doesn't exist
+  \item Variable is a pointer
+  \item Missing comparison type (operator)
+  \item Invalid comparison type (operator)
+  \item Missing trigger value
+  \item Invalid random value specification (\verb"RandValue")
+  \item Variable is of an invalid, non-pointer type
+        case)
+  \item Periodic trigger with incomplete specification
+  \item Periodic trigger with negative period
+  \item Periodic trigger with invalid periodic length (length is greater than
+        period)
+  \end{itemize}
+\item Invalid fault specification in XML file
+  \begin{itemize}
+  \item Missing fault name
+  \item Duplicate fault name
+  \item Missing Location
+  \item Invalid Location
+  \item Missing variable specification node
+  \item Missing variable name
+  \item Variable doesn't exist
+  \item Missing fault type for Boolean
+  \item Invalid fault type for Boolean
+  \item Variable is of an invalid, non-pointer type
+  \item Missing fault type
+  \item Invalid fault type
+  \item Bias faults
+    \begin{itemize}
+    \item Missing bias node
+    \item Missing bias value
+    \end{itemize}
+  \item Scale faults
+    \begin{itemize}
+    \item Missing scale node
+    \item Missing scale value
+    \end{itemize}
+  \item Overwrite faults
+    \begin{itemize}
+    \item Missing Overwrite and RandValue nodes
+    \item Incomplete Overwrite and missing RandValue nodes
+    \item Missing Overwrite and incomplete RandValue nodes
+    \item Overwrite and RandValue nodes competing
+    \end{itemize}
+  \item Function faults
+    \begin{itemize}
+    \item Missing Function node
+    \item Missing function type
+    \item Invalid function type
+    \item Missing independent variable node
+    \item Independent variable errors
+      \begin{itemize}
+      \item Missing variable name
+      \item Variable doesn't exist
+      \item Invalid variable
+      \end{itemize}
+    \item Periodic functions
+      \begin{itemize}
+      \item Missing amplitude node
+      \item Missing amplitude nominal value
+      \item Missing frequency node
+      \item Missing frequency nominal value
+      \item Missing amplitude rate with an independent variable specified
+      \item Missing amplitude independent variable with specified rate
+      \end{itemize}
+    \item Linear functions
+      \begin{itemize}
+      \item Missing parameters node
+      \item Missing rate
+      \end{itemize}
+    \end{itemize}
+  \item White-noise faults
+    \begin{itemize}
+    \item Missing RandValue node
+    \item Invalid random number configuration
+    \end{itemize}
+  \item Random Walk faults
+    \begin{itemize}
+    \item Missing RandValue node
+    \item Invalid random distribution specification
+    \end{itemize}
+
+  \item Random Number Configuration errors
+    \begin{itemize}
+    \item invalid random distribution specification
+    \item Missing mean on Normal distribution
+    \item Missing standard deviation on Normal distribution
+    \item Missing minimum value on Uniform distribution
+    \item Missing maximum value on Uniform distribution
+    \end{itemize}
+
+  \item Setter errors
+    \begin{itemize}
+    \item Invalid fault name in \textit{set\_fault\_enabled}
+    \item Invalid fault name in \textit{set\_fault\_trigger\_enabled}
+    \item Invalid trigger name in \textit{set\_fault\_trigger\_enabled}
+    \item Invalid fault name in \textit{set\_fault\_param}
+    \item Invalid trigger name in \textit{set\_trigger\_value}
+    \item Invlid setting of a numeric value to a string-based trigger in
+          \textit{set\_trigger\_value}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+The faults are configured in \textit{xml\_files/errors.xml}.
+
+This file results in four valid faults, and six valid triggers; all other
+content in \textit{errors.xml} results in unusable configurations.
+
+The four valid faults are:
+\begin{itemize}
+  \item \textit{Valid Fault} is used as a control, it is fully functional.
+        It results in the
+        application of a $+30$ bias to \verb'var_double'.
+  \item \textit{Trigger Errors} has 4 valid triggers, one of which is fully
+        configured and used throughout the file (\textit{valid trigger})
+        and the other three are used to explore non-terminal configuration
+        errors. It results in applying a bias of $+40$ to the value of
+        \verb'var_float'.
+  \item \textit{Redundant Spec Overwrite} evaluates a redundantly specified
+        overwrite-Fault. It results in overwriting the value of
+        \verb'var_float', setting the value to $2$.
+  \item \textit{String Periodic Trigger} is used to evaluate the consequences
+        of a downstream reassignment to the configuration of its
+        \textit{string trigger} trigger. It results in the application of
+        a $+2$ bias to \verb'var_double'.
+\end{itemize}
+
+There are six valid Trigger definitions:
+\begin{itemize}
+ \item \textit{valid trigger} is defined within the definition of the
+       first Fault (\textit{Trigger Errors}). This Trigger monitors for
+       the simulation time being greater than 0, which occurs on the
+       second cycle. It is used for all but one of the Faults.
+ \item A second Trigger named \textit{valid trigger} is defined to test
+       the detection of duplicate names, which is a non-critical situation
+       so it remains as a valid Trigger. This Trigger monitors for
+       the simulation time being greater than 2, which is not satisfied
+       during \textit{RUN\_errors}.
+ \item Three Triggers are used to test faulty periodic configurations:
+   \begin{itemize}
+   \item \textit{Incomplete Period}
+   \item \textit{Negative Period}
+   \item \textit{Invalid Periodic Length}
+   \end{itemize}
+       Like \textit{valid trigger}, these three Triggers are also configured
+       within the definition of the (\textit{Trigger Errors}) Fault and will
+       trigger when simulation time is greater than 0.
+       These three Triggers are configured with an invalid periodicity;
+       the invalid periodicity invalidates only the periodic nature of the
+       trigger, leaving each of these Triggers functionally equivalent to
+       \textit{valid trigger}.
+ \item \textit{string trigger} is used only in the
+       \textit{String Periodic Trigger} fault; it is used to test whether a
+       valid Trigger that is later given an invalid assignment will retain
+       its original valid configuration.
+\end{itemize}
+
+For convenience, most (all except for \textit{string trigger}) of the
+trigger configuration errors are defined within the same Fault definition
+(\textit{Trigger Errors}).
+There is a unique trigger defined within this fault for each of the
+configuration errors.
+
+\paragraph{Results}
+The four valid faults:
+
+\begin{itemize}
+  \item \textit{Valid Fault} is configured to use the single
+        \textit{valid trigger} trigger; this Fault is applied
+        on the second cycle, when \textit{valid trigger} triggers.
+  \item \textit{Trigger Errors} has five valid triggers (all except
+        \textit{string trigger}). This Fault is
+        never applied because the second \textit{valid trigger}
+        Trigger does not satisfy its trigger criterion.
+  \item \textit{Redundant Spec Overwrite} is configured to use the single
+        \textit{valid trigger} trigger; this Fault is applied
+        on the second cycle, when \textit{valid trigger} triggers.
+  \item \textit{String Periodic Trigger} is configured to use the single
+        \textit{string trigger} trigger; this Fault is applied
+        immediately, because \textit{string trigger} is always satisfied.
+\end{itemize}
+The result is that:
+\begin{itemize}
+  \item On the first cycle, \verb'var_double' is biased by $+2$
+  \item On the second cycle, \verb'var_double' is biased by $+32$
+       (compound effect of \textit{String Period Trigger} and \textit{Valid
+       Fault}), and \verb'var_float' is assigned the value $2$
+       (\textit{Redundant Spec Override}).
+\end{itemize}
+These results are confirmed in Figure \ref{fig:RUN_error}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_RUN_error.png}
+  \caption{Results of RUN\_error}
+  \label{fig:RUN_error}
+\end{figure}
+
+
+The other faults defined in \textit{errors.xml} all have critical errors in
+their configurations. While they all are configured to use a valid trigger,
+the other errors prevent them from being made operational. None of these
+other faults should cause any effect.
+
+Examination of the simulation data (saved in verif\_data/RUN\_errors/log
+\_fault\_variables.csv), the errors printed to the console, and the code
+coverage report shows that this scenario functions as expected.
+
+\subsection{Testing Terminal Errors} \label{verif_fails}
+There are three scenarios that test terminal errors:
+\begin{itemize}
+  \item \textit{FAIL\_bad\_filename} specifies the XML filename,
+        \textit{fault\_file="non-existent file"} to be a non-existent file.
+        The run terminates with an error message indicating that the
+        specified XML file could not be opened.
+        \begin{figure}[h!]
+          \centering
+          \includegraphics[scale=0.5]{graphics/verif_fail_bad_filename.png}
+        \end{figure}
+  \item \textit{FAIL\_invalid\_xml} specifies the XML filename,
+        \textit{fault\_file="xml\_files/invalid.xml"}; this file exists
+        but idoes not provide the syntax necessary to be a valid XML
+        definition of a \verb'FaultManager' structure hierarchy.
+        \begin{figure}[h!]
+          \centering
+          \includegraphics[scale=0.5]{graphics/verif_fail_invalid_xml.png}
+        \end{figure}
+  \item \textit{FAIL\_bad\_location} attempts to execute the
+        \textit{FaultManager::update(...)} method with an invalid `location'
+        specification. The `location' setting indicates which set of
+        Faults (e.g. \textit{UPSTREAM, DOWNSTREAM}) should be applied and
+        this test attempts to use \textit{INVALID}, which is not one of
+        the four recognized locations.
+        \begin{figure}[h!]
+          \centering
+          \includegraphics[scale=0.5]{graphics/verif_fail_bad_location.png}
+        \end{figure}
+\end{itemize}
+
+
+\section{SIM\_fault} \label{sec:verif:DI}
+\par SIM\_fault instantiates four Faults and two Triggers to test specific
+content related to making direct assignments to instantiated faults.
+Direct assignments are not possible using the Fault Manager architecture.
+
+The two Triggers are:
+\begin{itemize}
+  \item \textit{trigger} monitors the \textit{current\_time} variable (of
+        type \textit{double});
+        this Trigger is used in almost all test scenarios.
+  \item \textit{trigger\_str} monitors \textit{control\_string} (of type
+        \textit{std::string}); this Trigger is used only in the
+        two \textit{RUN\_string\_trigger*} scenarios.
+\end{itemize}
+
+The four Faults are:
+\begin{itemize}
+  \item \textit{fault\_function} is a \textit{FaultFunction<double>} instance.
+       It is used in:
+  \begin{itemize}
+    \item \textit{RUN\_disable\_linear\_*} to investigate the effect of
+          disabling and later re-enabling the Fault mid-simulation.
+    \item \textit{RUN\_linear} to provide a baseline for comparison with the
+          \textit{RUN\_linear\_int}.
+    \item \textit{RUN\_linear\_invalid\_comparator} and
+          \textit{RUN\_linear\_periodic} as a convenient baseline to test
+          additional capabilities.
+    \item \textit{RUN\_new\_rate\_*} to investigate the effect of changing
+          the linear function;
+    \item \textit{RUN\_sinewave} to investigate the reshaping of a
+          function-fault mid simulation.
+    \item \textit{RUN\_string\_trigger*} to investigate the setting of
+          trigger values when a Trigger is using a string variable.
+  \end{itemize}
+  \item \textit{fault\_function\_int} is a similar
+        \textit{FaultFunction<double>}
+        instance. Its independent variable is an integer, which leads to the
+        appearance of a Fault using a discrete variable. This is used in
+        \textit{RUN\_linear\_int}.
+  \item \textit{fault\_noise} is a \textit{FaultWhiteNoise<double>} instance.
+        It is used to test the random number configurations. This
+        Fault is used in the four \textit{RUN\_noise\_*} runs.
+  \item \textit{fault\_stale} is a \textit{FaultStale<double>} instance.
+        It is used in \textit{RUN\_disable\_stale\_*} to investigate the effect
+        of disabling and later re-enabling the Fault mid-simulation.
+\end{itemize}
+
+All four Faults use the same target variable.
+Except in \textit{RUN\_disable\_stale\_*}, this target variable is overwritten
+with a constant value at the beginning of each timestep (this is similar to the
+test cases in \textit{SIM\_fault\_manager}). In \textit{RUN\_disable\_stale\_*},
+the fault variable is instead overwritten with the current time at the beginning
+of each timestep because overriding with a constant value makes it difficult
+to discern whether the constant value is an effect of the stale Fault, or the
+system override.
+
+
+\subsection{Linear Function} \label{sec:verif:DI:function:linear}
+In \textit{RUN\_linear\_*}, the function fault is enabled and configured to
+use the linear function \newline  $var = 2 - 0.4t$.  The Trigger is
+configured to apply the Fault for $t >= 1$.
+
+\textit{RUN\_linear} produces the expected linear function after the fault
+is triggered.
+
+\textit{RUN\_linear\_int} uses \textit{time\_int}, an integer truncation of
+\textit{current\_time} for its independent variable. The fault variable should
+look like a set of stairs instead of a straight line.
+
+\textit{RUN\_linear\_periodic} sets the trigger to be periodic, with the trigger
+automatically oscillating between its triggered and non-triggered states. At
+$t=3.5$ the periodicity is removed from the trigger and the fault applies
+continually thereafter.
+
+\textit{RUN\_linear\_invalid\_comparator} sets the triggers \textit{Operator} to
+an invalid enumeration. This means the logical test for triggering will never
+pass and the fault will never be applied.
+
+Note -- the ability to adjust the periodicity of a fault is not available via
+the fault manager.
+
+The results of these runs are shown in Figure \ref{fig:linear}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.45]{graphics/verif_linear.png}
+  \caption{Results of Linear Function Fault}
+  \label{fig:linear}
+\end{figure}
+
+\subsection{Random Noise} \label{sec:verif:DI:noise}
+\par In \textit{RUN\_noise\_*}, the white-noise fault is enabled and configured
+to use one of the distributions outlined below. The faulted variable has a
+nominal value $2$.
+\begin{itemize}
+ \item \textit{gaussian\_narrow}: Normal with mean 3 and standard deviation
+        1, resulting in a narrow range centered on $3+2=5$ with a3-sigma
+        distribution range of $[2,8]$.
+ \item \textit{gaussian\_wide}: Normal with mean 3 and standard deviation 10,
+        resulting in a wider range centered on $3+2=5$ with a 3-sigma
+        distribution range of $[-25,35]$.
+ \item \textit{uniform\_narrow}: Uniform distribution on $[-2,0]$, resulting in
+       output in range $[0,2]$
+ \item \textit{uniform\_wide}: Uniform distribution on $[0,10]$, resulting in
+       output in range $[2,12]$
+\end{itemize}
+
+The results are shown in Figure \ref{fig:noise}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.45]{graphics/verif_random.png}
+  \caption{Results for random number generation}
+  \label{fig:noise}
+\end{figure}
+
+\clearpage
+
+\subsection {Setting New Rate} \label{sec:verif:DI:new_rate}
+\textit{RUN\_new\_rate\_*} investigates the two options for setting a new rate
+mid-sim, as discussed in Section \ref{sec:formulation:fault:params}, with the
+expectation illustrated in Figure \ref{fig:Rate_change}.
+
+\textit{RUN\_new\_rate\_discontinuous} applies a direct override to the
+\textit{rate} value; this leaves the \textit{nominal} value untouched and
+creates a discontinuity.
+
+\textit{RUN\_new\_rate\_continuous} applies the same override to the
+\textit{rate} value, but uses the \textit{set\_param} method with the optional
+3rd argument; this results in modifying the \textit{nominal} value and leaving
+the fault evolution continuous.
+
+The results of these tests are presented in Figure \ref{fig:new_rate}.
+
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_new_rate.png}
+  \caption{Results for setting new rates: \newline
+  Left: Discontinuous function, matching ``point of origin'' at (1,4) \newline
+  Right: Continuous function; recomputed ``point of origin''}
+  \label{fig:new_rate}
+\end{figure}
+
+\clearpage
+
+\subsection {Setting Function Parameters} \label{sec:verif:DI:sinewave}
+\textit{RUN\_sinewave} executes a sinusoidal function fault with varying
+amplitude, frequency, and phase-offset parameters. Table \ref{tbl:sinewave}
+summarizes
+the changes made, more details on these changes are found in the input file at
+\textit{RUN\_sinewave/input.py}
+
+\begin{table}[htb]
+\centering
+\caption{String-trigger Changes} \label{tbl:sinewave}
+\begin{tabular}{|l|c|c|c|} \hline
+\textbf{Time} & \textbf{parameter set} & \textbf {parameter value}\\ \hline
+0 & fault activation & \\ \hline
+  & frequency        & 0.25\\ \hline
+  & amplitude        & 1 \\ \hline
+  & phase-offset     & 0.5 \\ \hline
+  & amplitude-rate   & 0.2 \\ \hline
+2 & phase-offset     & 0 \\ \hline
+7 & amplitude-rate   & 0 \\ \hline
+11 & amplitude-rate   & 0.1 \\ \hline
+13 & amplitude-rate   & 0 \\ \hline
+16 & amplitude        & 1 \\ \hline
+   & frequency        & 0.5 \\ \hline
+19 & amplitude        & -1.0 \\ \hline
+21 & frequency        & 0.25 \\ \hline
+   & amplitude        & 1.5 \\ \hline
+24 & phase-offset-rate& 1/16 \\ \hline
+   & amplitude        & 1.0 \\ \hline
+28 & phase-offset-rate& 0 \\ \hline
+   & amplitude        & 1.5 \\ \hline
+32 & phase-offset-rate& 0.25 \\ \hline
+   & amplitude        & 1.0 \\ \hline
+34 & phase-offset-rate& 0 \\ \hline
+   & amplitude        & 0.5 \\ \hline
+35 & frequency        & 10.4 \\ \hline
+   & frequency-rate   & -0.3 \\ \hline
+42 & frequency-rate   & 0 \\ \hline
+   & amplitude        & 0.2 \\ \hline
+\end{tabular}
+\end{table}
+
+The results of these tests are presented in Figure \ref{fig:sinewave}. The
+red circles in this plot identify the points at which the functional behavior
+is changed. A description of these key features follows:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_sinewave.png}
+  \caption{Results for modifying parameters on-the-fly:
+  the red dots mark the end of each segment where changes are made to
+  some parameter setting}
+  \label{fig:sinewave}
+\end{figure}
+
+\begin{itemize}
+ \item $0<t<2$ Fault starts with phase = $0.5$, amplitude grows.
+ \item $t=2$ phase-offset change results in a half-wavelength
+       phase-shift. Phase jumps from $1.0$ to $0.5$. Both of these are
+       zero-crossings, but the slope changes from positive to negative.
+ \item $2<t<7$ Fault continues to evolve with increasing amplitude
+ \item $t=7$ Amplitude-rate drops to 0 with no change to nominal amplitude.
+       Total amplitude drops to $+1.0$. Phase unaffected by this change,
+       remains at $1.75$ cycles, giving the Fault a value of $-1.0$ and the
+       output a value of $2.0 + (-1.0) = 1.0$.
+ \item $7<t<11$ Fault evolves at constant amplitude; phase advances to $2.75$
+       cycles.
+ \item $t=11$ Amplitude-rate set to $+0.1$; instantaneously increases the
+       amplitude to $2.1$. Phase of $2.75$ cycles is a minimum, making a
+       value $2.0 + (-2.1) = -0.1$.
+ \item $11<t<13$ Fault evolves with increasing amplitude, growing to $2.3$ as
+       the phase advances to $3.25$.
+ \item $t=13$ Amplitude-rate set back to $0.0$, this time with the continuity
+       flag. Amplitude remains at $2.3$. Phase = $3.25$, a maximum point so
+       value = $2.0 + (+2.3) = 4.3$.
+ \item $13<t<16$ Fault evolves at constant amplitude. Phase advances to
+       $4.0$.
+ \item $t=16$ Increase the frequency from $0.25$ to $0.5$, this should halve
+       the period. Also reduce the amplitude to 1.0 to make it easier to
+       identify the transition in the plot. Phase = $4.0$, a zero-crossing.
+ \item $16<t<19$ Fault evolves at higher frequency and lower amplitude than
+       previous. Phase advances to $5.5$.
+ \item $t=19$ Amplitude is set to $-1.0$ to verify the effect of having a
+       negative amplitude. Phase = $5.5$, a zero-crossing. The negation of
+       the amplitude should result in the slope changing from negative (which
+       is expected of a sine-wave with phase of $5.5$) to positive.
+ \item $19<t<21$ The negative amplitude results in a reflection about fault=0
+       and the fault continues to evolve at the same frequency and amplitude.
+       Phase advances to $6.5$
+ \item $t=21$ Frequency is reduced back to 0.25. Amplitude is returned to a
+       positive value ($+1.5$).
+       Phase = $6.5$, a zero-crossing but slope changes sign
+       again, from positive to the more conventional negative associated with
+       a half-phase.
+ \item $21<t<24$ Fault evolves at a lower frequency again, with amplitude
+       $1.5$. Phase advances to $7.25$.
+ \item $t=24$ Phase = $7.25$, a maximum, so value = $2.0 + (+1.5) = 3.5$
+       A phase-offset-rate is introduced, with value $1/16 = 0.0625$. The
+       phase-shift assumes this phase-offset-rate has been applied since the
+       start; with $dt = 24$, this creates an additional phase-offset of $1.5$,
+       Phase jumps from $7.25$ to $8.75$, a maximum to a minimum.
+       Amplitude is changed to 1.0. Value changes instantaneously from $3.5$
+       to $2.0 + (-1.0) = 1.0$.
+ \item $24<t<28$ With phase-offset-rate increasing phase and phase still
+       advancing due to the integration of frequency, the apparent frequency
+       increases from $0.25$ to $0.25 + 0.0625 = 0.3125$ or $5/16$. In the
+       $dt=4$ of this interval, the phase should advance $5/4$ or $1.25$ from
+       $8.75$ to $10.0$.
+ \item $t=28$ The phase-offset-rate is set back to 0 without changing the
+       nominal phase-offset, so the surplus phase resulting from the
+       phase-offset-rate is removed instantaneously. The phase drops from
+       $10.0$ to $8.25$, a zero-crossing to a maximum. The amplitude is
+       increased again to 1.5. The value becomes $2.0 + (+1.5) = 3.5$
+ \item $28<t<32$ Fault evolves at the lower frequency ($0.25$) again,
+       similar to the period $21<t<24$. Phase advances to $9.25$
+ \item $t=32$ The phase-offset-rate is again increased, this time to $0.25$.
+       With $dt=32$, this creates a phase jump of $8.0$; the phase jumps
+       from $9.25$ to $17.25$ (both represent a maximum).
+       The amplitude is set back to $1.0$ to distinguish the next segment
+       from the previous, causing the value to change from $2.0 + (1.5) =
+       3.5$ to $2.0 + (+1.0) = 3.0$.
+ \item $32<t<34$ The Fault evolves to phase $18.25$, with amplitude $1.0$
+ \item $t=34$ The phase-offset-rate is returned to 0, but this time with the
+       continuity flag set. The nominal phase-offset is adjusted to match
+       the current phase of $18.25$. The amplitude is reduced to $0.5$
+       to distinguish the next segment from the previous.
+       The value to changes from $2.0 + (+1.0) = 3.0$ to $2.0 + (+0.5) = 2.5$.
+ \item $34<t<35$ Fault evolves to phase 18.5.
+ \item $t=35$ The final parameter to test is frequency. For the next section,
+       we investigate the effect of a negative frequency. The frequency-rate
+       is set to $-0.3$ and the nominal frequency is raised to $10.4$,
+       leaving a net frequency of $10.4 + 35(-0.3) = -0.1$.
+       The phase will now start to ``unwind'' due to the negative frequency,
+       and do so at an increasing rate as the magnitude of the frequency
+       increases (frequency becomes more negative). The Fault-evolution
+       effectively reverses direction.
+ \item $35<t<42$ As the frequency continues to get more negative, the period of
+       each cycle decreases as the frequency evolves to $10.4 + 42(-0.3) =
+       -2.2$.
+ \item $t=42$ The frequency-rate is returned to 0 with the continuity flag set
+       so the nominal frequency is adjusted to match the evolved frequency
+       value of $-2.2$ from the linear function describing the frequency. The
+       amplitude is reduced to $0.2$ to keep the high-frequncy oscillations
+       easily observable on the plot.
+ \item $t>42$ The plot confirms that the Fault continues to oscillate a little
+       faster than 2Hz.
+\end{itemize}
+
+
+\clearpage
+
+
+\subsection {Disable and Re-enable} \label{sec:verif:DI:disable}
+\textit{RUN\_disable\_*} investigates the two options for disabling a fault. If
+the fault is to remain disabled, the two options produce the same result, but
+differ if the model is later re-enabled. This effect is discussed in section
+\ref{sec:UG:DirectInstantiation:Config:Enabled}
+
+To investigate this effect, we try two different faults -- a linear function
+fault, and a stale fault. For each fault, we try two test cases. In the first,
+we disable directly, setting \textit{enabled = false}, and in the second, we
+disable indirectly by calling \textit{disable()}. For all four test cases, the
+fault is later re-enabled directly, setting \textit{enabled = true}.
+
+By using the \textit{disable()} method, when the fault is re-enabled, it will
+reset and re-compute the initial values. Without the reset, the fault will
+simply continue to use its previous initial values.
+
+\begin{itemize}
+ \item linear, direct: after re-enabling at $t=3.5$, the fault continues to
+   follow the previous line. With a Fault configured to have a nominal value
+   of $2.0$ and a rate of $0.4$, at $t=3.5$, the Fault-value should be $2.0 +
+   0.4 (3.5 - 1.0) = 3.0$. The resulting value should be the sum of the
+   nominal value of \textit{var} and the Fault-value, or $2.0 + 3.0 = 5.0$.
+ \item linear, indirect: after re-enabling, the fault restarts its independent
+   variable, starting back at $0.0 at t=3.5$. The output value therefore starts to
+   evolve from the Fault's nominal value of $2.0$, which is added to the
+   output-variable's nominal value of $2.0$ to produce an initial faulted
+   value of $var=4.0$ as it did at $t=1$.  The new line is parallel to the old
+   line because the \textit{rate} has not changed.
+ \item stale, direct: after re-enabling, the fault returns the variable to its
+   previous stale value of $1.0$.
+ \item stale, indirect: after re-enabling, the fault resets the stale value to
+   the current value and holds there.
+\end{itemize}
+Note -- recall from earlier presentation that the non-faulted value of $var$ is
+constant (at $2.0$) for the linear cases, and equal to $t$ for the stale cases.
+
+The results of these tests are presented in Figure \ref{fig:disable_enable}.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.45]{graphics/verif_disable.png}
+  \caption{Results for Disable / Re-enable}
+  \label{fig:disable_enable}
+\end{figure}
+
+\clearpage
+
+\subsection{String Trigger Behavior} \label{sec:verif:DI:string_trigger}
+In \textit{RUN\_string\_trigger}, we use the \textit{trigger\_str} Trigger
+to trigger the \textit{fault\_function} Fault, to fault the value of
+\textit{test\_object.var} when \textit{control\_string} is equal to some
+trigger-value. In this test, we want to investigate the ability to change the
+trigger-value.
+
+The ability to change trigger-values when using the Fault Manager (XML format)
+implementation is limited to numeric values; the Fault Manager does not support
+changing string trigger-values. This can only be accomplished when using
+an independently-instantiated Trigger and Fault.
+
+The Fault is configured to provide a linear function with a nominal value of
+$2.0$ and rate of $0.4$. The sequence and expected results for this test are
+presented in Table \ref{tbl:str_trigger}.
+The run output data are presented in Figure \ref{fig:str_trigger}.
+
+\begin{table}[htb]
+\centering
+\caption{String-trigger Changes} \label{tbl:str_trigger}
+\begin{tabular}{|l|c|c|c|c|} \hline
+\textbf{Time} & \textbf{control-string} & \textbf{trigger-value} &
+\textbf{fault-status} & \textbf{var}\\ \hline
+0 & `stop' & `go'   & off ($go \neq stop$) & $2.0$ \\ \hline
+1 &        &        & off ($go \neq stop$) & $2.0$ \\ \hline
+2 & `go'   &        & on  ($go = go$)      & $2.0 + (2.0 + 0.4(t-2))$ \\ \hline
+3 &        & `stop' & off ($stop \neq go$) & $2.0$ \\ \hline
+4 & `stop' &        & on  ($stop = stop$)  & $2.0 + (2.0 + 0.4(t-4))$ \\ \hline
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.5]{graphics/verif_string_trigger.png}
+  \caption{Results for String Trigger Test}
+  \label{fig:str_trigger}
+\end{figure}
+
+Additionally, \textit{RUN\_string\_trigger\_GT} operates the same fault with the
+operator or logical comparator changed from ``is-equal-to'' to
+``is-greater-than''. Evaluating relative/comparative values of strings is not
+supported (evaluating whether `stop' > `go' has no unambiguous result);
+this Fault never triggers and the data for this run (not shown) flatlines at
+$2.0$ with no Fault applied.
+
+\subsection{Error Cases}
+This simulation provides three error cases:
+\begin{itemize}
+  \item \textit{ERROR\_double\_initialization} detects duplicate initialization
+        on an independent variable. Because the initialization of an independent
+        variable requires allocation of memory for the \verb'UntypedVariable'
+        templated interface-variable (see Section
+        \ref{sec:formulation:indep_var}), it should be run only once.
+
+        Note -  only the direct-instantiation architecture requires the direct
+        call to \textit{initialize()}.  The Fault Manager architecture makes
+        this call behind the scenes.
+  \item \textit{ERROR\_early\_initialization} detects another initialization
+        problem, this time in the sequencing. To initialize a fault-function, it
+        is first necessary to initialize the independent variable to allocate
+        the memory for the \verb'UntypedVariable' templated interface-variable
+        (see Section \ref{sec:formulation:indep_var}).
+
+        Note -  only the direct-instantiation architecture requires the direct
+        call to \textit{initialize()}.  The Fault Manager architecture makes
+        this call behind the scenes.
+  \item \textit{ERROR\_invalid\_function\_type} detects the invalid
+        specification of the type of function to be used in a Fault-function.
+
+        Note -  only the direct-instantiation architecture requires the direct
+        setting of the function type. An invalid setting while using the Fault
+        Manager architecture is detected in parsing the XML file.
+\end{itemize}
+
+
+\end{document}

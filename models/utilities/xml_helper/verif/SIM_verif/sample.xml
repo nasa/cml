@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SampleRoot ID= "Root1" purpose="0: tree-root">
+  <SampleNode ID="Node1" purpose="1: first level node 1.1"></SampleNode>
+  <TargetNode ID="Node2" Purpose="2: first level node 1.2">
+    <SampleNode ID="Node5" purpose="5: second level node 1.2.1"></SampleNode>
+    <SampleNode ID="Node6" purpose="6: second level node 1.2.2">
+      <SampleNode ID="Node9" purpose="9: third level node 1.2.2.1"></SampleNode>
+      <SampleNode ID="Node10" purpose="10: third level node 1.2.2.2"></SampleNode>
+      <TargetNode ID="Node11" purpose="11: third level node 1.2.2.3"></TargetNode>
+    </SampleNode>
+  </TargetNode>
+  <SampleNode ID="Node3" purpose="3: first level node 1.3">
+    <SampleNode ID="Node7" purpose="7: second level node 1.3.1"></SampleNode>
+    <TargetNode ID="Node8" purpose="8: second level node 1.3.2"></TargetNode>
+  </SampleNode>
+  <TargetNode ID="Node4" purpose="4: first level node 1.4"> </TargetNode>
+</SampleRoot>

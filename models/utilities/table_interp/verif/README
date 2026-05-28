@@ -1,0 +1,19 @@
+This verification test contains the directories as below:
+  - include:  the common code for all the unit tests of table_interp. This common code 
+    uses C++ template to handle the multiple dimensional aray and provide the base test mode.
+  - SIM_table_interp1d: the unit sim test for interpolation on one dimensional table.
+  - SIM_table_interp2d: the unit sim test for interpolation on one dimensional table.
+  - SIM_table_interp3d: the unit sim test for interpolation on three dimensional table.
+  - SIM_table_interp4d: the unit sim test for interpolation on four dimensional table.
+  - SIM_angle_table_interp1d: the unit sim teset for interpolation on one dimensional angle table.
+  - SIM_table_lookup1d: the unit sim test for one dimensional table lookup.
+  - SIM_table_lookup2d: the unit sim test for two dimensional table lookup.
+
+Each of "SIM_*" directory is for one unit sim, and it contains:
+  - include: the customized test model for this specific interpolation.
+  - Log_data: the python code to do logging.
+  - RUN_verif: the specific run with input.py
+  - verif_data: the regresstion data and verified with matlab.
+  - S_define: the main file of unit sim
+  - S_overrides.mk: the customized makefile. 
+

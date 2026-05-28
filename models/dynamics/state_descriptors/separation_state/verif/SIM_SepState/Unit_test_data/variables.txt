@@ -1,0 +1,13 @@
+test_sep.subject.composite_body.state.trans.position[0]
+test_sep.subject.composite_body.state.trans.position[1]
+test_sep.subject.composite_body.state.trans.position[2]
+test_sep.subject.composite_body.state.trans.velocity[0]
+test_sep.subject.composite_body.state.trans.velocity[1]
+test_sep.subject.composite_body.state.trans.velocity[2]
+test_sep.subject.composite_body.state.rot.Q_parent_this.scalar
+test_sep.subject.composite_body.state.rot.Q_parent_this.vector[0]
+test_sep.subject.composite_body.state.rot.Q_parent_this.vector[1]
+test_sep.subject.composite_body.state.rot.Q_parent_this.vector[2]
+test_sep.subject.composite_body.state.rot.ang_vel_this[0]
+test_sep.subject.composite_body.state.rot.ang_vel_this[1]
+test_sep.subject.composite_body.state.rot.ang_vel_this[2]

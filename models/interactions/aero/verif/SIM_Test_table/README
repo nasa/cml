@@ -1,0 +1,19 @@
+This set of runs is not intended to be realistic; the data values are just
+numerical values to test the validity of the interfaces between the classes
+and the external models.
+
+RUN_0*  These runs cover the various nominal run options
+RUN_1*  These runs cover non-terminal mis-configurations
+RUN_2*  These runs cover terminal errors.
+
+Verification Status:
+Have checked that:
+- tables are getting loaded appropriately
+- model is capable of using appropriate environment variables to extract values
+  from the tables for the various coefficients.
+- usage is configurable at the input file level.
+- dispersions can be specified and applied appropriately.
+- appropriate protections are in place to prevent conflicting demands.
+
+Have not checked:
+- The computations of derived coefficients, e.g. CD, CS, CL from CX, CY, CZ.

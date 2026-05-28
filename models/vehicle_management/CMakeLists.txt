@@ -1,0 +1,41 @@
+include(AddCMLLibrary)
+add_cml_library(
+    NAME
+        vehicle_management
+
+    HEADERS
+        commandable_action/include/commandable_action.hh
+        commandable_action/include/commandable_action_set.hh
+        compound_events/include/compound_event.hh
+        compound_events/include/compound_event_manager.hh
+        compound_events/include/compound_event_python_interface.hh
+        compound_events/include/event_trigger.hh
+        compound_events/include/event_trigger_set.hh
+        dummy_vehicle_launcher/include/dummy_vehicle_launcher.hh
+        events_manager/include/event_action.hh
+        events_manager/include/event_action_base.hh
+        events_manager/include/event_variable_assignment.hh
+        events_manager/include/vehicle_events_manager.hh
+        events_manager/include/watch_values_base.hh
+        events_manager/include/watch_values_base_core.hh
+        events_manager/include/watch_values_base_multi.hh
+        events_manager/include/watch_values_delay.hh
+        events_manager/include/watch_values_flipflop.hh
+        events_manager/include/watch_values_set.hh
+        events_manager/include/watch_values_specific.hh
+        events_manager/include/watch_values_specific__jeod.hh
+
+    SOURCES
+        commandable_action/src/commandable_action.cc
+        commandable_action/src/commandable_action_set.cc
+        compound_events/src/compound_event.cc
+        compound_events/src/compound_event_manager.cc
+        compound_events/src/compound_event_python_interface.cc
+        compound_events/src/event_trigger.cc
+        compound_events/src/event_trigger_set.cc
+        dummy_vehicle_launcher/src/dummy_vehicle_launcher.cc
+        events_manager/src/vehicle_events_manager.cc
+        events_manager/src/watch_values_base_core.cc
+        events_manager/src/watch_values_flipflop.cc
+        events_manager/src/watch_values_set.cc
+)

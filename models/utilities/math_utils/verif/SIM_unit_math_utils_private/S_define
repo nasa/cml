@@ -1,0 +1,1007 @@
+//==========================  TRICK HEADER  ================================
+// PURPOSE: (Perform unit-simulation-test of the math utilities model)
+//==========================================================================
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+##include <cmath>
+##include <cfloat>
+
+##include "cml/models/utilities/cml_message/include/cml_message.hh"
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/math_utils.hh"
+##include "../../include/quadratic_solver.hh"
+##include "../../include/std_array_ops.hh"
+
+class MathUtilsPrivateSimObject: public Trick::SimObject {
+public:
+  bool   comparison_failure;
+  double div_protected_vals_double[5];
+  float  div_protected_vals_float[4];
+  double acos_protected_vals_double[3];
+  float  acos_protected_vals_float[3];
+  double asin_protected_vals_double[3];
+  float  asin_protected_vals_float[3];
+  double sqrt_protected_vals_double[4];
+  float  sqrt_protected_vals_float[2];
+  double log_protected_vals_double[4];
+  float  log_protected_vals_float[4];
+  double log10_protected_vals_double[4];
+  float  log10_protected_vals_float[4];
+  bool   is_near_equal_vals[11];
+  bool   has_changed_from_vals[6];
+  bool   is_equal_vals[8];
+  bool   is_within_abs_tolerance_vals[9];
+  bool   is_within_rel_tolerance_vals[9];
+  int    sign_vals[3];
+  double polynomial_vals[4];
+  double quadratic_solver_vals[13][2];
+
+  MathUtilsPrivateSimObject()
+    :
+    comparison_failure(false)
+  {};
+
+  /*****************************************************************************
+  Purpose:(Testing "div_protected" function using both doubles and floats.)
+  *****************************************************************************/
+  void div_protected_testing() {
+    // This section tests the double capabilities of divide_protected.
+    div_protected_vals_double[0] = MathUtils::divide_protected( (double) 15.0,
+                                                                (double)  5.0);
+    compare( MathUtils::is_near_equal( (double) div_protected_vals_double[0],
+                                       (double) 3.0),
+             true,
+             "divide_protected(double 15.0, double 5.0) is_near_equal 3.0");
+
+    div_protected_vals_double[1] = MathUtils::divide_protected( (double)  1.0,
+                                                                (double)  0.0,
+                                                                (double) 70.0);
+    compare( MathUtils::is_near_equal( (double) div_protected_vals_double[1],
+                                       (double) 70.0),
+             true,
+             "divide_protected(double 1.0, double 0.0, 70.0) is_near_equal 70.0");
+
+    div_protected_vals_double[2] = MathUtils::divide_protected( (double) 1.e-300,
+                                                                (double) 1.e300,
+                                                                (double) 2.0);
+    compare( MathUtils::is_near_equal( (double) div_protected_vals_double[2],
+                                       (double) 0.0),
+             true,
+             "divide_protected(double 1.e-300, double 1.e300) is_near_equal 0.0");
+
+    div_protected_vals_double[3] = MathUtils::divide_protected( (double) 1.e38,
+                                                                (double) 1.e-38,
+                                                                (double) 35.0);
+    compare( MathUtils::is_near_equal( (double) div_protected_vals_double[3],
+                                       (double) 1e76),
+             true,
+             "divide_protected(double 1.e38, double 1.e-38, 35.0) is_near_equal 1e76");
+
+    div_protected_vals_double[4] = MathUtils::divide_protected( (double) 1.e300,
+                                                                (double) 1.e-300,
+                                                                (double) 35.0);
+    compare( MathUtils::is_near_equal( (double) div_protected_vals_double[4],
+                                       (double) 35.0),
+             true,
+             "divide_protected(double 1.e300, double 1.e-300, 35.0) is_near_equal 35.0");
+    // This next section tests the float capabilities of divide_protected.
+    div_protected_vals_float[0] = MathUtils::divide_protected( (float) 15.0,
+                                                               (float)  5.0);
+    compare( MathUtils::is_near_equal( (float)  div_protected_vals_float[0],
+                                       (float)  3.0),
+             true,
+             "divide_protected(float 15.0, float 5.0) is_near_equal 3.0");
+
+    div_protected_vals_float[1] = MathUtils::divide_protected( (float)  1.0,
+                                                               (float)  0.0,
+                                                               (float)  3.14);
+    compare( MathUtils::is_near_equal( (float)  div_protected_vals_float[1],
+                                       (float)  3.14),
+             true,
+             "divide_protected(float 1.0, float 0.0, 3.14) is_near_equal 3.14");
+
+    div_protected_vals_float[2] = MathUtils::divide_protected( (float) 1.e-38,
+                                                               (float) 1.e38,
+                                                               (float) 2.0);
+    compare( MathUtils::is_near_equal( (float)  div_protected_vals_float[2],
+                                       (float)  0.0),
+             true,
+             "divide_protected(float 1.e-38, float 1.e38) is_near_equal 0.0");
+
+    div_protected_vals_float[3] = MathUtils::divide_protected( (float) 1.e38,
+                                                               (float) 1.e-38,
+                                                               (float) 5.45678);
+    compare( MathUtils::is_near_equal( (float)  div_protected_vals_float[3],
+                                       (float)  5.45678),
+             true,
+             "divide_protected(float 1.e38, float 1.e-38, 5.45678) is_near_equal 5.45678");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose: (Testing "div_protected" function to ensure that it's NaN and inf
+            value dividing check works as intended and will error or fail out
+            depending on user input.)
+  *****************************************************************************/
+  void div_protected_fail_testing() {
+    MathUtils::divide_protected( (double) 1.0,
+                                 (double) 0.0,
+                                          0.0,
+                                          true);
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing "acos_protected" function using both doubles and floats.)
+  *****************************************************************************/
+  void acos_protected_testing() {
+    // This section tests the double capabilities of acos_protected
+    acos_protected_vals_double[0] = MathUtils::acos_protected( (double) 0.877582561890373);
+    compare( MathUtils::is_near_equal( acos_protected_vals_double[0],
+                                       (double) 0.5,
+                                       10),
+             true,
+             "acos_protected(double 0.877582561890373) is_near_equal 0.5 to within 10 ULP");
+
+    acos_protected_vals_double[1] = MathUtils::acos_protected( (double) -1.1);
+    compare( MathUtils::is_near_equal( acos_protected_vals_double[1], // Out of range test -
+                                       (double) 3.141592653589793),
+             true,
+             "acos_protected(double -1.1) is_near_equal PI");
+
+    acos_protected_vals_double[2] = MathUtils::acos_protected( (double) 1.1);
+    compare( MathUtils::is_near_equal( acos_protected_vals_double[2],  // Out of range test +
+                                       (double) 0.0),
+             true,
+             "acos_protected(double 1.1) is_near_equal 0");
+
+    // This next section tests the float capabilities of acos_protected
+    acos_protected_vals_float[0] = MathUtils::acos_protected( (float) 0.877582561890373);
+    compare( MathUtils::is_near_equal( acos_protected_vals_float[0],
+                                       (float) 0.5),
+             true,
+             "acos_protected(float 0.877582561890373) is_near_equal 0.5");
+
+    acos_protected_vals_float[1] = MathUtils::acos_protected( (float) -1.1);
+    compare( MathUtils::is_near_equal( acos_protected_vals_float[1],  // Out of range test -
+                                       (float) 3.14159265358979),
+             true,
+             "acos_protected(float -1.1) is_near_equal PI");
+
+    acos_protected_vals_float[2] = MathUtils::acos_protected( (float) 1.1);
+    compare( MathUtils::is_near_equal( acos_protected_vals_float[2],   // Out of range test +
+                                       (float) 0.0),
+             true,
+             "acos_protected(float 1.1) is_near_equal 0");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing "asin_protected" function using both doubles and floats.)
+  *****************************************************************************/
+  void asin_protected_testing() {
+    // This section tests the double capabilities of asin_protected.
+    asin_protected_vals_double[0] = MathUtils::asin_protected( (double) 0.479425538604203);
+    compare( MathUtils::is_near_equal( asin_protected_vals_double[0],
+                                       (double) 0.5),
+             true,
+             "asin_protected(double 0.479425538604203) is_near_equal 0.5");
+
+    asin_protected_vals_double[1] = MathUtils::asin_protected( (double) -1.1);
+    compare( MathUtils::is_near_equal( (float) asin_protected_vals_double[1],    // Out of bounds -
+                                       (float) -1.570796326794897),
+             true,
+             "asin_protected(double -1.1) is_near_equal -PI/2");
+
+    asin_protected_vals_double[2] = MathUtils::asin_protected( (double) 1.1);
+    compare( MathUtils::is_near_equal( (float) asin_protected_vals_double[2],    // Out of bounds +
+                                       (float) 1.570796326794897),
+             true,
+             "asin_protected(double 1.1) is_near_equal PI/2");
+
+    // This next section tests the float capabilities of asin_protected.
+    asin_protected_vals_float[0] = MathUtils::asin_protected( (float) 0.479425538604203);
+    compare( MathUtils::is_near_equal( asin_protected_vals_float[0],
+                                       (float)  0.5),
+             true,
+             "asin_protected(float 0.479425538604203) is_near_equal 0.5");
+
+    asin_protected_vals_float[1] = MathUtils::asin_protected( (float) -1.1);
+    compare( MathUtils::is_near_equal( asin_protected_vals_float[1],    // Out of bounds -
+                                       (float)  -1.570796326794897),
+             true,
+             "asin_protected(float -1.1) is_near_equal -PI/2");
+
+    asin_protected_vals_float[2] = MathUtils::asin_protected( (float) 1.1);
+    compare( MathUtils::is_near_equal( asin_protected_vals_float[2],    // Out of bounds +
+                                       (float)  1.570796326794897),
+             true,
+             "asin_protected(float 1.1) is_near_equal PI/2");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing "sqrt" function using both doubles and floats.)
+  *****************************************************************************/
+  void sqrt_protected_testing() {
+    // This section tests the double capabilities of sqrt_protected.
+    sqrt_protected_vals_double[0] = MathUtils::sqrt_protected( (double) 16.0 );
+    compare( MathUtils::is_near_equal( (double) sqrt_protected_vals_double[0],
+                                       (double) 4.0),
+             true,
+             "sqrt_protected(double 16.0) is_near_equal 4.0");
+
+    sqrt_protected_vals_double[1] = MathUtils::sqrt_protected( (double) 2.0 );
+    compare( MathUtils::is_near_equal( (double) sqrt_protected_vals_double[1],
+                                       (double) 1.414213562373095, 
+                                       1.0),
+             true,
+             "sqrt_protected(double 2.0) is_near_equal 1.414213562373095 to within 1 ULP");
+
+    sqrt_protected_vals_double[2] = MathUtils::sqrt_protected( (double) 0.0 );
+    compare( MathUtils::is_near_equal( (double) sqrt_protected_vals_double[2],
+                                       (double) 0.0),
+             true,
+             "sqrt_protected(double 0.0) is_near_equal 0.0");
+
+    // This next section tests the float capabilities of sqrt_protected
+    sqrt_protected_vals_float[0] = MathUtils::sqrt_protected( (float) 16.0 );
+    compare( MathUtils::is_near_equal( (float) sqrt_protected_vals_float[0],
+                                       (float) 4.0),
+             true,
+             "sqrt_protected(float 16.0) is_near_equal 4.0");
+
+    sqrt_protected_vals_float[1] = MathUtils::sqrt_protected( (float) 2.0 );
+    compare( MathUtils::is_near_equal( (float) sqrt_protected_vals_float[1],
+                                       (float) 1.4142135),
+             true,
+             "sqrt_protected(float 2.0) is_near_equal 1.4142135");
+
+    // Error testing
+    sqrt_protected_vals_double[3] = MathUtils::sqrt_protected( (double) -16.0 );
+    compare( MathUtils::is_near_equal( sqrt_protected_vals_double[3],
+                                       (double) 0.0),
+             true,
+             "sqrt_protected(double -16.0) is_near_equal 0.0");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose: (Testing "log_protected" function for both doubles and floats.)
+  *****************************************************************************/
+  void log_protected_testing() {
+    // This section tests the double capabilities of log_protected.
+    log_protected_vals_double[0] = MathUtils::log_protected( (double)  1.0);
+    compare( MathUtils::is_near_equal( log_protected_vals_double[0],
+                                       (double) 0.0),
+             true,
+             "log_protected(double 1.0) is_near_equal 0.0");
+
+    log_protected_vals_double[1] = MathUtils::log_protected(std::exp((double) 1.0));
+    compare( MathUtils::is_near_equal( log_protected_vals_double[1],
+                                       (double) 1.0),
+             true,
+             "log_protected(double e) is equal to 1.0");
+
+    log_protected_vals_double[2] = MathUtils::log_protected( (double)  1.e-308);
+    compare( MathUtils::is_near_equal( (double) log_protected_vals_double[2],
+                                       (double) -709.1962086421661),
+             true,
+             "log_protected(double 1e-308) is_near_equal -709.196");
+
+    log_protected_vals_double[3] = MathUtils::log_protected( (double)  1.e308);
+    compare( MathUtils::is_near_equal( (double) log_protected_vals_double[3],
+                                       (double) 709.1962086421661),
+             true,
+             "log_protected(double 1e308) is_near_equal 709.196");
+
+    // This next section tests the float capabilities of log_protected.
+    log_protected_vals_float[0] = MathUtils::log_protected( (float)  1.0);
+    compare( MathUtils::is_near_equal( log_protected_vals_float[0],
+                                       (float) 0.0),
+             true,
+             "log_protected(float 1.0) is_near_equal 0.0");
+
+    // NOTE -- extra (float) necessary in here. For some reason,
+    // exp((float)1.0) is returning a double on some builds and branching to
+    // test the function using a double parameter instead of a float parameter.
+    log_protected_vals_float[1] = MathUtils::log_protected((float) std::exp((float) 1.0));
+    compare( MathUtils::is_near_equal( log_protected_vals_float[1],
+                                       (float)  1.0,
+                                       1),
+             true,
+             "log_protected(float e) is equal to 1.0 to within 1 ULP");
+
+    // NOTE -- the success criteria for this comparison has shifted between 1.0 and
+    // 0.99999994 on successive compiler upgrades.
+    compare( MathUtils::is_near_equal( log_protected_vals_float[1],
+                                       (float)  0.99999994),
+             true,
+             "log_protected(float e) is equal to 0.99999994");
+
+    log_protected_vals_float[2] = MathUtils::log_protected( (float)  1.e-38);
+    compare( MathUtils::is_near_equal( log_protected_vals_float[2],
+                                       (float) -87.49823),
+             true,
+             "log_protected(float 1e-38) is_near_equal -87.49823");
+
+    log_protected_vals_float[3] = MathUtils::log_protected( (float)  1.e38);
+    compare( MathUtils::is_near_equal( log_protected_vals_float[3],
+                                       (float) 87.49823),
+             true,
+             "log_protected(float 1e38) is_near_equal 87.49823");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose: (Testing "log_protected" function to ensure that the NaN and inf
+            value logarithmic check works as intended and fails the sim.
+            Test out warning part of protection first as well before failure.)
+  *****************************************************************************/
+  void log_protected_fail_testing() {
+    MathUtils::log_protected( (double) -2.0,
+                              (double)  5.0,
+                                        false);
+
+    MathUtils::log_protected( (double) 0.0,
+                              (double) 0.0,
+                                       true);
+  }
+
+  /*****************************************************************************
+  Purpose: (Testing "log10_protected" function for both doubles and floats.)
+  *****************************************************************************/
+  void log10_protected_testing() {
+    // This section tests the double capabilities of log10_protected.
+    log10_protected_vals_double[0] = MathUtils::log10_protected( (double) 1.0);
+    compare( MathUtils::is_near_equal( log10_protected_vals_double[0],
+                                       (double) 0.0),
+             true,
+             "log10_protected(double 1.0) is_near_equal 0.0");
+
+    log10_protected_vals_double[1] = MathUtils::log10_protected( (double)  10.0);
+    compare( MathUtils::is_near_equal( log10_protected_vals_double[1],
+                                       (double) 1.0),
+             true,
+             "log10_protected(double 10.0) is_near_equal 1.0");
+
+    log10_protected_vals_double[2] = MathUtils::log10_protected( (double)  1.e-308);
+    compare( MathUtils::is_near_equal( log10_protected_vals_double[2],
+                                       (double) -308.0),
+             true,
+             "log10_protected(double 1e-308) is_near_equal -308.0");
+
+    log10_protected_vals_double[3] = MathUtils::log10_protected( (double)  1.e308);
+    compare( MathUtils::is_near_equal( log10_protected_vals_double[3],
+                                       (double) 308.0),
+             true,
+             "log10_protected(double 1e308) is_near_equal 308.0");
+
+    // This next section tests the float capabilities of log10_protected.
+    log10_protected_vals_float[0] = MathUtils::log10_protected( (float) 1.0);
+    compare( MathUtils::is_near_equal( log10_protected_vals_float[0],
+                                       (float) 0.0),
+             true,
+             "log10_protected(float 1.0) is_near_equal 0.0");
+
+    log10_protected_vals_float[1] = MathUtils::log10_protected( (float)  10.0);
+    compare( MathUtils::is_near_equal( log10_protected_vals_float[1],
+                                       (float) 1.0),
+             true,
+             "log10_protected(float 10.0) is_near_equal 1.0");
+
+    log10_protected_vals_float[2] = MathUtils::log10_protected( (float)  1.e-38);
+    compare( MathUtils::is_near_equal( log10_protected_vals_float[2],
+                                       (float) -38.0),
+             true,
+             "log10_protected(float 1e-38) is_near_equal -38.0");
+
+    log10_protected_vals_float[3] = MathUtils::log10_protected( (float)  1.e38);
+    compare( MathUtils::is_near_equal( log10_protected_vals_float[3],
+                                       (float) 38.0),
+             true,
+             "log10_protected(float 1e38) is_near_equal 38.0");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing "log10_protected" function to ensure that NaN and inf
+           values passed in are checked correctly and fail out the sim.
+           Test out warning part of protection first as well before failure.)
+  *****************************************************************************/
+  void log10_protected_fail_testing() {
+    MathUtils::log10_protected( (double) -4.0,
+                                (double)  10.0,
+                                          false);
+
+    MathUtils::log10_protected( (double) 0.0,
+                                (double) 0.0,
+                                         true);
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing the "is_near_equal" function for both doubles and floats.)
+  *****************************************************************************/
+  void is_near_equal_testing() {
+    // This section tests the double capabilities of is_near_equal
+    is_near_equal_vals[0] = MathUtils::is_near_equal( (double) 3.45,
+                                                             (double) 3.45);
+    compare( is_near_equal_vals[0],
+             true,
+             "double 3.45 == double 3.45, ulp=0.5");
+
+    is_near_equal_vals[1] = MathUtils::is_near_equal( (double) 1.0000000000000001,
+                                                             (double) 1.0);
+    compare( is_near_equal_vals[1],
+             true,
+             "double 1.0000000000000001 == double 1.0, ulp=0.5");
+
+    is_near_equal_vals[2] = MathUtils::is_near_equal( (double) 1.000000000000001,
+                                                             (double) 1.0);
+    compare( is_near_equal_vals[2],
+             false,
+             "double 1.000000000000001 == double 1.0, ulp=0.5");
+
+    is_near_equal_vals[3] = MathUtils::is_near_equal( (double) 5.4321,
+                                                             (double) 5.4322,
+                                                             (double) 1.0);
+    compare( is_near_equal_vals[3],
+             false,
+             "double 5.4321 == double 5.4322, ulp=1.0");
+
+    is_near_equal_vals[4] = MathUtils::is_near_equal( (double) 5.4321,
+                                                             (double) 5.4322,
+                                                             (double) 1e7);
+    compare( is_near_equal_vals[4],
+             false,
+             "double 5.4321 == double 5.4322, ulp=1e7");
+
+    is_near_equal_vals[5] = MathUtils::is_near_equal( (double) 5.4321,
+                                                             (double) 5.4322,
+                                                             (double) 1e15);
+    compare( is_near_equal_vals[5],
+             true,
+             "double 5.4321 == double 5.4322, ulp=1e15");
+
+    // This next section tests the float capabilities of is_near_equal
+    is_near_equal_vals[6] = MathUtils::is_near_equal( (float) 3.45,
+                                                            (float) 3.45);
+    compare( is_near_equal_vals[6],
+             true,
+             "float 3.45 == float 3.45");
+
+    is_near_equal_vals[7] = MathUtils::is_near_equal( (float) 1.00000001,
+                                                            (float) 1.0);
+    compare( is_near_equal_vals[7],
+             true,
+             "float 1.00000001 == float 1.0");
+
+    is_near_equal_vals[8] = MathUtils::is_near_equal( (float) 1.0000001,
+                                                            (float) 1.0);
+    compare( is_near_equal_vals[8],
+             false,
+             "float 1.0000001 == float 1.0");
+
+    is_near_equal_vals[9] = MathUtils::is_near_equal( (float) 5.4321,
+                                                            (float) 5.4322,
+                                                            (float) 1.0);
+    compare( is_near_equal_vals[9],
+             false,
+             "float 5.4321 == float 5.4322, ulp=1.0");
+
+    is_near_equal_vals[10] = MathUtils::is_near_equal( (float) 5.4321,
+                                                            (float) 5.4322,
+                                                            (float) 1e7);
+    compare( is_near_equal_vals[10],
+             true,
+             "float 5.4321 == float 5.4322, ulp=1e7");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing the "has_changed_from" function
+  *****************************************************************************/
+  void has_changed_from_testing() {
+    has_changed_from_vals[0] = MathUtils::has_changed_from( (double) 3.45,
+                                                                   (double) 4.56);
+    compare( has_changed_from_vals[0],
+             true,
+             "double 3.45 has changed from double 4.56");
+
+    has_changed_from_vals[1] = MathUtils::has_changed_from( (double) 4.56,
+                                                                   (double) 3.45);
+    compare( has_changed_from_vals[1],
+             true,
+             "double 4.56 has changed from double 3.45");
+
+    has_changed_from_vals[2] = MathUtils::has_changed_from( (double) 3.45,
+                                                                   (double) 3.45);
+    compare( has_changed_from_vals[2],
+             false,
+             "double 3.45 has not changed from double 3.45");
+
+    has_changed_from_vals[3] = MathUtils::has_changed_from( (float) 3.45,
+                                                                  (float) 4.56);
+    compare( has_changed_from_vals[3],
+             true,
+             "float 3.45 has changed from float 4.56");
+
+    has_changed_from_vals[4] = MathUtils::has_changed_from( (float) 4.56,
+                                                                  (float) 3.45);
+    compare( has_changed_from_vals[4],
+             true,
+             "float 4.56 has changed from float 3.45");
+
+    has_changed_from_vals[5] = MathUtils::has_changed_from( (float) 3.45,
+                                                                  (float) 3.45);
+    compare( has_changed_from_vals[5],
+             false,
+             "float 3.45 has not changed from float 3.45");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing the "is_equal" function
+  *****************************************************************************/
+  void is_equal_testing() {
+    is_equal_vals[0] = MathUtils::is_equal( (int) 3,
+                                            (int) 3);
+    compare( is_equal_vals[0],
+             true,
+             "int 3 is equal to int 3");
+             
+    is_equal_vals[1] = MathUtils::is_equal( (int) 3,
+                                            (int) 4);
+    compare( is_equal_vals[1],
+             false,
+             "int 3 is not equal to int 4");
+             
+    is_equal_vals[2] = MathUtils::is_equal( (bool) 1,
+                                            (bool) 1);  
+    compare( is_equal_vals[2],
+             true,
+             "bool 1 is equal to bool 1");
+             
+    is_equal_vals[3] = MathUtils::is_equal( (bool) 0,
+                                            (bool) 1); 
+    compare( is_equal_vals[3],
+             false,
+             "bool 0 is not equal to bool 1");
+             
+    is_equal_vals[4] = MathUtils::is_equal( (double) 3.45,
+                                            (double) 3.45);  
+    compare( is_equal_vals[4],
+             true,
+             "double 3.45 is equal to double 3.45");
+             
+    is_equal_vals[5] = MathUtils::is_equal( (double) 3.45,
+                                            (double) 4.56);
+    compare( is_equal_vals[5],
+             false,
+             "double 3.45 is not equal to double 4.56");
+             
+    is_equal_vals[6] = MathUtils::is_equal( (float) 3.45,
+                                            (float) 3.45);
+    compare( is_equal_vals[6],
+             true,
+             "float 3.45 is equal to float 3.45");
+             
+    is_equal_vals[7] = MathUtils::is_equal( (float) 3.45,
+                                            (float) 4.56);
+    compare( is_equal_vals[7],
+             false,
+             "float 3.45 is not equal to float 4.56");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing the "is_within_abs_tolerance" function
+  *****************************************************************************/
+  void is_within_abs_tolerance_testing() {
+    is_within_abs_tolerance_vals[0] = MathUtils::is_within_abs_tolerance( (double) 3.45,
+                                                                          (double) 3.46,
+                                                                          (double) 0.01);
+    compare( is_within_abs_tolerance_vals[0],
+             true,
+             "double 3.45 is within 0.01 of double 3.46");
+
+    //*********
+    is_within_abs_tolerance_vals[1] = MathUtils::is_within_abs_tolerance( (double) 3.45,
+                                                                          (double) 3.46,
+                                                                          (double) 0.0099);
+    compare( is_within_abs_tolerance_vals[1],
+             false,
+             "double 3.45 is not within 0.0099 of double 3.46");
+    //*********
+    is_within_abs_tolerance_vals[2] = MathUtils::is_within_abs_tolerance( (int) 3,
+                                                                          (int) -2,
+                                                                          (int) 5);
+    compare( is_within_abs_tolerance_vals[2],
+             true,
+             "int 3 is within 5 of int -2");
+
+    //*********
+    is_within_abs_tolerance_vals[3] = MathUtils::is_within_abs_tolerance( (unsigned int) 3,
+                                                                          (unsigned int) -2,
+                                                                          (unsigned int) 5);
+    compare( is_within_abs_tolerance_vals[3],
+             false,
+             "unsigned int 3 is not within 5 of unsigned int -2 (-2 wraps around)");
+
+    //*********
+    is_within_abs_tolerance_vals[4] = MathUtils::is_within_abs_tolerance( (float) -2.0,
+                                                                          (float) -2.01,
+                                                                          (float) 0.0099);
+    compare( is_within_abs_tolerance_vals[4],
+             false,
+             "float -2.0 is not within 0.0099 of float -2.01");
+
+    // Error tests
+    is_within_abs_tolerance_vals[5] = MathUtils::is_within_abs_tolerance( (float) -2.0,
+                                                                          (float) -2.01,
+                                                                          (float) -1.0);
+    compare( is_within_abs_tolerance_vals[5],
+             false,
+             "float -2.0 is not within -1.0 of float -2.01");
+
+    is_within_abs_tolerance_vals[6] = MathUtils::is_within_abs_tolerance( true,
+                                                          true,
+                                                          true);
+    compare( is_within_abs_tolerance_vals[6],
+             true,
+             "Checking boolean type: true is within true of true");
+             
+    is_within_abs_tolerance_vals[7] = MathUtils::is_within_abs_tolerance( true,
+                                                          true,
+                                                          false);
+    compare( is_within_abs_tolerance_vals[7],
+             true,
+             "Checking boolean type: true is within false of true");
+             
+    is_within_abs_tolerance_vals[8] = MathUtils::is_within_abs_tolerance( true,
+                                                          false,
+                                                          false);
+    compare( is_within_abs_tolerance_vals[8],
+             false,
+             "Checking boolean type: true is not within false of false");
+
+    check_comparison();  
+  }
+  
+  /*****************************************************************************
+  Purpose:(Testing the "is_within_rel_tolerance" function
+  *****************************************************************************/
+  void is_within_rel_tolerance_testing() {
+    is_within_rel_tolerance_vals[0] = MathUtils::is_within_rel_tolerance( (double) 1.65,
+                                                                          (double) 1.50,
+                                                                          (double) 0.1);
+    compare( is_within_rel_tolerance_vals[0],
+             true,
+             "double 1.65 is within 10% of double 1.50");
+
+    //*********
+    is_within_rel_tolerance_vals[1] = MathUtils::is_within_rel_tolerance( (double) 1.65,
+                                                                          (double) 1.50,
+                                                                          (double) 0.09999);
+    compare( is_within_rel_tolerance_vals[1],
+             false,
+             "double 1.65 is not within 9.999% of double 1.50");
+    //*********
+    is_within_rel_tolerance_vals[2] = MathUtils::is_within_rel_tolerance( (int) 2,
+                                                                          (int) -2,
+                                                                          (double) 2.0);
+    compare( is_within_rel_tolerance_vals[2],
+             true,
+             "int 2 is within 200% of int -2");
+
+    //*********
+    is_within_rel_tolerance_vals[3] = MathUtils::is_within_rel_tolerance( (unsigned int) -2,
+                                                                          (unsigned int) 2,
+                                                                          (double) 2);
+    compare( is_within_rel_tolerance_vals[3],
+             false,
+             "unsigned int 2 is not within 200% of unsigned int -2 (-2 wraps around)");
+
+    //*********
+    is_within_rel_tolerance_vals[4] = MathUtils::is_within_rel_tolerance( (float) -1.65,
+                                                                          (float) -1.50,
+                                                                          (double) 0.1);
+    compare( is_within_rel_tolerance_vals[4],
+             true,
+             "float -1.65 is within 10% of float -1.50");
+
+    // Error tests
+    is_within_rel_tolerance_vals[5] = MathUtils::is_within_rel_tolerance( (float) -2.0,
+                                                                          (float) -2.01,
+                                                                          (float) -1.0);
+    compare( is_within_rel_tolerance_vals[5],
+             false,
+             "float -2.0 is not within -1.0 of float -2.01");
+
+    is_within_rel_tolerance_vals[6] = MathUtils::is_within_rel_tolerance( true,
+                                                          true,
+                                                          true);
+    compare( is_within_rel_tolerance_vals[6],
+             true,
+             "Checking boolean type: true is within true of true");
+             
+    is_within_rel_tolerance_vals[7] = MathUtils::is_within_rel_tolerance( true,
+                                                          true,
+                                                          false);
+    compare( is_within_rel_tolerance_vals[7],
+             true,
+             "Checking boolean type: true is within false of true");
+             
+    is_within_rel_tolerance_vals[8] = MathUtils::is_within_rel_tolerance( true,
+                                                          false,
+                                                          false);
+    compare( is_within_rel_tolerance_vals[8],
+             false,
+             "Checking boolean type: true is not within false of false");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing the "sign" function
+  *****************************************************************************/
+  void sign_testing() {
+    sign_vals[0] = MathUtils::sign( 5 );
+    compare( MathUtils::is_equal( (int) sign_vals[0],
+                                  (int) 1),
+             true,
+             "sign(int 5) is_equal 1");
+             
+    sign_vals[1] = MathUtils::sign( 0 );
+    compare( MathUtils::is_equal( (int) sign_vals[1],
+                                  (int) 0),
+             true,
+             "sign(int 0) is_equal 0");
+             
+    sign_vals[2] = MathUtils::sign( -5 );
+    compare( MathUtils::is_equal( (int) sign_vals[2],
+                                  (int) -1),
+             true,
+             "sign(int -5) is_equal -1");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing "polynomial" function.)
+  *****************************************************************************/
+  void polynomial_testing() {
+    std::vector<double> coeffs{3,4,5}; // y = 5x^2 + 4x + 3,  y = 31
+
+    polynomial_vals[0] = MathUtils::polynomial( 2.0,
+                                                coeffs);
+    compare( MathUtils::is_near_equal( polynomial_vals[0],
+                                       31.0),
+             true,
+             "polynomial(2.0, <3, 4, 5>) is_near_equal 31.0");
+
+    polynomial_vals[1] = MathUtils::polynomial( 1.e308,
+                                                coeffs,
+                                                75.7575);
+    compare( MathUtils::is_near_equal( polynomial_vals[1],
+                                       75.7575),
+             true,
+             "polynomial(1.e308, <3, 4, 5>) is_near_equal 75.7575");
+
+    std::replace( coeffs.begin(), coeffs.end(), 3, 0); // Replace 3 with 0 to test low boundaries of values
+    polynomial_vals[2] = MathUtils::polynomial( -1.e-308,
+                                                coeffs);
+    compare( MathUtils::is_near_equal( (double) polynomial_vals[2],
+                                       (double) -4e-308,
+                                       (double) 1.0),
+             true,
+             "polynomial(-1e-308, <0, 4, 5>) is_near_equal -4e-308");
+
+    coeffs.push_back(-1.0);
+    coeffs.push_back(-1.0); // {0,4,5,-1,-1}
+    polynomial_vals[3] = MathUtils::polynomial( -2.0,
+                                                coeffs);
+    compare( MathUtils::is_near_equal( (double) polynomial_vals[3],
+                                       (double) 4.0),
+             true,
+             "polynomial(-2.0, <0, 4, 5, -1, -1>) is_near_equal 4.0");
+
+    check_comparison();
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing "polynomial" function to ensure that NaN and inf
+           values passed in are checked correctly and fail out the sim.)
+  *****************************************************************************/
+  void polynomial_fail_testing() {
+    std::vector<double> coeffs;
+    coeffs.push_back(3); coeffs.push_back(4); coeffs.push_back(5);   // y = 5x^2 + 4x + 3
+    MathUtils::polynomial( 1.e308,
+                           coeffs,
+                           0.0,
+                           true);
+  }
+
+  /*****************************************************************************
+  Purpose:(Testing "QuadraticSolver::solve" function.)
+  *****************************************************************************/
+  void quadratic_solver_testing() {
+    QuadraticSolver quadratic;
+    bool success;
+
+    // x^2-3x+2=0
+    quadratic.a = 1, quadratic.b = -3, quadratic.c = 2;
+    quadratic.solve();
+    quadratic_solver_vals[0][0] = quadratic.root1, quadratic_solver_vals[0][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[0]),
+                                       std::array<double, 2>{1.0, 2.0}),
+             true,
+             "Roots 1 and 2 of x^2-3x+2=0 are is_near_equal to 1.0 and 2.0, respectively");
+
+             
+    // x^2+2x+1=0
+    QuadraticSolver quadratic2(1, 2, 1); // to add coverage over specialized constructor
+    quadratic_solver_vals[1][0] = quadratic2.root1, quadratic_solver_vals[1][1] = quadratic2.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[1]),
+                                       std::array<double, 2>{-1.0, -1.0}),
+             true,
+             "Roots 1 and 2 of x^2+2x+1=0 are both is_near_equal to -1.0");
+
+    // 2x+1=0
+    quadratic.a = 0, quadratic.b = 2, quadratic.c = 1;
+    quadratic.solve();
+    quadratic_solver_vals[2][0] = quadratic.root1, quadratic_solver_vals[2][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[2]),
+                                       std::array<double, 2>{-0.5, -0.5}),
+             true,
+             "Roots 1 and 2 of 2x+1=0 are both is_near_equal to -0.5");
+
+    // x^2-1=0
+    quadratic.a = 1, quadratic.b = 0, quadratic.c = -1;
+    quadratic.solve();
+    quadratic_solver_vals[3][0] = quadratic.root1, quadratic_solver_vals[3][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[3]),
+                                       std::array<double, 2>{-1.0, 1.0}),
+             true,
+             "Roots 1 and 2 of x^2-1=0 are is_near_equal to -1.0 and 1.0, respectively");
+
+    // x^2+1=0
+    quadratic.a = 1, quadratic.b = 0, quadratic.c = 1;
+    success = quadratic.solve();
+    compare( success,
+             false,
+             "Roots of x^2+1=0 are both imaginary, and are not computed");
+    quadratic_solver_vals[4][0] = quadratic.root1, quadratic_solver_vals[4][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[4]),
+                                       std::array<double, 2>{0.0, 0.0}),
+             true,
+             "Roots 1 and 2 of x^2+1=0 are both is_near_equal to 0.0");
+
+    // x^2+3x=0
+    quadratic.a = 1, quadratic.b = 3, quadratic.c = 0;
+    quadratic.solve();
+    quadratic_solver_vals[5][0] = quadratic.root1, quadratic_solver_vals[5][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[5]),
+                                       std::array<double, 2>{0.0, -3.0}),
+             true,
+             "Roots 1 and 2 of x^2+3x=0 are is_near_equal to 0.0 and -3.0, respectively");
+
+    // 1=0
+    quadratic.a = 0, quadratic.b = 0, quadratic.c = 1;
+    success = quadratic.solve();
+    compare( success,
+             false,
+             "Roots of 1=0 do not have a solution, and are not computed");
+    quadratic_solver_vals[6][0] = quadratic.root1, quadratic_solver_vals[6][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[6]),
+                                       std::array<double, 2>{0.0, 0.0}),
+             true,
+             "Roots of 1=0 are both is_near_equal to 0.0");
+
+    // 3x=0
+    quadratic.a = 0, quadratic.b = 3, quadratic.c = 0;
+    quadratic.solve();
+    quadratic_solver_vals[7][0] = quadratic.root1, quadratic_solver_vals[7][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[7]),
+                                       std::array<double, 2>{0.0, 0.0}),
+             true,
+             "Roots of 3x=0 are both is_near_equal to 0.0");
+
+    // 3x^2=0
+    quadratic.a = 3, quadratic.b = 0, quadratic.c = 0;
+    quadratic.solve();
+    quadratic_solver_vals[8][0] = quadratic.root1, quadratic_solver_vals[8][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[8]),
+                                       std::array<double, 2>{0.0, 0.0}),
+             true,
+             "Roots of 3x^2=0 are both is_near_equal to 0.0");
+
+    // 0=0
+    quadratic.a = 0, quadratic.b = 0, quadratic.c = 0;
+    success = quadratic.solve();
+    compare( success,
+             false,
+             "Roots of 0=0 are infinite solutions, and are not computed");
+    quadratic_solver_vals[9][0] = quadratic.root1, quadratic_solver_vals[9][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[9]),
+                                       std::array<double, 2>{0.0, 0.0}),
+             true,
+             "Roots of 0=0 are both is_near_equal to 0.0");
+    
+    // x^2+(1e308)x+1=0
+    quadratic.a = 1, quadratic.b = 1e308, quadratic.c = 1;
+    quadratic.solve();
+    quadratic_solver_vals[10][0] = quadratic.root1, quadratic_solver_vals[10][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[10]),
+                                       std::array<double, 2>{-1e-308, -1e308}),
+             true,
+             "Roots of x^2+(1e308)x+1=0 are is_near_equal to -1e-308 and -1e308, respectively");
+
+    // don't compute roots
+    quadratic.a = 1, quadratic.b = -3, quadratic.c = 2;
+    success = quadratic.solve(false);
+    compare( success,
+             true,
+             "Roots 1 and 2 of x^2-3x+2=0 are defined, but are set to not be computed with compute_roots=false");
+    quadratic_solver_vals[11][0] = quadratic.root1, quadratic_solver_vals[11][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[11]),
+                                       std::array<double, 2>{0.0, 0.0}),
+             true,
+             "Roots 1 and 2 of x^2-3x+2=0 were not computed and are still both is_near_equal to 0.0");
+
+    quadratic.a = 0, quadratic.b = 2, quadratic.c = 1;
+    success = quadratic.solve(false);
+    compare( success,
+             true,
+             "Roots 1 and 2 of 2x+1=0 are defined, but are set to not be computed with compute_roots=false");
+    quadratic_solver_vals[12][0] = quadratic.root1, quadratic_solver_vals[12][1] = quadratic.root2;
+    compare( MathUtils::is_near_equal( std_copy(quadratic_solver_vals[12]),
+                                       std::array<double, 2>{0.0, 0.0}),
+             true,
+             "Roots 1 and 2 of 2x+1=0 were not computed and are still both is_near_equal to 0.0");
+
+    check_comparison();
+  }
+
+private:
+  /*****************************************************************************
+  Purpose:(Used to compare the boolean output of each of the functions to the
+           expected boolean output for a given input into the functions.)
+  *****************************************************************************/
+  void compare( bool input,
+                bool expected,
+                std::string test_name) {
+    if (input != expected) {
+      std::cout << "FAILURE: Expected output of " << expected << " but got "
+      "output of " << input << " in test: " << test_name << std::endl;
+      comparison_failure = true;
+    }
+    else {
+      std::cout << "SUCCESS: Expected output of " << expected << " and got "
+      "output of " << input << " in test: " << test_name << std::endl;
+    }
+  }
+
+  void check_comparison() {
+    if (comparison_failure) {
+      CMLMessage::error(
+        __FILE__,__LINE__,"Failed Comparison.\n",
+        "One or more of tests just run have failed to successfully compare\n"
+        "to the desired result. Check the comparison output above to find which\n"
+        "comparison failed.");
+    }
+  }
+
+  MathUtilsPrivateSimObject (const MathUtilsPrivateSimObject&);
+  MathUtilsPrivateSimObject & operator = (const MathUtilsPrivateSimObject&);
+};
+MathUtilsPrivateSimObject  ut_private;

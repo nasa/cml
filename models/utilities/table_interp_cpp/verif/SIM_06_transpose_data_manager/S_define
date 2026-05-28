@@ -1,0 +1,200 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Test sim object
+*****************************************************************************/
+##include "../../include/generic_multi_input_table.hh"
+##include "../../include/table_independent_variable.hh"
+##include "../../include/table_lookup__transpose_data.hh"
+
+class TestingModelSimObject : public Trick::SimObject {
+ public:
+  // General variables
+  double  independent;
+  double  independent_2;
+  double  indep_incr;   // (--) increment per cycle.
+  double  dependent[4]; // (--) target variable
+  double alt_dep[3];    // (--) alternative target-variable
+  std::list< std::vector< double > > list_vec;
+  std::vector<double> data_line;
+
+  // Model suppoort variables
+  TableIndependentVariable TIV_1; // (--) a TIV to use with manager (optional)
+  TableIndependentVariable TIV_2; // (--) a second TIV for testing purposes only
+  GenericMultiInputTable   table; // (--) a table to use with manager (optional)
+                                  //      nominal setup creates a new table for the
+                                  //      first configuration set and uses this
+                                  //      table for the second.
+  GenericMultiInputTable   table_2; // (--) a second table instance
+
+  // Class for testing:
+  TableLookupTransposeDataSet manager;
+
+  TestingModelSimObject()
+      :
+      independent(0.0),
+      independent_2(0.0),
+      indep_incr(5.0),
+      TIV_1(independent, TableIndependentVariable::Linear),
+      TIV_2(independent_2, TableIndependentVariable::Linear),
+      table( dependent[2]),
+      table_2( dependent[3])
+  {
+    ("default_data")   defaults();
+    (1.0, "scheduled") update();
+  };
+
+  //****************************************
+  // use the TIV_1 instance with the manager
+  //****************************************
+  void use_TIV_1()
+  {
+    manager.add_independent_variable(TIV_1);
+  }
+  //***************
+  // add second TIV
+  //***************
+  void add_TIV_2()
+  {
+    manager.add_independent_variable( TIV_2);
+  }
+  //*********************************************************
+  // use the GenericMultiInputTable instance with the manager
+  //*********************************************************
+  void use_table()
+  {
+    manager.add_table(table);
+  }
+  //*********************
+  // initialize the model
+  //*********************
+  void initialize()
+  {
+    if (!manager.is_enabled()) {
+      return;
+    }
+    manager.initialize();
+    manager.subscribe();
+  }
+  //*************
+  // set the data
+  //*************
+  void set_internal_data()
+  {
+    list_vec.clear();
+    data_line.resize(5);
+    data_line[0] = 0;
+    data_line[1] = 1;
+    data_line[2] = 2;
+    data_line[3] = 3;
+    data_line[4] = 4;
+    list_vec.push_back( data_line);
+
+    data_line[0] = 10;
+    data_line[1] = 11;
+    data_line[2] = 12;
+    data_line[3] = 13;
+    data_line[4] = 14;
+    list_vec.push_back( data_line);
+
+    data_line[0] = 20;
+    data_line[1] = 21;
+    data_line[2] = 22;
+    data_line[3] = 23;
+    data_line[4] = 24;
+    list_vec.push_back( data_line);
+  }
+  //********************************
+  // process data from compiled code
+  //********************************
+  void process_internal_data()
+  {
+    set_internal_data();
+    manager.process_data(list_vec);
+  }
+  //*************************************
+  // process data from external text file
+  //*************************************
+  void process_external_data()
+  {
+    manager.process_data( "data/text_file.txt");
+  }
+  //*********************
+  // process reduced file
+  //*********************
+  void process_reduced_file()
+  {
+    manager.process_data( "data/text_file_2.txt",2);
+  }
+  //********************************************
+  // corrupt then process the data from list_vec
+  //********************************************
+  void process_corrupt_data_short()
+  {
+    set_internal_data();
+    std::vector<double> data(2, 1.0);
+    list_vec.push_back(data);
+    manager.process_data( list_vec);
+  }
+  //********************************************
+  // corrupt then process the data from list_vec
+  //********************************************
+  void process_corrupt_data_long()
+  {
+    set_internal_data();
+    std::vector<double> data(6, 31.0);
+    list_vec.push_back(data);
+    manager.process_data( list_vec);
+  }
+  //********************************************
+  // corrupt then process the data from list_vec
+  //********************************************
+  void process_corrupt_data_reversed()
+  {
+    set_internal_data();
+    std::vector<double> data(5, 1.0);
+    list_vec.push_back(data);
+    manager.process_data( list_vec);
+  }
+
+ private:
+  //**********************
+  // default configuration
+  //**********************
+  void defaults()
+  {
+    manager.independent_var = &independent;
+    manager.populate_independent_from_file = true;
+    manager.indep_index = 1;
+
+    TableLookupTransposeDataSet_TableConfig config;
+    config.name = "var1";
+    config.index_low = 3;
+    config.index_high = 4;
+    config.dependent_variables.push_back(&dependent[0]);
+    config.dependent_variables.push_back(&dependent[1]);
+    manager.add_config(config);
+
+    config.name = "var2";
+    config.index_low = 0;
+    config.index_high = 0;
+    config.dependent_variables.clear();
+    config.table_ptr = &table;
+    manager.add_config(config);
+  }
+
+  //****************
+  // update sequence
+  //****************
+  void update()
+  {
+    independent += indep_incr;
+    manager.update();
+  }
+  TestingModelSimObject( const TestingModelSimObject&);
+  TestingModelSimObject& operator= ( const TestingModelSimObject&);
+
+};
+
+TestingModelSimObject test;

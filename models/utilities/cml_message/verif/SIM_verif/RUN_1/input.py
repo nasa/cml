@@ -1,0 +1,8 @@
+trick.CMLMessage.set_publish_level(trick.CMLMessage.Fail)
+trick.add_read(1, "trick.CMLMessage.set_publish_level (trick.CMLMessage.Error)")
+trick.add_read(2, "trick.CMLMessage.set_publish_level (trick.CMLMessage.Warning)")
+trick.add_read(3, "trick.CMLMessage.set_publish_level (trick.CMLMessage.Status)")
+trick.add_read(4, "trick.CMLMessage.set_publish_level (trick.CMLMessage.Inform)")
+trick.add_read(5, "trick.CMLMessage.set_publish_level (trick.CMLMessage.Debug)")
+trick.add_read(5, "verif.sample.terminate = True")
+trick.stop(5)

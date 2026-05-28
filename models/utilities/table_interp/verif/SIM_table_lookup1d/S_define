@@ -1,0 +1,63 @@
+/******************************************************************************
+PURPOSE:
+    (Test 1D table interpolation)
+PROGRAMMERS:
+    (((Bingquan Wang) (OSR) (May 2017) (initial implementation)
+
+******************************************************************************/
+
+//trick
+#include "sim_objects/default_trick_sys.sm"
+
+//jeod
+#include "jeod_sys.sm"
+
+//test model
+##include "include/test_model_lookup1d.hh"
+
+
+class TestTblLookup1D_SimObj : public Trick::SimObject
+{
+public:
+  const double x_base;  /* (--) the starting point of independent variable X. */
+  const double x_step;  /* (--) the interval of variable X between two simulation steps. */
+
+  double var_x;       /* (--) the independent variable X */
+  double interp_val;  /* (--) the interpolated value */
+
+  bool is_asc;        /* (--) indicate whether the variable data is ascending or descending */
+
+  TestModelLookup1D<25> test_model;
+  
+  TestTblLookup1D_SimObj() :
+    x_base(-3.0),
+    x_step(0.25),
+    is_asc(true),
+    test_model(x_base, 2.0*x_step)
+  {
+    ("initialization") init();
+    (1.0, "scheduled") update();
+  };
+
+private:
+  TestTblLookup1D_SimObj(const TestTblLookup1D_SimObj&);
+  TestTblLookup1D_SimObj& operator=(const TestTblLookup1D_SimObj&);
+
+  void init()
+  {
+    test_model.set_default_data(is_asc);
+  }
+
+  void update()
+  {
+    const double x_step_impl = is_asc ? x_step : -x_step;
+
+    static double prev_val= x_base-x_step_impl;
+    var_x = prev_val + x_step_impl;    
+    interp_val = test_model.update(var_x);
+    prev_val = var_x;
+  }
+};
+
+TestTblLookup1D_SimObj test_lookup1d;
+

@@ -1,0 +1,3 @@
+double_words.convert_value
+double_words.resolution
+double_words.bit_size

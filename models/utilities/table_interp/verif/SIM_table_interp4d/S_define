@@ -1,0 +1,93 @@
+/******************************************************************************
+PURPOSE:
+    (Test interpolation functions on 4D tables)
+PROGRAMMERS:
+    (((Bingquan Wang) (OSR) (May 2017) (initial implementation)
+
+******************************************************************************/
+
+//trick
+#include "sim_objects/default_trick_sys.sm"
+
+//jeod
+#include "jeod_sys.sm"
+
+//test model
+##include "include/test_model_interp4d.hh"
+
+
+class TestTblInterp4D_SimObj : public Trick::SimObject
+{
+public:
+  const double base;  /* (--) the starting point of independent variable. */
+  const double step;  /* (--) the interval of independent variable between two simulation steps. */
+
+  double var_x;       /* (--) the independent variable X */
+  double var_y;       /* (--) the independent variable Y */
+  double var_z;       /* (--) the independent variable Z */
+  double var_w;       /* (--) the independent variable W */
+  double interp_val;  /* (--) the interpolated value */
+  int low_index_x;    /* (--) the lower breakpoint index of X */
+  double frac_x;      /* (--) the fractional distance in the interval between breakpoints of X */
+  int low_index_y;    /* (--) the lower breakpoint index of Y */
+  double frac_y;      /* (--) the fractional distance in the interval between breakpoints of Y */
+  int low_index_z;    /* (--) the lower breakpiont index of Z */
+  double frac_z;      /* (--) the fractional distance in the interval between breakpoints of Z */
+  int low_index_w;    /* (--) the lower breakpoint index of W */
+  double frac_w;      /* (--) the fractional distance in the inerval between breakpoints of W */
+
+  bool is_asc;        /* (--) indicate whether the variable data is ascending or descedning */
+
+  TestModelInterp4D<10, 10, 20, 10> test_model;
+  
+  TestTblInterp4D_SimObj() :
+    base(-3.0),
+    step(0.25),
+    is_asc(true),
+    test_model(base, 2.0*step)
+  {
+    ("initialization") init(); 
+    (1.0, "scheduled") update();
+  };
+
+private:
+  TestTblInterp4D_SimObj(const TestTblInterp4D_SimObj&);
+  TestTblInterp4D_SimObj& operator=(const TestTblInterp4D_SimObj&);
+
+  void init()
+  {
+    test_model.set_default_data(is_asc);
+  }
+
+  void update()
+  {
+    const double step_impl = is_asc ? step : -step;
+
+    static double prev_x = base-step_impl;
+    static double prev_y = base-step_impl;
+    static double prev_z = base-step_impl;
+    static double prev_w = base-step_impl;
+
+    var_x = prev_x + step_impl;  
+    var_y = prev_y + step_impl;  
+    var_z = prev_z + step_impl;
+    var_w = prev_w + step_impl;
+    interp_val = test_model.update(var_x, var_y, var_z, var_w);
+    prev_x = var_x;
+    prev_y = var_y;
+    prev_z = var_z;
+    prev_w = var_w;
+
+    low_index_x = test_model.get_low_index_x();
+    frac_x = test_model.get_frac_x();
+    low_index_y = test_model.get_low_index_y();
+    frac_y = test_model.get_frac_y();
+    low_index_z = test_model.get_low_index_z();
+    frac_z = test_model.get_frac_z();
+    low_index_w = test_model.get_low_index_w();
+    frac_w = test_model.get_frac_w();
+  }
+};
+
+TestTblInterp4D_SimObj test_interp4d;
+

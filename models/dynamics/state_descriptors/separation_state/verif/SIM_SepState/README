@@ -1,0 +1,15 @@
+Guide to run numbers:
+
+RUN_0 has an uninitialized sep-state.
+
+RUN_*1 provides composite-body to composite-body
+RUN_*2 provides composite-body to subject-point
+RUN_*3 provides source-point to composite-body
+RUN_*4 provides source-point to subject-point
+
+RUN_0* uses the 2 argument initialization
+RUN_2* uses the 3 argument initialization, (source-body, subj-frame, source-name)
+RUN_3* uses the 3 argument initialization, (source-frame, subj-body, subj-name)
+RUN_4* uses the 4 argument initialization, (source-body, subj-body, source-name, subj-name)
+
+RUN_9* are failure cases

@@ -1,0 +1,160 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 25,
+        "patch": 0
+    },
+
+    "configurePresets": [
+        {
+            "name": "base",
+            "description": "General settings that apply to all configurations",
+            "hidden": true,
+            "generator": "Unix Makefiles"
+        },
+        {
+            "name": "base-release",
+            "description": "Release build with debug info",
+            "inherits": "base",
+            "hidden": true,
+            "binaryDir": "build/release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        },
+        {
+            "name": "base-debug",
+            "description": "Debug build",
+            "inherits": "base",
+            "hidden": true,
+            "binaryDir": "build/debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "base-user",
+            "description": "CML user settings. Build the library, not anything extra.",
+            "hidden": true,
+            "cacheVariables": {
+                "CML_BUILD_UNIT_TESTS": "OFF",
+                "CML_CODE_COVERAGE": "OFF",
+                "CML_WARNINGS_AS_ERRORS": "OFF"
+            }
+        },
+        {
+            "name": "base-dev",
+            "description": "CML developer settings. Builds everything.",
+            "hidden": true,
+            "cacheVariables": {
+                "CML_BUILD_UNIT_TESTS": "ON",
+                "CML_CODE_COVERAGE": "ON",
+                "CML_WARNINGS_AS_ERRORS": "ON"
+            }
+        },
+        {
+            "name": "user-debug",
+            "description": "Debug build for users",
+            "inherits": ["base-user", "base-debug"]
+        },
+        {
+            "name": "user-release",
+            "description": "Release build for users. Probably what you want.",
+            "inherits": ["base-user", "base-release"]
+        },
+        {
+            "name": "dev",
+            "description": "CML developer build. If you're not directly working on CML, this isn't for you.",
+            "inherits": ["base-dev", "base-debug"]
+        }
+    ],
+
+    "buildPresets": [
+        {
+            "name": "user-debug",
+            "description": "Build CML in debug mode",
+            "configurePreset": "user-debug",
+            "targets": ["trickify", "install"]
+        },
+        {
+            "name": "user-release",
+            "description": "Build CML in release mode",
+            "configurePreset": "user-release",
+            "targets": ["trickify", "install"]
+        },
+        {
+            "name": "dev",
+            "description": "CML developer build. If you're not directly working on CML, this isn't for you.",
+            "configurePreset": "dev",
+            "targets": ["trickify", "install"]
+        }
+    ],
+
+    "testPresets": [
+        {
+            "name": "default",
+            "configurePreset": "dev",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true,
+                "verbosity": "verbose"
+            }
+        }
+    ],
+
+    "workflowPresets": [
+        {
+            "name": "user-debug",
+            "description": "Build CML in debug mode",
+            "displayName": "Build only CML with debug information",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "user-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "user-debug"
+                }
+            ]
+        },
+        {
+            "name": "user-release",
+            "description": "Build CML in release mode",
+            "displayName": "Build only CML with optimizations (probably what you should use)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "user-release"
+                },
+                {
+                    "type": "build",
+                    "name": "user-release"
+                }
+            ]
+        },
+        {
+            "name": "dev",
+            "description": "CML developer build",
+            "displayName": "Build CML and all other extra targets, like tests and documentation",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "dev"
+                },
+                {
+                    "type": "build",
+                    "name": "dev"
+                },
+                {
+                    "type": "test",
+                    "name": "default"
+                }
+            ]
+        }
+    ]
+}

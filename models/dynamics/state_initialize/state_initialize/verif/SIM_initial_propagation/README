@@ -1,0 +1,80 @@
+Process for obtaining verification data:
+
+1.  Run layout
+
+The sim runs are cataloged into different run-sets.  Each set represents a
+different environment setting.  Within each set there are a number of runs,
+with each representing a different duration over which the initial
+propagation is to run; these are named RUN_verif_<n> where <n> represents the
+duration.
+
+In the SET_forward_* sets, there is also a RUN_baseline, which provides data
+from a regular Trick-managed integration over 6000 seconds.
+
+
+2. Execute the runs
+
+Run:
+   bash run_all.sh
+
+Execute all runs for the set(s) of interest.
+
+The SET_reverse_* sets back-propagate the initial state using this model, then
+forward-propagate that state using a regular Trick-managed integration
+mechanism for the same duration.  The data of interest is the final state,
+which should be close to the originally specified state.
+
+The SET_forward_* sets forward-propagate the initial state using this model and
+immediately stop.  The data of interest is this final state which can then be
+compared against a regular forward-propagating Trick-managed integration over
+the same duration.  Note that in these runs the jeod time is "moved forward" by
+the amount of propagation_time, so that the pfix frames align at t=0 between
+RUN_verif* and RUN_baseline/
+
+See SIM_initial_propagation_visual.png in this directory for a visualization
+of this explanation
+
+
+3.  Post-process the data
+
+Execute the script "post_process_data":
+   bash post_process_data   # Gather data into SET*/RUN_combined/
+
+The post_process_data script extracts the data from all of the different runs
+for a single comparison.  For all sets, a new "run", RUN_combined, is created
+by this script.  Within RUN_combined, a new data-set will be created containing
+the data of interest from each of the set's runs.  Data from RUN_combined
+can then be used as a measure of the effect of propagating within a certain
+environment over a variable propagation-duration.
+
+For the SET_reverse_* sets, the last recorded data-set is simply extracted from
+each respective run.  Each run's last recorded data-set represents a state that
+should be back at the original state.  it is the state of the vehicle after
+having gone through a reverse propagation and subsequent forward integration
+through a time period equal to the timestamp of that last recorded data set.
+The combined data set can be compared against the initially-specified state
+to evaluate the error induced by the reverse propagation as a function of the
+duration of said propagation.
+
+For the SET_forward_* sets, the only recorded data is that of the initially-
+propagated state, recorded at t=0 and representative of the state at
+t=propagation-duration. The timestamp (t=0) is overwritten by the value of the
+propagation duration, creating a set of data points much like a set generated
+from a regular Trick-managed sim.  This data set can then be compared against
+the RUN_baseline output to measure how the the two propagation methods diverge
+over time.
+
+
+4. Analyze the Data
+
+For SET_forward*/, the data comparisons of the combined data against the
+baseline data are launched automatically by the post-processing script.
+The differences are plotted and can be compared against the plots committed
+for verification purposes.
+
+For SET_reverse*/ each RUN_combined/log_test_data.csv is self-verifying, meaning
+the values should be close to the initial conditions. You can view all runs
+together easily via:
+
+   trick-qp SET_reverse_*/RUN_combined
+   <hit comparison plot button>

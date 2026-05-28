@@ -1,0 +1,66 @@
+/*****************************************************************************
+PURPOSE: (Verification simulation for the Solid Rocket Motors Model))
+PROGRAMMERS:
+  (
+   ((Brenton Caughron) (OSR) (Jan 2018) (Antares) (IV&V Code Review))
+  )
+*****************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Rocket Motor sim object
+*****************************************************************************/
+
+//CML headers
+##include "cml/models/fhw/effectors/rocket_motors/include/rocket_motor_basic.hh"
+// JEOD header:
+##include "dynamics/mass/include/mass_properties_init.hh"
+
+class RocketMotorSimObject : public Trick::SimObject {
+  public:
+    RocketMotor_Basic        basic_motor;
+    RocketMotor_Basic        basic_motor_group;
+    RocketMotor_Basic        basic_motor_group_string;
+    double                   dynamic_time;
+    double                   vehicle_com[3];
+    DynamicMassGroup         motor_prop_group;
+    DynamicMassBody          motor_prop_a;
+    DynamicMassBody          motor_prop_b;
+    DynamicMassString        motor_prop_string;
+    jeod::MassPropertiesInit mass_init;
+    double attach_offset[3] = {0,0,0};
+    double attach_T[3][3] = {{1,0,0},{0,1,0},{0,0,1}};
+    
+    RocketMotorSimObject()
+    :
+    basic_motor(motor_prop_string,
+                dynamic_time,
+                vehicle_com),
+    basic_motor_group(motor_prop_group,
+                      motor_prop_a,
+                      dynamic_time,
+                      vehicle_com),
+    basic_motor_group_string(motor_prop_group,
+                             motor_prop_string,
+                             dynamic_time,
+                             vehicle_com)
+    {
+
+      ("initialization")   motor_prop_a.initialize_mass(mass_init, {});
+      ("initialization")   motor_prop_b.initialize_mass(mass_init, {});
+      ("initialization")   motor_prop_b.attach_to(attach_offset,
+                                                  attach_T,
+                                                  motor_prop_a);
+      ("initialization")   basic_motor.initialize();
+      (1.0, "environment") dynamic_time = exec_get_sim_time();
+      (1.0, "effector")    basic_motor.update();
+    };
+
+
+  private:
+    RocketMotorSimObject( const RocketMotorSimObject&);
+    RocketMotorSimObject & operator = ( const RocketMotorSimObject&);
+
+};
+RocketMotorSimObject rocket_motor;

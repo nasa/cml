@@ -1,0 +1,110 @@
+/***************************************************************
+CLASS: VehicleSimObject
+PURPOSE:
+   This sim object models a vehicle in a gravity field; it is
+   used by both SIM_verif and SIM_JEOD_moon_LP150Q to provide
+   a consistent baseline for comapring the two gravity models.
+***************************************************************/
+
+// JEOD includes
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
+
+// CML models
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+ protected:
+  jeod::DynManager   & dyn_manager;
+  jeod::GravityManager & grav_manager;
+
+ public:
+  // NOTE -- using a DynBody here because it brings in so much useful
+  //         configuration.  It isn't actually necessary to run gravity, but it
+  //         helps to configure it.
+  jeod::DynBody                  body;
+  jeod::SphericalHarmonicsGravityControls  grav_controls;
+
+
+  UnitTestFramework  framework;
+
+  // for logging
+  double radius;
+  double latitude;
+  double longitude;
+  double gravity_magnitude; /* (m/s2)
+      magnitude of the gravitational acceleration vector.*/
+  double gravity_radial_alignment; /* (--)
+      cosine of the angle between the gravity vector and the radial vector.*/
+
+  // Constructor:
+  VehicleSimObject( jeod::DynManager   & dyn_mgr_in,
+                    jeod::GravityManager & env_grav_manager)
+    :
+    dyn_manager (dyn_mgr_in),
+    grav_manager(env_grav_manager),
+    body(),
+    grav_controls(),
+    radius(3E6),
+    latitude(0),
+    longitude(0),
+    gravity_magnitude(-1.0),
+    gravity_radial_alignment(-1.0)
+  {
+    P_ENV ("initialization")   body.initialize_model( dyn_manager);
+          ("initialization")   framework.initialize();
+          ("initialization")   update_position();
+
+    (DYNAMICS, "environment")  framework.update();
+    (DYNAMICS, "environment")  update_position();
+    (DYNAMICS, "environment")  grav_manager.gravitation( body.composite_body,
+                                                       body.grav_interaction);
+    (DYNAMICS, "scheduled")    compute();
+
+  };
+
+  // Got to implement these here because SWIG can't process a reference to a
+  // primitive so we can't call add_sweep from the input file.
+  void sweep_radius( double start, double end, double step)
+  {
+    framework.add_sweep(radius, start,end,step);
+  }
+  void sweep_longitude( double start, double end, double step)
+  {
+    framework.add_sweep(longitude, start,end,step);
+  }
+  void sweep_latitude( double start, double end, double step)
+  {
+    framework.add_sweep(latitude, start,end,step);
+  }
+
+ private:
+  void update_position()
+  {
+    body.composite_body.state.trans.position[0] = radius * std::cos(latitude) *
+                                                                std::cos(longitude);
+    body.composite_body.state.trans.position[1] = radius * std::cos(latitude) *
+                                                                std::sin(longitude);
+    body.composite_body.state.trans.position[2] = radius * std::sin(latitude);
+  }
+
+  void compute()
+  {
+     gravity_magnitude = jeod::Vector3::vmag( body.grav_interaction.grav_accel);
+
+     double r_hat[3];
+     jeod::Vector3::normalize( body.composite_body.state.trans.position,
+                         r_hat);
+     double g_hat[3];
+     jeod::Vector3::normalize( body.grav_interaction.grav_accel,
+                         g_hat);
+     gravity_radial_alignment = jeod::Vector3::dot( r_hat, g_hat);
+  }
+
+  VehicleSimObject( const VehicleSimObject&);
+  VehicleSimObject & operator= ( const VehicleSimObject&);
+};
+VehicleSimObject vehicle( dynamics.dyn_manager,
+                          env.gravity_manager);

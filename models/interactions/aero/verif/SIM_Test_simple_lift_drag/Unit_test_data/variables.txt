@@ -1,0 +1,2 @@
+aero.interface.executive.bank_angle
+aero.atmos_rel.dynamic_pressure

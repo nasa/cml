@@ -1,0 +1,112 @@
+/*****************************************************************************
+PURPOSE: (Verifies the mass-consumed-step functionality for individual tanks,
+ parallel tank strings, serial tanks, and serial tank strings)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (Mar 2017) (Antares) (verification))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+// NOTE - this sim uses the DynMassGroup, which requires that the tanks be
+//        elements of the same body.  So I'm adding dynamics.sm to get the
+//        body-actions ... and time.sm to get dynamics.sm ... and env.sm just
+//        for good measure.
+#define DYNAMICS 1.0
+#include "default_priority_settings.sm"
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+/*****************************************************************************
+DynMassUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/body_attach_matrix.hh"
+
+##include "../../include/dynamic_mass_body.hh"
+##include "../../include/dynamic_mass_group.hh"
+##include "../../include/dynamic_mass_string.hh"
+
+class DynMassUnitTestSimObject: public Trick::SimObject
+{
+ protected:
+  jeod::DynManager & dyn_manager;
+
+ public:
+  // Framework
+  UnitTestFramework       framework;
+  // Model for testing:
+  DynamicMassBody         tank_a;
+  DynamicMassBody         tank_b;
+  DynamicMassBody         tank_c;
+  DynamicMassBody         dummy_body;
+     /* (--) used in tests:
+        RUN_21_failed_lookups, RUN_22_initailization_sequence_error and
+        RUN_23_update_mass_error */
+  DynamicMassGroup        group;
+  DynamicMassString       string;
+  DynamicMassString       second_string;
+  DynamicMassString       dummy_string; /* (--) used in RUN_21_failed_lookups */
+  // support variables:
+  jeod::DynBody           body;
+  jeod::MassBodyInit      mass_init[4]; // (--) tank_a, body, tank_b, tank_c
+  jeod::BodyAttachMatrix  tank_attach[3];
+  bool                    use_series_flow_method;
+  int                     fail_check;
+
+  DynMassUnitTestSimObject(jeod::DynManager & dyn_mgr_in)
+    :
+    dyn_manager (dyn_mgr_in),
+    use_series_flow_method(false),
+    fail_check(0)
+  {
+
+    // Framework
+    ("initialization")   framework.initialize();
+    (1.0, "environment") framework.update();
+    // support jobs:
+    P_ENV ("initialization") body.initialize_model( dyn_manager);
+    // test-specific jobs:
+    ("initialization")   group.initialize();
+    ("initialization")   terminal_errors();
+    (1.0, "environment") move_mass();
+    (1.0, "scheduled")   group.update_group_mass();
+  }
+
+ private:
+  void move_mass()
+  {
+    // If using series-flow, flow from tank_a to tank_b.
+    if (use_series_flow_method) group.series_flow(0,1);
+  }
+
+  /* Adding method here because Trick will hang if a terminal fault is
+   * initiated from within a Python input file.*/
+  void terminal_errors()
+  {
+    switch (fail_check) {
+    default:
+      return;
+    case 1:
+      group.add_mass_to_group( &tank_c);
+      break;
+    case 2:
+      string.add_mass_to_string(nullptr);
+    }
+  }
+
+  DynMassUnitTestSimObject (const DynMassUnitTestSimObject&);
+  DynMassUnitTestSimObject & operator = (const DynMassUnitTestSimObject&);
+
+};
+DynMassUnitTestSimObject mass_test(dynamics.dyn_manager) ;
+
+IntegLoop tankgroup_intg_loop (DYNAMICS) dynamics;

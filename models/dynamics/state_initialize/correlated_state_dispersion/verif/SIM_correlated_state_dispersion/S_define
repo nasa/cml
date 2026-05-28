@@ -1,0 +1,122 @@
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "time_dyntime_only.sm"
+#include "dynamics_init_only.sm"
+
+/*****************************************************************************
+Verif sim object
+*****************************************************************************/
+
+##include "jeod/models/environment/planet/include/planet.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_rot_state.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "cml/models/dynamics/state_initialize/correlated_state_dispersion/include/correlated_state_dispersion.hh"
+
+class VerifSimObject : public Trick::SimObject {
+ public:
+  UnitTestFramework framework;
+  jeod::DynBody trans_base;
+  jeod::DynBody rot_base;
+  jeod::MassBodyInit mass_init_trans_base;
+  jeod::MassBodyInit mass_init_rot_base;
+  jeod::DynBodyInitTransState trans_init_trans_base;
+  jeod::DynBodyInitTransState trans_init_rot_base;
+  jeod::DynBodyInitRotState rot_init_trans_base;
+  jeod::DynBodyInitRotState rot_init_rot_base;
+
+  CorrelatedStateDispersion corr_state;
+  jeod::Planet planet;
+  double true_position[3];
+  double true_velocity[3];
+  double true_T_mx[3][3];
+
+  double dispersed_position[3];
+  double dispersed_velocity[3];
+  double dispersed_T_mx[3][3];
+
+  bool disperse_pv;
+  bool disperse_pva;
+  bool disperse_a;
+  bool disperse_pva_diff_ref_diff_att;
+  bool disperse_pva_diff_ref;
+
+ protected:
+  jeod::DynManager& dyn_manager;
+
+ public:
+  VerifSimObject(jeod::DynManager& dyn_manager_in)
+    :
+    disperse_pv(false),
+    disperse_pva(false),
+    disperse_a(false),
+    disperse_pva_diff_ref_diff_att(false),
+    disperse_pva_diff_ref(false),
+    dyn_manager(dyn_manager_in)
+  {
+    P_ENV ("initialization") trans_base.initialize_model(dyn_manager);
+    P_ENV ("initialization") rot_base.initialize_model(dyn_manager);
+    ("initialization") framework.initialize();
+    ("initialization") corr_state.TR_param.set_planet(&planet);
+    ("initialization") copy_truth();
+    (1.0, "environment") update_states();
+    (1.0, 1.0, "scheduled") disperse_state();
+  };
+
+  void null_check()
+  {
+    double dummy;
+    corr_state.disperse_state(NULL, &dummy);
+    corr_state.disperse_state(&dummy, NULL);
+    corr_state.disperse_state(NULL, NULL);
+  }
+
+ private:
+ void copy_truth() {
+    jeod::Vector3::copy(true_position, dispersed_position);
+    jeod::Vector3::copy(true_velocity, dispersed_velocity);
+    jeod::Matrix3x3::copy(true_T_mx, dispersed_T_mx);
+  }
+  void update_states()
+  {
+    framework.update();
+    trans_base.composite_body.state.rot.Q_parent_this.left_quat_to_transformation(
+                                   trans_base.composite_body.state.rot.T_parent_this);
+    rot_base.composite_body.state.rot.Q_parent_this.left_quat_to_transformation(
+                                      rot_base.composite_body.state.rot.T_parent_this);
+    trans_base.propagate_state();
+    rot_base.propagate_state();
+  }
+  void disperse_state() {
+    copy_truth(); // reset baseline to truth.
+    if (disperse_pv) corr_state.disperse_state(  dispersed_position,
+                                                 dispersed_velocity);
+    if (disperse_pva) corr_state.disperse_state( dispersed_position,
+                                                 dispersed_velocity,
+                                                 dispersed_T_mx);
+    if (disperse_a)  corr_state.disperse_state(  dispersed_T_mx);
+    if (disperse_pva_diff_ref_diff_att) corr_state.disperse_state( trans_base.composite_body.state,
+                                                                   rot_base.composite_body.state.rot.T_parent_this,
+                                                                   dispersed_position,
+                                                                   dispersed_velocity,
+                                                                   dispersed_T_mx);
+    if (disperse_pva_diff_ref) corr_state.disperse_state( trans_base.composite_body.state,
+                                                          dispersed_position,
+                                                          dispersed_velocity,
+                                                          dispersed_T_mx);
+  }
+
+
+  VerifSimObject(const VerifSimObject&);
+  VerifSimObject & operator = (const VerifSimObject&);
+};
+VerifSimObject verif(dynamics.dyn_manager);

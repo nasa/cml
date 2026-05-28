@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Test Fault 1" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="SINEWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters Amplitude="1" frequency="0.125" phase="0"></Parameters>
+      <VarFrequency scalar=".1">
+         <IndVariable name="test_object.current_time"></IndVariable>
+      </VarFrequency>
+   </Function>
+   <TriggerGroup>
+      <Trigger name = "trigger 1" variable="test_object.current_time" compare="GE" value="2"></Trigger>
+      <Trigger name = "trigger 2" variable="test_object.current_time" compare="LE" value="10"></Trigger>
+   </TriggerGroup>
+   <TriggerGroup>
+      <Trigger name = "trigger 7" variable="test_object.current_time" compare="GE" value="32"></Trigger>
+      <Trigger name = "trigger 8" variable="test_object.current_time" compare="LE" value="40"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 2" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="SINEWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters Amplitude="1" frequency="0.125" phase="0"></Parameters>
+      <VarAmplitude scalar=".2">
+         <IndVariable name="test_object.current_time"></IndVariable>
+      </VarAmplitude>
+   </Function>
+   <TriggerGroup>
+      <Trigger name = "trigger 3" variable="test_object.current_time" compare="GE" value="12"></Trigger>
+      <Trigger name = "trigger 4" variable="test_object.current_time" compare="LE" value="20"></Trigger>
+   </TriggerGroup>
+   <TriggerGroup>
+      <Trigger name = "trigger 9" variable="test_object.current_time" compare="GE" value="42"></Trigger>
+      <Trigger name = "trigger 10" variable="test_object.current_time" compare="LE" value="50"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 3" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="SINEWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters Amplitude="1" frequency="0.125" phase="0"></Parameters>
+      <VarPhase scalar=".125">
+         <IndVariable name="test_object.current_time"></IndVariable>
+      </VarPhase>
+   </Function>
+   <TriggerGroup>
+      <Trigger name = "trigger 5" variable="test_object.current_time" compare="GE" value="22"></Trigger>
+      <Trigger name = "trigger 6" variable="test_object.current_time" compare="LE" value="30"></Trigger>
+   </TriggerGroup>
+   <TriggerGroup>
+      <Trigger name = "trigger 11" variable="test_object.current_time" compare="GE" value="52"></Trigger>
+   </TriggerGroup>
+</Fault>
+</FaultManager>

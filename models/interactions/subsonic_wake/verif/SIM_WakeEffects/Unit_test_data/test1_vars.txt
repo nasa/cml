@@ -1,0 +1,6 @@
+test.bodyA_inertial_vel[0]
+test.bodyA_inertial_vel[1]
+test.bodyA_inertial_vel[2]
+test.bodyB_inertial_vel[0]
+test.bodyB_inertial_vel[1]
+test.bodyB_inertial_vel[2]

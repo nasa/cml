@@ -1,0 +1,84 @@
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/body_attach_aligned.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_rot_state.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/mass/include/mass.hh"
+
+##include "../../include/mass_body_detach_impulsive.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+  protected:
+    jeod::DynManager & dyn_manager;
+
+  public:
+    bool                         initialize_third_body;
+    jeod::DynBody                bodyA;
+    jeod::DynBody                bodyB;
+    jeod::MassBody               bodyC;
+    jeod::MassBody               bodyD;
+    jeod::DynBody                bodyE;
+    jeod::MassBodyInit           mass_init_A;
+    jeod::MassBodyInit           mass_init_B;
+    jeod::MassBodyInit           mass_init_C;
+    jeod::MassBodyInit           mass_init_D;
+    jeod::MassBodyInit           mass_init_E;
+    jeod::BodyAttachAligned      attach_B_to_A;
+    jeod::BodyAttachAligned      attach_C_to_A;
+    jeod::BodyAttachAligned      attach_D_to_C;
+    jeod::BodyAttachAligned      attach_E_to_B;
+    jeod::DynBodyInitTransState  trans_init;
+    jeod::DynBodyInitRotState    rot_init;
+
+// ********** Insert testing instance here:   *******
+    MassBodyDetachImpulsive  detach_B_from_A;
+    MassBodyDetachImpulsive  detach_C_from_A;
+    MassBodyDetachImpulsive  detach_D_from_C;
+    MassBodyDetachImpulsive  detach_E_from_B;
+// *************************************************
+
+
+    VehicleSimObject(jeod::DynManager & dyn_mgr_in)
+      :
+      dyn_manager (dyn_mgr_in),
+      initialize_third_body(false)
+    {
+      P_ENV ("initialization") initialize_dynbodies();
+    };
+
+  protected:
+    void initialize_dynbodies() {
+      bodyA.initialize_model( dyn_manager);
+      bodyB.initialize_model( dyn_manager);
+      if (initialize_third_body) {
+        bodyE.initialize_model( dyn_manager);
+      }
+    }
+
+  private:
+    VehicleSimObject( const VehicleSimObject&);
+    VehicleSimObject & operator = ( const VehicleSimObject&);
+};
+VehicleSimObject vehicle(dynamics.dyn_manager);
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

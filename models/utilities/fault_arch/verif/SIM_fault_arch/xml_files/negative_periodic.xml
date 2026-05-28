@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Test Fault 1" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Overwrite value="100"></Overwrite>
+   <TriggerGroup>
+      <Trigger name = "trigger 1" variable="test_object.negative_time" compare="LE" value="-5" trigger_period="3" trigger_length="1.5"></Trigger>
+   </TriggerGroup>
+</Fault>
+</FaultManager>

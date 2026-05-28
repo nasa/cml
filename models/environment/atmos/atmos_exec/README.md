@@ -1,0 +1,72 @@
+# Information
+
+<p align="center">
+    <table>
+        <tr>
+            <th colspan=5>Model Information</th>
+        </tr>
+        <tr>
+            <td>Rating</td>
+            <td colspan=4 align=center>~maturity-4</td>
+        </tr>
+        <tr>
+            <td>POC</td>
+            <td>Gary Turner @gturner </td>
+            <td>gary.w.turner@nasa.gov</td>
+            <td>281.244.0668</td>
+            <td>~ANTARES</td>
+        </tr>
+    </table>
+</p>
+
+## Synopsis
+
+The Atmos-exec model provides an interface between the vehicles and the
+atmospheres so that a vehicle can find the current state of its atmosphere
+given its current state and time.
+
+The atmosphere models typically reside with the planet (Earth); Earth has an
+atmosphere so it makes sense that the Earth sim-object should house the
+atmosphere models.
+The exception to this rule is the GRAM model.  For various reasons - not the
+least of which being a lack of time to figure out why it would be so designed -
+the atmospheric state in a GRAM atmosphere depends on its previous state(s).
+So if the GRAM model is shared between vehicles, the atmospheric state at
+vehicleA will depend on the previous calculation, which might be the
+atmospheric state at vehicleB.  Not a good start.
+
+For each atmosphere model, there is an executive model that generates
+the atmospheric state given the necessary inputs.  The selection of variables
+to use as inputs is model-specific.  Note that this is a conceptual
+relationship, not an instantiated relationship.  There will typically be
+multiple instances of the executive (one per vehicle) and only one instance of
+the actual atmosphere (except in the case of GRAM).
+Because each vehicle needs access to the single atmosphere entity, this
+executive is implemented as an interface, using references to the input state
+and a reference to the atmosphere model.  Then there can be as many of
+these executives as there are vehicles without duplicating atmospheres.
+This model includes a selection of model-specific executives.  They are labeled
+atmosphere\_exec_*, e.g. atmosphere_exec\_ATB.
+
+The master atmos-exec class is intended to be a project-specific class.  It
+provides the executive interfaces to all of the atmosphere models that a
+particular project might want to use.
+The constructor for the atmos\_exec class takes references to all of the
+atmosphere instances and farms them out to the constructors of the respective
+atmosphere-executives.
+An enumerated list provide the choice of atmosphere and wind models that the
+atmos-exec class makes available.
+
+Finally, each (atmospheric) vehicle is created with an instance of this
+atmos-exec class.  Through that instance, every vehicle gets access to every
+atmosphere available in the project.
+It is typical, but not required, that all vehicles will use the same
+atmosphere.
+
+## Documentation
+
+This model is independently documented in the docs directory.
+
+## Verification
+
+This model contains independent verification test cases in the verif directory.

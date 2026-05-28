@@ -1,0 +1,69 @@
+/***************************************************************
+CLASS: MoonSimObject
+PURPOSE:
+  This sim object models the Moon, with the GRAIL gravity
+  model GRGM900C.)
+***************************************************************/
+
+// Include headers for classes that this class contains:
+##include "jeod/models/environment/planet/include/planet.hh"
+##include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
+
+// Include default data classes:
+##include "jeod/models/environment/planet/data/include/moon.hh"
+
+// CML headers
+##include "cml/models/environment/gravity/lunar_GRGM900C/data/include/GRGM900C_lunar_gravity.hh"
+
+// NOTE -
+//  Not inheriting from JEOD generic-planet sim-object class because
+//  that has a call to
+//  SphericalHarmonicsGravitySource_default_data::
+//                                initialize(SphericalHarmonicsGravitySource*)
+//  While GRGM900C_LunarGravity could be made to be a type of
+//  SphericalHarmonicsGravitySource_default_data without much difficulty, the
+//  JEOD method uses a pointer to the gravity body, and the GRGM900C model
+//  uses a reference.  So the effort spent would result in the model being
+//  less robust.
+
+class MoonSimObject: public Trick::SimObject
+{
+ protected:
+  // References
+  jeod::GravityManager & grav_manager;
+  jeod::DynManager & dyn_manager;
+
+ public:
+  jeod::Planet planet;
+  jeod::SphericalHarmonicsGravitySource gravity_source;
+
+  jeod::Planet_moon_default_data    planet_default_data;
+  GRGM900C_LunarGravity       GRGM900C_lunar_gravity;
+
+  //Constructor
+  MoonSimObject( jeod::GravityManager & grav_in,
+                 jeod::DynManager   & dyn_manager_in)
+    :
+    grav_manager(grav_in),
+    dyn_manager(dyn_manager_in),
+    gravity_source(),
+    GRGM900C_lunar_gravity( GRGM900C_LunarGravity::MAX_RES_900,
+                            gravity_source)
+
+  {
+    //Default data jobs
+    ("default_data") planet_default_data.initialize ( &planet );
+
+    // Initialization jobs
+    P_ENV  ("initialization") gravity_source.initialize_body ( );
+    P_ENV  ("initialization") grav_manager.add_grav_source ( gravity_source) ;
+    P_ENV  ("initialization") planet.register_model ( gravity_source,
+                                                      dyn_manager);
+    P_EPH  ("initialization") planet.initialize ( );
+  }
+ private:
+  MoonSimObject (const MoonSimObject&);
+  MoonSimObject & operator = (const MoonSimObject&);
+};
+MoonSimObject moon( env.gravity_manager,
+                    dynamics.dyn_manager );

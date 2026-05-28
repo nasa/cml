@@ -1,0 +1,41 @@
+include(AddCMLLibrary)
+add_cml_library(
+    NAME
+        interactions
+
+    HEADERS
+        aero/include/aero_coefficients.hh
+        aero/include/aero_environment.hh
+        aero/include/aero_executive_base.hh
+        aero/include/aero_executive_simple.hh
+        aero/include/aero_executive_simple_lift_drag.hh
+        aero/include/aero_executive_table.hh
+        aero/include/aero_interface_base.hh
+        aero/include/aero_interface_base_extended.hh
+        aero/include/aero_interface_output.hh
+        aero/include/aero_interface_simple.hh
+        aero/include/aero_interface_simple_lift_drag.hh
+        aero/include/aero_interface_table.hh
+        aero/include/aero_table_set.hh
+        aero/include/aero_table_set_base.hh
+        subsonic_wake/include/subsonic_wake.hh
+        subsonic_wake/include/wake_bodies.hh
+        subsonic_wake/include/wake_effects.hh
+        subsonic_wake/include/wake_params.hh
+
+    SOURCES
+        aero/src/aero_executive_simple.cc
+        aero/src/aero_executive_simple_lift_drag.cc
+        aero/src/aero_executive_table.cc
+        aero/src/aero_executive_table_disperse.cc
+        aero/src/aero_interface_base.cc
+        aero/src/aero_interface_simple.cc
+        aero/src/aero_interface_simple_lift_drag.cc
+        aero/src/aero_interface_table.cc
+        aero/src/aero_table_set_base.cc
+        subsonic_wake/src/prf_model.cc
+        subsonic_wake/src/reverse_flow.cc
+        subsonic_wake/src/subsonic_wake.cc
+        subsonic_wake/src/wake_bodies.cc
+        subsonic_wake/src/wake_effects_base.cc
+)

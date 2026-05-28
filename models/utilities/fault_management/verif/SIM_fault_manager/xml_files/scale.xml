@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Scale Faults">
+<Fault ID="Scale Fault Char" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_char"></SimVar>
+  <Scale value="2"></Scale>
+  <TriggerGroup>
+    <Trigger name="scale trigger" variable="test_object.current_time" compare="GE" value="1.0"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault UChar" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uchar"></SimVar>
+  <Scale value="96"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault Short" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_sint"></SimVar>
+  <Scale value="150"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault UShort" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_usint"></SimVar>
+  <Scale value="150"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault Int" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_int"></SimVar>
+  <Scale value="150"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault UInt" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uint"></SimVar>
+  <Scale value="150"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault Long" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_lint"></SimVar>
+  <Scale value="150"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault ULong" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ulint"></SimVar>
+  <Scale value="150"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault LongLong" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_llint"></SimVar>
+  <Scale value="150"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault ULongLong" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ullint"></SimVar>
+  <Scale value="150"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault Float" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <Scale value="150"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Scale Fault Double" enabled="true" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Scale value="150"></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="scale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+</FaultManager>

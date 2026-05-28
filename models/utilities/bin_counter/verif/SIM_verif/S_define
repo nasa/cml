@@ -1,0 +1,176 @@
+/*****************************************************************************
+PURPOSE: (Tests the bin- and target- counter algorithms
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (09/2023) (ANTARES) (verification))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/bin_counter.hh"
+##include "../../include/target_counter.hh"
+##include "../../include/proximity_counter.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+
+ public:
+  UnitTestFramework framework;
+
+  std::vector<double> edges;
+  std::vector<int> empty_ints;
+  std::vector<double> empty_dbl;
+  std::vector<double> non_monot_edges;
+  std::vector<int> targets_v;
+  int targets_a[4];
+  unsigned int ii;
+  double limit_a_dbl;
+  double limit_b_dbl;
+  int limit_a_int;
+  int limit_b_int;
+
+  double x;
+  int    i;
+
+  // Model for testing:
+  CML_BinCounter        bin_counter_vec;
+  CML_BinCounter        bin_counter_arr;
+  CML_BinCounter        bin_counter_arr_open;
+  CML_BinCounter        bin_counter_interval;
+  CML_BinCounter        bin_counter_interval_open;
+  CML_TargetCounter     tgt_counter_vec;
+  CML_TargetCounter     tgt_counter_arr;
+  CML_TargetCounter     tgt_counter_interval;
+  CML_ProximityCounter  prox_counter;
+  CML_ProximityCounter  prox_counter_vec;
+
+
+
+
+  AntaresUnitTestSimObject()
+    :
+    edges{-1.0, 0.5, 2.1, 3.3},
+    empty_ints{},
+    empty_dbl{},
+    non_monot_edges{-2.0, 1.0, 0.5, 5.0},
+    targets_v{-2, -5, 2, -2},
+    targets_a{-2, -5, 2, -2},
+    ii(4),
+    limit_a_dbl(-1.0),
+    limit_b_dbl(3.3),
+    limit_a_int(-2),
+    limit_b_int(1),
+
+    bin_counter_vec( edges),
+    bin_counter_arr(),
+    bin_counter_arr_open(),
+    bin_counter_interval( limit_b_dbl, limit_a_dbl, 3),
+    bin_counter_interval_open(limit_a_dbl, limit_b_dbl, 3, false),
+    tgt_counter_vec( targets_v),
+    tgt_counter_arr(),
+    tgt_counter_interval( limit_b_int, limit_a_int),
+    prox_counter_vec( edges)
+  {
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    // support jobs
+//    ("initialization") tgt_counter_arr.set_data( targets_a, 4);
+    ("initialization") template_methods();
+    (1.0, "environment") add_entries();
+  }
+
+  void template_methods()
+  {
+    tgt_counter_arr.set_data<4>( targets_a);
+    bin_counter_arr.set_data<4>( {-1.0, 0.5, 2.1, 3.3} );
+    bin_counter_arr_open.set_data<4>( {-1.0, 0.5, 2.1, 3.3}, false );
+    prox_counter.set_data<4>({-1.0, 0.5, 2.1, 3.3});
+
+  }
+
+  void add_entries()
+  {
+    bin_counter_vec.insert(x);
+    bin_counter_arr.insert(x);
+    bin_counter_arr_open.insert(x);
+    bin_counter_interval.insert(x);
+    bin_counter_interval_open.insert(x);
+    tgt_counter_vec.insert(i);
+    tgt_counter_arr.insert(i);
+    tgt_counter_interval.insert(i);
+    prox_counter.insert(x);
+    prox_counter_vec.insert(x);
+  }
+
+  void test_warnings()
+{
+// TARGET COUNTE WARNING
+  std::cout << "\n"
+"***************************************************************************\n"
+"Error - cannot create target counter from empty data set.\n"
+"Requires at least one target. \n"
+"***************************************************************************\n" << std::endl;
+  tgt_counter_arr.set_data( empty_ints);
+
+
+// PROXIMITY COUNTER WARNINGS
+  std::cout << "\n"
+"***************************************************************************\n"
+"Error - cannot create proximity counter with less than one target.\n"
+"***************************************************************************\n" << std::endl; 
+
+  prox_counter.set_data( empty_dbl);
+
+  std::cout << "\n"
+"***************************************************************************\n"
+"Error - cannot create proximity counter with non monotonic data set.\n"
+"***************************************************************************\n" << std::endl; 
+
+  prox_counter.set_data( non_monot_edges);
+
+
+// BIN COUNTER WARNINGS
+  std::cout << "\n"
+"***************************************************************************\n"
+"Error - cannot create bin counter with non monotonic data set.\n"
+"***************************************************************************\n" << std::endl; 
+
+  bin_counter_vec.set_data( non_monot_edges);
+
+  std::cout << "\n"
+"***************************************************************************\n"
+"Error - cannot create bin counter with less than two edges in data set.\n"
+"A bin is created using two edges.\n"
+"***************************************************************************\n" << std::endl; 
+
+  bin_counter_vec.set_data( empty_dbl);
+  
+  std::cout << "\n"
+"***************************************************************************\n"
+"Error - cannot create bin counter with less than one bin.\n"
+"***************************************************************************\n" << std::endl; 
+  unsigned int zero_bin = 0;
+  bool closed_end = true;
+  bin_counter_vec.set_data( limit_a_dbl, limit_b_dbl, zero_bin, closed_end);
+
+
+  std::cout << "\n"
+"***************************************************************************\n"
+"Error - cannot create bin counter with infinitesimal bin.\n"
+"***************************************************************************\n" << std::endl; 
+  unsigned int num_bins = 2;
+  limit_a_dbl = 1.0;
+  limit_b_dbl = 1.0;
+  bin_counter_vec.set_data( limit_a_dbl, limit_b_dbl, num_bins, closed_end);
+
+}
+
+
+ private:
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject test;

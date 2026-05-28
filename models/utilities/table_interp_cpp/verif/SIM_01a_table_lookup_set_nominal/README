@@ -1,0 +1,6 @@
+The runs in this sim are intended to examine the various options for
+correctly configuring a set of lookup/interpolation tables across multiple
+independent variables.
+
+In the verif_data area, the verif.py script runs these scenarios
+independently and performs data comparisons on them.

@@ -1,0 +1,4 @@
+aero.indep_generic
+aero.atmos_rel.mach_number
+aero.atmos_rel.angle_of_attack
+aero.atmos_rel.angle_of_sideslip

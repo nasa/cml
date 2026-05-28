@@ -1,0 +1,201 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+#define DYNAMICS 1.0
+#include "default_priority_settings.sm"
+#define P_REL P70
+
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_TAI_UTC_UT1.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_basic.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
+##include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+##include "cml/models/environment/gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh"
+##include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec.hh"
+##include "cml/models/environment/atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh"
+##include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
+##include "../../include/secondary_chute_atmosphere.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+  public:
+   jeod::DynBody                         body;
+   jeod::MassBodyInit                    mass_init;
+   StateInitialize                       state_initialize;
+   SphericalHarmonicsFastGravityControls grav_controls_earth;
+
+// Environment setup
+   AtmosphereExec                  atmos_exec;
+   AtmosRelativeState              atmos_rel;
+
+   GramInterface gram_i;
+   GramInterface master_gram_i;
+   LookupAtmosWinds DRWP_atmos;  // (--) Doppler Radar Wind Pairs from SLS program
+   STD1976          std_76;
+   SimpleLookupWind simple_wind;
+
+   ExtendedPlanetaryDerivedState   body_state;
+   int      month_override;
+
+
+// Secondary atmosphere testing
+   State_Atmos_Output             mchute_state;
+   State_Atmos_Output             dchute_state;
+   State_Atmos_Output             schute_state;
+   double   mchute_offset;
+   double   dchute_offset;
+   double   schute_offset;
+
+   ChuteAtmosphere             mchute;
+   ChuteAtmosphere             dchute;
+   ChuteAtmosphere             schute;
+
+// Test the mid-sim interrupt capability.  Override state just to burn some time.
+   bool state_override_flag;
+
+// *************************************************
+
+
+  VehicleSimObject(    jeod::DynManager & dyn_mgr_in,
+                       double     & dyn_time_in,
+                       jeod::TimeStandard & time_in)
+      :
+      atmos_exec( gram_i,
+                  DRWP_atmos,
+                  std_76,
+                  simple_wind,
+                  &master_gram_i,
+                  dyn_time_in,
+                  body_state,
+                  body),
+      atmos_rel( body,
+                 body_state,
+                 atmos_exec),
+      month_override(0),
+      mchute_state(),
+      dchute_state(),
+      schute_state(),
+      mchute_offset(0.0),
+      dchute_offset(0.0),
+      schute_offset(0.0),
+      mchute(DRWP_atmos,
+             std_76,
+             simple_wind,
+             gram_i,
+             master_gram_i,
+             dyn_time_in,
+             body_state,
+             body,
+             mchute_state),
+      dchute(DRWP_atmos,
+             std_76,
+             simple_wind,
+             gram_i,
+             master_gram_i,
+             dyn_time_in,
+             body_state,
+             body,
+             dchute_state),
+      schute(DRWP_atmos,
+             std_76,
+             simple_wind,
+             gram_i,
+             master_gram_i,
+             dyn_time_in,
+             body_state,
+             body,
+             schute_state),
+      state_override_flag(true),
+
+      dyn_manager (dyn_mgr_in),
+      dyn_time (dyn_time_in),
+      time_ut1(time_in)
+  {
+    P_REL("initialization") atmos_rel.initialize();
+    P_REL("initialization") atmos_exec.initialize(time_ut1);
+
+    P_ENV ("initialization") body.initialize_model( dyn_manager);
+    P_DYN ("initialization") body_state.initialize(body, dyn_manager);
+    P_DYN ("initialization") mchute.initialize(time_ut1);
+    P_DYN ("initialization") dchute.initialize(time_ut1);
+    P_DYN ("initialization") schute.initialize(time_ut1);
+
+    (1.0, "environment") state_override(dyn_time);
+    (1.0, "environment") body_state.update();
+    (1.0, "environment") atmos_rel.update();
+    (1.0, "environment") atmos_exec.update();
+
+    (1.0, "environment") set_chute_state();
+    (1.0, "environment") mchute.update();
+    (1.0, "environment") dchute.update();
+    (1.0, "environment") schute.update();
+  };
+  private:
+    VehicleSimObject( const VehicleSimObject&);
+    VehicleSimObject & operator= ( const VehicleSimObject&);
+
+  protected:
+    jeod::DynManager & dyn_manager;
+    double     & dyn_time;
+    jeod::TimeStandard & time_ut1;
+
+  void state_override(double time) {
+    if (!state_override_flag) {
+      return;
+    }
+    body.composite_body.state.trans.position[0] = 6380000+400*time;
+    for (unsigned int ii = 0; ii<3; ii++) {
+      body.composite_body.state.trans.velocity[ii] = state_initialize.velocity[ii]*time;
+    }
+    return;
+  };
+
+  void set_chute_state() {
+    mchute_state.geocen_alt = body_state.state.sphere_coords.altitude +
+                                                               mchute_offset;
+    mchute_state.geocen_lat = body_state.state.sphere_coords.latitude;
+    mchute_state.geocen_lon = body_state.state.sphere_coords.longitude;
+    mchute_state.geocen_alt_gram = body_state.topocentric_altitude +
+                                                               mchute_offset;
+
+    dchute_state.geocen_alt = body_state.state.sphere_coords.altitude +
+                                                               dchute_offset;
+    dchute_state.geocen_lat = body_state.state.sphere_coords.latitude;
+    dchute_state.geocen_lon = body_state.state.sphere_coords.longitude;
+    dchute_state.geocen_alt_gram = body_state.topocentric_altitude +
+                                                               dchute_offset;
+
+    schute_state.geocen_alt = body_state.state.sphere_coords.altitude +
+                                                               schute_offset;
+    schute_state.geocen_lat = body_state.state.sphere_coords.latitude;
+    schute_state.geocen_lon = body_state.state.sphere_coords.longitude;
+    schute_state.geocen_alt_gram = body_state.topocentric_altitude +
+                                                               schute_offset;
+  };
+
+
+};
+VehicleSimObject vehicle(dynamics.dyn_manager,
+                         jeod_time.time_manager.dyn_time.seconds,
+                         jeod_time.time_ut1);
+
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

@@ -1,0 +1,27 @@
+Addendum to verification:
+
+With the addition of the option to specify actions as entities rather than as
+executives in an extended class, a new sim was added -- SIM_verif_actions.
+
+This sim has a very similar structure to that for SIM_verif and the resulting
+data is very similar.
+
+The difference lies in:
+
+
+- RUN_sim_stop_var_adjust_logging_a:
+  - In SIM_verif, the "log-now" occurs as part of the events specific-execution,
+    then the complementary-changes take place, which include the assignment of
+    base_bool to false. So in this run, the former value of base_bool is logged.
+  - In SIM_verif_actions, the "log-now" occurs as part of an additional action,
+    so occurs as part of the complementary-changes, and occurs AFTER the
+    assignment of base_bool. So in this run, the new value of base_bool is
+    logged.
+
+- RUN_delayed_check
+  - Has an extra log at t=1.8 because the "log-now" acction was added to this
+    event.
+
+- RUN_2_variable_check:
+  - Two OR check forces a log at t=0.2, 0.3, 0.6, 0.7 that did not exist before
+  - Two AND check terminates the sim at t=0.7, previously it went to t=1.

@@ -1,0 +1,43 @@
+==========================================
+     RUN_SET_forward_8x8_Earth_only
+==========================================
+
+====================
+DIFFERENCES EXIST!!!
+====================
+log_test_data.csv:
+  Stop times do not match: Regression data stops at t = 6010.0
+ Test data stops at t = 6000.0
+  Comparison made of common simulation period only.
+  Logging frequencies do not match: Regression time interval = 10.0
+ Test time interval       = 40.0
+  Comparison points limited to where times match.
+Testing the following variables:
+Those prefixed with ----<time>------- show diffs and will be plotted.
+The value <time> is the time at which the first divergence was noticed for the respective variable.
+---- 10.0 ---- test.body.composite_body.state.trans.position[0]
+
+---- 10.0 ---- test.body.composite_body.state.trans.position[1]
+
+---- 10.0 ---- test.body.composite_body.state.trans.position[2]
+
+---- 10.0 ---- test.body.composite_body.state.trans.velocity[0]
+
+---- 10.0 ---- test.body.composite_body.state.trans.velocity[1]
+
+---- 10.0 ---- test.body.composite_body.state.trans.velocity[2]
+
+---- 10.0 ---- test.prop_time
+
+
+
+################################
+# CHRONOLOGICALLY ORDERED LIST #
+################################
+10.0 ----- test.body.composite_body.state.trans.position[0]
+10.0 ----- test.body.composite_body.state.trans.position[1]
+10.0 ----- test.body.composite_body.state.trans.position[2]
+10.0 ----- test.body.composite_body.state.trans.velocity[0]
+10.0 ----- test.body.composite_body.state.trans.velocity[1]
+10.0 ----- test.body.composite_body.state.trans.velocity[2]
+10.0 ----- test.prop_time

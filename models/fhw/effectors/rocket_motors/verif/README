@@ -1,0 +1,12 @@
+The numbers on each run directory carry hidden meaning:
+
+RUN_0* are the nominal model tests; these runs generate data that can be
+automatically compared against the data in the verif_data directory.
+
+RUN_1* are off-nominal runs that result in specific error messages.  These
+should be manually checked to confirm that the intended error message is
+getting broadcast.
+
+RUN_2* are failure cases.  In these cases the configuration results in
+simulation termination.  These should be manually checked to confirm that the
+error messages match expectation.

@@ -1,0 +1,17 @@
+contact_obj.override.composite_body.state.trans.position[0]
+contact_obj.override.composite_body.state.trans.position[1]
+contact_obj.override.composite_body.state.trans.position[2]
+
+contact_obj.override.composite_body.state.rot.Q_parent_this.scalar
+contact_obj.override.composite_body.state.rot.Q_parent_this.vector[0]
+contact_obj.override.composite_body.state.rot.Q_parent_this.vector[1]
+contact_obj.override.composite_body.state.rot.Q_parent_this.vector[2]
+
+contact_obj.ref.composite_body.state.trans.position[0]
+contact_obj.ref.composite_body.state.trans.position[1]
+contact_obj.ref.composite_body.state.trans.position[2]
+
+contact_obj.ref.composite_body.state.rot.Q_parent_this.scalar
+contact_obj.ref.composite_body.state.rot.Q_parent_this.vector[0]
+contact_obj.ref.composite_body.state.rot.Q_parent_this.vector[1]
+contact_obj.ref.composite_body.state.rot.Q_parent_this.vector[2]

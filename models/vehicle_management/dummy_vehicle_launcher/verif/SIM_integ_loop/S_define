@@ -1,0 +1,73 @@
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+
+#include "integ_loop.sm" // gives access to GravityManager class
+#include "time_dyntime_only.sm"
+#include "dynamics_multi_group.sm"
+#include "environment_sans_de405.sm"
+#include "earth_basic.sm"
+#include "vehicle_basic.sm" //provides instance called "vehicle"
+
+/* =============== Events Manager Verification Simulation ========================== */
+/* ================================================================================= */
+/*                      sys - Trick runtime executive and data recording routines.   */
+/* dummy_veh_launcher_verif - Dummy vehicle launcher verif object                    */
+/* ================================================================================= */
+
+VehicleSimObject vehicle2(dynamics.dyn_manager);
+
+##include "jeod/models/dynamics/dyn_manager/include/dynamics_integration_group.hh"
+##include "er7_utils/integration/rk4/include/rk4_integrator_constructor.hh"
+
+##include "../../include/dummy_vehicle_launcher.hh"
+
+
+class VerifSimObject : public Trick::SimObject {
+    public:
+        DummyVehicleLauncher           launcher; // (--) makes the vehicle active
+        DummyVehicleLauncher           launcher_no_mass_body;
+        jeod::MassBody                 mass_body;
+        jeod::DynamicsIntegrationGroup group;
+        er7_utils::RK4IntegratorConstructor   rk4_constructor;
+        er7_utils::IntegratorConstructor * rk4_constructor_ptr;
+
+        VerifSimObject(VehicleBasicSimObject & vehicle_in,
+                       VehicleSimObject & vehicle2_in)
+            :
+            launcher(vehicle2_in.dyn_body, // populate this body
+                     mass_body,            //   with these mass data
+                     vehicle_in.dyn_body), //   and these state data
+            launcher_no_mass_body(vehicle2_in.dyn_body,
+                                  vehicle_in.dyn_body),
+            rk4_constructor_ptr(&rk4_constructor)
+        {
+            ("initialization") launcher.initialize_integ_group_actions();
+            ("initialization") launcher_no_mass_body.initialize_integ_group_actions();
+        };
+    
+    private:
+        VerifSimObject (const VerifSimObject&);
+        VerifSimObject & operator = (const VerifSimObject&);
+};
+VerifSimObject dummy_veh_launcher_verif(vehicle, 
+                                        vehicle2);
+
+JeodIntegLoopSimObject group1(DYNAMICS,
+                              dummy_veh_launcher_verif.rk4_constructor_ptr,
+                              dummy_veh_launcher_verif.group,
+                              jeod_time.time_manager,
+                              dynamics.dyn_manager,
+                              env.gravity_manager,
+                              &vehicle,
+                              NULL);
+
+JeodIntegLoopSimObject group2(5*DYNAMICS,
+                              dummy_veh_launcher_verif.rk4_constructor_ptr,
+                              dummy_veh_launcher_verif.group,
+                              jeod_time.time_manager,
+                              dynamics.dyn_manager,
+                              env.gravity_manager,
+                              NULL);

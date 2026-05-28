@@ -1,0 +1,2 @@
+trick_logging_verif.group1_var
+trick_logging_verif.group2_var

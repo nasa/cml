@@ -1,0 +1,100 @@
+/******************************************************************************
+PURPOSE:
+    (Test interpolation functions on 1D tables)
+PROGRAMMERS:
+    (((Bingquan Wang) (OSR) (May 2017) (initial implementation)
+
+******************************************************************************/
+
+//trick
+#include "sim_objects/default_trick_sys.sm"
+
+//jeod
+#include "jeod_sys.sm"
+
+//test model
+##include "include/test_model_interp1d.hh"
+##include "../../include/table_interp.h"
+##include "trick/exec_proto.h"
+
+class TestTblInterp1D_SimObj : public Trick::SimObject
+{
+public:
+  bool is_asc;        /* (--) to indicate the data is ascending or descending. */
+  const double x_base;  /* (--) the starting point of independent variable X. */
+  const double x_step;  /* (--) the interval of variable X between two simulation steps. */
+
+  double var_x;       /* (--) the independent variable X */
+  double interp_val;  /* (--) the interpolated value */
+  int low_index;      /* (--) the lower breakpoint index */
+  double frac;        /* (--) the fractional distance in the interval between breakpoints */
+
+  TestModelInterp1D<25> test_model;
+  
+  TestTblInterp1D_SimObj() :
+    is_asc(true),    
+    x_base(-3.0),
+    x_step(0.25),
+    test_model(x_base, 2.0*x_step)
+  {
+    ("initialization") init();
+    (1.0, "scheduled") update();
+  };
+
+private:
+  TestTblInterp1D_SimObj(const TestTblInterp1D_SimObj&);
+  TestTblInterp1D_SimObj& operator=(const TestTblInterp1D_SimObj&);
+
+  void init()
+  {
+    test_scale_range();
+    test_model.set_default_data(is_asc);
+  }
+
+  void update()
+  {    
+    static double prev_val= x_base - (is_asc?x_step:-x_step);
+    var_x = prev_val + (is_asc ? x_step : -x_step); 
+    interp_val = test_model.update(var_x);
+    prev_val = var_x;
+   
+    low_index = test_model.get_low_index();
+    frac = test_model.get_frac();
+  }  
+
+  void test_scale_range()
+  {
+    double test_var[10];
+    const size_t len = sizeof(test_var)/sizeof(double);
+    for (size_t i=0; len>i; ++i) {      
+      test_var[i] = is_asc ? i : -double(i);
+    }
+    
+    double frac=0.0;
+    int low_index=-1;
+    
+    int ret = 0;
+    if (is_asc) {
+      ret = scale(test_var[0]-1.0, &frac, &low_index, test_var, len);
+    }
+    else {
+      ret = scale(test_var[0]+1.0, &frac, &low_index, test_var, len);
+    }
+    if (-1 != ret) {
+      exec_terminate_with_return(-1, __FILE__, __LINE__, "out-of-range test failed.");
+    }
+
+    if (is_asc) {
+      ret = scale(test_var[len-1]+2.0, &frac, &low_index, test_var, len);
+    }
+    else {
+      ret = scale(test_var[len-1]-2.0, &frac, &low_index, test_var, len);
+    }  
+    if (-2 != ret) {
+      exec_terminate_with_return(-1, __FILE__, __LINE__, "out-of-range test failed.");
+    }
+  }
+};
+
+TestTblInterp1D_SimObj test_interp1d;
+

@@ -1,0 +1,54 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+--------------------------------
+CML v0.2.0, May 2026
+--------------------------------
+
+This is the initial open-source release of the Johnson Space Center Aeroscience
+and Flight Mechanics Division (EG) Common Model Library (CML). CML is a
+relatively newly funded project so users should understand that this codebase
+is a work-in-progress. Significant architectural improvements are planned for
+future releases.
+
+* Bugs addressed:
+    - Fixed an issue where the Earth-Moon Rotating Frame model calculated the
+      quaternion incorrectly when the Earth__Moon_to_Earth option or the
+      Moon__Earth_to_Moon option was chosen. The transformation matrix was
+      correct originally and is unaffected by the bug.
+    - Fixed an issue where the Table Interpolation model's
+      TableIndependentVariable class would access invalid data when calculating
+      the interpolation fraction at the edge of the breakpoint list for the
+      case where there's only two breakpoints.
+
+* Changes to models:
+    - Updated the supported JEOD version from 3.4 to the 5.x series.
+    - Updated the minimum supported C++ standard to C++17.
+    - Some data and models which were not suitable for public release were
+      removed.
+
+* Changes to tools:
+    - Updated CMake build process to be the intended primary build tool for CML
+      models. Presets are provided for users to quickly build CML in various
+      configurations.
+    - Added the option to use CML as a Trickified library.
+    - Added code coverage instrumentation to the developer build.
+    - Split out build options specific to CML unit sims into their own internal
+      cml_unit_sim.mk file. Global options (TRICK_CXXFLAGS, TRICK_LDFLAGS, etc.)
+      for CML consumers are now the only thing remaining in cml.mk.
+
+* Changes to documentation:
+    - Added a contributing guide.
+
+--------------------------------
+CML v0.1.0, March 2026
+--------------------------------
+
+This is the original closed-source release of CML. The content included in this
+release was carried over from the Ramtares project as of commit hash
+2f871f4104efc6b45cfc0d9b057bcb0b5cf6c9bd with minimal changes. This release
+functions as a drop-in replacement for the Ramtares version of CML as of that
+commit.
+
+This release is available upon request for users within the NASA firewall.

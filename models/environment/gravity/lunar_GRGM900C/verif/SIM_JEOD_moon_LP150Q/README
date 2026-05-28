@@ -1,0 +1,8 @@
+This simulation is provided as a baseline to support comparison analysis
+between the GRGM900C model and another lunar gravity model.
+
+The simulation is not provided with any runs or verified data because we are
+not verifying the LP150Q model.  However, it does have exactly the same
+structure as the GRGM900C verification sim found in SIM_verif, so any input
+files executed in SIM_verif can also be executed here to obtain the vehile
+response to the LP150Q gravity model.

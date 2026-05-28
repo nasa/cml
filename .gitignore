@@ -1,0 +1,60 @@
+# Ignore Trick logged data except for data in verif_data directories.
+**/SIM_*/**/log_*.header
+**/SIM_*/**/log_*.trk
+**/SIM_*/**/log_*.csv
+**/SIM_*/**/log_*.h5
+**/SIM_*/**/_init_log*.csv
+**/SIM_*/**/varserver_log
+!**/verif_data/**/log_*.header
+!**/verif_data/**/log_*.trk
+!**/verif_data/**/log_*.csv
+!**/verif_data/**/log_*.h5
+
+# Ignore Trick and CMake build products.
+build
+**/SIM_*/.trick
+**/SIM_*/*akefile*
+swig_src
+S_source.hh
+S_default.dat
+S_main*.exe
+S_library_list
+S_sie.resource
+trick.zip
+/lib
+
+# Ignore Trick run-time generated files.
+chkpnt_*
+jeod_chkpnt_*
+DP_Product
+Default_data
+send_hs
+S_document.xml
+S_job_execution
+S_run_summary
+MONTE_RUN_*
+
+# Ignore Python venv and compiled files.
+.venv
+*.pyc
+
+# Ignore IDE/editor files.
+.vs/
+.idea/
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.bak
+*.swp
+*~
+_ReSharper*
+
+# Ignore user-specific settings.
+CMakeUserPresets.json
+tags
+
+# Ignore OS-generated files.
+.DS_Store
+.nfs*

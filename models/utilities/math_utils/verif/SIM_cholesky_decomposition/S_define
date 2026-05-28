@@ -1,0 +1,134 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "../../include/math_utils.hh"
+class SimpleSimObject : public Trick::SimObject {
+public:
+  double A[10][10];
+  double sqrt_A[10][10];
+  double B[10][10];
+  size_t sub_mx;
+  bool   test_4_arg_version;
+  bool   test_in_array_null;
+  bool   test_out_array_null;
+  bool   test_non_symmetric;
+
+  SimpleSimObject()
+    :
+    sub_mx(10),
+    test_4_arg_version(false),
+    test_in_array_null(false),
+    test_out_array_null(false),
+    test_non_symmetric(false)
+  {
+    ("default_data")   generate_seed();
+    ("initialization") exec_cholesky();
+  }
+
+private:
+  void generate_seed()
+  {
+    srand(2);
+    double seed[10][10] = {{0.0}};
+    for (size_t ii = 0; ii < 10; ++ii) {
+      for (size_t jj = 0; jj <=ii; ++jj) {
+        seed[ii][jj] = (rand() % 3000) / 1000.0;
+      }
+    }
+    print_mx("random seed matrix",seed);
+    mx_x_mxT( seed, A);
+    print_mx("A (generated)",A);
+  }
+
+  void exec_cholesky()
+  {
+    print_mx( "A (modified)", A);
+    bool success;
+    if (test_4_arg_version) {
+      success = MathUtils::cholesky_decomposition( "test",
+                                                   &A[0][0],
+                                                   &sqrt_A[0][0],
+                                                   10);
+    } else {
+      success = MathUtils::cholesky_decomposition( "test",
+                                                   &A[0][0],
+                                                   &sqrt_A[0][0],
+                                                   10,
+                                                   sub_mx);
+    }
+
+    if (test_in_array_null) {
+      success = MathUtils::cholesky_decomposition( "test",
+                                                   NULL,
+                                                   &sqrt_A[0][0],
+                                                   10,
+                                                   sub_mx);
+    }
+
+    if (test_out_array_null) {
+      success = MathUtils::cholesky_decomposition( "test",
+                                                   &A[0][0],
+                                                   NULL,
+                                                   10,
+                                                   sub_mx);
+    }
+
+    if (test_non_symmetric) {
+      A[0][1] = 55;
+      A[0][5] = 110;
+      success = MathUtils::cholesky_decomposition( "test",
+                                                   &A[0][0],
+                                                   &sqrt_A[0][0],
+                                                   10,
+                                                   sub_mx);
+    }
+
+    if (success) {
+      mx_x_mxT( sqrt_A, B);
+      print_mx( "sqrt-A", sqrt_A);
+      print_mx( "B", B);
+      test_equal( A, B);
+    }
+  }
+
+  void mx_x_mxT( double P[10][10], double Q[10][10])
+  {
+    for (size_t ii = 0; ii < 10; ++ii) {
+      for (size_t jj = 0; jj < 10; ++jj) {
+        Q[ii][jj] = 0.0;
+        for (size_t kk = 0; kk < 10; ++kk) {
+          Q[ii][jj] += P[ii][kk] * P[jj][kk];
+        }
+      }
+    }
+  }
+  void print_mx( std::string id, double P[10][10])
+  {
+    std::cout << "********   " << id << "   **************\n";
+    for (size_t ii = 0; ii < 10; ++ii) {
+      for (size_t jj = 0; jj < 10; ++jj) {
+        printf( "%9.5f", P[ii][jj]);
+      }
+      std::cout << "\n";
+    }
+  }
+  void test_equal( double P[10][10], double Q[10][10])
+  {
+    bool match = true;
+    for (size_t ii = 0; ii < sub_mx; ++ii) {
+      for (size_t jj = 0; jj < sub_mx; ++jj) {
+        if (std::abs(P[ii][jj] - Q[ii][jj]) > 0.001) {
+          std::cout << "MISMATCH at "<< ii << ", " << jj << " : " << P[ii][jj] << "  " << Q[ii][jj] <<"\n";
+          match = false;
+        }
+      }
+    }
+    if (match) std::cout << "\n******************************************\n********* Reconstruction matched *********\n******************************************\n\n";
+  }
+
+
+  SimpleSimObject( const SimpleSimObject&);
+  SimpleSimObject & operator= ( const SimpleSimObject&);
+
+};
+SimpleSimObject simple_so;

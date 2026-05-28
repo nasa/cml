@@ -1,0 +1,82 @@
+/************************************TRICK HEADER************************************************
+PURPOSE:  (S_define header)
+
+Unit_Test_Description: (Unit test runs all three different methods that can
+                        be used to convert values to words in C++. Then it
+                        compares them to make sure the models run the same
+                        and output the same and correct values.)
+***********************************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "cml/models/utilities/double_to_words/include/convert_double_to_words.hh"
+##include "cml/models/utilities/cml_message/include/cml_message.hh"
+##include <vector>
+##include <iostream>
+##include <ostream>
+
+class ConvertDoubleToWordsSimObject : public Trick::SimObject {
+  public:
+  UnitTestFramework framework;
+  double val; // (--)
+  double resolution; // (--)
+  std::vector<unsigned int> wvector; // (--)
+  unsigned int warray[4]; // (--)
+  unsigned int bit_size; // (--)
+
+  ConvertDoubleToUintWords dble_to_uint;
+
+  ConvertDoubleToWordsSimObject()
+    :
+    val(100.0),
+    resolution(0.10),
+    wvector(4,0),
+    bit_size(4),
+    dble_to_uint( val,
+                  0.10,
+                  4,
+                  4)
+  {
+    // Framework (leave this alone)
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    // test-specific jobs:
+    // Class form
+    (1.0,"scheduled") dble_to_uint.update();
+
+    // Vector form
+    (1.0,"scheduled") convert_double_to_uint_words( val,
+                                                    resolution,
+                                                    wvector,
+                                                    bit_size);
+    // Array form
+    (1.0,"scheduled") convert_double_to_uint_words (val,
+                                                    resolution,
+                                                    warray,
+                                                    4,
+                                                    bit_size);
+    (1.0,"scheduled") comparison();
+  }
+
+  void sweep_val( double start, double end, double incr) {
+    framework.add_sweep(val, start, end, incr);
+  }
+
+  private:
+  void comparison() {
+    for (unsigned int ii = 0; ii < 4; ii++) {
+      if (dble_to_uint.words[ii] != wvector[ii] ||
+          dble_to_uint.words[ii] != warray[ii]) {
+        std::cout << "All model values are NOT equal for word "<< ii <<
+                     " for value " << val << std::endl;
+      }
+    }
+  }
+
+  ConvertDoubleToWordsSimObject (const ConvertDoubleToWordsSimObject&);
+  ConvertDoubleToWordsSimObject & operator = (const ConvertDoubleToWordsSimObject&);
+};
+
+ConvertDoubleToWordsSimObject convert_double_words ;

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Test Fault 1" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="LINEAR">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters a="10" b="0"></Parameters>
+   </Function>
+   <TriggerGroup>
+      <Trigger name = "trigger 1" variable="test_object.current_time" compare="GE" value="5"></Trigger>
+   </TriggerGroup>
+</Fault>
+</FaultManager>

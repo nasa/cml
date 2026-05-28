@@ -1,0 +1,51 @@
+/*#####################TRICK HEADER#############################################
+
+PURPOSE:
+  ( Test the capabilities of Constraint-check)
+
+AUTHOR:
+   (
+    ((Gary Turner) (OSR) (May 2023) (Refactor with ANTARES V&V))
+   )
+##############################################################################*/
+
+#include "sim_objects/default_trick_sys.sm"
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "test_constraint_set.hh"
+
+class VerifUnitSimObject: public Trick::SimObject {
+
+ public:
+  UnitTestFramework framework;
+  double  var_x;
+  double  var_x_neg;
+  int     var_i;
+  double  delta_time;
+  TestConstraintSet constraints;
+
+
+  VerifUnitSimObject()
+    :
+    delta_time(0.1),
+    constraints( delta_time, var_x, var_x_neg, var_i)
+  {
+
+    ("initialization")   framework.initialize();
+    (1.0, "environment") framework.update();
+    (0.1, "environment") update_vals();
+
+    ("initialization")   constraints.set.initialize();
+    (0.1, "environment") constraints.set.update();
+  }
+
+  void update_vals()
+  {
+    var_x = var_i * 1.0;
+    var_x_neg = -var_x;
+  }
+  private:
+    VerifUnitSimObject (const VerifUnitSimObject&);
+    VerifUnitSimObject & operator = (const VerifUnitSimObject&);
+
+};
+VerifUnitSimObject test;

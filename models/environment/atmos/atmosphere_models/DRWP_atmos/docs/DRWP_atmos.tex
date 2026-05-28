@@ -1,0 +1,1855 @@
+ \documentclass[11pt,fleqn]{report}
+
+\usepackage{cml}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{longtable}
+
+\newcommand{\ModelName}{Doppler Radar Wind Pairs (DRWP)}
+\newcommand{\ModelAuthor}{Brian Birmingham, Gary Turner}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{April 2023}
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+\begin{document}
+\pagestyle{empty}
+\titlePage
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+
+{\Large \textbf {Revision History}}
+
+\begin{tabular}{| m{0.1\textwidth}| m{0.15\textwidth} | m{0.2\textwidth} | m{0.4\textwidth} |} \hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\
+\hline
+1 & April 2023 & Brian Birmingham,&  \\
+  &            & Gary Turner      & Initial Version \\ \hline
+\end{tabular}
+
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagestyle{plain}
+\pagenumbering{arabic} % Start text with arabic 1
+The Doppler Radar Wind Pairs (DRWP) model uses a one dimensional interpolation
+algorithm to obtain atmospheric values s a function of altitude; altitude is
+used as the independent variable for all interpolations.
+The values directly interpolated from the data file are:
+\begin{itemize}
+\item 2 or 3 components of the Cartesian wind velocity vector expressed in
+the topocentric East-North-Up (ENU) frame; the vertical component (U) is
+optional, the two horizontal components (E,N) are required.
+\item atmospheric mass-density
+\item atmospheric kinetic-temperature
+\item atmospheric static-pressure
+\end{itemize}
+
+In addition, the model computes values based on these interpolated values,
+and outputs:
+\begin{itemize}
+\item A 3-component Cartesian vector representing the wind velocity
+expressed in the topocentric North-East-Down(NED) frame.
+\item The azimuth angle representing the direction from which the wind is
+blowing in the horizontal plane.
+\item The azimuth angle representing the direction to which the wind is
+blowing in the horizontal plane.
+\item The magnitude of the wind velocity vector.
+\item The speed of sound.
+\end{itemize}
+
+Additionally, the model provides optional capability to compute the average
+wind velocity across a range of altitudes.
+
+The DRWP model is part of the Common Model Library (cml).
+
+\chapter{Requirements}
+\begin{enumerate}
+\item The model shall provide a simple mechanism for interpolating wind
+  and atmospheric values from a provided data set. The model shall provide
+  the capability to interpolate the data presented according to the
+  following assumptions:
+   \begin{itemize}
+  \item The file will be binary with a pre-defined data format.
+    \footnote{The model assumes a specific data layout within the binary
+              data file in response to this requirement. The organization
+              of data within the data file
+              is outlined in section \ref{sec:input_data}
+              and discussed in more detail in section
+              \ref{sec:binary_read_struc}.}
+  \item Altitude will be the independent variable for interpolations.
+  \item The file will include calibrated points at a selection of altitudes
+    for the following variables:
+    \begin{itemize}
+    \item East component of wind velocity.
+    \item North (Topocentric-North) component of wind velocity.
+    \item (optional) Vertical (Topocentric-Up) component of wind velocity.
+    \item mass-density.
+    \item kinetic temperature.
+    \item pressure.
+    \end{itemize}
+  \item For altitudes outside the domain of the provided data, the model
+    shall return the data associated with the closest calibrated data set.
+  \item Altitude data will be monotonically increasing.
+   \end{itemize}
+\item The model shall output the interpolated values for the following
+variables:
+  \begin{enumerate}
+  \item the 2 or 3 components of the Cartesian wind velocity as provided in
+    the data file; these are expressed in the Topocentric ENU frame.
+  \item A 3-component Cartesian vector representing the wind velocity
+    expressed in the Topocentric NED frame.
+  \item The azimuth angle representing the direction from which the wind is
+    blowing in the horizontal plane.
+  \item The azimuth angle representing the direction to which the wind is
+    blowing in the horizontal plane.
+  \item The magnitude of the wind velocity vector.
+  \item The atmospheric mass-density
+  \item The atmospheric kinetic-temperature
+  \item The atmospheric static-pressure.
+  \item The local speed of sound.
+  \end{enumerate}
+\item The model shall provide an On/Off mechanism that will prevent the model
+  from being executed if it is not needed by the simulation.
+  The model should run only if it is explicitly activated.
+\end{enumerate}
+
+
+
+\newpage
+\chapter{Model Specification}
+\section{Inheritance}\label{sec:Inheritance}
+
+The DRWP model inherits directly from the \textit{SubscriptionBase} class
+defined in the CML
+subscription model (\textit{utilities/subscriptions}).
+This allows for the model to be be selectively activated, and disabled when
+not being used by the simulation.
+
+The DRWP model defines an interpolation-table class
+(\textit{DRWPTableLookup}) that inherits from the
+\textit{SimpleTableLookup} class defined in the CML table-interpolation
+model (\textit{utilites/table\_interp\_cpp}). This provides the
+interpolation system, as well as extensive tools for checking data
+consistency.
+
+
+\section{Dependencies}
+In addition to the dependencies associated with inheritance, this model also
+requires the CML Message Handling model (\textit{utilities/cml\_message}).
+
+\section{Related Models} \label{sec:related_models}
+This model is supported by the CML Atmosphere-executive model
+(\textit{environment/atmos/atmos\_exec}) which handles switching between
+atmospheres and the associated initialization, activation, execution, and
+deactivation processes.
+
+\section{Classes}
+The model has two classes:
+\begin{itemize}
+\item \textbf{DRWPTableLookup}
+\item \textbf{LookupAtmosWinds}
+\end{itemize}
+
+\subsection{DRWPTableLookup}
+This class is an extension of the \textit{SimpleTableLookup} class, which
+already provides all necessary interpolation algorithms. This class adds
+four data members and one method to enhance management of multiple tables by
+the \textit{LookupAtmosWinds} class.
+
+The data contained within an instance of \textit{DRWPTableLookup} represents
+a single profile, with one value for each of the interpolated variables for
+each of one set of calibrated altitude values.
+
+An important consideration associated with this class is the visibility of
+its members and methods. Everything added to \textit{SimpleTableLookup}
+by this class is public, but the
+instances of this class within this model are private to the
+\textit{LookupAtmosWinds} class so their status as public does not
+imply a direct connection to the user-interface.
+From the user-interface perspective, they should be considered private.
+Of course, additional instances of this class could be created, and the
+members of those instances would be accessible to the user-interface, but
+these would not be accessible by the \textit{LookupAtmosWinds} class so
+doing so would be futile within the intenided usage of this model.
+
+\subsubsection{DRWPTableLookup Members}
+\begin{longtable}{|p{2.0cm}|p{3.4cm}|p{5cm}|p{1.0cm}|p{2.0cm}|}
+\caption{Table Management Data}\\
+\hline
+\textbf{Type} & \textbf{Name} & \textbf{Purpose} & \textbf{Units} & \textbf{Protection}\\
+\hline
+std::string & drwpFileName & The name of the data file from which this table
+was populated & none & public \\
+\hline
+unsigned int & profile\_number & The profile number used to identify this
+profile within the data file from which this table was populated. & none &
+public \\
+\hline
+bool & initialized\_with\_\hspace{0.5cm}vertical\_component & This data table includes
+vertical wind data & none & public \\
+\hline
+bool & verified & This table has been checked for internal consistency &
+none & public \\
+\hline
+\end{longtable}
+
+\subsubsection{DRWPTableLookup::verify(...)}
+This method is used to perform internal consistency checking of the
+populated data. This is primarily used at model initialization to support
+checking all tables before the run starts executing; if an error is found,
+the execution is terminated so it can be resolved before the run gets
+underway.
+
+As with the data members, this method is public but it has no user-interface
+because the class instances within the model are private. The intent is that
+the \textit{LookupAtmosWinds} class calls this method.
+
+If the verification passes, the member flag \textit{verified} is set to
+true. This flag is queried by the \textit{LookupAtmosWinds} model when it
+switches to using a new data table mid-run. If the flag is true, the table
+initialization and verification can be bypassed. If the flag is still false,
+the initialization and verification of the table will be executed at the
+time the table is first used, which can lead to simulation termination if an
+anomaly is found.
+
+The method takes a single optional argument; this is a boolean value that
+defaults to false if not provided. This argument is an instruction to leave
+the table active after verification is complete.
+
+
+\subsection{LookupAtmosWinds}
+This class is the main class for the model, providing the
+external/user-interface into the model.
+
+The model comprises:
+\begin{itemize}
+\item a set of data tables provided by \textit{DRWPTableLookup}
+  instances,
+\item the logic for populating, reading, and interpreting a selected table,
+  and
+\item output variables populated by the results of interpolating the data
+  within the selected table.
+\end{itemize}
+Each table provides an atmospheric profile (as a
+function of altitude) for a specific region of the atmosphere. The model
+supports mid-run transitions between profiles.
+
+The class data members can be divided into four categories:
+\begin{itemize}
+\item Model Configuration
+\item Table Identification
+\item Model Outputs
+\item Internal Management
+\end{itemize}
+We will look at these one at a time.
+
+\subsubsection{LookupAtmosWinds Model Configuration}
+The following variables are used for model configuration:
+
+\begin{itemize}
+\item \textbf{alt\_bias} is a public variable used to facilitate situations
+  in which the altitude provided by the simulation to the
+  \textit{LookupAtmosWinds::update( double altitude)} method
+  uses a different datum than that used to populate the data files.
+\item \textbf{altitude} is the variable used as the independent variable in
+  the table interpolation mechanism. This variable is public purely so that it
+  is visible to the table-interpolation. Setting this value manually is
+  futile. It is computed on each pass of
+  \textit{LookupAtmosWinds::update( double altitude)} by combining the altitude
+  passed in and
+  \textit{alt\_bias} to bias the incoming altitude to account for any offset
+  between the datum used for zero-altitude by the simulation, and
+  the datum used for zero-altitude by the data tables.
+\item \textbf{block\_warnings} is a flag used to block certain messages
+  issued by the model, including:
+  \begin{itemize}
+  \item A warning about the altitude being out of the domain of the current
+    data table. This warning would normally be issued once (per table) only
+    on the very first occurrence of a domain violation, but can be blocked
+    entirely.\\
+    \textbf{Note:} Consideration was given to a design in which a first
+    domain violation would result in the warning being issued and the flag
+    being set to prevent further warnings, then that blocking flag being
+    reset if the altitude subsequently returns to within the tabulated domain.
+    This would support a warning every time the domain bounds are crossed,
+    which would provide, for example, a warning at top and bottom if the
+    vehicle transits through the entire domain.
+    However, this can also result in
+    multiple messages being sent when multiple vehicles are concurrently
+    accessing the same atmospheric profile, with one in-domain, and one
+    out-of-domain -- one would trigger the warning and set the blocking
+    flag, and the next would reset the blocking flag, so the first would
+    reissue the warning, etc.
+    This consideration was subsequently rejected.
+  \item Informational message when loading a new profile mid-run.
+  \item Informational message when selecting the initial table by index
+    rather than by filename/profile-number.
+  \end{itemize}
+\item \textbf{gamma} is the ratio of specific heats $C_p / C_v$. For a
+  diatomic gas, this has a value of $1.4$; it would be unusual to change
+  this value. It is used in the computation of
+  the speed of sound from the tabulated atmospheric data.
+\item High-altitude speed of sound parameters. At high-altitude, the
+  conventional approach for computing speed of sound becomes unreliable. The
+  model sets the speed of sound to a constant value above some altitude,
+  with a phase-in approach to ensure continuity in the transition below that
+  altitude. This
+  requires three parameters:
+  \begin{itemize}
+  \item\textbf{SOS\_hi\_alt\_const} is the high-altitude constant value for
+    speed-of-sound, specified in $m s^{-1}$.
+  \item\textbf{SOS\_fair\_hi\_alt} is the altitude, specified in $m$,
+    above which the
+    speed-of-sound is set to the constant value. This also defines the upper
+    bound of the region over which the phase-in is applied.
+  \item\textbf{SOS\_fair\_lo\_alt} is the lower bound of the
+    region over which the phase-in is applied.
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{LookupAtmosWinds Table Identification}
+There are three variables that provide information about the data table.
+These variables serve dual purpose depending on context, they may represent
+either the table currently being used, or the table about to be used:
+
+\begin{itemize}
+\item \textbf{drwpFileName} is the name of the file containing the binary
+data used in populating the table.
+\item \textbf{wind\_number} is the profile number within the binary file for
+the profile used in populating the table. This name is a legacy misnomer,
+held over from earlier implementations of this model that were restricted
+to providing wind data only; a more appropriate name would be
+\textit{profile\_number}.
+\item \textbf{include\_vertical\_component} is a flag indicating whether the
+table has data for the vertical wind velocity component.
+\end{itemize}
+
+When the model selects and loads a new table, these three variables are
+assigned the values from the equivalent variables found in the selected
+instance of \textit{DRWPTableLookup}.
+
+The model may also use these public variables to identify which table to
+select; in this context, they are user-settable values that can be used to
+configure the model.  When the \textit{change\_profile()} method is called
+(which may be from the \textit{activate()} method as the model is first
+activated, or by a deliberate follow-up call once the model is active),
+the model will try to find a profile defined by the
+specified \textit{drwpFileName} and \textit{wind\_number}. If no profile is
+found already loaded, the model will attempt to load one from the specified
+file. In this case, the setting of \textit{include\_vertical\_component}
+will be used to determine how to interpret the data in the binary file.
+
+
+\subsubsection{LookupAtmosWinds Model Outputs}
+
+\begin{longtable}{|p{1.5cm}|p{3cm}|p{5.5cm}|p{1cm}|p{2cm}|}
+\caption{Atmospheric variables of interest}\\
+\hline
+\textbf{Type} & \textbf{Name} & \textbf{Purpose} & \textbf{Units} & \textbf{Protection}\\
+\hline
+\endfirsthead
+\multicolumn{5}{c}%
+{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+\hline
+\textbf{Type} & \textbf{Name} & \textbf{Purpose} & \textbf{Units} & \textbf{Protection}\\
+\hline
+\endhead
+\hline \multicolumn{5}{r}{\textit{Continued on next page}} \\
+\endfoot
+\hline
+\endlastfoot
+double & u & Easterly directed wind velocity & $m\ s^{-1}$ & public \\
+\hline
+double & v & Topocentric-Northerly directed wind velocity & $m\ s^{-1}$ &
+public \\
+\hline
+double & w & Topocentric-Upwardly directed wind velocity & $m\ s^{-1}$ &
+public \\
+\hline
+double & wind\_angle\_\hspace{0.5cm}blowing\_to & Azimuth angle in the
+topocentric-horizontal plane & $rad$ & public \\
+\hline
+double & wind\_angle\_\hspace{0.5cm}blowing\_from & Azimuth angle in the
+topocentric-horizontal plane & $rad$ & public \\
+\hline
+double & wind\_velocity\_tc & 3-vector for wind velocity in topocentric NED
+frame & $m s^{-1}$  $m\ s^{-1}$ & public \\
+\hline
+double & wind\_vmag & magnitude of wind\_velocity\_tc & $m\ s^{-1}$ & public \\
+\hline
+double & average\_wind & 3-vector representing an average of
+wind\_velocity\_tc over a specified altitude range & $m\ s^{-1}$ & public \\
+float & rho & atmospheric density & $kg\ m^{-3}$ & public \\
+\hline
+float & T & temperature & $K$  & public \\
+\hline
+float & P & pressure & $Pa$ & public \\
+\hline
+float & SOS & speed of sound & $m\ s^{-1}$ & public \\
+\hline
+\end{longtable}
+
+\subsubsection{LookupAtmosWinds Internal Management}
+The following data members are used internally only:
+\begin{itemize}
+\item \textbf{TableLookup\_array} is an array of (10) instances of
+\textit{DRWPTableLookup}. This array is sized by:
+\item \textbf{MaxDatasets} specifies the number of elements allocated in the
+  \textit{TableLookup\_array} array. This is a compile-time setting. It is
+  currently set to $10$.
+\item \textbf{number\_of\_datasets} records how many of the
+  \textit{DRWPLookupTable} instances of \textit{TableLookup\_array} have
+  been populated with data.
+\item \textbf{current\_index} identifies which of the
+  \textit{DRWPLookupTable} instances of \textit{TableLookup\_array} is
+  currently being used. This is the index to the array.
+\item \textbf{warning\_issued} is a flag indicating that the out-of-domain
+  warning has been issued for the current table. This warning is issued no
+  more than once per table, being blocked after the first time.
+\item \textbf{size\_of\_source\_float} is a compile-time setting, specifying
+  how many bytes the floating-point values in the binary data files occupy.
+  This is currently set to $4$; the expectation is that the binary data were
+  constructed from data of type \textit{float} (and 32-bit integers).
+\item \textbf{size\_of\_source\_int} is a compile-time setting, specifying
+  how many bytes the integer values in the binary data files occupy.
+  This is currently set to $4$; the expectation is that the binary data were
+  constructed from 32-bit integers (and data of type \textit{float}).
+\end{itemize}
+
+
+\subsubsection{LookupAtmosWinds::LookupAtmosWinds()}
+\textit{Constructor}\\
+Creates an instance of the DRWP LookupAtmosWinds class and sets default values.
+
+\subsubsection{LookupAtmosWinds::initialize()}
+\textit{Called from: \textbf{external}}\\
+Verifies the data content in all profiles that have been
+pre-loaded via \textit{load\_DRWP\_file(...)} by calling
+\textit{DRWPTableLoookup::verify()} for each pre-loaded member of the
+\textit{TableLookup\_array} array.
+
+
+\subsubsection{LookupAtmosWinds::activate()}
+\textit{Called from: \textbf{internal}}\\
+Note -- This method is called in response to successful model initialization
+and an
+active subscription to the model; these can occur in either order. This
+pattern adheres to the design of the underlying CML Subscriptions model that
+activates a model once it has been initialized and identified as needed with
+a \textit{subscribe()} call. The methods
+\textit{initialize()} and \textit{subscribe()} are both external calls.
+
+If \textit{drwpFileName} has been specified, activation results in a call to
+\textit{change\_profile} to find (or load) a profile that matches the
+specification of \textit{drwpFileName} and \textit{wind\_number} (and
+\textit{include\_vertical\_component} if loading a new data profile).
+
+If \textit{drwpFileName} has \textbf{not} been specified, activation results
+in selecting the profile loaded to the selected index of the
+\textit{TableLookup\_array} array. The index can be assigned via the
+\textit{change\_datafile\_index} method.
+
+If the selection of data pprofile fails for any reason (e.g. there are no
+pre-loaded profiles and no specification of \textit{drwpFileName}, or the
+specified profile cannot be found) the activation fails and the model cannot
+be used.
+
+
+\subsubsection{LookupAtmosWinds::update(double altitude)}
+\textit{Called from:  \textbf{external}}
+\begin{enumerate}
+\item Adds an altitude bias (if present) to the input altitude.
+\item Calls the \textit{DRWPTableLookup} class's inherited
+  \textit{SimpleTableLookup::update()} method for the current data table, which
+  performs all of the interpolation.
+\item Calls \textit{calculate\_speed\_of\_sound()}
+\item Calls \textit{calculate\_wind\_mag\_dir()}
+\item Queries the status of the interpolation algorithm to identify whether
+  the input altitude is within the tabulated altitude domain. If not, it
+  posts a single-issuance warning about being outside the domain.
+\end{enumerate}
+
+\textbf{Note:} In many CML models, the \textit{update()} method is
+structured to take no arguments. In this case, the model is intended to
+simultaneously handle multiple vehicles if necessary, so each vehicle would
+need to pass its own altitude in as an argument. The model cannot track
+vehicle altitudes because it has no knowledge of which vehicles are using
+it. This orgnaization supports the general design paradigm that
+\textit{planets} have atmospheres, and \textit{vehicles} use them.
+
+
+\subsubsection{LookupAtmosWinds::change\_datafile\_index(size\_t)}
+\textit{Called from:  \textbf{external, activate(), or change\_profile()}}
+This method is used to select which data table to use in subsequent calls
+to \textit{update()}. Selection can be applied at any time; if the model is
+currently active, this will switch which interpolation-table is currently
+being used.
+
+The argument provides the index in the \textit{TableLookup\_array} array that
+contains the desired data profile.
+
+If the model is already active, the formerly-current table is deactivated.
+
+The identifying parameters \textit{drwpFileName},  \textit{wind\_number},
+and \textit{include\_vertical\_component}, are copied in from their
+counterparts in the newly selected table. The \textit{current\_index} is
+assigned to the new index, and the new table activated.
+
+\subsubsection{LookupAtmosWinds::change\_profile()}
+\textit{Called from:  \textbf{external or activate()}}
+Like \textit{change\_datafile\_index(size\_t)}, this method is used to
+select which data table to use in subsequent calls
+to \textit{update()}. Selection can be applied at any time; if the model is
+currently active, this will switch which interpolation-table is currently
+being used.
+
+While \textit{change\_datafile\_index(size\_t)} specifies the new table by
+index in the \textit{TableLookup\_array} array, this method uses the class
+members \textit{drwpFileName}, and \textit{wind\_number} to identify a match
+in the \textit{TableLookup\_array} array. If no match is found, the call
+forwards to  \textit{load\_DRWP\_file(...)} to find and load a suitable
+profile using \textit{drwpFileName}, \textit{wind\_number}, and
+\textit{include\_vertical\_component}. If both attempts fail, the method
+fails, an error message is posted, and the profile remains unchanged.
+
+\subsubsection{LookupAtmosWinds::load\_DRWP\_file(...)}
+\textit{Called from: \textbf{external or change\_profile()}}
+
+The primary purpose of this method is to pre-load data profiles prior to
+model initialization. This method can also be accessed internally in
+response to initialization without preloading, or switching to a new profile
+without preloading. This method performs numerous checks on the integrity
+and structure  of
+the specified file to be as sure as possible of its correct interpretation.
+
+The method takes three arguments to identify the profile to be loaded:
+\begin{enumerate}
+\item std::string drwpFileName\_,
+\item bool contains\_vertical\_component\_,
+\item unsigned int wind\_number\_)
+\end{enumerate}
+
+The binary files are assumed to be constructed of combinations of integer
+and floating-point values with a specified format and specific data-types.
+The model provides for relatively easy adjustment to these default formats,
+but those adjustments are made at compile-time, not at run-time.
+
+As discussed previously, the model identifies the expected memory size
+occupied by the integer and floating-point values in the binary file with
+the class members \textit{size\_of\_source\_integer} and
+\textit{size\_of\_source\_float}. These both defalt to $4$ (bytes).
+
+Within this method, two data types are defined, \textit{data\_int}, and
+\textit{data\_float}. The data from the binary file will be read into
+individual instances and arrays of instances of these variables. These
+are currently implemented as \textit{int32\_t} and \textit{float}
+respectively (both of which are 32-bit / 4-byte). The first
+check the method makes is that these two data types have sizes that match
+the expected size in the binary data.
+
+The method then checks for the availability of at least one slot in the
+\textit{TableLookup\_array} array. This array has a fixed (compile-time)
+size, so if all slots are already populated, we cannot add a new data
+profile.
+
+Then the binary file is opened and systematically parsed and read, checking
+for expected values wherever possible to verify the integrity and structure
+of the file. The expected structure of the file is as follows:
+\begin{enumerate}\label{sec:binary_read_struc}
+\item An integer specifying the number of profiles in the file
+  (\textit{nProfiles}).
+\item An integer specifying the number of altitude breakpoints /
+  calibration-points used for each profile (\textit{nAlts}). Note -- all
+  profiles within a file use the same set of altitude breakpoints /
+  calibration-points.
+\item An array of \textit{nAlts} floating-point values specifying the values
+  of the altitude breakpoints / calibration-points.
+\item An array of \textit{nProfiles} integer values specifying the profile
+  numbers of each profile in the order in which they are included in the
+  binary file.
+\item An array of \textit{nProfiles} profiles. Each profile is defined by
+the following data:
+  \begin{enumerate}
+  \item An integer defining the profile number of this profile. This must
+    match with the appropriate value in the earlier array of profile
+    numbers.
+  \item An array of \textit{nAlts} floating-point values specifying the
+    values for the West-to-East wind component.
+  \item An array of \textit{nAlts} floating-point values specifying the
+    values for the South-to-North wind component.
+  \item \textbf{(optional)}An array of \textit{nAlts} floating-point
+    values specifying the
+    values for the Upward-positive vertical wind component.
+  \item An array of \textit{nAlts} floating-point values specifying the
+    values for the temperature.
+  \item An array of \textit{nAlts} floating-point values specifying the
+    values for the density.
+  \item An array of \textit{nAlts} floating-point values specifying the
+    values for the pressure.
+  \end{enumerate}
+\end{enumerate}
+
+For each of the following reads from the file, if the read itself fails
+(likely due
+to reading past the end of the file), or the read result is inconsistent with
+expectation, the method is terminated. This usually results in simulation
+termination.
+
+The first and second integers are read and compared against reasonable
+expectation. If either
+value is 0 (indicates empty file) or very large (typically indicative of
+an unmatched memory size between the way the file was written and the way it
+ws read), the overall method is terminated.
+
+The altitude array is read next, and if successful, its values assigned to a
+STL-vector of type \textit{double}. This vector is passed to the CML
+table-interpolation model for loading into the interpolator's independent
+variable data set. This action includes checks on things like monotonicity
+of the altitude data. If the loading of data to the interpolator fails, the
+overall method is terminated.
+
+The array of profile numbers is read next. There is no independent
+evaluation that can be applied to these values but once read, the array is
+searched for the presence of the desired profile number, and the index of
+that match recorded. If no match is found, the overall method is terminated.
+
+At this point, we do not need to read the entirety of the rest of the file
+containing all of
+the profiles, we only need the one desired profile from this file,
+and we know where that should be
+located. To make sure that the rest of the file is structured as expected
+before jumping to the desired profile start, we make two additional sanity
+checks:
+
+\begin{itemize}
+\item
+The next field is read as an integer, this should be the profile number of
+the first profile in the list, and should match the first entry of the array
+of profile numbers already read in. If it does not, the method is
+terminated. We now skip over enough memory to house the floating-point
+values of the profile (which is a function of the number of altitude
+breakpoints, and whether the profiles include the vertical velocity
+component) and read the next field as an integer, which should match with
+the second profile number. If it does not, the method is terminated. This
+process is repeated for all \textit{nProfiles} profiles.
+\item
+After reaching the end of the last profile, the position is compared
+against the size of the file to make sure the file is appropriately sized
+to house the specified number of profiles. If this does not match, the
+method is terminated.
+\end{itemize}
+
+Now, with confidence that the file structure matches with expectation,
+we return to the
+position at the start of the profile of interest. We ignore the first field
+for the profile number (that value has already been checked), and read in
+sufficient
+data to cover all the variables for each altitude breakpoint. As with the
+altitude data, these data are assigned to a
+STL-vector of type \textit{double}, in preparation for the CML
+table-interpolation model's data loading.
+
+Next, we populate a STL-vector of pointers with the addresses of the class
+members \textit{u, v, w, T, rho, P} (\textit{w} being optional). The data vector
+and the variables vector are both passed to the CML table-interpolation
+model's method for loading onto the interpolator's
+\textit{dependent} variables data set. If this data-loading process fails,
+the method is terminated.
+
+At this point, the CML table-interpolation model has its data tables
+fully populated and can be used to interpolate between the specified data
+points. The binary file can be closed.
+
+
+\subsubsection{LookupAtmosWinds::compute\_average\_wind(...)}
+\textit{Called from: \textbf{external}}
+
+This method computes the average of the wind velocity vectors, outputting
+the computed average into the 3-element vector \textit{average\_wind} with
+the three components representing average expressed in the topocentric
+NED frame.
+
+This method has four different calling interfaces with 0, 1, 2, or 3
+arguments. We will look at the 3-argument method, the others are derived
+from it.
+\begin{enumerate}
+\item \textbf{table index} The averages will be taken from the data table at
+  the specified index in the \textit{TableLookup\_array} array. If this is
+  not specified (0 or 2 argument signatures):
+  \begin{itemize}
+  \item if the model is active, it will use the table currently in use.
+  \item if the model is not active, it will the first table in the
+    \textit{TableLookup\_array} array.
+  \end{itemize}
+\item \textbf{minimum altitude}
+\item \textbf{maximum altitude} The minimum and maximum altitudes are
+  presented as a pair of arguments. The model supports specification of an
+  altitude domain over which to compute the average winds.
+  If these are omitted (0 or 1 argument
+  signatures), the full domain is used for the averaging.
+\end{enumerate}
+
+Behind the scenes, the four interface methods all feed into a single,
+4-argument method. This method is protected so cannot be externally called.
+The hidden method proceeds as follows:
+
+\begin{enumerate}
+\item The selected index is compared against \textit{number\_of\_datasets}
+  to confirm that this table has been populated. If it has not, the method
+  returns with no action.
+\item The set of altitude values in the lookup-table's independent variable
+  array is stepped
+  through sequentially. Each altitude point is used if either the method is
+  using the full domain, or the point value falls between the minimum and
+  maximum altitudes specifying the domain over which to compute the average.
+  For all altitude points that meet this criterion, the model variable
+  \textit{altitude} is
+  assigned to this calibration point, and the interpolation table updated,
+  assigning values to \textit{u, v, w}. The
+  \textit{calculate\_wind\_mag\_dir()} converts these values to the
+  topocentric-NED 3-element vector, which is then be incremented onto a
+  cumulative total.
+\item The accumulated total of the 3-element vectors is then divided by the
+  number of points used to give a mean average.
+\item Finally, to ensure that the model outputs are consistent with the
+  model's actual intent (to compute winds and atmosphere at a vehicle's
+  altitude), the model's \textit{update()} method is executed again to
+  recompute the state based on the actual vehicle altitude, returning
+  the model's output variables to their original state.
+\end{enumerate}
+
+\textbf{Note:}
+There is significant ambiguity in what an ``average velocity'' means. This
+implementation is an average over the calibrated points, but this is not the
+same as a spatial average because there is no verification that the data
+points are equally distributed. A spatially averaged wind velocity would
+have to weight each data point by the spatial separation between it and its
+neighbors.\\
+Neither does this represent a temporally-averaged velocity, such as
+would be encountered by a vehicle on
+some trajectory; this would also require the local vehicle velocity to
+support weighting each calibrated value by the duration the vehicle spends
+in its vicinity.\\
+Furthermore, if the desired representation is that of a wind representing
+the average dynamic effect on a vehicle, this average falls woefully short.
+Such an average would require
+squaring the relative speed along the direction of interest and multiplying
+by both the duration for which that speed is relevant and the density of the
+atmosphere in the vicinity, even if we assume simple aerodynamics such as a
+coefficient-of-drag or ballistic-coefficient type representation.\\
+Simply averaging the wind velocities provides
+information, but it is highly subject to misinterpretation and
+misapplication.
+
+
+
+\subsubsection{LookupAtmosWinds::(calculate\_speed\_of\_sound)}
+\textit{Called from:  \textbf{update()}}
+
+See \ref{sec:sos_algo}
+
+\subsubsection{calculate\_wind\_mag\_dir()}
+\textit{Called from:  \textbf{update(), compute\_average\_wind(...)}}
+
+See \ref{sec:wind_dir_mag}.
+
+\subsubsection{LookupAtmosWinds::stream\_error(...)}
+\textit{Called from:  \textbf{load\_DRWP\_file(...)}}
+
+Provides shared error-handling messages for multiple potential errors coming
+from the \textit{load\_DRWP\_file(...)} method.
+
+\subsubsection{LookupAtmosWinds::set\_include\_vertical\_component(bool val)}
+\textit{Called from:  \textbf{deprecated}}
+
+This method was deprecated in the 2023 refactor because its old capability is
+no longer needed. However, it was accessible to the public interface, so it has
+been replaced with a method that simply issues an error message.
+
+\subsubsection{LookupAtmosWinds::test\_for\_reinitialize()}
+\textit{Called from:  \textbf{deprecated}}
+
+This method was deprecated in the 2023 refactor because its old capability is
+no longer needed. However, it was accessible to the public interface, so it has
+been replaced with a method that simply issues an error message.
+
+
+
+\section{Mathematical Formulation}
+\subsection{Data requirements}
+
+The DRWP model requires that the independent variable (the altitude) be
+everywhere monotonic.
+
+\subsection{Algorithms}
+\subsubsection{One-dimensional interpolation}
+The interpolation is handled by the CML table-interpolation method. See
+model documents for details
+(\textit{cml/models/utilities/table\_interp\_cpp/docs/table\_interp.pdf)}.
+
+General principle of linear interpolation:
+Let $x$ be the altitude of interest, and $x_{n}$, $x_{n+1}$ be the
+bracketing values of the this independent variable, such that
+$x_{n}$ $\leq$ $x$ $\leq$ $x_{n+1}$ or
+$x_{n+1}$ $\leq$ $x$ $\leq$ $x_{n}$.  Then define a value to represent the
+fractional part of that interval:
+\begin{equation}
+  \alpha = \frac{x -  x_{n}} {x_{n+1} - x_{n}}
+\end{equation}
+The desired interpolated value, $f(x)$, then becomes
+\begin{equation}\label{eq:interp}
+  f(x) = f(x_{n}) + \alpha \cdot (f(x_{n+1}) - f(x_{n}))
+\end{equation}
+
+\subsubsection{Speed of Sound}\label{sec:sos_algo}
+If we let $\gamma = \frac{C_{p}}{C_{v}}$, where $C_{p}$, $C_{v}$ are the
+heat capacities at constant pressure and constant volume, respectively.
+Then the speed of sound $c$ is obtained from
+\begin{equation}\label{eq:SOS}
+  c = \sqrt{\gamma\frac{P}{\rho}}
+\end{equation}
+where:\\
+\hspace{1cm}$P$ = pressure at altitude,\\
+\hspace{1cm}$\rho$ = density at altitude
+
+Standard atmospheric conditions give $\gamma$ a value of 1.4 (diatomic gas
+$N_2$ AND $O_2$).
+
+At high altitudes, an adjustment must be made to equation \ref{eq:SOS}.
+$c$ is considered to remain constant at high altitudes, so a transition
+(fairing) must occur from equation \ref{eq:SOS} to this altitude.
+This transition uses a rolling interpolation of the form:
+\begin{equation}\label{eq:SOS_fair}
+  c = \sqrt{\gamma\frac{P}{\rho}} + \frac {h - h_{lo}}{h_{hi} - h_{lo}} \cdot
+  \left( c_{hi} -  \sqrt{\gamma\frac{P}{\rho}} \right)
+\end{equation}
+where:\\
+%\begin{adjustwidth}{2.5em}{0pt}
+~~$h$ = altitude of interest,\\
+~~$h_{lo}$ is the altitude at the floor of the transition region\\
+~~$h_{hi}$ is the altitude at the ceiling of the transition region\\
+~~$c_{hi}$ is the speed of sound at the ceiling of the transition region\\
+%\end{adjustwidth}
+
+Note the apparent similarity but fundamental difference between equation
+\ref{eq:SOS_fair} and \ref{eq:interp}. This is not a linear interpolation
+between the speeds of sound at the floor and ceiling of the transition
+region. It is a linear interpolation between the speeds of sound at the
+\textbf{current altitude} and ceiling of the transition region,
+with the relative weightings determined by the relative position between
+the \textbf{floor} and ceiling of the transition region. This produces a
+profile that generally follows the low-altitude equation, gradually diverging
+from it until it smoothly reaches $c_{hi}$ at $h_{hi}$.
+
+Default values for this transition region are:
+\begin{itemize}
+\item $h_{lo} = 85,344 m$
+\item $h_{hi} = 91,440 m$
+\item $c_{hi} = 274.61 m\ s^{-1}$
+\end{itemize}
+
+For altitudes above $h_{hi}$,
+\begin{equation}
+  c = c_{hi}
+\end{equation}
+
+\clearpage
+\subsubsection{Wind magnitude and direction}\label{sec:wind_dir_mag}
+DRWP calculates the wind direction and magnitude by
+\begin{equation}
+\theta = tan^{-1}\left(\frac{u}{v}\right)
+\end{equation} and
+\begin{equation}
+| \vec v| = \sqrt{u^2 + v^2 + w^2}
+\end{equation}
+where:
+$u, v, w$ are the East, North, and Up components of the
+wind velocity, respectively.
+
+These values are available as the public members
+\textit{wind\_angle\_blowing\_to} and \textit{wind\_vmag}.
+
+
+\chapter{User's Guide}
+
+\section{Instantiation and Construction}
+The DRWP model is typically instantiated as part of the Earth planet
+object. A single instance of this model can service multiple vehicles
+simultaneously.
+
+\begin{code}
+LookupAtmosWinds   DRWP;
+\end{code}
+
+The model constructor takes no arguments.
+
+
+\section{Implementation via Atmosphere-Executive Interface}
+It is recommended to use the CML \textit{Atmosphere Executive}
+model (see \textit{cml/models/environment/atmos/atmos\_exec} for managing
+the implementation of this model within a simulation framework. The
+atmosphere-executive model handles switching between atmospheres; it is
+equipped with the code to manage the associated initialization, activation,
+execution, and deactivation processes of the DRWP model for any vehicle
+electing to use DRWP for representation of the atmosphere in its locality.
+See the Atmosphere-executive model documentation for
+details on instantiating an Atmosphere-executive, and configuring it to use
+the DRWP model.
+
+\section{Standalone Implementation}
+It is also possible to use the DRWP model independently of the
+Atmosphere-Executive. In this case, there are four methods that the user
+must be familiar with.
+\begin{itemize}
+\item \textbf{initialize()} should be executed during simulation
+  initialization. The model cannot be activated without having executed this
+  method.
+\item \textbf{subscribe()} is executed typically by a vehicle object when it
+  starts to need atmospheric data in its locality. If this is the first (or
+  only) subscription to the model, this call will activate the model.
+\item \textbf{unsubscribe()} is executed when the vehicle object no longer
+  needs an updated atmospheric conditions. This removes a subscription. If
+  the last subscription is removed, the model deactivates and subsequent
+  calls to \textit{update( altitude)} will return without action.
+\item \textbf{update( double altitude)} is typically executed by the vehicle
+  object, passing in the value of the vehicle's current altitude. This call
+  may be scheduled for regular execution even while the model is not needed;
+  if the model is not subscribed, this will have no effect. However, it is
+  more efficient to call this method only as needed.
+\end{itemize}
+
+\section{Model Data}
+\subsection{Default values}
+Default data is all provided within the model constructor; there is no
+separate method to populate the model with default values.
+Most values are constructed to 0, 0.0, or false (depending on the data type).
+Default values used in the speed of sound calculations are presented in
+section \ref{sec:sos_algo}.
+
+\section{Setting Input Data}\label{sec:input_data}
+The user must supply a file with the profile data.
+This file must be in binary format with a structure presented in section
+\ref{sec:binary_read_struc}. That structure is summarized here for
+convenience.
+
+\begin{itemize}
+\item A 32-bit integer representing the number of profiles
+\item A 32-bit integer representing the number of altitudes per profile
+\item Array of \textit{float} values representing the altitudes
+  (the independent variable)
+\item Array of 32-bit integers representing the profile-numbers for
+  profiles included in this file.
+\item Array of compound data representing the data for each profile. 
+  For each profile:
+  \begin{itemize}
+  \item A 32-bit integer representing the specific profile number
+  \item Array of \textit{float} values representing the U wind velocity
+    component values (1 value for each altitude in the altitude-array).
+  \item Array of \textit{float} values representing the V wind velocity
+    component values (1 value for each altitude in the altitude-array).
+  \item (optional) Array of \textit{float} values representing the W
+    wind velocity component values (1 value for each altitude in the
+    altitude-array).
+  \item Array of \textit{float} values representing the temperature
+    (1 value for each altitude in the altitude-array).
+  \item Array of \textit{float} values representing the density
+    (1 value for each altitude in the altitude-array).
+  \item Array of \textit{float} values representing the pressure
+    (1 value for each altitude in the altitude-array).
+  \end{itemize}
+\end{itemize}
+
+The user must also supply the filename of the file containing the binary
+file, and the profile number to find the desired profile within said file.
+The profile number and name of the binary file are typically
+supplied in the simulation input file.
+
+\textbf{Notes:}
+\begin{itemize}
+\item If the configuration specifies inclusion of the vertical
+  component of wind velocity, it must be present (can be zero) in all
+  profiles in the specified data file.
+  Similarly, if the vertical component of wind velocity is present (can be
+  zero) in the data files, it must be specified for inclusion in the
+  interpolation tables.
+\item All floating-point values (altitude and atmospheric variables) must be
+  of the same type, as must all
+  integer values (sizes and indices). By default, the model expects these to
+  be 32-bit (\textbf{float} and \textbf{int32\_t}).
+\end{itemize}
+
+
+\section{Extracting Output Data}
+The model outputs include the three main wind components,
+wind magnitude and direction, density, temperature, pressure,
+and the speed of sound.  These are available as public members of
+the instantiated class as data type \textit{double}.
+The most commonly used are:
+
+\begin{itemize}
+\item u
+\item v
+\item w
+\item wind\_velocity\_tc (3-element array)
+\item wind\_angle\_blowing\_to
+\item wind\_angle\_blowing\_from
+\item wind\_vmag
+\item rho
+\item T
+\item P
+\item SOS
+\item average\_wind (3-element array)
+\end{itemize}
+
+
+
+
+%***********************************************************************
+% Verification chapter
+%***********************************************************************
+\chapter{Verification}
+The model was inspected to ensure compliance with coding standards.
+Verification of results was accomplished through unit simulation testing.
+Test altitudes are managed by a sweep algorithm in the Unit-test-framework
+model, sweeping from $-3\ km$ to $+187\ km$ in $2\ km$ intervals.
+The binary data files are found in \textit{SIM\_lookup/Binaries}. This
+directory also includes csv files corresponding to selected profiles from the
+binary data for purposes of comparing the model outputs against a
+human-readable data set.
+
+The swept altitude domain exceeds the domain of the binary data files on both
+ends; this will be identified and noted by the model upon execution.
+
+\section{Code Coverage}
+\begin{figure}[h!]
+   \centering
+   \includegraphics[width=\linewidth]{Images/code_coverage.png}
+\end{figure}
+
+\subsection{Exceptions}
+\subsubsection{lookup\_winds.hh}
+The header file has no methods to cover; the two lines identified and not
+covered are the empty class destructors.
+
+\subsubsection{lookup\_winds.cc}
+There are six lines not covered in this file. Each of these lines would be 
+executed upon detection of one of five errors. Each error:
+\begin{itemize}
+\item appears to be  unreachable through the automated unit-testing
+process,
+\item has been commented as such in the code, and
+\item has been tested manually in gdb to execute the lines not covered in
+automated testing.
+\end{itemize}
+
+
+\section{Input data}
+Some verification tests (such as \textit{RUN\_01\_preload\_5\_nospec}) read
+the binary file\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}.
+This binary file does not provide the vertical velocity component data so the
+interpolation populates five dependent variables.
+
+Some verification tests (such as \textit{RUN\_02\_preload\_6\_nospec}) read
+the binary file\\
+\textit{Binaries/DRWP\_w\_comp.bin}.
+This binary file does provide the vertical velocity component data so the
+interpolation populates six dependent variables.
+
+In \textit{verif/SIM\_lookup/Binaries/corrupt\_binaries}, a set of partial
+binary files exist to test the error detection in the binary file reader.
+
+Each of the two valid binary files contains multiple profiles from which one
+profile is used repeatedly in the unit-tests discussed below.
+Human-readable, comma-separated versions of these two frequently-used
+profiles are also made available in the \textit{Binaries} folder\\
+(\textit{Binaries/DRWP\_no\_w\_comp\_\_prof\_1771.csv} and
+\textit{Binaries/DRWP\_w\_comp\_\_prof\_2.csv}).
+
+\section{Results}
+For each verification run, the configuration and purpose of the run is
+listed, followed by the results of the run.
+
+%***********************************************************************
+% RUN_01
+%***********************************************************************
+\subsection{RUN\_01\_preload\_5\_nospec}\label{sec:ver:RUN01}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$
+
+\textbf{Purpose:}\\ To test the interpolation of a 5-element data file.
+
+This scenario uses the \textit{load\_DRWP\_file(...)} method to preload
+the specified profile. At execution, the model defaults to using the
+preloaded profile from index 0.
+
+The model correctly identified out-of-range input altitudes on the low side
+of the altitude domain.
+Only the first occurrence outside the
+domain generated a warning, subsequent warnings were inhibited.
+
+\textbf{Note:} Because this warning is only issued once, it is not
+repeated when the altitude goes out of domain on the high side.
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{Images/OutOfRange.png}
+\end{figure}
+
+The wind direction and magnitude were calculated for each altitude.
+See \ref{sec:wind_dir_mag}.
+
+The profile used for this test has calibrated data points at convenient
+round-number values of altitude. The values of altitude used as inputs are
+found in the data tables so the values for atmospheric variables returned by
+the model should be identical to those found in the data table, an example
+is shown in Figure \ref{fig:01_9}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.45\linewidth]{Images/RUN_01_figure_9.png}
+  \caption{For this profile, all lookup-altitudes overlap with
+    calibration-points.}
+  \label{fig:01_9}
+\end{figure}
+
+The raw data and interpolated data are compared for all variables in the
+Figures \ref{fig:RUN01_1} - \ref{fig:RUN01_3}.
+
+\begin{figure}[ht!]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Images/RUN_01_figure_1.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Images/RUN_01_figure_2.png}
+  \end{subfigure}
+  \caption{Comparison of Wind Velocity components, including raw data,
+  interpolated data (\textit{u,v}), and NED output data
+  (\textit{wind\_velocity\_tc}).}
+  \label{fig:RUN01_1}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_01_figure_4.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_01_figure_5.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Images/RUN_01_figure_6.png}
+  \end{subfigure}
+  \caption{Comparison of density, pressure, and temperature profiles from
+  raw data and interpolated output.}
+  \label{fig:RUN01_3}
+\end{figure}
+
+\newpage
+
+The profiles of the derived quantities, speed of sound and wind speed,
+are shown in Figure \ref{fig:RUN01_4}. These values are calculated from the
+interpolated values at each test altitude; these are not provided in raw
+data. See sections \ref{sec:sos_algo} and \ref{sec:wind_dir_mag}.
+
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Images/RUN_01_figure_7.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Images/RUN_01_figure_8.png}
+  \end{subfigure}
+  \caption{Speed of sound and wind speed computed profiles}
+  \label{fig:RUN01_4}
+\end{figure}
+
+\clearpage
+\newpage
+
+%***********************************************************************
+% RUN_02
+%***********************************************************************
+\subsection{RUN\_02\_preload\_6\_nospec}\label{sec:ver:RUN02}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $2$
+
+\textbf{Purpose:}\\ To test the interpolation of a 6-element data file.
+
+This scenario uses the \textit{load\_DRWP\_file(...)} method to 
+preload the specified profile.
+At execution, the model defaults to using the preloaded profile from index 0.
+
+The profile used for this test has calibrated data points at obscure
+altitudes that do not match with the round-number values of altitude
+provided by the unit test. The values of altitude used as inputs are
+\textbf{not} found in the data tables so the values for atmospheric
+variables returned by the model should require interpolation between the
+values found in the data table, as illustrated in figure \ref{fig:02_9}.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.45\linewidth]{Images/RUN_02_figure_9.png}
+  \caption{For this profile, all lookup-altitudes require innterpolation
+    between the calibration-points.}
+  \label{fig:02_9}
+\end{figure}
+
+As with \textit{RUN\_01}, the model correctly identified out-of-domain
+input altitudes on the low sides of the altitude domain, with only the first
+occurrence on each side generating a warning and the remaining incidences of
+out-of-domain inputs being processed without warnings issued.
+
+The model correctly performed a 1D interpolation on each of the six
+atmospheric properties for the given altitude as shown in the Figures
+\ref{fig:RUN02_1} - \ref{fig:RUN02_2}.
+
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_02_figure_1.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_02_figure_2.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_02_figure_3.png}
+  \end{subfigure}
+  \caption{Comparison of Wind Velocity components, including raw data,
+  interpolated data (\textit{+u,+v,-w}), and NED output data
+  (\textit{wind\_velocity\_tc}).}
+  \label{fig:RUN02_1}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Images/RUN_02_figure_4.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Images/RUN_02_figure_5.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Images/RUN_02_figure_6.png}
+  \end{subfigure}
+  \caption{Comparison of density, pressure, and temperature profiles from
+  raw data and interpolated output.}
+  \label{fig:RUN02_2}
+\end{figure}
+
+\newpage
+
+The profiles of the derived quantities, speed of sound and wind speed,
+are shown in Figure \ref{fig:RUN02_3}. These values are calculated from the
+interpolated values at each test altitude; these are not provided in raw
+data. See sections \ref{sec:sos_algo} and \ref{sec:wind_dir_mag}.
+
+\begin{figure}[ht!]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Images/RUN_02_figure_7.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Images/RUN_02_figure_8.png}
+  \end{subfigure}
+  \caption{Speed of sound and wind speed computed profiles}
+  \label{fig:RUN02_3}
+\end{figure}
+
+\clearpage
+\newpage
+
+
+%***********************************************************************
+% RUN_03-06
+%***********************************************************************
+\subsection{RUN\_03\_preload\_56\_nospec}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $2$ (\textit{RUN\_02}).
+
+\textbf{Purpose:}\\ To test the default behavior of defaulting to index 0 when
+multiple profiles are pre-loaded.
+
+This scenario uses the \textit{load\_DRWP\_file(...)} method 
+to preload the specified
+profiles. At execution, the model defaults to using the preloaded profile from
+index 0. The results match with those from \textit{RUN\_01} (section
+\ref{sec:ver:RUN01}).
+
+
+\subsection{RUN\_04\_preload\_56\_spec\_6\_file}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $2$ (\textit{RUN\_02}).
+
+\textbf{Purpose:}\\ To test the ability to select between multiple pre-loaded
+profiles using the \textit{drwpFileName} and \textit{wind\_number} settings.
+
+This scenario uses \textit{RUN\_03} as a baseline to preload 2 profiles.
+It also sets the \textit{drwpFileName} and \textit{wind\_number}
+variables to \textit{Binaries/DRWP\_w\_comp.bin} and value $2$ respectively.
+At execution, the model identifies the profile at index 1 as matching the
+specification, and runs with that profile.
+The results match with those from \textit{RUN\_02} (section
+\ref{sec:ver:RUN02}).
+
+
+\subsection{RUN\_05\_preload\_56\_spec\_6\_ix}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $2$ (\textit{RUN\_02}).
+
+\textbf{Purpose:}\\ To test the ability to select between multiple pre-loaded
+profiles by specifying the desired index.
+
+This scenario uses \textit{RUN\_03} as a baseline to preload 2 profiles.
+It also sets desired index to $1$ using \textit{change\_datafile\_index(1)}.
+The results match with those from \textit{RUN\_02} (section
+\ref{sec:ver:RUN02}).
+
+
+\subsection{RUN\_06\_spec\_6\_file}
+\textbf{Configuration:}\\ preload none\\
+run-time load\\
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $2$ (\textit{RUN\_02}).
+
+\textbf{Purpose:}\\ To test the ability to identify and load a profile at model
+activation when there are no profiles pre-loaded.
+
+This scenario uses no preloads of data profiles.
+It sets the \textit{drwpFileName} and \textit{wind\_number}
+variables to \textit{Binaries/DRWP\_w\_comp.bin} and $2$ respectively.
+At execution, the model identifies that this profile has not been pre-loaded,
+and loads it.
+The results match with those from \textit{RUN\_02} (section
+\ref{sec:ver:RUN02}).
+
+
+%***********************************************************************
+% RUN_07
+%***********************************************************************
+\subsection{RUN\_07\_mid\_run\_switch\_index} \label{sec:verif:RUN07}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $2$ (\textit{RUN\_02})\\
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $3$\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})
+
+\textbf{Purpose:}\\ To test the ability to switch between profiles
+mid-run using \textit{change\_datafile\_index(...)}.
+
+The run uses \textit{change\_datafile\_index(...)} to switch between
+profiles mid-run. The profile selection cycles from
+index 0 to 1 to 2 and back to 0.
+Initially, the data should match with \textit{RUN\_02} for ten cycles, then
+switch to new data for ten cycles as we use a new profile, then switch to
+match with output from \textit{RUN\_01} for ten cycles, and finally switch
+back to match with data from \textit{RUN\_02}. In Figure \ref{fig:RUN07_1},
+we see the red line from this run overlap the blue line from
+\textit{RUN\_02} and the black line from \textit{RUN\_01} as expected.
+
+\begin{figure}[ht!]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_07_figure_1.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_07_figure_2.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_07_figure_3.png}
+  \end{subfigure}
+  \caption{Comparison of Wind Velocity components from \textit{RUN\_01},
+    \textit{RUN\_02}, and \textit{RUN\_07}.}
+  \label{fig:RUN07_1}
+\end{figure}
+
+\clearpage
+
+
+%***********************************************************************
+% RUN_08
+%***********************************************************************
+\subsection{RUN\_08\_mid\_run\_switch\_spec}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $2$ (\textit{RUN\_02})\\
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $3$\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01});\\
+run-time load\\
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $1$
+
+\textbf{Purpose:}\\ To test the ability to switch between profiles --
+pre-loaded and unloaded -- mid-run using
+\textit{change\_profile()}. The run cycles from
+\begin{enumerate}
+\item t=0: index 0: by default
+\item t=10: index 1: \textit{wind\_number} is set to $3$ and
+\textit{drwpFileName} remains unchanged. \textit{change\_profile()}
+recognizes these settings as consistent with index 1, and and switches the
+selection of data-table.
+\item t=20: index 2: \textit{wind\_number} is set to $1771$ and
+\textit{drwpFileName} to \textit{Binaries/DRWP\_no\_w\_comp.bin}.
+\textit{change\_profile()}
+recognizes these settings as consistent with index 2, and switches the
+selection of data-table.
+\item t=30: index 0: \textit{wind\_number} is set to $2$ and
+\textit{drwpFileName} to \textit{Binaries/DRWP\_w\_comp.bin}.
+\textit{change\_profile()}
+recognizes these settings as consistent with index 0, and switches the
+selection of data-table.
+\item t=40: index 0: \textit{wind\_number} is set to $1$ and
+\textit{drwpFileName} remains unchanged.
+\textit{change\_profile()}
+recognizes these settings as inconsistent with anything currently loaded,
+identifies a matching profile in the specified file, loads it, and
+switches the selection of data-table to index 3.
+\end{enumerate}
+
+For the first 39 cycles, the data match with those from
+\textit{RUN\_07} (section \ref{sec:verif:RUN07}).  The cycles following
+where \textit{RUN\_07} stops follows a new profile.
+
+\begin{figure}[ht!]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_08_figure_1.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_08_figure_2.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_08_figure_3.png}
+  \end{subfigure}
+  \caption{Comparison of Wind Velocity components from \textit{RUN\_01},
+    \textit{RUN\_02}, and \textit{RUN\_08}.}
+  \label{fig:RUN08_1}
+\end{figure}
+
+\clearpage
+%***********************************************************************
+% RUN_10
+%***********************************************************************
+\subsection{RUN\_10\_alt\_bias}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})
+
+\textbf{Purpose:}\\ To test the application of an altitude bias.
+
+This run uses \textit{RUN\_01} as a baseline and applies an bias of +4000
+m to the input altitude using the \textit{alt\_bias} variable. This is an
+abbreviated run, the intent is to confirm the offset and this can be
+accomplished with a handful of data points.
+
+With a 4000 m bias, the unit-test altitude profile starts above the floor
+of the model data so the out-of-domain warning message issued in 
+\textit{RUN\_01} is not issued for this run.
+If the run was allowed to proceed through the full $95$ cycles examined in 
+\textit{RUN\_01} (comment out the stop time in the input file),
+the out-of-domain warning is issued when the altitude
+passes through the domain ceiling.
+\includegraphics[width=\linewidth]{Images/RUN_10_warning.png}
+
+With each data point covering a height of 2000 m, the 4000 m bias should
+produce an offset in the data logging of two steps (two lines) from the data
+produced by \textit{RUN\_01} and should be otherwise identical to it. This
+is observed in the output data files
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth]{Images/data_01_10.png}
+\includegraphics[width=\linewidth]{Images/data_10.png}
+\caption {Data for tests 2-6 from \textit{RUN\_01},
+          and tests 0-4 from \textit{RUN\_10}.
+          The altitudes for these two test-sets match and the consequential
+          output data also match.}
+\end{figure}
+
+The profile resulting from the application of this bias results in a shift
+of the existing profile to lower altitudes, as shown in Figure
+\ref{fig:RUN10_2}. It may be initially counterintuitive as to why the data
+shifts to lower altitude with the application of a positive bias, but this
+is the correct behavior. The altitude as provided to the data-lookup process
+(the value plotted on the x-axis in Figure \textit{RUN\_07}) is
+biased positively, so obtains a value (red line) that would otherwise have been
+obtained from a higher altitude (black line).
+
+\begin{figure}[ht!]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_10_figure_1.png}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[width=\linewidth]{Images/RUN_10_figure_2.png}
+  \end{subfigure}
+  \caption{Comparison of Wind Velocity components from \textit{RUN\_01},
+    and \textit{RUN\_10}.}
+  \label{fig:RUN10_2}
+\end{figure}
+\clearpage
+
+%***********************************************************************
+% RUN_07
+%***********************************************************************
+\subsection{RUN\_11\_average\_wind}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $2$ (\textit{RUN\_02})\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})
+
+\textbf{Purpose:}\\ To test the different methods of calling
+\textit{compute\_average\_wind(...)}.
+
+The logged output for this test-run includes the same variables as the previous
+test-runs, with the addition of the average velocity outputs at the end. It
+is important to compare the output of this run with the output from
+\textit{RUN\_02} because the computation of average velocity should not
+interfere with the data generated to be representative of the current
+vehicle, even when the average velocity is being computed from a different
+profile. \textbf{The interpolated data values match with those from
+\textit{RUN\_02}, as required.}
+
+The average velocity data is shown below:
+
+\includegraphics[width=0.7\linewidth]{Images/data_11.png}
+
+Summary of results:
+\begin{enumerate}
+\setcounter{enumi}{0}
+\item average winds not computed, values are zero-vector
+\item Zero-argument method: average winds computed over full domain for
+  the current index (0).
+\item One-argument method: average winds computed over full domain
+  specifically for index 0.
+\item Two-argument method: average winds computed over domain [0,1000]
+  for index 0.
+\item Two-argument method: average winds computed over domain [0,10000]
+  for index 0.
+\item One-argument method: average winds computed over full domain
+  for index 1 while the model continues to use index 0 for scheduled updates.
+\item Three-argument method: average winds computed over domain [0,1000]
+  for index 1 while the model continues to use index 0 for scheduled updates.
+\item Three-argument method: average winds computed over domain [0,10000]
+  for index 1 while the model continues to use index 0 for scheduled updates.
+\item Two-argument method: average winds computed over domain [0,0.1]
+  for index 0. There are no calibrated points in this domain, an error
+  is posted and the average velocity is set to the zero vector.
+\item Three-argument method: average winds computed over domain [0,1000]
+  for index 5. There is no profile loaded to index 5, an error is posted
+  and the average velocity is set to the zero vector.
+\end{enumerate}
+
+
+%***********************************************************************
+% ERROR cases
+%***********************************************************************
+\subsection{ERROR\_bad\_binary01\_no\_number\_of\_profiles}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})\\
+run-time load\\
+\textit{Binaries/corrupt\_binaries/no\_number\_of\_profiles.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection of
+a run-time load of an invalid binary file (empty file)
+when a valid binary file is already pre-loaded.
+
+\includegraphics[width=\linewidth]{Images/error1.png}
+
+
+\subsection{ERROR\_bad\_binary03\_no\_number\_of\_altitudes}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})\\
+run-time load\\
+\textit{Binaries/corrupt\_binaries/no\_number\_of\_altitudes.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a run-time load of an invalid binary file (no number of altitudes entry)
+when a valid binary file is already pre-loaded.
+
+\includegraphics[width=\linewidth]{Images/error2.png}
+
+
+
+\subsection{ERROR\_bad\_binary05\_short\_altitude\_array}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})\\
+run-time load\\
+\textit{Binaries/corrupt\_binaries/short\_altitude\_array.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection
+a run-time load of an invalid binary file (incorrectly sized altitude array)
+when a valid binary file is already pre-loaded.
+
+\includegraphics[width=\linewidth]{Images/error3.png}
+
+
+
+\subsection{ERROR\_bad\_binary07\_short\_profile\_array}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})\\
+run-time load\\
+\textit{Binaries/corrupt\_binaries/short\_profile\_array.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection
+a run-time load of an invalid binary file (incorrectly sized profile array)
+when a valid binary file is already pre-loaded.
+
+\includegraphics[width=\linewidth]{Images/error4.png}
+
+
+
+\subsection{ERROR\_bad\_binary08\_no\_profile\_number}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})\\
+run-time load\\
+\textit{Binaries/corrupt\_binaries/no\_profile\_number.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection
+a run-time load of an invalid binary file (missing profile data)
+when a valid binary file is already pre-loaded.
+
+\includegraphics[width=\linewidth]{Images/error5.png}
+
+
+
+\subsection{ERROR\_deprecated}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})
+
+\textbf{Purpose:}\\ To test the error detection when executing deprecated
+methods.
+
+\includegraphics[width=\linewidth]{Images/error6.png}
+
+
+
+\subsection{ERROR\_no\_data}
+\textbf{Configuration:}\\ Empty
+
+\textbf{Purpose:}\\ To test the error detection when the model is provided no
+interpolation data or a configuration to find interpolation data.
+
+\includegraphics[width=\linewidth]{Images/error7.png}
+
+
+
+\subsection{FAIL\_01\_repetitive\_preload}
+\textbf{Configuration:}\\ preload
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ 11 times
+
+\textbf{Purpose:}\\ To test the error detection when pre-loading more profiles
+than slots available.
+
+\includegraphics[width=\linewidth]{Images/fail1.png}
+
+
+
+\subsection{FAIL\_06\_spec\_6\_file\_invalid\_profile}
+\textbf{Configuration:}\\
+run-time load\\
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $12$ (invalid).
+
+\textbf{Purpose:}\\ To test the error detection when specifying an invalid
+profile number in a good data file.
+
+\includegraphics[width=\linewidth]{Images/fail2.png}
+
+
+\subsection{FAIL\_06\_spec\_6\_file\_invalid\_vertical}
+\textbf{Configuration:}\\
+run-time load\\
+\textit{Binaries/DRWP\_w\_comp.bin}, profile $2$ (\textit{RUN\_02}), with
+specification that profile does not include vertical wind data.
+
+\textbf{Purpose:}\\ To test the error detection when attempting to load a data
+profile with an inconsistent setting of \textit{include\_vertical\_component}.
+
+\includegraphics[width=\linewidth]{Images/fail3.png}
+
+
+\subsection{FAIL\_07\_mid\_run\_switch\_invalid\_index}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})
+
+\textbf{Purpose:}\\ To test the error detection when switching to a
+pre-loaded profile index higher than the availability of pre-loaded
+profiles. In this case, there is 1 pre-loaded profile, and we try to switch
+to index 5.
+
+\includegraphics[width=\linewidth]{Images/fail4.png}
+
+
+\subsection{FAIL\_bad\_binary01\_no\_number\_of\_profiles}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/corrupt\_binaries/no\_number\_of\_profiles.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a pre-load of an invalid binary file (empty file).
+
+\includegraphics[width=\linewidth]{Images/fail5.png}
+
+
+\subsection{FAIL\_bad\_binary02\_invalid\_number\_of\_profiles}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/corrupt\_binaries/invalid\_number\_of\_profiles.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a pre-load of an invalid binary file (invalid number of profiles).
+
+\includegraphics[width=\linewidth]{Images/fail6.png}
+
+
+\subsection{FAIL\_bad\_binary03\_no\_number\_of\_altitudes}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/corrupt\_binaries/no\_number\_of\_altitudes.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a pre-load of an invalid binary file (no number of altitudes entry).
+
+\includegraphics[width=\linewidth]{Images/fail7.png}
+
+
+\subsection{FAIL\_bad\_binary04\_invalid\_number\_of\_altitudes}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/corrupt\_binaries/invalid\_number\_of\_altitudes}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a pre-load of an invalid binary file (invalid number of altitudes specified).
+
+\includegraphics[width=\linewidth]{Images/fail8.png}
+
+\subsection{FAIL\_bad\_binary05\_short\_altitude\_array}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/corrupt\_binaries/short\_altitude\_array.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a pre-load of an invalid binary file (incorrectly sized altitude array)
+
+\includegraphics[width=\linewidth]{Images/fail9.png}
+
+
+
+\subsection{FAIL\_bad\_binary06\_invalid\_altitude\_array}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/corrupt\_binaries/invalid\_altitude\_array.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a pre-load of an invalid binary file (non-monotonic data in the altitude array).
+This is a compound error: the table-interpolation model detects the problem
+with lack of monotonicity and posts an error; this model interprets that
+error as being critical and terminates the simulation.
+
+\includegraphics[width=\linewidth]{Images/fail10.png}
+
+
+
+\subsection{FAIL\_bad\_binary07\_short\_profile\_array}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/corrupt\_binaries/short\_profile\_array.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a pre-load of an invalid binary file (incorrectly sized profile array)
+
+\includegraphics[width=\linewidth]{Images/fail11.png}
+
+
+
+\subsection{FAIL\_bad\_binary08\_no\_profile\_number}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/corrupt\_binaries/no\_profile\_number.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a pre-load of an invalid binary file (missing profile data). In this case,
+the corrupted binary file is missing the entirety of the profile data,
+and the error is detected when the reader fails to read the first part of
+that profile, being the profile number.
+
+\includegraphics[width=\linewidth]{Images/fail12.png}
+
+
+
+\subsection{FAIL\_bad\_binary09\_invalid\_profile\_number}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/corrupt\_binaries/invalid\_profile\_number.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a pre-load of an invalid binary file (profile number at the front of the
+profile does not match the value in the initial array).
+
+\includegraphics[width=\linewidth]{Images/fail13.png}
+
+
+
+\subsection{FAIL\_bad\_binary10\_incorrect\_filelength}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/corrupt\_binaries/incorrect\_filelength.bin}, profile $11$
+
+\textbf{Purpose:}\\ To test the error detection with
+a pre-load of an invalid binary file (file length does not match
+expectation).
+
+\includegraphics[width=\linewidth]{Images/fail14.png}
+
+
+
+\subsection{FAIL\_bad\_filename}
+\textbf{Configuration:} Invalid
+
+\textbf{Purpose:}\\ To test the error detection when
+an invalid filename is provided for preloading data.
+
+\includegraphics[width=\linewidth]{Images/fail15.png}
+
+
+\subsection{FAIL\_bad\_filename\_post\_init}
+\textbf{Configuration:} Invalid
+
+\textbf{Purpose:}\\ To test the error detection when
+an invalid filename is provided for run-time loading of data.
+The model starts inactive with no pre-loaded data;
+it fails when it is activated with a specified
+filename that is not valid.
+This scenario results in multiple messages:
+\begin{enumerate}
+\item At activation, the model searches for pre-loaded
+  data matching the specification. On finding none, it posts an inform-level
+  message and starts the search for a file with that name.
+\item Because this search occurs post-initialization, the
+  model also posts an inform-level message about not using recommended
+  practice (which is to have all data loaded before initialization).
+\item The model is unable to find the specified file; because the model has
+  no data already loaded, this results in termination.
+\end{enumerate}
+
+
+\includegraphics[width=\linewidth]{Images/fail16.png}
+
+
+
+\subsection{FAIL\_bad\_filename\_with\_good\_preload}
+\textbf{Configuration:}\\ preload\\
+\textit{Binaries/DRWP\_no\_w\_comp.bin}, profile $1771$ (\textit{RUN\_01})\\
+run-time load\\Invalid
+
+\textbf{Purpose:}\\ To test the error detection when
+an invalid filename is provided for the initial identification of
+the data table to use. This scenario results in multiple messages:
+\begin{enumerate}
+\item At activation, the model searches for pre-loaded
+  data matching the specification. On finding none, it posts an inform-level
+  message and starts the search for a file with that name.
+\item Because this search occurs post-initialization (activation always
+  occurs post-initialization due to the nature of the Subscription model), the
+  model also posts an inform-level message about not using recommended
+  practice (which is to have all data loaded before initialization).
+\item The model is unable to find the specified file; because the model has
+  data already loaded, this results in a non-critical error.
+\item The failure to read the file means the data fails to load, resulting
+  in the profile not being changed, which is a non-critical error.
+\item Failure to change the profile during activation means that no profile
+  is available for the model to use; this is a critical fault, and the model
+  terminates the simulation.
+\end{enumerate}
+
+\includegraphics[width=\linewidth]{Images/fail17.png}
+
+\end{document}

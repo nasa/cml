@@ -1,0 +1,323 @@
+\documentclass[11pt,fleqn]{report}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+
+\usepackage{cml}
+\lstnewenvironment{codeXML}
+    {\lstset{basicstyle=\small\ttfamily,
+             language=XML,
+             xleftmargin=0.0in,
+             xrightmargin=0.0in,
+             backgroundcolor=\color{Orchid!60}, % 60% orchid, 40% white
+             escapeinside={\%*}{*)}, %  .tex file characters inside %*...*) are
+                                     %  treated as Tex commands.
+            }
+    }
+    { }
+
+\newcommand{\ModelName}{XML Helper}
+\newcommand{\ModelAuthor}{Daniel Ghan \\ Gary Turner}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{July 2022}
+\pagestyle{plain}
+\usepackage[parfill]{parskip}
+\usepackage[margin=1.5cm]{caption}
+\usepackage{subfig}
+
+\begin{document}
+\titlePage
+\clearpage % Reset page number
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\ \hline
+ \hline
+1 & July 2022 & Gary Turner & Initial Version \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagenumbering{arabic} % Start text with arabic 1
+\par The XML-helper model provides some utility functions to facilitate
+processing of XML data files. This model was written to support the
+fault-injection / fault-management CML model which parses XML files to
+specify the type and nature of faults to be injected. It can be used in
+other applications.
+
+\chapter {Requirements}
+The model shall provide commonly used functions to support processing of XML
+data. It is anticipated that this model is incomplete. The most urgent needs
+identified are:
+\begin{enumerate}
+  \item  Provide the value of a specified node property for a specified node.
+  In the example below, we may want the value of the property ID or purpose for
+  this node.
+  \begin{codeC}
+    <ABC name="myname" purpose="none" ID="5"></ABC>
+  \end{codeC}
+  \item Locate an XML node by node-name (or node-type) within the node-tree.
+  Three levels of specificity are required:
+  \begin{enumerate}
+    \item some specified level in the XML tree; this node would start at the
+    next sibling of a specified node. This option subdivides a tree-level,
+    looking only for nodes that are at the specified location, or downstream
+    siblings of it. It cannot return "upstream" nodes from the specified level.
+    \item the level one below some specified level in the XML tree; this node
+    would be a child of a specified node. This option will search an entire
+    tree-level until it finds a matching node. For a tree-level containing
+    multiple nodes of the same type, this option will always return the
+    first encountered, it cannot find additional downstream nodes of the
+    same type.
+    \item any level below some specified level in the XML tree; this node
+    would be a progeny of unspecified generation of a specified node. This
+    option will iteratively search through the tree, descending through
+    generations first, and then across generations.
+  \end{enumerate}
+  Notes:
+  \begin{itemize}
+    \item A node-name in this context is the type of node, not one of the
+    node properties. For example, in the XML line above, the node-name would
+    be `ABC'; the field identified as `name' is a property of this node.
+  \end{itemize}
+\end{enumerate}
+
+
+
+\chapter {Model Specification}
+The model is written to provide a set of static methods; it is not intended
+that this model be instantiated at any time.
+The model provides the following four methods to address the four algorithms
+specified in the requirements section.
+\begin{codeC}
+  static xmlNodePtr xml_find(        xmlNodePtr node, const char* name);
+  static xmlNodePtr xml_find_child(  xmlNodePtr node, const char* name);
+  static xmlNodePtr xml_find_progeny(xmlNodePtr node, const char* name);
+
+  static const char* xml_find_value( xmlNodePtr node,
+                                     const char* name,
+                                     bool allow_case=false);
+\end{codeC}
+It also provides additional utilities for convenience, such as verification
+that a node has the correct name / type in \textit{xml\_name\_match}.
+
+
+\chapter {User's Guide}
+The model methods are called as needed, for example:
+\begin{codeC}
+const char * value = XmlHelper::xml_find_value( node_A, "ID");
+\end{codeC}
+
+The five methods listed in the previous chapter are discussed below.
+
+\begin{itemize}
+\item \textbf{xml\_find} looks for nodes with the specified name; nodes must
+be ``downstream'' sibling nodes of the specified node.
+It returns a pointer to the node, or \textit{nullptr} if none is found.
+\item \textbf{xml\_find\_child} looks for nodes with the specified name;
+nodes must be immediate children of the specified node.
+It returns a pointer to the node, or \textit{nullptr} if none is found.
+\item \textbf{xml\_find\_progeny} looks for nodes with the specified name;
+nodes must be subordinate to the specified node.
+It returns a pointer to the node, or \textit{nullptr} if none is found.
+
+While \textit{xml\_find\_child} will search only one generation down,
+\textit{xml\_find\_progeny} will search the entire tree below the specified
+node.
+
+\item \textbf{xml\_find\_value} looks for a field with the specified name
+within the specified node. It returns a \textit{char*} pointer to the array
+containing the string found at the named field, or \textit{nullptr} if no
+field is found with a matching name.
+
+The optional flag supports flexibility where the field-name may have a first
+character with inconsistent case. For example, in the verification tests, we
+have \textit{Node2} with a field-name \textit{Purpose}, while the other nodes
+have a field-name \textit{purpose}. Searching \textit{Node2} for
+\textit{purpose} with:
+\begin{codeC}
+const char* purpose =XmlHelper::xml_find_value( node2,"purpose");
+\end{codeC}
+will default to requiring a perfect string comparison, and no match will be
+found. However, using:
+\begin{codeC}
+const char* purpose =XmlHelper::xml_find_value( node2,"purpose",true);
+\end{codeC}
+will support a positive string match when comparing \textit{purpose} and
+\textit{Purpose}. Note that this case insensitivity option:
+\begin{itemize}
+\item is limited to field-names, it does not apply to node-names;
+\item is limited to the first character of a field-name;
+\item must be activated by providing \textit{true} as the optional third
+argument -- if only two arguments are provided, the field-names must match
+the specified name completely.
+\end{itemize}
+
+\item \textbf{xml\_name\_match} is used by \textit{xml\_find},
+\textit{xml\_find\_child}, and \textit{xml\_find\_progeny} to compare the
+node-names against the specified name. For this name comparison, a case
+match is required on all characters.
+\end{itemize}
+
+
+\chapter{Verification}
+
+\section{Code Coverage}
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.6]{graphics/code_coverage.png}
+  \caption{Code Coverage}
+  \label{fig:coverage}
+\end{figure}
+\newpage
+
+\section {Coding Standards}
+There is a coding-standards violation in the model, in the use or
+\textit{reinterpret\_cast}. This model will need a waiver to allow the use this
+dangerous function. The specific use-case is in reinterpreting a pointer to an
+\textit{unsigned char} as a pointer to a \textit{char}.
+
+The rationale for this need follows:
+\begin{itemize}
+  \item The *.xml files provide information about the nodes as ASCII strings.
+  \item The *.xml files are parsed and processed by the XML library, which
+  stores the content it reads as \textit{unsigned char} arrays.
+  \item Other aspects of the simulation, including the SWIG interface and other
+  user-settable configurations, typically use \textit{char} arrays to store the
+  expected ASCII strings.
+  \item We need to be able to compare the expected strings with those stored by
+  the XML reader, so it is necessary to reinterpret one as the other.
+  \item Compilers will not implicitly cast between \textit{unsigned char} and
+  \textit{char} because one half of the 255 possible values of the 8-bit
+  variables represent different interpretations.
+  \item The g++ compiler interprets the values 0-127 of a \textit{char} variable
+  equivalently to the values 0-127 of an \textit{unsigned char} variable.
+  (the values 128-255 may be treated differently).
+  NOTE THAT THIS IS NOT GUARANTEED BY THE C++ STANDARD.
+  \item The ASCII text map uses values 0-127, so ASCII text may be equivalently
+  stored as \textit{unsigned char} or \textit{char} with our compiler.
+  \item This model is limited to comparing ASCII text, as read by the XML
+  reader.
+  \item In this model, the reinterpret cast is limited to converting from
+  \textit{unsigned char} to \textit{char}; it is isolated to a method
+  that requires an input argument of type \textit{unsigned char*} and outputs a
+  \textit{char*}.
+  \item The verification process includes comparison between values provided as
+  \textit{char} with values stored by the XML-reader as \textit{unsigned char}.
+  If the compiler were to change at some point, and if that change resulted in
+  breaking the current equivalence between these types for ASCII characters,
+  then the verification tests would fail. There is no reasonable path that
+  might lead to a situation in which the verification tests pass and the model
+  creates a false positive match between a user-specified
+  \textit{char} string and an XML-read \textit{unsigned char} string.
+\end{itemize}
+
+\section {Verification Tests}
+The model provides a single test case, at \textit{SIM\_verif/RUN\_verif}.
+This test case exercises all of the functionality of the model, using an
+XML structure defined in sample.xml with nodes as illustrated below.
+The structure includes four nodes, colored orange, that are all of the
+same type (\textit{TargetNode}); these will be the target of the search
+algorithms.
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.6]{graphics/verif_tree.png}
+  \caption{Node Tree from sample.xml}
+\end{figure}
+
+The simulation utilizes a test class \textit{XmlHelperTester}, provided at
+\textit{SIM\_verif/include/test.hh}.
+Most of the verification is conducted within \textit{XmlHelperTester::test()}.
+The execution of this test relies on internal testing; with each test if
+the results are unexpected, the simulation will terminate prematurely with
+a failed flag. There is no regression data to compare; if any tests fail,
+the resulting premature termination will indicate that failure.
+
+The verification includes several tests:
+\begin{enumerate}
+  \item Testing name-match (\textit{xml\_name\_match})
+  \begin{enumerate}
+    \item Tests the root-node to confirm that its name matches with expectation.
+  \end{enumerate}
+  \begin{figure}[h]
+    \centering
+    \includegraphics{graphics/snapshot1.png}
+  \end{figure}
+
+  \item Testing property lookup (\textit{xml\_find\_value}):
+  \begin{enumerate}
+    \item parses through the level 1 nodes and prints their \textit{purpose}
+    values.  These tests do not have individual fail-checks, but the test
+    will fail if it does not detect 4 nodes at this level.
+    \item The verification sequence identifies some useful nodes for later,
+    and uses the \textit{xml\_find\_value} method to confirm that the correct
+    nodes have been identified, printing the output to the screen.
+    This serves no purpose for verification, it is informational as a
+    troubleshooting tool.
+    If the wrong nodes are identified, later tests will fail.
+    \item Note that we deliberately introduced a case error in the
+    field name \textit{purpose} for \textit{Node2}, labeling it \textit{Purpose}
+    instead. This was done to test the optional case-insensitivity setting
+    on the first character of a field name. Consequently, everywhere that
+    \textit{xml\_find\_value} is used with \textit{Node2}, we must use the
+    optional flag to allow the field-name \textit{Purpose} to match with the
+    specified name, \textit{purpose}.
+  \end{enumerate}
+  \begin{figure}[h]
+    \centering
+    \includegraphics{graphics/snapshot2.png}
+  \end{figure}
+
+  \item Testing the same-level node finder (\textit{xml\_find})
+  \begin{enumerate}
+    \item Starting with node-1, the search terminates at node-2,
+    the first downstream sibling TargetNode.
+    \item  Starting with node-3, the search terminates at node-4, the
+    first downstream sibling TargetNode; even though node-2 is also a
+    sibling, it is upstream of the starting-point (node-3) and so is
+    not considered.
+    \item  Starting with node-5, the search terminates with no result;
+    even though node-8 is on the same level, and "downstream", it is not
+    a sibling of node-5.
+  \end{enumerate}
+  \begin{figure}[h]
+    \centering
+    \includegraphics{graphics/snapshot3.png}
+  \end{figure}
+
+  \item Testing the child-level node-finder (\textit{xml\_find\_child})
+  \begin{enumerate}
+    \item Starting with node-0, the search terminates at node-2,
+    the highest-upstream of the child nodes with type \textit{TargetNode}.
+    \item Starting with node-2, the search terminates with no result;
+    neither node-5 nor node-6 are \textit{TargetNode} nodes, and this
+    search will only include immediate child nodes, it will not descend
+    further.
+    \item Starting with node-3, the search terminates at node-8,
+    the highest-upstream of the child nodes with type \textit{TargetNode}.
+  \end{enumerate}
+  \begin{figure}[h]
+    \centering
+    \includegraphics{graphics/snapshot4.png}
+  \end{figure}
+
+  \item Testing the tree-search node-finder (\textit{xml\_find\_progeny})
+  \begin{enumerate}
+    \item Starting with node-0, the search terminates at node-2 after
+    considering node-1.
+    \item Starting with node-2, the search terminates at node-11.
+  \end{enumerate}
+  \begin{figure}[h]
+    \centering
+    \includegraphics{graphics/snapshot5.png}
+  \end{figure}
+\end{enumerate}
+
+\end{document}

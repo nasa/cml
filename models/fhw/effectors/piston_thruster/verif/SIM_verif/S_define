@@ -1,0 +1,71 @@
+//==========================  TRICK HEADER  ================================
+// PURPOSE:
+/* ========================================================================= -
+ -  This simulation defines the baseline starting point for GRAM 2010 Model  -
+ -  simulation development.  The following simulation objects are defined in -
+ -  this sim:                                                                -
+ -                                                                           -
+ -           sys - Trick runtime executive and data recording routines.      -
+ -       Pistons Test - unit object for the EXAMPLE model                    -
+ -                                                                           -
+ - ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../include/sample_group.hh"
+
+class PistonsUnitTestSimObject: public Trick::SimObject {
+public:
+  // Framework (leave this alone)
+  UnitTestFramework framework;
+  // Model for testing:
+  SamplePistonGroup pistons;
+  // support variables:
+  PistonThruster extra_piston;
+  PistonThruster unusable_piston;
+  double time;
+  bool   null_flag_A; // (--) For sideA on a thruster
+  bool   null_flag_B; // (--) For sideB on a thruster
+
+  PistonsUnitTestSimObject()
+    :
+    pistons( time),
+    extra_piston( pistons.vehA_CoM,
+                  pistons.vehB_CoM),
+    null_flag_A(false),
+    null_flag_B(false)
+  {
+
+    // Framework (leave this alone)
+    ("initialization")   framework.initialize();
+    (1.0, "environment") framework.update();
+
+    // support:
+    ("default_data") pistons.configure();
+
+    // test-specific jobs:
+    ("initialization")   pistons.initialize();
+    (1.0, "environment") pistons.update();
+
+    (1.0, "scheduled")   piston_null();
+  }
+
+private:
+  void piston_null()
+  {
+    if (null_flag_A) {
+      pistons.thrusterA.sideA.loadCoM(nullptr);
+    }
+    if (null_flag_B) {
+      pistons.thrusterA.sideB.loadCoM(nullptr);
+    }
+  }
+
+  PistonsUnitTestSimObject (const PistonsUnitTestSimObject&);
+  PistonsUnitTestSimObject & operator = (const PistonsUnitTestSimObject&);
+
+};
+PistonsUnitTestSimObject pistons_unit_test;

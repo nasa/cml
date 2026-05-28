@@ -1,0 +1,31 @@
+//==========================  TRICK HEADER  ================================
+// PURPOSE: (Perform unit-simulation-test of the math utilities model)
+//==========================================================================
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+//***************************************************************
+// CLASS: (SubscriptionSimObject)
+// PURPOSE: Tests the Subscription Model
+//***************************************************************
+
+##include "../../include/subscriptions.hh"
+##include "test_class.hh"
+
+class SubscriptionSimObject: public Trick::SimObject {
+
+  public:
+    SubscriptionBase       subs;
+    SubscriptionTestClass  activation_fails;
+
+    SubscriptionSimObject()
+      :
+      subs()
+   {}
+
+  private:
+    SubscriptionSimObject (const SubscriptionSimObject&);
+    SubscriptionSimObject & operator = (const SubscriptionSimObject&);
+};
+SubscriptionSimObject subs_verif;

@@ -1,0 +1,69 @@
+/*****************************************************************************
+PURPOSE:
+  (Verification of the LaggedAtmosphere / LaggedWinds / PaylaodData
+  combination)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (June 2021) (Antares) (initial))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+
+##include "../../include/lagged_atmosphere.hh"
+##include "../../include/lagged_winds.hh"
+##include "../../include/payload_data.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+
+ public:
+  // Framework (leave this alone)
+  UnitTestFramework framework;
+  // support variables:
+  double      lagged_altitude;/* (m) altitude of interpolated point*/
+  PayloadData payload;        /* (--) data for recording. */
+
+  // Model for testing:
+  LaggedAtmosphere lagged_atmosphere; /* (--) lagged-atmos*/
+  LaggedWinds      lagged_winds;      /* (--) lagged-winds*/
+
+
+  AntaresUnitTestSimObject()
+    :
+    lagged_altitude(0.0),
+    payload(),
+    lagged_atmosphere(),
+    lagged_winds()
+  {
+    // Framework
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    // test-specific jobs:
+    // NOTE -- need to update history twice because this sub-model will
+    // terminate if there is only 1 history point.
+    ("initialization") framework.update();
+    ("initialization") lagged_atmosphere.update_history(payload);
+    ("initialization") lagged_winds.update_history(payload);
+
+    (1.0, "environment") lagged_atmosphere.update_history(payload);
+    (1.0, "environment") lagged_winds.update_history(payload);
+
+    (1.0, "environment") lagged_atmosphere.compute( lagged_altitude);
+    (1.0, "environment") lagged_winds.compute( lagged_altitude);
+  }
+
+ private:
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject test;

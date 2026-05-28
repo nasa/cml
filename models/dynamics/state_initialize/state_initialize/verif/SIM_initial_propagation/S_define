@@ -1,0 +1,67 @@
+/*****************************************************************************
+PURPOSE: (TO BE COMPLETED) // TODO: complete this
+PROGRAMMERS:
+    (
+     ((Name) (Org) (Date) (Project) (purpose))
+    )
+*****************************************************************************/
+
+#define DYNAMICS 1.0
+#define LOW_RATE_ENV 600.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+
+#include "time_TAI_UTC_UT1_TT_GMST.sm"
+#include "dynamics.sm"
+#include "environment.sm"
+#include "earth_GGM02C_MET_RNP.sm"
+#include "moon_basic.sm"
+#include "sun_basic.sm"
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "cml/models/environment/gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh"
+
+##include "../../include/state_initialize_with_propagation.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject
+{
+ protected:
+  jeod::DynManager & dyn_manager;
+ public:
+  // Model for testing:
+  StateInitializeWithPropagation  state_init;
+  // support variables:
+  jeod::MassBodyInit       mass_init;
+  jeod::DynBody  body;
+  SphericalHarmonicsFastGravityControls   grav_controls_earth;
+  SphericalHarmonicsFastGravityControls   grav_controls_sun;
+  SphericalHarmonicsFastGravityControls   grav_controls_moon;
+  double prop_time;
+
+  AntaresUnitTestSimObject( jeod::DynManager & dyn_manager_in,
+                            jeod::GravityManager    & gravity_manager)
+  :
+    dyn_manager(dyn_manager_in),
+    state_init( gravity_manager)
+  {
+    // test-specific jobs:
+    P_ENV ("initialization")  body.initialize_model( dyn_manager);
+  }
+
+ private:
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject test (dynamics.dyn_manager,
+                               env.gravity_manager);
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics, earth;

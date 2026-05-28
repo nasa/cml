@@ -1,0 +1,63 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Sim object for developing multiple table load capabilities in table_lookup
+*****************************************************************************/
+##include "../../include/simple_table_lookup.hh"
+##include "../../include/abstract_table_lookup.hh"
+
+class MultiLoadSimObject : public Trick::SimObject {
+  public:
+    double              independent_variable;
+    double              dependent_variable[4];
+    SimpleTableLookup   table_set;
+
+   MultiLoadSimObject()
+     :
+     independent_variable(0.2),
+     table_set()
+   {
+
+     ("initialization") initialization();
+     (1.0, "scheduled") update();
+
+   };
+
+   void initialization()
+   {
+        dependent_variable[0] =
+        dependent_variable[1] =
+        dependent_variable[2] =
+        dependent_variable[3] =  0.1;
+        table_set.initialize();
+        table_set.subscribe();
+   }
+
+   void update() {
+        independent_variable += 1.0;
+        table_set.update();
+   }
+
+   void load_independent_variable(const double *independent_data,
+                                  size_t       number_of_independent_data_points) {
+        table_set.load_independent_data(independent_variable,
+                                        independent_data,
+                                        number_of_independent_data_points);
+   }
+
+   void load_dependent_variables(const double *dependent_data,
+                                 size_t number_of_dependent_variables,
+                                 size_t number_of_independent_data_points) {
+        table_set.load_dependent_data(dependent_variable,
+                                      number_of_dependent_variables,
+                                      dependent_data,
+                                      number_of_independent_data_points);
+   }
+
+
+ private:
+   MultiLoadSimObject( const MultiLoadSimObject&);
+   MultiLoadSimObject& operator = ( const MultiLoadSimObject&);
+};
+MultiLoadSimObject multi;

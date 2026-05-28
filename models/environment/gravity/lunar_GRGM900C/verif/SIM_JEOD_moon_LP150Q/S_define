@@ -1,0 +1,19 @@
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_dyntime_only.sm"
+#include "dynamics_init_only.sm"
+#include "environment_sans_de405.sm"
+#include "moon_lp150Q.sm"
+
+#include "../S_modules/vehicle.sm"
+
+//IntegLoop sim_integ_loop (DYNAMICS) dynamics;

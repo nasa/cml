@@ -1,0 +1,3 @@
+test_sep.subject.composite_body.state.trans.position[0]
+test_sep.subject.composite_body.state.trans.position[1]
+test_sep.subject.composite_body.state.trans.position[2]

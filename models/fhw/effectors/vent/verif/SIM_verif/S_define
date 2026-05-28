@@ -1,0 +1,164 @@
+/**************************** Trick Header ************************************
+PURPOSE:
+    (VentSet Verif Sim)
+******************************************************************************/
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+
+
+//////////////////////////////////////////////////////////////
+// Vent Object
+//////////////////////////////////////////////////////////////
+
+##include "../../include/vent_set.hh"
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_rot_state.hh"
+##include "jeod/models/dynamics/body_action/include/body_attach_matrix.hh"
+##include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+##include "cml/models/utilities/math_utils/include/math_utils.hh"
+
+class VentSimObject : public Trick::SimObject {
+ protected:
+  jeod::DynManager& dyn_manager;
+  const double & dyn_time;
+
+ public:
+  DynamicMassBody tank[2];
+  jeod::DynBody root_body;
+  jeod::DynBody vent_body;
+  jeod::MassBodyInit vent_massinit;
+  jeod::MassBodyInit root_massinit;
+  jeod::BodyAttachMatrix attach;
+  jeod::BodyAttachMatrix attach_tank[2];
+  jeod::DynBodyInitTransState trans_init;
+  jeod::DynBodyInitRotState rot_init;
+
+  Vent extra_vent;
+  SimpleVent extra_simple_vent;
+  SimpleVent uninitialized_vent;
+
+  VentSet set_simple;
+  VentSet set_1_tank;  /* (--) used only to test 4-arg constructor with 4th arg
+                               a single tank; not initialized / used in the sim. */
+  VentSet set_2_tanks;
+
+
+  // A set of vent parameters representing those of some specified vent,
+  // usually "extra_vent"
+  double force_magnitude;
+  double impulse_magnitude;
+  double duration;
+  double direction[3];
+  double force[3];
+  double impulse[3];
+  double flowrate;
+  double exhaust_speed;
+  bool direction_set;
+  bool force_set;
+  bool force_magnitude_set;
+  bool impulse_set;
+  bool impulse_magnitude_set;
+  bool duration_set;
+  bool flowrate_set;
+  bool exhaust_speed_set;
+
+  // copy of the dynamic/impulse mode for auto-created vents vent(0) and vent(1)
+  bool vent0_apply_as_impulse;
+  bool vent1_apply_as_impulse;
+
+
+ public:
+  VentSimObject( jeod::DynManager& dyn_mgr,
+                 const double & dyn_time_)
+  :
+    dyn_manager(dyn_mgr),
+    dyn_time(dyn_time_),
+
+    extra_vent(dyn_time, tank[0]),
+    extra_simple_vent(dyn_time),
+    uninitialized_vent(dyn_time),
+    set_simple(2, vent_body, dyn_time),
+    set_1_tank(2, vent_body, dyn_time, tank[0]),
+    set_2_tanks(2, vent_body, dyn_time, tank)
+  {
+    P_ENV ("initialization") root_body.initialize_model(dyn_manager);
+    P_ENV ("initialization") vent_body.initialize_model(dyn_manager);
+
+    ("initialization")       add_vents_to_sets();
+    ("initialization")       set_2_tanks.initialize();
+
+    (DYNAMICS, "effector")   set_2_tanks.update();
+    (DYNAMICS, "effector")   tank[0].update_mass();
+    (DYNAMICS, "effector")   tank[1].update_mass();
+    (DYNAMICS, "effector")   root_body.mass.update_mass_properties();
+  }
+
+  //***************************************************************************
+  void tank_null_check()
+  {
+    VentSet(2, vent_body, dyn_time, NULL);
+  }
+
+  //***************************************************************************
+  void copy_parameters(Vent & vent)
+  {
+    force_magnitude = vent.get_force_magnitude();
+    impulse_magnitude = vent.get_impulse_magnitude();
+    duration = vent.get_duration();
+    vent.get_direction( direction);
+    vent.get_force( force);
+    vent.get_impulse( impulse);
+    flowrate = vent.get_flowrate();
+    exhaust_speed = vent.get_exhaust_speed();
+    direction_set = vent.direction_is_set();
+    force_set = vent.force_is_set();
+    force_magnitude_set = vent.force_magnitude_is_set();
+    impulse_set = vent.impulse_is_set();
+    impulse_magnitude_set = vent.impulse_magnitude_is_set();
+    duration_set = vent.duration_is_set();
+    flowrate_set = vent.flowrate_is_set();
+    exhaust_speed_set = vent.exhaust_speed_is_set();
+  }
+
+  //***************************************************************************
+  void copy_mode_flags()
+  {
+    vent0_apply_as_impulse = set_2_tanks.get_vent(0)->is_impulse_mode();
+    vent1_apply_as_impulse = set_2_tanks.get_vent(1)->is_impulse_mode();
+  }
+
+ private:
+  //***************************************************************************
+  void add_vents_to_sets()
+  {
+    set_simple.add_vent( extra_vent);
+    set_simple.add_vent( extra_simple_vent);
+    set_2_tanks.add_vent( extra_vent);
+    set_2_tanks.add_vent( extra_simple_vent);
+  };
+
+  VentSimObject (const VentSimObject&);
+  VentSimObject & operator = (const VentSimObject&);
+};
+
+VentSimObject ventset_obj(dynamics.dyn_manager,
+                          jeod_time.time_manager.dyn_time.seconds);
+
+vcollect ventset_obj.vent_body.collect.collect_effector_forc jeod::CollectForce::create {
+   ventset_obj.set_2_tanks.force
+ };
+vcollect ventset_obj.vent_body.collect.collect_effector_torq jeod::CollectTorque::create {
+   ventset_obj.set_2_tanks.torque
+};
+
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

@@ -1,0 +1,5 @@
+test.R_P[0]
+test.R_P[1]
+test.R_P[2]
+test.longitude
+test.latitude

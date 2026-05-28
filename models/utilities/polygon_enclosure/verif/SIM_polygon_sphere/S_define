@@ -1,0 +1,86 @@
+/*#####################TRICK HEADER#############################################
+
+PURPOSE:
+  ( Test the capabilities of Polygon Enclosure)
+
+AUTHOR:
+   (
+    ((Name Gary Turner) (OSR) (June 2023) (ANTARES V&V))
+   )
+
+##############################################################################*/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/polygon_enclosure_sphere.hh"
+
+class UnitSimObject: public Trick::SimObject {
+
+ public:
+  UnitTestFramework framework;
+  double R_P[3];
+  double longitude;
+  double latitude;
+
+  PolygonEnclosureSphere<4> rectangle;
+  PolygonEnclosureSphere<4> polar_quad_north;
+  PolygonEnclosureSphere<4> polar_quad_south;
+  PolygonEnclosureSphere<6> irreg_hex;
+  PolygonEnclosureSphere<4> invalid;
+
+  bool in_rectangle_ang;
+  bool in_rectangle_cart;
+  bool in_hex_ang;
+  bool in_hex_cart;
+
+  UnitSimObject()
+    :
+    rectangle(),
+    irreg_hex(),
+    invalid()
+  {
+    ("default_data") vertices();
+
+    ("initialization") framework.initialize();
+    (1, "environment") framework.update();
+
+    ("initialization") rectangle.initialize();
+    ("initialization") polar_quad_north.initialize();
+    ("initialization") polar_quad_south.initialize();
+    ("initialization") irreg_hex.initialize();
+    (1, "scheduled") test();
+  }
+
+  void vertices()
+  {
+    double rect[4][2] = {{-1.0, -1.0}, {1.0, -1.0}, {1.0, 1.0}, {-1.0, 1.0}};
+    rectangle.set_vertices(rect);
+
+    double np[4][2] = {{-2.2, 1.0}, {-0.8, 1.0}, {0.8, 1.0}, {2.2, 1.0}};
+    polar_quad_north.set_vertices(np);
+
+    double sp[4][2] = {{-2.2, -1.0}, {-0.8, -1.0}, {0.8, -1.0}, {2.2, -1.0}};
+    polar_quad_south.set_vertices(sp);
+
+    double ih[6][2] = {{-1,0}, {-0.5,1}, {0.5,1}, {1,0}, {0.5,-1}, {-0.5,-1}};
+    irreg_hex.set_vertices(ih);
+
+    double inv[4][2] = {{0,0},{0,1},{2,1},{1,0.8}};
+    invalid.set_vertices(inv);
+  }
+
+  void test()
+  {
+    in_rectangle_cart  = rectangle.in_polygon(R_P);
+    in_hex_cart        = irreg_hex.in_polygon(R_P);
+    in_rectangle_ang   = rectangle.in_polygon(longitude, latitude);
+    in_hex_ang         = irreg_hex.in_polygon(longitude, latitude);
+  }
+
+  private:
+    UnitSimObject (const UnitSimObject&);
+    UnitSimObject & operator = (const UnitSimObject&);
+
+};
+UnitSimObject test;

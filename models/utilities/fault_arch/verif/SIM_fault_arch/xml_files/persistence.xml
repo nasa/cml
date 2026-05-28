@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Test Fault 1" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Overwrite value="100"></Overwrite>
+   <TriggerGroup>
+      <Trigger name = "trigger 1" variable="test_object.current_time" compare="GE" value="1" fire_limit="13"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 2" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Overwrite value="50"></Overwrite>
+   <TriggerGroup>
+      <Trigger name = "trigger 2" variable="test_object.current_time" compare="GE" value="3" fire_limit="9"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 3" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Overwrite value="150"></Overwrite>
+   <TriggerGroup>
+      <Trigger name = "trigger 3" variable="test_object.current_time" compare="GE" value="5" fire_limit="5"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 4" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Overwrite value="103"></Overwrite>
+   <TriggerGroup>
+      <Trigger name = "trigger 4" variable="test_object.current_time" compare="GE" value="7" fire_limit="1"></Trigger>
+   </TriggerGroup>
+</Fault>
+</FaultManager>

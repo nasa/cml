@@ -1,0 +1,236 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Sim object for gettting the code coverage to 100%
+*****************************************************************************/
+##include "../../include/simple_table_lookup.hh"
+##include "../../include/abstract_table_lookup.hh"
+##include "../../include/table_independent_variable.hh"
+##include "../../include/table_lookup__transpose_data.hh"
+
+class CodeCoverageSimObject : public Trick::SimObject {
+  public:
+    double               independent_variable;
+    double        second_independent_variable;
+    double              dependent_variable[2];
+    SimpleTableLookup                     stl;
+    GenericMultiInputTable               gmit;
+    TableIndependentVariable              tiv;
+    TableIndependentVariable              tiv2;
+    QuaternionSphericalInterpolator        qsi;
+    jeod::Quaternion                     quat_0;
+    jeod::Quaternion                     quat_1;
+    SingleInputTableForAngles             sitfa;
+    SingleInputTableForQuaternions        sitfq;
+
+    TableLookupTransposeDataSet            tltd;
+    TableLookupTransposeDataSet_TableConfig tltd_tc;
+
+
+    int number_of_independent_data_points = 5;
+    double independent_data[5] = {1.0, 2.0, 3.0, 4.0, 5.0};
+    int number_of_dependent_variables = 2;
+    double dependent_data[10] = {11.0,  12.0,  13.0,  14.0,  15.0, 101.0, 102.0, 103.0, 104.0, 105.0};
+
+   CodeCoverageSimObject() :  independent_variable(2.5),
+                              stl(),
+                              gmit(dependent_variable, 2),
+                              tiv(independent_variable, TableIndependentVariable::Linear),
+                              tiv2(second_independent_variable, TableIndependentVariable::Linear),
+                              qsi(),
+                              quat_0(),
+                              quat_1(),
+                              sitfa(),
+                              sitfq()
+   {
+
+     ("default_data")   default_data();
+
+   };
+
+   void default_data() {
+        stl.load_independent_data(independent_variable,
+                                  independent_data,
+                                  number_of_independent_data_points);
+        stl.load_dependent_data(dependent_variable,
+                                number_of_dependent_variables,
+                                dependent_data,
+                                number_of_independent_data_points);
+   }
+
+
+   /*  Routines for table_lookup_transpose_data.cc code coverage  */
+  void tltd_process_data() {
+    //  Arrives at pointer check
+    //      in TableLookupTransposeDataSet_TableConfig::populate_table()
+    //      must use a debugger to set table_ptr = NULL
+    //  Covers check for num_matches > 1 in
+    //      TableLookupTransposeDataSet::get_config(...)
+    tltd.independent_var = &independent_variable;
+    tltd_tc.name = "independent_1";
+    tltd_tc.dependent_variables.push_back(&dependent_variable[0]);
+    tltd.add_config(tltd_tc);
+    std::list< std::vector< double > > list_vec{{0,1,2,3,4}, {10,11,12,13,14}};
+    tltd.process_data(list_vec);
+
+    tltd_tc.name = "independent_1";
+    tltd_tc.dependent_variables.push_back(&dependent_variable[0]);
+    tltd.add_config(tltd_tc);
+    tltd.get_config("independent_1");
+  }
+
+   /*  Routines for table_independent_variable.cc code coverage  */
+   void tiv_binary_search() {
+     //  Covers check for perform_full_search in
+     //      TableIndependentVariable::update()
+     //  Arrives at check for fraction < 0 in
+     //      TableIndependentVariable::generate_fraction()
+     //       must use debugger to set fraction < 0
+     //  Arrives at check for fraction > 1 in
+     //      TableIndependentVariable::generate_fraction()
+     //      must use debugger to set fraction > 1
+     TableIndependentVariable tiv_new(independent_variable);
+     tiv_new.perform_full_search=true;
+     DoubleVec dvec{2,3};
+     tiv_new.load_data(dvec);
+     tiv_new.initialize();
+     tiv_new.update();
+   }
+   void tiv_bad_size() {
+     //  Covers data_in size < 1 check in
+     //     TableIndependentVariable::load_data(...)
+     //  loads empty vector
+     TableIndependentVariable tiv_new(independent_variable);
+     DoubleVec dvec;
+     tiv_new.load_data(dvec);
+   }
+
+   /*  Routines for single_input_table_for_quaternions.cc code coverage  */
+   void sitfq_bad_size() {
+     //  Covers independent size check > 1 in
+     //    SingleInputTableForQuaternions::initialize()
+     //  Adds two independent variables, which is illegal for this class
+     sitfq.add_independent(tiv);
+     sitfq.add_independent(tiv2);
+     sitfq.initialize();
+   }
+
+   /*  Routines for single_input_table_for_angles.cc code coverage  */
+   void sitfa_bad_size() {
+     //  Covers independent size check > 1 in
+     //     SingleInputTableForAngles::initialize()
+     //  Adds two independent variables, which is illegal for this class
+     sitfa.add_independent(tiv);
+     sitfa.add_independent(tiv2);
+     sitfa.initialize();
+   }
+
+   /*  Routine for quaternion_spherical_interpolator.cc code coverage  */
+   void q_delta_s() {
+     // Covers q_delta_s < 0.0 check in QuaternionSphericalInterpolator::update()
+     //    Defines two quaternions so that q_delta_s is negative
+     qsi.update();
+   }
+
+   /*  Routines for generic_multi_input_table.cc code coverage  */
+   void gmit_generic_update() {
+     //  These checks can not be reached under normal conditions.
+     //     One must use a debugger and set breakpoints to cover the
+     //     following sections of code
+     //  Arrives at check for independent variable data points <= 1 in
+     //     GenericMultiInputTable::generate_base_values()
+     //     must use a debugger to set this value to <= 1
+     //  Arrives at size check for dwell in
+     //      GenericMultiInputTable::generate_base_values()
+     //      must use a debugger to set this size > 0.5 * number of interp points
+     //  Arrives at default case for switch on type of interpolation in
+     //      GenericMultiInputTable::generate_base_values()
+     //      must use a debugger to set value out of bounds
+     //  Arrives at check for output_ptrs_set in
+     //      GenericMultiInputTable::precheck_output()
+     //      must use a debugger to set outpout_ptrs_set = False
+     //  Arrives at comparison between data_point_size and data_point_weight size
+     //      in GenericMultiInputTable::precheck_output()
+     //      must use a debugger to set unequal values
+     //  Arrives at precheck_output() call in
+     //      GenericMultiInputTable::generate_output()
+     //      must use a debugger to set this to false
+     gmit.add_independent(tiv);
+     tiv.load_data( independent_data, 5);
+     SizeVec dim_list;
+     dim_list.push_back(2);  //  number of dependent variables
+     dim_list.push_back(5);  //  first independent has 1 value
+     gmit.load_data(dependent_data, dim_list);
+     gmit.initialize();
+     gmit.update();
+   }
+
+   void gmit_generic_init() {
+     //  Arrives at independent data size check in GenericMultiInputTable::initialize()
+     //    use a debugger to set incorrect independent data size
+     //  Arrives at output_ptrs_set check in GenericMultiInputTable::generate_trivial_output()
+     //    use a debugger to set output_ptrs_set = False
+     gmit.add_independent(tiv);
+     tiv.load_data( independent_data, 1);
+     SizeVec dim_list;
+     dim_list.push_back(2);  //  number of dependent variables
+     dim_list.push_back(1);  //  first independent has 1 value
+     gmit.load_data(dependent_data, dim_list);
+     gmit.initialize();
+   }
+   void independent_nullptr() {
+     //  Covers null input pointer check in GenericMultiInputTable::add_independent(...)
+     //  sends in a NULL address
+     TableIndependentVariable * hope[2] = {NULL, NULL};
+     gmit.add_independent(**hope);
+   }
+
+   /*  Routines for abstract_table_lookup.cc code coverage  */
+   void bad_table_type() {
+        stl.initialize();
+        stl.subscribe();
+        // Covers the default switch case in AbstractTableLookup::create_table(...)
+        // chooses an illegal table type = 4
+        stl.create_table(dependent_data[0], static_cast<AbstractTableLookup::TableType>(14));
+   }
+   void table_failed_update() {
+        stl.initialize();
+        stl.subscribe();
+        stl.create_table(dependent_data[0],  AbstractTableLookup::Generic);
+        // Covers table update in AbstractTableLookup::update()
+        // returns !(*it_tab).first->update() as false (output table not initialized in GMIT::update())
+        stl.update();
+   }
+   void independent_variable_failed_update() {
+        stl.initialize();
+        stl.subscribe();
+        stl.create_independent_variable("second", second_independent_variable);
+        // Covers independent variable update in AbstractTableLookup::update()
+        // returns if (!(*it)->update()) as false (since "second" has not been initialized in TIV::update())
+        stl.update();
+   }
+   void table_not_enabled() {
+        // Covers subscription base check for enabled in AbstractTableLookup::initialize()
+        // sets enabled = false
+        stl.disable();
+
+        stl.initialize();
+        stl.subscribe();
+        stl.update();
+   }
+   void destructor_coverage() {
+        SimpleTableLookup *stl_temp = new SimpleTableLookup();
+        stl_temp->load_independent_data(independent_variable, independent_data, number_of_independent_data_points);
+        stl_temp->load_dependent_data(dependent_variable, number_of_dependent_variables, dependent_data, number_of_independent_data_points);
+        // Covers the destructor in AbstractTableLookup::~AbstractTableLookup()
+        // destructor is explicitly called
+        delete stl_temp;
+   }
+
+ private:
+   CodeCoverageSimObject( const CodeCoverageSimObject&);
+   CodeCoverageSimObject& operator = ( const CodeCoverageSimObject&);
+};
+
+CodeCoverageSimObject code_coverage;

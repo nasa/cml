@@ -1,0 +1,10 @@
+jeod_time.time_manager_init.initializer = "UTC"
+jeod_time.time_manager_init.sim_start_format = trick.TimeEnum.calendar
+
+jeod_time.time_tai.update_from_name = "Dyn"
+jeod_time.time_tai.initialize_from_name = "UTC"
+
+jeod_time.time_ut1.update_from_name = "TAI"
+jeod_time.time_ut1.initialize_from_name = "TAI"
+
+jeod_time.time_utc.update_from_name = "TAI"

@@ -1,0 +1,61 @@
+// Purpose:  To verify that the modifications made to the first_order_hold
+// method did not break its functionality.
+// A step function will be provided to the FOH model and the output measured to
+// confirm that it is interpreting correctly.
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+
+#include "time_dyntime_only.sm"
+
+#include "dynamics.sm"
+
+##include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
+##include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+
+##include "../../include/first_order_hold.hh"
+
+
+class WindFirstOrderHoldTestSimObject : public Trick::SimObject {
+  protected:
+    const double                 & my_time;
+
+  public:
+    ExtendedPlanetaryDerivedState  state;
+    AtmosExecOutput                atmos_out;
+    FirstOrderHold                 hold;
+    double                         test_wind;
+
+    WindFirstOrderHoldTestSimObject( const double & time_in )
+      :
+      my_time(time_in),
+      state(),
+      atmos_out(),
+      hold(my_time,
+           state,
+           atmos_out)
+    {
+      ("initialization") adjust_wind();
+      ("initialization") hold.activate();
+      (10,"environment") adjust_wind();
+      (1, "environment") hold.update();
+    };
+
+  private:
+    WindFirstOrderHoldTestSimObject (const WindFirstOrderHoldTestSimObject&);
+    WindFirstOrderHoldTestSimObject & operator = (const WindFirstOrderHoldTestSimObject&);
+
+    void adjust_wind()
+    {
+      if (my_time < 50 || (my_time > 59 && my_time < 61) || 
+         (my_time > 89 && my_time < 91)) {
+        atmos_out.atmos_new_time = my_time;
+
+        test_wind = 30.0 - my_time;
+        atmos_out.wind_velocity_td[0] = test_wind;
+      }
+    }
+};
+WindFirstOrderHoldTestSimObject test_object(jeod_time.time_manager.dyn_time.seconds);

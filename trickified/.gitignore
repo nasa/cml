@@ -1,0 +1,6 @@
+.trick
+*.o
+build
+full_file
+python.zip
+!S_source.hh

@@ -1,0 +1,1 @@
+vehicle.body.composite_body.state.trans.position[0]

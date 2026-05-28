@@ -1,0 +1,72 @@
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_basic.sm"
+#include "vehicle_basic.sm"
+
+##include "../../include/impact_point.hh"
+
+##include "jeod/models/dynamics/derived_state/include/planetary_derived_state.hh"
+##include "jeod/models/environment/planet/include/planet.hh"
+##include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
+
+class ImpactPoint_SimObject: public Trick::SimObject {
+
+ public:
+  jeod::PlanetaryDerivedState planet_rel_state;
+  ImpactPoint impact_point;
+  double reference_position[3];
+ protected:
+  jeod::DynManager & dyn_manager;
+  jeod::DynBody & body;
+
+ public:
+  ImpactPoint_SimObject( const double & time,
+                         const jeod::RefFrameTrans & ref_frame_trans,
+                         const jeod::Planet & planet,
+                         const double & grav_mu,
+                         jeod::DynManager & dyn_manager_in,
+                         jeod::DynBody & body_in)
+    :
+    planet_rel_state(),
+    impact_point(time,
+                 ref_frame_trans,
+                 planet,
+                 grav_mu),
+    dyn_manager(dyn_manager_in),
+    body(body_in)
+
+  {
+    ("initialization") impact_point.initialize(reference_position);
+    ("initialization") planet_rel_state.initialize( body,
+                                                    dyn_manager);
+
+
+// Runtime
+   (DYNAMICS, "environment") planet_rel_state.update();
+   (DYNAMICS, "environment") impact_point.update();
+  }
+
+ private:
+  ImpactPoint_SimObject (const ImpactPoint_SimObject&);
+  ImpactPoint_SimObject & operator = (const ImpactPoint_SimObject&);
+};
+ImpactPoint_SimObject impact_point(
+                                   jeod_time.time_manager.dyn_time.seconds,
+                                   vehicle.dyn_body.composite_body.state.trans,
+                                   earth.planet,
+                                   earth.gravity_source.mu,
+                                   dynamics.dyn_manager,
+                                   vehicle.dyn_body);
+
+IntegLoop sim_integ_loop  (DYNAMICS) dynamics;
+
+
+
+
+

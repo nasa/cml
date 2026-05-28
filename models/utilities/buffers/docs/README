@@ -1,0 +1,49 @@
+Important note on inheritance:
+
+Using the generic form of the buffers can be quite inefficient and the number
+of data copies can be reduced by specializing the buffer class via inheritance.
+
+Suppose we have a structure Foo that is populated from elements of other
+structures Bar1 and Bar2:
+  Foo.a = Bar1.a;
+  Foo.b = Bar2.b;
+etc.
+and we want to buffer copies of Foo:
+
+To buffer instances of Foo, we need to:
+ - create and populate a (temporary) instance of Foo from its constituent pieces.
+   This might be done via a non-default constructor, e.g.
+   Foo::Foo( const Bar1 & b1,
+             const Bar2 & b2)
+     :
+     a(b1.a),
+     b(b2.b)
+     ...
+  So the code might look like:
+     Foo foo(bar1, bar2);
+  This results in copying all the contents of Foo once, into the temporary
+  instance (foo).
+
+- Call buffer_data with the new instance:
+     foo_buffer.buffer_data( foo);
+  This results in a second copy of the contents of Foo, this time into the
+  buffer.
+
+This data copying can be reduced by overloading the buffer_data(...) method (or
+providing a unique method) to circumvent the double copying by passing the
+constituent pieces directly.:
+  class FooBuffer : public CMLSimpleRingBuffer<Foo>
+
+  void buffer_data (const Bar1 & b1,
+                    const Bar2 & b2)
+  {
+    advance_index();
+    Foo & foo = data[buffer_ix];
+    foo.a = b1.a;
+    foo.b = b2.b;
+    ...
+  }
+Caution/Bonus: This will overwrite the elements of Foo piecemeal. There is no
+requirement that all elements get overwritten. This could be desirable, but it
+could also be the cause of unexpected data creeping in / being retained
+unexpectedly / erroneously.

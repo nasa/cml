@@ -1,0 +1,121 @@
+/*****************************************************************************
+PURPOSE: (Verifies the mass-consumed-step functionality for individual tanks,
+ parallel tank strings, serial tanks, and serial tank strings)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (Mar 2017) (Antares) (verification))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+DynMassUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include <cassert>
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "jeod/models/dynamics/mass/include/mass_properties_init.hh"
+
+##include "../../include/dynamic_mass_body.hh"
+
+class DynMassUnitTestSimObject: public Trick::SimObject {
+
+ public:
+  UnitTestFramework        framework;
+  DynamicMassBody          tank;
+  jeod::MassPropertiesInit mass_init;
+  double                   mass_consumed;
+  bool                     fail_check;
+
+  DynMassUnitTestSimObject()
+    :
+    fail_check(false)
+  {
+
+    // Framework
+    ("initialization")   framework.initialize();
+    (1.0, "environment") framework.update();
+    // test-specific jobs:
+    ("default_data")     set_interpolation();
+    ("initialization")   tank.initialize_mass(mass_init, {});
+    ("initialization")   tank.initialize_dyn_mass();
+    ("initialization")   terminal_error();
+    (1.0, "scheduled")   tank.update_mass();
+  }
+
+  //**************************************************************************
+  // add_poi_data
+  // Purpose:(adds poi-data to test warnings about flags set incorrectly.)
+  //**************************************************************************
+  void add_poi_data()
+  {
+    static const double i_array[2] = {1.0, 0.5};
+    DynamicMassBodyInterpolation &mass_interp =
+                                     tank.dynamic_properties.interpolation;
+    std::vector<size_t> dim_list(2);
+    dim_list[0]=1; dim_list[1] = 2;
+    bool res = mass_interp.poi_dep_xy.load_data(&i_array[0], dim_list);
+    assert(res);
+    res = mass_interp.poi_dep_xz.load_data(&i_array[0], dim_list);
+    assert(res);
+    res = mass_interp.poi_dep_yz.load_data(&i_array[0], dim_list);
+    assert(res);
+
+
+    // Also add data for X, Y, position
+    res = mass_interp.pos_dep_y.load_data(&i_array[0], dim_list);
+    assert(res);
+    res = mass_interp.pos_dep_z.load_data(&i_array[0], dim_list);
+    assert(res);
+  }
+
+
+ private:
+  void set_interpolation()
+  {
+    static const double mass_array[2] = {1000.0, 0.0};
+    static const double pos_x_array[2] = {0.0, 1.0};
+    static const double moi_array[3][2] = {
+                          {1.0, 0.5},
+                          {1.0, 1.5},
+                          {1.0, 0.0}
+                        };
+    DynamicMassBodyInterpolation &mass_interp = tank.dynamic_properties.interpolation;
+    std::vector<size_t> dim_list(2);
+    dim_list[0]=1; dim_list[1] = 2;
+
+    bool res = mass_interp.mass_indep.load_data(mass_array, 2);
+    assert(res);
+    res = mass_interp.pos_dep_x.load_data(pos_x_array, dim_list);
+    assert(res);
+    res = mass_interp.moi_dep_xx.load_data(&moi_array[0][0], dim_list);
+    assert(res);
+    res = mass_interp.moi_dep_yy.load_data(&moi_array[1][0], dim_list);
+    assert(res);
+    res = mass_interp.moi_dep_zz.load_data(&moi_array[2][0], dim_list);
+    assert(res);
+
+    tank.dynamic_properties.interpolation.set_interp_position(true, false, false);
+    tank.dynamic_properties.interpolation.set_interp_moi(true, true, true);
+    tank.dynamic_properties.interpolation.set_interp_poi(false, false, false);
+  }
+
+  /* Adding method here because Trick will hang if a terminal fault is
+   * initiated from within a Python input file.*/
+  void terminal_error()
+  {
+    if (fail_check) {
+      tank.dynamic_properties.interpolation.set_inertia_structural_cg_flag(true);
+    }
+  }
+
+  DynMassUnitTestSimObject (const DynMassUnitTestSimObject&);
+  DynMassUnitTestSimObject & operator = (const DynMassUnitTestSimObject&);
+
+};
+
+DynMassUnitTestSimObject mass_test;

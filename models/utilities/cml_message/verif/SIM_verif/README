@@ -1,0 +1,5 @@
+The CML Message publisher verification is handled in 2 ways. The Trick-specific
+implementation is handled as with most of the CML through a Trick simulation.
+
+This model also supports non-Trick compilation; the file test.cc will compile
+and execute independently.

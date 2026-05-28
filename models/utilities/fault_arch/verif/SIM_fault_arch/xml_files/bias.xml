@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Test Fault 1" enabled="true" type="BIAS" loc="DOWNSTREAM" singleshot="true">
+   <SimVar name="test_object.constant_value"></SimVar>
+   <Bias value="100"></Bias>
+   <TriggerGroup>
+      <Trigger name = "trigger 1" variable="test_object.current_time" compare="GE" value="5"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 2" enabled="true" type="BIAS" loc="DOWNSTREAM" singleshot="true">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Bias value="50"></Bias>
+   <TriggerGroup>
+      <Trigger name = "trigger 2" variable="test_object.current_time" compare="GE" value="2.5"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 3" enabled="true" type="BIAS" loc="DOWNSTREAM" singleshot="false">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Bias value="150"></Bias>
+   <TriggerGroup>
+      <Trigger name = "trigger 3" variable="test_object.current_time" compare="GE" value="7.5"></Trigger>
+   </TriggerGroup>
+</Fault>
+</FaultManager>

@@ -1,0 +1,5 @@
+exec(open("RUN_01_baseline/input.py").read())
+drg1.add_variable("vehicle.body.composite_body.state.trans.velocity[0]")
+drg1.add_variable("vehicle.body.composite_body.state.trans.velocity[1]")
+drg1.add_variable("vehicle.test_dyn.pseudo_force[1]")
+drg1.add_variable("vehicle.test_dyn.pseudo_torque[2]")

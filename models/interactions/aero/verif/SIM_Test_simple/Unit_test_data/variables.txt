@@ -1,0 +1,4 @@
+aero.atmos_rel.dynamic_pressure
+aero.atmos_rel.free_stream_vel_unit[0]
+aero.atmos_rel.free_stream_vel_unit[1]
+aero.atmos_rel.free_stream_vel_unit[2]

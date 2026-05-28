@@ -1,0 +1,133 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+#include "default_priority_settings.sm"
+
+#define DYNAMICS 0.005
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/body_attach_matrix.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_rot_state.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
+##include "jeod/models/dynamics/derived_state/include/relative_derived_state.hh"
+
+##include "../../include/mass_body_detach_with_springs.hh"
+
+/*************************************/
+/****** Parent Vehicle simobject *****/
+/*************************************/
+class VehicleSimObject : public Trick::SimObject {
+public:
+  bool                        normal_detach_initialization;
+  bool                        initialize_detach_using_sep_state_not_initialized;
+  jeod::DynBody               body;
+  jeod::MassBodyInit          mass_init;
+  jeod::DynBodyInitTransState trans_initialize;
+  jeod::DynBodyInitRotState   rot_initialize;
+
+  VehicleSimObject( jeod::DynManager & dyn_mgr_in)
+    :
+    normal_detach_initialization(true),
+    initialize_detach_using_sep_state_not_initialized(false),
+    dyn_manager( dyn_mgr_in)
+  {
+    P_ENV ("initialization")  body.initialize_model( dyn_manager);
+  };
+
+private:
+  // operator= and copy constructor declared private and not implemented
+  VehicleSimObject( const VehicleSimObject&);
+  VehicleSimObject & operator= ( const VehicleSimObject&);
+
+protected:
+  jeod::DynManager & dyn_manager;
+
+};
+VehicleSimObject veh_reaction(dynamics.dyn_manager);
+
+
+/************************************/
+/****** Child Vehicle simobject *****/
+/************************************/
+class VehicleKidSimObject : public VehicleSimObject {
+public:
+  SeparationState           rel_state;
+  SeparationState           sep_state_not_initialized;
+  jeod::BodyAttachMatrix    attach;
+  MassBodyDetachWithSprings detach;
+
+  VehicleKidSimObject(  jeod::DynManager & dyn_mgr_in,
+                        jeod::DynBody & parent_in)
+    :
+    VehicleSimObject( dyn_mgr_in),
+    parent( parent_in)
+  {
+    ("initialization")   rel_state.initialize( body,
+                                               parent,
+                                               "child_to_parent",
+                                               "parent_to_child");
+    ("initialization")   detach_initialization();
+    ("initialization")   springs_initialized_with_bad_sep_state();
+
+    (0.005, "scheduled") rel_state.update();
+    (0.005, "scheduled") detach.springs.update();
+  };
+
+  void detach_initialization() {
+    if (normal_detach_initialization) {
+      detach.initialize( parent,
+                         rel_state);
+    } else {
+      jeod::DynBody *dyn_subject = detach.get_subject_dyn_body();
+      detach.springs.set_bodies( *dyn_subject,
+                                  parent);
+      detach.springs.set_sep_state( rel_state);
+    }
+  }
+
+  void springs_initialized_with_bad_sep_state() {
+    if (initialize_detach_using_sep_state_not_initialized) {
+      detach.initialize( parent,
+                         sep_state_not_initialized);
+    }
+  }
+
+private:
+  // operator= and copy constructor declared private and not implemented
+  VehicleKidSimObject( const VehicleKidSimObject&);
+  VehicleKidSimObject & operator= ( const VehicleKidSimObject&);
+
+protected:
+  jeod::DynBody & parent;
+
+};
+VehicleKidSimObject veh_action( dynamics.dyn_manager,
+                                veh_reaction.body);
+
+vcollect veh_action.body.collect.collect_effector_forc jeod::CollectForce::create {
+           veh_action.detach.springs.total_force_struc_action};
+vcollect veh_reaction.body.collect.collect_effector_forc jeod::CollectForce::create {
+           veh_action.detach.springs.total_force_struc_reaction};
+vcollect veh_action.body.collect.collect_effector_torq jeod::CollectTorque::create {
+           veh_action.detach.springs.total_torque_struc_action};
+vcollect veh_reaction.body.collect.collect_effector_torq jeod::CollectTorque::create {
+           veh_action.detach.springs.total_torque_struc_reaction};
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

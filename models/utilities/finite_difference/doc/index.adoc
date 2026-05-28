@@ -1,0 +1,105 @@
+== Finite Difference
+
+FAST provides classes to estimate the first and second derivatives of values
+using backwards differencing.  The methods used have second order accuracy.
+That is, if the time step used is reduced by a factor of 2, the error will
+reduce by a factor of 4.
+
+=== Usage
+
+You need to maintain an instance of one of the classes, since it internally
+stores the information from past calls to compute the derivatives.
+
+There are classes for computing the first and second derivatives of scalar
+values, the first and second derivatives of vectors, and the first derivative
+of matrices.
+
+=== Derivation
+
+==== First Derivative
+
+We begin with the Taylor series
+
+[latexmath]
+++++
+\begin{align}
+u_{i-1} &= u_i - \Delta t_1 \left( \frac{\delta u}{\delta t} \right)_i + \frac{\Delta t_1^2}{2} \left( \frac{\delta^2 u}{\delta t^2} \right)_i - \frac{\Delta t_1^3}{6} \left( \frac{\delta^3 u}{\delta t^3} \right)_i,\\
+u_{i-2} &= u_i - \Delta t_2 \left( \frac{\delta u}{\delta t} \right)_i + \frac{\Delta t_2^2}{2} \left( \frac{\delta^2 u}{\delta t^2} \right)_i - \frac{\Delta t_2^3}{6} \left( \frac{\delta^3 u}{\delta t^3} \right)_i,
+\end{align}
+++++
+
+where
+
+[latexmath]
+++++
+\begin{align}
+\Delta t_1 &= t_i - t_{i-1},\\
+\Delta t_2 &= t_i - t_{i-2}.
+\end{align}
+++++
+
+Combining the equations to eliminate the second derivative terms and solving for
+the first derivative yields
+
+[latexmath]
+++++
+\left( \frac{\delta u}{\delta t} \right)_i = \frac{\Delta t_1 + \Delta t_2}{\Delta t_1 \Delta t_2} u_i + \frac{\Delta t_2}{\Delta t_1 \left( \Delta t_1 - \Delta t_2 \right)} u_{i-1} - \frac{\Delta t_1}{\Delta t_2 \left( \Delta t_1 - \Delta t_2 \right)} u_{i-2}
+++++
+
+with a leading error term of
+
+[latexmath]
+++++
+\frac{\Delta t_1 \Delta t_2}{6} \left( \frac{\delta^3 u}{\delta t^3} \right)_i,
+++++
+
+which is indeed second order in latexmath:[\Delta t].
+
+==== Second Derivative
+
+We begin with the Taylor series
+
+[latexmath]
+++++
+\begin{align}
+u_{i-1} &= u_i - \Delta t_1 \left( \frac{\delta u}{\delta t} \right)_i + \frac{\Delta t_1^2}{2} \left( \frac{\delta^2 u}{\delta t^2} \right)_i - \frac{\Delta t_1^3}{6} \left( \frac{\delta^3 u}{\delta t^3} \right)_i + \frac{\Delta t_1^4}{24} \left( \frac{\delta^4 u}{\delta t^4} \right)_i,\\
+u_{i-2} &= u_i - \Delta t_2 \left( \frac{\delta u}{\delta t} \right)_i + \frac{\Delta t_2^2}{2} \left( \frac{\delta^2 u}{\delta t^2} \right)_i - \frac{\Delta t_2^3}{6} \left( \frac{\delta^3 u}{\delta t^3} \right)_i + \frac{\Delta t_2^4}{24} \left( \frac{\delta^4 u}{\delta t^4} \right)_i,\\
+u_{i-3} &= u_i - \Delta t_3 \left( \frac{\delta u}{\delta t} \right)_i + \frac{\Delta t_3^2}{2} \left( \frac{\delta^2 u}{\delta t^2} \right)_i - \frac{\Delta t_3^3}{6} \left( \frac{\delta^3 u}{\delta t^3} \right)_i + \frac{\Delta t_3^4}{24} \left( \frac{\delta^4 u}{\delta t^4} \right)_i,
+\end{align}
+++++
+
+where
+
+[latexmath]
+++++
+\begin{align}
+\Delta t_1 &= t_i - t_{i-1},\\
+\Delta t_2 &= t_i - t_{i-2},\\
+\Delta t_3 &= t_i - t_{i-3}.
+\end{align}
+++++
+
+Then we combine the first and second equations to eliminate the first
+derivative.  We do the same with the second and third equations.  We then
+combine the two resulting equations to eliminate the third derivative.  Solving
+for the second derivative yields
+
+[latexmath]
+++++
+\begin{align}
+\left( \frac{\delta^2 u}{\delta t^2} \right)_i &= \frac{2 \left( \Delta t_2 + \Delta t_3 \right)}{\Delta t_1 \Delta t_2 \left( \Delta t_3 - \Delta t_1 \right)} u_i\\
+                                               &- \frac{2 \left( \Delta t_1 + \Delta t_2 \right)}{\Delta t_2 \Delta t_3 \left( \Delta t_3 - \Delta t_1 \right)} u_i\\
+                                               &+ \frac{2 \left( \Delta t_2 + \Delta t_3 \right)}{\Delta t_1 \left( \Delta t_1 - \Delta t_2 \right) \left( \Delta t_3 - \Delta t_1 \right)} u_{i-1}\\
+                                               &+ \frac{2 \left( \Delta t_1 + \Delta t_3 \right)}{\Delta t_2 \left( \Delta t_1 - \Delta t_2 \right) \left( \Delta t_2 - \Delta t_3 \right)} u_{i-2}\\
+                                               &+ \frac{2 \left( \Delta t_1 + \Delta t_2 \right)}{\Delta t_3 \left( \Delta t_2 - \Delta t_3 \right) \left( \Delta t_3 - \Delta t_1 \right)} u_{i-3}
+\end{align}
+++++
+
+with a leading error term of
+
+[latexmath]
+++++
+\frac{\left( \Delta t_1 + \Delta t_2 \right) \left( \Delta t_3^2 + \Delta t_3 \Delta t_4 + \Delta t_4^2 \right) - \left( \Delta t_3 + \Delta t_4 \right) \left( \Delta t_1^2 + \Delta t_1 \Delta t_2 + \Delta t_2^2 \right)}{12 \left( \Delta t_3 + \Delta t_4 - \Delta t_1 - \Delta t_2 \right)} \left( \frac{\delta^4 u}{\delta t^4} \right)_i,
+++++
+
+which is indeed second order in latexmath:[\Delta t].

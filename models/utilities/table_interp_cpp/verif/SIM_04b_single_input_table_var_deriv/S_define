@@ -1,0 +1,209 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Test sim object
+*****************************************************************************/
+##include "../../include/simple_table_lookup.hh"
+##include "../../include/table_lookup_set.hh"
+##include "../../include/single_input_table_var_with_deriv.hh"
+
+class TestingModelSimObject : public Trick::SimObject {
+  public:
+    double  indep_incr;       // (--) increment per cycle.
+    double  independent;      // (--) value of the independent variable
+
+    // A simple table-lookup; table and its output:
+    double x[5];
+    double xdot[5];
+
+    std::vector<double*> x_vec;
+    std::vector<double*> xdot_vec;
+
+    SimpleTableLookup simple_table;
+
+    TableLookupSet                  tab_set;
+    TableIndependentVariable        tiv;
+
+    // Several test-tables to test the different methods of construction:
+    SingleInputTableVarDeriv  interpolation_table_default;
+
+    SingleInputTableVarDeriv  interpolation_table_1array;
+    SingleInputTableVarDeriv  interpolation_table_2array;
+
+    SingleInputTableVarDeriv  interpolation_table_1vec;
+    SingleInputTableVarDeriv  interpolation_table_2vec;
+
+    SingleInputTableVarDeriv  interpolation_table_1elem;
+    SingleInputTableVarDeriv  interpolation_table_2elem;
+
+
+    // A test-table for error checking
+    SingleInputTableVarDeriv  interpolation_table_error;
+
+
+    bool use_simple_table;
+
+    TestingModelSimObject()
+      :
+      indep_incr(0.25),
+      independent(-indep_incr),
+
+      x_vec(5, x),
+      xdot_vec(5, xdot),
+
+      simple_table(),
+      tab_set(),
+      tiv(independent, TableIndependentVariable::Linear),
+
+      interpolation_table_default(),
+      interpolation_table_1array(x, 5),
+      interpolation_table_2array(x, xdot, 5),
+      interpolation_table_1vec(x_vec),
+      interpolation_table_2vec(x_vec, xdot_vec),
+      interpolation_table_1elem(x[4]),
+      interpolation_table_2elem(x[4], xdot[4]),
+
+      use_simple_table(false)
+
+
+    {
+      ("default_data") configure();
+      ("initialization") init();
+      (1.0, "scheduled") update();
+    };
+
+  private:
+    TestingModelSimObject( const TestingModelSimObject&);
+    TestingModelSimObject& operator = ( const TestingModelSimObject&);
+
+    void configure()
+    {
+      // Add the dependents to those tables with incomplete construction:
+
+      for (int ii = 0; ii < 5; ++ii) {
+        interpolation_table_default.add_dependent(x[ii]);
+        interpolation_table_default.derivs.add_dependent(xdot[ii]);
+        interpolation_table_1array.derivs.add_dependent(xdot[ii]);
+        interpolation_table_1vec.derivs.add_dependent(xdot[ii]);
+      }
+      interpolation_table_1elem.derivs.add_dependent(xdot[4]);
+
+      for (int ii = 0; ii < 5; ++ii) {
+        x_vec[ii] = &x[ii];
+        xdot_vec[ii] = &xdot[ii];
+      }
+
+      // Generate the interpolation data
+      double independent_data[6]     = {0,1,2,3,4,5};
+      double x_data[5][6];
+      double xdot_data[5][6];
+
+      for (int ii = 0; ii < 6; ++ii) {
+        x_data[0][ii] = 1.0;
+        xdot_data[0][ii] = 0.0;
+
+        x_data[1][ii] = ii+1.0;
+        xdot_data[1][ii] = 1.0;
+
+        x_data[2][ii] = (ii - 1.5) * (ii -4);
+        xdot_data[2][ii] = 2*ii - 5.5;
+
+        x_data[3][ii] = (ii-1) * (ii-3) * (ii-5);
+        xdot_data[3][ii] = (ii-3)*(ii-5) + (ii-1)*(ii-5) + (ii-1)*(ii-3);
+
+        x_data[4][ii]    = std::sin(ii);
+        xdot_data[4][ii] = std::cos(ii);
+      }
+
+
+
+
+      // configure the table-independent-variable
+      tiv.load_data(independent_data,6);
+
+      // set the size-vector for configuring the regular tables:
+      std::vector<size_t> size;
+      size.push_back(5);
+      size.push_back(6);
+
+      // configure the simple-table.
+      simple_table.load_independent_data( independent, independent_data, 6);
+      simple_table.load_dependent_data( x,
+                                        5,
+                                        &x_data[0][0],
+                                        6,
+                                        AbstractTableLookup::VarDeriv);
+      SingleInputTableVarDeriv * table =
+           dynamic_cast<SingleInputTableVarDeriv*>(simple_table.get_table());
+      if (table) {
+        for (int ii = 0; ii<5; ++ii) {
+          table->derivs.add_dependent(xdot[ii]);
+        }
+        table->derivs.load_data(&xdot_data[0][0], {5,6});
+      }
+
+      // load the data onto the independently-instantiated tables
+      interpolation_table_default.load_data( &x_data[0][0], {5,6});
+      interpolation_table_default.derivs.load_data( &xdot_data[0][0], {5,6});
+
+      interpolation_table_1array.load_data( &x_data[0][0], {5,6});
+      interpolation_table_1array.derivs.load_data( &xdot_data[0][0], {5,6});
+
+      interpolation_table_2array.load_data( &x_data[0][0], {5,6});
+      interpolation_table_2array.derivs.load_data( &xdot_data[0][0], {5,6});
+
+      interpolation_table_1vec.load_data( &x_data[0][0], {5,6});
+      interpolation_table_1vec.derivs.load_data( &xdot_data[0][0], {5,6});
+
+      interpolation_table_2vec.load_data( &x_data[0][0], {5,6});
+      interpolation_table_2vec.derivs.load_data( &xdot_data[0][0], {5,6});
+
+      interpolation_table_1elem.load_data( &x_data[4][0], {1,6});
+      interpolation_table_1elem.derivs.load_data( &xdot_data[4][0], {1,6});
+
+      interpolation_table_2elem.load_data( &x_data[4][0], {1,6});
+      interpolation_table_2elem.derivs.load_data( &xdot_data[4][0], {1,6});
+
+
+      // load up the table-manager
+      tab_set.add_independent_variable( tiv);
+
+      /* NOTE:
+        In normal use, we would add the tables to the table-set.
+            tab_set.add_table(interpolation_table_default);
+            tab_set.associate_table_and_independent();
+            tab_set.add_table(interpolation_table_1array);
+            tab_set.associate_table_and_independent();
+            etc.
+        However, these table instances all set values for the same target
+        variables for purposes of comparison and verification.
+        Adding all of these tables to the table-set would be counter-productive
+        for verification purposes because we would not be able to distinguish
+        which tables might not be working properly if the output data are being
+        overwritten by each table.
+        Instead, we put these additions into the input files so that each run
+        can test with a different table connected up to the table-set.*/
+    }
+
+    void init()
+    {
+      if (use_simple_table) {
+        simple_table.initialize();
+      } else {
+        tab_set.initialize();
+      }
+    }
+
+    void update()
+    {
+      independent += indep_incr;
+      if (use_simple_table) {
+        simple_table.update();
+      } else {
+        tab_set.update();
+      }
+    }
+};
+
+TestingModelSimObject test;

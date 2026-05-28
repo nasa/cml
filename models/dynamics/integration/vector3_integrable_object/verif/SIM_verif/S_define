@@ -1,0 +1,101 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_basic.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/environment/gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh"
+##include "../../include/vector3_integrable_object.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+ protected:
+  const double & time;
+  jeod::DynManager   & dyn_manager;
+
+ public:
+  jeod::DynBody  body;
+  jeod::MassBodyInit mass_init;
+  StateInitialize    state_initialize;
+  SphericalHarmonicsFastGravityControls  grav_controls_earth;
+
+  double   external_deriv[3];
+  bool     update_external_deriv;
+
+  Vector3IntegrableObject test_vel;
+  Vector3IntegrableObject test_external_deriv;
+  Vector3IntegrableObject test_internal_deriv;
+  Vector3IntegrableObject test_null;
+
+  // Constructor:
+  VehicleSimObject( const double & time_in,
+                    jeod::DynManager   & dyn_mgr_in)
+    :
+    time (time_in),
+    dyn_manager (dyn_mgr_in),
+
+    external_deriv(),
+    update_external_deriv(false),
+
+    test_vel( body,
+              body.derivs.trans_accel),
+    test_external_deriv( body,
+                         external_deriv),
+    test_internal_deriv( body),
+    test_null( body,
+               NULL)
+  {
+     P_ENV ("initialization") body.initialize_model( dyn_manager);
+
+     P_DYN ("initialization") test_vel.initialize();
+     P_DYN ("initialization") test_external_deriv.initialize();
+     P_DYN ("initialization") test_internal_deriv.initialize();
+
+     ("derivative") update_derivs();
+  };
+
+  void try_default_constructor()
+  {
+    Vector3IntegrableObject fail;
+  }
+
+ private:
+  void update_derivs()
+  {
+    if (update_external_deriv) {
+      test_internal_deriv.deriv[1] =
+      external_deriv[1]            = 2 * time;
+
+      test_internal_deriv.deriv[2] =
+      external_deriv[2]            = 3 * time * time;
+
+    }
+  }
+
+  VehicleSimObject( const VehicleSimObject&);
+  VehicleSimObject & operator= ( const VehicleSimObject&);
+};
+VehicleSimObject vehicle( jeod_time.time_manager.dyn_time.seconds,
+                          dynamics.dyn_manager);
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics,vehicle;

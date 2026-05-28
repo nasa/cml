@@ -1,0 +1,38 @@
+\documentclass[11pt,fleqn]{report}
+\usepackage{graphicx}
+
+\usepackage{cml}
+
+\newcommand{\ModelName}{My Model Name}
+\newcommand{\ModelAuthor}{My Name}
+\newcommand{\ModelAffiliation}{My Affiliation}
+\newcommand{\ModelDate}{Date}
+
+
+\begin{document}
+\pagestyle{empty}
+\titlePage
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\ \hline \hline
+                1 &               &                 & Initial Version  \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagenumbering{arabic} % Start text with arabic 1
+
+\chapter{Requirements}
+\chapter{Model Specification}
+\section{Code Structure} % Make a "section" heading
+\chapter{User's Guide}
+
+
+\end{document} % The required last line\tableofcontents

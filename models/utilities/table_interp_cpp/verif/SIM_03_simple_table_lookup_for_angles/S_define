@@ -1,0 +1,95 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Test sim object
+*****************************************************************************/
+##include "../../include/simple_table_lookup.hh"
+##include "../../include/single_input_table_for_angles.hh"
+
+class TestingModelSimObject : public Trick::SimObject {
+public:
+  double  independent;
+  double  dependent_degrees[2];
+  double  dependent_radians[2];
+  double  indep_incr; // (--) increment per cycle.
+  int     frame_count;
+  int     reverse_on_count;
+  SimpleTableLookup         table_degrees;
+  SimpleTableLookup         table_radians;
+
+  // Constructor options, testing only the constructors:
+  SingleInputTableForAngles angle_table_default;
+  SingleInputTableForAngles angle_table_array;
+  SingleInputTableForAngles angle_table_ref;
+  std::vector<double *>     ptrvec;
+  SingleInputTableForAngles angle_table_ptrvec;
+
+  TestingModelSimObject()
+    :
+    independent(0.0),
+    dependent_degrees(),
+    dependent_radians(),
+    indep_incr(0.5),
+    frame_count(0),
+    reverse_on_count(25),
+    table_degrees(),
+    table_radians(),
+
+    angle_table_default(),
+    angle_table_array( dependent_degrees, 2),
+    angle_table_ref( dependent_degrees[0]),
+    ptrvec( 1, dependent_degrees),
+    angle_table_ptrvec( ptrvec)
+  {
+    ("default_data")   configure();
+    ("initialization") init();
+    (1.0, "scheduled") update();
+  };
+
+private:
+  TestingModelSimObject( const TestingModelSimObject&);
+  TestingModelSimObject& operator= ( const TestingModelSimObject&);
+
+  void configure()
+  {
+    double scratch_indep[6]     = {0,2,4,6,8,10};
+    double scratch_depend_deg[2][6] =
+              {{30,90,150,-150,-90,-30},
+               {30,140,250,340,430,560}};
+    double scratch_depend_rad[2][6] =
+             {{0.5,1.0,1.5,-1.5,-1.0,-0.5},
+              {1.5, 3.0, 4.5, 6.0, 7.5, 10.0}};
+    table_degrees.load_independent_data( independent, scratch_indep, 6);
+    table_degrees.load_dependent_data( dependent_degrees,
+                               2,
+                               &scratch_depend_deg[0][0],
+                               6,
+                               AbstractTableLookup::AngularDeg);
+    table_radians.load_independent_data( independent, scratch_indep, 6);
+    table_radians.load_dependent_data( dependent_radians,
+                               2,
+                               &scratch_depend_rad[0][0],
+                               6,
+                               AbstractTableLookup::AngularRad);
+  }
+
+  void init()
+  {
+    table_degrees.initialize();
+    table_radians.initialize();
+  }
+
+  void update()
+  {
+    independent += indep_incr;
+    frame_count++;
+    if (frame_count == reverse_on_count) {
+      indep_incr *= -1;
+    }
+    table_degrees.update();
+    table_radians.update();
+  }
+};
+
+TestingModelSimObject test;

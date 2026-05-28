@@ -1,0 +1,91 @@
+#include "sim_objects/default_trick_sys.sm"
+
+##include "../../include/fault_function.hh"
+##include "../../include/fault_white_noise.hh"
+##include "../../include/fault_stale.hh"
+
+class FaultArchitectureTestSimObject: public Trick::SimObject {
+
+  public:
+    Trigger<double> trigger;
+    TriggerGroup trigger_group;
+
+    Trigger<std::string> trigger_str;
+    TriggerGroup trigger_str_group;
+
+    FaultFunction<double> fault_function_int;
+    FaultFunction<double> fault_function;
+    FaultWhiteNoise<double> fault_noise;
+    FaultStale<double> fault_stale;
+
+    bool         advance_var; /* (--) should var advance or hold static.*/
+    bool         error_init;  /* (--) introduce an initialization error*/
+    std::string  control_string; /* (--) string for trigger_str. */
+
+  private:
+    double       current_time;   /* (s) Current time */
+    int          time_int;       /* (s) Time truncated to an integer */
+    double       var;            /* (--) Variable for faulting */
+    const double value;          /* (--) Nominal value of the variable */
+
+  public:
+    FaultArchitectureTestSimObject() :
+      trigger(current_time),
+      trigger_str( control_string),
+      fault_function_int(var),
+      fault_function(var),
+      fault_noise(var),
+      fault_stale(var),
+      advance_var(false),
+      var(2.0),
+      value(2.0)
+    {
+      ("initialization") initialize();
+      (0.1, "scheduled") update();
+    }
+
+    void initialize() {
+      trigger_group.add_trigger(trigger);
+      trigger_str_group.add_trigger(trigger_str);
+
+      fault_function_int.add_trigger_group(trigger_group);
+      fault_function_int.ind_variable.initialize(time_int);
+      fault_function_int.initialize();
+      if (error_init) {
+        fault_function_int.ind_variable.initialize(time_int);
+      }
+
+      fault_function.add_trigger_group(trigger_group);
+      fault_function.ind_variable.initialize(current_time);
+      fault_function.amplitude.ind_variable.initialize(current_time);
+      fault_function.frequency.ind_variable.initialize(current_time);
+      fault_function.phase_offset.ind_variable.initialize(current_time);
+      fault_function.initialize();
+
+      fault_noise.add_trigger_group(trigger_group);
+      fault_noise.initialize();
+
+      fault_stale.add_trigger_group(trigger_group);
+      fault_stale.initialize();
+    }
+
+    void update() {
+      current_time = exec_get_sim_time();
+      time_int = current_time;
+      if (advance_var) {
+        var = current_time;
+      } else {
+        var = value;
+      }
+      fault_function_int.update();
+      fault_function.update();
+      fault_noise.update();
+      fault_stale.update();
+    }
+
+  private:
+   FaultArchitectureTestSimObject (const FaultArchitectureTestSimObject&);
+   FaultArchitectureTestSimObject & operator = (const FaultArchitectureTestSimObject&);
+};
+
+FaultArchitectureTestSimObject test_object;

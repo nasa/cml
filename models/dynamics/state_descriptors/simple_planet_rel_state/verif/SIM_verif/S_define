@@ -1,0 +1,59 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+#include "default_priority_settings.sm"
+
+#define DYNAMICS 1.0
+
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_basic.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/dynamics/state_descriptors/simple_planet_rel_state/include/simple_planet_rel_state.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+  protected:
+   jeod::DynManager & dyn_manager;
+  public:
+   jeod::DynBody      body;
+   jeod::MassBodyInit mass_init;
+   StateInitialize    state_initialize;
+
+   SimplePlanetRelState   planet_rel;
+
+   VehicleSimObject(jeod::DynManager & dyn_mgr_in)
+     :
+     dyn_manager (dyn_mgr_in),
+     planet_rel( "test_vehicle.composite_body", "Earth.inertial")
+  {
+   P_ENV ("initialization")      body.initialize_model( dyn_manager);
+
+   ("initialization")   planet_rel.initialize( body, dyn_manager);
+   (1.0,"environment")  planet_rel.update();
+  };
+ private:
+  VehicleSimObject( const VehicleSimObject&);
+  VehicleSimObject & operator= ( const VehicleSimObject&);
+
+};
+VehicleSimObject vehicle(dynamics.dyn_manager);
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

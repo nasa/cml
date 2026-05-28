@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Stale Fault Char" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_char"></SimVar>
+  <TriggerGroup>
+    <Trigger name="stale trigger" variable="test_object.current_time" compare="GE" value="1.0"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault UChar" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uchar"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+    <Trigger name="stale trigger end" variable="test_object.current_time" compare="LE" value="2.0"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault Short" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_sint"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+    <Trigger reuse_name="stale trigger end"></Trigger>
+  </TriggerGroup>
+  <TriggerGroup>
+    <Trigger name="stale re-trigger" variable="test_object.current_time" compare="GE" value="3.0"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault UShort" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_usint"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault Int" enabled="true" type="STALE" loc="DOWNSTREAM" fire_limit="7">
+  <SimVar name="test_object.var_int"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault UInt" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uint"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault Long" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_lint"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault ULong" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ulint"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault LongLong" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_llint"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault ULongLong" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ullint"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault Float" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault Double" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Stale Fault Boolean" enabled="true" type="STALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_bool"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="stale trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+</FaultManager>

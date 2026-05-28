@@ -1,0 +1,9 @@
+oe_verif.body.composite_body.state.trans.position[0]
+oe_verif.body.composite_body.state.trans.position[1]
+oe_verif.body.composite_body.state.trans.position[2]
+oe_verif.body.composite_body.state.trans.velocity[0]
+oe_verif.body.composite_body.state.trans.velocity[1]
+oe_verif.body.composite_body.state.trans.velocity[2]
+oe_verif.correct_j2
+oe_verif.gen_cartesian_inrtl
+oe_verif.pfix_z_values

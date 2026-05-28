@@ -1,0 +1,94 @@
+// DEFINE THE PHASE INITIALIZATION PRIORITIES.
+// NOTE: Initialization jobs lacking an assigned phase initialization priority
+// run after all initialization jobs that have assigned phase init priorities.
+// JEOD-priorities
+#define DYNAMICS 1.0
+#include "default_priority_settings.sm"
+
+
+/* ========================================================================= */
+/* ================== Trick Executive Systems Sim Object. ================== */
+/* ========================================================================= */
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_basic.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/environment/gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh"
+##include "../../include/extended_planetary_derived_state.hh"
+
+class VehicleSimObject : public Trick::SimObject
+{
+ protected:
+  // external references
+  jeod::DynManager & dyn_manager;
+
+ public:
+  // support variables:
+  jeod::DynBody                         body;
+  jeod::MassBodyInit                    mass_init;
+  StateInitialize                       state_initialize;
+  SphericalHarmonicsFastGravityControls grav_controls_earth;
+
+  // Class for testing:
+  ExtendedPlanetaryDerivedState planet_rel_state;
+
+  // Data location
+  double * pt_to_pt_position[6]; /* (m) relative-positions*/
+
+
+  VehicleSimObject(jeod::DynManager & dyn_mgr_in)
+      :
+      dyn_manager (dyn_mgr_in)
+  {
+    P_ENV ("initialization") body.initialize_model( dyn_manager);
+    P_DYN ("initialization") planet_rel_state.initialize( body,
+                                                          dyn_manager);
+
+    (1.0, "environment") planet_rel_state.update();
+  };
+
+
+
+  // test error case
+  void add_null_point()
+  {
+    planet_rel_state.pt_to_pt.add_planet_point( "null-pt",NULL);
+  }
+
+  // interfaces because SWIG does not appreciate passing the double ** for
+  // the pt_to_pt_position array.
+  void add_relative_position( std::string v_name,
+                              std::string p_name,
+                              int         ix)
+  {
+    planet_rel_state.pt_to_pt.add_relative_position( v_name,
+                                                     p_name,
+                                                     pt_to_pt_position[ix]);
+  }
+  void assign_pt_to_pt_positions( std::string v_name,
+                                  std::string p_name,
+                                  int ix)
+  {
+    pt_to_pt_position[ix] = planet_rel_state.pt_to_pt.get_relative_position( v_name, p_name);
+  }
+
+ private:
+  VehicleSimObject( const VehicleSimObject&);
+  VehicleSimObject & operator= ( const VehicleSimObject&);
+};
+VehicleSimObject vehicle(dynamics.dyn_manager);
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

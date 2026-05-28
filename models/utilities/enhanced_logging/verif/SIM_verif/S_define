@@ -1,0 +1,67 @@
+/********************************* TRICK HEADER ********************************
+PURPOSE:
+  (Test the capabilities of EnhancedLogging)
+
+PROGRAMMERS:
+  (((Gary Turner) (OSR) (June 2024) (ANTARES) (initial)))
+
+NOTES:
+- ProjectInputFiles exists to support code-coverage metrics only. Code-coverage
+  does not function with JIT-input files. For developers copying this
+  implementation into an integrated sim, follow the input_jit.cc structure
+  instead.
+*******************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm" // for SubscriptionBase messages
+
+##include "cml/models/vehicle_management/compound_events/include/compound_event.hh"
+##include "include/data_struc.hh"
+##include "Project_implementation/include/project_logging_manager.hh"
+##include "Project_implementation/include/input_files.hh"
+
+class VerificationSimObject: public Trick::SimObject {
+
+ public:
+  VerifTestStruc        sim_data;
+  CompoundEvent         sample_event;
+  ProjectLoggingManager logging_manager;
+  ProjectInputFiles     input;
+
+  VerificationSimObject()
+    :
+    sample_event( sim_data.dyn_time),
+    logging_manager( sim_data.dyn_time,
+                     sim_data,
+                     sample_event),
+    input(sim_data,
+          logging_manager)
+
+  {
+    ("initialization") logging_manager.initialize();
+    ("initialization") logging_manager.subscribe();
+
+    (1,"scheduled") emulate_sim_updates();
+    (1, "logging") logging_manager.update();
+
+    ("shutdown") logging_manager.shutdown();
+
+  }
+  void emulate_sim_updates()
+  {
+    sim_data.dyn_time += 1.0;
+    sim_data.b1 = !sim_data.b1;
+    sim_data.x1 *= -1.5;
+    sim_data.x2 += (5/sim_data.x1);
+    if (sim_data.b1) {
+      sim_data.x2 *= -1.0;
+    }
+    if (sim_data.x2 < 0) {
+      sim_data.i1 *= -1.5;
+    }
+  }
+
+ private:
+  VerificationSimObject (const VerificationSimObject&);
+  VerificationSimObject & operator = (const VerificationSimObject&);
+};
+VerificationSimObject verif_test;

@@ -1,0 +1,227 @@
+ \documentclass[11pt,fleqn]{report}
+
+\usepackage{cml}
+%\usepackage{amssymb}
+\usepackage{graphicx}
+%\usepackage{subcaption}
+%\usepackage{changepage}
+%\usepackage{longtable}
+
+\newcommand{\ModelName}{Simple Lookup Wind}
+\newcommand{\ModelAuthor}{Gary Turner}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{January 2018}
+
+\definecolor{customorange}{HTML}{FFCC99}
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+\begin{document}
+\pagestyle{empty}
+\titlePage
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+
+{\Large \textbf {Revision History}}
+
+\begin{tabular}{| m{0.1\textwidth}| m{0.15\textwidth} | m{0.2\textwidth} | m{0.4\textwidth} |} \hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\
+\hline 
+1 & August 2018 & Gary Turner & Initial version \\ \hline
+2 & January 2022 & Brian Birmingham & Added verification section \\ \hline
+\end{tabular}
+
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagestyle{plain}
+\pagenumbering{arabic} % Start text with arabic 1
+This model uses the table-interpolation model to provide a simple interface for providing wind data.  It is a very limited model, providing only the capability to manage a table providing a wind profile as a function of altitude.
+
+
+\chapter{Requirements}
+The model shall provide simple lookup/interpolate functionality to provide a wind vector as a function of altitude.  The wind vector may be specified as either:
+\begin{itemize}
+	\item Wind direction (horizontal), magnitude of the wind in the horizontal plane, and vertical component, or
+	\item Wind component values in a North-East-Down specification.
+\end{itemize}
+
+
+
+
+\chapter{Model Specification}
+\section{Code Structure}
+\subsection{Inheritance}
+The model inherits the CML SubscriptionBase model for managing the model's activity flags.
+
+\subsection{Dependency}
+The model depends heavily on the CML Table Interpolation model to provide table-management functionally.
+
+\chapter{User's Guide}
+\section{Input settings}
+\subsection{Configuration}
+The behavioral configuration of the model is managed by 2 flags:
+\begin{itemize}
+   \item \textbf{wind\_components\_specified.}  This flag switches between the model interpreting data as magnitude-direction-vertical, or as NED components.  It defaults to false, indicating that it will not use components in favor of using the magnitude-direction-vertical specification.
+   \item \textbf{include\_vertical\_component.}  This flag indicates whether there is data for the vertical component of the wind.  It switches between a 2-element lookup and a 3-element lookup (i.e. magnitude-direction vs. magnitude-direction-vertical; or North-East vs. North-East-Down).  It defaults to false, indicating horizontal only.
+\end{itemize}
+ The model will use altitude as the independent variable in the table lookup.  The model is agnostic to whether the altitude is topocentric wrt sphere, topocentric wrt ellipsoid, or topodetic; the altitude is passed into the model with each update() call, so it is important to pass in the altitude that matches with the data set.
+
+Where the output is specified as a direction, the data may be in either degrees or radians.  The default is radians, but this can be changed to degrees by setting\\
+\indent\hspace{1cm} \colorbox{customorange}{wind\_blowing\_from\_table.output\_in\_radians = false}
+ 
+\subsection{Setting Data}
+The data management is handled by instances of classes provided by the Table Interpolation model, specifically:
+\begin{itemize}
+   \item \textbf{TableLookupSet dir\_mag\_table\_set} is the table manager.
+   \item \textbf{TableIndependentVariable altitude\_table} is the table of altitudes, used as the independent variable in the table lookup.  Altitude comes from the planetary-derived state, so units are SI.
+   \item \textbf{SingleInputTableForAngles wind\_blowing\_from\_table.}  This is a wrap-around interpolation table, used for generating orientation of wind. See Table Interpolation model for more details on interpolation of angles.  Note that this provides the direction from which the wind is blowing.
+   \item \textbf{GenericMultiInputTable wind\_magnitude\_table.}  Because the direction table requires special treatment (due to the output being an angle), it is necessary to manage multiple tables.  This one provides the magnitude of the horizontal components of the wind velocity.
+   \item \textbf{GenericMultiInputTable wind\_vertical\_up\_table.} This table is optional (depending on the setting of the \textbf{include\_vertical\_component flag}).  It provides the data for the vertical component of the wind velocity.
+\end{itemize}
+An example of how to set these data is provided in the verification simulation.  The steps that are necessary are:
+\begin{itemize}
+\item Create an array of data for the altitude, and load the data into the altitude table:\\
+\indent\hspace{1cm} \colorbox{customorange}{double alt\_arr[5] = \{ 1.0, 2.0, 3.0, 4.0, 5.0\};}\\
+\indent\hspace{1cm} \colorbox{customorange}{wind.altitude\_table.load\_data( alt\_arr, 5);}
+
+\item Before setting the data in the dependent-variable tables, it is necessary to create a STL-vector with 2 entries.  The first entry is 1, and the second is the number of data points.  See the Table Interpolation model for why this is necessary.\\
+\indent\hspace{1cm} \colorbox{customorange}{std::vector\textless size\_t\textgreater \enspace dim\_list(2,1); \enspace // [1,1]}\\
+\indent\hspace{1cm} \colorbox{customorange}{dim\_list[1] = 5;  \enspace  // [1,5]}
+
+\item Create an array of data for the dependent variables and load the data to those respective tables.  
+    
+\item e.g. using a direction-magnitude configuration\\
+\indent\hspace{1cm} \colorbox{customorange}{double dir\_arr[5] = \{-1.0, 1.0, 3.0, 5.0, 1.5\};}\\
+\indent\hspace{1cm} \colorbox{customorange}{double mag\_arr[5] = \{  11,  12,  13,  14,  15\};}\\
+\indent\hspace{1cm} \colorbox{customorange}{wind.wind\_blowing\_from\_table.load\_data( dir\_arr, dim\_list);}\\
+\indent\hspace{1cm} \colorbox{customorange}{wind.wind\_magnitude\_table.load\_data( mag\_arr, dim\_list);}
+
+\end{itemize}
+
+\newpage
+\section{Implementing in a Simulation}
+\subsection{Atmospheric Executive Interface}
+The Simple Lookup Wind model may be accessed in two fundamentally different ways.  The preferred way is to use an interface built for accessing various wind and atmospheric models.  This interface is the Atmospheric Executive, or atmos\_exec.  Atmos\_exec allows a particular wind and atmospheric model to be linked to a vehicle.  The vehicle can then access the wind and atmospheric values given a simulation time and state.  The main advantage of this approach is that only one instance of an atmosphere will be present, while any number of vehicles can access the model data.  Another advantage is ease-of-use.  Since the wind and atmospheric values are altitude-dependent, the simulation can automatically determine the vehicle's altitude and call the chosen wind/atmospheric model.  The data is now available to the vehicle model.  The steps needed to implement the atmos\_exec are below.
+
+\subsubsection{Instantiate}
+Instantiate an \textit{AtmosphereExec}:\\
+\indent\hspace{1cm} \colorbox{customorange}{AtmosphereExec atmos\_exec;}
+
+Assign the wind and atmosphere models to each vehicle.  This is most easily accomplished in the Trick input file:\\
+\indent\hspace{1cm} \colorbox{customorange}{\# vehicle setup values}\\
+\indent\hspace{1cm} \colorbox{customorange}{veh1.atmos\_exec.subscribe()}\\
+\indent\hspace{1cm} \colorbox{customorange}{veh2.atmos\_exec.subscribe()}\\
+\indent\hspace{1cm} \colorbox{customorange}{veh1.atmos\_exec.winds\_model = trick.AtmosphereExec.WINDS\_SIMPLE}\\
+\indent\hspace{1cm} \colorbox{customorange}{veh2.atmos\_exec.winds\_model = trick.AtmosphereExec.WINDS\_SIMPLE}
+
+\indent\hspace{1cm} (Note:  This is not the complete input file.)
+
+Atmos\_exec must initialize and subscribe the Simple Lookup Wind model.
+
+\subsubsection{Schedule Execution}
+Initialize the job:\\
+\indent\hspace{1cm} \colorbox{customorange}{JobPhaseNumber (\textquotedblleft initialization\textquotedblright)   atmos\_exec.initialize( time );}
+
+Schedule the job:\\
+\indent\hspace{1cm} \colorbox{customorange}{(frequency, \textquotedblleft environment\textquotedblright) atmos\_exec.update();}
+
+
+
+\subsection{Direct call of Simple Lookup Wind}
+An equally valid but more cumbersome and resource-intensive approach is to call the Simple Lookup Wind model directly from the S\_define file.  This approach requires an explicit determination of altitude.  The steps for this approach are below.
+\subsubsection{Instantiate}
+Instantiate a \textit{SimpleLookupWind}:\\
+\indent\hspace{1cm} \colorbox{customorange}{SimpleLookupWind   wind;}
+
+Call the constructor from the simulation-object constructor.  This step is optional – it will be carried out anyway because we use the default constructor, but it can be useful for maintenance to see that the default constructor is intentionally being used.\\
+\indent\hspace{1cm} \colorbox{customorange}{wind()}
+
+\subsubsection{Schedule Execution}
+There are 2 methods to call, one to initialize the model and one to routinely update the winds.
+
+Initialization takes no arguments, but the tables should have been loaded with data before initialization.\\
+\indent\hspace{1cm} \colorbox{customorange}{wind.initialize()}
+
+The update method takes a single argument for current altitude.\\
+\indent\hspace{1cm} \colorbox{customorange}{wind.update(altitude)}
+
+\subsubsection{Manage Execution}
+To activate the model it is necessary to subscribe to it; this comes from the SubscriptionBase parent class.\\
+\indent\hspace{1cm} \colorbox{customorange}{wind.subscribe()}
+
+To turn the model off, remove the last subscription.  Subscriptions are removed (one at a time) with\\
+\indent\hspace{1cm} \colorbox{customorange}{wind.unsubscribe()}
+
+To forcibly turn the model off and irrevocably disable the model:\\
+\indent\hspace{1cm} \colorbox{customorange}{wind.disable()}
+
+\chapter{Verification}
+The verification simulation is found in \textit{simple\_lookup\_wind/verif/SIM\_lookup.}  The verification data is provided for inspection in \textit{simple\_lookup\_wind/verif/SIM\_lookup/verif\_data}. 
+
+Note:  The independent variable can have a value outside the domain.  The model will use the maximum (or minimum) value of the variable, and its corresponding dependent variable value.  See Linear Continuity (as opposed to WrapAround Continuity) default behavior on page 5 of the documentation for Table Lookup and Interpolation,  \textit{/cml/models/utilities/table\_interp\_cpp/docs}.  
+
+\section{Two-component input data}
+Verification of this model is conducted using the \textbf{RUN\_input\_data\_2\_components.py} input file.  This simulation receives the North and East components of the wind profile and returns the magnitude and wind direction.
+\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\linewidth]{Images/2_comp_results.png}
+				\caption{Two-component input and magnitude/direction output}
+\end{figure}
+
+\section{Three-component input data}
+The \textbf{RUN\_input\_data\_3\_components.py} input file is used for verification of a three-component wind model.  This simulation receives the North, East, and Down components of the wind profile and returns the magnitude and wind direction.
+\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\linewidth]{Images/3_comp_results.png}
+				\caption{Three-component input and magnitude/direction output}
+\end{figure}
+
+\newpage
+
+\section{Direction and magnitude input data}
+The \textbf{RUN\_input\_data\_dir\_mag.py} input file is used for verification of a magnitude/direction wind model.  This simulation receives the direction and magnitude of the wind profile and returns the North/East wind components.
+\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\linewidth]{Images/dir_mag.png}
+				\caption{Magnitude/direction input and two-component output}
+\end{figure}
+
+\newpage
+
+\section{Direction, magnitude, and vertical input data}
+The \textbf{RUN\_input\_data\_dir\_mag\_vert.py} input file is used for verification of a magnitude/direction/vertical wind model.  This simulation receives the direction, magnitude, and vertical component of the wind profile and returns the North/East/Down wind components.
+\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\linewidth]{Images/dir_mag_vert.png}
+				\caption{Magnitude/direction/vertical input and two-component output}
+\end{figure}
+
+\newpage
+
+\section{Precompiled data}
+The \textbf{RUN\_precompiled\_data.py} input file contains the verification of the ability to use pre-loaded wind data in compiled code.    This simulation loads a mag/dir wind profile in the S\_define (which is later compiled). 
+\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\linewidth]{Images/precompiled.png}
+				\caption{Precompiled mag/dir/vert input and two-component output}
+\end{figure}
+
+\section{Component dimension check}
+The model checks for the correct range of input for the number of components input variable.  Any value greater than 3 will result in an error message.  The \textbf{ERROR\_input\_data\_4\_components.py} simulation explicitly sets the components to 4.  This test is necessary to achieve 100\% code coverage.
+\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\linewidth]{Images/component_dimension_error.png}
+				\caption{Forced dimension error}
+\end{figure}
+
+\newpage
+\section{North and East component values}
+The model uses the C++ math routine \textbf{std::atan2(double x, double y)} to compute the wind angle.  \textbf{atan2} can accomodate either x = 0 or y = 0, but not both.  The model tests for x = y = 0 and presents a warning if this condition occurs.  This condition is not fatal, since the physical meaning is that no wind is present.  Subsequent no-wind conditions do not display a warning.  This behavior is verified by \textbf{RUN\_windcomponents\_zero/input.py}.
+
+
+
+
+
+\end{document}

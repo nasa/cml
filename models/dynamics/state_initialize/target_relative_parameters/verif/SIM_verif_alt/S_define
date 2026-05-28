@@ -1,0 +1,244 @@
+/*****************************************************************************
+PURPOSE:
+  (To evaluate the target-relative-parameters code base)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (Feb 2021) (Antares) (initial model V&V))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "jeod/models/utils/math/include/vector3.hh"
+
+##include "../../include/TR_state_parameters_alt.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+
+ public:
+  UnitTestFramework framework;
+
+  double ref_position[3]; /* (m) */
+  double K_theta;
+  bool framework_provides_R3; /* (--)
+     Flag to switch between  operating modes, deciding whether the framework
+     provides 6 values as pos and vel R3 vectors, or as parameters.
+     Default: false (provides parameters)*/
+
+  // Define flags to run methods with nullptr inputs
+  // or prior to initialization
+  bool initialize_with_null_R3; /* (--)
+     Flag to run initialize() with a null input.*/
+  bool compute_with_null; /* (--)
+     Flag to run compute_*() methods with a null input.*/
+  bool compute_pre_init; /* (--)
+     Flag to run compute_*() methods prior to initialization.*/
+  bool run_compute_params_from_vectors; /* (--)
+     Flag to run compute_params_from_vectors().*/
+  bool run_compute_position_from_params; /* (--)
+     Flag to run compute_position_from_params().*/
+  bool run_compute_velocity_from_params; /* (--)
+     Flag to run compute_velocity_from_params().*/
+  bool run_compute_pos_vel_from_params; /* (--)
+     Flag to run compute_pos_vel_from_params().*/
+
+  double position_in[3]; /* (m) */
+  double position_out[3]; /* (m)
+     Generic position-output;
+     source of computation is determined by pos_angle_in*/
+  double position_out_from_rot[3]; /* (m)
+      Position computed using the rotation-angle*/
+  double position_out_from_cross[3]; /* (m)
+      Position computed using the cross-angle*/
+  double position_out_from_pos_vel[3]; /* (m)
+      Position computed using compute_pos_vel_from_params() */
+
+  double velocity_in[3]; /* (m/s) */
+  double velocity_out[3]; /* (m/s) */
+  double velocity_out_from_pos_vel[3]; /* (m/s)
+      Velocity computed using compute_pos_vel_from_params() */
+
+  TR_ParameterSet params_out;
+  TR_ParameterSet params_in;
+  TargetRelative_StateParameter_Alt::InputPosAngle pos_angle_in;
+
+  // Use 2 independent instances of TargetRelative_StateParameters_Alt.
+  // The sim will convert from parameters to vectors and back again but to make
+  // sure there are no hidden dependencies, each direction will be handled by
+  // an independent instance.
+  TargetRelative_StateParameter_Alt tr_params_to_R3;
+  TargetRelative_StateParameter_Alt tr_R3_to_params;
+
+
+  AntaresUnitTestSimObject()
+    :
+    framework_provides_R3(false),
+    initialize_with_null_R3(false),
+    compute_with_null(false),
+    compute_pre_init(false),
+    run_compute_params_from_vectors(false),
+    run_compute_position_from_params(false),
+    run_compute_velocity_from_params(false),
+    run_compute_pos_vel_from_params(false)
+  {
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    // test-specific jobs:
+    ("initialization") initialize_both_sets();
+    (1.0, "scheduled") double_conversion();
+  }
+
+  void initialize_both_sets() {
+    // Make sure that both sets get the same target position.
+    tr_params_to_R3.K_theta =
+    tr_R3_to_params.K_theta = K_theta;
+
+    // If failing initialization with a nullptr R3
+    if (initialize_with_null_R3) {
+      tr_params_to_R3.initialize(nullptr);
+    }
+    // If running compute_* methods before initializing
+    // Intended to fail sim
+    if (compute_pre_init) {
+      if (run_compute_params_from_vectors) {
+        tr_R3_to_params.compute_params_from_vectors(
+                                            position_in,
+                                            velocity_in,
+                                            params_out);
+      } else if (run_compute_position_from_params) {
+        tr_params_to_R3.compute_position_from_params(
+                                          params_in.altitude,
+                                          params_in.theta_Rng,
+                                          params_in.theta_Rot,
+                                          pos_angle_in,
+                                          position_out);
+      } else if (run_compute_velocity_from_params) {
+        tr_params_to_R3.compute_velocity_from_params(
+                                          params_in.Vmag,
+                                          params_in.gamma,
+                                          params_in.Lambda,
+                                          position_out,
+                                          velocity_out);
+      }
+    }
+
+    // Make sure that both sets get the same reference position.
+    // But check both formats.
+    tr_params_to_R3.initialize( ref_position);
+    tr_R3_to_params.initialize( ref_position);
+  }
+
+  void double_conversion() {
+    // If running compute_* methods with nullptr, run first
+    // so that the error or failure occurs first.
+    if (framework_provides_R3) {
+      // Convert from R3 {pos,vec} to params, then back again.
+      tr_R3_to_params.compute_params_from_vectors(
+                                            position_in,
+                                            velocity_in,
+                                            params_out);
+
+      // Test position conversion using both theta_rot and phi-cross
+      tr_params_to_R3.compute_position_from_params(
+                                          params_out.altitude,
+                                          params_out.theta_Rng,
+                                          params_out.theta_Rot,
+                                          TargetRelative_StateParameter_Alt::INPUT_THETA_ROT,
+                                          position_out_from_rot);
+
+      // Note that if using cross-angle, then we need to split the call based
+      // on the value of the rotation angle.
+      if (std::abs(params_out.theta_Rot) < M_PI_2) {
+        tr_params_to_R3.compute_position_from_params(
+                                              params_out.altitude,
+                                              params_out.theta_Rng,
+                                              params_out.phi_Cross,
+                                              TargetRelative_StateParameter_Alt::INPUT_PHI_ABS_THETA_ROT_LT_90,
+                                              position_out_from_cross);
+      } else {
+        tr_params_to_R3.compute_position_from_params(
+                                              params_out.altitude,
+                                              params_out.theta_Rng,
+                                              params_out.phi_Cross,
+                                              TargetRelative_StateParameter_Alt::INPUT_PHI_ABS_THETA_ROT_GT_90,
+                                              position_out_from_cross);
+      }
+      // Generate the "target_is_behind_vehicle" setting based on the input
+      // velocity and generated target position (params into tr_params_to_R3.
+      // generate the vector that is tangent to the initial position along the
+      // great circle joining the initial position and target position.
+      // If the input velocity had a component that is positively aligned
+      // with that vector, then the target is "in front of" the vehicle.
+      // Otherwise, it is behind it.
+      // Note -- it is very important that this setting be correct.
+      //         The angles -- which do not carry intrinsic signs -- will be
+      //         directed the wrong way if this setting is incorrect, and the
+      //         generation of velocity from parameters will not return the
+      //         original velocity.
+      double r0_target_nhat[3];
+      jeod::Vector3::cross( position_in,
+                      tr_params_to_R3.get_tgt_position(),
+                      r0_target_nhat);
+      double r0_target_phat[3];
+      jeod::Vector3::cross( r0_target_nhat,
+                      position_in,
+                      r0_target_phat);
+      tr_params_to_R3.target_is_behind_vehicle =
+                (jeod::Vector3::dot( velocity_in,
+                               r0_target_phat)) < -1E-3;
+
+      tr_params_to_R3.compute_pos_vel_from_params(params_out,
+                                                  TargetRelative_StateParameter_Alt::INPUT_THETA_ROT,
+                                                  position_out_from_pos_vel,
+                                                  velocity_out_from_pos_vel);
+      tr_params_to_R3.compute_velocity_from_params(
+                                          params_out.Vmag,
+                                          params_out.gamma,
+                                          params_out.Lambda,
+                                          position_out_from_rot,
+                                          velocity_out);
+
+    } else {
+      // Convert from params to R3 and back again.
+      if (pos_angle_in == 0) {
+        tr_params_to_R3.compute_position_from_params(
+                                          params_in.altitude,
+                                          params_in.theta_Rng,
+                                          params_in.theta_Rot,
+                                          pos_angle_in,
+                                          position_out);
+      } else {
+        tr_params_to_R3.compute_position_from_params(
+                                          params_in.altitude,
+                                          params_in.theta_Rng,
+                                          params_in.phi_Cross,
+                                          pos_angle_in,
+                                          position_out);
+      }
+      tr_params_to_R3.compute_velocity_from_params(
+                                          params_in.Vmag,
+                                          params_in.gamma,
+                                          params_in.Lambda,
+                                          position_out,
+                                          velocity_out);
+      tr_R3_to_params.compute_params_from_vectors(
+                                          position_out,
+                                          velocity_out,
+                                          params_out);
+    }
+  }
+
+
+ private:
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject test ;

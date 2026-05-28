@@ -1,0 +1,172 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Test sim object
+*****************************************************************************/
+##include "../../include/table_independent_variable.hh"
+##include "../../include/table_lookup__transpose_data.hh"
+
+class TestingModelSimObject : public Trick::SimObject {
+ public:
+   double dependent;
+   double independent;
+   double indep;
+   double indp;
+   bool   use_config;
+   // Create multiple TableIndependentVariable instances so as to create a special
+   // environment to test specific checks, such as those that require extra
+   // table independent variable additions with different or extra data required to
+   // hit the error or warning checks desired
+   TableIndependentVariable tiv_1;
+   TableIndependentVariable tiv_2;
+   TableIndependentVariable tiv_3;
+   TableIndependentVariable tiv_4;
+   TableIndependentVariable tiv_5;
+   GenericMultiInputTable   generic_table;
+
+   TestingModelSimObject()
+     :
+     indep(1.5),
+     indp(2.0),
+     use_config(false),
+     tiv_1(independent, TableIndependentVariable::Linear),
+     tiv_2(independent, TableIndependentVariable::Linear),
+     tiv_3(independent, TableIndependentVariable::Linear),
+     tiv_4(indep, TableIndependentVariable::Linear),
+     tiv_5(indp, TableIndependentVariable::Linear),
+     generic_table(dependent)
+   {
+     ("initialization") configure();
+     (1.0, "scheduled") update();
+   }
+
+   void fraction()
+   {
+     std::vector<size_t> dimlist;
+     dimlist.push_back(2);
+     dimlist.push_back(3);
+     dimlist.push_back(4);
+     dimlist.push_back(5);
+
+     std::cout << "*** TEST: Try loading independent data with only 1 output ***\n";
+     std::cout << "***       while there are 2 dependent variables ***\n";
+     std::vector<double> dep_data;
+     dep_data.push_back(10);
+     dep_data.push_back(11);
+     dep_data.push_back(12);
+     dep_data.push_back(13);
+     generic_table.load_data(dep_data, dimlist);
+
+     generic_table.add_independent( tiv_1);
+     generic_table.add_independent( tiv_2);
+     generic_table.add_independent( tiv_3);
+     generic_table.add_independent( tiv_5);
+
+     double indp_data[3] = {-3,-2,-1};
+     tiv_1.load_data(indp_data, 2);
+     tiv_2.load_data(indp_data, 1);
+     tiv_3.load_data(indp_data, 2);
+     tiv_5.load_data(indp_data, 3);
+
+     generic_table.initialize();
+
+     tiv_1.initialize();
+     tiv_2.initialize();
+     tiv_3.initialize();
+     tiv_5.initialize();
+   }
+
+   void name()
+   {
+     std::cout << "*** TEST: Try changing the independent variable name after first setting it ***\n";
+     std::string s  ("Testing Name");
+     tiv_1.set_name(s);
+     std::string sn ("New Test Name");
+     tiv_1.set_name(sn);
+   }
+
+   void high_index()
+   {
+     std::vector<size_t> dim_list;
+     dim_list.push_back(1);
+     dim_list.push_back(2);
+     dim_list.push_back(1);
+     dim_list.push_back(2);
+
+     std::vector<double> dep_data;
+     dep_data.push_back(11);
+     dep_data.push_back(12);
+     dep_data.push_back(21);
+     dep_data.push_back(22);
+     generic_table.load_data(dep_data, dim_list);
+
+     generic_table.add_independent( tiv_1);
+     generic_table.add_independent( tiv_2);
+     generic_table.add_independent( tiv_3);
+     generic_table.add_independent( tiv_4);
+
+     double indp_data[3] = {1,2,3};
+     tiv_1.load_data(indp_data, 2);
+     tiv_2.load_data(indp_data, 1);
+     tiv_3.load_data(indp_data, 2);
+     tiv_4.load_data(indp_data, 3);
+
+     std::cout << "*** TEST: Try initializing the model with mismatching ***\n";
+     std::cout << "***       independent and dependent variable sizes ***\n";
+     generic_table.initialize();
+
+     tiv_1.initialize();
+     tiv_2.initialize();
+     tiv_3.initialize();
+     tiv_4.initialize();
+   }
+
+   void configure()
+   {
+     if (use_config) {
+       std::vector<size_t> dim_list;
+       dim_list.push_back(1); // There is only 1 dependent
+       dim_list.push_back(2); // first independent has 2 values
+       dim_list.push_back(1); // second independent has 1 value
+       dim_list.push_back(2); // third independent has 1 value
+
+       std::vector<double> dep_data;
+       dep_data.push_back(11);
+       dep_data.push_back(12);
+       dep_data.push_back(21);
+       dep_data.push_back(22);
+       generic_table.load_data(dep_data, dim_list);
+
+       generic_table.add_independent( tiv_1);
+       generic_table.add_independent( tiv_2);
+       generic_table.add_independent( tiv_3);
+
+       double indep_data[2] = {1,2};
+       tiv_1.load_data(indep_data,2);
+       tiv_2.load_data(indep_data,1);
+       tiv_3.load_data(indep_data,2);
+
+       generic_table.initialize();
+
+       tiv_1.initialize();
+       tiv_2.initialize();
+       tiv_3.initialize();
+     }
+   }
+
+   void update()
+   {
+     independent += 0.5;
+     tiv_1.update();
+     tiv_2.update();
+     tiv_3.update();
+     generic_table.update();
+   }
+
+ private:
+   TestingModelSimObject( const TestingModelSimObject&);
+   TestingModelSimObject& operator = ( const TestingModelSimObject&);
+};
+
+TestingModelSimObject test;

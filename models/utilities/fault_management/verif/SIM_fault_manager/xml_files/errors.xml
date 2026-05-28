@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Trigger Errors" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <Bias value="40"></Bias>
+  <TriggerGroup></TriggerGroup> <!--Empty TriggerGroup-->
+  <TriggerGroup>
+    <Trigger name="valid trigger" variable="test_object.current_time" compare="GT" value="0"></Trigger>
+    <Trigger reuse_name="Invalid"></Trigger>
+    <Trigger variable="test_object.current_time" compare="GE" value="5"></Trigger> <!--No Name-->
+    <Trigger name="valid trigger" variable="test_object.current_time" compare="GE" value="2"></Trigger> <!--Duplicate Name-->
+    <Trigger name="No Variable" compare="GE" value="2.5"></Trigger>
+    <Trigger name="Non-existent Variable" variable="invalid" compare="GE" value="5"></Trigger>
+    <Trigger name="Pointer Variable" variable="test_object.ptr_sint" compare="GE" value="5"></Trigger>
+    <Trigger name="No Comparison Type" variable="test_object.current_time" value="5"></Trigger>
+    <Trigger name="Invalid Comparison Type" variable="test_object.current_time" compare=">>" value="5"></Trigger>
+    <Trigger name="No Trigger Value" variable="test_object.current_time" compare="GE"></Trigger>
+    <Trigger name="Invalid RandValue" variable="test_object.current_time" compare="GE">
+      <RandValue></RandValue>
+    </Trigger>
+    <Trigger name="Invalid Variable Type" variable="test_object.faults" compare="GE" value="5"></Trigger>
+    <Trigger name="Incomplete Period" variable="test_object.current_time" compare="GE" value="0" trigger_period="1"></Trigger>
+    <Trigger name="Negative Period" variable="test_object.current_time" compare="GE" value="0" trigger_period="-1" trigger_length="-2"></Trigger>
+    <Trigger name="Invalid Periodic Length" variable="test_object.current_time" compare="GE" value="0" trigger_period="1" trigger_length="5"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Valid Fault" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Bias value="30"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault type="BIAS" loc="DOWNSTREAM"> <!--No Name-->
+  <SimVar name="test_object.var_double"></SimVar>
+  <Bias value="50"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Valid Fault" type="BIAS" loc="DOWNSTREAM"> <!--Duplicate Name-->
+  <SimVar name="test_object.var_double"></SimVar>
+  <Bias value="50"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Location" type="BIAS">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Bias value="50"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Invalid Location" type="BIAS" loc="Invalid">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Bias value="50"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Variable" type="BIAS" loc="DOWNSTREAM">
+  <Bias value="50"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Variable Name" type="BIAS" loc="DOWNSTREAM">
+  <SimVar></SimVar>
+  <Bias value="50"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Non-existent Variable" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="variable.with.invalid.location"></SimVar>
+  <Bias value="50"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Type Boolean Variable" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_bool"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Invalid Type Boolean Variable" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_bool"></SimVar>
+  <Bias value="50"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Invalid Variable Type" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.faults"></SimVar>
+  <Bias value="50"></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Type" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Invalid Type" type="Invalid" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Bias Node" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Bias Value" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Bias></Bias>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Scale Node" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Scale Value" type="SCALE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Scale></Scale>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Overwrite Node" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Overwrite Value" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Overwrite></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Invalid Random Overwrite" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <RandValue></RandValue>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Redundant Spec Overwrite" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <Overwrite value="2"> </Overwrite>
+  <RandValue mean="0.0" std_dev=".25" seed="2" distribution="GAUSSIAN"></RandValue>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="No Function Node" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="No Function Type" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function> </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Invalid Function Type" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="Invalid Function Type">
+    <IndVariable name="test_object.current_time"></IndVariable>
+    <Parameters a="10" b="0"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="No Function IndVariable Node" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="LINEAR"> </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No IndVariable Name" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable></IndVariable>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Invalid IndVariable Name" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="variable.does.not.exist"></IndVariable>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Invalid IndVariable Type" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.faults"></IndVariable>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="No Amplitude Node" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="SQUAREWAVE">
+    <IndVariable name="test_object.current_time"></IndVariable>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No nominal setting in Amplitude" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="TRIANGLEWAVE">
+    <IndVariable name="test_object.current_time"></IndVariable>
+    <Amplitude></Amplitude>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Frequency Node" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="SINEWAVE">
+    <IndVariable name="test_object.current_time"></IndVariable>
+    <Amplitude nominal="1.2"> </Amplitude>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No nominal setting in Frequency" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="TRIANGLEWAVE">
+    <IndVariable name="test_object.current_time"></IndVariable>
+    <Amplitude nominal="1.2"></Amplitude>
+    <Frequency></Frequency>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Parameter Rate" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="SINEWAVE">
+    <IndVariable name="test_object.current_time"></IndVariable>
+    <Amplitude nominal="1.2">
+      <IndVariable></IndVariable>
+    </Amplitude>
+    <Frequency nominal="0.4"></Frequency>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Parameter IndepVariable" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="SINEWAVE">
+    <IndVariable name="test_object.current_time"></IndVariable>
+    <Amplitude nominal="1.2" rate = "1">
+      <IndVariable></IndVariable>
+    </Amplitude>
+    <Frequency nominal="0.4"></Frequency>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="No Linear Parameters Node" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.current_time"></IndVariable>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Linear Rate Parameter" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.current_time"></IndVariable>
+    <Parameters nominal="0"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="No White-noise RandValue" type="WHITENOISE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="WhiteNoise Invalid RandValue" type="WHITENOISE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <RandValue distribution="Invalid Statistical Distribution"></RandValue>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="No Random-walk RandValue" type="RANDOMWALK" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="RandomWalk Invalid RandValue Gaussian" type="RANDOMWALK" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <RandValue distribution="GAUSSIAN"></RandValue>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="RandomWalk Invalid RandValue Flat No Min" type="RANDOMWALK" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <RandValue distribution="FLAT"></RandValue>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="RandomWalk Invalid RandValue Flat No Max" type="RANDOMWALK" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <RandValue distribution="FLAT" min="5.5"></RandValue>
+  <TriggerGroup>
+    <Trigger reuse_name="valid trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="String Periodic Trigger" type="BIAS" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Bias value="2"></Bias>
+  <TriggerGroup>
+    <Trigger name="string trigger" variable="test_object.command" compare="NE" value="abc"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+</FaultManager>

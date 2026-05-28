@@ -1,0 +1,67 @@
+/******************************************************************************
+PURPOSE:
+    (Test angle interpolation functions on 1D tables)
+PROGRAMMERS:
+    (((Bingquan Wang) (OSR) (May 2017) (initial implementation)
+
+******************************************************************************/
+
+//trick
+#include "sim_objects/default_trick_sys.sm"
+
+//jeod
+#include "jeod_sys.sm"
+
+//test model
+##include "include/test_model_angle_interp1d.hh"
+
+
+class TestTblAngleInterp1D_SimObj : public Trick::SimObject
+{
+public:
+  const double base;  /* (--) the starting point of independent variable. */
+  const double step;  /* (--) the interval of independent variable between two simulation steps. */
+
+  double var_x;        /* (--) the independent variable */
+  double interp_val;  /* (--) the interpolated value */
+  int low_index;      /* (--) the lower breakpoint index */
+  double frac;        /* (--) the fractional distance in the interval between breakpoints */
+
+  bool is_asc;        /* (--) indicate whether the varaible data is ascending or descending */
+
+  TestModelAngleInterp1D<25> test_model;
+  
+  TestTblAngleInterp1D_SimObj() :
+    base(-3.0),
+    step(0.25),
+    is_asc(true),
+    test_model(base, 2.0*step)   
+  {
+    ("initialization") init();
+    (1.0, "scheduled") update();
+  };
+
+private:
+  TestTblAngleInterp1D_SimObj(const TestTblAngleInterp1D_SimObj&);
+  TestTblAngleInterp1D_SimObj& operator=(const TestTblAngleInterp1D_SimObj&);
+
+  void init()
+  {
+    test_model.set_default_data(is_asc);
+  }
+
+  void update()
+  {
+    const double step_impl = is_asc ? step : -step;    
+    static double prev_val= base-step_impl;
+    var_x = prev_val + step_impl;    
+    interp_val = test_model.update(var_x);
+    prev_val = var_x;
+   
+    low_index = test_model.get_low_index();
+    frac = test_model.get_frac();
+  }
+};
+
+TestTblAngleInterp1D_SimObj test_angle_interp1d;
+

@@ -1,0 +1,135 @@
+/*****************************************************************************
+PURPOSE: (Tests the dynamic stability of the application of an
+          angular-rate-dependent torque)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (Sep 2018) (Antares) (initial))
+    )
+*****************************************************************************/
+#include "default_priority_settings.sm"
+#define DYNAMICS 0.005 // Unlike in most CML sims, the integration rate matters
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/body_attach_matrix.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_rot_state.hh"
+##include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+##include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
+##include "../../include/mass_derivative_dynamics.hh"
+
+
+class VehicleSimObject : public Trick::SimObject
+{
+ protected:
+  jeod::DynManager & dyn_manager;
+
+ public:
+  jeod::DynBody               body;
+  DynamicMassBody             tank;
+  DynamicMassGroup            tank_group;
+  jeod::MassBodyInit          mass_init;
+  jeod::MassBodyInit          tank_init;
+  jeod::BodyAttachMatrix      tank_attach;
+
+  jeod::DynBodyInitTransState trans_init;
+  jeod::DynBodyInitRotState   rot_init;
+
+  double nozzle_position[3];
+  double mass_consumption;
+  double mass_cons_freq;
+  double mass_cons_internal;
+  double eigen_rot;
+  bool update_at_derivative_rate;
+  double decay_time;
+  bool null_check;
+
+
+  // Model for testing:
+  MassDerivativeDynamics  test_dyn;
+
+  VehicleSimObject(  const double & dyn_time,
+                     jeod::DynManager & dyn_mgr_in)
+      :
+      dyn_manager (dyn_mgr_in),
+      mass_cons_freq(0.0),
+      update_at_derivative_rate(false),
+      decay_time(-2*DYNAMICS),
+      null_check(false),
+      test_dyn( dyn_time,
+                tank.composite_properties,
+                nozzle_position,
+                body)
+  {
+    P_ENV ("initialization") body.initialize_model( dyn_manager);
+    ("initialization")       tank_group.initialize();
+    ("initialization")        test_NULL();
+    (DYNAMICS, DYNAMICS, "scheduled")  consume_mass();
+    (DYNAMICS, "scheduled")  tank_group.update_group_mass();
+
+    // test-specific jobs:
+    ("initialization")       test_dyn.initialize();
+    (DYNAMICS, "scheduled")  update();
+    ("derivative")           derivative_update();
+  };
+ private:
+  void derivative_update()
+  {
+    if (update_at_derivative_rate) {
+      test_dyn.update_force_torque();
+    }
+  }
+  void update()
+  {
+    eigen_rot = -2 * (180 / 3.141592654) *
+      std::asin(body.composite_body.state.rot.Q_parent_this.vector[2]);
+    double scratch = std::cos( exec_get_sim_time() * mass_cons_freq);
+    mass_cons_internal = mass_consumption * scratch * scratch;
+
+    test_dyn.update();
+    decay_time += DYNAMICS;
+  }
+  void consume_mass()
+  {
+    tank.dynamic_properties.mass_consumed_step += mass_cons_internal * DYNAMICS;
+  }
+  void test_NULL()
+  {
+    if (null_check) {
+      double dummy_;
+      double dummy_mx_[3][3];
+      MassDerivativeDynamics null_check_instance( dummy_,
+                                                  dummy_,
+                                                  dummy_mx_,
+                                                  nullptr,
+                                                  nullptr,
+                                                  body);
+    }
+  }
+
+                                                  
+
+  VehicleSimObject( const VehicleSimObject&);
+  VehicleSimObject & operator= ( const VehicleSimObject&);
+};
+VehicleSimObject vehicle( jeod_time.time_manager.dyn_time.seconds,
+                          dynamics.dyn_manager);
+
+vcollect vehicle.body.collect.collect_effector_forc jeod::CollectForce::create{
+    vehicle.test_dyn.pseudo_force  };
+vcollect vehicle.body.collect.collect_effector_torq jeod::CollectTorque::create{
+    vehicle.test_dyn.pseudo_torque  };
+
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics, vehicle;

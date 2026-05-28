@@ -1,0 +1,76 @@
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[top=1in, bottom=1.5in, left=1in, right=1in]{geometry}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt}
+\usepackage{amsmath}
+\usepackage{listings}
+
+%\newsavebox{\Ccodebox}
+\lstnewenvironment{code}
+    {\lstset{basicstyle=\small\ttfamily,
+             language=C++,
+             xleftmargin=0.5in,
+             xrightmargin=0.5in,
+             backgroundcolor=\color{Apricot!60}, %60% apricot, 40% white
+             escapeinside={\%*}{*)}, %  .tex file characters inside %*...*) are treated as Tex commands.
+            }
+    }
+    { }
+
+
+
+
+\newsavebox{\codebox}
+\newenvironment{code1}
+  {\par
+   \begin{center}
+   \begin{lrbox}{\codebox}
+   \begin{minipage}{0.8\textwidth}
+   \fontfamily{pcr} \selectfont
+   \small
+  }
+  {
+   \end{minipage}
+   \end{lrbox}
+   \colorbox{Apricot}{\usebox{\codebox}}
+   \end{center}
+   \par
+  }
+
+\newsavebox{\codecommentbox}
+\newenvironment{codecomment}
+  {\begin{lrbox}{\codecommentbox}
+   \begin{minipage}{0.8\textwidth}
+   \fontfamily{\familydefault} \selectfont
+   \small
+  }
+  {
+   \end{minipage}
+   \end{lrbox}
+%   \indent
+   \colorbox{SkyBlue!70}{\usebox{\codecommentbox}}
+  }
+
+\newcommand*{\titlePage}
+{\begingroup
+ \centering % Center all text
+ \vspace*{\baselineskip} % White space at the top of the page
+
+ \rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt} % Thick horizontal line
+ \rule{\textwidth}{0.4pt}\\[\baselineskip] % Thin horizontal line
+ {\LARGE Antares - CML Code Project}\\[0.2\baselineskip] % Title
+ \rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt} % Thin horizontal line
+ \rule{\textwidth}{1.6pt}\\[\baselineskip] % Thick horizontal line
+
+ \vspace*{8\baselineskip}
+ {\Huge \ModelName \par}
+ \vfill
+% \vspace*{8\baselineskip}
+
+ \Large \ModelAuthor \\
+ \vspace*{2\baselineskip}
+ \ModelAffiliation \\
+ \vspace*{2\baselineskip}
+ \ModelDate \\
+ \endgroup
+}

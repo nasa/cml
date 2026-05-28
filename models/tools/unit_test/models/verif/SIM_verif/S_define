@@ -1,0 +1,50 @@
+/*****************************************************************************
+PURPOSE: (TO BE COMPLETED)
+PROGRAMMERS:
+    (
+     ((Name) (Org) (Date) (Project) (purpose))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+
+/*****************************************************************************
+SimpleUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "../../include/unit_test.hh"
+##include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+class SimpleUnitTestSimObject: public Trick::SimObject {
+
+   public:
+   // Framework (leave this alone)
+    UnitTestFramework framework;
+    UnitTestFramework another_framework;
+    double var1; /* (--) var1 */
+    double var2; /* (--) var2 */
+    
+    SimpleUnitTestSimObject() {
+
+    // Framework (leave this alone)
+      ("initialization")  framework.initialize();
+      (1.0, "environment") framework.update();
+      ("initialization")  another_framework.initialize();
+      (3.0, "environment") another_framework.update();
+    }
+
+  public:
+   void sweep_var1(double start, double end, double incr) {
+     framework.add_sweep( var1, start, end, incr);
+   }
+   void sweep_var2(double start, double end, double incr) {
+     framework.add_sweep( var2, start, end, incr);
+   }
+  private:
+    SimpleUnitTestSimObject (const SimpleUnitTestSimObject&);
+    SimpleUnitTestSimObject & operator = (const SimpleUnitTestSimObject&);
+
+};
+SimpleUnitTestSimObject test ;

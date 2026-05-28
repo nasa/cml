@@ -1,0 +1,274 @@
+\documentclass[11pt,fleqn]{report}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+
+\usepackage{cml}
+\lstnewenvironment{codeXML}
+    {\lstset{basicstyle=\small\ttfamily,
+             language=XML,
+             xleftmargin=0.0in,
+             xrightmargin=0.0in,
+             backgroundcolor=\color{Orchid!60}, % 60% orchid, 40% white
+             escapeinside={\%*}{*)}, %  .tex file characters inside %*...*) are
+                                     %  treated as Tex commands.
+            }
+    }
+    { }
+
+\newcommand{\ModelName}{Sim Speed Monitor}
+\newcommand{\ModelAuthor}{Gary Turner}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{Sept 2022}
+\pagestyle{plain}
+\usepackage[parfill]{parskip}
+\usepackage[margin=1.5cm]{caption}
+\usepackage{subfig}
+
+\begin{document}
+\titlePage
+\clearpage % Reset page number
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\ \hline
+ \hline
+1 & Sept 2022 & Gary Turner & Initial Version \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagenumbering{arabic} % Start text with arabic 1
+The Sim Speed Monitor model computes the sim-speed at regular intervals.
+This is useful for debugging issues identified as sim slowdowns because it
+makes it easy to identify the frequency and location within a cycle of where
+significant slowdowns occur.
+
+\chapter {Requirements}
+The model shall provide the sim-speed at a user-specified frequency.
+
+\chapter {Model Specification}
+I start this section by defining two terms:
+\begin{itemize}
+\item Simulation-time is the clock used by the simulation-engine.
+
+  Aside -- because this model relies on scheduling by the simulation engine,
+  it must depend on simulation-time rather than dynamic-time.
+  For the vast majority of simulations, simulation-time and dynamic-time are
+  equivalent.
+\item True-time is the time experienced by the user in the real world; this is
+  also known as wall-time, or wall-clock-time.
+\item Simulation-speed is the ratio of simulation-time to true-time, it
+  indicates how many times faster than real-time the simulation is processing.
+  For the Trick simulation engine, we get an average simulation-speed at the
+  completion of the run. This model provides the user with outputs for
+  monitoring the simulation-speed as it varies during the course of the
+  simulation.
+\end{itemize}
+The model computes the simulation speed as a multiple of wall-clock-time.
+The elapsed clock-time between calls to the model's \textit{calculate\_rate}
+method can also be accessed.
+
+The model contains a single class, \textit{SimSpeedMonitor}.
+
+This class provides two methods of interest:
+\begin{enumerate}
+\item \textit{calculate\_rate( double simulation\_dt)} is the main method. The
+  one argument to this method is the period of simulation-time at which the
+  method is called. This method populates the class member
+  \textit{\textbf{sim\_speed}}.
+\item \textit{get\_dt()} provides a getter to return the true-time elapsed
+  during the most recent computation of \textit{sim\_speed}.
+\end{enumerate}
+
+
+\chapter {User's Guide}
+\section {Implementation}
+Somewhere in the simulation, instantiate an instance of
+\textit{SimSpeedMonitor}. Typically, it would be desirable to monitor several
+different frequencies at once so this may be an array of instances:
+
+\begin{codeC}
+SimSpeedMonitor  sim_speed[3];
+\end{codeC}
+
+\section{Initialization}
+The model is self-initializing on the first call to its
+\textit{calculate\_rate(...)} method.
+
+\section {Routine Execution}
+At some regular interval, call each of these instance's
+\textit{calculate\_rate(...)} methods. These could be called at distinct rates:
+
+\begin{codeC}
+(0.1, "environment") sim_speed[0].calculate_rate(0.1);
+(0.2, "environment") sim_speed[1].calculate_rate(0.2);
+(0.5, "environment") sim_speed[2].calculate_rate(0.5);
+\end{codeC}
+
+or at distinct points within a cycle:
+\begin{codeC}
+(0.1, "environment") sim_speed[0].calculate_rate(0.1);
+(0.1, "scheduled")   sim_speed[1].calculate_rate(0.1);
+(0.1, "effector")    sim_speed[2].calculate_rate(0.1);
+\end{codeC}
+
+Important notes:
+\begin{enumerate}
+\item It is important to note that the value in the argument to
+      \textit{calculate\_rate(...)} is identical to the calling period.
+\item If trying to identify the period at which the slowdown occurs, having the
+      instances run at different rates is most effective.
+\item If trying to identify where the slowdown occurs within a cycle, having
+      the instances run at different locations within a cycle is most effective.
+      In this case, these jobs should run at double the frequency of interest;
+      running at the frequency of interest will not return any useful
+      information.
+\end{enumerate}
+
+\section {Optional Execution}
+The regular execution will populate the \textit{sim\_speed} variable. For some
+analyses, it may be desirable to also monitor the true-time elapsed between
+subsequent calls to \textit{calculate\_rate(...)}. The \textit{get\_dt()}
+method can be used to log this value:
+
+\begin{codeC}
+double dt = sim_speed[0].get_dt();
+\end{codeC}
+
+\section {Configuration}
+The model has little available for configuration. As with most CML models, the
+instance must be subscribed in order to function.
+\begin{codePython}
+test.sim_speed[0].subscribe()
+\end{codePython}
+
+\chapter{Verification}
+The model includes a simple verification simulation, comprising 4 instances of
+SimSpeedMonitor, and 2 methods to slow down the simulation, one running at 5Hz
+and one at 1Hz. Both slow-down methods execute as ``scheduled'' class jobs.
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+ \textbf{Instance index} & \textbf{Calling Period / s} &
+ \textbf{Calling Phase} \\ \hline
+ \hline
+0 & 0.1 & environment (early) \\ \hline
+1 & 0.1 & effector (late)     \\ \hline
+2 & 0.5 & environment (early) \\ \hline
+3 & 1.0 & environment (early) \\ \hline
+\end{tabular}
+\end{center}
+
+The following table contains values characteristic of
+the simulation-speed measured by the 4 instances.
+
+Note that the actual values from the
+verification simulation cannot be committed to the repository for comparison
+during regression testing because these values are a function of how quickly
+the simulation executes. This is a function of the performance of the machine
+which will vary from run to run and machine to machine.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ \textbf{Simulation Time / s} & \textbf{SimSpeed [0]}  & \textbf{SimSpeed [1]} &
+ \textbf{SimSpeed [2]} & \textbf{SimSpeed [3]} \\
+     & 0.1 s early & 0.1 s late & 0.5 s early & 1.0 s early \\  \hline \hline
+0.0  &     0   &     0  &  0  &   0   \\ \hline
+0.1  &     3   &  4000  &  0  &   0   \\ \hline
+0.2  & 10000   &    10  &  0  &   0   \\ \hline
+0.3  &    10   & 10000  &  0  &   0   \\ \hline
+0.4  & 10000   &    10  &  0  &   0   \\ \hline
+0.5  &    10   & 10000  &  3  &   0   \\ \hline
+0.6  & 10000   &    10  &  3  &   0   \\ \hline
+0.7  &    10   & 10000  &  3  &   0   \\ \hline
+0.8  & 10000   &    10  &  3  &   0   \\ \hline
+0.9  &    10   & 10000  &  3  &   0   \\ \hline
+1.0  &  3000   &     3  & 10  &  10   \\ \hline
+1.1  &     3   & 10000  & 10  &  10   \\ \hline
+1.2  & 10000   &    10  & 10  &  10   \\ \hline
+1.3  &    10   & 10000  & 10  &  10   \\ \hline
+1.4  & 10000   &    10  & 10  &  10   \\ \hline
+1.5  &    10   & 10000  &  3  &  10   \\ \hline
+1.6  & 10000   &    10  &  3  &  10   \\ \hline
+1.7  &    10   & 10000  &  3  &  10   \\ \hline
+1.8  & 10000   &    10  &  3  &  10   \\ \hline
+1.9  &    10   & 10000  &  3  &  10   \\ \hline
+2.0  &  4000   &     3  & 10  &  10   \\ \hline
+2.1  &     3   & 10000  & 10  &  10   \\ \hline
+2.2  & 10000   &    10  & 10  &  10   \\ \hline
+2.3  &    10   & 10000  & 10  &  10   \\ \hline
+2.4  & 10000   &    10  & 10  &  10   \\ \hline
+2.5  &    10   & 10000  &  3  &  10   \\ \hline
+2.6  & 10000   &    10  &  3  &  10   \\ \hline
+2.7  &    10   & 10000  &  3  &  10   \\ \hline
+2.8  & 10000   &    10  &  3  &  10   \\ \hline
+2.9  &    10   & 10000  &  3  &  10   \\ \hline
+3.0  &  4000   &     3  & 10  &  10   \\ \hline
+\end{tabular}
+\end{center}
+
+
+To identify the calling frequency of the slow-down jobs, we use the instances to
+cover a distribution of frequencies.
+
+The instance at index 3, executing at $1 Hz$, shows a
+constant speed throughout the simulation. Whatever is causing our slowdown is
+happening equally on every $1 Hz$ frame, so must be executing at no less than
+$1 Hz$.
+
+The instance at index 2, executing at $2 Hz$ shows a distinct alternating
+pattern.  For time \newline $t \in \{[0.5, 1.0), [1.5, 2.0), etc\}$, the
+simulation runs relatively slowly when compared to time\newline
+$t \in \{[1.0, 1.5), [2.0, 2.5), etc.\}$.
+From this information, we can see that some job is having a significant impact
+to the simulation speed sometime between the sim-speed detection at $t=1.0$
+(when it calculates a high speed), and $t=1.5$, and that this pattern repeats
+every second.
+
+The instance at index 0, executing at $10 Hz$ also shows a distinct alternating
+pattern, this time at $5 Hz$. At some time between the sim-speed detection at
+$t=0.2$
+(when it calculates a high speed), and $t=0.3$ (when it calculates a low speed),
+we can deduce that a job is executed that produces a significant impact
+on average sim speed.
+
+Note also that this higher-frequency job cannot be solely responsible for the
+signature seen at $1 Hz$; if the sim-speeds at $2 Hz$ were in ratios of $2:3$,
+it could be argued that a 5Hz job was hitting one $2 Hz$ interval twice,
+and the next one 3 times. But the ratios are inconsistent with this
+inference.
+
+Thus, we can conclude that there are two significant jobs processing within
+this simulation, one operating at $5 Hz$, and one at $1 Hz$.  Actually, we
+would need to run this for more than 3 seconds to identify the precise
+frequency, but this exercise is primarily for illustrative purposes.
+
+To identify the phase of the $5 Hz$ job, we use the two $10 Hz$ speed
+calculations
+executing at the same timestamps but with different phasing within each cycle.
+We see that the instance at index 0, running early in the cycle, computes a
+high speed at $t=0.2$, while the instance with index 1, running late in the
+cycle, computes a low speed for $t=0.2$. From this information we deduce that
+the $5 Hz$ job is executing somewhere in the cycle at $t=0.2$, sandwiched
+between the phases at which these two calculations occur -- the first
+calculation did not see the impact of this job, but the second calculation
+did.
+
+A similar analysis can be run to find where the $1 Hz$ slow-down job executes.
+
+In a large simulation, these jobs can be inserted as desired to systematically
+identify the precise top-level function producing the slowdown without having
+to resort to a full performance analysis (which can be very
+time-consuming).
+
+\end{document}

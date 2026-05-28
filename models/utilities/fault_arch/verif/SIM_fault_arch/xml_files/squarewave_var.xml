@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Test Fault 1" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="SQUAREWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters Amplitude="1" frequency="0.1" phase="0"></Parameters>
+      <VarFrequency scalar="0.03">
+         <IndVariable name="test_object.current_time"></IndVariable>
+      </VarFrequency>
+   </Function>
+   <TriggerGroup>
+      <Trigger name = "trigger 1" variable="test_object.current_time" compare="GE" value="2"></Trigger>
+      <Trigger name = "trigger 2" variable="test_object.current_time" compare="LE" value="10"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 2" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="SQUAREWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters Amplitude="1" frequency="0.25" phase="0"></Parameters>
+      <VarAmplitude scalar=".2">
+         <IndVariable name="test_object.current_time"></IndVariable>
+      </VarAmplitude>
+   </Function>
+   <TriggerGroup>
+      <Trigger name = "trigger 3" variable="test_object.current_time" compare="GE" value="12"></Trigger>
+      <Trigger name = "trigger 4" variable="test_object.current_time" compare="LE" value="20"></Trigger>
+   </TriggerGroup>
+</Fault>
+<Fault ID="Test Fault 3" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+   <SimVar name="test_object.constant_value_replaced"></SimVar>
+   <Function type="SQUAREWAVE">
+      <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+      <Parameters Amplitude="1" frequency="0.25" phase="0"></Parameters>
+      <VarPhase scalar=".25">
+         <IndVariable name="test_object.current_time"></IndVariable>
+      </VarPhase>
+   </Function>
+   <TriggerGroup>
+      <Trigger name = "trigger 5" variable="test_object.current_time" compare="GE" value="22"></Trigger>
+   </TriggerGroup>
+</Fault>
+</FaultManager>

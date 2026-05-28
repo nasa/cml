@@ -1,0 +1,51 @@
+/******************************************************************************
+PURPOSE: (This simulation defines the unit-sim test for STD 1976 Atmos model)
+PROGRAMMERS:
+   (((Bingquan Wang) (OSR) (Jan. 2018) (Antares) 
+                          (Refactored to use the newer sim-unit test template)))
+*******************************************************************************/
+
+// for TRICK
+#include "sim_objects/default_trick_sys.sm"
+
+// for JEOD
+#include "jeod_sys.sm"
+
+/******************************************************************************
+ CLASS: (Std76UnitTestSimObject) 
+ PURPOSE: 
+******************************************************************************/
+
+// for JEOD message handler
+##include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+// for CML unit-sim test framework
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+
+// for std1976 atmos model
+##include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
+
+
+class Std76UnitTestSimObject: public Trick::SimObject {
+
+public:
+    UnitTestFramework framework;
+    STD1976 std1976;
+    double altitude; /* (m) input altitude */
+
+    Std76UnitTestSimObject() :
+      framework(),
+      std1976(),
+      altitude(0.0) {
+        ("initialization")   framework.initialize() ;
+        (1.0, "environment") framework.update();
+        (1.0, "environment") std1976.update(altitude);
+    }
+
+private:
+    Std76UnitTestSimObject (const Std76UnitTestSimObject&);
+    Std76UnitTestSimObject & operator = (const Std76UnitTestSimObject&);
+
+};
+
+Std76UnitTestSimObject std76_unit;

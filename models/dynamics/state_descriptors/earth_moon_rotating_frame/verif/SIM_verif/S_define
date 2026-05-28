@@ -1,0 +1,122 @@
+/*****************************************************************************
+PURPOSE: (Tests the Earth-Moon-Rotating-Frame implementation)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (June 2019) (Antares) (initial))
+    )
+*****************************************************************************/
+#define DYNAMICS 1.0
+#define LOW_RATE_ENV 100.0
+
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+
+#include "time_TAI_UTC_UT1_TT.sm"
+#include "dynamics.sm"
+#include "environment.sm"
+#include "earth_basic.sm"
+#include "moon_basic.sm"
+#include "sun_basic.sm"
+
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "../../include/earth_moon_rotating_frame.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+ private:
+   jeod::DynManager    & dyn_manager;
+   jeod::RefFrameState & earth_inrtl;
+   jeod::RefFrameState & moon_inrtl;
+ public:
+  // Framework
+  UnitTestFramework framework;
+  // Model for testing:
+  EarthMoonRotatingFrame  em_rotating_frame;
+  // support variables
+  double earth_moon_mass_ratio; // (--) also used as a flag
+
+  AntaresUnitTestSimObject( jeod::DynManager    & dyn_manager_in,
+                            jeod::RefFrameState & earth_inrtl_in,
+                            jeod::RefFrameState & moon_inrtl_in)
+    :
+    dyn_manager (dyn_manager_in),
+    earth_inrtl(earth_inrtl_in),
+    moon_inrtl(moon_inrtl_in),
+    em_rotating_frame( dyn_manager),
+    earth_moon_mass_ratio(-1.0)
+  {
+    // Framework
+    ("initialization")   framework.initialize();
+    (1.0, "environment") framework.update();
+    // test-specific jobs:
+    ("initialization") em_rotating_frame.initialize();
+    (1.0, "environment") update_planet_state();
+    (1.0, "environment") em_rotating_frame.update();
+   }
+
+  void update_planet_state() {
+    if (earth_moon_mass_ratio <= 0.0) return;
+    moon_inrtl.trans.position[0] = -earth_inrtl.trans.position[0] * earth_moon_mass_ratio;
+    moon_inrtl.trans.position[1] = -earth_inrtl.trans.position[1] * earth_moon_mass_ratio;
+    moon_inrtl.trans.position[2] = -earth_inrtl.trans.position[2] * earth_moon_mass_ratio;
+    moon_inrtl.trans.velocity[0] = -earth_inrtl.trans.velocity[0] * earth_moon_mass_ratio;
+    moon_inrtl.trans.velocity[1] = -earth_inrtl.trans.velocity[1] * earth_moon_mass_ratio;
+    moon_inrtl.trans.velocity[2] = -earth_inrtl.trans.velocity[2] * earth_moon_mass_ratio;
+  }
+
+ private:
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject test(dynamics.dyn_manager,
+                              earth.planet.inertial.state,
+                              moon.planet.inertial.state);
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/derived_state/include/relative_derived_state.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+ private:
+  jeod::DynManager & dyn_manager;
+ public:
+  jeod::DynBody              body;
+  jeod::MassBodyInit         mass_init;
+  StateInitialize            state_initialize;
+  jeod::RelativeDerivedState rel_state;
+
+  VehicleSimObject(jeod::DynManager & dyn_mgr_in)
+    :
+    dyn_manager (dyn_mgr_in)
+  {
+    P_ENV ("initialization")  body.initialize_model( dyn_manager);
+    ("initialization")        rel_state.initialize( body,
+                                                    dyn_manager);
+    (DYNAMICS, "environment") rel_state.update();
+  };
+ private:
+   VehicleSimObject( const VehicleSimObject&);
+   VehicleSimObject & operator= ( const VehicleSimObject&);
+};
+VehicleSimObject vehicle(dynamics.dyn_manager);
+
+
+
+// Don't really need this, but dynamics sim object has integration- and
+// derivative-class jobs so choices are: put it in, write a new dynamics
+// sim-object, tolerate warning messages about missing schedules.  This is
+// easiest.
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

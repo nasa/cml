@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE product PUBLIC "-//Tricklab//DTD Product V1.0//EN" "Product.dtd">
+<product version="1.0">
+    <tstart>-1.0E20</tstart>
+    <tstop>1.0E20</tstop>
+    <frequency>0.0</frequency>
+    <page hcells="0" vcells="0">
+        <title>Page</title>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="r">test.range_from_pfix.totalrange_angle</var>
+            </curve>
+        </plot>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="r">test.range_from_pfix.downrange_angle</var>
+            </curve>
+        </plot>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="r">test.range_from_pfix.crossrange_angle</var>
+            </curve>
+        </plot>
+    </page>
+    <page hcells="0" vcells="0">
+        <title>Page</title>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="r">test.range_to_pfix.totalrange_angle</var>
+            </curve>
+        </plot>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="r">test.range_to_pfix.downrange_angle</var>
+            </curve>
+        </plot>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="r">test.range_to_pfix.crossrange_angle</var>
+            </curve>
+        </plot>
+    </page>
+    <page hcells="0" vcells="0">
+        <title>Page</title>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="m">test.range_to_pfix.total_range_ref_rad</var>
+            </curve>
+        </plot>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="m">test.range_to_pfix.down_range_ref_rad</var>
+            </curve>
+        </plot>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="m">test.range_to_pfix.cross_range_ref_rad</var>
+            </curve>
+        </plot>
+    </page>
+    <page hcells="0" vcells="0">
+        <title>Page</title>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="m">test.range_from_pfix.total_range_ref_rad</var>
+            </curve>
+        </plot>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="m">test.range_from_pfix.down_range_ref_rad</var>
+            </curve>
+        </plot>
+        <plot grid="Yes" grid_color="#b2b2b2">
+            <title>Plot</title>
+            <curve>
+                <var units="s">sys.exec.out.time</var>
+                <var units="m">test.range_from_pfix.cross_range_ref_rad</var>
+            </curve>
+        </plot>
+    </page>
+</product>

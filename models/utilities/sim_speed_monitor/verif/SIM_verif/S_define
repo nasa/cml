@@ -1,0 +1,46 @@
+/*****************************************************************************
+PURPOSE: (Tests the sim-speed-monitor capability)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (Sep 2022) (Antares) (initial))
+    )
+*****************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+//CML headers
+##include "cml/models/utilities/sim_speed_monitor/include/sim_speed_monitor.hh"
+
+class TestSimObject : public Trick::SimObject {
+ public:
+  SimSpeedMonitor  sim_speed[4];
+  double           cycle_time[4];
+
+  TestSimObject()
+  {
+    (0.2, "scheduled") pause_sim(10000); // 0.01 seconds
+    (1.0, "scheduled") pause_sim(30000); // 0.03 seconds
+
+    (0.1, "environment") calc_rate(0, 0.1);
+    (0.1, "effector")    calc_rate(1, 0.1);
+    (0.5, "environment") calc_rate(2, 0.2);
+    (1.0, "environment") calc_rate(3, 1.0);
+
+  };
+
+  private:
+    void pause_sim( int dt)
+    {
+      usleep(dt);
+    }
+
+    void calc_rate( size_t ix, double dt)
+    {
+      sim_speed[ix].calculate_rate(dt);
+      cycle_time[ix] = sim_speed[ix].get_dt();
+    }
+
+    TestSimObject( const TestSimObject&);
+    TestSimObject & operator= ( const TestSimObject&);
+};
+TestSimObject test;

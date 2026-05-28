@@ -1,0 +1,45 @@
+The verification runs for this model follow this architecture:
+
+
+SIM_01a_table_lookup_set_nominal
+  This is the main sim, testing the operation of the following classes
+  under a typical configuration:
+     table-lookup-set (and thereby the table-manager)
+     generic-multi-input-table
+     table-independent-variable
+
+SIM_01b_table_lookup_set_faults
+  This sim tests whether misconfigurations are correctly caught; it continues
+  the testing of the same classes from SIM_01a_table_lookup_set_nominal.
+
+SIM_02_simple_table_lookup
+  This sim tests the specifics of the simple-table-lookup manager
+  (SimpleTableLookup).
+  It includes verification of nominal operations and catching of
+  configuration errors.
+
+SIM_03_simple_table_lookup_for_angles
+  This sim tests the operation of the SingleInputTableForAngles class, using
+  the simple-table-lookup manager.
+  It includes verification of nominal operations and catching of
+  configuration errors.
+
+SIM_04_table_lookup_for_quaternions
+  Tests the operation of the SingleInputTableForQuaternions class, using the
+  generic table-lookup-set manager.
+  It includes verification of nominal operations and catching of
+  configuration errors.
+
+SIM_05_independent_wraparound
+  Test the operation of the TableIndependentVariable_WrapAround, using the
+  generic table-lookup-set manager.
+  It includes verification of nominal operations and catching of
+  configuration errors.
+
+SIM_06_transpose_data_manager
+  Tests the operation of the TableManagerTransposeDataSet table-manager.
+  It includes verification of nominal operations and catching of
+  configuration errors.
+
+SIM_10_special_cases
+  Tests special cases not uniquely coverable by previous sims.

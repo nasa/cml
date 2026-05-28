@@ -1,0 +1,151 @@
+#include "sim_objects/default_trick_sys.sm"
+
+##include "../../include/fault_manager.hh"
+##include <string>
+
+class FaultArchitectureTestSimObject: public Trick::SimObject {
+
+  public:
+    FaultManager faults;
+    FaultFunctionIndependentVariable  bad_var;
+    bool replace_values;
+    bool execute_bad_update;
+    std::string command;
+
+  private:
+    double current_time;  /* (s)  Current time */
+    double negative_time; /* (s)  Negative time */
+    double offset_time;   /* (--) Used in function faults*/
+
+    // Variables to fault
+    char               var_char;
+    unsigned char      var_uchar;
+    short              var_sint;
+    unsigned short     var_usint;
+    int                var_int;
+    unsigned int       var_uint;
+    long               var_lint;
+    unsigned long      var_ulint;
+    long long          var_llint;
+    unsigned long long var_ullint;
+    float              var_float;
+    double             var_double;
+    bool               var_bool;
+
+    int var_char_numeric; /* (--) int copy of var_char for logging */
+
+    // Constant replacement values
+    const char               constant_char;
+    const unsigned char      constant_uchar;
+    const short              constant_sint;
+    const unsigned short     constant_usint;
+    const int                constant_int;
+    const unsigned int       constant_uint;
+    const long               constant_lint;
+    const unsigned long      constant_ulint;
+    const long long          constant_llint;
+    const unsigned long long constant_ullint;
+    const float              constant_float;
+    const double             constant_double;
+    const bool               constant_bool;
+
+    // Pointer and reference
+    short& ref_sint;
+    short* ptr_sint;
+
+  public:
+    FaultArchitectureTestSimObject() :
+      replace_values(true),
+      command("hold"),
+      current_time(0.0),
+      negative_time(0.0),
+      offset_time(-30.0),
+      var_char('a'),
+      var_uchar(1),
+      var_sint(2),
+      var_usint(3),
+      var_int(4),
+      var_uint(5),
+      var_lint(6),
+      var_ulint(7),
+      var_llint(8),
+      var_ullint(9),
+      var_float(0.1),
+      var_double(0.2),
+      var_bool(false),
+      constant_char('a'),
+      constant_uchar(1),
+      constant_sint(2),
+      constant_usint(3),
+      constant_int(4),
+      constant_uint(5),
+      constant_lint(6),
+      constant_ulint(7),
+      constant_llint(8),
+      constant_ullint(9),
+      constant_float(0.1),
+      constant_double(0.2),
+      constant_bool(false),
+      ref_sint(var_sint)
+    {
+      ("initialization") faults.initialize();
+      ("initialization") faults.update(FaultManager::Location::Initialize);
+
+      (0.1, "scheduled") update();
+    }
+
+    void update() {
+      update_internals();
+      faults.update(FaultManager::Location::Upstream);
+      faults.update(FaultManager::Location::Intermediate_1);
+      faults.update(FaultManager::Location::Intermediate_2);
+      faults.update(FaultManager::Location::Downstream);
+      copy_var_char();
+    }
+
+    void update_internals() {
+      current_time  = exec_get_sim_time();
+      negative_time = -current_time;
+      offset_time   = current_time - 30;
+      if(replace_values) {
+        var_char   = constant_char;
+        var_uchar  = constant_uchar;
+        var_sint   = constant_sint;
+        var_usint  = constant_usint;
+        var_int    = constant_int;
+        var_uint   = constant_uint;
+        var_lint   = constant_lint;
+        var_ulint  = constant_ulint;
+        var_llint  = constant_llint;
+        var_ullint = constant_ullint;
+        var_float  = constant_float;
+        var_double = constant_double;
+        var_bool   = constant_bool;
+      } else {
+        var_char++;
+        var_uchar++;
+        var_sint++;
+        var_usint++;
+        var_int++;
+        var_uint++;
+        var_lint++;
+        var_ulint++;
+        var_llint++;
+        var_ullint++;
+        var_float  += 1.0;
+        var_double += 1.0;
+        var_bool    = !var_bool;
+      }
+      if (execute_bad_update) {
+        faults.update(FaultManager::Location::INVALID);
+      }
+    }
+
+    void copy_var_char() { var_char_numeric = var_char; }
+
+  private:
+    FaultArchitectureTestSimObject (const FaultArchitectureTestSimObject&);
+    FaultArchitectureTestSimObject & operator = (const FaultArchitectureTestSimObject&);
+};
+
+FaultArchitectureTestSimObject test_object;

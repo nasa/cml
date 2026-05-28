@@ -1,0 +1,113 @@
+/*******************************TRICK HEADER******************************
+PURPOSE: ()
+
+LIBRARY DEPENDENCY:
+   (())
+
+PROGRAMMERS:
+  (((Gary Turner) (OSR) (October 2023) (ANTARES)
+   (Based on logic in DATA_COLLECTION_TRIGGER and DC_TRIGGER_PRIMAL,
+    after stripping out the risky parts and picking up the existingi
+    capabilities in CML))
+  )
+**********************************************************************/
+#ifndef GROK_EVENT_TRIGGER_BASE_HH
+#define GROK_EVENT_TRIGGER_BASE_HH
+
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
+/*****************************************************************************
+EventTriggerBase
+Purpose:
+  Provides a baseline for EventTrigger.
+  Based heavily on the design of CML's WatchValuesBaseCore with strong
+  influences from GNC_PAR/DataCollect/DC_TRIGGER_PRIMAL.
+Notes:
+- Because this only represents a trigger and not an action-taker,
+  all of the action content from WatchValuesBaseCore can be ignored. We also
+  have a different set of constraints so the Direction enum can be ignored.
+-  Saying this new class is an extension of WatchValuesBaseCore is a bit of
+  a stretch, but I want to use the CML WatchValuesSet, which has a vector
+  of WatchValuesBaseCore pointers that I want to point to by EventTrigger
+  instances, so I need that inheritance at some point.
+*****************************************************************************/
+class EventTriggerBase : public WatchValuesBaseCore {
+ protected:
+  const double & time; /* (s)
+    Reference to simulation dynamic-time to support time-delayed triggering.*/
+ public:
+  enum TriggerCondition
+  {
+    Undefined,
+    EQ,
+    NE,
+    GT,
+    LT,
+    GE,
+    LE,
+    OC,
+    Change,
+    Crossing
+  } discrete_logic; /* (--)
+    Specifies how to compare the value of variable agaisnt the
+    recorded reference value.*/
+
+  enum FunctionModifier
+  {
+    NoModification,
+    Absolute,
+    Sine,
+    Cosine,
+    Tan,
+    AbsSine,
+    AbsCosine,
+    AbsTan
+  } function_modifier; /* (--)
+    Specifies how to modify the value of "variable" before comparing against
+    "reference". */
+
+  enum DirectionLimit
+  {
+    NoDirectionLimit = 0,
+    NA               = 0,
+    Increasing       = 1,
+    INCREASING       = 1,
+    INCR             = 1,
+    INC              = 1,
+    Decreasing       = 2,
+    DECREASING       = 2,
+    DECR             = 2,
+    DEC              = 2,
+  } direction_limit; /* (--)
+    Specifies further restrictions on what is considered a triggering.
+    E.g. value has to be greater than threshold and decreasing.
+    Using all legacy enumerations to try to maintain as much
+    backward-compatibility as possible.*/
+
+  double time_delay; /* (s)
+    Time interval between the trigger conditions satisfying requirements and
+    the trigger being marked as event_triggered. */
+
+ protected:
+  bool reference_is_variable; /* (--)
+    Reference is a variable, not fixed value.*/
+  bool in_delay; /* (--)
+    Internal flag indicating that the trigger consitions have been
+    satisfied and the time-delay clock has started. */
+  double trigger_time; /* (s)
+    Value of time at which the trigger conditions were satisfied.*/
+
+ public:
+  EventTriggerBase( const double & time_)
+    :
+    WatchValuesBaseCore(),
+    time(time_),
+    discrete_logic(Undefined),
+    function_modifier(NoModification),
+    direction_limit(NoDirectionLimit),
+    reference_is_variable(false)
+  {};
+  virtual ~EventTriggerBase(){};
+
+  // Inherit initialize() direct from SubscriptionBase via WatchValuesBaseCore.
+};
+#endif

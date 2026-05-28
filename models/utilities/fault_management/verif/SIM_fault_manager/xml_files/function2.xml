@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+
+<Fault ID="Linear Fault Char" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_char"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.current_time" relative="true"></IndVariable>
+    <Parameters nominal="1" rate="1"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger name="trigger" variable="test_object.current_time" compare="GE" value="0"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault UChar" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uchar"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_char" relative="true"></IndVariable>
+    <Parameters initial="0" rate="2"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault Short" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_sint"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_uchar" relative="true"></IndVariable>
+    <Parameters initial="0" rate="2"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault UShort" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_usint"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_sint" relative="true"></IndVariable>
+    <Parameters initial="0" rate="2"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault Int" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_int"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_usint" relative="false"></IndVariable>
+    <Parameters initial="0" rate="0.5"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault UInt" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uint"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_int" relative="true"></IndVariable>
+    <Parameters initial="0" rate="0.5"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault Long" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_lint"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_uint" relative="false"></IndVariable>
+    <Parameters initial="0" rate="0.5"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+
+</Fault>
+<Fault ID="Linear Fault ULong" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ulint"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_lint" relative="true"></IndVariable>
+    <Parameters initial="0" rate="2"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault LongLong" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_llint"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_ulint" relative="true"></IndVariable>
+    <Parameters initial="0" rate="2"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault ULongLong" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ullint"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_llint" relative="true"></IndVariable>
+    <Parameters initial="0" rate="2"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault Float" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_ullint" relative="true"></IndVariable>
+    <Parameters initial="0" rate="0.5"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault Double" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_float" relative="true"></IndVariable>
+    <Parameters initial="0" rate="0.5"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault Double Self-referential" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_double" relative="true"></IndVariable>
+    <Parameters initial="0" rate="10"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+<Fault ID="Linear Fault Double BoolTest" enabled="true" type="FUNCTION" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Function type="LINEAR">
+    <IndVariable name="test_object.var_bool" relative="true"></IndVariable>
+    <Parameters initial="0" rate="2"></Parameters>
+  </Function>
+  <TriggerGroup>
+    <Trigger reuse_name="trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+
+</FaultManager>

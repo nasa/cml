@@ -1,0 +1,118 @@
+/*****************************************************************************
+PURPOSE: (Tests the differences between the PointingRefFrame and the
+EphemBasedPointingRefFrame.)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (July 2019) (Antares) (initial))
+    )
+*****************************************************************************/
+#define DYNAMICS 40000
+#define LOW_RATE_ENV 400000
+
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+
+#include "time_TAI_UTC_UT1_TT.sm"
+#include "dynamics.sm"
+#include "environment.sm"
+#include "earth_basic.sm"
+#include "moon_basic.sm"
+#include "sun_basic.sm"
+
+
+/*****************************************************************************
+AntaresUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/derived_state/include/relative_derived_state.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/dynamics/state_descriptors/pointing_ref_frame/include/ephem_based_pointing_ref_frame.hh"
+
+class AntaresUnitTestSimObject: public Trick::SimObject {
+ private:
+   jeod::DynManager    & dyn_manager;
+ public:
+  // Model for testing:
+  EphemBasedPointingRefFrame  ephem_rotating_frame;
+  PointingRefFrame            non_ephem_rotating_frame;
+   // support variables
+  jeod::DynBody              body;
+  jeod::MassBodyInit         mass_init;
+  StateInitialize            state_initialize;
+  jeod::RelativeDerivedState ephem_rel_state;
+  jeod::RelativeDerivedState non_ephem_rel_state;
+  bool use_ephem;
+  bool use_non_ephem;
+
+  // Trigger variable for FAIL_noephem_with_subscriptions (see run 
+  // for more details)
+  bool fail_noephem_with_subscriptions;
+
+  AntaresUnitTestSimObject(jeod::DynManager    & dyn_manager_in)
+    :
+    dyn_manager (dyn_manager_in),
+    ephem_rotating_frame( dyn_manager),
+    non_ephem_rotating_frame(),
+    use_ephem(true),
+    use_non_ephem(false)
+  {
+    P_ENV ("initialization")  body.initialize_model( dyn_manager);
+    ("initialization") initialize();
+    (DYNAMICS, "environment") update(); 
+    (300000, "end_of_frame") fail_with_noephem_with_subscriptions(); // Called at 300000Hz to execute once at t=300000
+  }
+
+  void initialize()
+  {
+    if (use_ephem) {
+      ephem_rotating_frame.initialize();
+      ephem_rel_state.initialize( body,
+                                  dyn_manager);
+
+    }
+
+    if (use_non_ephem) {
+      non_ephem_rotating_frame.initialize();
+      non_ephem_rel_state.initialize( body,
+                                      dyn_manager);
+    }
+  }
+
+  void update() {
+    if (use_ephem) {
+      ephem_rotating_frame.update();
+      ephem_rel_state.update();
+    }
+    if (use_non_ephem) {
+      non_ephem_rotating_frame.update();
+      non_ephem_rel_state.update();
+    }
+  }
+
+  // Calls failing function in C++ layer for FAIL_noephem_with_subscriptions
+  // whenever boolean variable is triggered in Python layer (see run for 
+  // more details)
+  void fail_with_noephem_with_subscriptions() {
+    if (fail_noephem_with_subscriptions) {
+      non_ephem_rotating_frame.subscribe();
+    }
+  }
+
+ private:
+  AntaresUnitTestSimObject (const AntaresUnitTestSimObject&);
+  AntaresUnitTestSimObject & operator = (const AntaresUnitTestSimObject&);
+};
+AntaresUnitTestSimObject test(dynamics.dyn_manager);
+
+// Don't really need this, but dynamics sim object has integration- and
+// derivative-class jobs so choices are: put it in, write a new dynamics
+// sim-object, tolerate warning messages about missing schedules.  This is
+// easiest.
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

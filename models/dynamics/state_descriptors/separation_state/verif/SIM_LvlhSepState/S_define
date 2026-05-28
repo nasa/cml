@@ -1,0 +1,193 @@
+//==========================  TRICK HEADER  ================================
+// PURPOSE:(Tests the separation-state model)
+// =========================================================================
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "default_priority_settings.sm"
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_basic.sm"
+
+
+//***************************************************************
+// CLASS: (SepStateSimObject)
+// PURPOSE:
+//***************************************************************
+##include "../../include/lvlh_separation_state.hh"
+
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/mass/include/mass_point_init.hh"
+
+class SepStateSimObject: public Trick::SimObject
+{
+ protected: // external references
+  jeod::DynManager     & dyn_manager;
+  jeod::Planet         & earth;
+ public:
+  // Framework (leave this alone)
+  UnitTestFramework framework;
+
+  // support variables:
+  jeod::DynBody        source;
+  jeod::DynBody        subject;
+  jeod::MassPointInit  source_init;
+  jeod::MassPointInit  subject_init;
+  bool                 initialize_from_frame_names;
+  bool                 use_external_lvlh;
+  bool                 check_init_errors;
+  bool                 check_not_enabled_blocker;
+  std::string          planet_name;
+  jeod::LvlhFrame      external_lvlh;
+
+  // Model for testing:
+  LvlhSeparationState   sep_state_1;
+  LvlhSeparationState   sep_state_2;
+  LvlhSeparationState   sep_state_3;
+
+  //Constructor
+  SepStateSimObject( jeod::DynManager & dyn_mngr_in,
+                     jeod::Planet     & earth_)
+    :
+    dyn_manager(dyn_mngr_in),
+    earth(earth_),
+    source(),
+    subject(),
+    initialize_from_frame_names(true),
+    use_external_lvlh(false),
+    check_init_errors(false),
+    check_not_enabled_blocker(false),
+    planet_name("Earth"),
+    sep_state_1(),
+    sep_state_2(),
+    sep_state_3(external_lvlh)
+
+  {
+    // Framework (leave this alone)
+    ("initialization")  framework.initialize();
+    (1.0, "environment") framework.update();
+
+    // test-specific jobs:
+    P_BODY ("initialization") source.add_mass_point( source_init);
+    P_BODY ("initialization") subject.add_mass_point( subject_init);
+    P_ENV ("initialization") source.initialize_model( dyn_manager);
+    P_ENV ("initialization") subject.initialize_model( dyn_manager);
+
+    ("initialization") source.set_state( jeod::RefFrameItems::Pos_Vel_Att_Rate,
+                                           source.composite_body.state,
+                                           source.composite_body);
+    ("initialization") source.propagate_state();
+    // put the subject body at the same state as the source body -- yes, that
+    // second argument should be "source.comp..." because that is the state
+    // assigned in the input file; push it to subject.composite_body.
+    ("initialization") subject.set_state( jeod::RefFrameItems::Pos_Vel_Att_Rate,
+                                          source.composite_body.state,
+                                          subject.composite_body);
+    ("initialization") subject.propagate_state();
+    ("initialization") initialize();
+
+    (1.0, "environment") source.set_state( jeod::RefFrameItems::Pos_Vel_Att_Rate,
+                                           source.composite_body.state,
+                                           source.composite_body);
+    (1.0, "environment") source.propagate_state();
+    (1.0, "environment") subject.set_state( jeod::RefFrameItems::Pos_Vel_Att_Rate,
+                                           subject.composite_body.state,
+                                           subject.composite_body);
+    (1.0, "environment") subject.propagate_state();
+    (1.0, "environment") sep_state_1.update();
+    (1.0, "environment") sep_state_2.update();
+    (1.0, "environment") sep_state_3_update();
+  }
+
+ private:
+  void initialize() {
+    if (check_init_errors) {
+      sep_state_3.initialize( dyn_manager,
+                              subject.composite_body);
+      sep_state_3.initialize( dyn_manager,
+                              planet_name,
+                              subject,
+                              source,
+                              "test-point",
+                              "test-point");
+      sep_state_3.initialize( dyn_manager,
+                              earth,
+                              subject.composite_body,
+                              source.composite_body);
+    }
+
+    else if (check_not_enabled_blocker) {
+      sep_state_1.disable();
+      sep_state_2.disable();
+      sep_state_3.disable();
+      sep_state_1.initialize( dyn_manager,
+                              planet_name,
+                              subject,
+                              source,
+                              "test-point",
+                              "test-point");
+      sep_state_2.initialize( dyn_manager,
+                              earth,
+                              subject.composite_body,
+                              source.composite_body);
+      sep_state_3.initialize( dyn_manager,
+                              subject.composite_body);
+    }
+
+    else {
+      // initialize sep_state_1 and 2 using either names or references
+      if (initialize_from_frame_names) {
+        sep_state_1.initialize( dyn_manager,
+                                planet_name,
+                                subject,
+                                source,
+                                "test-point",
+                                "test-point");
+        sep_state_2.initialize( dyn_manager,
+                                planet_name,
+                                subject,
+                                source); // leave frame names blank; defaults to
+                                         // composite-body
+      }
+      else {
+        jeod::BodyRefFrame * source_frame, * subject_frame;
+        source_frame = const_cast<jeod::BodyRefFrame *>(
+                                     source.find_vehicle_point("test-point"));
+        subject_frame = const_cast<jeod::BodyRefFrame *>(
+                                     subject.find_vehicle_point("test-point"));
+        sep_state_1.initialize( dyn_manager,
+                                earth,
+                                *subject_frame,
+                                *source_frame);
+        sep_state_2.initialize( dyn_manager,
+                                earth,
+                                subject.composite_body,
+                                source.composite_body);
+      }
+      // initialize sep_state_3 only if needed.
+      if (use_external_lvlh) {
+        external_lvlh.set_planet (earth);
+        external_lvlh.set_subject_frame( source.core_body);
+        external_lvlh.initialize( dyn_manager);
+        sep_state_3.initialize( dyn_manager,
+                                subject.composite_body);
+      }
+    } 
+  }
+
+  void sep_state_3_update() {
+    if (!use_external_lvlh) return;
+    sep_state_3.update();
+  }
+
+
+  SepStateSimObject (const SepStateSimObject&);
+  SepStateSimObject & operator = (const SepStateSimObject&);
+};
+SepStateSimObject test_sep(dynamics.dyn_manager,
+                           earth.planet);
+

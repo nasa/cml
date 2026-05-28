@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Gaussian White-Noise Fault" enabled="true" type="WHITENOISE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <RandValue mean="0.0" std_dev=".25" seed="2" distribution="GAUSSIAN"></RandValue>
+  <TriggerGroup>
+    <Trigger name="white-noise trigger" variable="test_object.current_time" compare="GE" value="0"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Uniform White-Noise Fault" enabled="true" type="WHITENOISE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <RandValue rel_min="1" mean="0" rel_max="1" seed="4" distribution="FLAT"></RandValue>
+  <TriggerGroup>
+    <Trigger reuse_name="white-noise trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+</FaultManager>

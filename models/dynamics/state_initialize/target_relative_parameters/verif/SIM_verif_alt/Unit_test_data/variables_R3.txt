@@ -1,0 +1,6 @@
+test.position_in[0]
+test.position_in[1]
+test.position_in[2]
+test.velocity_in[0]
+test.velocity_in[1]
+test.velocity_in[2]

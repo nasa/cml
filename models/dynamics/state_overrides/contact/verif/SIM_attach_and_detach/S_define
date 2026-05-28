@@ -1,0 +1,78 @@
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_rot_state.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/body_attach_matrix.hh"
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+
+##include "../../include/contact_state_override.hh"
+
+class ContactSimObject : public Trick::SimObject {
+ public:
+  UnitTestFramework framework;
+  ContactStateOverride contact;
+  jeod::DynBody ref;
+  jeod::DynBody override;
+  jeod::DynBody root;
+  jeod::MassBodyInit mass_init_ref;
+  jeod::MassBodyInit mass_init_override;
+  jeod::MassBodyInit mass_init_root;
+  jeod::DynBodyInitTransState trans_init;
+  jeod::DynBodyInitRotState rot_init;
+
+  jeod::BodyAttachMatrix attach_root_to_ref;
+  jeod::BodyAttachMatrix attach_override_to_root;
+
+ protected:
+  jeod::DynManager& dyn_manager;
+
+ public:
+  ContactSimObject(jeod::DynManager& dyn_manager_in)
+  :
+    contact(ref, override),
+    dyn_manager(dyn_manager_in)
+  {
+    P_ENV ("initialization") ref.initialize_model(dyn_manager);
+    P_ENV ("initialization") override.initialize_model(dyn_manager);
+    P_ENV ("initialization") root.initialize_model(dyn_manager);
+          ("initialization") framework.initialize();
+          ("initialization") contact.initialize();
+        (1.0, "environment") update_states();
+      (1.0, 0.1, "effector") contact.update();
+  }
+
+ private:
+  void update_states()
+  {
+    framework.update();
+    // update the root-body T-mx
+    ref.composite_body.state.rot.Q_parent_this.left_quat_to_transformation(
+                                   ref.composite_body.state.rot.T_parent_this);
+    root.composite_body.state.rot.Q_parent_this.left_quat_to_transformation(
+                                   root.composite_body.state.rot.T_parent_this);
+    override.composite_body.state.rot.Q_parent_this.left_quat_to_transformation(
+                               override.composite_body.state.rot.T_parent_this);
+    // propagate down from the ref body, then down from the root body.
+    // If the ref and root bodies are attached, the first will overwrite any
+    // framework settings and the latter is redundant.
+    ref.propagate_state();
+    root.propagate_state();
+    override.propagate_state();
+  }
+
+  ContactSimObject(const ContactSimObject&);
+  ContactSimObject& operator = (const ContactSimObject&);
+};
+ContactSimObject contact_obj(dynamics.dyn_manager);
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

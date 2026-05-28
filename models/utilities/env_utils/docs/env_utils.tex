@@ -1,0 +1,91 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\title{Utility Functions for Environment Variable Access in C++}
+\author{}
+\date{}
+
+\lstset{
+  language=C++,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{teal},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single
+}
+
+\begin{document}
+
+\maketitle
+
+\section*{Overview}
+
+These C++ utility functions provide safer and more expressive alternatives to the standard \lstinline|getenv()| function for retrieving environment variables. Each function handles the case where the environment variable is not set in a distinct way: exiting the program, returning a default value, or throwing an exception.
+
+\section*{Function Descriptions}
+
+\subsection*{1. \lstinline|const char* getenv_or_exit(const char* var_name, void (*exit_fn)(int) = std::exit)|}
+
+This function attempts to retrieve the environment variable \lstinline|var_name| using \lstinline|getenv()|. If the variable is not set (i.e., \lstinline|getenv()| returns \lstinline|nullptr), it calls the specified \lstinline|exit\_fn| function, which defaults to \lstinline|std::exit|.
+
+\textbf{Example Usage:}
+\begin{lstlisting}
+const char* path = getenv_or_exit("MY_ENV_VAR");
+\end{lstlisting}
+
+\textbf{Notes:}
+\begin{itemize}
+  \item Useful for critical variables that must be present for the program to continue.
+  \item Allows custom exit behavior by passing a different exit function.
+\end{itemize}
+
+\subsection*{2. \lstinline|const char* getenv_or_default(const char* var_name, const char* default_value)|}
+
+Returns the value of the environment variable \lstinline|var_name| if it exists. Otherwise, returns \lstinline|default_value|.
+
+\textbf{Example Usage:}
+\begin{lstlisting}
+const char* mode = getenv_or_default("RUN_MODE", "debug");
+\end{lstlisting}
+
+\textbf{Notes:}
+\begin{itemize}
+  \item Useful when a fallback or default behavior is acceptable.
+  \item Avoids the need for manual null checks.
+\end{itemize}
+
+\subsection*{3. \lstinline|const char* getenv_or_throw(const char* var_name)|}
+
+Returns the environment variable value if it exists. If not, throws a \lstinline|std::runtime_error| with a descriptive message.
+
+\textbf{Example Usage:}
+\begin{lstlisting}
+try {
+    const char* value = getenv_or_throw("API_KEY");
+} catch (const std::runtime_error& e) {
+    std::cerr << "Missing env var: " << e.what() << std::endl;
+}
+\end{lstlisting}
+
+\textbf{Notes:}
+\begin{itemize}
+  \item Best used in exception-enabled code where you want to handle missing variables as recoverable errors.
+\end{itemize}
+
+\section*{Conclusion}
+
+These utility functions offer three different idiomatic patterns for environment variable access in C++:
+\begin{itemize}
+  \item \textbf{Fail-fast:} \lstinline|getenv_or_exit|
+  \item \textbf{Fallback:} \lstinline|getenv_or_default|
+  \item \textbf{Exception-based:} \lstinline|getenv_or_throw|
+\end{itemize}
+
+They help enforce clear, consistent handling of environment variables and avoid scattered manual null checks throughout your codebase.
+
+\end{document}

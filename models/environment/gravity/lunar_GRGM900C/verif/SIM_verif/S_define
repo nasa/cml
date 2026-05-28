@@ -1,0 +1,30 @@
+/*******************************TRICK HEADER******************************
+PURPOSE: (Test the GRGM900C gravity model)
+
+PROGRAMMERS:
+  (((Gary Turner) (OSR) (July 2021) (Antares) (initial)))
+
+NOTES:
+  - This sim is somewhat bloated.  I'm using a DynBody for the vehicle
+    and putting it in the JEOD dynamics and environemnt because it brings in so
+    much useful configuration support.
+  - It isn't actually necessary to do that to run the gravity model  -- I could
+    instantiate a GravityManager, GravityInteractions, ref-frames, and
+    tie it all together, but it's easier to have JEOD do it for me.
+  - However, I am paring doen to use barebones dynamics and environment
+    sim-objects.
+
+***********************************************************************/
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+
+#include "time_dyntime_only.sm"
+#include "dynamics_init_only.sm"
+#include "environment_sans_de405.sm"
+
+#include "../S_modules/moon.sm"
+#include "../S_modules/vehicle.sm"

@@ -1,0 +1,29 @@
+/*****************************************************************************
+PURPOSE: (Tests the XML-helper model methods)
+PROGRAMMERS:
+    (
+     ((Daniel Ghan) (OSR) (Mar 2022) (Antares) (initial))
+    )
+*****************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+
+
+##include "include/test.hh"
+
+class XmlHelperSimObject: public Trick::SimObject {
+
+ public:
+  XmlHelperTester xml_tester;
+
+  XmlHelperSimObject()
+
+  {
+    ("initialization")  xml_tester.test();
+  }
+
+ private:
+  XmlHelperSimObject (const XmlHelperSimObject&);
+  XmlHelperSimObject & operator = (const XmlHelperSimObject&);
+};
+XmlHelperSimObject test;

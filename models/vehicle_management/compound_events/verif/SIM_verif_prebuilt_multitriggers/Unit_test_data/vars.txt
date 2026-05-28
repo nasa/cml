@@ -1,0 +1,10 @@
+verif.sim_data.time
+verif.sim_data.trigger_var_arm[0]
+verif.sim_data.trigger_var_arm[1]
+verif.sim_data.trigger_var_arm[2]
+verif.sim_data.trigger_var_disarm[0]
+verif.sim_data.trigger_var_disarm[1]
+verif.sim_data.trigger_var_disarm[2]
+verif.sim_data.trigger_var_action[0]
+verif.sim_data.trigger_var_action[1]
+verif.sim_data.trigger_var_action[2]

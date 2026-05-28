@@ -1,0 +1,45 @@
+/*******************************TRICK HEADER************************************
+PURPOSE:
+  (Verification sim for initializing mass with core-dispersions)
+
+PROGRAMMERS:
+  (((Gary Turner) (OSR) (Apr 2018) (Antares) (initial))
+   ((Brent Caughron) (OSR) (Mar 2021) (Antares) (Secondary IV&V)))
+*******************************************************************************/
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "default_priority_settings.sm"
+#include "time_dyntime_only.sm"
+#include "dynamics_init_only.sm"
+
+/*******************************************************************************
+mass body disp sim object
+*******************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "../../include/mass_body_dispersed_init.hh"
+
+class MassBodyDispSimObject : public Trick::SimObject {
+public:
+  jeod::DynBody      body;
+  MassBodyDispersedInit  mass_init;
+
+  MassBodyDispSimObject( jeod::DynManager & dyn_mgr_in)
+    :
+    dyn_manager (dyn_mgr_in)
+  {
+    ("initialization")  body.mass.update_mass_properties();
+  };
+
+private:
+  MassBodyDispSimObject( const MassBodyDispSimObject&);
+  MassBodyDispSimObject & operator = ( const MassBodyDispSimObject&);
+
+protected:
+  jeod::DynManager & dyn_manager;
+
+};
+MassBodyDispSimObject mass_body_disp(dynamics.dyn_manager);

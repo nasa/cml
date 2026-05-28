@@ -1,0 +1,253 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Test sim object
+
+Tests all 6 interpretations of the data.
+2 runs test ascending data and descending data.
+Descending data runs with only 1 dependent while ascending data runs with 2 to pick up both the SingleVar and Multivar implementations.
+*****************************************************************************/
+##include "../../include/simple_table_lookup.hh"
+##include "../../include/abstract_table_lookup.hh"
+
+class TestingModelSimObject : public Trick::SimObject {
+  public:
+   double            independent;
+   double            dependent[11][2]; // (--) 11 tables, 2 data per table
+   double            indep_incr;       // (--) increment per cycle.
+   int               frame_count;
+   int               reverse_on_count;
+
+   std::vector<double> independent_vec;
+   std::vector<double> dependent_vec;
+   std::vector<double> dependent_vec_s;
+
+   SimpleTableLookup table_single_array; // (--) 1 dependent, populated with array
+   SimpleTableLookup table_single_vec;   // (--) 1 dependent, populated with vector
+   SimpleTableLookup table_interp; // (--) 2 dependents, array-populated, interpolating
+   SimpleTableLookup table_prev;   // (--) 2 dependents, vector-populated, uses previous value
+   SimpleTableLookup table_next;   // (--) 2 dependents, vector-populated, uses next value
+   SimpleTableLookup table_floor;  // (--) 2 dependents, vector-populated, rounds down
+   SimpleTableLookup table_ceil;   // (--) 2 dependents, vector-populated, rounds up
+   SimpleTableLookup table_round;  // (--) 2 dependents, vector-populated, rounds nearest
+   SimpleTableLookup table_wrap;   // (--) 2 dependents, vector-populated, interpolates with wrap-around
+   SimpleTableLookup table_reverse;// (--) 2 dependents, array-populated, data in reverse order
+   SimpleTableLookup table_error;  // (--) used for testing errors
+   SimpleTableLookup table_1_indep_val; // (--) 1 independent var with 1 value
+
+
+   TestingModelSimObject()
+     :
+     independent(0.0),
+     dependent(),
+     indep_incr(0.5),
+     frame_count(0),
+     reverse_on_count(25),
+
+     independent_vec(),
+     dependent_vec(),
+     dependent_vec_s(),
+
+     table_single_array(),
+     table_single_vec(),
+     table_interp(),
+     table_prev(),
+     table_next(),
+     table_floor(),
+     table_ceil(),
+     table_round(),
+     table_wrap(),
+     table_reverse(),
+     table_error(),
+     table_1_indep_val()
+   {
+     ("default_data")   configure();
+     ("initialization") initialize();
+     (1.0, "scheduled") update();
+   };
+
+   void configure()
+   {
+     double scratch_indep[5]     = {2,4,6,8,10};
+     double scratch_indep_rev[5] = {10,8,6,4,2};
+     double scratch_depend[2][5] = {{0,1,2,3,4},{10,11,12,13,14}};
+     for (unsigned int ii = 0; ii < 5; ++ii) {
+       independent_vec.push_back(2*(ii+1));
+       dependent_vec.push_back(ii);
+     }
+     dependent_vec_s = dependent_vec;
+     for (unsigned int ii = 10; ii < 15; ++ii) {
+       dependent_vec.push_back(ii);
+     }
+
+
+     table_single_array.load_independent_data( independent, scratch_indep, 5);
+     table_single_vec.load_independent_data(   independent, independent_vec);
+     table_interp.load_independent_data(independent, independent_vec);
+     table_prev.load_independent_data(  independent, independent_vec,
+                                        TableIndependentVariable::Prev);
+     table_next.load_independent_data(  independent, independent_vec,
+                                        TableIndependentVariable::Next);
+     table_floor.load_independent_data( independent, independent_vec,
+                                        TableIndependentVariable::Floor);
+     table_ceil.load_independent_data(  independent, independent_vec,
+                                        TableIndependentVariable::Ceil);
+     table_round.load_independent_data( independent, independent_vec,
+                                        TableIndependentVariable::Round);
+     table_wrap.load_independent_data(  independent, independent_vec,
+                                        TableIndependentVariable::Interp,
+                                        TableIndependentVariable::WrapAround);
+     table_reverse.load_independent_data(independent, scratch_indep_rev, 5);
+
+
+     // Dependent data:
+     table_single_array.load_dependent_data( dependent[0][0],
+                                             &scratch_depend[0][0],
+                                             5);
+     table_single_vec.load_dependent_data(   dependent[1][0],
+                                             dependent_vec_s);
+     table_interp.load_dependent_data( dependent[2], 2,
+                                       &scratch_depend[0][0], 5);
+     table_prev.load_dependent_data(   dependent[3], 2,
+                                       dependent_vec, 5);
+     std::vector<double *> dep_vec_4;
+     dep_vec_4.push_back( &dependent[4][0]);
+     dep_vec_4.push_back( &dependent[4][1]);
+     table_next.load_dependent_data(   dep_vec_4,
+                                       &scratch_depend[0][0], 5);
+     std::vector<double *> dep_vec_5;
+     dep_vec_5.push_back( &dependent[5][0]);
+     dep_vec_5.push_back( &dependent[5][1]);
+     table_floor.load_dependent_data(  dep_vec_5,
+                                       dependent_vec, 5);
+     table_ceil.load_dependent_data(   dependent[6], 2,
+                                       dependent_vec, 5);
+     table_round.load_dependent_data(  dependent[7], 2,
+                                       dependent_vec, 5);
+     table_wrap.load_dependent_data(   dependent[8], 2,
+                                       dependent_vec, 5);
+     table_reverse.load_dependent_data( dependent[9], 2,
+                                        &scratch_depend[0][0], 5);
+   }
+
+   void initialize()
+   {
+     table_single_array.initialize();
+     table_single_vec.initialize();
+     table_interp.initialize();
+     table_prev.initialize();
+     table_next.initialize();
+     table_floor.initialize();
+     table_ceil.initialize();
+     table_round.initialize();
+     table_wrap.initialize();
+     table_reverse.initialize();
+   }
+
+   void update()
+   {
+     independent += indep_incr;
+     frame_count++;
+     if (frame_count == reverse_on_count) {
+       indep_incr *= -1;
+     }
+     table_single_array.update();
+     table_single_vec.update();
+     table_interp.update();
+     table_prev.update();
+     table_next.update();
+     table_floor.update();
+     table_ceil.update();
+     table_round.update();
+     table_wrap.update();
+     table_reverse.update();
+     table_1_indep_val.update();
+   }
+
+   // Note: these error methods have to be methods because loading STL-vectors
+   //       is not available via SWIG.
+   void configure_table_1_indep_val()
+   {
+     double scratch_indep1[1] = {3};
+     double scratch_dep[2]    = {2, 5};
+     std::vector<double> indep_vec1( scratch_indep1, scratch_indep1 + 1 );
+     std::vector<double> dep_vec1( scratch_dep, scratch_dep + 2 );
+     std::cout << "\n**** Test loading a single value for independent data *****\n\n";
+     table_1_indep_val.load_independent_data(independent, indep_vec1 );
+     std::cout << "\n**** Test loading insufficient dependent data *****\n\n";
+     table_1_indep_val.load_dependent_data( dependent[11], 2,
+                                            dep_vec1, 2 );
+   }
+
+   void duplicate_load()
+   {
+     std::cout << "***TEST: Load independent data into the model again ***\n";
+     table_single_vec.load_independent_data(   independent, independent_vec);
+     std::cout << "***TEST: Try having the model load another data table ***\n";
+     table_single_vec.load_dependent_data(   dependent[1][0],
+                                             dependent_vec_s);
+   }
+
+   // test detection of NULL loads:
+   void load_NULL_tests()
+   {
+     double scratch[2] = {1,2};
+     std::vector<double> scratch_v(2,1);
+     std::vector<double *> scratch_v_ptr(2, NULL);
+     std::cout << "  ***TEST: independent data ***\n";
+     table_error.load_independent_data( independent, NULL, 2);
+     std::cout << "  ***TEST: dependent data source, single element ***\n";
+     table_error.load_dependent_data( dependent[0][0], NULL, 2);
+     std::cout << "  ***TEST: dependent data source, multiple element***\n";
+     table_error.load_dependent_data( dependent[0], 2, NULL, 2);
+     std::cout << "  ***TEST: dependent data target, using array source ***\n";
+     table_error.load_dependent_data( NULL, 1, scratch, 2);
+     std::cout << "  ***TEST: dependent data target, using vector source ***\n";
+     table_error.load_dependent_data( NULL, 1, scratch_v, 2);
+     std::cout << "  ***TEST: dependent data, source vector contains NULL ***\n";
+     table_error.load_dependent_data( scratch_v_ptr, NULL, 2);
+   }
+
+   // test detection of duplicated values in independent varaiable data
+   void load_duplicate_independent()
+
+   {
+     double scratch[2] = {1,1};
+     table_error.load_independent_data( independent, scratch, 2);
+   }
+
+   // succesfully load independent data
+   void load_independent_on_error()
+   {
+     table_error.load_independent_data( independent, independent_vec);
+   }
+
+   // create a dummy table so that a table can exist without having
+   // dependent-data.  There is no way to fail load_dependent_data such that it
+   // creates a table but does not populate it.
+   void create_dummy_table()
+   {
+     table_error.create_table( dependent[0][0], AbstractTableLookup::Generic);
+   }
+
+
+   void load_bad_size()
+   {
+     // size 0 error on target:
+     table_error.load_dependent_data( dependent[0], 0,
+                                      dependent[0], 1);
+     // size 0 error on source:
+     table_error.load_dependent_data( dependent[0], 1,
+                                      dependent[0], 0);
+     // inconsistent sizes, dependent_vec has 10 values, not 15.
+     table_error.load_dependent_data( dependent[0], 1,
+                                      dependent_vec, 15);
+   }
+
+ private:
+   TestingModelSimObject( const TestingModelSimObject&);
+   TestingModelSimObject& operator = ( const TestingModelSimObject&);
+};
+
+TestingModelSimObject test;

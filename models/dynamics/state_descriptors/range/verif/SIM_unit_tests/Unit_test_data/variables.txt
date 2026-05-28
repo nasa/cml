@@ -1,0 +1,10 @@
+test.reference_position.latitude
+test.reference_position.longitude
+test.reference_position.altitude
+test.azimuth
+test.vehicle_position.ellip_coords.latitude
+test.vehicle_position.ellip_coords.longitude
+test.vehicle_position.ellip_coords.altitude
+test.pfix_rel_vel[0]
+test.pfix_rel_vel[1]
+test.pfix_rel_vel[2]

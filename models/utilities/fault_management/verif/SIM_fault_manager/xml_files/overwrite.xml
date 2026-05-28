@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultManager name="Test Faults">
+<Fault ID="Overwrite Fault Char" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_char"></SimVar>
+  <Overwrite value="-62"></Overwrite>
+  <TriggerGroup>
+    <Trigger name="overwrite trigger" variable="test_object.current_time" compare="GE" value="1.0"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault UChar" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uchar"></SimVar>
+  <Overwrite value="96"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault Short" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_sint"></SimVar>
+  <Overwrite value="150"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault UShort" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_usint"></SimVar>
+  <Overwrite value="150"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault Int" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_int"></SimVar>
+  <Overwrite value="150"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault UInt" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_uint"></SimVar>
+  <Overwrite value="150"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault Long" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_lint"></SimVar>
+  <Overwrite value="150"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault ULong" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ulint"></SimVar>
+  <Overwrite value="150"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault LongLong" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_llint"></SimVar>
+  <Overwrite value="150"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault ULongLong" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_ullint"></SimVar>
+  <Overwrite value="150"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault Float" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_float"></SimVar>
+  <RandValue mean="150" std_dev="10" seed="1" distribution="GAUSSIAN"></RandValue>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault Double" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_double"></SimVar>
+  <Overwrite value="150"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+<Fault ID="Overwrite Fault Boolean" enabled="true" type="OVERWRITE" loc="DOWNSTREAM">
+  <SimVar name="test_object.var_bool"></SimVar>
+  <Overwrite value="true"></Overwrite>
+  <TriggerGroup>
+    <Trigger reuse_name="overwrite trigger"></Trigger>
+  </TriggerGroup>
+</Fault>
+</FaultManager>

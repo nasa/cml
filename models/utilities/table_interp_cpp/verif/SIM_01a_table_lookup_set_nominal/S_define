@@ -1,0 +1,104 @@
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+Test sim object
+
+Independents sweep up and down, reversing direction periodically
+*****************************************************************************/
+
+##include "include/test_model.hh"
+
+class TestingModelSimObject : public Trick::SimObject {
+ public:
+  TestModelDynamicAllocate  test_on_the_fly;
+  TestModelPreInstantiated  test_so_defined;
+  double independent_vars[4]; // (--) independent variables
+  double increments[4];    // (--) step-increment for each of the independents
+  size_t frame_cnt;        // (--) count between sweep reversals
+  size_t reverse_on_count; // (--) reverse direction of independents on this frame#
+
+  TestingModelSimObject()
+    :
+    test_on_the_fly( ),
+    test_so_defined( independent_vars),
+    increments(),
+    frame_cnt(0)
+  {
+    ("initialization") init();
+
+    (1.0, "scheduled") mod_inds();
+    (1.0, "scheduled") test_so_defined.update();
+    (1.0, "scheduled") test_on_the_fly.update();
+  };
+
+  void reload_data_dep()
+  {
+    test_so_defined.single_table.load_data(
+                          &test_so_defined.single_table_vals[0][0][0],
+                          test_so_defined.single_table_dims);
+  }
+  void reload_data_indep_no_clear()
+  {
+    test_so_defined.independents_data[0][1] = 0;
+    test_so_defined.indep0.load_data(
+                          test_so_defined.independents_data[0]);
+  }
+  void reload_data_indep()
+  {
+    test_so_defined.independents_data[0][1] = 0;
+    test_so_defined.indep0.clear_data();
+    test_so_defined.indep0.load_data(
+                          test_so_defined.independents_data[0]);
+  }
+  void reload_data_indep_wrongsize()
+  {
+    double scratch_arr[6] = {7,6,5,4,3,2};
+    std::vector<double> scratch_vec(scratch_arr, scratch_arr+6);
+    test_so_defined.indep0.clear_data();
+    test_so_defined.indep0.load_data( scratch_vec);
+  }
+ private:
+  void init()
+  {
+    increments[0] = 0.4;
+    increments[1] = 0.4;
+    increments[2] = 0.25;
+    increments[3] = 0.25;
+
+    independent_vars[0] = 0.0;
+    independent_vars[1] = 0.0;
+    independent_vars[2] = 1.5;
+    independent_vars[3] = 1.5;
+
+    test_so_defined.configure();
+    test_on_the_fly.configure(independent_vars);
+
+    test_so_defined.initialize( );
+    test_on_the_fly.initialize( );
+
+    reverse_on_count = 25;
+  }
+
+  void mod_inds()
+  {
+    for (size_t ii = 0; ii < 4; ++ii) {
+      independent_vars[ii] += increments[ii];
+    }
+    ++frame_cnt;
+    if (frame_cnt > reverse_on_count) {
+      frame_cnt = 0;
+      double step_fraction = 2;
+      reverse_on_count *= step_fraction;
+      for (size_t ii = 0; ii < 4; ++ii) {
+        increments[ii] *= -(1/step_fraction);
+      }
+    }
+  }
+
+
+  TestingModelSimObject( const TestingModelSimObject&);
+  TestingModelSimObject & operator = ( const TestingModelSimObject&);
+
+};
+TestingModelSimObject testing_model;

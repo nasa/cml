@@ -1,0 +1,69 @@
+/*****************************************************************************
+PURPOSE: (TO BE COMPLETED)
+PROGRAMMERS:
+    (
+     ((Name) (Org) (Date) (Project) (purpose))
+    )
+*****************************************************************************/
+#define RCS_RATE 0.025
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*****************************************************************************
+RcsGenericUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+
+##include "../data/include/rcs_test_multigroup.hh"
+
+class RcsGenericUnitTestSimObject: public Trick::SimObject {
+
+   public:
+   // Model for testing:
+     RcsTestMultigroup  rcs;
+   // support variables:
+     double center_of_mass[3];
+     bool   commands[4];
+
+     bool test_renormalize_ratio;
+
+
+    RcsGenericUnitTestSimObject()
+      :
+      rcs(),
+      test_renormalize_ratio(false)
+
+    {
+      default_data();
+      ("initialization")  modify_data();
+      ("initialization")  rcs.initialize( RCS_RATE,
+                                          center_of_mass );
+      (RCS_RATE, "effector") rcs.update( commands);
+
+    }
+
+  private:
+    void default_data()
+    {
+      for (unsigned int ii = 0; ii < 3; ++ii) {
+        center_of_mass[ii] = 0.0;
+      }
+      for (unsigned int ii = 0; ii < 4; ++ii) {
+        commands[ii] = false;
+      }
+    }
+    void modify_data()
+    {
+      if (test_renormalize_ratio) {
+        rcs.group_1.isp_prop_comp_ratio.at(1) *= 0.5;
+      }
+    }
+
+    RcsGenericUnitTestSimObject (const RcsGenericUnitTestSimObject&);
+    RcsGenericUnitTestSimObject & operator = (const RcsGenericUnitTestSimObject&);
+
+};
+RcsGenericUnitTestSimObject test ;
