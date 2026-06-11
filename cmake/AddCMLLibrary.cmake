@@ -49,7 +49,7 @@ function(add_cml_library)
     # CML_CODE_COVERAGE is true.
     target_link_libraries(${LIBRARY_NAME}
         PUBLIC
-            Trick::Trick
+            Trick::Core
             JEOD::JEOD
         PRIVATE
             $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>

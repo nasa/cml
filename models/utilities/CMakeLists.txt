@@ -135,5 +135,6 @@ add_cml_tests(
         utilities
 
     SOURCES
+        cml_message/test/cml_message_test.cc
         table_interp_cpp/test/table_independent_variable_test.cc
 )
