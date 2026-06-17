@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f0670ea8e6feb1491709e023976aa3e7b73ebf0c1aeb9f0cf406d25a74dea89e
-size 1069
+sys.exec.out.time {s},test.ellipsoid_intersection.intersection {1},test.root1[0] {1},test.root1[1] {1},test.root1[2] {1},test.root2[0] {1},test.root2[1] {1},test.root2[2] {1}
+                   0,1,                   2,                   0,                   0,                  -2,                   0,                   0
+                   1,1,                   0,                   3,                   0,                   0,                  -3,                   0
+                   2,1,                   0,                   0,                   4,                   0,                   0,                  -4
+                   3,1,                   0,                   0,                   4,                   0,                   0,                   4
+                   4,1,   1.611258466588724,   1.611258466588724,                   1,  -1.611258466588724,  -1.611258466588724,                   1
+                   5,0,   1.611258466588724,   1.611258466588724,                   1,  -1.611258466588724,  -1.611258466588724,                   1

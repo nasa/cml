@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e21fc954b2e79c5537d61d012ad493ce4f6fe652062f9a4396e9f2b8617e0ce3
-size 1744
+sys.exec.out.time {s},verif.sim_data.time {1},verif.sim_data.sim_int {1},verif.sim_data.sim_bool {1},verif.sim_data.action_assgt {1},verif.manager.trigger_i.reference_dbl {--},verif.manager.event.status {1},verif.manager.event.event_triggered {--},verif.manager.event.action_triggers.event_triggered {--},verif.manager.trigger_i.event_triggered {--},verif.manager.trigger_b.event_triggered {--}
+                   0,                   0,3,0,0,                   3,1,0,0,1,0
+                   1,                   1,0,0,0,                   3,1,0,0,0,0
+                   2,                   2,0,0,0,                   3,1,0,0,0,0
+                   3,                   3,0,1,0,                   3,1,0,0,0,1
+                   4,                   4,1,0,0,                   3,1,0,0,0,0
+                   5,                   5,2,1,0,                   3,1,0,0,0,1
+                   6,                   6,3,1,0,                   3,1,0,0,0,1
+                   7,                   7,4,0,0,                   4,1,0,0,1,0
+                   8,                   8,5,0,0,                   5,1,0,0,1,0
+                   9,                   9,3,1,0,                   5,1,0,0,0,1
+                  10,                  10,1,1,0,                   5,1,0,0,0,1
+                  11,                  11,-1,0,0,                   5,1,0,0,0,0
+                  12,                  12,-3,1,0,                   5,1,0,0,0,1
+                  13,                  13,-4,1,0,                   5,1,0,0,0,1
+                  14,                  14,-8,0,0,                   5,1,0,0,0,0
+                  15,                  15,-9,1,0,                   5,1,0,0,0,1
+                  16,                  16,-1,1,0,                   5,1,0,0,0,1

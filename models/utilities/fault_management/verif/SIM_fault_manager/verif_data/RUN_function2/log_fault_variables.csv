@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:906d4380f74145b57cdf45db1fe962e0e064821d79ffa9b1190eeae61e9d1e03
-size 882
+sys.exec.out.time {s},test_object.var_char_numeric {--},test_object.var_uchar {1},test_object.var_sint {1},test_object.var_usint {1},test_object.var_int {1},test_object.var_uint {1},test_object.var_lint {1},test_object.var_ulint {1},test_object.var_llint {1},test_object.var_ullint {1},test_object.var_float {1},test_object.var_double {1}
+                   0,98,1,2,3,5,5,8,7,8,9,                 0.1,                 0.2
+                   1,99,3,6,11,9,7,9,9,12,17,           4.0999999,   22.19999946728349
+                   2,100,5,10,19,13,9,10,11,16,25,           8.1000004,   44.20000208988786
+                   3,101,7,14,27,17,11,11,13,20,33,                12.1,   66.20000208988786
+                   4,102,9,18,35,21,13,12,15,24,41,                16.1,   88.20000208988786
+                   5,103,11,22,43,25,15,13,17,28,49,                20.1,   110.2000020898879

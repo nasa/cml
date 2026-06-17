@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:acfb9472c907b60f0f4dcad62b8903121d0b69d0af11a39ae200289f2ffbac85
-size 1339
+sys.exec.out.time {s},aero.interface.executive.coefficients.CD {--},aero.interface.executive.coefficients.CS {--},aero.interface.executive.coefficients.CL {--},aero.interface.executive.coefficients.Cl_mrc {--},aero.interface.executive.coefficients.Cm_mrc {--},aero.interface.executive.coefficients.Cn_mrc {--}
+                   0,                   0,                1.14,                2.48,                3.54,                 5.1,                6.95
+                   1,                   0,                1.14,                2.48,                3.54,                 5.1,                6.95
+                   2, 0.05300000000000001,               1.197,               2.542,               3.599,             5.16375,              7.0195
+                   3,               0.106,               1.254,               2.604,               3.658,   5.227499999999999,               7.089
+                   4,               0.159,               1.311,               2.666,   3.717000000000001,   5.291250000000001,              7.1585
+                   5,               0.212,               1.368,               2.728,               3.776,               5.355,               7.228
+                   6,               0.212,               1.368,               2.728,               3.776,               5.355,               7.228

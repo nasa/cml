@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c64aa589c89d0cfdf997eb898ec3001c638280dba255209f4727634f87e648fd
-size 208
+sys.exec.out.time {s},ut_private.polynomial_vals[0] {1},ut_private.polynomial_vals[1] {1},ut_private.polynomial_vals[2] {1}
+                   0,                  31,   75.75749999999999,             -4e-308

@@ -1,3 +1,4 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:83bbf626224e647a35c59c27bf8929f98d1faef3ee8919db89dd004c41b1f6a0
-size 1003
+sys.exec.out.time {s},vehicle.planet_rel_state.hang_angle_body_vec[0] {--},vehicle.planet_rel_state.hang_angle_body_vec[1] {--},vehicle.planet_rel_state.hang_angle_body_vec[2] {--},vehicle.planet_rel_state.roll_wrt_hdg_body_vec[0] {--},vehicle.planet_rel_state.roll_wrt_hdg_body_vec[1] {--},vehicle.planet_rel_state.roll_wrt_hdg_body_vec[2] {--},vehicle.planet_rel_state.hang_angle {rad},vehicle.planet_rel_state.roll_wrt_heading {rad}
+                   0,                   0,                   0,                   0,                   0,                   0,                   0,                   0,                   0
+                   5,                   0,                   0,                   0,                   0,                   0,                   0,                   0,                   0
+                  10,                   0,                   0,                   0,                   0,                   0,                   0,                   0,                   0

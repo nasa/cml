@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:cff43c8f602da780707849c6a4ef1471b0d6485d511be62db152e3e5a35042e8
-size 1238
+sys.exec.out.time {s},events_manager_verif.sim_time {--},events_manager_verif.position {--},events_manager_verif.xx1 {--},events_manager_verif.xx2 {--},events_manager_verif.xx_in {--},events_manager_verif.ii {--},events_manager_verif.sim_off {--},events_manager_verif.base_bool {--},events_manager_verif.base_float {--}
+                   0,                   0,                  10,                   0,                   0,                   0,4,0,0,                   0
+                   1,                   1,                   8,                   0,                   0,                   0,4,0,0,                   4
+                   2,                   2,                 7.5,                   0,                   0,                   0,4,0,0,                   5
+                   3,                   3,                   6,                   0,                   0,                   0,4,0,0,                   2
+                   4,                   4,                   4,                   0,                   0,                   0,4,0,0,                   1
+                   5,                   5,                 2.5,                   0,                   0,                   0,4,0,0,                   6

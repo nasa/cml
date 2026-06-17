@@ -1,3 +1,3 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4e6072c404319a71761570faddfb15764661fa39bc3e0d2972898d9376da9045
-size 970
+sys.exec.out.time {s},verif.corr_state.pos_error[0] {m},verif.corr_state.pos_error[1] {m},verif.corr_state.pos_error[2] {m},verif.dispersed_position[0] {1},verif.dispersed_position[1] {1},verif.dispersed_position[2] {1},verif.corr_state.vel_error[0] {m/s},verif.corr_state.vel_error[1] {m/s},verif.corr_state.vel_error[2] {m/s},verif.dispersed_velocity[0] {1},verif.dispersed_velocity[1] {1},verif.dispersed_velocity[2] {1}
+                   0,                   0,                   0,                   0,             6800000,                   0,                   0,                   0,                   0,                   0,                   0,                8000,                   0
+                   1,   0.111763543682565,   0.111763543682565,-0.06256410199640665,   6800000.111763543,   0.111763543682565,-0.06256410199640665,   5.823707453076813, -0.4600097769346309,  0.0383485680388829,   5.823707453076813,   7999.539990223066,  0.0383485680388829

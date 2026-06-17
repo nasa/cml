@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1321a59cdd6cada7ab58c193cbafc497ee02b3e9bfed324fef3ca1ea20dcf3c5
-size 437
+sys.exec.out.time {s},ut_private.sqrt_protected_vals_double[0] {1},ut_private.sqrt_protected_vals_double[1] {1},ut_private.sqrt_protected_vals_double[2] {1},ut_private.sqrt_protected_vals_double[3] {1},ut_private.sqrt_protected_vals_float[0] {1},ut_private.sqrt_protected_vals_float[1] {1}
+                   0,                   4,   1.414213562373095,                   0,                   0,                   4,           1.4142135

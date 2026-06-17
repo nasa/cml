@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0e2661b4cbcc98165f41c18dd2c16b89e800f9d9cfe89647a3ff0c6eff8dc6cf
-size 609
+sys.exec.out.time {s},test.longitude_deg {degree},test.latitude_deg {degree},test.egm.delta_altitude {m}
+                   0,                 241,                  37,             -26.151
+                   1,                -119,                  37,             -26.151
+                   2,          242.983333,                  36,  -29.24089963799997
+                   3,                   0,                  90,              14.899
+                   4,          359.983333,                 -90,              -30.15
+                   5,                   0,                 -90,              -30.15

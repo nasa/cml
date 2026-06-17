@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c07fe1a0ad6fc756c70989157826b5ddb30c00809d9a21d45da6a9c27a16b78a
-size 1538
+sys.exec.out.time {s},vehicle.planet_rel_state.calc_rel_vel {--},vehicle.planet_rel_state.calc_topocentric {--},vehicle.planet_rel_state.calc_topocentric_altitude {--},vehicle.planet_rel_state.calc_topodetic {--},vehicle.planet_rel_state.calc_pt_to_pt {--},vehicle.planet_rel_state.calc_hang_roll {--},vehicle.planet_rel_state.calc_boost_reference {--},vehicle.planet_rel_state.calc_plumbline {--},vehicle.planet_rel_state.using_launch_range {--},vehicle.planet_rel_state.using_landing_range {--},vehicle.planet_rel_state.using_entry_range {--},vehicle.planet_rel_state.calc_range_safety {--}
+                   0,0,0,0,0,0,0,0,0,0,0,0,0
+                   5,0,0,0,0,0,0,0,0,0,0,0,0
+                  10,0,0,0,0,0,0,0,0,0,0,0,0
+                  15,0,0,0,0,0,0,0,0,0,0,0,0
+                  20,1,1,1,1,1,1,1,1,1,1,1,1
+                  25,1,1,1,1,1,1,1,1,1,1,1,1
+                  30,1,1,1,1,1,1,1,1,1,1,1,1
+                  35,1,1,1,1,1,1,1,1,1,1,1,1
+                  40,1,1,1,1,1,1,1,1,1,1,1,1
+                  45,1,1,1,1,1,1,1,1,1,1,1,1
+                  50,1,1,1,1,1,1,1,1,1,1,1,1
+                  55,1,1,1,1,1,1,1,1,1,1,1,1
+                  60,1,1,1,1,1,1,1,1,1,1,1,1
+                  65,1,1,1,1,1,1,1,1,1,1,1,1
+                  70,1,1,1,1,1,1,1,1,1,1,1,1
+                  75,1,1,1,1,1,1,1,1,1,1,1,1
+                  80,1,1,1,1,1,1,1,1,1,1,1,1
+                  85,1,1,1,1,1,1,1,1,1,1,1,1
+                  90,1,1,1,1,1,1,1,1,1,1,1,1
+                  95,1,1,1,1,1,1,1,1,1,1,1,1
+                 100,1,1,1,1,1,1,1,1,1,1,1,1

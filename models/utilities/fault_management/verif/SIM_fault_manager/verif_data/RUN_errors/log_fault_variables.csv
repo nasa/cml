@@ -1,3 +1,3 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0f26f4da5bc527549beeab1dec895baf3c51252064a8b9a65f14677d7aee24ff
-size 201
+sys.exec.out.time {s},test_object.var_float {1},test_object.var_double {1}
+                   0,                 0.1,                 2.2
+                 0.1,                   2,                32.2

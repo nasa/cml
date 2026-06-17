@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bc25c693e8cab6a964e4c70c78ac1c061a9c2c7587d154eda8033d3a6b889d86
-size 638
+sys.exec.out.time {s},vehicle.planet_rel_state.calc_rel_vel {--},vehicle.planet_rel_state.calc_topocentric {--},vehicle.planet_rel_state.calc_topocentric_altitude {--},vehicle.planet_rel_state.calc_topodetic {--},vehicle.planet_rel_state.calc_pt_to_pt {--},vehicle.planet_rel_state.calc_hang_roll {--},vehicle.planet_rel_state.calc_boost_reference {--},vehicle.planet_rel_state.calc_plumbline {--},vehicle.planet_rel_state.using_launch_range {--},vehicle.planet_rel_state.using_landing_range {--},vehicle.planet_rel_state.using_entry_range {--},vehicle.planet_rel_state.calc_range_safety {--}
+                   0,0,0,0,0,0,1,0,0,0,0,0,0

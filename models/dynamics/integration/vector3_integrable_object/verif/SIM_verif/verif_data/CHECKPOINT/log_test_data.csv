@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:82a4913fe1e9e3a967cc633eb7546fe25d33f1e5ce57b43b1ef3e3b248e93032
-size 1501
+sys.exec.out.time {s},vehicle.test_internal_deriv.variable[0] {--},vehicle.test_internal_deriv.variable[1] {--},vehicle.test_internal_deriv.variable[2] {--}
+                  15,                  15,                  30,                  45
+                  16,                  16,                  32,                  48
+                  17,                  17,                  34,                  51
+                  18,                  18,                  36,                  54
+                  19,                  19,                  38,                  57
+                  20,                  20,                  40,                  60
+                  21,                  21,                  42,                  63
+                  22,                  22,                  44,                  66
+                  23,                  23,                  46,                  69
+                  24,                  24,                  48,                  72
+                  25,                  25,                  50,                  75
+                  26,                  26,                  52,                  78
+                  27,                  27,                  54,                  81
+                  28,                  28,                  56,                  84
+                  29,                  29,                  58,                  87
+                  30,                  30,                  60,                  90

@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:926c44183744a4af276fe4a700cce5dd12b8252fca1070f9ccea28a0af5afae5
-size 715
+sys.exec.out.time {s},test.accum_val.accumulated_deltas[0] {--},test.accum_val.accumulated_deltas[1] {--},test.accum_val.accumulated_deltas[2] {--},test.accum_val.accumulated_deltas[3] {--}
+                   0,                   1,                   1,                   1,                   1
+                   1,                   2,                 1.5,                   2,                   1
+                   2,                   3,                   2,                   3,                   1
+                   3,                   4,                 2.5,                   4,                   1
+                   4,                   4,                 2.5,                   4,                   1

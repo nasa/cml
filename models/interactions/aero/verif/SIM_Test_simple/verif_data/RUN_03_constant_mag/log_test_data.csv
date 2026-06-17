@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8f26ca7e0c7e17045f7d2d0be897b8ca3f4fac9cf29ade5f58e96a8c57b71078
-size 1659
+sys.exec.out.time {s},aero.atmos_rel.dynamic_pressure {N/m2},aero.interface.executive.drag_mag {N},aero.atmos_rel.free_stream_vel_unit[0] {--},aero.atmos_rel.free_stream_vel_unit[1] {--},aero.atmos_rel.free_stream_vel_unit[2] {--},aero.interface.output.force[0] {N},aero.interface.output.force[1] {N},aero.interface.output.force[2] {N}
+                   0,                   1,                 1.2,                   1,                   0,                   0,                -1.2,                  -0,                  -0
+                   1,                   2,                 1.2,                   1,                   0,                   0,                -1.2,                  -0,                  -0
+                   2,                   3,                 1.2,                   1,                   0,                   0,                -1.2,                  -0,                  -0
+                   3,                   4,                 1.2,                   0,                   1,                   0,                  -0,                -1.2,                  -0
+                   4,                   5,                 1.2,                   0,                   1,                   0,                  -0,                -1.2,                  -0
+                   5,                   6,                 1.2,                   0,                   0,                   1,                  -0,                  -0,                -1.2
+                   6,                   7,                 1.2,                   0,                   0,                   1,                  -0,                  -0,                -1.2

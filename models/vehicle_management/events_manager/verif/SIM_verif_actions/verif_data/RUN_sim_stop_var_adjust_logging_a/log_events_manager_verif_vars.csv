@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f659d65d74264fada64eb7fd408d2a041ad6bbf87fd84c18d4ee3a1445efb9d1
-size 2156
+sys.exec.out.time {s},events_manager_verif.sim_time {--},events_manager_verif.position {--},events_manager_verif.xx1 {--},events_manager_verif.xx2 {--},events_manager_verif.xx_in {--},events_manager_verif.ii {--},events_manager_verif.sim_off {--},events_manager_verif.base_bool {--},events_manager_verif.base_float {--}
+                   0,                   0,                  10,                   0,                   0,                   0,0,0,1,                   0
+                   1,                   1,                   8,                   0,                   0,                   0,0,0,1,                   0
+                   2,                   2,                 7.5,                   0,                   0,                   0,0,0,1,                   0
+                   3,                   3,                   6,                   0,                   0,                   0,0,0,1,                   0
+                 3.6,                 3.6,                   6,                   0,                   0,                   0,0,0,0,                   0
+                 3.8,                 3.8,                   6,                   0,                   0,                   0,0,0,0,                   0
+                   4,                   4,                   4,                   0,                   0,                   0,0,0,0,                   0
+                 4.2,                 4.2,                   4,                   0,                   0,                   0,0,0,0,                   0
+                 4.4,                 4.4,                   4,                   0,                   0,                   0,0,0,0,                   0
+                 4.6,                 4.6,                   4,                   0,                   0,                   0,0,0,0,                   0
+                 4.8,                 4.8,                   4,                   0,                   0,                   0,0,0,0,                   0
+                   5,                   5,                 2.5,                   0,                   0,                   0,0,0,0,                   0

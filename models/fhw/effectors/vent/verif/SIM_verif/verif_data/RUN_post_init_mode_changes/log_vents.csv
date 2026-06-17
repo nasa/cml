@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:11aa758a090b48268958d5cbf43755870608da27bd39abb87ee5d8a2e5e299ae
-size 487
+sys.exec.out.time {s},ventset_obj.vent0_apply_as_impulse {1},ventset_obj.vent1_apply_as_impulse {1},ventset_obj.extra_vent.apply_as_impulse {--},ventset_obj.extra_simple_vent.apply_as_impulse {--}
+                   0,0,1,1,0
+                   1,0,1,1,0
+                   2,0,1,0,0
+                   3,0,1,0,0
+                   4,0,1,0,0
+                   5,0,1,1,0
+                   6,1,1,1,1
+                   7,0,1,0,0
+                   8,0,0,0,0
+                   9,1,1,1,1

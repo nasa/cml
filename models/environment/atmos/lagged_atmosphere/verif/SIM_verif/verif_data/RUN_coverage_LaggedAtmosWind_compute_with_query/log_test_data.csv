@@ -1,3 +1,5 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e5b75a9f1cc3018ed7f4d4a81159a4274498d750cb3d1f71f994acf5bcfa05de
-size 910
+sys.exec.out.time {s},test.lagged_altitude {m},test.lagged_data.data_out.density {kg/m3},test.lagged_data.data_out.speed_of_sound {m/s},test.lagged_data.data_out.planetodetic_wind_velocity[0] {m/s},test.lagged_data.data_out.planetodetic_wind_velocity[1] {m/s},test.lagged_data.data_out.planetodetic_wind_velocity[2] {m/s}
+                   0,                 110,                  10,                 310,                   1,                   0,                   0
+                   1,                  90,                  10,                 310,                   1,                   0,                   0
+                   2,                 100,                  10,                 310,                   1,                   0,                   0
+                   3,                  90,                   9,                 309,                   2,                   1,                   0

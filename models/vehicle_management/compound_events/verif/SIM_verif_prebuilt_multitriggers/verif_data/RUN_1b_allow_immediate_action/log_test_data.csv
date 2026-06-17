@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:16902002cb60fe854fad2b7d25bb090158fae219dae8a0f29c560584eaede91c
-size 307
+sys.exec.out.time {s},verif.sim_data.action_assgt {1}
+                   0,0
+                   1,0
+                   2,0
+                   3,0
+                   4,0
+                   5,0
+                   6,0
+                   7,0
+                   8,0
+                   9,1
+                  10,1

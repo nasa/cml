@@ -1,3 +1,4 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e763cb9b983a249b775012526c7ecd45e184c62b85c69a7cc25a7402daaf8182
-size 238
+sys.exec.out.time {s},subs_verif.subs.enabled {--},subs_verif.subs.active {--},subs_verif.subs.num_subscriptions {--},subs_verif.subs.sub_pending {--}
+                   0,1,0,0,2
+                   1,1,1,2,0
+                   2,0,0,2,0

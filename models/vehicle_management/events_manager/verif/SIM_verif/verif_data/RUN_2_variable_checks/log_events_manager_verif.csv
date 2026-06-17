@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3bea985489c5e86ff97d960e10de159092221fe93bc438f3a941da8ee17c61be
-size 934
+sys.exec.out.time {s},events_manager_verif.manager.two_variable_check_and.int_event_triggered {--},events_manager_verif.manager.two_variable_check_and.watch_a.int_event_triggered {--},events_manager_verif.manager.two_variable_check_and.watch_b.int_event_triggered {--},events_manager_verif.manager.two_variable_check_or.int_event_triggered {--},events_manager_verif.manager.two_variable_check_or.watch_a.int_event_triggered {--},events_manager_verif.manager.two_variable_check_or.watch_b.int_event_triggered {--},events_manager_verif.base_bool {--}
+                   0,0,0,0,0,0,0,0
+                 0.1,0,0,0,0,0,0,0
+                 0.2,0,0,1,1,0,1,1
+                 0.3,0,0,1,1,0,1,1
+                 0.4,0,0,0,0,0,0,0
+                 0.5,0,0,0,0,0,0,0
+                 0.6,0,1,0,1,1,0,0
+                 0.7,1,1,1,1,1,1,1
+                 0.8,1,1,1,1,1,1,1
+                 0.9,1,1,1,1,1,0,0
+                   1,1,1,1,1,1,0,0

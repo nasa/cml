@@ -1,3 +1,5 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ac554079ff6fb0989158b00e3c6855dffe302da931373f51f3b6ab959055c15b
-size 160
+sys.exec.out.time {s},test.in_rectangle {1},test.in_hex {1}
+                   0,0,0
+                   1,1,1
+                   2,0,0
+                   3,0,1
