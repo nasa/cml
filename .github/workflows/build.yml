@@ -46,7 +46,7 @@ jobs:
 
       - name: Build Trick
         run: |
-          source ${{ github.workspace }}/.venv/bin/activate
+          source .venv/bin/activate
           git clone https://github.com/nasa/trick.git --branch 25.1.0 ${TRICK_HOME}
           cd ${TRICK_HOME}
           ./configure
@@ -54,7 +54,7 @@ jobs:
 
       - name: Build JEOD
         run: |
-          source ${{ github.workspace }}/.venv/bin/activate
+          source .venv/bin/activate
           git clone https://github.com/nasa/jeod.git --branch jeod_v5.4.1 ${JEOD_HOME}
           cd ${JEOD_HOME}
           make -f bin/jeod/makefile TRICK_BUILD=1
