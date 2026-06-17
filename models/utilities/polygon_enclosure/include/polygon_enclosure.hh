@@ -163,7 +163,7 @@ Purpose:
        Continue testing direction-sign with the next side in the list.
     */
     bool convex = true;
-    for ( ; ix < N; ix++) {
+    for ( ; ix < N-1; ix++) {
       if( MathUtils::sign( r_to_next[ix][0] * r_to_next[ix+1][1] -
                            r_to_next[ix][1] * r_to_next[ix+1][0])
           == -direction_sign) {
