@@ -7,6 +7,10 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build and Test
@@ -60,3 +64,6 @@ jobs:
           make -f bin/jeod/makefile TRICK_BUILD=1
           cd ${JEOD_HOME}/trickified
           make
+
+      - name: Build CML and run unit tests
+        run: cmake --workflow --preset dev
