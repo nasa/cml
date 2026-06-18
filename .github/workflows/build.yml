@@ -18,6 +18,10 @@ jobs:
     container:
       image: rockylinux:8
 
+    defaults:
+      run:
+        shell: bash
+
     env:
       TRICK_HOME: ${{ github.workspace }}/externals/trick
       JEOD_HOME: ${{ github.workspace }}/externals/jeod
@@ -39,7 +43,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure environment
-        run: echo "MAKEFLAGS=-j$(nproc)" >> "$GITHUB_ENV"
+        run:
+          echo "MAKEFLAGS=-j$(nproc)" >> "$GITHUB_ENV"
+          echo "CML_HOME=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
 
       - name: Set up Python virtual environment
         run: |
@@ -50,7 +56,7 @@ jobs:
 
       - name: Build Trick
         run: |
-          source .bashrc
+          source .venv/bin/activate
           git clone https://github.com/nasa/trick.git --branch 25.1.0 ${TRICK_HOME}
           cd ${TRICK_HOME}
           ./configure
@@ -58,7 +64,7 @@ jobs:
 
       - name: Build JEOD
         run: |
-          source .bashrc
+          source .venv/bin/activate
           git clone https://github.com/nasa/jeod.git --branch jeod_v5.4.1 ${JEOD_HOME}
           cd ${JEOD_HOME}
           make -f bin/jeod/makefile TRICK_BUILD=1
@@ -67,21 +73,38 @@ jobs:
 
       - name: Build CML and run unit tests
         run: |
-          source .bashrc
+          source .venv/bin/activate
           cmake --workflow --preset dev
 
       - name: Build verification sims
         id: build_verif_sims
         run: |
           export PATH=${TRICK_HOME}/bin:${PATH}
-          source .bashrc
+          source .venv/bin/activate
           ./bin/test.py builds --quiet
 
       - name: Run verification sims
         id: run_verif_sims
         run: |
-          source .bashrc
+          source .venv/bin/activate
           ./bin/test.py runs --quiet
+
+      # Uncomment when we stop tracking .csv files with LFS
+      #- name: Compare verification data
+      #  run: ./bin/test.py comparisons --quiet
+
+      - name: Generate coverage report
+        run: |
+          source .venv/bin/activate
+          gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
+            --xml-pretty --exclude '.*/test/.*' -o coverage.xml
+
+      - name: Upload coverage report
+        run:
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
 
       - name: Upload logs on failure
         if: ${{ failure() && (steps.build_verif_sims.outcome == 'failure' || steps.run_verif_sims.outcome == 'failure') }}
@@ -91,7 +114,3 @@ jobs:
           path: bin/logs/*.txt
           if-no-files-found: warn
           retention-days: 2
-
-      # Uncomment when we stop tracking .csv files with LFS
-      #- name: Compare verification data
-      #  run: ./bin/test.py comparisons --quiet
