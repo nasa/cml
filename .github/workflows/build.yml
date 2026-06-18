@@ -66,13 +66,19 @@ jobs:
           make
 
       - name: Build CML and run unit tests
-        run: cmake --workflow --preset dev
+        run: |
+          source .venv/bin/activate
+          cmake --workflow --preset dev
 
       - name: Build verification sims
-        run: ./bin/test.py builds --quiet
+        run: |
+          source .venv/bin/activate
+          ./bin/test.py builds --quiet
 
       - name: Run verification sims
-        run: ./bin/test.py runs --quiet
+        run: |
+          source .venv/bin/activate
+          ./bin/test.py runs --quiet
 
       # Uncomment when we stop tracking .csv files with LFS
       #- name: Compare verification data
