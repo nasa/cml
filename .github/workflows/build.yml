@@ -100,11 +100,11 @@ jobs:
             --xml-pretty --exclude '.*/test/.*' -o coverage.xml
 
       - name: Upload coverage report
-        run:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage.xml
+          if-no-files-found: error
 
       - name: Upload logs on failure
         if: ${{ failure() && (steps.build_verif_sims.outcome == 'failure' || steps.run_verif_sims.outcome == 'failure') }}
