@@ -50,7 +50,7 @@ jobs:
 
       - name: Build Trick
         run: |
-          source .venv/bin/activate
+          source .bashrc
           git clone https://github.com/nasa/trick.git --branch 25.1.0 ${TRICK_HOME}
           cd ${TRICK_HOME}
           ./configure
@@ -58,7 +58,7 @@ jobs:
 
       - name: Build JEOD
         run: |
-          source .venv/bin/activate
+          source .bashrc
           git clone https://github.com/nasa/jeod.git --branch jeod_v5.4.1 ${JEOD_HOME}
           cd ${JEOD_HOME}
           make -f bin/jeod/makefile TRICK_BUILD=1
@@ -67,20 +67,20 @@ jobs:
 
       - name: Build CML and run unit tests
         run: |
-          source .venv/bin/activate
+          source .bashrc
           cmake --workflow --preset dev
 
       - name: Build verification sims
         id: build_verif_sims
         run: |
           export PATH=${TRICK_HOME}/bin:${PATH}
-          source .venv/bin/activate
+          source .bashrc
           ./bin/test.py builds --quiet
 
       - name: Run verification sims
         id: run_verif_sims
         run: |
-          source .venv/bin/activate
+          source .bashrc
           ./bin/test.py runs --quiet
 
       - name: Upload logs on failure
