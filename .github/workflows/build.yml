@@ -5,7 +5,7 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, read_for_review]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -67,3 +67,13 @@ jobs:
 
       - name: Build CML and run unit tests
         run: cmake --workflow --preset dev
+
+      - name: Build verification sims
+        run: ./bin/test.py builds --quiet
+
+      - name: Run verification sims
+        run: ./bin/test.py runs --quiet
+
+      # Uncomment when we stop tracking .csv files with LFS
+      #- name: Compare verification data
+      #  run: ./bin/test.py comparisons --quiet
