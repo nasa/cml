@@ -27,17 +27,17 @@ jobs:
       JEOD_HOME: ${{ github.workspace }}/externals/jeod
 
     steps:
-#      - name: Install system dependencies
-#        run: |
-#          dnf install -y epel-release
-#          dnf update -y
-#          dnf install -y bison clang flex git llvm make maven swig cmake clang-devel \
-#            gcc gcc-c++ java-11-openjdk-devel libxml2-devel llvm-devel llvm-static \
-#            ncurses-devel openmotif openmotif-devel perl perl-Digest-MD5 udunits2 \
-#            udunits2-devel which zlib-devel libX11-devel libXt-devel \
-#            python3-devel diffutils
-#          dnf config-manager --enable powertools
-#          dnf install -y gtest-devel gmock-devel
+      - name: Install system dependencies
+        run: |
+          dnf install -y epel-release
+          dnf update -y
+          dnf install -y bison clang flex git llvm make maven swig cmake clang-devel \
+            gcc gcc-c++ java-11-openjdk-devel libxml2-devel llvm-devel llvm-static \
+            ncurses-devel openmotif openmotif-devel perl perl-Digest-MD5 udunits2 \
+            udunits2-devel which zlib-devel libX11-devel libXt-devel \
+            python3-devel diffutils
+          dnf config-manager --enable powertools
+          dnf install -y gtest-devel gmock-devel
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,75 +46,71 @@ jobs:
         run:
           echo "MAKEFLAGS=-j$(nproc)" >> "$GITHUB_ENV"
           echo "CML_HOME=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
-          echo ${CML_HOME}
 
-      - name: Test CML_HOME
-        run: echo ${CML_HOME}
+      - name: Set up Python virtual environment
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip3 install --upgrade pip
+          pip3 install -r requirements.txt
 
-#      - name: Set up Python virtual environment
-#        run: |
-#          python3 -m venv .venv
-#          source .venv/bin/activate
-#          pip3 install --upgrade pip
-#          pip3 install -r requirements.txt
-#
-#      - name: Build Trick
-#        run: |
-#          source .venv/bin/activate
-#          git clone https://github.com/nasa/trick.git --branch 25.1.0 ${TRICK_HOME}
-#          cd ${TRICK_HOME}
-#          ./configure
-#          make
-#
-#      - name: Build JEOD
-#        run: |
-#          source .venv/bin/activate
-#          git clone https://github.com/nasa/jeod.git --branch jeod_v5.4.1 ${JEOD_HOME}
-#          cd ${JEOD_HOME}
-#          make -f bin/jeod/makefile TRICK_BUILD=1
-#          cd ${JEOD_HOME}/trickified
-#          make
-#
-#      - name: Build CML and run unit tests
-#        run: |
-#          source .venv/bin/activate
-#          cmake --workflow --preset dev
-#
-#      - name: Build verification sims
-#        id: build_verif_sims
-#        run: |
-#          export PATH=${TRICK_HOME}/bin:${PATH}
-#          source .venv/bin/activate
-#          ./bin/test.py builds --quiet
-#
-#      - name: Run verification sims
-#        id: run_verif_sims
-#        run: |
-#          source .venv/bin/activate
-#          ./bin/test.py runs --quiet
-#
-#      # Uncomment when we stop tracking .csv files with LFS
-#      #- name: Compare verification data
-#      #  run: ./bin/test.py comparisons --quiet
-#
-#      - name: Generate coverage report
-#        run: |
-#          source .venv/bin/activate
-#          gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
-#            --xml-pretty --exclude '.*/test/.*' -o coverage.xml
-#
-#      - name: Upload coverage report
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: coverage-report
-#          path: coverage.xml
-#          if-no-files-found: error
-#
-#      - name: Upload logs on failure
-#        if: ${{ failure() && (steps.build_verif_sims.outcome == 'failure' || steps.run_verif_sims.outcome == 'failure') }}
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: verif-sim-failure-logs
-#          path: bin/logs/*.txt
-#          if-no-files-found: warn
-#          retention-days: 2
+      - name: Build Trick
+        run: |
+          source .venv/bin/activate
+          git clone https://github.com/nasa/trick.git --branch 25.1.0 ${TRICK_HOME}
+          cd ${TRICK_HOME}
+          ./configure
+          make
+
+      - name: Build JEOD
+        run: |
+          source .venv/bin/activate
+          git clone https://github.com/nasa/jeod.git --branch jeod_v5.4.1 ${JEOD_HOME}
+          cd ${JEOD_HOME}
+          make -f bin/jeod/makefile TRICK_BUILD=1
+          cd ${JEOD_HOME}/trickified
+          make
+
+      - name: Build CML and run unit tests
+        run: |
+          source .venv/bin/activate
+          cmake --workflow --preset dev
+
+      - name: Build verification sims
+        id: build_verif_sims
+        run: |
+          export PATH=${TRICK_HOME}/bin:${PATH}
+          source .venv/bin/activate
+          ./bin/test.py builds --quiet
+
+      - name: Run verification sims
+        id: run_verif_sims
+        run: |
+          source .venv/bin/activate
+          ./bin/test.py runs --quiet
+
+      # Uncomment when we stop tracking .csv files with LFS
+      #- name: Compare verification data
+      #  run: ./bin/test.py comparisons --quiet
+
+      - name: Generate coverage report
+        run: |
+          source .venv/bin/activate
+          gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
+            --xml-pretty --exclude '.*/test/.*' -o coverage.xml
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+          if-no-files-found: error
+
+      - name: Upload logs on failure
+        if: ${{ failure() && (steps.build_verif_sims.outcome == 'failure' || steps.run_verif_sims.outcome == 'failure') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: verif-sim-failure-logs
+          path: bin/logs/*.txt
+          if-no-files-found: warn
+          retention-days: 2
