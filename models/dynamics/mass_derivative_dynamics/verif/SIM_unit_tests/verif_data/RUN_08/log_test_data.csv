@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:52aabac1cc77203386a1d0aae0caf7e2163e2b0065ad03b342fe0db4af087c0e
-size 1929
+sys.exec.out.time {s},test.mass {1},test.test_dyn.pseudo_torque[0] {N*m},test.test_dyn.pseudo_torque[1] {N*m},test.test_dyn.pseudo_torque[2] {N*m},test.test_dyn.pseudo_force[0] {N},test.test_dyn.pseudo_force[1] {N},test.test_dyn.pseudo_force[2] {N}
+                   0,                  10,                   0,                   0,                   0,                   0,                   0,                   0
+                   1,                   9,                  -0,                  -0,              -148.5,                   0,                 -15,                   0
+                   2,                   7,                  -0,                  -0,              -247.5,                   0,                 -25,                   0
+                   3,                   6,                  -0,                  -0,               -49.5,                   0,                  -5,                   0
+                   4,                   5,                  -0,                  -0,                 -99,                   0,                 -10,                   0
+                   5,                   2,                  -0,                  -0,                -396,                   0,                 -40,                   0
+                   6,                   1,                   0,                   0,                   0,                   0,                   0,                   0
+                   7,                   0,                  -0,                  -0,                 -99,                   0,                 -10,                   0
+                   8,                   0,                   0,                   0,                49.5,                   0,                   5,                   0
+                   9,                   0,                   0,                   0,                   0,                   0,                   0,                   0

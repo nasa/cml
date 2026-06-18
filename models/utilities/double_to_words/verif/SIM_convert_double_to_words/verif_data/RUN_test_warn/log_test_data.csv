@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1c06c433ac960fa84f634e3fab616f9f874348a6a750e23b81faa29ccf826170
-size 908
+sys.exec.out.time {s},convert_double_words.convert_value {--},convert_double_words.resolution {--},convert_double_words.bit_size {--},convert_double_words.warray[0] {--},convert_double_words.warray[1] {--},convert_double_words.warray[2] {--},convert_double_words.warray[3] {--}
+                   0,              0.0001,               0.001,16,0,0,0,0
+                   1,               5.001,               0.001,4,9,8,3,1
+                   2,              5.0017,               0.001,4,10,8,3,1
+                   3,             700.001,               0.001,4,15,15,15,15
+                   4,   123456.7890123457,9.999999999999999e-12,16,19337,23915,56404,43
+                   5,              123457,                   1,16,57921,1,0,0
+                   6,              123458,                   1,16,57922,1,0,0
+                   7,   99900987654321.19,               0.001,16,46121,16856,60267,354

@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a92590cb8d66316b788d7935a4d28cddf3fc626b7e48ec227cb6124e4f40b51e
-size 693
+sys.exec.out.time {s},rocket_motor.motor_prop_a.core_properties.mass {kg},rocket_motor.motor_prop_b.core_properties.mass {kg}
+                   0,                  10,                  10
+                   1,                   7,                  10
+                   2,                   4,                  10
+                   3,                   1,                  10
+                   4,                   0,                   8
+                   5,                   0,                   5
+                   6,                   0,                   2
+                   7,                   0,                   0
+                   8,                   0,                   0

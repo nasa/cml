@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:57fbb0af7e6f8cd9f3c3ddc80b3d36d67d93031c7822a5e718e3f58e13cdf12a
-size 315
+sys.exec.out.time {s},ut_private.is_equal_vals[0] {1},ut_private.is_equal_vals[1] {1},ut_private.is_equal_vals[2] {1},ut_private.is_equal_vals[3] {1},ut_private.is_equal_vals[4] {1},ut_private.is_equal_vals[5] {1},ut_private.is_equal_vals[6] {1},ut_private.is_equal_vals[7] {1}
+                   0,1,0,1,0,1,0,1,0

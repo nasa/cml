@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:924d3a51203b0dcf76baac14a63fe1465dcba25d84e03771cf3e8490b6f23392
-size 1024
+sys.exec.out.time {s},trick_logging_verif.group1_var {--}
+                   0,                   0
+                   2,                   2
+                   4,                   4
+                 4.1,                   4
+                 4.2,                   4
+                 4.3,                   4
+                 4.4,                   4
+                 4.5,                   4
+                 4.6,                   4
+                 4.7,                   4
+                 4.8,                   4
+                 4.9,                   4
+                   5,                   5
+                 5.1,                   5
+                 5.2,                   5
+                 5.3,                   5
+                 5.4,                   5
+                 5.5,                   5
+                 5.6,                   5
+                 5.7,                   5
+                 5.8,                   5
+                 5.9,                   5
+                   6,                   6

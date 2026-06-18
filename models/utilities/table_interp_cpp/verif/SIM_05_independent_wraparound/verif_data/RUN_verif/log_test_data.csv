@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bdedf6846c8fcb17d8b7387e8842b9966895819b131060a5291e8308c80184be
-size 881
+sys.exec.out.time {s},test.independent {1},test.dependent {1}
+                   0,                -2.5,                   3
+                   1,                  -2,                   0
+                   2,                -1.5,                   3
+                   3,                  -1,                   6
+                   4,                -0.5,                   8
+                   5,                   0,                  10
+                   6,                 0.5,                   8
+                   7,                   1,                   6
+                   8,                 1.5,                   3
+                   9,                   2,                   0
+                  10,                 2.5,                   3
+                  11,                   3,                   6
+                  12,                 3.5,                   8

@@ -4,8 +4,6 @@
 *.TRK filter=lfs diff=lfs merge=lfs -text
 *.odt filter=lfs diff=lfs merge=lfs -text
 *.ODT filter=lfs diff=lfs merge=lfs -text
-*.csv filter=lfs diff=lfs merge=lfs -text
-*.CSV filter=lfs diff=lfs merge=lfs -text
 *.doc filter=lfs diff=lfs merge=lfs -text
 *.DOC filter=lfs diff=lfs merge=lfs -text
 *.docx filter=lfs diff=lfs merge=lfs -text
@@ -23,4 +21,3 @@
 *.XLS filter=lfs diff=lfs merge=lfs -text
 *.xlsx filter=lfs diff=lfs merge=lfs -text
 *.XLSX filter=lfs diff=lfs merge=lfs -text
-models/environment/gravity/lunar_GRGM900C/data/src/GRGM900C_lunar_gravity.cc filter=lfs diff=lfs merge=lfs -text

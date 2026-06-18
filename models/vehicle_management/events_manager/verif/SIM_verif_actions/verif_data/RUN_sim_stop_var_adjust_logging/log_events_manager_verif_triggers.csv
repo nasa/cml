@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d5ea5c87f7a822bdcc9b12eff9a5ad127b4673ece465b1f25d1e7880b51fed83
-size 958
+sys.exec.out.time {s},events_manager_verif.manager.sim_stop_verif.event_triggered {--},events_manager_verif.manager.sim_stop_var_verif.event_triggered {--},events_manager_verif.manager.relative_to_activation_double_verif.event_triggered {--},events_manager_verif.manager.deact_sim_obj_verif.event_triggered {--},events_manager_verif.manager.adjust_log_verif.event_triggered {--},events_manager_verif.manager.log_now_verif.event_triggered {--},events_manager_verif.manager.two_variable_check_and.event_triggered {--},events_manager_verif.manager.two_variable_check_or.event_triggered {--}
+                   0,0,0,0,0,0,0,0,0
+                   1,0,0,0,0,0,0,0,0
+                   2,0,0,0,0,0,0,0,0
+                   3,0,0,0,0,0,0,0,0
+                   4,0,0,0,0,1,0,0,0
+                 4.2,0,0,0,0,1,0,0,0
+                 4.4,0,0,0,0,1,0,0,0
+                 4.6,0,0,0,0,1,0,0,0
+                 4.8,0,0,0,0,1,0,0,0
+                   5,0,1,0,0,1,0,0,0

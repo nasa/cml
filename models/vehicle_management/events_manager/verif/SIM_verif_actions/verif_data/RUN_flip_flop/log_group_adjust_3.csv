@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:be62e0428299235c647051764b046be4b6a5054e09020c415339fc00020973f8
-size 855
+sys.exec.out.time {s},events_manager_verif.sim_time {--}
+                   0,                   0
+                 0.5,                 0.5
+                   1,                   1
+                 1.5,                 1.5
+                   2,                   2
+                 2.5,                 2.5
+                   3,                   3
+                 3.5,                 3.5
+                   4,                   4
+                 4.5,                 4.5
+                   5,                   5
+                 5.5,                 5.5
+                   6,                   6
+                 6.5,                 6.5
+                   7,                   7
+                 7.5,                 7.5
+                   8,                   8
+                 8.5,                 8.5
+                   9,                   9

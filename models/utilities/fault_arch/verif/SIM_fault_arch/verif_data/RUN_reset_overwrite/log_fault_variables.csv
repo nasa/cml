@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2744e5aa473b9321a56bd710a8481148d9cf4e5bda516e05d8b3bca4dba5ce8d
-size 1102
+sys.exec.out.time {s},test_object.constant_value {--},test_object.constant_value_replaced {--},test_object.linear_value {--},test_object.counting_int {--}
+                   0,             3.14159,            8.675309,                   0,0
+                   1,             3.14159,            8.675309,                   1,1
+                   2,             3.14159,            8.675309,                   2,2
+                   3,             3.14159,                  40,                   3,3
+                   4,             3.14159,                  40,                   4,4
+                   5,             3.14159,                  40,                   5,5
+                   6,             3.14159,                  40,                   6,6
+                   7,             3.14159,                  40,                   7,7
+                   8,             3.14159,                  40,                   8,8
+                   9,             3.14159,                  40,                   9,9
+                  10,             3.14159,                  40,                  10,10

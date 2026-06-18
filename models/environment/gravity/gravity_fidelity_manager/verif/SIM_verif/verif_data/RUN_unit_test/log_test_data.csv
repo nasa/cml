@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:177ffd4011fa89baaaccb83747dc8a946230ebd0ee3b9c201029ef00f6611373
-size 924
+sys.exec.out.time {s},vehicle.body.composite_body.state.trans.position[0] {m},vehicle.grav_controls_earth.degree {--},vehicle.grav_controls_earth.order {--},vehicle.grav_controls_earth.spherical {--}
+                   0,             9000000,10,10,0
+                   1,            11000000,5,5,0
+                   2,            19000000,5,5,0
+                   3,            21000000,2,2,0
+                   4,            29000000,2,2,0
+                   5,            31000000,0,0,1
+                   6,            35000000,0,0,1
+                   7,            35000000,0,0,1
+                   8,            30000000,0,0,1
+                   9,            25000000,2,2,0
+                  10,            20000000,2,2,0
+                  11,            15000000,5,5,0
+                  12,            10000000,5,5,0
+                  13,         9999999.999,5,5,0
+                  14,          9999999.99,10,10,0

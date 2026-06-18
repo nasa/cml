@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0dfcf9bc68ba38188efed1079652d6054d6c813d4331ce3070b93743ff197647
-size 1503
+sys.exec.out.time {s},mass_test.tank_a.core_properties.mass {kg},mass_test.tank_b.core_properties.mass {kg},mass_test.body.mass.composite_properties.mass {kg}
+                   0,                1000,                1000,                3000
+                   1,                 950,                 950,                2900
+                   2,                 850,                 950,                2800
+                   3,                 850,                 850,                2700
+                   4,                 750,                 750,                2500
+                   5,                 600,                 700,                2300
+                   6,                 550,                 550,                2100
+                   7,                 400,                 400,                1800
+                   8,                 400,                 250,                1650
+                   9,                 350,                 200,                1550
+                  10,                 400,                 250,                1650
+                  11,                  50,                   0,                1050
+                  12,                1150,                   0,                2150
+                  13,                   0,                   0,                1000
+                  14,                   0,                   0,                1000
+                  15,                   0,                   0,                1000

@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:13971dcff212091f149495d93946ab3471f8bbadbbbb31938e7c5687d1fa49d6
-size 2097
+sys.exec.out.time {s},test.mass {1},test.test_dyn.pseudo_torque[0] {N*m},test.test_dyn.pseudo_torque[1] {N*m},test.test_dyn.pseudo_torque[2] {N*m},test.test_dyn.pseudo_force[0] {N},test.test_dyn.pseudo_force[1] {N},test.test_dyn.pseudo_force[2] {N}
+                   0,                   9,                  20,                 -99,                -103,                   2,                 -10,                  10
+                   1,                   8,                  20,                 -99,                -103,                   2,                 -10,                  10
+                   2,                   7,                  20,                 -99,                -103,                   2,                 -10,                  10
+                   3,                   6,                  20,                 -99,                -103,                   2,                 -10,                  10
+                   4,                   5,                  20,                 -99,                -103,                   2,                 -10,                  10
+                   5,                   4,                  20,                 -99,                -103,                   2,                 -10,                  10
+                   6,                   3,                  20,                 -99,                -103,                   2,                 -10,                  10
+                   7,                   2,                  20,                 -99,                -103,                   2,                 -10,                  10
+                   8,                   1,                  20,                 -99,                -103,                   2,                 -10,                  10
+                   9,                   0,                  20,                 -99,                -103,                   2,                 -10,                  10
+                  10,                   0,                 -10,                49.5,                51.5,                  -1,                   5,                  -5

@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:720a694039140c0accdeb8f64c0aaa636399655298c61a9fc58012aaaa679281
-size 1403
+sys.exec.out.time {s},impact_point.impact_point.time_to_impact {s},impact_point.impact_point.time_of_impact {s},impact_point.impact_point.surface_range {m},impact_point.impact_point.impact_type {--},impact_point.impact_point.ellip_coords.longitude {rad},impact_point.impact_point.ellip_coords.latitude {rad},impact_point.impact_point.ellip_coords.altitude {m}
+                   0,               -9999,               -9999,               -9999,2,        -174.5154719,        -174.5154719,                   0
+                   5,               -9999,               -9999,               -9999,2,        -174.5154719,        -174.5154719,                   0
+                  10,               -9999,               -9999,               -9999,2,        -174.5154719,        -174.5154719,                   0
+                  15,               -9999,               -9999,               -9999,2,        -174.5154719,        -174.5154719,                   0
+                  20,               -9999,               -9999,               -9999,2,        -174.5154719,        -174.5154719,                   0
+                  25,               -9999,               -9999,               -9999,2,        -174.5154719,        -174.5154719,                   0
+                  30,               -9999,               -9999,               -9999,2,        -174.5154719,        -174.5154719,                   0

@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5aa508aaccf72a5ab29ca835022984ef9999f24d8d7630ccece9e5dd5db0d0f6
-size 2386
+
+Group: verif_group1
+condition_name {--}, condition_type {--},condition_count {--}, condition_first_time {s},condition_last_time {s}, x1_alias1{kg}, x2_alias1{N}, verif_test.sim_data.x1{kg}, verif_test.sim_data.i1{count}, x1_alias2{kg}
+Group1: First hit       , 1,      1,      6.000,      6.000,  14.0617265624999970,   0.6778150576059458,  14.0617265624999970,             -9,  14.0617265624999970
+Group1: Maxima          , 2,      5,      6.000,     10.000,  71.1874907226562357,   0.6778150576059458,  71.1874907226562357,             13,  71.1874907226562357
+Group1: Minima          , 3,      5,      6.000,     10.000, -47.4583271484374905,  -0.7041539548049627, -47.4583271484374905,            -19, -47.4583271484374905
+Group1: Maxima-Absolute , 4,      5,      6.000,     10.000,  71.1874907226562357,  -0.7041539548049627,  71.1874907226562357,            -19,  71.1874907226562357
+Group1: Minima-Absolute , 5,      5,      6.000,     10.000,  14.0617265624999970,   0.4407649828147953,  14.0617265624999970,             -9,  14.0617265624999970
+Group1: Average         , 6,      5,      6.000,     10.000,   9.6674370117187483,   0.0899089230428935,   9.6674370117187483,             -8,   9.6674370117187483
+Group1: Average_Absolute, 7,      5,      6.000,     10.000,  37.0878038085937476,   0.6110898513684369,  37.0878038085937476,             13,  37.0878038085937476
+Group1: Average-Non-zero, 8,      5,      6.000,     10.000,   9.6674370117187483,   0.0899089230428935,   9.6674370117187483,             -8,   9.6674370117187483
+
+Group: verif_group2
+condition_name {--}, condition_type {--},condition_count {--}, condition_first_time {s},condition_last_time {s}, x1_standalone{kg_plus}, x2_standalone{N_plus}
+Group2: i1 <  -9: First hit, 1,      1,      9.000,      9.000, -47.4583271484374905,  -0.7041539548049627
+Group2: i1 != -9: First hit, 1,      1,      8.000,      8.000,  31.6388847656249936,  -0.5987983660088957
+
+Group: verif_group3
+condition_name {--}, condition_type {--},condition_count {--}, condition_first_time {s},condition_last_time {s}, verif_test.sim_data.i1{count}, verif_test.sim_data.b1{--}, verif_test.sim_data.s1{--}, verif_test.sim_data.e1{1}, x1_alias1{kg}, x2_alias1{N}
+Group3: Max from t=2 to i1 < -9, 4,      6,      3.000,      8.000,             13,     1,             test,              3,  31.6388847656249936,  -1.0333901697926717

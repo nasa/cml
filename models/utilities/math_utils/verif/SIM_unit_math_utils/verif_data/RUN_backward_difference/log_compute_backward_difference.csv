@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:86b7503dafdc94448178d3de6e3709fbe78779d325e5f29890ea5eda6dea2372
-size 1286
+sys.exec.out.time {s},mutil_verif.back_diff_vals[0] {1},mutil_verif.back_diff_vals[1] {1},mutil_verif.back_diff_vals[2] {1},mutil_verif.back_diff_vals[3] {1},mutil_verif.back_diff_vals[4] {1},mutil_verif.backward_diff {1},mutil_verif.size {1}
+                   0,                 436,                 217,                  88,                  25,                   4,                   0,0
+                   1,                 436,                 217,                  88,                  25,                   4,                   0,1
+                   2,                 436,                 217,                  88,                  25,                   4,                 219,2
+                   3,                 436,                 217,                  88,                  25,                   4,                 264,3
+                   4,                 436,                 217,                  88,                  25,                   4,   271.9999999999999,4
+                   5,                 436,                 217,                  88,                  25,                   4,   272.0000000000001,5
+                   6,                 436,                 217,                  88,                  25,                   4,   272.0000000000001,6

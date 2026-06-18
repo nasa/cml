@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2cabe30e2928e7c95c1ed27f750b73ae2f57412e59673a23116a741f6d212b03
-size 415
+sys.exec.out.time {s},vehicle.planet_rel_state.launch_range.active {--},vehicle.planet_rel_state.landing_range.active {--},vehicle.planet_rel_state.entry_range.active {--}
+                   0,1,1,1
+                   5,1,1,1
+                  10,1,1,1
+                  15,1,1,1
+                  20,1,1,1
+                  25,0,0,0
+                  30,0,0,0
+                  35,0,0,0
+                  40,0,0,0

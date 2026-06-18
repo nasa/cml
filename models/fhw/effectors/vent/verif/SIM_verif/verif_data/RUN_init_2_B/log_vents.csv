@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b345c5f1e260faf3cc525def81c1a28f8ee59502b6b487216efb0339f6b1bac5
-size 942
+sys.exec.out.time {s},ventset_obj.extra_vent.force_mag {N},ventset_obj.extra_vent.impulse_mag {N*s},ventset_obj.extra_vent.duration {s},ventset_obj.extra_vent.stop_time {s},ventset_obj.extra_vent.direction[0] {--},ventset_obj.extra_vent.direction[1] {--},ventset_obj.extra_vent.direction[2] {--},ventset_obj.extra_vent.force[0] {N},ventset_obj.extra_vent.force[1] {N},ventset_obj.extra_vent.force[2] {N},ventset_obj.extra_vent.impulse[0] {N*s},ventset_obj.extra_vent.impulse[1] {N*s},ventset_obj.extra_vent.impulse[2] {N*s},ventset_obj.extra_vent.flowrate {kg/s},ventset_obj.extra_vent.exhaust_speed {m/s}
+                   0,                   9,                   8,  0.8888888888888888,                   0,  0.1111111111111111,  0.4444444444444444,  0.8888888888888888,                   1,                   4,                   8,  0.8888888888888888,   3.555555555555555,   7.111111111111111,              0.5625,                  16

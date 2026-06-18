@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:71354b5b2d7b2d4155cc8bdf729a8e96d86b0eefd86db34b6255ea01bf9ccc7e
-size 624
+sys.exec.out.time {s},ut_private.div_protected_vals_double[0] {1},ut_private.div_protected_vals_double[1] {1},ut_private.div_protected_vals_double[2] {1},ut_private.div_protected_vals_double[3] {1},ut_private.div_protected_vals_double[4] {1},ut_private.div_protected_vals_float[0] {1},ut_private.div_protected_vals_float[1] {1},ut_private.div_protected_vals_float[2] {1},ut_private.div_protected_vals_float[3] {1}
+                   0,                   3,                  70,                   0,               1e+76,                  35,                   3,           3.1400001,                   0,             5.45678

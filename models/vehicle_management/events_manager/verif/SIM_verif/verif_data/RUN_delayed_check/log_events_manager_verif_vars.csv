@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3fad1cf156e5db2ffc43876d4dfd4b1f783acf99e12104386aa25c3c9cab213e
-size 3533
+sys.exec.out.time {s},events_manager_verif.sim_time {--},events_manager_verif.position {--},events_manager_verif.xx1 {--},events_manager_verif.xx2 {--},events_manager_verif.xx_in {--},events_manager_verif.ii {--},events_manager_verif.sim_off {--},events_manager_verif.base_bool {--},events_manager_verif.base_float {--}
+                   0,                   0,                  10,                   0,                   0,                   0,0,0,0,                   0
+                 0.1,                 0.1,                  10,                   0,                   0,                   0,0,0,0,                   0
+                 0.2,                 0.2,                  10,                   0,                   0,                   0,0,0,0,                   0
+                 0.3,                 0.3,                  10,                   0,                   0,                   0,0,0,0,                   0
+                 0.4,                 0.4,                  10,                   0,                   0,                   0,3,0,0,                   0
+                 0.5,                 0.5,                  10,                   0,                   0,                   0,3,0,0,                   0
+                 0.6,                 0.6,                  10,                   0,                   0,                   0,3,0,0,                   0
+                 0.7,                 0.7,                  10,                   0,                   0,                   0,2,0,0,                   0
+                 0.8,                 0.8,                  10,                   0,                   0,                   0,3,0,0,                   0
+                 0.9,                 0.9,                  10,                   0,                   0,                   0,2,0,0,                   0
+                   1,                   1,                   8,                   0,                   0,                   0,2,0,0,                   0
+                 1.1,                 1.1,                   8,                   0,                   0,                   0,2,0,0,                   0
+                 1.2,                 1.2,                   8,                   0,                   0,                   0,2,0,0,                   0
+                 1.3,                 1.3,                   8,                   0,                   0,                   0,2,0,0,                   0
+                 1.4,                 1.4,                   8,                   0,                   0,                   0,2,0,0,                   0
+                 1.5,                 1.5,                   8,                   0,                   0,                   0,2,0,0,                   0
+                 1.6,                 1.6,                   8,                   0,                   0,                   0,2,0,0,                   0
+                 1.7,                 1.7,                   8,                   0,                   0,                   0,2,0,0,                   0
+                 1.8,                 1.8,                   8,             123.456,                   0,                   0,2,0,0,                   0
+                 1.9,                 1.9,                   8,             123.456,                   0,                   0,2,0,0,                   0
+                   2,                   2,                 7.5,             123.456,                   0,                   0,2,0,0,                   0

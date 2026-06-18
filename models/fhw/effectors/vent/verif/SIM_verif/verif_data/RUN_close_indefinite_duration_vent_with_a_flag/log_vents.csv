@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7261c10a4910cef2e2854279a6da1ef7ee674b143248c46cb9ee62823098c8e1
-size 1739
+sys.exec.out.time {s},ventset_obj.root_body.mass.composite_properties.mass {kg},ventset_obj.tank[0].dynamic_properties.consumable_mass {kg},ventset_obj.tank[1].dynamic_properties.consumable_mass {kg},ventset_obj.set_2_tanks.force[0] {N},ventset_obj.set_2_tanks.force[1] {N},ventset_obj.set_2_tanks.force[2] {N},ventset_obj.set_2_tanks.torque[0] {N*m},ventset_obj.set_2_tanks.torque[1] {N*m},ventset_obj.set_2_tanks.torque[2] {N*m},ventset_obj.extra_vent.venting {--}
+                   0,                   5,                   1,                   1,                   0,                   0,                   0,                   0,                   0,                   0,0
+                   1,                4.75,                   1,                0.75,                  -8,                 1.6,                  -8,                   0,                  -8,                 1.6,1
+                   2,                4.55,                 0.8,                0.75,                  -8,                 1.6,                  -8,                   0,                  -8,                 1.6,1
+                   3,                4.35,  0.6000000000000001,                0.75,                  -8,                 1.6,                  -8,                   0,                  -8,                 1.6,1
+                   4,                4.15,  0.4000000000000001,                0.75,                  -8,                 1.6,                  -8,                   0,                  -8,                 1.6,1
+                   5,                3.95,  0.2000000000000001,                0.75,                  -8,                   0,                  -8,                   0,                  -8,                   0,0

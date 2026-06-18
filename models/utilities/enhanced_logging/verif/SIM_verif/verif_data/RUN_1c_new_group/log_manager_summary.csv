@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5cb40a935aefbc27a8c2340d53ad57c0e5cb1a6048a7dd126ff9584895da4eb0
-size 912
+condition_name {--}, condition_type {--},condition_count {--}, condition_first_time {s},condition_last_time {s}, alias_x1{kg}, verif_test.sim_data.x_vec[0]{m}, verif_test.sim_data.x_vec[1]{m}, verif_test.sim_data.x_vec[2]{m}, verif_test.sim_data.i1{count}, verif_test.sim_data.b1{--}, verif_test.sim_data.s1{--}, verif_test.sim_data.e1{1}
+Unnamed,1,1,1,1, -1.85175, 2.1, 2.2, 2.3, 3, 0, test, 3
+
+Group: data_group2
+condition_name {--}, condition_type {--},condition_count {--}, condition_first_time {s},condition_last_time {s}, alias_x1{kg}, verif_test.sim_data.x_vec[0]{m}, verif_test.sim_data.x_vec[1]{m}, verif_test.sim_data.x_vec[2]{m}, verif_test.sim_data.i1{count}, bool-1{--}, string-1{--}, verif_test.sim_data.e1{1}
+Unnamed, 1,      1,      1.000,      1.000,  -1.8517500000000000,   2.1000000000000001,   2.2000000000000002,   2.2999999999999998,              3,     0,             test,              3

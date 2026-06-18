@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1bf839546798065c75e8c8d83e2afe9c013a8b417e0dbbc55448447cf4ce2bfb
-size 1939
+sys.exec.out.time {s},test.lagged_altitude {m},test.lagged_data.data_out.density {kg/m3},test.lagged_data.data_out.speed_of_sound {m/s},test.lagged_data.data_out.planetodetic_wind_velocity[0] {m/s},test.lagged_data.data_out.planetodetic_wind_velocity[1] {m/s},test.lagged_data.data_out.planetodetic_wind_velocity[2] {m/s}
+                   0,                 110,                  10,                 310,                   1,                   0,                   0
+                   1,                  90,                  10,                 310,                   1,                   0,                   0
+                   2,                 100,                  10,                 310,                   1,                   0,                   0
+                   3,                  90,                   9,                 309,                   2,                   1,                   0
+                   4,                  85,                 8.5,               308.5,                 2.5,                 1.5,                 0.5
+                   5,                  50,                   5,                 305,                3.75,                2.75,                1.75
+                   6,                  90,                   9,                 309,                   2,                   1,                   0
+                   7,                  50,                   5,                 305,                3.75,                2.75,                1.75
+                   8,                  30,                   3,                 303,                4.25,                3.25,                2.25
+                   9,                  70,                   7,                 307,                3.25,                2.25,                1.25
+                  10,                  30,                   3,                 303,                4.25,                3.25,                2.25

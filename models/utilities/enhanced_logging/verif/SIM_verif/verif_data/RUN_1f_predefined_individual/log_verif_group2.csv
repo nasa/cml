@@ -1,3 +1,5 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:66df06e6519361c76a523e0b8444d47f639be8279618c3ff7be2ffbbbcf562bd
-size 394
+
+Group: verif_group2
+condition_name {--}, condition_type {--},condition_count {--}, condition_first_time {s},condition_last_time {s}, x1_standalone{kg_plus}, x2_standalone{N_plus}
+Group2: i1 <  -9: First hit, 1,      1,      9.000,      9.000, -47.4583271484374905,  -0.7041539548049627
+Group2: i1 != -9: First hit, 1,      1,      8.000,      8.000,  31.6388847656249936,  -0.5987983660088957

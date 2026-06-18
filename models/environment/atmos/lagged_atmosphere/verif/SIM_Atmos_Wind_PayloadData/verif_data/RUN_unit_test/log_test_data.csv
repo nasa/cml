@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7844223a869575fd973c78ae953fc429c8bc959f30cc748e4e368cbc73c0872e
-size 1894
+sys.exec.out.time {s},test.lagged_altitude {m},test.lagged_atmosphere.density {kg/m3},test.lagged_atmosphere.speed_of_sound {m/s},test.lagged_winds.planetodetic_velocity[0] {m/s},test.lagged_winds.planetodetic_velocity[1] {m/s},test.lagged_winds.planetodetic_velocity[2] {m/s}
+                   0,                 100,                  10,                 310,                   1,                   0,                   0
+                   1,                  91,                 9.1,               309.1,                 1.9,                 0.9,                   0
+                   2,                  85,                13.5,               313.5,                 7.5,                 6.5,                 5.5
+                   3,                  50,                   5,                 305,                3.75,                2.75,                1.75
+                   4,                  90,                  19,                 319,                  12,                  11,                  10
+                   5,                  50,                   5,                 305,                3.75,                2.75,                1.75
+                   6,                  40,                   4,                 304,                   4,                   3,                   2
+                   7,                  70,                   7,                 307,                3.25,                2.25,                1.25
+                   8,                  35,              11.875,             353.125,              13.625,              12.625,              11.625
+                   9,                  75,                17.5,               317.5,              13.125,              12.125,              11.125
+                  10,                  75,                17.5,               317.5,              13.125,              12.125,              11.125

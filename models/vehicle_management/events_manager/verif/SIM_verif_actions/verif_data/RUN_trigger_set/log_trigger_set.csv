@@ -1,3 +1,4 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2eff9b088179e2c7a9504646dfcb8ce50ba0abc5928ceba9b803bbcd91f46d67
-size 449
+sys.exec.out.time {s},events_manager_verif.manager.trigger_set_bool.event_triggered {--},events_manager_verif.manager.trigger_set_int.event_triggered {--},events_manager_verif.manager.trigger_set_double.event_triggered {--},events_manager_verif.manager.trigger_set_all.event_triggered {--},events_manager_verif.manager.trigger_set_any.event_triggered {--}
+                   0,0,0,0,0,0
+                 0.2,1,1,0,0,1
+                 0.7,1,1,1,1,1

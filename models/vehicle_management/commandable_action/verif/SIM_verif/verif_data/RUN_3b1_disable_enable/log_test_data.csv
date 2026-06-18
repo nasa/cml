@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d4642bdb552e3c2cd7d1a0f031589af9dc47ffd379c24a4b7ae6e2a92d907f1b
-size 600
+sys.exec.out.time {s},test.indirect_bus.fsw1 {1},test.indirect_bus.fsw2 {1},test.indirect_bus.fsw3 {1},test.indirect_bus.fsw4 {1},test.direct_bus.fsw1 {1},test.direct_bus.fsw2 {1},test.direct_bus.fsw3 {1},test.direct_bus.fsw4 {1}
+                   0,0,0,0,0,0,0,0,0
+                   1,0,0,0,0,1,0,0,0
+                   2,1,0,0,0,0,0,0,0
+                   3,1,0,0,0,0,0,0,0
+                   4,0,0,0,0,0,0,0,0
+                   5,0,0,0,0,0,0,0,0
+                   6,0,0,0,0,0,0,0,0
+                   7,0,0,0,0,0,0,0,1
+                   8,0,0,0,1,0,0,0,0
+                   9,0,0,0,1,0,0,0,0

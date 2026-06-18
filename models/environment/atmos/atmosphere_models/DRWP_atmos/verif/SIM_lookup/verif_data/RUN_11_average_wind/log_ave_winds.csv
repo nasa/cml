@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2107c7540c26f0b1b84e8330cad19b19a2654fa9f387d973ea70e6204a2db5b9
-size 590
+sys.exec.out.time {s},luwinds.lookup_table_winds.average_wind[0] {m/s},luwinds.lookup_table_winds.average_wind[1] {m/s},luwinds.lookup_table_winds.average_wind[2] {m/s}
+                   0,                   0,                   0,                   0
+                   1,   1.153042136266421,   27.88453161458137,-0.004031119555662118
+                   2,  -14.28728318760413,  -10.56840472184975,  0.2315038966260697
+                   3,  -10.34710991996747, -0.4566116416826844,  0.2035087541558496
+                   4,                   0,                   0,                   0

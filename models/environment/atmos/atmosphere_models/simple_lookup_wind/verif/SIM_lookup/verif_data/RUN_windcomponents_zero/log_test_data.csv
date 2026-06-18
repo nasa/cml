@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b7a63893f8b14a1fc0e3e4c53bd71ab79f314fef73211c9a8bbed0fbbdba7d46
-size 1416
+sys.exec.out.time {s},test.altitude {1},test.wind.wind_blowing_from {rad},test.wind.wind_vertical_up {m/s},test.wind.wind_magnitude_horizontal {m/s},test.wind.wind_magnitude {m/s},test.wind.wind_component[0] {m/s},test.wind.wind_component[1] {m/s},test.wind.wind_component[2] {m/s}
+                   0,                 1.5,   3.926990816987241,                   0,                   0,   21.21320343559643,                  15,                  15,                   0
+                   1,                 2.5,   3.605240262590599,                   0,                   0,   11.18033988749895,                  10,                   5,                   0
+                   2,                 4.5,   2.761086276477428,                   0,                   0,   26.92582403567252,                  25,                 -10,                   0
+                   3,                   3,                   0,                   0,                   0,                   0,                   0,                   0,                   0
+                   4,                   0,   4.248741371383884,                   0,                   0,    22.3606797749979,                  10,                  20,                   0
+                   5,                   6,   2.761086276477428,                   0,                   0,   53.85164807134504,                  50,                 -20,                   0
