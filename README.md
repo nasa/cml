@@ -2,8 +2,6 @@
 
 The Common Model Library (CML) is designed to be a common location to store and share Trick-based and JEOD-based models that have common applicability to multiple simulations in the NASA community. The origin of the CML project is currently located here: https://github.com/nasa/cml
 
-[[_TOC_]]
-
 # Dependencies
 
 ## System tools
