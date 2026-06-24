@@ -168,7 +168,7 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
 
    ExtendedPlanetaryDerivedState(void);
    virtual ~ExtendedPlanetaryDerivedState(void){};
-
+   using SubscriptionBase::initialize;
    virtual void initialize(jeod::DynBody & subject_body, jeod::DynManager & dyn_manager);
 
    virtual void update (void);

@@ -41,7 +41,7 @@ public:
                       const double (&T_struc_to_body_in)[3][3]);
   virtual ~AeroInterfaceTable(){};
 
-  virtual void initialize();
+  virtual void initialize() override;
   virtual void update() override;
 protected:
   virtual void activate() override;

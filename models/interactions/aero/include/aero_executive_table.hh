@@ -174,10 +174,10 @@ public:
   void change_table(AeroTableSetBase & new_table);
   void add_table(AeroTableSetBase * new_table);
 
-  virtual void initialize();
+  virtual void initialize() override;
   virtual void update() override;
 protected:
-  virtual void activate();
+  virtual void activate() override;
   void configure_new_table(AeroTableSetBase *);
   void trig_functions();
   void post_process_table_data();

@@ -44,13 +44,22 @@ def _verify_args(args):
     '''
     Ensure Trick and JEOD areas exist and libs are built. If they aren't, all tests will fail
     '''
+    # We need to know what TRICK_HOST_CPU is to find the libraries, so get that first
+    cmd = ( os.path.join(args.trick, 'bin/trick-gte') + " TRICK_HOST_CPU")
+    sys.path.append(os.path.abspath(os.path.join(args.trick, 'share/trick/trickops/')))
+    from WorkflowCommon import run_subprocess
+    trick_host_cpu = run_subprocess(command=cmd,m_shell=True).stdout.strip().split("\n")[-1]
+    if "Linux" in trick_host_cpu:
+        trick_build_lib_dir = "lib64"
+    elif "Darwin" in trick_host_cpu:
+        trick_build_lib_dir = "lib"
     if not args.trick or not os.path.exists(args.trick):
         msg = ("Unable to locate trick directory. Define TRICK_HOME in your environment"
           " or use --trick=/path/to/trick/ to specify a path to a pre-built Trick"
           " directory (Requires version 19.5.1 or later)")
         raise RuntimeError(msg)
-    if (not os.path.exists(os.path.join(args.trick, 'lib64')) or
-        not os.listdir(os.path.join(args.trick,'lib64'))):
+    if (not os.path.exists(os.path.join(args.trick, trick_build_lib_dir)) or
+        not os.listdir(os.path.join(args.trick, trick_build_lib_dir))):
         msg = (f"Specified trick directory {args.trick} is missing built libraries. "
           "Build trick for this platform to resolve this error.")
         raise RuntimeError(msg)
@@ -59,12 +68,7 @@ def _verify_args(args):
           " or use --jeod=/path/to/jeod/ to specify a path to a JEOD"
           " directory (Requires version 3.4 or later)")
         raise RuntimeError(msg)
-    # We need to know what TRICK_HOST_CPU is to find the libraries, so get that first
-    cmd = ( os.path.join(args.trick, 'bin/trick-gte') + " TRICK_HOST_CPU")
-    sys.path.append(os.path.abspath(os.path.join(args.trick, 'share/trick/trickops/')))
-    from WorkflowCommon import run_subprocess
-    trick_host_cpu = run_subprocess(command=cmd,m_shell=True).stdout.strip().split("\n")[-1]
-    if not os.path.isfile(os.path.join(args.trick, 'lib64/libtrick.a')):
+    if not os.path.isfile(os.path.join(args.trick, trick_build_lib_dir + '/libtrick.a')):
         raise RuntimeError(f"Trick hasn't been built. Build {args.trick} and try again.")
     if not os.path.isfile(os.path.join(args.jeod, 'lib_jeod_' + trick_host_cpu + '/libjeod.a' )):
         raise RuntimeError(f"JEOD library under {args.jeod} hasn't been built. See README.md for instructions and try again.")
@@ -74,7 +78,7 @@ def _verify_args(args):
     if len(ephem_files) < 1:
         raise RuntimeError(f"JEOD ephemeris files under {args.jeod} haven't been built. See README.md for instructions and try again.")
 
-    return args  
+    return args
 
 # Argparsing must happen at global scope since we can't import TrickOps without
 # figuring out the location of Trick, which can be passed in to this script.
