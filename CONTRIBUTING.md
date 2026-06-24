@@ -96,3 +96,19 @@ CML may also make non-breaking changes to your model without consulting you, suc
 We ask that you provide an originating group and a point of contact when submitting
 your model because we will attempt to consult you when someone outside your group
 proposes a change to your model.
+
+## Artificial Intelligence (AI) Policy
+
+The CML team supports the responsible usage of AI assistance for software development.
+You may use AI tools when contributing to CML, subject to the following guidelines:
+- Pull requests, issues, comments, and any other submission to the CML GitHub
+  repository must be authored by a human. AI tools are not permitted to automatically
+  open an issue or respond to a pull request review.
+- A pull request must be fully understood by the human author who submits it.
+- AI tools are not permitted to be credited as authors. An AI tool may not be listed as
+  the co-author of a commit, the author of a change to documentation, or an author in
+  the Trick header of a source file, for example.
+
+Before marking a pull request as ready for review, please ensure that any AI-generated
+code, documentation, and tests adhere to our contribution guidelines and coding
+standards.
