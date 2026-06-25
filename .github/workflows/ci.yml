@@ -1,3 +1,6 @@
+# This is the main workflow for testing CML. It sets up dependencies, builds
+# CML, runs unit tests, builds and runs verification sims, and checks to make
+# sure that the committed verification data is reproducible.
 name: Build and Test CML
 
 on:
@@ -22,10 +25,6 @@ jobs:
       run:
         shell: bash
 
-    env:
-      TRICK_HOME: ${{ github.workspace }}/externals/trick
-      JEOD_HOME: ${{ github.workspace }}/externals/jeod
-
     steps:
       - name: Install system dependencies
         run: |
@@ -46,6 +45,8 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> "$GITHUB_ENV"
           echo "CML_HOME=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+          echo "TRICK_HOME=$GITHUB_WORKSPACE/externals/trick" >> "$GITHUB_ENV"
+          echo "JEOD_HOME=$GITHUB_WORKSPACE/externals/jeod" >> "$GITHUB_ENV"
 
       - name: Set up Python virtual environment
         run: |
@@ -106,7 +107,12 @@ jobs:
           if-no-files-found: error
 
       - name: Upload logs on failure
-        if: ${{ failure() && (steps.build_verif_sims.outcome == 'failure' || steps.run_verif_sims.outcome == 'failure' || steps.compare_verif_sim_data.outcome == 'failure') }}
+        if: >-
+          ${{ failure() && (
+            steps.build_verif_sims.outcome == 'failure' ||
+            steps.run_verif_sims.outcome == 'failure' ||
+            steps.compare_verif_sim_data.outcome == 'failure'
+          ) }}
         uses: actions/upload-artifact@v4
         with:
           name: verif-sim-failure-logs
