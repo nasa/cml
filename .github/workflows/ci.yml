@@ -5,7 +5,7 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, read_for_review]
+    types: [opened, synchronize, ready_for_review]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -55,21 +55,17 @@ jobs:
           pip3 install -r requirements.txt
 
       - name: Build Trick
-        run: |
-          source .venv/bin/activate
-          git clone https://github.com/nasa/trick.git --branch 25.1.0 ${TRICK_HOME}
-          cd ${TRICK_HOME}
-          ./configure
-          make
+        uses: ./.github/actions/build-trick
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          trick-version: 25.0.2
 
       - name: Build JEOD
-        run: |
-          source .venv/bin/activate
-          git clone https://github.com/nasa/jeod.git --branch jeod_v5.4.1 ${JEOD_HOME}
-          cd ${JEOD_HOME}
-          make -f bin/jeod/makefile TRICK_BUILD=1
-          cd ${JEOD_HOME}/trickified
-          make
+        uses: ./.github/actions/build-jeod
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          jeod-home: ${{ env.JEOD_HOME }}
+          jeod-version: jeod_v5.4.0
 
       - name: Build CML and run unit tests
         run: |
@@ -110,7 +106,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload logs on failure
-        if: ${{ failure() && (steps.build_verif_sims.outcome == 'failure' || steps.run_verif_sims.outcome == 'failure' || steps.compare_verif_sim_data == 'failure') }}
+        if: ${{ failure() && (steps.build_verif_sims.outcome == 'failure' || steps.run_verif_sims.outcome == 'failure' || steps.compare_verif_sim_data.outcome == 'failure') }}
         uses: actions/upload-artifact@v4
         with:
           name: verif-sim-failure-logs
