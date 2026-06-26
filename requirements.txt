@@ -1,4 +1,0 @@
-gcovr
-numpy
-PyYAML
-psutil
