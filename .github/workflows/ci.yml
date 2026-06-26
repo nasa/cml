@@ -86,7 +86,7 @@ jobs:
           export PATH=${TRICK_HOME}/bin:${PATH}
           export CML_TRICK_BUILD=1
           source .venv/bin/activate
-          ./bin/test.py builds --quiet
+          ./bin/test.py builds -j 1 --quiet
           # Clean all sim build products.
           git -C models clean -x -d -f
 
