@@ -53,7 +53,7 @@ CML also uses [TrickOps](https://nasa.github.io/trick/documentation/miscellaneou
 
 The CML `.bashrc` is intended to provide the environment needed for CML core development and testing. From a `bash` shell, simply `. .bashrc` to activate it. This file will print warnings if `JEOD_HOME` and `TRICK_HOME` are not found, or aren't suitably configured in the user environment. It will also look for the `python3` virtual environment which is needed for internal testing of CML models.
 
-Note that the `.bashrc` inclusded in this project provides the environment for **this project** - we do not recommend that CML using projects source this file directly. Instead, use the `.bashrc` as an example of what CML expects to be defined and ensure your project's environment provides those definitions accordingly.
+Note that the `.bashrc` included in this project provides the environment for **this project** - we do not recommend that CML using projects source this file directly. Instead, use the `.bashrc` as an example of what CML expects to be defined and ensure your project's environment provides those definitions accordingly.
 
 For CML core testing and development, we suggest creating an alias in your `~/.bashrc` to manage the environment for CML. For example:
 
@@ -130,20 +130,25 @@ This directory contains testing infrastructure for the CML project. None of the 
 
 ## Getting a python3 virtual environment (`.venv`)
 
-The scripts which manage testing CML content leverage TrickOps modules which themselves require a valid `python3` virtual environment to be created and activated with content defined by `${TRICK_HOME}/share/trick/trickops/requirements.txt`. Additionally, some of the CML model input files require non-system packages like `numpy`. Creating the needed `.venv` directory is easy, simply run the following in a shell:
+The scripts which manage testing CML content leverage TrickOps modules which themselves require a valid `python3` virtual environment to be created and activated with content defined by `${TRICK_HOME}/share/trick/trickops/requirements.txt`. Additionally, some of the CML model input files require non-system packages like `numpy`.
+
+To create a virtual environment, CML recommends using [`uv`](https://docs.astral.sh/uv/).
 
 ```bash
-# Starting from a shell at the top of the cml repo.
-python3 -m venv .venv && source .venv/bin/activate && pip3 install --upgrade pip \
-  && pip3 install -r requirements.txt
-```
-The above steps create the `cml/.venv` directory and also activate it. After it's created, it can be activated in other shells by running:
-
-```bash
-# Starting from a shell at the top of the cml repo
+uv sync
 source .venv/bin/activate
 ```
-The CML project `.bashrc` automatically sources `.venv/bin/activate`.
+
+If you don't have `uv` installed, you can use `pip`.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip3 install --upgrade pip
+pip install .
+```
+
+Note that the CML project `.bashrc` automatically sources `.venv/bin/activate`.
 
 ## `test.py`
 
