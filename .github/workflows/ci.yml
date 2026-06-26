@@ -108,13 +108,6 @@ jobs:
           gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
             --xml-pretty --exclude '.*/test/.*' -o coverage.xml
 
-      - name: Post code coverage
-        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
-        uses: coverallsapp/github-action@v2
-        with:
-          file: coverage.xml
-          format: cobertura
-
       - name: Upload logs on failure
         if: >-
           ${{ failure() && env.RUN_VERIF_SIMS == 'true' && (
