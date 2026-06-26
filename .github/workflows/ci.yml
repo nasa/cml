@@ -47,14 +47,12 @@ jobs:
           echo "CML_HOME=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
           echo "TRICK_HOME=$GITHUB_WORKSPACE/externals/trick" >> "$GITHUB_ENV"
           echo "JEOD_HOME=$GITHUB_WORKSPACE/externals/jeod" >> "$GITHUB_ENV"
-          echo "RUN_VERIF_SIMS=true" >> "$GITHUB_ENV"
-          # Uncomment after verifying that all jobs work:
-          #if [[ "${{ github.event_name }}" != "pull_request" || \
-          #      "${{ github.event.pull_request.draft }}" == "false" ]]; then
-          #  echo "RUN_VERIF_SIMS=true" >> "$GITHUB_ENV"
-          #else
-          #  echo "RUN_VERIF_SIMS=false" >> "$GITHUB_ENV"
-          #fi
+          if [[ "${{ github.event_name }}" != "pull_request" || \
+                "${{ github.event.pull_request.draft }}" == "false" ]]; then
+            echo "RUN_VERIF_SIMS=true" >> "$GITHUB_ENV"
+          else
+            echo "RUN_VERIF_SIMS=false" >> "$GITHUB_ENV"
+          fi
 
       - name: Set up Python virtual environment
         run: |
@@ -76,29 +74,13 @@ jobs:
           jeod-home: ${{ env.JEOD_HOME }}
           jeod-version: jeod_v5.4.0
 
-      # Build the verification sims using the regular Trick build process, i.e.,
-      # let Trick generate SWIG interfaces and compile CML as part of building
-      # each unit sim.
-      - name: Build verification sims (Trick build)
-        id: build_verif_sims_trick
-        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
-        run: |
-          export PATH=${TRICK_HOME}/bin:${PATH}
-          export CML_TRICK_BUILD=1
-          source .venv/bin/activate
-          ./bin/test.py builds -j 1 --quiet
-          # Clean all sim build products.
-          git -C models clean -x -d -f
-
       - name: Build CML and run unit tests
         run: |
           source .venv/bin/activate
           cmake --workflow --preset dev
 
-      # Build the verification sims and link against our prebuilt libcml and
-      # Trickified CML library from the previous step.
-      - name: Build verification sims (CML build)
-        id: build_verif_sims_cml
+      - name: Build verification sims
+        id: build_verif_sims
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
         run: |
           export PATH=${TRICK_HOME}/bin:${PATH}
@@ -136,8 +118,7 @@ jobs:
       - name: Upload logs on failure
         if: >-
           ${{ failure() && env.RUN_VERIF_SIMS == 'true' && (
-            steps.build_verif_sims_trick.outcome == 'failure' ||
-            steps.build_verif_sims_cml.outcome == 'failure' ||
+            steps.build_verif_sims.outcome == 'failure' ||
             steps.run_verif_sims.outcome == 'failure' ||
             steps.compare_verif_sim_data.outcome == 'failure'
           ) }}
