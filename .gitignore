@@ -37,6 +37,7 @@ MONTE_RUN_*
 # Ignore Python venv and compiled files.
 .venv
 *.pyc
+uv.lock
 
 # Ignore IDE/editor files.
 .vs/
