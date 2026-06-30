@@ -102,11 +102,21 @@ jobs:
           ./bin/test.py comparisons --quiet
 
       - name: Generate coverage report
-        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        # Temporarily commented-out for testing:
+        #if: ${{ env.RUN_VERIF_SIMS == 'true' }}
         run: |
           source .venv/bin/activate
           gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
             --xml-pretty --exclude '.*/test/.*' -o coverage.xml
+
+      - name: Upload coverage report
+        # Temporarily commented-out for testing:
+        #if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: coverage.xml
+          format: cobertura
 
       - name: Upload logs on failure
         if: >-
