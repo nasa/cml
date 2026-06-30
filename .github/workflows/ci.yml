@@ -37,102 +37,99 @@ jobs:
             python3-devel diffutils
           dnf config-manager --enable powertools
           dnf install -y gtest-devel gmock-devel
-          update-ca-trust extract
 
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: debug
-        run: ls /etc/pki/tls/cert.pem
+      - name: Configure environment
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> "$GITHUB_ENV"
+          echo "CML_HOME=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+          echo "TRICK_HOME=$GITHUB_WORKSPACE/externals/trick" >> "$GITHUB_ENV"
+          echo "JEOD_HOME=$GITHUB_WORKSPACE/externals/jeod" >> "$GITHUB_ENV"
+          if [[ "${{ github.event_name }}" != "pull_request" || \
+                "${{ github.event.pull_request.draft }}" == "false" ]]; then
+            echo "RUN_VERIF_SIMS=true" >> "$GITHUB_ENV"
+          else
+            echo "RUN_VERIF_SIMS=false" >> "$GITHUB_ENV"
+          fi
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          echo "SSL_CERT_FILE=/etc/pki/tls/cert.pem" >> "$GITHUB_ENV"
 
-#      - name: Configure environment
-#        run: |
-#          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-#          echo "MAKEFLAGS=-j$(nproc)" >> "$GITHUB_ENV"
-#          echo "CML_HOME=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
-#          echo "TRICK_HOME=$GITHUB_WORKSPACE/externals/trick" >> "$GITHUB_ENV"
-#          echo "JEOD_HOME=$GITHUB_WORKSPACE/externals/jeod" >> "$GITHUB_ENV"
-#          if [[ "${{ github.event_name }}" != "pull_request" || \
-#                "${{ github.event.pull_request.draft }}" == "false" ]]; then
-#            echo "RUN_VERIF_SIMS=true" >> "$GITHUB_ENV"
-#          else
-#            echo "RUN_VERIF_SIMS=false" >> "$GITHUB_ENV"
-#          fi
-#
-#      - name: Set up Python virtual environment
-#        run: |
-#          python3 -m venv .venv
-#          source .venv/bin/activate
-#          pip3 install --upgrade pip
-#          pip3 install -r requirements.txt
-#
-#      - name: Build Trick
-#        uses: ./.github/actions/build-trick
-#        with:
-#          trick-home: ${{ env.TRICK_HOME }}
-#          trick-version: 25.0.2
-#
-#      - name: Build JEOD
-#        uses: ./.github/actions/build-jeod
-#        with:
-#          trick-home: ${{ env.TRICK_HOME }}
-#          jeod-home: ${{ env.JEOD_HOME }}
-#          jeod-version: jeod_v5.4.0
-#
-#      - name: Build CML and run unit tests
-#        run: |
-#          source .venv/bin/activate
-#          cmake --workflow --preset dev
-#
-#      - name: Build verification sims
-#        id: build_verif_sims
-#        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
-#        run: |
-#          export PATH=${TRICK_HOME}/bin:${PATH}
-#          source .venv/bin/activate
-#          ./bin/test.py builds --quiet
-#
-#      - name: Run verification sims
-#        id: run_verif_sims
-#        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
-#        run: |
-#          source .venv/bin/activate
-#          ./bin/test.py runs --quiet
-#
-#      - name: Compare verification data
-#        id: compare_verif_sim_data
-#        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
-#        run: |
-#          source .venv/bin/activate
-#          ./bin/test.py comparisons --quiet
-#
-#      - name: Generate coverage report
-#        # Temporarily commented-out for testing:
-#        #if: ${{ env.RUN_VERIF_SIMS == 'true' }}
-#        run: |
-#          source .venv/bin/activate
-#          gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
-#            --xml-pretty --exclude '.*/test/.*' -o coverage.xml
-#
-#      - name: Upload coverage report
-#        # Temporarily commented-out for testing:
-#        #if: ${{ env.RUN_VERIF_SIMS == 'true' }}
-#        uses: coverallsapp/github-action@v2
-#        with:
-#          github-token: ${{ secrets.GITHUB_TOKEN }}
-#          file: coverage.xml
-#          format: cobertura
-#
-#      - name: Upload logs on failure
-#        if: >-
-#          ${{ failure() && env.RUN_VERIF_SIMS == 'true' && (
-#            steps.build_verif_sims.outcome == 'failure' ||
-#            steps.run_verif_sims.outcome == 'failure' ||
-#            steps.compare_verif_sim_data.outcome == 'failure'
-#          ) }}
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: verif-sim-failure-logs
-#          path: bin/logs/*.txt
-#          if-no-files-found: warn
-#          retention-days: 2
+      - name: Set up Python virtual environment
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip3 install --upgrade pip
+          pip3 install -r requirements.txt
+
+      - name: Build Trick
+        uses: ./.github/actions/build-trick
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          trick-version: 25.0.2
+
+      - name: Build JEOD
+        uses: ./.github/actions/build-jeod
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          jeod-home: ${{ env.JEOD_HOME }}
+          jeod-version: jeod_v5.4.0
+
+      - name: Build CML and run unit tests
+        run: |
+          source .venv/bin/activate
+          cmake --workflow --preset dev
+
+      - name: Build verification sims
+        id: build_verif_sims
+        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        run: |
+          export PATH=${TRICK_HOME}/bin:${PATH}
+          source .venv/bin/activate
+          ./bin/test.py builds --quiet
+
+      - name: Run verification sims
+        id: run_verif_sims
+        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        run: |
+          source .venv/bin/activate
+          ./bin/test.py runs --quiet
+
+      - name: Compare verification data
+        id: compare_verif_sim_data
+        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        run: |
+          source .venv/bin/activate
+          ./bin/test.py comparisons --quiet
+
+      - name: Generate coverage report
+        # Temporarily commented-out for testing:
+        #if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        run: |
+          source .venv/bin/activate
+          gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
+            --xml-pretty --exclude '.*/test/.*' -o coverage.xml
+
+      - name: Upload coverage report
+        # Temporarily commented-out for testing:
+        #if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: coverage.xml
+          format: cobertura
+
+      - name: Upload logs on failure
+        if: >-
+          ${{ failure() && env.RUN_VERIF_SIMS == 'true' && (
+            steps.build_verif_sims.outcome == 'failure' ||
+            steps.run_verif_sims.outcome == 'failure' ||
+            steps.compare_verif_sim_data.outcome == 'failure'
+          ) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: verif-sim-failure-logs
+          path: bin/logs/*.txt
+          if-no-files-found: warn
+          retention-days: 2
