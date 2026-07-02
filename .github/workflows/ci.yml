@@ -53,6 +53,8 @@ jobs:
           else
             echo "RUN_VERIF_SIMS=false" >> "$GITHUB_ENV"
           fi
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          echo "SSL_CERT_FILE=/etc/pki/tls/cert.pem" >> "$GITHUB_ENV"
 
       - name: Set up Python virtual environment
         run: |
@@ -106,7 +108,16 @@ jobs:
         run: |
           source .venv/bin/activate
           gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
-            --xml-pretty --exclude '.*/test/.*' -o coverage.xml
+            --xml-pretty --exclude ${TRICK_HOME}/ --exclude ${JEOD_HOME}/ \
+            --exclude '.*/test/.*' -o coverage.xml
+
+      - name: Upload coverage report
+        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: coverage.xml
+          format: cobertura
 
       - name: Upload logs on failure
         if: >-
