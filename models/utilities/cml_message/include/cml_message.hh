@@ -27,6 +27,11 @@ Programmers:
 #include "trick/exec_proto.h"
 #endif
 
+#ifndef SWIG
+inline std::ostream& operator<<(std::ostream& os, const jeod::NamedItem& item) {
+    return os << item.get_name();
+}
+#endif
 
 class CMLMessage
 {
@@ -234,9 +239,9 @@ class CMLMessage
   CMLMessage & operator= (const CMLMessage &);
 };
 
-#ifndef SWIG
-inline std::ostream& operator<<(std::ostream& os, const jeod::NamedItem& item) {
-    return os << item.get_name();
-}
-#endif
+//#ifndef SWIG
+//inline std::ostream& operator<<(std::ostream& os, const jeod::NamedItem& item) {
+//    return os << item.get_name();
+//}
+//#endif
 #endif

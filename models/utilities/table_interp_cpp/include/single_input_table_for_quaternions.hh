@@ -30,6 +30,9 @@ PROGRAMMERS:
 
 class SingleInputTableForQuaternions : public GenericSingleInputTable
 {
+#ifdef SWIG
+%immutable;
+#endif
  protected:
   QuaternionSphericalInterpolator sph_interp; /* (--)
       Instance of the interpolator.*/
@@ -56,6 +59,9 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
 
  protected:
   virtual bool generate_output() override;
+#ifdef SWIG
+%mutable;
+#endif
  private:
   // Disable the copy/assignment operators
   SingleInputTableForQuaternions (const SingleInputTableForQuaternions&);

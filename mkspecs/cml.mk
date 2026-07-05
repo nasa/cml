@@ -58,8 +58,21 @@ endif
 TRICK_CXXFLAGS += -I${CML_HOME}/..
 TRICK_CFLAGS += -I${CML_HOME}/..
 
-# Include paths and libraries for libxml2
+# Include paths and libraries for libxml2 for linux
 ifeq ($(shell pkg-config --exists libxml-2.0 && echo $$?),0)
     TRICK_CXXFLAGS += $(shell pkg-config libxml-2.0 --cflags)
     TRICK_LDFLAGS += $(shell pkg-config libxml-2.0 --libs)
+endif
+
+# Include paths and libraries for libxml2 if installed via homebrew
+ifeq ($(shell PKG_CONFIG_PATH="$(shell brew --prefix libxml2)/lib/pkgconfig" pkg-config --exists libxml-2.0 && echo $$?),0)
+    TRICK_CXXFLAGS += $(shell PKG_CONFIG_PATH="$(shell brew --prefix libxml2)/lib/pkgconfig" pkg-config libxml-2.0 --cflags)
+    TRICK_LDFLAGS += $(shell PKG_CONFIG_PATH="$(shell brew --prefix libxml2)/lib/pkgconfig" pkg-config libxml-2.0 --libs)
+endif
+
+# Include paths and libraries for libxml2 for non-homebrew installation
+SDK_PATH := $(shell xcrun --sdk macosx --show-sdk-path)
+ifeq ($(wildcard $(SDK_PATH)/usr/include/libxml2),$(SDK_PATH)/usr/include/libxml2)
+    TRICK_CXXFLAGS += -I$(SDK_PATH)/usr/include/libxml2
+    TRICK_LDFLAGS += -lxml2
 endif

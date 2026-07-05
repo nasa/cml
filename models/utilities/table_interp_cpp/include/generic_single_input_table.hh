@@ -23,6 +23,9 @@
 
 class GenericSingleInputTable : public GenericMultiInputTable
 {
+#ifdef SWIG
+%immutable;
+#endif
  friend class SingleInputTableVarDeriv;
  public:
   virtual bool initialize() override;
@@ -32,6 +35,9 @@ class GenericSingleInputTable : public GenericMultiInputTable
  protected:
   virtual void generate_base_values() override;
   virtual bool generate_output() override;
+#ifdef SWIG
+%mutable;
+#endif
  private:
   // Disable the copy/assignment operators
   GenericSingleInputTable (const GenericSingleInputTable&);

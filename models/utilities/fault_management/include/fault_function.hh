@@ -32,6 +32,10 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
       Trianglewave
     };
 
+#ifdef SWIG
+%immutable;
+#endif
+
     FaultFunctionBase();
     virtual ~FaultFunctionBase(){}
 
@@ -67,6 +71,10 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
       functions. */
     double ind_prev; /* (--) The previous value of the independent variable. */
     double freq_prev; /* (--) The previous value of the frequency. */
+
+#ifdef SWIG
+%mutable;
+#endif
 
   private:
     FaultFunctionBase(const FaultFunctionBase&);

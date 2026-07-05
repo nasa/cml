@@ -50,6 +50,7 @@ void xcompute_chute_CDS(INFLATION_DATA   *inflation,
                        double sim_local_time )
 {
 
+    fenv_t env;
     const char error_msg[] = "\nERROR: Calling argument pointer is NULL in xcompute_chute_CDS \n";
     if (!inflation) {
        printf(error_msg);
@@ -127,7 +128,7 @@ void xcompute_chute_CDS(INFLATION_DATA   *inflation,
    if (inflation->work.stage_elasped_time < 0.0) inflation->work.stage_elasped_time = 0.0;
 
    //disable the FP exception to allow isnan()/isinf() to work
-   int fe_prev = fedisableexcept(FE_ALL_EXCEPT);
+   int fe_prev = feholdexcept(&env);
    assert(-1 != fe_prev);
 
    inflation->work.percent_filled     = inflation->work.stage_elasped_time / inflation->work.fill_time;
@@ -138,7 +139,7 @@ void xcompute_chute_CDS(INFLATION_DATA   *inflation,
    }
 
    //recover the previous settings of FP exceptions
-   feenableexcept(fe_prev);
+   fesetenv(&env);
 
    // Compute Chute Drag Area during inflation
    if (inflation->param.use_DCLDYN_Inflation_Model == true) {

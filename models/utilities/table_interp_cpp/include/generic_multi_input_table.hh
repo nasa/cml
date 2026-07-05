@@ -35,6 +35,9 @@ Purpose:
 class GenericMultiInputTable
 {
  friend class SingleInputTableVarDeriv;
+#ifdef SWIG
+%immutable;
+#endif
  protected:
   bool trivial_case; /* (--)
        Blocks the table-lookup when all independents have only one value.
@@ -120,6 +123,9 @@ class GenericMultiInputTable
   bool precheck_output();
   void generate_trivial_output();
   bool index_checks(size_t & idx1, size_t & idx2, std::string func);
+#ifdef SWIG
+%mutable;
+#endif
 
  private:
   bool load_data_internal_check( const SizeVec &dim_list );
