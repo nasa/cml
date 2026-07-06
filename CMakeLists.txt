@@ -43,8 +43,8 @@ option(CML_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors." OFF)
 # The final dependency is googletest for our unit tests, which we declare in   #
 # the externals directory. See below for an explanation.                       #
 # ---------------------------------------------------------------------------- #
-find_package(Trick 25.0.2 REQUIRED COMPONENTS Core OPTIONAL_COMPONENTS Library)
-find_package(JEOD 5.0 REQUIRED COMPONENTS Core OPTIONAL_COMPONENTS Library)
+find_package(Trick 25.1.0 REQUIRED COMPONENTS Core OPTIONAL_COMPONENTS Library)
+find_package(JEOD 5.4.1 REQUIRED COMPONENTS Core OPTIONAL_COMPONENTS Library)
 find_package(LibXml2 REQUIRED)
 
 if (NOT JEOD_Library_FOUND AND CML_BUILD_UNIT_TESTS)

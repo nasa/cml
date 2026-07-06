@@ -28,8 +28,8 @@ standards older than C++17.
 
 In order to use CML models, your workflow must have access to compatible versions of [Trick](https://github.com/nasa/trick/). Most (but not all) models also have dependencies on JEOD. Currently, the supported versions are:
 
-* [Trick 25.0.2](https://github.com/nasa/trick)+ (must be built for the platform you intend to use CML on). We recommend using `export PYTHON_VERSION=3` and pointing Trick to SWIG version 3.X or higher, per the recommended dependencies in the Trick documentation.
-* [JEOD 5.0](https://github.com/nasa/jeod) or newer (must be built into libraries for the same platform)
+* [Trick 25.1.0](https://github.com/nasa/trick) or newer (must be built for the platform you intend to use CML on). We recommend using `export PYTHON_VERSION=3` and pointing Trick to SWIG version 3.X or higher, per the recommended dependencies in the Trick documentation.
+* [JEOD 5.4.1](https://github.com/nasa/jeod) or newer (must be built into libraries for the same platform)
     - `lib_jeod_${TRICK_HOST_CPU}/libjeod.a`
     - `trickified/trickified_jeod_${TRICK_HOST_CPU}.o`
     - `lib_jeod_${TRICK_HOST_CPU}/de4xx_lib/libde*.so`
