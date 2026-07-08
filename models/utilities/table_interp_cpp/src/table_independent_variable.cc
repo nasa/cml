@@ -11,6 +11,7 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
+#include <algorithm>
 #include <cmath> // floor
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
@@ -581,15 +582,8 @@ TableIndependentVariable::generate_fraction()
   fraction = (modified_value - data[index])/(data[index+1]-data[index]);
 
   // Make sure the arithmetic kept fraction within [0.0,1.0]
-  // For these statements to be executed, the independent data
-  //    must have been modified externally or have been corrupted.
-  //    This is unlikely
-  if (fraction < 0.0) {
-    fraction = 0.0;
-  }
-  else if (fraction > 1.0) {
-    fraction = 1.0;
-  }
+  fraction = std::clamp(fraction, 0.0, 1.0);
+
   // To support the discrete LookupMethods, check for proximity to a calibrated
   // point.  When variable is close to a calibrated point, PREV, NEXT, FLOOR,
   // CEIL should all take that point.  ROUND also does, but that is handled as

@@ -495,8 +495,6 @@ bool
 GenericMultiInputTable::generate_output()
 {
   // Run prechecks, abort output generation if prechecks fail.
-  // However, there does not appear to be a way to fail the prechecks, so this
-  // is a failsafe.
   if (!precheck_output()) {
     return false;
   }
@@ -553,6 +551,22 @@ GenericMultiInputTable::precheck_output()
       "Continuing runs the risk of accessing data out of bounds.\n"
       "Aborting table-lookup\n");
     return false;
+  }
+
+  // Check to make sure that if one of the independent variables had its data
+  // reloaded, the new data was the correct size. Otherwise, we may attempt to
+  // access data outside the storage of the table in generate_output().
+  const size_t num_independents = independents.size();
+  for (size_t ii = 0; ii < num_independents; ++ii) {
+    if (independents[ii].first->get_size() != size_of_dimension[ii + 1]) {
+      CMLMessage::error(
+        __FILE__,__LINE__,"Internal error:\n",
+        "The size of independent variable[",ii,"] (",
+        independents[ii].first->get_size(),") is inconsistent with the\n"
+        "size of dimension[",ii+1,"] (",
+        size_of_dimension[ii + 1],") of the data table.\n");
+      return false;
+    }
   }
   return true;
 }
