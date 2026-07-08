@@ -36,7 +36,7 @@ jobs:
             udunits2-devel which zlib-devel libX11-devel libXt-devel \
             python3-devel diffutils
           dnf config-manager --enable powertools
-          dnf install -y gtest-devel gmock-devel liblsan libubsan
+          dnf install -y gtest-devel gmock-devel libasan liblsan libubsan
 
       - name: Checkout code
         uses: actions/checkout@v4
