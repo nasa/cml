@@ -15,4 +15,9 @@ TRICK_CFLAGS += -g -I. -Wall -Wextra -Werror -Wno-implicit-fallthrough -Wno-form
 TRICK_CXXFLAGS += -g -I. -std=c++17 -Wall -Wextra -Werror -Wno-implicit-fallthrough -Wno-format-truncation -Wno-int-in-bool-context -Wno-address -Wno-nonnull-compare
 TRICK_SFLAGS += -I${JEOD_HOME}/lib/jeod/JEOD_S_modules -I.
 
+# Sanitizer options for unit sims.
+TRICK_CFLAGS += -fsanitize=address,undefined
+TRICK_CXXFLAGS += -fsanitize=address,undefined
+TRICK_LDFLAGS += -fsanitize=address,undefined
+
 TRICK_CXXFLAGS += -I${JEOD_HOME}/..

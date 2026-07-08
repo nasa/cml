@@ -1,0 +1,10 @@
+# Ignore any leaks coming from Trick that we can't control.
+leak:Trick::DataRecordGroup::DataRecordGroup
+leak:Trick::FrameLog::default_data
+leak:Trick::MemoryManager::ref_attributes
+leak:Trick::MulticastGroup::MulticastGroup
+leak:Trick::UnitsMap::add_param
+leak:Trick::VariableServerListenThread::thread_body
+
+# Ignore any leaks coming from the libpython external library.
+leak:libpython*.so

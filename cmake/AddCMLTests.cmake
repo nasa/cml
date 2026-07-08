@@ -40,11 +40,17 @@ function(add_cml_tests)
             JEOD::JEOD
             GTest::gtest_main
             GTest::gmock_main
+            $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     )
 
     target_compile_features(${TEST_NAME}
         PRIVATE
             cxx_std_17
+    )
+
+    target_compile_options(${TEST_NAME}
+        PRIVATE
+            $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     )
 
     include(GoogleTest)

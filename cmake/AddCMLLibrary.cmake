@@ -53,6 +53,7 @@ function(add_cml_library)
             JEOD::JEOD
         PRIVATE
             $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
+            $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     )
 
     target_compile_features(${LIBRARY_NAME}
@@ -61,12 +62,13 @@ function(add_cml_library)
     )
 
     # Add warning flags. Instrument the build for code coverage if CML_CODE_COVERAGE
-    # is true.
+    # is true and sanitizing if CML_USE_SANITIZERS is true.
     target_compile_options(${LIBRARY_NAME}
         PRIVATE
             -Wall
             -Wextra
             $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
+            $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     )
     if (CML_WARNINGS_AS_ERRORS)
         # TODO: Nino Tarantino 2/11/26: uncomment this as part of #24.

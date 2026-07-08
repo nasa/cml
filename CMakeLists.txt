@@ -29,6 +29,9 @@ option(CML_CODE_COVERAGE "Instrument the build to enable coverage profiling." OF
 
 option(CML_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors." OFF)
 
+option(CML_USE_SANITIZERS
+"Build with address sanitizer and undefined behavior sanitizer." OFF)
+
 # ---------------------------------------------------------------------------- #
 # Locate common CML dependencies:                                              #
 #                                                                              #
@@ -115,12 +118,15 @@ endforeach()
 target_link_libraries(cml_static
     PUBLIC
         LibXml2::LibXml2
+    INTERFACE
+        $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     PRIVATE
         $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
 )
 target_link_libraries(cml_shared
     PUBLIC
         LibXml2::LibXml2
+        $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     PRIVATE
         $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
 )

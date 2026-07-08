@@ -40,7 +40,8 @@
             "cacheVariables": {
                 "CML_BUILD_UNIT_TESTS": "OFF",
                 "CML_CODE_COVERAGE": "OFF",
-                "CML_WARNINGS_AS_ERRORS": "OFF"
+                "CML_WARNINGS_AS_ERRORS": "OFF",
+                "CML_USE_SANITIZERS": "OFF"
             }
         },
         {
@@ -50,7 +51,8 @@
             "cacheVariables": {
                 "CML_BUILD_UNIT_TESTS": "ON",
                 "CML_CODE_COVERAGE": "ON",
-                "CML_WARNINGS_AS_ERRORS": "ON"
+                "CML_WARNINGS_AS_ERRORS": "ON",
+                "CML_USE_SANITIZERS": "ON"
             }
         },
         {
