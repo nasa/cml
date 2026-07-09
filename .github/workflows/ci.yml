@@ -109,7 +109,7 @@ jobs:
           source .bashrc
           gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
             --xml-pretty --exclude ${TRICK_HOME}/ --exclude ${JEOD_HOME}/ \
-            --exclude '.*/test/.*' -o coverage.xml
+            --exclude '.*/test/.*' --exclude utility/mocks -o coverage.xml
 
       - name: Upload coverage report
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
