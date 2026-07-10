@@ -6,5 +6,12 @@ leak:Trick::MulticastGroup::MulticastGroup
 leak:Trick::UnitsMap::add_param
 leak:Trick::VariableServerListenThread::thread_body
 
-# Ignore any leaks coming from the libpython external library.
-leak:libpython*.so
+# Ignore any leaks coming from Python and SWIG.
+leak:libpython*
+leak:SWIG*
+leak:Swig*
+leak:*numpy*
+
+# Ignore other leaks that we can't do anything about.
+leak:vasprintf
+leak:libudunits*
