@@ -36,7 +36,7 @@ jobs:
             udunits2-devel which zlib-devel libX11-devel libXt-devel \
             python3-devel diffutils
           dnf config-manager --enable powertools
-          dnf install -y gtest-devel gmock-devel
+          dnf install -y gtest-devel gmock-devel libasan liblsan libubsan
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -78,7 +78,7 @@ jobs:
 
       - name: Build CML and run unit tests
         run: |
-          source .venv/bin/activate
+          source .bashrc
           cmake --workflow --preset dev
 
       - name: Build verification sims
@@ -86,27 +86,27 @@ jobs:
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
         run: |
           export PATH=${TRICK_HOME}/bin:${PATH}
-          source .venv/bin/activate
+          source .bashrc
           ./bin/test.py builds --quiet
 
       - name: Run verification sims
         id: run_verif_sims
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
         run: |
-          source .venv/bin/activate
+          source .bashrc
           ./bin/test.py runs --quiet
 
       - name: Compare verification data
         id: compare_verif_sim_data
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
         run: |
-          source .venv/bin/activate
+          source .bashrc
           ./bin/test.py comparisons --quiet
 
       - name: Generate coverage report
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
         run: |
-          source .venv/bin/activate
+          source .bashrc
           gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
             --xml-pretty --exclude ${TRICK_HOME}/ --exclude ${JEOD_HOME}/ \
             --exclude '.*/test/.*' -o coverage.xml

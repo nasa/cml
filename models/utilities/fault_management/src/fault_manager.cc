@@ -345,6 +345,8 @@ void FaultManager::parse() {
   // Note -- the fault_param_cache and trigger_value_cache pending assignments
   // are cleared in initialize() after this method has returned and after the
   // individual faults have been initialized.
+
+  xmlFreeDoc(doc);
 }
 
 

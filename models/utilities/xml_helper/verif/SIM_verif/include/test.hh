@@ -205,6 +205,8 @@ struct XmlHelperTester {
     }
 
     std::cout << "**********************************************************\n";
+
+    xmlFreeDoc(xml_file);
   }
 
 
