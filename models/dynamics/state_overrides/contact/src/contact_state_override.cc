@@ -162,7 +162,7 @@ ContactStateOverride::override_state()
       CMLMessage::error(
         __FILE__,__LINE__,"Unidentified mass tree error\n"
         "The mass-tree returned a NULL pointer for the root of the tree\n"
-        "containing the override-body (", override_body.name,"(.\n"
+        "containing the override-body (", override_body.name.get_name(),"(.\n"
         "This should not happen.\n"
         "Aborting state override.\n");
       return;

@@ -189,7 +189,7 @@ void DynamicMassString::add_mass_to_string( // Return: -- void
     if (new_mass_body == (*it)) {
       CMLMessage::error(
         __FILE__,__LINE__,"Invalid object addition\n",
-        "Attempt to add a new DynamicMassBody (", new_mass_body->name, ") that is already assigned\n"
+        "Attempt to add a new DynamicMassBody (", new_mass_body->name.get_name(), ") that is already assigned\n"
         "to this string. \n"
         "Cannot duplicate a mass-body on a single string.\n");
       return;

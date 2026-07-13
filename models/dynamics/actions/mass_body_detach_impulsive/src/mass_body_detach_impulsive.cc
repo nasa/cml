@@ -83,8 +83,8 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   if (parent == NULL) {
     CMLMessage::error (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
-       "\n", action_identifier, " failed to detach ", subject->name, " because no parent body was found to\n"
-      "which ", subject->name, " is currently attached.");
+       "\n", action_identifier, " failed to detach ", subject->name.get_name(), " because no parent body was found to\n"
+      "which ", subject->name.get_name(), " is currently attached.");
 
     if (terminate_on_error) {
       CMLMessage::fail (
@@ -99,7 +99,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
     // Detachment failed: Terminate the sim if terminate_on_error is set.
     CMLMessage::error (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
-      "\n", action_identifier, " failed to detach ", subject->name, ".");
+      "\n", action_identifier, " failed to detach ", subject->name.get_name(), ".");
 
 
     if (terminate_on_error) {
@@ -117,7 +117,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   // down are unaffected.
   CMLMessage::debug (
     __FILE__, __LINE__, jeod::BodyActionMessages::trace,
-     "\n", action_identifier, ": ", subject->name, " detached.");
+     "\n", action_identifier, ": ", subject->name.get_name(), " detached.");
 
   jeod::DynBody  * parent_body  = parent->dyn_owner;
   jeod::DynBody  * subject_body = get_subject_dyn_body();
@@ -172,7 +172,7 @@ MassBodyDetachImpulsive::apply_impulse( jeod::DynBody          & dyn_body,
   if (mass_point == NULL) {
     CMLMessage::error (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
-       "\n", action_identifier, " could not find mass point named ", mass_point_name, " on body ", dyn_body.name, " to apply impulse to."
+       "\n", action_identifier, " could not find mass point named ", mass_point_name, " on body ", dyn_body.name.get_name(), " to apply impulse to."
       "\nNo impulse applied to this body.");
 
     if (terminate_on_error) {
@@ -240,7 +240,7 @@ MassBodyDetachImpulsive::apply_impulse( jeod::DynBody          & dyn_body,
     if (root_body == NULL) {
       CMLMessage::error (
         __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
-         "\n", action_identifier, " could not find root body for body ", dyn_body.name, ".\n"
+         "\n", action_identifier, " could not find root body for body ", dyn_body.name.get_name(), ".\n"
         "Impulse must be applied to root body.\n"
         "No impulse applied to this body.");
       if (terminate_on_error) {

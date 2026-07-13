@@ -231,7 +231,7 @@ AtmosphereExec::initialize( // Return: --   Void
 
   CMLMessage::inform(
     __FILE__,__LINE__," Atmosphere Exec initialization configuration:\n",
-    "For vehicle ", body.name,
+    "For vehicle ", body.name.get_name(),
     ":\nAtmosphere: ", current_atmos->name,
     "\nWinds: ", current_winds->name,
     "\nTime: ", time_in.calendar_year, "/",

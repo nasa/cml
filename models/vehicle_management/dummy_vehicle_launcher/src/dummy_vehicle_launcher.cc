@@ -103,10 +103,10 @@ DummyVehicleLauncher::initialize_integ_group_actions()
     if (current_integ_group == NULL) {
       CMLMessage::warn (
         __FILE__, __LINE__, "VehicleLauncher::InitializationError\n",
-        "The initialization of the dummy-vehicle-launcher for vehicle ", body.name, ""
+        "The initialization of the dummy-vehicle-launcher for vehicle ", body.name.get_name(), ""
         "\ndoes not have a specified integ group. If you're not setting "
         "\nthe integ group at a later time, it will try to use the same "
-        "\ninteg group as ", real_state_body.name, ".\n");
+        "\ninteg group as ", real_state_body.name.get_name(), ".\n");
     }
     intended_integ_group = current_integ_group;
   }
@@ -285,7 +285,7 @@ DummyVehicleLauncher::add_to_integ_group()
       CMLMessage::error (
         __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
         "The intended integration group was not specified.\n"
-        "Unable to add vehicle ", body.name, " to any integration group.\n"
+        "Unable to add vehicle ", body.name.get_name(), " to any integration group.\n"
         "It will not be integrated.\n");
         return;
     }
@@ -314,7 +314,7 @@ DummyVehicleLauncher::process_inconsistent_setup()
   if (current_integ_group == NULL) {
     CMLMessage::warn (
       __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
-      "An intended integration group was specified, but the jeod::DynBody ", body.name, "\n"
+      "An intended integration group was specified, but the jeod::DynBody ", body.name.get_name(), "\n"
       "cannot be removed from its existing integration group.\n"
       "Ignoring specified values.\n");
     return;
@@ -325,7 +325,7 @@ DummyVehicleLauncher::process_inconsistent_setup()
     __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
     "The automated integration group switching was not activated,\n"
     "but an intended integration group was specified.\n"
-    "Removing the jeod::DynBody ", body.name, " from its current integration group\n"
+    "Removing the jeod::DynBody ", body.name.get_name(), " from its current integration group\n"
     "and moving it to the specified integration group.\n");
   current_integ_group->delete_dyn_body( body );
   add_to_integ_group_at_launch = true;
