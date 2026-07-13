@@ -622,7 +622,7 @@ AtmosRelativeState::compute_reynolds_number()
       __FILE__, __LINE__, "Atmosphere Relative State Setup error\n",
       "Computation of Reynolds Number requires a reference length, which "
       "has not been assigned.\n"
-      "Reynolds number for vehicle ", body.name, " will not be computed.\n"
+      "Reynolds number for vehicle ", body.name.get_name(), " will not be computed.\n"
       "Use method AtmosRelativeState::set_reference_length( double *)\n"
       "to set this pointer.\n"
       "This message will only be sent once.\n");

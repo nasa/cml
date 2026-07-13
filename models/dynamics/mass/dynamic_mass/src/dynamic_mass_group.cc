@@ -465,10 +465,10 @@ DynamicMassGroup::test_root_body()
           "There are multiple root bodies branching from the same Group.\n"
           "DynamicMassGroups must stay as one block in "
           "order for their updates to work.\n"
-          "Body called ", dyn_masses[0]->name, " has a root called ",
-          first_root->name, " while\n", "body called ",
-          dyn_masses[ii]->name, " has a root called ",
-          second_root->name, "");
+          "Body called ", dyn_masses[0]->name.get_name(), " has a root called ",
+          first_root->name.get_name(), " while\n", "body called ",
+          dyn_masses[ii]->name.get_name(), " has a root called ",
+          second_root->name.get_name(), "");
       }
     }
     root_body_ptr = const_cast<jeod::MassBody*>(first_root);
@@ -509,7 +509,7 @@ DynamicMassGroup::add_mass_to_group_internal(
       if (send_err_msg) {
         CMLMessage::error(
           __FILE__,__LINE__,"Invalid object addition\n",
-          "Attempt to add a new DynamicMassBody (", mass->name, ") that is already assigned\n"
+          "Attempt to add a new DynamicMassBody (", mass->name.get_name(), ") that is already assigned\n"
           "to this group. \n"
           "Cannot duplicate a mass-body in a single group.\n");
       }
