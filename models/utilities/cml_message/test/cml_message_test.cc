@@ -63,8 +63,6 @@ TEST(CMLMessage, InterfaceMethods) {
 
     EXPECT_CALL(cml_message_mock, publish(CMLMessage::Fail, _, _, expected));
     CMLMessage::fail(__FILE__, __LINE__, "This ", part2, ii, part3);
-
-    testing::Mock::VerifyAndClear(&cml_message_mock);
 }
 
 // Test the printf formatting functionality by formatting a floating point value.
