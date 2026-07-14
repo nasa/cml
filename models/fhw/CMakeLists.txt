@@ -3,24 +3,6 @@ add_cml_library(
     NAME
         fhw
     HEADERS
-        effectors/chute/include/hifi_parachute.hh
-        effectors/chute/include/mortar.h
-        effectors/chute/include/orbitalutil_2.h
-        effectors/chute/include/parachute_DCLDYN_prototypes.h
-        effectors/chute/include/parachute_aero.h
-        effectors/chute/include/parachute_att_pnt_damping.hh
-        effectors/chute/include/parachute_coupling.h
-        effectors/chute/include/parachute_eom.h
-        effectors/chute/include/parachute_exec.hh
-        effectors/chute/include/parachute_inflation.h
-        effectors/chute/include/parachute_integrable_object.hh
-        effectors/chute/include/parachute_line_sail.h
-        effectors/chute/include/parachute_mass_props.h
-        effectors/chute/include/parachute_max_items.hh
-        effectors/chute/include/parachute_pre_atmos.hh
-        effectors/chute/include/parachute_proto.hh
-        effectors/chute/include/parachute_relstate.hh
-        effectors/chute/include/parachute_twist_torque.h
         effectors/piston_thruster/include/piston_thruster.hh
         effectors/piston_thruster/include/piston_thruster_group.hh
         effectors/rcs_generic/include/Example_RcsAdvanced.hh
@@ -44,34 +26,6 @@ add_cml_library(
         effectors/vent/include/vent_set.hh
 
     SOURCES
-        effectors/chute/src/DCLDYN_fill_time.c
-        effectors/chute/src/hifi_parachute.cpp
-        effectors/chute/src/mortar_recoil.c
-        effectors/chute/src/orbutil_geocentric_ellipsoid_alt.c
-        effectors/chute/src/orbutil_pfix_to_topo.c
-        effectors/chute/src/orbutil_xyz_to_geocentric.c
-        effectors/chute/src/orbutil_xyz_to_geodetic_e2.c
-        effectors/chute/src/parachute_aero.c
-        effectors/chute/src/parachute_att_pnt_damping.cpp
-        effectors/chute/src/parachute_attitude_reset.cpp
-        effectors/chute/src/parachute_coupling.c
-        effectors/chute/src/parachute_eom.c
-        effectors/chute/src/parachute_exec.cpp
-        effectors/chute/src/parachute_exec_init.cpp
-        effectors/chute/src/parachute_integrable_object.cpp
-        effectors/chute/src/parachute_line_sail.c
-        effectors/chute/src/parachute_loads.cpp
-        effectors/chute/src/parachute_mass_init.cpp
-        effectors/chute/src/parachute_mass_properties_mark2.c
-        effectors/chute/src/parachute_phasing.cpp
-        effectors/chute/src/parachute_recontact_monitor.cpp
-        effectors/chute/src/parachute_relstate.cpp
-        effectors/chute/src/parachute_state.cpp
-        effectors/chute/src/parachute_state_atmos.cpp
-        effectors/chute/src/parachute_twist_exec.cpp
-        effectors/chute/src/parachute_twist_torque.c
-        effectors/chute/src/parachute_waveform.c
-        effectors/chute/src/xcompute_chute_CDS.c
         effectors/piston_thruster/src/piston_thruster.cc
         effectors/piston_thruster/src/piston_thruster_group.cc
         effectors/rcs_generic/src/rcs_build_trail.cc
