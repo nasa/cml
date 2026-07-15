@@ -6,7 +6,7 @@ CML and Trick behavior.
 
 ## Inclusion
 
-Boith the CML and Trick mock libraries are created if the `CML_BUILD_MOCKS`
+Both the CML and Trick mock libraries are created if the `CML_BUILD_MOCKS`
 CMake variable is true.
 
 ```cmake
