@@ -12,7 +12,6 @@ PROGRAMMERS:
 #ifndef CML_FAULT_FUNCTION_HH
 #define CML_FAULT_FUNCTION_HH
 
-#define _USE_MATH_DEFINES // for M_PI
 #include <cmath> // M_PI
 #include "fault.hh"
 #include "fault_function_parameter.hh"
@@ -33,14 +32,14 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
     };
 
     FaultFunctionBase();
-    virtual ~FaultFunctionBase(){}
+    ~FaultFunctionBase() override = default;
 
     void initialize() override;
     void reset() override;
-    virtual void overwrite_value() override = 0;
+    void overwrite_value() override = 0;
     bool set_param(std::string param_name,
                    double value,
-                   bool modify_nominal_with_rate = false);
+                   bool modify_nominal_with_rate = false) override;
 
     FunctionType type; /* (--)
       The type of function to add to the fault variable. */
@@ -82,7 +81,7 @@ template<typename T> class FaultFunction : public FaultFunctionBase {
   public :
 
     explicit FaultFunction(T& var) : variable(var) {}
-    virtual ~FaultFunction(){};
+    ~FaultFunction() override = default;
 
     void overwrite_value() override;
 
@@ -127,6 +126,9 @@ template<typename T> void FaultFunction<T>::overwrite_value() {
         variable += A * (4.0 * std::abs(phi + 0.25 - round( phi + 0.25)) - 1);
         break;
       }
+      case Linear:
+        // Impossible to get here since we already handled this above, but included
+        // for completeness.
       default:
         CMLMessage::error(__FILE__, __LINE__,
           "Fault Management Error\n",

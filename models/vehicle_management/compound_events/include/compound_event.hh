@@ -107,10 +107,10 @@ class CompoundEvent : public WatchValuesDelay<bool>
   // Methods
  public:
   explicit CompoundEvent( const double & time);
-  virtual ~CompoundEvent(){};
+  ~CompoundEvent() override = default;
 
-  void initialize( std::list<WatchValuesBaseCore *> * active_watches);
-  bool test_crossing();
+  void initialize( std::list<WatchValuesBaseCore *> * active_watches_in) override;
+  bool test_crossing() override;
   void test_crossing_iterative();
 
   // For Python input file support:
@@ -119,7 +119,7 @@ class CompoundEvent : public WatchValuesDelay<bool>
   bool update_no_manager();
 
  protected:
-  void activate();
+  void activate() override;
 //  void check_arming_trigger();
 
  private: // not implemented / deleted

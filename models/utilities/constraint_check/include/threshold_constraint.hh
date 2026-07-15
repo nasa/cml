@@ -87,7 +87,7 @@ class ThresholdInstantConstraint : public Constraint
   {
     set.constraints.push_back(this);
   }
-  virtual ~ThresholdInstantConstraint(){};
+  ~ThresholdInstantConstraint() override = default;
 
   /***************************************************************************
   * Inherited -  initialize
@@ -97,7 +97,7 @@ class ThresholdInstantConstraint : public Constraint
   * Name: update
   * Purpose: Main executable of this constraint.
   ***************************************************************************/
-  void update()
+  void update() override
   {
     if (!active) {return;}
 
@@ -185,7 +185,7 @@ class ThresholdTimedConstraint : public Constraint
   {
     set.constraints.push_back(this);
   }
-  virtual ~ThresholdTimedConstraint(){};
+  ~ThresholdTimedConstraint() override = default;
 
   /***************************************************************************
   * Inherited -  initialize
@@ -195,7 +195,7 @@ class ThresholdTimedConstraint : public Constraint
   * Name: update
   * Purpose: Main executable of this constraint.
   ***************************************************************************/
-  void update()
+  void update() override
   {
     if (!active) {return;}
 
@@ -327,7 +327,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
   {
     set.constraints.push_back(this);
   }
-  virtual ~ThresholdTimedConstraintSpecData(){};
+  ~ThresholdTimedConstraintSpecData() override = default;
 
   /***************************************************************************
   Name: set_num_specs
@@ -359,7 +359,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
   *          Generates the interpolated test points based on the provided
   *          specification values.
   ***************************************************************************/
-  void initialize()
+  void initialize() override
   {
     if (num_specs == 0 || num_tests == 0) {
       CMLMessage::error( __FILE__,__LINE__,
@@ -601,7 +601,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
   * Name: update
   * Purpose: Main executable of this constraint.
   ***************************************************************************/
-  void update()
+  void update() override
   {
     if (!active) {return;}
 

@@ -57,7 +57,7 @@ class GustModel
     cycling again after the current gust has completed.*/
 
   explicit GustModel(const double & time_in);
-  virtual ~GustModel(){};
+  virtual ~GustModel() = default;
 
   void   activate();
   void   update();

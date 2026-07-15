@@ -72,7 +72,7 @@ class GenericMultiInputTable
                           size_t num_vars);
   explicit GenericMultiInputTable( double & dependent_var);
   explicit GenericMultiInputTable( const DoublePtrVec & dependent_variables);
-  virtual ~GenericMultiInputTable() { }
+  virtual ~GenericMultiInputTable() = default;
 
   //the first element of dim_list is the number of dependent variables and
   //the rest are the size of each dimension of dependent variable
@@ -101,9 +101,9 @@ class GenericMultiInputTable
   bool is_initialized() const { return initialized; }
   bool is_data_loaded() const { return data_loaded; }
   const IndepPairVec & get_independents() const {return independents;}
-  size_t get_num_dep_vars() const { return output.size();};
+  size_t get_num_dep_vars() const { return output.size();}
   size_t get_data_size() const { return data.size();}
-  double* get_dependent_variable_ptr(size_t index) {return output.at(index);};
+  double* get_dependent_variable_ptr(size_t index) {return output.at(index);}
 
   void bias_data(double bias, size_t idx1, size_t idx2);
   void bias_data(double bias, size_t idx) { bias_data( bias, idx, idx);}

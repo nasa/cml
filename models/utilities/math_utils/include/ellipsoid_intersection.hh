@@ -55,7 +55,7 @@ class EllipsoidIntersection{
            MathUtils::divide_protected( 1, r2),
            MathUtils::divide_protected( 1, r3)}
   {}
-  virtual ~EllipsoidIntersection(){};
+  virtual ~EllipsoidIntersection() = default;
 
 /*****************************************************************************
 update

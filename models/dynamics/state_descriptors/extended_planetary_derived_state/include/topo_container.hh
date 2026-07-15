@@ -50,7 +50,7 @@ class TopoContainer {
  public:
   TopoContainer( const jeod::AltLatLongState & state_in,
                  const int & calc_rel_vel);
-  ~TopoContainer(){};
+  ~TopoContainer() = default;
   void initialize( const jeod::RefFrameRot & planet_rot_state_in,
                    const jeod::RefFrameRot & vehicle_rot_state_in,
                    const double * inrtl_inrtl_vel_in,

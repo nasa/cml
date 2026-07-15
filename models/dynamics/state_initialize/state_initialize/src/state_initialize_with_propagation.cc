@@ -40,7 +40,6 @@ PROGRAMMERS:
  ******************************************************************************/
 
 #include <cmath>   // abs
-#include <cstddef> // NULL
 
 #include "../include/state_initialize_with_propagation.hh"
 
@@ -52,7 +51,7 @@ StateInitializeWithPropagation::StateInitializeWithPropagation(
   :
   StateInitialize(),
   gravity_manager( gravity_manager_in),
-  body(NULL),
+  body(nullptr),
   T_initial_to_current{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
   T_inrtl_to_initial_pfix{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
   omega(0.0),
@@ -71,7 +70,7 @@ StateInitializeWithPropagation::initialize( jeod::DynManager & dyn_manager)
   StateInitialize::initialize( dyn_manager); // sets the planet pointer to
                                              // non-null or fails.
   body = get_subject_dyn_body();
-  if (body == NULL) {
+  if (body == nullptr) {
     CMLMessage::fail(
     __FILE__,__LINE__,"Invalid subject specification\n",
     "The subject of this body action, is NULL\n");

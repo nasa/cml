@@ -192,8 +192,8 @@ public:
   void scale_data(double scale) {scale_data( scale, 0, data.size()-1);}
 
   void clear_data() {data.clear(); data_loaded = false;}
-  void reset_index_front(){index = 0;};
-  void reset_index_back(){index = size-1;};
+  void reset_index_front(){index = 0;}
+  void reset_index_back(){index = size-1;}
 
   // Setters and getters:
   void set_name( const std::string &new_name);

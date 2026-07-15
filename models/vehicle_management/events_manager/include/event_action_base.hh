@@ -53,6 +53,6 @@ Purpose:
 class EventActionBase {
  public:
   virtual bool specific_execution() { return false;}
-  virtual ~EventActionBase(){};
+  virtual ~EventActionBase() = default;
 };
 #endif

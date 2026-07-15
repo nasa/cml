@@ -76,13 +76,13 @@ class WakeEffectsBase : public SubscriptionBase
                    const WakeParamsSub & params_in);
 
   virtual void update() = 0;
-  bool get_in_region(){return in_region;};
+  bool get_in_region(){return in_region;}
 
  protected:
-  virtual void deactivate() {
+  void deactivate() override {
     force_toward_A = 0.0;
     SubscriptionBase::deactivate();
-  };
+  }
   void generate_trail_and_radial_dist();
 
  private: // and undefined:
@@ -112,11 +112,11 @@ class WakeReverseFlow : public WakeEffectsBase
                    const WakeFollowingBody & objectB_in,
                    const WakeParamsSub & params_in);
 
-  virtual void initialize();
-  virtual void update() override;
+  void initialize() override;
+  void update() override;
 
  protected:
-  virtual void deactivate() override;
+  void deactivate() override;
 
  private: // and undefined:
   WakeReverseFlow (const WakeReverseFlow& rhs);
@@ -179,11 +179,11 @@ class WakePrfModel : public WakeEffectsBase
                 const WakeFollowingBody & objectB_in,
                 const WakeParams & params_in);
 
-  virtual void initialize();
-  virtual void update() override;
+  void initialize() override;
+  void update() override;
 
  protected:
-  virtual void deactivate() override;
+  void deactivate() override;
 
  private: // and undefined:
   WakePrfModel (const WakePrfModel& rhs);

@@ -94,7 +94,7 @@ TargetRelative_StateParameter::initialize_check_config()
   // pfix-position must have been configured prior to
   // initialization with the set_planet method.
   //-----------------------------------------------------
-  if (pfix_position.planet == NULL) {
+  if (pfix_position.planet == nullptr) {
     CMLMessage::fail( __FILE__,__LINE__,
     "Planet has not been assigned to the PlanetFixedPosition instance\n"
     "(pfix_position) in TargetRelative_StateParameters.\n"
@@ -187,7 +187,7 @@ Purpose:(Set pointer to planet)
 void
 TargetRelative_StateParameter::set_planet( const jeod::Planet * planet_IN )
 {
-  if (planet_IN == NULL) {
+  if (planet_IN == nullptr) {
     CMLMessage::fail( __FILE__,__LINE__,
       "Planet passed in was NULL.\n"
       "Pfix-position has not been configured correctly or an invalid pointer\n"

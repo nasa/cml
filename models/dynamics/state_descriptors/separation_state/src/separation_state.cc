@@ -29,8 +29,8 @@ SeparationState::SeparationState()
   separation_distance(0.0),
   separation_rate(0.0),
   frames_subscribed(false),
-  source(NULL),
-  subject(NULL)
+  source(nullptr),
+  subject(nullptr)
 {
   subscribe_name = "SeparationState:";
 
@@ -132,14 +132,14 @@ SeparationState::initialize_find_frame(
        std::string  frame_name,
        std::string  body_type)
 {
-  jeod::BodyRefFrame * frame = NULL;
+  jeod::BodyRefFrame * frame = nullptr;
   if (frame_name.empty()) {
     frame = &body.composite_body;
   } else {
     frame = const_cast<jeod::BodyRefFrame *>(
                            body.find_vehicle_point(frame_name));
   }
-  if (frame == NULL) {
+  if (frame == nullptr) {
     CMLMessage::fail (
      __FILE__, __LINE__, "separation_state INVALID NAME\n",
      "Could not find a vehicle point named ", frame_name, " on the ", body_type, " vehicle");

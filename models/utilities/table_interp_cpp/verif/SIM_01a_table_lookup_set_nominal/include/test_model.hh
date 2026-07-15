@@ -108,7 +108,7 @@ public:
     }
   }
 
-  virtual ~TestModelBase() { };
+  virtual ~TestModelBase() = default;
 
   void initialize( ) { table_set.initialize(); }
 
@@ -327,7 +327,7 @@ public:
                                                1,
                                                lookup_method[1]);
   }
-  virtual ~TestModelDynamicAllocate() { };
+  ~TestModelDynamicAllocate() override = default;
   void update() { table_set.update(); };
 private:
   // Disable the copy/assignment operations
@@ -438,7 +438,7 @@ public:
                                                lookup_method[2]);
   };
 
-  virtual ~TestModelPreInstantiated() {};
+  ~TestModelPreInstantiated() override = default;
   void update()
   {
     table_set.update();

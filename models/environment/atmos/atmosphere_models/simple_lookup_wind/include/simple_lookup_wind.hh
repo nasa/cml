@@ -92,9 +92,9 @@ class SimpleLookupWind : public SubscriptionBase
        
 
   SimpleLookupWind();
-  virtual ~SimpleLookupWind(){};
+  ~SimpleLookupWind() override = default;
 
-  void initialize();
+  void initialize() override;
   void update(double altitude);
 
 

@@ -29,10 +29,10 @@ public:
                        const double & geodetic_altitude,
                        const double (&T_inrtl_struc)[3][3],
                        const double & mass);
-  virtual ~AeroInterfaceSimpleLiftDrag(){};
+  ~AeroInterfaceSimpleLiftDrag() override = default;
 
-  virtual void initialize() override;
-  virtual void update() override;
+  void initialize() override;
+  void update() override;
 
 private:
   // Make the copy constructor and assignment operator private

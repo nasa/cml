@@ -19,7 +19,7 @@ Purpose:(Manages injection of a random-walk fault.)
 template <typename T> class FaultRandomWalk : public Fault {
   public :
     explicit FaultRandomWalk(T& var);
-    virtual ~FaultRandomWalk(){}
+    ~FaultRandomWalk() override = default;
 
     void overwrite_value() override;
 

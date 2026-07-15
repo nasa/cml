@@ -7,7 +7,6 @@ PROGRAMMERS:
 
 *************************************************************/
 
-#define _USE_MATH_DEFINES /// M_PI_2
 #include <cmath> // M_PI_2
 #include "trick/constant.h" // DTR, degrees to radians.
 

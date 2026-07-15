@@ -15,7 +15,6 @@ PROGRAMMERS:
 *******************************************************************************/
 //Local Headers
 #include "../include/convert_double_to_words.hh"
-#include <cstddef> //for NULL
 
 /*******************************************************************************
 Purpose:(Run the class function that calls the variables and creates the
@@ -28,7 +27,7 @@ void convert_double_to_uint_words( double convert_value,
                                    const unsigned int array_size,
                                    unsigned int bit_size)
 {
-  if (words == NULL) {
+  if (words == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid arguments.\n",
       "The words array was passed in as NULL. There is nowhere for the\n"
@@ -214,13 +213,14 @@ ConvertDoubleToUintWords::update()
   // convert_value, so the max_index word must be zero, and the most
   // significant non-zero word is at max_index -1.
   double remainder = convert_value;
-  for (int word_id = word_count -1; word_id >= 0; word_id--) {
+  for (int word_id = static_cast<int>(word_count) - 1; word_id >= 0; word_id--) {
     // Take the whole multiple of the significance of this word
-    words.at(word_id) = static_cast<unsigned int> (remainder /
-                                                   significance.at(word_id));
+    const unsigned int word_index = static_cast<unsigned int>(word_id);
+    words.at(word_index) = static_cast<unsigned int> (remainder /
+                                                      significance.at(word_index));
 
     // Keep the remainder.
-    remainder -= words.at(word_id) * significance.at(word_id);
+    remainder -= words.at(word_index) * significance.at(word_index);
   }
 
   // Check to see if round off error occurs causing lost value

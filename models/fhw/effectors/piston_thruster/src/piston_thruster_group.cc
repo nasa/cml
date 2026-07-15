@@ -185,6 +185,7 @@ PistonThrusterGroup::update()
   case PistonThrusterGroupParams::TimeTableLookup:
     input.table_set.update();
     break;
+  case PistonThrusterGroupParams::SeparationTableLookup:
   default:
     CMLMessage::error(
       __FILE__,__LINE__, "Unsupported mode\n",

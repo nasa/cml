@@ -8,7 +8,6 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2017) (Antares) (new)))
 **********************************************************************/
 
-#include <cstddef> // NULL
 #include <cmath>   // abs
 #include <new>
 
@@ -23,12 +22,12 @@ AccumulatedAbsoluteDeltas::AccumulatedAbsoluteDeltas(
     :
     variable(variable_),
     size(size_),
-    old_variable(NULL),
-    accumulated_deltas(NULL)
+    old_variable(nullptr),
+    accumulated_deltas(nullptr)
 {
   subscribe_name = "AccumulatedAbsoluteDeltas:";
 
-  if (variable == NULL) {
+  if (variable == nullptr) {
     CMLMessage::fail(
     __FILE__,__LINE__,"Invalid construction\n",
     "The variable being accumulated in NULL.\n");

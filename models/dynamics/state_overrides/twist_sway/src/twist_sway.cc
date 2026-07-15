@@ -12,7 +12,6 @@ Programmers:
  )
 
 *******************************************************************************/
-#define _USE_MATH_DEFINES // M_PI
 #include <cmath> // M_PI, exp, pow
 #include <random> // std::uniform_real_distribution
 

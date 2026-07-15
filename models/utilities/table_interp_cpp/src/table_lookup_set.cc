@@ -245,7 +245,7 @@ TableLookupSet::associate_table_and_independent(
   TableIndependentVariable *ind_var,
   TableIndependentVariable::LookupMethod lookup_method)
 {
-  if (ind_var != NULL && table != NULL) {
+  if (ind_var != nullptr && table != nullptr) {
     table->add_independent(*ind_var, lookup_method);
   }
 }
@@ -258,7 +258,7 @@ TableLookupSet::associate_table_and_independent(
   size_t table_ix,
   TableIndependentVariable::LookupMethod lookup_method)
 {
-  if (ind_var != NULL && table != NULL) {
+  if (ind_var != nullptr && table != nullptr) {
     table->add_independent(*ind_var, table_ix, lookup_method);
   }
 }
@@ -278,11 +278,11 @@ TableLookupSet::lookup_independent(
       "Cannot identify an independent variable without a name.\n"
       "Specified name is empty.\n"
       "Returning NULL\n");
-    return NULL;
+    return nullptr;
   }
 
   TableIndependentVariable *ret = AbstractTableLookup::lookup_independent(var_name);
-  if (ret == NULL) {
+  if (ret == nullptr) {
     CMLMessage::error(
       __FILE__, __LINE__, "Invalid variable lookup\n",
       "No independent variable named ",var_name," was found in the "

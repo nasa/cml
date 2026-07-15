@@ -25,7 +25,7 @@ class TableLookupSet : public AbstractTableLookup
 {
 public:
   TableLookupSet();
-  virtual ~TableLookupSet(){};
+  ~TableLookupSet() override = default;
 
   void add_table( GenericMultiInputTable &new_table);
   void add_independent_variable( TableIndependentVariable &var_in);
@@ -86,7 +86,7 @@ public:
                      size_t table_ix,
                      TableIndependentVariable::LookupMethod lookup_method
                                          = TableIndependentVariable::Interp);
-  virtual TableIndependentVariable* lookup_independent(
+  TableIndependentVariable* lookup_independent(
                                           const std::string &var_name) override;
 
 private:

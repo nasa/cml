@@ -93,7 +93,7 @@ protected:
 
 public:
   PistonThrusterVehicleSide();
-  virtual ~PistonThrusterVehicleSide(){};
+  virtual ~PistonThrusterVehicleSide() = default;
 
   void loadCoM( const double * pos_CoM);
   void initialize();
@@ -119,17 +119,17 @@ public:
   PistonThruster();
   PistonThruster( const double *,
                   const double *);
-  virtual ~PistonThruster(){};
+  ~PistonThruster() override = default;
 
   void loadCoM( const double * pos_CoM_A,
                 const double * pos_CoM_B);
-  virtual void initialize();
+  void initialize() override;
   virtual void update( double force_mag);
 
 protected:
   bool construction_complete; /* (--) Flag specifying whether the sides' CoM
                                       positions have been loaded. */
-  virtual void deactivate();
+  void deactivate() override;
 
 private:
   PistonThruster(const PistonThruster& rhs);

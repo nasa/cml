@@ -22,7 +22,6 @@ add_cml_library(
         constraint_check/include/valset_constraint.hh
         convert_string/include/convert_string.hh
         double_to_words/include/convert_double_to_words.hh
-        double_to_words/include/double_to_words.h
         enhanced_logging/include/base_logging_group.hh
         enhanced_logging/include/base_logging_variable.hh
         enhanced_logging/include/enhanced_logging_manager.hh
@@ -85,7 +84,6 @@ add_cml_library(
         constraint_check/src/constraint_test_templates.cc
         constraint_check/src/constraint_test_timed_templates.cc
         double_to_words/src/convert_double_to_uint_words.cc
-        double_to_words/src/double_to_uint_words.c
         enhanced_logging/src/base_logging_group.cc
         enhanced_logging/src/enhanced_logging_manager.cc
         enhanced_logging/src/enhanced_logging_variable.cc

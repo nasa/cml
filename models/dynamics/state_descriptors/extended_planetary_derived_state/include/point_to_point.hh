@@ -51,7 +51,7 @@ class PointToPointElement
   PointToPointElement( std::string name,
                        double      position[3]);
   PointToPointElement( const PointToPointElement & orig);
-  virtual ~PointToPointElement(){};
+  virtual ~PointToPointElement() = default;
   // Accept default operator=; it isn't used in the implementation.
 };
 
@@ -87,7 +87,7 @@ class PointToPointPosition
   PointToPointPosition( std::string v_name,
                         std::string p_name);
   PointToPointPosition( const PointToPointPosition & original);
-  virtual ~PointToPointPosition(){};
+  virtual ~PointToPointPosition() = default;
   // Accept default operator=; it isn't used in the implementation.
 
   bool check_names (std::string v_pt_name,
@@ -144,7 +144,7 @@ class PointToPointManager
 
 
   PointToPointManager( const jeod::PlanetFixedPosition & B_wrt_P_in_P_);
-  virtual ~PointToPointManager(){};
+  virtual ~PointToPointManager() = default;
  private:
   void add_point( std::string pt_name,
                   double      pt_pos[3],

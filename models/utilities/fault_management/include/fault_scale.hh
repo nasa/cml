@@ -18,7 +18,7 @@ Purpose:(Manages injection of a scale-factor fault.)
 template<typename T> class FaultScale : public Fault {
   public :
     explicit FaultScale(T& var);
-    virtual ~FaultScale(){}
+    ~FaultScale() override = default;
 
     void overwrite_value() override;
 

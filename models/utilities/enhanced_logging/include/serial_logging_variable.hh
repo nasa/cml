@@ -49,7 +49,7 @@ class EnhancedLogging_SerialVariableT : public EnhancedLogging_SerialVariable
   {
     set_field_width();
   }
-  virtual ~EnhancedLogging_SerialVariableT(){};
+  ~EnhancedLogging_SerialVariableT() override = default;
 
  private: // remove operator= fnd copy-constructor completely
   EnhancedLogging_SerialVariableT (const EnhancedLogging_SerialVariableT&);
@@ -98,7 +98,7 @@ Purpose: Create an array of instances of this type from a specified variable
     */
     std::vector<unsigned int> count_per_index = array_size;
     for (int ii = count_per_index.size()-2; ii >= 0; --ii) {
-      count_per_index[ii] *= count_per_index[ii+1];
+      count_per_index[static_cast<size_t>(ii)] *= count_per_index[static_cast<size_t>(ii)+1];
     }
 
     /* Now create enough variables to cover the entire array, i.e.

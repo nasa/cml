@@ -22,7 +22,7 @@ class TrickLogging {
 
     TrickLogging()
       :
-      group_list(0){};
+      group_list(0){}
 
     /***************************************************************************/
     // Add a data record group to the group list
@@ -36,7 +36,7 @@ class TrickLogging {
         return;
       }
       group_list.push_back(add_me);
-    };
+    }
 
     /***************************************************************************/
     // Change the log cycle of a specified data record group
@@ -52,21 +52,21 @@ class TrickLogging {
            ++ii) {
         (*ii)->set_cycle(cycle);
       }
-    };
+    }
     /***************************************************************************/
     void set_cycle( double cycle, const char * name) {
       Trick::DataRecordGroup * group = get_group(name);
       if (group) {
         group->set_cycle( cycle);
       }
-    };
+    }
     /***************************************************************************/
     void set_cycle( double cycle, const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
       if (group) {
         group->set_cycle( cycle);
       }
-    };
+    }
 
     /***************************************************************************/
     // Change the log cycle of all the data record groups in the list
@@ -88,21 +88,21 @@ class TrickLogging {
       for (Trick::DataRecordGroup * group:group_list) {
         log_now( *group);
       }
-    };
+    }
     /***************************************************************************/
     void log_now( const char * name) {
       Trick::DataRecordGroup * group = get_group(name);
       if (group) {
         log_now( *group);
       }
-    };
+    }
     /***************************************************************************/
     void log_now( const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
       if (group) {
         log_now( *group);
       }
-    };
+    }
     /***************************************************************************/
     void log_now (Trick::DataRecordGroup & drg) {
       if (drg.record) {
@@ -154,26 +154,26 @@ class TrickLogging {
       for (Trick::DataRecordGroup * group:group_list) {
         disable(*group);
       }
-    };
+    }
     /***************************************************************************/
     void disable( const char * name) {
       Trick::DataRecordGroup * group = get_group(name);
       if (group) {
         disable(*group);
       }
-    };
+    }
     /***************************************************************************/
     void disable( const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
       if (group) {
         disable(*group);
       }
-    };
+    }
     /***************************************************************************/
     void disable( Trick::DataRecordGroup & group) {
       group.disable();
       group.write_data(true); // Flushes out the buffer
-    };
+    }
 
     /***************************************************************************/
     // Enable all data record groups
@@ -182,7 +182,7 @@ class TrickLogging {
       for (Trick::DataRecordGroup * group:group_list) {
         group->enable();
       }
-    };
+    }
 
     /***************************************************************************/
     // Enable specified data record group
@@ -192,14 +192,14 @@ class TrickLogging {
       if (group) {
         group->enable();
       }
-    };
+    }
     /***************************************************************************/
     void enable( const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
       if (group) {
         group->enable();
       }
-    };
+    }
 
     /***************************************************************************/
     // Returns a pointer to a Trick::DataRecordGroup specified by name
@@ -221,7 +221,7 @@ class TrickLogging {
         "No DataRecordGroup found with name ",name,".\n"
         "Returning nullptr.\n");
       return nullptr;
-    };
+    }
     /***************************************************************************/
     Trick::DataRecordGroup * get_group( const std::string & name)
     {
@@ -234,7 +234,7 @@ class TrickLogging {
         "No DataRecordGroup found with name ",name,".\n"
         "Returning nullptr.\n");
       return nullptr;
-    };
+    }
 
   private:
     TrickLogging (const TrickLogging&);

@@ -57,14 +57,14 @@ class PlanetPlanetState : public SubscriptionBase
   PlanetPlanetState( jeod::DynManager & dyn_mgr,
                      jeod::RefFrame & to_frame,
                      jeod::RefFrame & from_frame);
-  virtual ~PlanetPlanetState(){};
+  ~PlanetPlanetState() override = default;
 
-  void initialize();
+  void initialize() override;
   void update();
 
  protected:
-  void activate();
-  void deactivate();
+  void activate() override;
+  void deactivate() override;
 
  private:
    // Not implemented:

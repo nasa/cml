@@ -35,7 +35,7 @@ public:
     is_asc(true)
     {};
 
-  ~TestModel(){};
+  ~TestModel() = default;
 
   void update()
   {

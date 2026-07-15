@@ -8,7 +8,6 @@ PROGRAMMERS:
        (New implementation))
    )
 ********************************************************************************/
-#define _USE_MATH_DEFINES // M_PI
 #include <cmath>           // M_PI, fmod
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

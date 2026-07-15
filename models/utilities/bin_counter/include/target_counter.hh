@@ -65,7 +65,7 @@ class CML_TargetCounter {
   {
     std::vector<int> targets_v( targets_, targets_+n_targets);
     set_data( targets_v);
-  };
+  }
 
  private: // not implemented
   CML_TargetCounter(const CML_TargetCounter&);

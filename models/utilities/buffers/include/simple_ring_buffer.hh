@@ -48,7 +48,7 @@ Constructor/ destructor
   {
     data.resize(1);
   }
-  virtual ~CMLSimpleRingBuffer(){};
+  virtual ~CMLSimpleRingBuffer() = default;
 
 /*****************************************************************************
 advance_index

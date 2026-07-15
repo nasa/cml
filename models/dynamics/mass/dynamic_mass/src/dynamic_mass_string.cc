@@ -176,7 +176,7 @@ Purpose: (Adds a DynamicMassBody to a string)
 void DynamicMassString::add_mass_to_string( // Return: -- void
     DynamicMassBody * new_mass_body)  /* In: -- DynamicMassBody to be added */
 {
-  if (new_mass_body == NULL) {
+  if (new_mass_body == nullptr) {
     CMLMessage::fail (
       __FILE__, __LINE__, "Setup error.\n",
       "A NULL pointer was given to the add_mass_to_string function. "

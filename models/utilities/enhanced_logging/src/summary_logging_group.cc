@@ -140,14 +140,14 @@ Name: find_condition
 Purpose:
   Returns the index of a condition of specified name.
 *****************************************************************************/
-unsigned int
+int
 EnhancedLogging_SummaryGroup::find_condition( const std::string & cond_name)
 {
   auto it = std::find_if( conditions.begin(), conditions.end(),
                 [cond_name](EnhancedLogging_SummaryCondition_GroupData & cond_){
                 return (cond_.get_name() == cond_name);}
                );
-  if (it != conditions.end()) {return (*it).get_ID();}
+  if (it != conditions.end()) {return static_cast<int>(it->get_ID());}
 
   CMLMessage::error( __FILE__,__LINE__,
     "Did not find a condition in group ",name," with name ",cond_name,
@@ -173,7 +173,7 @@ EnhancedLogging_SummaryGroup::reset_summary_value(
   int cond_ix = find_condition( cond_name);
   if (cond_ix < 0) {return;}
   // Reset the specified variable's summary value at that index.
-  var->reset_summary_val(cond_ix);
+  var->reset_summary_val(static_cast<size_t>(cond_ix));
 }
 
 
@@ -189,7 +189,7 @@ EnhancedLogging_SummaryGroup::log_group_csv(std::ofstream & fstream)
   fstream << "condition_name {--}, condition_type {--}," <<
               "condition_count {--}, condition_first_time {s}," <<
               "condition_last_time {s}";
-  for (auto & var : variables) {
+  for (const auto & var : variables) {
     fstream << ", " << var->alias << "{" << var->units << "}";
   }
   fstream << std::endl;

@@ -32,7 +32,7 @@ class WakeParamsSub
     start_dist(0.0),
     stop_dist(0.0),
     radial_dist(0.0)
-  {};
+  {}
 };
 
 /*****************************************************************************
@@ -65,6 +65,6 @@ class WakeParams
     main_body_diameter(0.0),
     rev_flow(),
     prf()
-  {};
+  {}
 };
 #endif

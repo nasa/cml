@@ -123,7 +123,7 @@ AtmosphereExec::AtmosphereExec(
   beta(1.458E-6),  // from std 76 atmosphere model
   month_init(0),
   atmos_gram( gi_stub,
-              NULL,
+              nullptr,
               planet_state,
               dyn_time,
               out),

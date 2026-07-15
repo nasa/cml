@@ -46,13 +46,13 @@ class VehicleEventsManager
 
  public:
   VehicleEventsManager();
-  virtual ~VehicleEventsManager(){};
+  virtual ~VehicleEventsManager() = default;
 
   virtual void initialize(); // Second part of init sequence, called late.
   virtual void update();
   virtual void execution_follow_up() = 0;
 
-  void register_watch(WatchValuesBaseCore & watch) {all_watches.push_back(&watch);};
+  void register_watch(WatchValuesBaseCore & watch) {all_watches.push_back(&watch);}
 
  private:
    VehicleEventsManager (const VehicleEventsManager& rhs);

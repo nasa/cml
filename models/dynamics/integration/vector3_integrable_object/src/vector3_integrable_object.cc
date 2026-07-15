@@ -33,8 +33,8 @@ Purpose: (Constructs the model with no inputs, here to prevent a user from
 *****************************************************************************/
 Vector3IntegrableObject::Vector3IntegrableObject () // DO NOT USE THIS
   :
-  deriv_ptr(NULL),
-  dyn_body(NULL)
+  deriv_ptr(nullptr),
+  dyn_body(nullptr)
 {
   subscribe_name = "Vector3IntegrableObject:";
 
@@ -119,7 +119,7 @@ Vector3IntegrableObject::initialize()
     return;
   }
 
-  if (deriv_ptr == NULL) {
+  if (deriv_ptr == nullptr) {
     CMLMessage::fail (
       __FILE__, __LINE__, "Invalid Integration configuration\n",
       "The pointer to the derivatives has not been set.\n"
@@ -137,7 +137,7 @@ Vector3IntegrableObject::activate()
 {
   // If it doesn't know which jeod::DynBody it is attached to, it doesn't know which
   // group it is a part of.  All hope is lost.
-  if (dyn_body == NULL) {
+  if (dyn_body == nullptr) {
     // This is unreachable code in current implementation; dyn_body is a
     // protected pointer settable only at construction time, and there it is set
     // to the address of a passed-in reference.
@@ -156,9 +156,9 @@ Vector3IntegrableObject::activate()
   // must be added to the group manually.
   if (dyn_body->get_integ_frame() != nullptr) {
 
-    jeod::DynamicsIntegrationGroup * integ_group =
+    jeod::DynamicsIntegrationGroup * body_integ_group =
                                     dyn_body->get_dynamics_integration_group();
-    if (integ_group == NULL) {
+    if (body_integ_group == nullptr) {
       // This may be unreachable code; it suggests something has gone awry deep
       // in JEOD functionality.  A dyn-body should always have an integration
       // group.  But we must check a returned pointer from an external source
@@ -176,7 +176,7 @@ Vector3IntegrableObject::activate()
     // first line is this line of code can only be run if this was previously
     // inactive, which means it was removed from the integration group at that
     // time.
-    integ_group->add_integrable_object(*this);
+    body_integ_group->add_integrable_object(*this);
   }
   // Add it to the jeod::DynBody list of associated-integrable-objects.  This list
   // gets hauled around if the jeod::DynBody changes groups.
@@ -195,7 +195,7 @@ Vector3IntegrableObject::deactivate()
 {
   // If it doesn't know which jeod::DynBody it is attached to, something went
   // horribly wrong. It should never have been activated.
-  if (dyn_body == NULL) {
+  if (dyn_body == nullptr) {
     // This is unreachable code in current implementation; dyn_body is a
     // protected pointer settable only at construction time.  It was
     // checked at model activation, and there is no mechanism by which it could
@@ -216,9 +216,9 @@ Vector3IntegrableObject::deactivate()
   // must be added to the group manually.
   if (dyn_body->get_integ_frame() != nullptr) {
 
-    jeod::DynamicsIntegrationGroup * integ_group =
+    jeod::DynamicsIntegrationGroup * body_integ_group =
                                     dyn_body->get_dynamics_integration_group();
-    if (integ_group == NULL) {
+    if (body_integ_group == nullptr) {
       // This may be unreachable code; it suggests something has gone awry deep
       // in JEOD functionality.  A dyn-body should always have an integration
       // group.  But we must check a returned pointer from an external source
@@ -231,7 +231,7 @@ Vector3IntegrableObject::deactivate()
       return;
     }
 
-    integ_group->remove_integrable_object(*this);
+    body_integ_group->remove_integrable_object(*this);
   }
   // Remove it to the jeod::DynBody list of associated-integrable-objects.
   dyn_body->remove_integrable_object(*this);

@@ -59,7 +59,7 @@ class RcsScaleFactorInterface
     valve_decay_time(0.0)
   {}
 
-  virtual ~RcsScaleFactorInterface() {};
+  virtual ~RcsScaleFactorInterface() = default;
 
  private:
   RcsScaleFactorInterface(const RcsScaleFactorInterface&);

@@ -36,14 +36,14 @@ class AtmosphereExec_Drwp : public AtmosphereExec_AtmosWindsBase
     AtmosphereExec_Drwp( LookupAtmosWinds              & DRWP_atmos_in,
                          ExtendedPlanetaryDerivedState & planet_state_in,
                          AtmosExecOutput               & master_output);
-    virtual ~AtmosphereExec_Drwp(){};
+    ~AtmosphereExec_Drwp() override = default;
 
-    virtual void activate() override;
-    virtual void deactivate() override;
-    virtual bool initialize_atmos() override {return initialize();};
-    virtual bool initialize_winds() override {return initialize();};
-    virtual void update_atmos() override;
-    virtual void update_winds() override;
+    void activate() override;
+    void deactivate() override;
+    bool initialize_atmos() override {return initialize();}
+    bool initialize_winds() override {return initialize();}
+    void update_atmos() override;
+    void update_winds() override;
 
   protected:
     bool initialize();

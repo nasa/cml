@@ -40,6 +40,7 @@ void
 EventTriggerBase::apply_function_modifier()
 {
   switch (function_modifier) {
+  case NoModification:
   default:
     break;
   case Absolute:
@@ -107,6 +108,29 @@ EventTriggerBase::set_new_reference()
   case ABS_MIN_CONDITIONAL_LAST:
     reference_dbl = std::abs(variable_dbl);
     break;
+  case Undefined:
+  case EQ:
+  case NE:
+  case GT:
+  case LT:
+  case GE:
+  case LE:
+  case ABS_EQ:
+  case ABS_GT:
+  case ABS_GE:
+  case ABS_LT:
+  case ABS_LE:
+  case OC:
+  case Change:
+  case Crossing:
+  case MAX_FIRST:
+  case MIN_FIRST:
+  case ABS_MAX_FIRST:
+  case ABS_MIN_FIRST:
+  case MAX_LAST:
+  case MIN_LAST:
+  case ABS_MAX_LAST:
+  case ABS_MIN_LAST:
   default:
     // No-op
     break;

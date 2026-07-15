@@ -170,7 +170,7 @@ class WatchValuesLogNow : public WatchValuesBase<varT> {
      logging(logging_in){};
  protected:
   TrickLogging & logging;
-  virtual bool specific_execution() {logging.log_now();
+  bool specific_execution() override {logging.log_now();
                                      return false;};
  private:
   WatchValuesLogNow (const WatchValuesLogNow& rhs);

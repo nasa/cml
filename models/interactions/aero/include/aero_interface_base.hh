@@ -57,13 +57,13 @@ public:
   AeroInterfaceBase( AtmosRelativeState & atmos_rel_state_in,
                      const double       & geodetic_altitude);
 
-  virtual ~AeroInterfaceBase() {};
+  ~AeroInterfaceBase() override = default;
 
   virtual void update() = 0;
 
 protected:
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
 
 private:
   // Make the copy constructor and assignment operator private

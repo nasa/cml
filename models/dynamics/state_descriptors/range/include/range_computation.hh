@@ -56,7 +56,7 @@ class RangeValues
 
  public:
   RangeValues();
-  virtual ~RangeValues(){};
+  virtual ~RangeValues() = default;
  private:
    // Copy constructor and assignment operator for this class are
    // declared private and are not implemented.
@@ -119,7 +119,6 @@ class RangeComputation : public RangeValues,
       The 3-vector specifying the reference direction.
       This does not have to be a unit vector.*/
 
-  double cos_totalrange_angle; /* (--) Cosine of the total-range angle*/
   double pos_x_pos_unit_pfix[3]; /* (--)
       Cross product of the target-position unit vector with the
       origin-position unit vector. */
@@ -133,7 +132,7 @@ class RangeComputation : public RangeValues,
 
  public:
   RangeComputation(const jeod::PlanetFixedPosition & state_in);
-  virtual ~RangeComputation(){};
+  ~RangeComputation() override = default;
 
   virtual void initialize( const jeod::Planet & planet_in);
   void set_reference_data_query(); /*

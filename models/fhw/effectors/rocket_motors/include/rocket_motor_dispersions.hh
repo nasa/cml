@@ -29,7 +29,7 @@ public:
               nominal motor frame; accounts for manufacturing tolerances. */
 
   RocketMotorDispersions();
-  virtual ~RocketMotorDispersions(){};
+  virtual ~RocketMotorDispersions() = default;
 
   void apply_dispersions( double position[3],
                           double T_parent_to_motor[3][3]);

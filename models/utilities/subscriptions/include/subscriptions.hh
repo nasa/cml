@@ -54,17 +54,17 @@ class SubscriptionBase {
     initialized(false),
     active(false),
     sub_pending(0),
-    num_subscriptions(0){};
+    num_subscriptions(0){}
 
-  virtual ~SubscriptionBase(){};
+  virtual ~SubscriptionBase() = default;
 
   virtual void subscribe();
   virtual void unsubscribe();
   virtual void initialize();
   virtual void disable();
-  bool is_initialized() const { return initialized;};
-  bool is_active() const { return active;};
-  bool is_enabled() const {return enabled;};
+  bool is_initialized() const { return initialized;}
+  bool is_active() const { return active;}
+  bool is_enabled() const {return enabled;}
 
  protected:
   void subscribe_internal();

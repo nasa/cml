@@ -19,14 +19,14 @@ PROGRAMMERS:
 class RangeDefaultData
 {
   public:
-  RangeDefaultData(){};
-  virtual ~RangeDefaultData(){};
+  RangeDefaultData() = default;
+  virtual ~RangeDefaultData() = default;
 
   void launch_pad_KSC_39B(RangeFromPfixReference & launch);
 
 private:
    // Not implemented:
    RangeDefaultData (const RangeDefaultData& rhs);
-   void operator =  (const RangeDefaultData& rhs);;
+   void operator =  (const RangeDefaultData& rhs);
 };
 #endif

@@ -19,7 +19,6 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#define _USE_MATH_DEFINES // M_PI
 #include<cmath>  // M_PI
 
 #include "../include/single_input_table_for_angles.hh"

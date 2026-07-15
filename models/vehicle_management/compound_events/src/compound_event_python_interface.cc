@@ -9,6 +9,7 @@ PROGRAMMERS:
 
 
 #include <string>
+#include <utility>
 #include "../include/compound_event_python_interface.hh"
 
 /* Note: these are the ways in which an event can have an action added to it via
@@ -30,12 +31,12 @@ PROGRAMMERS:
 */
 
 void
-CompoundEventPythonInterface::add_action( std::string name,
+CompoundEventPythonInterface::add_action( std::string action_name,
                                           double      action_value,
                                           std::string action_string)
 {
   CompoundEventActionConfig config;
-  config.name = name;
+  config.name = std::move(action_name);
   config.target_value_assignment = action_value;
   config.target_string_assignment = action_string;
   actions.push_back(config);
@@ -43,51 +44,51 @@ CompoundEventPythonInterface::add_action( std::string name,
 
 
 void
-CompoundEventPythonInterface::add_action( std::string name,
+CompoundEventPythonInterface::add_action( std::string action_name,
                                           std::string action_string)
 {
   CompoundEventActionConfig config;
-  config.name = name;
+  config.name = std::move(action_name);
   config.target_string_assignment = action_string;
   actions.push_back(config);
 }
 
 void
-CompoundEventPythonInterface::add_action( std::string name,
+CompoundEventPythonInterface::add_action( std::string action_name,
                                           double      action_value)
 {
   CompoundEventActionConfig config;
-  config.name = name;
+  config.name = std::move(action_name);
   config.target_value_assignment = action_value;
   actions.push_back(config);
 }
 
 void
-CompoundEventPythonInterface::add_action( std::string name,
+CompoundEventPythonInterface::add_action( std::string action_name,
                                           void *      target_ptr,
                                           double      action_value)
 {
   CompoundEventActionConfig config;
-  config.name = name;
+  config.name = std::move(action_name);
   config.target_ptr = target_ptr;
   config.target_value_assignment = action_value;
   actions.push_back(config);
 }
 
 void
-CompoundEventPythonInterface::add_action( std::string name,
+CompoundEventPythonInterface::add_action( std::string action_name,
                                           void *      target_ptr)
 {
   CompoundEventActionConfig config;
-  config.name = name;
+  config.name = std::move(action_name);
   config.target_ptr = target_ptr;
   actions.push_back(config);
 }
 
 void
-CompoundEventPythonInterface::add_action( std::string name)
+CompoundEventPythonInterface::add_action( std::string action_name)
 {
   CompoundEventActionConfig config;
-  config.name = name;
+  config.name = std::move(action_name);
   actions.push_back(config);
 }

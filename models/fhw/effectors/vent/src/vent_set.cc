@@ -78,7 +78,7 @@ VentSet::VentSet(
   :
   VentSet(dyn_body_, time)
 {
-  if (tank_array == NULL) {
+  if (tank_array == nullptr) {
     CMLMessage::fail(
     __FILE__,__LINE__,"Construction error.\n",
     "Tank array has not been specified.\n");
@@ -106,7 +106,7 @@ VentSet::~VentSet()
   for (auto& vent:vents) {
     if (vent->allocated_in_set) {
       delete vent;
-      vent = NULL;
+      vent = nullptr;
     }
   }
 }
@@ -246,7 +246,7 @@ SimpleVent * VentSet::get_vent(size_t ii)
       "The vents vector has only ", vents_size, " elements\n");
     // unreachable statement due to above FATAL error but required
     // because the compiler is expecting this method to return a pointer.
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -313,7 +313,7 @@ void VentSet::apply_impulse()
     // apply the impulse to the root body.
     jeod::DynBody * root_body = const_cast<jeod::DynBody *>(dyn_body.get_root_body());
     // Sanity check -- root body pointer must be non-NULL to continue.
-    if (root_body == NULL) {
+    if (root_body == nullptr) {
       // Possibly an unreachable error? 'dyn_body' is protected, so there is no
       // way to set root_body to NULL post initialization via external ways.
       // JEOD is guaranteed to never return a NULL for a root_body because a

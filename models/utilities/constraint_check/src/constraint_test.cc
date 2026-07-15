@@ -26,7 +26,7 @@ ConstraintTest::ConstraintTest()
   prev_violation(false),
   violation_count(0),
   equality_threshold(1e-6)
-{};
+{}
 // ***************************************************************************
 ConstraintTestTimed::ConstraintTestTimed()
   :
@@ -41,7 +41,7 @@ ConstraintTestTimed::ConstraintTestTimed()
   violation_timer (0.0),
   gap_timer (0.0),
   accumulated_violation_timer (0.0)
-{};
+{}
 
 /*****************************************************************************
 Name: set_violation_condition

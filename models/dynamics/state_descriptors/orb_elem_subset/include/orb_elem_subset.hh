@@ -113,7 +113,7 @@ class OrbElemSubset{
   OrbElemSubset(const jeod::RefFrameTrans & inrtl_state_in,
                 const jeod::Planet & planet_in,
                 const double & planet_mu);
-  ~OrbElemSubset(){};
+  ~OrbElemSubset() = default;
 
  private:
    // Copy constructor and assignment operator for this class are

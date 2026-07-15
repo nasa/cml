@@ -63,7 +63,7 @@ class DummyVehicleLauncher
                         const jeod::DynBody & state);
   DummyVehicleLauncher( jeod::DynBody & this_body,
                         const jeod::DynBody & real_body);
-  virtual ~DummyVehicleLauncher(){};
+  virtual ~DummyVehicleLauncher() = default;
 
   void initialize_integ_group_actions();
   void launch();
@@ -80,6 +80,6 @@ class DummyVehicleLauncher
  private:
   // Not implemented:
   DummyVehicleLauncher (const DummyVehicleLauncher& rhs);
-  DummyVehicleLauncher& operator = (const DummyVehicleLauncher& rhs);;
+  DummyVehicleLauncher& operator = (const DummyVehicleLauncher& rhs);
 };
 #endif

@@ -72,10 +72,10 @@ class WatchValuesFlipFlop : public WatchValuesBaseCore
     event_triggered value switches from true to false. */
 
   explicit WatchValuesFlipFlop( WatchValuesBaseCore & associated_watch);
-  virtual ~WatchValuesFlipFlop();
+  ~WatchValuesFlipFlop() override;
 
-  void initialize(std::list<WatchValuesBaseCore *> * active_watches) override;
-  virtual bool test_crossing() override;
+  void initialize(std::list<WatchValuesBaseCore *> * active_watches_in) override;
+  bool test_crossing() override;
   void apply_complementary_changes() override;
 
   void add_to_down_disable(SubscriptionBase & add_me)

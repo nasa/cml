@@ -225,7 +225,7 @@ void EnhancedLogging_SummaryVariableT<unsigned int>::set_var_abs_min_abs()
 template<>
 void EnhancedLogging_SummaryVariableT<float>::set_var_avg_excl_zeros()
 {
-  if (!MathUtils::is_near_equal( var_ref, (float)0.0)) {
+  if (!MathUtils::is_near_equal( var_ref, 0.0f)) {
     set_var_avg();
   }
 }
@@ -336,22 +336,22 @@ template<> void EnhancedLogging_SummaryVariableT<signed char>::log_value_fmt( si
 
 // Empty methods, no meaningful resolution.
 template<>
-void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs() {};
+void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs() {}
 template<>
-void EnhancedLogging_SummaryVariableT<std::string>::set_var_max() {};
+void EnhancedLogging_SummaryVariableT<std::string>::set_var_max() {}
 template<>
-void EnhancedLogging_SummaryVariableT<std::string>::set_var_min() {};
+void EnhancedLogging_SummaryVariableT<std::string>::set_var_min() {}
 template<>
-void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs_max() {};
+void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs_max() {}
 template<>
-void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs_min() {};
+void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs_min() {}
 template<>
-void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs_max_abs() {};
+void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs_max_abs() {}
 template<>
-void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs_min_abs() {};
+void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs_min_abs() {}
 template<>
-void EnhancedLogging_SummaryVariableT<std::string>::set_var_avg() {};
+void EnhancedLogging_SummaryVariableT<std::string>::set_var_avg() {}
 template<>
-void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs_avg() {};
+void EnhancedLogging_SummaryVariableT<std::string>::set_var_abs_avg() {}
 template<>
-void EnhancedLogging_SummaryVariableT<std::string>::set_var_avg_excl_zeros() {};
+void EnhancedLogging_SummaryVariableT<std::string>::set_var_avg_excl_zeros() {}

@@ -57,24 +57,24 @@ class AtmosphereExecInterface : public SubscriptionBase
     AtmosphereExecInterface(const double & dyn_time,
                             ExtendedPlanetaryDerivedState & planet_state,
                             const jeod::DynBody  & body);
-    virtual ~AtmosphereExecInterface(){};
+    ~AtmosphereExecInterface() override = default;
 
-    virtual void initialize();
+    void initialize() override;
 
     std::string get_current_atmos_name() {
         std::string name = "N/A";
         if (current_atmos) { name = current_atmos->name; }
         return name;
-    };
+    }
     std::string get_current_winds_name() {
         std::string name = "N/A";
         if (current_winds) { name = current_winds->name; }
         return name;
-    };
+    }
 
   protected:
-    virtual void activate();
-    virtual void deactivate();
+    void activate() override;
+    void deactivate() override;
 
   private:
     AtmosphereExecInterface (const AtmosphereExecInterface&);

@@ -54,7 +54,7 @@ AeroExecutiveTable::AeroExecutiveTable(AeroInterfaceOutput & output_ref,
   aero_damping_on_diag_in_table( AeroTableSetBase::NotInTable),
   aero_damping_off_diag_in_table( AeroTableSetBase::NotInTable),
 
-  current_table(NULL),
+  current_table(nullptr),
 
   threshold_min_free_stream_vel_mag(1.0), // Arbitrary threshold.
 
@@ -90,7 +90,7 @@ AeroExecutiveTable::change_table( unsigned int new_ix)
   }
   // if current_table == NULL, the model has not yet been initialized and will
   // fail at initialization if this is not corrected.
-  else if (current_table == NULL) {
+  else if (current_table == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid Table request.\n",
       "Request to switch to table at index ", new_ix, ", but there are only ", data_tables_vector.size(), " tables "
@@ -109,7 +109,7 @@ void
 AeroExecutiveTable::change_table( std::string new_name)
 {
   // Check trivial case - change commanded to current table.
-  if (current_table != NULL) {
+  if (current_table != nullptr) {
     if (current_table->name.compare(new_name) == 0) {
       CMLMessage::inform(
         __FILE__,__LINE__,"Redundant request\n",
@@ -128,7 +128,7 @@ AeroExecutiveTable::change_table( std::string new_name)
   }
   // if current_table == NULL, the model has not yet been initialized and will
   // fail at initialization if this is not corrected.
-  if (current_table == NULL) {
+  if (current_table == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid Table request.\n",
       "Request to switch to table named ", new_name, ", but none was found.\n"
@@ -164,7 +164,7 @@ Purpose: (Adds a table to the available tables collection.)
 void
 AeroExecutiveTable::add_table( AeroTableSetBase * table)
 {
-  if (table == NULL) {
+  if (table == nullptr) {
     CMLMessage::warn(
       __FILE__,__LINE__,"Invalid address.\n",
       "The table to be added is NULL.\n"
@@ -213,7 +213,7 @@ AeroExecutiveTable::initialize()
     return;
   }
 
-  if (current_table == NULL) {
+  if (current_table == nullptr) {
     if (data_tables_vector.empty()) {
       CMLMessage::error(
         __FILE__,__LINE__,"Invalid Table initialization.\n",
@@ -221,7 +221,7 @@ AeroExecutiveTable::initialize()
         "This table-based Aero capability cannot be activated.\n");
       return; // Do not continue to initialize
     }
-    else if (data_tables_vector[0] == NULL) {
+    else if (data_tables_vector[0] == nullptr) {
       // UNREACHABLE CODE: but best to be safe.
       // data_tables_vector is protected, the only path to add a new table is
       // via add_table, which checks for NULL before pushing the new entry
@@ -303,7 +303,7 @@ Purpose: (Activates the method.)
 void
 AeroExecutiveTable::activate()
 {
-  if (current_table == NULL) {
+  if (current_table == nullptr) {
     // UNREACHABLE CODE, sanity check.
     // activate() is called from SubscriptionBase and only when a model is
     // initialized.  This model cannot be initialized if current_table = NULL.
@@ -328,7 +328,7 @@ Purpose: (Actions necessary when a table changes.)
 void
 AeroExecutiveTable::configure_new_table( AeroTableSetBase * new_table)
 {
-  if (new_table == NULL) {
+  if (new_table == nullptr) {
     // UNREACHABLE CODE, but best to be safe.
     // This method is protected, and is only called using an argument pulled
     // directly from the data_tables_vector STL-vector.
@@ -348,7 +348,7 @@ AeroExecutiveTable::configure_new_table( AeroTableSetBase * new_table)
   }
 
   // Turn off the current table
-  if (current_table != NULL) {
+  if (current_table != nullptr) {
     current_table->unsubscribe();
   }
   // reset to new table and configure new table.
@@ -477,9 +477,9 @@ AeroExecutiveTable::post_process_table_data()
       coefficients.CA = -coefficients.CX;
       coefficients.CN = -coefficients.CZ;
     break;
+  case AeroTableSetBase::Unspecified:
   default:
     // UNREACHABLE CODE, sanity check.
-    // The switch cases are exhaustive
     CMLMessage::fail(
       __FILE__,__LINE__,"Illegal operation mode\n",
       "AeroTable data mode not found.\n");

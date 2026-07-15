@@ -66,7 +66,7 @@ class VerifVehicleEventsManager : public VehicleEventsManager
       Error test case: An unconfigured event */
 
  public:
-  virtual void execution_follow_up(){};
+  void execution_follow_up() override{};
   VerifVehicleEventsManager(TrickLogging & trick_logging,
                             const double  & time)
       :

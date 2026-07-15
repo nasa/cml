@@ -80,7 +80,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   // Have to cast away the const-ness because we will be applying an impulse
   // to the parent.
   jeod::MassBody * parent = const_cast<jeod::MassBody *>(subject->get_parent_body());
-  if (parent == NULL) {
+  if (parent == nullptr) {
     CMLMessage::error (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
        "\n", action_identifier, " failed to detach ", subject->name.get_name(), " because no parent body was found to\n"
@@ -125,7 +125,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   // This test could be abbreviated to if (parent_body == NULL) because if the
   // parent-body is not a jeod::DynBody, then the subject-body cannot be a jeod::DynBody
   // (cannot attach a Dynbody to a jeod::MassBody). However, for completeness:
-  if ( parent_body == NULL && subject_body == NULL) {
+  if ( parent_body == nullptr && subject_body == nullptr) {
     CMLMessage::warn (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
       "\nNeither of the two mass-body objects specified in ", action_identifier, " are dyn-body "
@@ -144,7 +144,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   // requirements. Do not try to hit a parent-body == NULL in code-coverage
   // verification, it can't be done. If parent_body == NULL, then
   // subject_body also == NULL, and method would have already exited.
-  if (parent_body != NULL) {
+  if (parent_body != nullptr) {
     apply_impulse( *parent_body,
                     parent_point_name);
   }
@@ -169,7 +169,7 @@ MassBodyDetachImpulsive::apply_impulse( jeod::DynBody          & dyn_body,
                                         std::string  mass_point_name)
 {
   const jeod::MassPoint * mass_point = dyn_body.mass.find_mass_point(mass_point_name);
-  if (mass_point == NULL) {
+  if (mass_point == nullptr) {
     CMLMessage::error (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
        "\n", action_identifier, " could not find mass point named ", mass_point_name, " on body ", dyn_body.name.get_name(), " to apply impulse to."
@@ -237,7 +237,7 @@ MassBodyDetachImpulsive::apply_impulse( jeod::DynBody          & dyn_body,
     // root body.
     root_body = const_cast<jeod::DynBody *>(dyn_body.get_root_body());
     // sanity check -- root body pointer must be non-NULL to continue.
-    if (root_body == NULL) {
+    if (root_body == nullptr) {
       CMLMessage::error (
         __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
          "\n", action_identifier, " could not find root body for body ", dyn_body.name.get_name(), ".\n"

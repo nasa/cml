@@ -45,7 +45,7 @@ class EnhancedLogging_SummaryVariable : public EnhancedLogging_BaseVariable
   EnhancedLogging_SummaryVariable( std::string alias,
                                    std::string units = "",
                                    std::string name = "");
-  virtual ~EnhancedLogging_SummaryVariable(){};
+  ~EnhancedLogging_SummaryVariable() override = default;
 
   void populate_condition(
                     size_t,
@@ -154,7 +154,7 @@ class EnhancedLogging_SummaryVariableT : public EnhancedLogging_SummaryVariable
                                      const EnhancedLogging_SummaryVariableT&);
 
  public:
-  virtual ~EnhancedLogging_SummaryVariableT(){};
+  ~EnhancedLogging_SummaryVariableT() override = default;
 
 /*****************************************************************************
 Name: set_field_width
@@ -198,8 +198,8 @@ Purpose: Create an array of instances of this type from a specified variable
     *          count_per_index = {24, 6, 2}
     */
     std::vector<unsigned int> count_per_index = array_size;
-    for (int ii = count_per_index.size()-2; ii >= 0; --ii) {
-      count_per_index[ii] *= count_per_index[ii+1];
+    for (int ii = static_cast<int>(count_per_index.size())-2; ii >= 0; --ii) {
+      count_per_index[static_cast<size_t>(ii)] *= count_per_index[static_cast<size_t>(ii)+1];
     }
 
     /* Now create enough variables to cover the entire array, i.e.
@@ -416,7 +416,7 @@ Notes:
     stream << std::endl;
   }
 /****************************************************************************/
-  void log_value( size_t index, std::ofstream & stream) const
+  void log_value( size_t index, std::ofstream & stream) const override
   {
     stream << ", " << recorded_vals[index];
   }

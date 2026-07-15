@@ -114,7 +114,7 @@ MassBodyDistributeCompToCore::update(
   // Set the update-flags again and update the entire tree.
   adjustable_body.set_update_flag();
   jeod::MassBody * root_body = const_cast<jeod::MassBody *> (target_body.get_root_body());
-  if (root_body != NULL) {
+  if (root_body != nullptr) {
     root_body->update_mass_properties();
   }
   else {

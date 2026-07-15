@@ -131,7 +131,6 @@ PROGRAMMERS:
 #include "cml/models/utilities/constraint_check/include/valset_constraint.hh"
 #include "cml/models/utilities/convert_string/include/convert_string.hh"
 #include "cml/models/utilities/double_to_words/include/convert_double_to_words.hh"
-#include "cml/models/utilities/double_to_words/include/double_to_words.h"
 #include "cml/models/utilities/enhanced_logging/include/base_logging_group.hh"
 #include "cml/models/utilities/enhanced_logging/include/base_logging_variable.hh"
 #include "cml/models/utilities/enhanced_logging/include/enhanced_logging_manager.hh"

@@ -109,7 +109,7 @@ class AtmosphereExec : public AtmosphereExecInterface {
            ExtendedPlanetaryDerivedState & state_in,
            jeod::DynBody  & body_in);
 
-    virtual ~AtmosphereExec(){};
+    ~AtmosphereExec() override = default;
 
     void initialize( jeod::TimeStandard & time_in);
 
@@ -119,8 +119,8 @@ class AtmosphereExec : public AtmosphereExecInterface {
 
   protected:
     GramInterface gi_stub;  /* (--) Stub for GRAM-less implementations*/
-    virtual void activate() override;
-    virtual void deactivate() override;
+    void activate() override;
+    void deactivate() override;
 
     void initialize_atmosphere();
     void initialize_winds();

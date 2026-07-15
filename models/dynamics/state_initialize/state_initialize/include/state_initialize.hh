@@ -297,10 +297,10 @@ class StateInitialize : public jeod::DynBodyInit
 
  public:
   StateInitialize();
-  virtual ~StateInitialize(){};
+  ~StateInitialize() override = default;
 
-  virtual void initialize(  jeod::DynManager & dyn_manager );
-  virtual void apply(  jeod::DynManager & dyn_manager );
+  void initialize(  jeod::DynManager & dyn_manager ) override;
+  void apply(  jeod::DynManager & dyn_manager ) override;
   void overwrite_attitude_from_free_stream( double rel_wind_inrtl[3]);
 
  protected:

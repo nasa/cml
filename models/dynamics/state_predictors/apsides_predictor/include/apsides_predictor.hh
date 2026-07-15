@@ -56,13 +56,13 @@ class ApsidesPredictor : public SubscriptionBase {
   ApsidesPredictor(const jeod::RefFrameTrans & inrtl_state,
                    const jeod::Planet & planet,
                    const double & grav_mu);
-  virtual ~ApsidesPredictor(){};
+  ~ApsidesPredictor() override = default;
 
-  void initialize();
+  void initialize() override;
   void update();
 
  protected:
-  virtual void activate();
+  void activate() override;
 
  private:
   void compute_next_apsis();

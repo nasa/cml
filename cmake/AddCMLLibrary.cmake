@@ -16,6 +16,7 @@
 #     SOURCES: A list of the source files associated with this library.
 
 include_guard()
+include(SetCMLCompileWarnings)
 
 function(add_cml_library)
     set(options)
@@ -49,6 +50,7 @@ function(add_cml_library)
     # CML_CODE_COVERAGE is true.
     target_link_libraries(${LIBRARY_NAME}
         PUBLIC
+            m
             Trick::Core
             JEOD::JEOD
         PRIVATE
@@ -61,22 +63,19 @@ function(add_cml_library)
             cxx_std_17
     )
 
+    target_compile_definitions(${LIBRARY_NAME}
+        PRIVATE
+            _USE_MATH_DEFINES
+    )
+
     # Add warning flags. Instrument the build for code coverage if CML_CODE_COVERAGE
     # is true and sanitizing if CML_USE_SANITIZERS is true.
+    set_cml_compile_warnings(${LIBRARY_NAME})
     target_compile_options(${LIBRARY_NAME}
         PRIVATE
-            -Wall
-            -Wextra
             $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
             $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     )
-    if (CML_WARNINGS_AS_ERRORS)
-        # TODO: Nino Tarantino 2/11/26: uncomment this as part of #24.
-        #set_target_properties(
-        #    ${LIBRARY_NAME}
-        #    PROPERTIES COMPILE_WARNING_AS_ERROR ON
-        #)
-    endif()
 
     set_target_properties(
         ${LIBRARY_NAME}

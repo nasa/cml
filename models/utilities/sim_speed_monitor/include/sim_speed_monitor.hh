@@ -23,13 +23,13 @@ class SimSpeedMonitor : public SubscriptionBase {
  public:
   double sim_speed;
 
-  SimSpeedMonitor(){};
+  SimSpeedMonitor() = default;
 
-  virtual ~SimSpeedMonitor(){};
+  ~SimSpeedMonitor() override = default;
 
   // Note -- model is self-initializing, this gets called on the first pass
   // through calculate_rate(...)
-  void initialize() {
+  void initialize() override {
     cycle_time = std::chrono::steady_clock::now();
     SubscriptionBase::initialize();
   }

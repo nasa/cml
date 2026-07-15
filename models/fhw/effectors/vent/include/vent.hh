@@ -33,11 +33,11 @@ class Vent : public SimpleVent {
 
 
  public:
-  Vent(const double& dyn_time,
-       DynamicMassBody& tank_);
-  virtual ~Vent() {};
+  Vent(const double& dyn_time_in,
+       DynamicMassBody& tank_in);
+  ~Vent() override = default;
 
-  virtual void use_impulse_mode(bool mode = true) override;
+  void use_impulse_mode(bool mode = true) override;
   void set_force_magnitude(double force_, bool hold_impulse = false) override;
   void set_force_vector(double force_[3], bool hold_impulse = false) override;
   void set_flowrate( double flowrate,

@@ -65,7 +65,7 @@ class SeparationState : public SubscriptionBase
  public:
    SeparationState (void);
    explicit SeparationState (std::string name);
-   virtual ~SeparationState(){};
+   ~SeparationState() override = default;
 
    void initialize( jeod::DynManager & dyn_manager_in,
                     jeod::DynBody & source_body,
@@ -95,15 +95,15 @@ class SeparationState : public SubscriptionBase
                     std::string    source_name = "",
                     std::string    subject_name = "");
    virtual void update( );
-   jeod::RefFrame* get_source() {return source;};
-   jeod::BodyRefFrame* get_subject() {return subject;};
+   jeod::RefFrame* get_source() {return source;}
+   jeod::BodyRefFrame* get_subject() {return subject;}
 
  protected:
    jeod::BodyRefFrame *  initialize_find_frame (jeod::DynBody &,
                                                 std::string,
                                                 std::string);
-   virtual void activate();
-   virtual void deactivate();
+   void activate() override;
+   void deactivate() override;
 
  private:
    // Not implemented:

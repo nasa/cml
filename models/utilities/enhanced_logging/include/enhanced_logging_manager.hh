@@ -83,10 +83,10 @@ class EnhancedLogging_Manager : public SubscriptionBase {
 
  public:
   explicit EnhancedLogging_Manager( const double & dyn_time);
-  virtual ~EnhancedLogging_Manager();
+  ~EnhancedLogging_Manager() override;
 
-  void initialize();
-  void activate();
+  void initialize() override;
+  void activate() override;
   void update();
   void subscribe_group();
   void subscribe_group( std::string name);

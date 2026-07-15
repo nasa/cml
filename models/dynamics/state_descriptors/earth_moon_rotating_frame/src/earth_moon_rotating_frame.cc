@@ -40,8 +40,8 @@ EarthMoonRotatingFrame::initialize ()
 {
   reverse_xy = false;
   std::string frame_name;
-  jeod::RefFrame * origin = NULL;
-  jeod::RefFrame * target = NULL;
+  jeod::RefFrame * origin = nullptr;
+  jeod::RefFrame * target = nullptr;
   switch (orientation) {
   case Earth__Moon_to_Earth:
     reverse_xy = true;
@@ -74,7 +74,7 @@ EarthMoonRotatingFrame::initialize ()
   }
 
   // check that necessary frames are registered with the ref-frame manager
-  if ((origin == NULL) || (target == NULL)) {
+  if ((origin == nullptr) || (target == nullptr)) {
     CMLMessage::fail(
       __FILE__,__LINE__,"Incomplete specification",
       "The origin and/or target of the Earth-Moon-Rotating-Frame were not\n"

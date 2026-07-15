@@ -44,8 +44,8 @@ class SweepSet {
   SweepSet(const SweepSet &other);
   SweepSet& operator = (const SweepSet &other);
 
-  virtual ~SweepSet() {};
-  void initialize() {variable = start;};
+  virtual ~SweepSet() = default;
+  void initialize() {variable = start;}
   bool increment_sweep();
 };
 
@@ -104,7 +104,7 @@ class UnitTestFramework {
       Drop the warning when cycle_overruns exceeds this value. */
 
   UnitTestFramework();
-  virtual ~UnitTestFramework(){};
+  virtual ~UnitTestFramework() = default;
 
   void add_sweep( double & variable,
                   double start,
@@ -132,8 +132,8 @@ class UnitTestFramework {
 // Interface to make this look like the C-style unit-test framework:
 class UNIT_TEST : public UnitTestFramework {};
 
-inline void unit_test_init( UNIT_TEST * data) {data->initialize();};
-inline void unit_test( UNIT_TEST * data) {data->update();};
-inline void unit_test_dd( UNIT_TEST * data) {(void) data;};
-inline void unit_test_shutdown( UNIT_TEST * data) {(void) data;};
+inline void unit_test_init( UNIT_TEST * data) {data->initialize();}
+inline void unit_test( UNIT_TEST * data) {data->update();}
+inline void unit_test_dd( UNIT_TEST * data) {(void) data;}
+inline void unit_test_shutdown( UNIT_TEST * data) {(void) data;}
 #endif

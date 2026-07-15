@@ -29,7 +29,7 @@ PointToPointElement::PointToPointElement(
     std::string name_,
     double      position_[3])
 {
-  if (position_ == NULL) {
+  if (position_ == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid position specified.\n",
       "Specified position vector is NULL for point called ", name, ".\n"
@@ -55,8 +55,8 @@ PointToPointManager::PointToPointManager(
     const jeod::PlanetFixedPosition & B_wrt_P_in_P_)
   :
   B_wrt_P_in_P( B_wrt_P_in_P_),
-  dyn_body( NULL),
-  pfix_frame_rot_state( NULL)
+  dyn_body( nullptr),
+  pfix_frame_rot_state( nullptr)
 {}
 
 /*****************************************************************************
@@ -290,7 +290,7 @@ PointToPointManager::add_relative_position(
       "Could not match the specified names (", v_pt_name, ", ", p_pt_name, ") with a registered\n"
       "vehicle-point-name and planet-point-name respectively.\n"
       "Cannot compute the relative position between these two points.\n");
-    return NULL;
+    return nullptr;
   }
 
   relative_positions.push_back( new_rel_pos);
@@ -353,7 +353,7 @@ PointToPointManager::get_relative_position(
     __FILE__,__LINE__,"Invalid names specified.\n",
     "Could not find a relative-position instance with point names ", v_pt_name, " and ", p_pt_name, ".\n"
     "No relative position available.\n");
-  return NULL;
+  return nullptr;
 }
 
 /*****************************************************************************

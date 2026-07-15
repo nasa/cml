@@ -20,7 +20,7 @@ public:
      const jeod::DynBody       & body_ref,
      ExtendedPlanetaryDerivedState & pds_ref,
      AtmosphereExecInterface       & atmos_exec_ref);
-   virtual ~AtmosRelStateTest(){};
+   ~AtmosRelStateTest() override = default;
 
    void compute_euler_angles();
 

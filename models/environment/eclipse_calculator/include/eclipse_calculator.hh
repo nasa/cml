@@ -50,9 +50,9 @@ class EclipseCalculator : public SubscriptionBase
   EclipseCalculator(const double & time,
                     jeod::DynManager & dyn_manager,
                     jeod::RefFrame & vehicle_frame);
-  virtual ~EclipseCalculator() {};
+  ~EclipseCalculator() override = default;
 
-  void initialize();
+  void initialize() override;
   void update();
   void set_earth_shadow_geometry(jeod::RadiationThirdBody::ShadowGeometry new_sg) {
     earth.shadow_geometry = new_sg;
@@ -62,8 +62,8 @@ class EclipseCalculator : public SubscriptionBase
   }
 
  protected:
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
 
  private: // and undefined:
   EclipseCalculator (const EclipseCalculator& rhs);

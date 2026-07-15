@@ -95,7 +95,7 @@ class EnhancedLogging_SummaryGroup : public EnhancedLogging_BaseGroup
 
   EnhancedLogging_SummaryGroup( std::string name,
                                 const double & dyn_time);
-  virtual ~EnhancedLogging_SummaryGroup();
+  ~EnhancedLogging_SummaryGroup() override;
 
   void initialize( const std::string &) override;
   void update() override;
@@ -121,12 +121,12 @@ class EnhancedLogging_SummaryGroup : public EnhancedLogging_BaseGroup
 
   template <typename T>
   void add_variable( const T & var,
-                     std::string name,
+                     std::string var_name,
                      std::string units="--")
   {
     EnhancedLogging_BaseVariable * new_var =
         new EnhancedLogging_SummaryVariableT<T>( var,
-                                                 name,
+                                                 var_name,
                                                  units);
     variables.push_back( new_var);
     allocated_variables.push_back( new_var);
@@ -143,7 +143,7 @@ class EnhancedLogging_SummaryGroup : public EnhancedLogging_BaseGroup
                                          new_event_condition( CompoundEvent &);
  protected:
   void check_conditions();
-  unsigned int find_condition( const std::string&);
+  int find_condition( const std::string&);
 
  public:
 

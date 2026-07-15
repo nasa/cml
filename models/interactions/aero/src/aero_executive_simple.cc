@@ -38,7 +38,7 @@ AeroExecutiveSimple::AeroExecutiveSimple(
   drag_mag(0.0),
   bc_epsilon(1E-6)
 {
-  if (free_stream_vel_unit == NULL) {
+  if (free_stream_vel_unit == nullptr) {
    CMLMessage::warn(
      __FILE__, __LINE__, "Simple Aerodynamics Construction limitation\n",
      "The free stream velocity is required for any computations of the\n"
@@ -93,6 +93,7 @@ void AeroExecutiveSimple::update()
     break;
   case constant_vec:
     return; // don't update the drag vector
+  case constant_mag:
   default: // no action;
     break;
   }
@@ -113,7 +114,7 @@ AeroExecutiveSimple::set_drag_type(DragType drag_type_in)
     return;
   }
 
-  if (free_stream_vel_unit == NULL) {
+  if (free_stream_vel_unit == nullptr) {
     CMLMessage::error(
       __FILE__, __LINE__, "Simple Aerodynamics Construction error.\n",
       "The free stream velocity is required for computing the aero drag\n"

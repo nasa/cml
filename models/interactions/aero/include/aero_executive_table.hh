@@ -167,17 +167,17 @@ public:
                       const bool   & disable_aero_damping_in,
                       const double (&T_struc_to_body_in)[3][3]);
 
-  virtual ~AeroExecutiveTable(){};
+  ~AeroExecutiveTable() override = default;
 
   void change_table(unsigned int new_ix);
   void change_table(std::string table_name);
   void change_table(AeroTableSetBase & new_table);
   void add_table(AeroTableSetBase * new_table);
 
-  virtual void initialize();
-  virtual void update() override;
+  void initialize() override;
+  void update() override;
 protected:
-  virtual void activate();
+  void activate() override;
   void configure_new_table(AeroTableSetBase *);
   void trig_functions();
   void post_process_table_data();

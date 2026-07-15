@@ -10,8 +10,7 @@ Purpose:(The sim)
 // Include headers for classes that this class contains:
 ##include "cml/models/utilities/env_utils/include/env_utils.h"
 ##include <stdexcept>
-
-
+##include <string>
 
 class EnvUtilsObject: public Trick::SimObject 
 {
@@ -35,8 +34,8 @@ class EnvUtilsObject: public Trick::SimObject
 
   void run_tests()
   {
-    test1 = (getenv_or_default("PWD", "nowhere") != "nowhere");
-    test2 = (getenv_or_default(bad_env_variable, "nobody") == "nobody");
+    test1 = std::string(getenv_or_default("PWD", "nowhere")) != "nowhere";
+    test2 = std::string(getenv_or_default(bad_env_variable, "nobody")) == "nobody";
 
     try 
     {

@@ -34,8 +34,8 @@ PlanetPlanetState::PlanetPlanetState(
    position_vector_only(true),
    state(),
    dyn_manager(dyn_mgr_in),
-   from_frame(NULL),
-   to_frame(NULL),
+   from_frame(nullptr),
+   to_frame(nullptr),
    init_from_name(true)
 {
   subscribe_name = "PlanetPlanetState:";
@@ -93,13 +93,13 @@ PlanetPlanetState::initialize()
 
   // Ensure frames found and pointers allocated.
   // Note -- names are valid constructs, but don't name valid frames.
-  if (to_frame  == NULL) {
+  if (to_frame  == nullptr) {
      CMLMessage::fail (
         __FILE__, __LINE__, "PlanetPlanetState::invalid name\n",
         "Invalid to-frame '", to_frame_name, "' for PlanetPlanetState");
      return;
   }
-  if (from_frame == NULL) {
+  if (from_frame == nullptr) {
      CMLMessage::fail (
         __FILE__, __LINE__, "PlanetPlanetState::invalid name\n",
         "Invalid from-frame '", from_frame_name, "' for PlanetPlanetState");

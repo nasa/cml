@@ -58,7 +58,7 @@ Purpose:
 *****************************************************************************/
 class EventActionSimStopNow : public EventActionBase {
  public:
-  bool specific_execution() {
+  bool specific_execution() override {
     exec_set_terminate_time(exec_get_sim_time());
     return false;}
 };
@@ -73,7 +73,7 @@ Purpose:
 class EventActionSimStopDyn : public EventActionBase {
  public:
   std::list<bool*> trans_dyn_flags;
-  bool specific_execution() {
+  bool specific_execution() override {
     // once we delete ii from the list we can no longer increment it.
     // so we do some gymnastics to avoid that problem: get a copy of the
     // to-be-deleted item's pointer, move on to the next item, then delete the
@@ -100,7 +100,7 @@ Purpose: Turns off all jobs in a sim object
 class EventActionDeactivateSimObject : public EventActionBase {
  public:
    std::string simobj_name;
-   bool specific_execution() {
+   bool specific_execution() override {
      exec_set_sim_object_onoff(simobj_name.c_str(), 0);
      return false;};
 };
@@ -121,7 +121,7 @@ class EventActionAdjustLogging : public EventActionBase {
     log_cycle(1.0),
     log_now(false)
   {};
-  bool specific_execution() {
+  bool specific_execution() override {
     logging.set_cycle(log_cycle);
     if (log_now) {
       logging.reset_next_call_time();
@@ -165,7 +165,7 @@ class EventActionAdjustLoggingGroup : public EventActionBase {
     log_cycle(1.0)
   {};
 
-  bool specific_execution() {
+  bool specific_execution() override {
     if (group_name_list.empty()) {
       process_group( group_name);
     } else {
@@ -206,7 +206,7 @@ class EventActionLogNow : public EventActionBase {
      :
      logging(logging_in)
   {};
-  bool specific_execution() {
+  bool specific_execution() override {
     logging.log_now();
     return false;
   }

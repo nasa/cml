@@ -42,8 +42,8 @@ class AtmosExecOutput {
       wind_velocity_td(),
       wind_velocity_eci(),
       atmos_new_time(0.0)
-    {};
-    virtual ~AtmosExecOutput(){};
+    {}
+    virtual ~AtmosExecOutput() = default;
 
     void zero_outputs() { // Zeros everything except atmos_new_time
       temperature = pressure = density = speed_of_sound = dynamic_viscosity =

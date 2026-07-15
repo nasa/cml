@@ -49,9 +49,9 @@ class EGM2008_WGS84 : public SubscriptionBase
  public:
   EGM2008_WGS84( const double & wgs_84_lat,
                  const double & wgs_84_lon);
-  virtual ~EGM2008_WGS84() {};
+  ~EGM2008_WGS84() override = default;
 
-  void initialize();
+  void initialize() override;
   void load_data();
   void update();
 

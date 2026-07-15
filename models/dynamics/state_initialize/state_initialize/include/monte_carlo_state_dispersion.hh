@@ -53,7 +53,7 @@ class MonteCarloStateDispersion {
 
  public:
   explicit MonteCarloStateDispersion(jeod::DynBodyInitTransState & trans_init);
-  virtual ~MonteCarloStateDispersion(){};
+  virtual ~MonteCarloStateDispersion() = default;
 
   void disperse_trans_state();
 

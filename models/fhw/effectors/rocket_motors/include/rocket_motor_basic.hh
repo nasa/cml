@@ -161,9 +161,9 @@ public:
                     DynamicMassString & string_in,
                     const double      & time_in,
                     const double      * veh_cm_in);
-  virtual ~RocketMotor_Basic(){};
+  ~RocketMotor_Basic() override = default;
 
-  virtual void initialize();
+  void initialize() override;
   virtual void update();
   virtual void hold_motor();
   virtual void shutdown_motor();

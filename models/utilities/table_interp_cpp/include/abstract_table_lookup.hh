@@ -76,9 +76,9 @@ public:
   };
 
   AbstractTableLookup();
-  virtual ~AbstractTableLookup();
+  ~AbstractTableLookup() override;
 
-  virtual void initialize();
+  void initialize() override;
   virtual bool update();
 
   virtual GenericMultiInputTable * create_table(

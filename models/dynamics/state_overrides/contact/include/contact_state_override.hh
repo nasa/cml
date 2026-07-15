@@ -107,8 +107,8 @@ class ContactStateOverride : public SubscriptionBase
     Needed because the model's active flag is protected by inheritance from
     SubscriptionBase.*/
 
-  ContactStateOverride(jeod::DynBody& reference_body,
-                       jeod::DynBody& override_body);
+  ContactStateOverride(jeod::DynBody& reference_body_in,
+                       jeod::DynBody& override_body_in);
 
   void update();
   void set_contact_normal(double contact_normal_in[3]);

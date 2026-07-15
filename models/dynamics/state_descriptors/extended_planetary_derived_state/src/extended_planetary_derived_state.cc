@@ -111,7 +111,7 @@ ExtendedPlanetaryDerivedState::initialize(
   // fault, in JEOD as part of PlanetaryDerivedState::initialize(...)
   // However, that is an external dependency, and if that were to change in
   // a future release, this would be necessary.
-  if (planet == NULL) {
+  if (planet == nullptr) {
     CMLMessage::fail(
     __FILE__,__LINE__, "Planetary Derived State initialization failure\n",
     "Model failed to find the specified planet.\n"

@@ -81,10 +81,10 @@ class StateInitializeWithPropagation : public StateInitialize
      propagation.  Default true.*/
 
   explicit StateInitializeWithPropagation( jeod::GravityManager & gravity_manager);
-  virtual ~StateInitializeWithPropagation(){};
+  ~StateInitializeWithPropagation() override = default;
 
-  virtual void initialize(  jeod::DynManager & dyn_manager ) override;
-  virtual void apply(  jeod::DynManager & dyn_manager ) override;
+  void initialize(  jeod::DynManager & dyn_manager ) override;
+  void apply(  jeod::DynManager & dyn_manager ) override;
 
  protected:
   void propagate_state();

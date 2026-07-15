@@ -135,7 +135,7 @@ public:
          Flag to modify the products of inertia in the inertia table. */
 
    explicit DynamicMassBodyInterpolation(const double &mass_in);
-   virtual ~DynamicMassBodyInterpolation(){};
+   virtual ~DynamicMassBodyInterpolation() = default;
 
    bool initialize();
    bool interpolate();

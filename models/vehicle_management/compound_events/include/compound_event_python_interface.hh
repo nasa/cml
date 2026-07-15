@@ -34,7 +34,7 @@ struct CompoundEventActionConfig
     target_ptr(nullptr),
     target_value_assignment(0.0),
     target_string_assignment("")
-  {};
+  {}
 };
 
 /*****************************************************************************

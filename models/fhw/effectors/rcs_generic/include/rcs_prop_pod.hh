@@ -63,7 +63,7 @@ class RcsPodComponent{
   explicit RcsPodComponent( unsigned int max_num_jets_on);
 
   // external interface only, not used internally:
-  void incr_mass_consumed_step(double incr) {*mass_consumed_step += incr;};
+  void incr_mass_consumed_step(double incr) {*mass_consumed_step += incr;}
 
  protected:
   void set_dyn_mass_interface( DynamicMassBodyPropertiesInterface & interface);
@@ -161,7 +161,7 @@ class RcsPropPod{
   RcsPropPod( unsigned int max_num_jets_on,
               unsigned int num_components_,
               const double & time_step);
-  virtual ~RcsPropPod(){};
+  virtual ~RcsPropPod() = default;
 
   void set_dyn_mass_interface( unsigned int component_ix,
                 DynamicMassBodyPropertiesInterface & dyn_mass_interface);
@@ -180,7 +180,7 @@ class RcsPropPod{
  private:
    // Not implemented:
    RcsPropPod (const RcsPropPod& rhs);
-   RcsPropPod & operator = (const RcsPropPod& rhs);;
+   RcsPropPod & operator = (const RcsPropPod& rhs);
 
 };
 #endif

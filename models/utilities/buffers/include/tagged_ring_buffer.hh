@@ -68,7 +68,7 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
     CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >(name),
     require_exact_tag(false)
   {};
-  virtual ~CMLTaggedRingBuffer(){};
+  ~CMLTaggedRingBuffer() override = default;
 
 
 /*****************************************************************************

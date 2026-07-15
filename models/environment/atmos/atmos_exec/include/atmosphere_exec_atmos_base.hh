@@ -38,17 +38,17 @@ class AtmosphereExec_AtmosBase
       out(master_output),
       active(false),
       name("NONE")
-    {};
+    {}
 
-    virtual ~AtmosphereExec_AtmosBase(){};
+    virtual ~AtmosphereExec_AtmosBase() = default;
 
-    virtual void activate(){active = true;};
-    virtual void deactivate(){active = false;};
+    virtual void activate(){active = true;}
+    virtual void deactivate(){active = false;}
     // These initialize_*() methods could be pure virtual but then derived
     // classes that are missing either winds or atmos (winds-only or atmos-only
     // models) would need to provide empty corresponding initialize_*() methods.
     virtual bool initialize_atmos() {return false;}
-    virtual void update_atmos(){};
+    virtual void update_atmos(){}
 
   private:
     AtmosphereExec_AtmosBase (const AtmosphereExec_AtmosBase&);
@@ -72,10 +72,10 @@ class AtmosphereExec_AtmosWindsBase : public AtmosphereExec_AtmosBase
       :
       AtmosphereExec_AtmosBase(master_output),
       planet_state(planet_state_in)
-    {};
+    {}
 
-    virtual bool initialize_winds() {return false;};
-    virtual void update_winds(){};
+    virtual bool initialize_winds() {return false;}
+    virtual void update_winds(){}
 
   protected:
     // The planet-rel-state model should already be subscribed to and updated by
