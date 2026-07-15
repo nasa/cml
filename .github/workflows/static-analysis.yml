@@ -89,6 +89,7 @@ jobs:
       - name: Install system dependencies
         run: |
           dnf install -y epel-release
+          dnf config-manager --enable powertools
           dnf update -y
           dnf install -y git make cmake gcc gcc-c++ libxml2-devel openmotif-devel \
             perl perl-Digest-MD5 udunits2-devel zlib-devel libX11-devel libXt-devel \
