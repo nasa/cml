@@ -2982,9 +2982,7 @@ SIM_verif_cml_message:
   path: models/utilities/cml_message/verif/SIM_verif
   build_args: CML_OFFLINE_BUILD=1
   runs:
-    RUN_1/input.py:
-      returns: 1
-    RUN_2/input.py:
+    RUN_test/input.py:
       returns: 1
     RUN_speed_test/input.py:
       returns: 1

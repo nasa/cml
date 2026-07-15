@@ -35,11 +35,15 @@ function(add_cml_tests)
 
     target_link_libraries(${TEST_NAME}
         PRIVATE
+            cml::cml_mocks
+            cml::trick_mocks
+            cml::trick_unit_testing_libs
             cml::cml_shared
-            Trick::Trick
+            Trick::Core
             JEOD::JEOD
             GTest::gtest_main
             GTest::gmock_main
+            $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
             $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     )
 
@@ -50,6 +54,7 @@ function(add_cml_tests)
 
     target_compile_options(${TEST_NAME}
         PRIVATE
+            $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
             $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     )
 

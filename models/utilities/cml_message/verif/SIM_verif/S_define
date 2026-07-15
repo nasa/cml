@@ -4,7 +4,8 @@ Purpose:
   (This simple simulation tests the CML message handling system.)
 
 Programmers:
-  (((Gary Turner) (OSR) (March 2023) (Antares) (Initial version)))
+  (((Gary Turner) (OSR) (March 2023) (Antares) (Initial version))
+   ((Nino Tarantino) (CACI) (April 2026) (CML) (Refactor for unit testing and mocking)))
 *******************************************************************************/
 #include "sim_objects/default_trick_sys.sm"
 //Note -- JEOD content is included and commented out to facilitate speed
@@ -18,13 +19,12 @@ Programmers:
 class VerifSimObject: public Trick::SimObject {
 
  public:
-  bool        use_alias_functions;
-  bool        perform_speed_test;
+  bool        perform_speed_test {false};
   SampleModel sample;
 
   VerifSimObject() {
     ("initialization") speed_test();
-    (1.0, "scheduled") sample.update(use_alias_functions);
+    (1.0, "scheduled") sample.update();
   }
 
  private:
@@ -33,12 +33,9 @@ class VerifSimObject: public Trick::SimObject {
     if (!perform_speed_test) return;
     for (int ii = 0; ii < 10000; ++ii) {
       CMLMessage::error(__FILE__,__LINE__,"Error number",ii);
-//      MessageHandler::error(__FILE__,__LINE__,"Error number","%d",ii);
+//      jeod::MessageHandler::error(__FILE__,__LINE__,"Error number",ii);
     }
     CMLMessage::fail(__FILE__,__LINE__,"Close out");
   }
-
-  VerifSimObject (const VerifSimObject&);
-  VerifSimObject & operator = (const VerifSimObject&);
 };
 VerifSimObject verif ;

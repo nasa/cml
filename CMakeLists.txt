@@ -25,6 +25,11 @@ option(CML_BUILD_UNIT_TESTS
 beforehand, and the CMake configuration step will fail if libtrick or libjeod \
 cannot be found." OFF)
 
+option(CML_BUILD_MOCKS
+"Build a library of mocked CML and Trick functionality. Users can set this \
+option to ON while keeping CML_BUILD_UNIT_TESTS OFF to build the CML mocks for \
+their tests but to not build the CML unit tests." OFF)
+
 option(CML_CODE_COVERAGE "Instrument the build to enable coverage profiling." OFF)
 
 option(CML_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors." OFF)
@@ -68,10 +73,13 @@ set(CML_INSTALL_DIR ${cml_SOURCE_DIR}/lib/${Trick_HOST_CPU})
 add_subdirectory(externals EXCLUDE_FROM_ALL)
 
 # ---------------------------------------------------------------------------- #
-# Enable unit tests                                                            #
+# Include project-wide utilities.                                              #
 # ---------------------------------------------------------------------------- #
+add_subdirectory(utility)
+
 if (CML_BUILD_UNIT_TESTS)
     enable_testing()
+    target_link_libraries(jeod_library INTERFACE cml::trick_unit_testing_libs)
 endif()
 
 # ---------------------------------------------------------------------------- #
@@ -141,6 +149,11 @@ target_include_directories(cml_static
     INTERFACE
         ${cml_SOURCE_DIR}/..
 )
+
+# If we're building tests, link against the shared library to get include paths.
+if (TARGET cml_mocks)
+    target_link_libraries(cml_mocks PRIVATE cml::cml_shared)
+endif()
 
 # ---------------------------------------------------------------------------- #
 # Create Trickification target                                                 #

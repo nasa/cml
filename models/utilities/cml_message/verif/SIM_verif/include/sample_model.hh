@@ -4,62 +4,22 @@ Purpose:
 
 Programmers:
   (((Gary Turner) (OSR) (March 2023) (ANTARES) (Initial version))
+   ((Nino Tarantino) (CACI) (April 2026) (CML) (Refactor for unit testing and mocking))
   )
 *******************************************************************************/
 #ifndef CML_MESSAGE_HANDLER_TEST_HH
 #define CML_MESSAGE_HANDLER_TEST_HH
-#include <iomanip>
+#include <string>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 struct SampleModel {
-  bool terminate;
+  bool terminate {false}; /* (--) If true, will terminate the sim on the next update() call */
 
-  void update(bool using_aliases)
+  void update()
   {
-    int ii = 4;
-    double x = 123456789.012345;
-    std::string part2 = "is a collection of ";
-    if (using_aliases) {
-      CMLMessage::error(
-          __FILE__, __LINE__,
-          "This ",part2,ii," arguments");
+      int ii = 4;
+      std::string part2 = "is a collection of ";
 
-      CMLMessage::warn(
-          __FILE__, __LINE__,
-          "This ",part2,ii," arguments");
-      
-      CMLMessage::status(
-          "This ",part2, ii," arguments");
-
-      CMLMessage::inform(
-          __FILE__, __LINE__,
-          "This ",part2,ii," arguments");
-
-      CMLMessage::debug(
-          __FILE__, __LINE__,
-          "This ",part2,ii," arguments");
-
-      CMLMessage::debug(
-          __FILE__, __LINE__,
-          "Testing printf_fmt: ",
-          CMLMessage::printf_fmt("%12.6g  %14.12g  %18.12E  %15.3f   %6d",
-                                    x,       x,       x,      x,     ii),
-          "\nUnformatted value of x:",x);
-          
-      CMLMessage::debug(
-          __FILE__, __LINE__,
-          "Testing printf_fmt error with invalid specifier: ",
-          CMLMessage::printf_fmt("%q",ii));
-
-      if (terminate) {
-        CMLMessage::fail(
-            __FILE__, __LINE__,
-            "This is ","a ","terminal error");
-      }
-    }
-
-
-    else {
       CMLMessage::publish(
           CMLMessage::Error,
           __FILE__, __LINE__,
@@ -83,35 +43,11 @@ struct SampleModel {
           __FILE__, __LINE__,
           "This ",part2,ii," arguments");
 
-      CMLMessage::publish(
-          CMLMessage::Debug,
-          __FILE__, __LINE__,
-          "Testing printf_fmt: ",
-          CMLMessage::printf_fmt("%12.6g  %14.12g  %18.12E  %15.3f   %6d",
-                                    x,       x,       x,      x,     ii),
-          "\nUnformatted value of x:",x);
-
-      CMLMessage::publish(
-          CMLMessage::Debug,
-          __FILE__, __LINE__,
-          "Testing printf_fmt error with invalid specifier: ",
-          CMLMessage::printf_fmt("%q",ii));
-
       if (terminate) {
-        CMLMessage::publish(
-            CMLMessage::Fail,
+        CMLMessage::fail(
             __FILE__, __LINE__,
             "This is ","a ","terminal error");
       }
     }
-  }
-
-  SampleModel(){}
-  virtual ~SampleModel(){};
-
- private:
-  SampleModel (const SampleModel &);
-  SampleModel & operator= (const SampleModel &);
-
 };
 #endif

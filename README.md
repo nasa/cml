@@ -182,6 +182,11 @@ Build and test CML:
 
 If all tests pass, your dev environment was setup correctly!
 
+# Unit Testing
+
+CML provides mock objects for some CML and Trick functionality in the
+`utility/mocks` directory. For more information, see
+[the documentation](utility/README.md).
 
 # Contact
 
