@@ -21,7 +21,6 @@ add_cml_library(
         atmos/gust/include/gust.hh
         atmos/lagged_atmosphere/include/lagged_atmos_payload_data.hh
         atmos/lagged_atmosphere/include/lagged_atmos_wind.hh
-        atmos/secondary_chute_atmosphere/include/secondary_chute_atmosphere.hh
         eclipse_calculator/include/eclipse_calculator.hh
         ephemerides/planet_planet_state/include/planet_planet_state.hh
         gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh
@@ -44,7 +43,6 @@ add_cml_library(
         atmos/first_order_hold/src/first_order_hold.cc
         atmos/gust/src/gust.cc
         atmos/lagged_atmosphere/src/lagged_atmos_wind.cc
-        atmos/secondary_chute_atmosphere/src/secondary_chute_atmosphere.cc
         eclipse_calculator/src/eclipse_calculator.cc
         ephemerides/planet_planet_state/src/planet_planet_state.cc
         gravity/fast_gravity/src/spherical_harmonics_fast_gravity_controls.cc

@@ -59,12 +59,6 @@ add_cml_library(
         polygon_enclosure/include/polygon_enclosure_sphere.hh
         sim_speed_monitor/include/sim_speed_monitor.hh
         subscriptions/include/subscriptions.hh
-        table_interp/include/osiris_math.h
-        table_interp/include/osiris_math_impl.h
-        table_interp/include/table_angle_impl.h
-        table_interp/include/table_interp.h
-        table_interp/include/table_interp_helper.h
-        table_interp/include/table_interp_impl.h
         table_interp_cpp/include/abstract_table_lookup.hh
         table_interp_cpp/include/generic_multi_input_table.hh
         table_interp_cpp/include/generic_single_input_table.hh
