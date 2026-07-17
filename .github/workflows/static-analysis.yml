@@ -29,6 +29,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Configure environment
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Set up Python virtual environment
         run: |
           python3 -m venv .venv
