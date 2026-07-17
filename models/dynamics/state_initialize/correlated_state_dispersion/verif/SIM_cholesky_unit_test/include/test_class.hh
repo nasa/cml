@@ -6,8 +6,8 @@ PROGRAMMERS:
      ((Dan Jordan ) (Jacobs) (11/2017) (Made test use common cholesky call)))
 ******************************************************************************/
 
-#ifndef SIM_CHOLESKY_UNIT_TEST_TEST_CLASS
-#define SIM_CHOLESKY_UNIT_TEST_TEST_CLASS
+#ifndef CML_TEST_CLASS_HH
+#define CML_TEST_CLASS_HH
 
 #include <cmath> //sqrt
 

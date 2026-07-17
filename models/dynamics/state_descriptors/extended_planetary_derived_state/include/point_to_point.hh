@@ -19,8 +19,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (May 2021) (Antares) (initial)))
 ***********************************************************************/
-#ifndef EXT_PLANET_DER_STATE_PT_TO_PT_HH
-#define EXT_PLANET_DER_STATE_PT_TO_PT_HH
+#ifndef CML_POINT_TO_POINT_HH
+#define CML_POINT_TO_POINT_HH
 
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"

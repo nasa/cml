@@ -6,8 +6,8 @@ Library Dependency:
   ((../src/scalar_integrable_object.cc))
 *******************************************************************************/
 
-#ifndef SCALAR_INTEGRABLE_OBJECT_HH
-#define SCALAR_INTEGRABLE_OBJECT_HH
+#ifndef CML_SCALAR_INTEGRABLE_OBJECT_HH
+#define CML_SCALAR_INTEGRABLE_OBJECT_HH
 
 #include "jeod/models/utils/integration/include/restartable_state_integrator.hh"
 #include "er7_utils/integration/core/include/integrable_object.hh"

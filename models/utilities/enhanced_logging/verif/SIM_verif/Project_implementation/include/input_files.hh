@@ -9,8 +9,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2024) (ANTARES) (initial)))
 *******************************************************************************/
-#ifndef ENHANCED_LOGGING_MANAGER_PROJECT_INPUTS_HH
-#define ENHANCED_LOGGING_MANAGER_PROJECT_INPUTS_HH
+#ifndef CML_INPUT_FILES_HH
+#define CML_INPUT_FILES_HH
 
 #include "project_logging_manager.hh"
 #include "../../include/data_struc.hh"

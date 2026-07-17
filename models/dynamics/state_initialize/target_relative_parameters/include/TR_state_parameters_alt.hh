@@ -21,8 +21,8 @@ NOTES:
   of the planet rotation rate, which the other implementation extracts from its
   pfix-position instance.))
 *******************************************************************************/
-#ifndef CML_TARGET_RELATIVE_PARAMETERS_STATE_ALT_HH
-#define CML_TARGET_RELATIVE_PARAMETERS_STATE_ALT_HH
+#ifndef CML_T_R_STATE_PARAMETERS_ALT_HH
+#define CML_T_R_STATE_PARAMETERS_ALT_HH
 
 #include "TR_state_param.hh"
 /*****************************************************************************
@@ -76,5 +76,5 @@ class TargetRelative_StateParameter_Alt : public TargetRelative_StateParam
   TargetRelative_StateParameter_Alt & operator = (
                                  const TargetRelative_StateParameter_Alt&);
 };
-#endif
 
+#endif

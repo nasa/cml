@@ -4,8 +4,8 @@ PURPOSE: (A basic data structure from which values will be logged)
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Jan 2024) (ANTARES) (initial)))
 **********************************************************************/
-#ifndef CML_SUMMARY_LOGGING_VERIFICATION_TEST_STRUC_HH
-#define CML_SUMMARY_LOGGING_VERIFICATION_TEST_STRUC_HH
+#ifndef CML_DATA_STRUC_HH
+#define CML_DATA_STRUC_HH
 
 #include "cml/models/vehicle_management/compound_events/include/compound_event.hh"
 struct VerifTestStruc {

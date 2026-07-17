@@ -23,8 +23,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Nov 2017) (Antares) (initial)))
 **********************************************************************/
-#ifndef SINGLE_INPUT_TRANSPOSE_DATA_SET
-#define SINGLE_INPUT_TRANSPOSE_DATA_SET
+#ifndef CML_TABLE_LOOKUP__TRANSPOSE_DATA_HH
+#define CML_TABLE_LOOKUP__TRANSPOSE_DATA_HH
 
 #include <vector>
 #include <list>

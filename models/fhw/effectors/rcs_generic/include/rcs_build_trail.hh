@@ -13,8 +13,8 @@ PROGRAMMERS:
                              Interface, split CML model from CEV model)))
 ******************************************************************************/
 
-#ifndef RCS_BUILD_TRAIL_HH
-#define RCS_BUILD_TRAIL_HH
+#ifndef CML_RCS_BUILD_TRAIL_HH
+#define CML_RCS_BUILD_TRAIL_HH
 
 /*****************************************************************************
 RcsBuildUpTrailOffJetData

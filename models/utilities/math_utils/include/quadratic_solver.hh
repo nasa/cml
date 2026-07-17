@@ -7,8 +7,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2023) (ANTARES) (new)))
 ***********************************************************************/
-#ifndef CML_MATHUTILS_QUADRATIC_SOLVER_HH
-#define CML_MATHUTILS_QUADRATIC_SOLVER_HH
+#ifndef CML_QUADRATIC_SOLVER_HH
+#define CML_QUADRATIC_SOLVER_HH
 
 
 class QuadraticSolver {

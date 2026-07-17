@@ -14,8 +14,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_GRAM_HH
-#define ATMOS_EXEC_GRAM_HH
+#ifndef CML_ATMOSPHERE_EXEC_GRAM_HH
+#define CML_ATMOSPHERE_EXEC_GRAM_HH
 
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 

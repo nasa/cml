@@ -7,8 +7,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2021) (Antares) (initial)))
 ***********************************************************************/
 
-#ifndef CML_SUBSCRIPTION_TEST_CLASS_HH
-#define CML_SUBSCRIPTION_TEST_CLASS_HH
+#ifndef CML_TEST_CLASS_HH
+#define CML_TEST_CLASS_HH
 
 #include <iostream>
 #include "../../include/subscriptions.hh"

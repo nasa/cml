@@ -22,8 +22,8 @@ PROGRAMMERS:
    ((Bingquan Wang) (OSR) (August 2014) (IV&V cleanup and refactored))
   )
 *******************************************************************************/
-#ifndef ANTARES_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
-#define ANTARES_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
+#ifndef CML_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
+#define CML_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
 
 #include <cstdarg> // for variadic function arguments
 

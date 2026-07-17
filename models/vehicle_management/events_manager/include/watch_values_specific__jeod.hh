@@ -7,8 +7,8 @@ PROGRAMMERS:
    (((Gary Turner) (OSR) (August 2017) (Antares))
  ******************************************************************************/
 
-#ifndef CML_WATCH_VALUES_SPECIFIC_JEOD_HH
-#define CML_WATCH_VALUES_SPECIFIC_JEOD_HH
+#ifndef CML_WATCH_VALUES_SPECIFIC__JEOD_HH
+#define CML_WATCH_VALUES_SPECIFIC__JEOD_HH
 
 #include <list>
 #include <utility> // std::pair

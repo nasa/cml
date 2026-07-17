@@ -34,8 +34,8 @@ PROGRAMMERS:
                dispersion model more statistically robust.)))
 ******************************************************************************/
 
-#ifndef ANTARES_CORRELATED_STATE_DISPERSIONS_HH
-#define ANTARES_CORRELATED_STATE_DISPERSIONS_HH
+#ifndef CML_CORRELATED_STATE_DISPERSION_HH
+#define CML_CORRELATED_STATE_DISPERSION_HH
 
 #include <random> // default_random_engine,
                   // uniform_real_distribution,

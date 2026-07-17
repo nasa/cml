@@ -11,8 +11,8 @@ Programmers:
     ((Dan Jordan)     (Jacobs/JETS) (June 2017) (EM1 V&V cleanup)))
 *******************************************************************************/
 
-#ifndef CML_PFIX_REFERENCE_POINT
-#define CML_PFIX_REFERENCE_POINT
+#ifndef CML_PFIX_REFERENCE_POINT_HH
+#define CML_PFIX_REFERENCE_POINT_HH
 
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

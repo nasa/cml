@@ -18,8 +18,8 @@
    )
 *******************************************************************************/
 
-#ifndef ANTARES_RANGE_SAFETY_DATA_HH
-#define ANTARES_RANGE_SAFETY_DATA_HH
+#ifndef CML_RANGE_SAFETY_DATA_HH
+#define CML_RANGE_SAFETY_DATA_HH
 
 
 /*

@@ -9,8 +9,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2024) (ANTARES) (new)))
 ***********************************************************************/
-#ifndef CML_ENHANCED_LOGGING_BASE_GROUP_HH
-#define CML_ENHANCED_LOGGING_BASE_GROUP_HH
+#ifndef CML_BASE_LOGGING_GROUP_HH
+#define CML_BASE_LOGGING_GROUP_HH
 
 #include <string>
 #include <list>

@@ -17,8 +17,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_STD_HH
-#define ATMOS_EXEC_STD_HH
+#ifndef CML_ATMOSPHERE_EXEC_STD_HH
+#define CML_ATMOSPHERE_EXEC_STD_HH
 
 #include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
 

@@ -77,5 +77,5 @@ class LvlhSeparationState : public SeparationState
    LvlhSeparationState (const LvlhSeparationState&);
    LvlhSeparationState& operator = (const LvlhSeparationState&);
 };
-#endif
 
+#endif

@@ -12,8 +12,8 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#ifndef ANTARES_TABLE_INDEPENDENT_VARIABLE_HH
-#define ANTARES_TABLE_INDEPENDENT_VARIABLE_HH
+#ifndef CML_TABLE_INDEPENDENT_VARIABLE_HH
+#define CML_TABLE_INDEPENDENT_VARIABLE_HH
 
 #include <string>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

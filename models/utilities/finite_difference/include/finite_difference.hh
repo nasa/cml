@@ -21,8 +21,8 @@ Programmers:
    (((Daniel Matz) (NASA) (July 2017) (Initial version)))
 *******************************************************************************/
 
-#ifndef FINITE_DIFFERENCE_HH
-#define FINITE_DIFFERENCE_HH
+#ifndef CML_FINITE_DIFFERENCE_HH
+#define CML_FINITE_DIFFERENCE_HH
 
 // Tell SWIG to treat an argument with signature "double &derivative" as an
 // output.  That is, when called from Python, the compute function will take two

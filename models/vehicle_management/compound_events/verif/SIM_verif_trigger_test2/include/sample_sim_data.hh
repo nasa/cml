@@ -9,8 +9,8 @@ PURPOSE: (
    PROGRAMMERS:
      (((Gary Turner) (OSR) (Feb 2024) (ANTARES) (model verification)))
      ***********************************************************************/
-#ifndef CML_VERIFICATION_COMPOUND_EVENTS_SIM_DATA_HH
-#define CML_VERIFICATION_COMPOUND_EVENTS_SIM_DATA_HH
+#ifndef CML_SAMPLE_SIM_DATA_HH
+#define CML_SAMPLE_SIM_DATA_HH
 struct SampleSimData
 {
   double time;

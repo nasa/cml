@@ -6,8 +6,8 @@ PROGRAMMERS:
   (((Andrew Spencer) (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor)))
 ############################################################################*/
-#ifndef CML_FAULT_UNTYPED_VARIABLE_HH
-#define CML_FAULT_UNTYPED_VARIABLE_HH
+#ifndef CML_UNTYPED_VARIABLE_HH
+#define CML_UNTYPED_VARIABLE_HH
 
 /*******************************************************************************
 UntypedVariableBase

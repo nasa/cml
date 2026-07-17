@@ -9,8 +9,8 @@ PROGRAMMERS:
 (((Gary Turner) (OSR) (October, 2015) (initial version)))
 *******************************************************************************/
 
-#ifndef ANTARES_RESTARTABLE_VECTOR3_INTEGRATOR_HH
-#define ANTARES_RESTARTABLE_VECTOR3_INTEGRATOR_HH
+#ifndef CML_RESTARTABLE_VECTOR3_1ST_ORDER_INTEGRATOR_HH
+#define CML_RESTARTABLE_VECTOR3_1ST_ORDER_INTEGRATOR_HH
 
 #include "er7_utils/integration/core/include/first_order_ode_integrator.hh"
 #include "jeod/models/utils/container/include/simple_checkpointable.hh"

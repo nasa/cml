@@ -8,8 +8,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (2017) (Antares) (initial)))
 **********************************************************************/
 
-#ifndef EXAMPLE_RCS_ADVANCED_HH
-#define EXAMPLE_RCS_ADVANCED_HH
+#ifndef CML_EXAMPLE_RCS_ADVANCED_HH
+#define CML_EXAMPLE_RCS_ADVANCED_HH
 
 #include "rcs_generic.hh"
 #include "rcs_prop_pod.hh"

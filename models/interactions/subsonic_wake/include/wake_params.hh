@@ -10,8 +10,8 @@ PROGRAMMERS:
     ((Bingquan Wang) (OSR) (Oct 2016) (Antares)
                 (Library dependency warning fixing)))
 **********************************************************************/
-#ifndef WAKE_PARAMS_HH
-#define WAKE_PARAMS_HH
+#ifndef CML_WAKE_PARAMS_HH
+#define CML_WAKE_PARAMS_HH
 
 /*****************************************************************************
 WakeParamsSub

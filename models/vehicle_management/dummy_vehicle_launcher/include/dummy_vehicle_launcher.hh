@@ -20,8 +20,8 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#ifndef ANTARES_DUMMY_VEHICLE_LAUNCHER_HH
-#define ANTARES_DUMMY_VEHICLE_LAUNCHER_HH
+#ifndef CML_DUMMY_VEHICLE_LAUNCHER_HH
+#define CML_DUMMY_VEHICLE_LAUNCHER_HH
 
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/mass/include/mass.hh"

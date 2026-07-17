@@ -38,8 +38,8 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#ifndef ANTARES_DYN_MASS_BODY_PROPERTIES_HH
-#define ANTARES_DYN_MASS_BODY_PROPERTIES_HH
+#ifndef CML_DYNAMIC_MASS_BODY_PROPERTIES_HH
+#define CML_DYNAMIC_MASS_BODY_PROPERTIES_HH
 
 #include "dynamic_mass_body_interpolation.hh"
 

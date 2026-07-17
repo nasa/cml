@@ -23,8 +23,8 @@ PROGRAMMERS:
                       (New implementation of PlanetaryDerivedState for Antares)))
  ******************************************************************************/
 
-#ifndef ANTARES_TOPO_CONTAINER_VELOCITY_SET_HH
-#define ANTARES_TOPO_CONTAINER_VELOCITY_SET_HH
+#ifndef CML_VELOCITY_SET_HH
+#define CML_VELOCITY_SET_HH
 
 /*****************************************************************************
 VelocitySet

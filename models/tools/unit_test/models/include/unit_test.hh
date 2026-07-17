@@ -14,8 +14,8 @@ PROGRAMMERS:
    ((Bingquan Wang) (OSR) (Jan 2018) (Migrated to FSL))
   )
 ***************************************************************************/
-#ifndef CML_UNIT_TEST_FRAMEWORK_HH
-#define CML_UNIT_TEST_FRAMEWORK_HH
+#ifndef CML_UNIT_TEST_HH
+#define CML_UNIT_TEST_HH
 
 #include <list>
 #include <vector>

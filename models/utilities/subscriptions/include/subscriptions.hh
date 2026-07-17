@@ -15,8 +15,8 @@
    )
 ***********************************************************************/
 
-#ifndef ANTARES_SUBSCRIPTION_BASE_HH
-#define ANTARES_SUBSCRIPTION_BASE_HH
+#ifndef CML_SUBSCRIPTIONS_HH
+#define CML_SUBSCRIPTIONS_HH
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <string>

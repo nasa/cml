@@ -22,8 +22,8 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#ifndef ANTARES_DYN_MASS_STRING_HH
-#define ANTARES_DYN_MASS_STRING_HH
+#ifndef CML_DYNAMIC_MASS_STRING_HH
+#define CML_DYNAMIC_MASS_STRING_HH
 
 #include "dynamic_mass_body.hh"
 #include "dynamic_mass_body_properties.hh"

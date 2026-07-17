@@ -11,8 +11,8 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#ifndef ANTARES_TABLE_LOOKUP_SET_HH
-#define ANTARES_TABLE_LOOKUP_SET_HH
+#ifndef CML_TABLE_LOOKUP_SET_HH
+#define CML_TABLE_LOOKUP_SET_HH
 
 #include <vector>
 #include <string>

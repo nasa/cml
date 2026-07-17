@@ -9,8 +9,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2024) (ANTARES) (new)))
 ***********************************************************************/
-#ifndef CML_SUMMARY_LOGGING_SUMMARY_VARIABLE_HH
-#define CML_SUMMARY_LOGGING_SUMMARY_VARIABLE_HH
+#ifndef CML_SUMMARY_LOGGING_VARIABLE_HH
+#define CML_SUMMARY_LOGGING_VARIABLE_HH
 
 #include <string>
 #include <vector>

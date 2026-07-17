@@ -11,8 +11,8 @@ PROGRAMMERS:
 ############################################################################*/
 
 
-#ifndef CML_XML_HELPER_CLASS_HH
-#define CML_XML_HELPER_CLASS_HH
+#ifndef CML_XML_HELPER_HH
+#define CML_XML_HELPER_HH
 
 #include <libxml/parser.h> // xmlNodePtr
 

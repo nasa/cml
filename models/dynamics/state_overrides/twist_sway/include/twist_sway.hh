@@ -41,8 +41,8 @@ PROGRAMMERS:
    )
 ******************************************************************************/
 
-#ifndef ANTARES_TWIST_SWAY_HH
-#define ANTARES_TWIST_SWAY_HH
+#ifndef CML_TWIST_SWAY_HH
+#define CML_TWIST_SWAY_HH
 
 #include <list>
 #include <random> // std::mt19937

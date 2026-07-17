@@ -15,8 +15,8 @@ PROGRAMMERS:
    )
 
 *******************************************************************************/
-#ifndef CML_TARGET_RELATIVE_PARAMETERS_REFFRAME_HH
-#define CML_TARGET_RELATIVE_PARAMETERS_REFFRAME_HH
+#ifndef CML_T_R_PARAMETER_REF_FRAME_HH
+#define CML_T_R_PARAMETER_REF_FRAME_HH
 
 #include <string>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

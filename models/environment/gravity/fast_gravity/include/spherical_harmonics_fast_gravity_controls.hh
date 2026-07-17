@@ -15,8 +15,8 @@ Programmers:
 
 *******************************************************************************/
 
-#ifndef JEOD_SPHERICAL_HARMONICS_FAST_GRAVITY_CONTROLS_HH
-#define JEOD_SPHERICAL_HARMONICS_FAST_GRAVITY_CONTROLS_HH
+#ifndef CML_SPHERICAL_HARMONICS_FAST_GRAVITY_CONTROLS_HH
+#define CML_SPHERICAL_HARMONICS_FAST_GRAVITY_CONTROLS_HH
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"

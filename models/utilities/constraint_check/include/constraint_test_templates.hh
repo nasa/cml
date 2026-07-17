@@ -12,8 +12,8 @@ PROGRAMMERS:
    (New, based on GNC_PAR grok_duration_check and grok-violation models))
  )
 *******************************************************************************/
-#ifndef CML_CONSTRAINT_TEST_INSTANT_TEMPLATE_HH
-#define CML_CONSTRAINT_TEST_INSTANT_TEMPLATE_HH
+#ifndef CML_CONSTRAINT_TEST_TEMPLATES_HH
+#define CML_CONSTRAINT_TEST_TEMPLATES_HH
 
 #include <list>
 #include <algorithm> // any_of

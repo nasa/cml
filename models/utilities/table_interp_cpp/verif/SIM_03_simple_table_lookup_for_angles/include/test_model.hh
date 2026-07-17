@@ -8,8 +8,8 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#ifndef ANTARES_TABLE_LOOKUP_TEST_MODEL_HH
-#define ANTARES_TABLE_LOOKUP_TEST_MODEL_HH
+#ifndef CML_TEST_MODEL_HH
+#define CML_TEST_MODEL_HH
 
 #include <algorithm> //std::swap()
 
@@ -66,5 +66,5 @@ private:
   TestModel (const TestModel&);
   TestModel& operator = (const TestModel&); 
 };
-#endif
 
+#endif

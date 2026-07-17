@@ -9,8 +9,8 @@ PROGRAMMERS:
    )
 
 *******************************************************************************/
-#ifndef CML_TARGET_RELATIVE_PARAMETERS_STATE_SET_HH
-#define CML_TARGET_RELATIVE_PARAMETERS_STATE_SET_HH
+#ifndef CML_T_R_STATE_PARAMETER_SET_HH
+#define CML_T_R_STATE_PARAMETER_SET_HH
 
 /*****************************************************************************
 TR_ParameterSet

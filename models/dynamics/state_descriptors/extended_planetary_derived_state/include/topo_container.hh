@@ -13,8 +13,8 @@ PROGRAMMERS:
                       (New implementation of PlanetaryDerivedState for Antares)))
  ******************************************************************************/
 
-#ifndef ANTARES_TOPO_CONTAINER_HH
-#define ANTARES_TOPO_CONTAINER_HH
+#ifndef CML_TOPO_CONTAINER_HH
+#define CML_TOPO_CONTAINER_HH
 
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/alt_lat_long_state.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
@@ -60,5 +60,5 @@ class TopoContainer {
    TopoContainer (const TopoContainer & rhs);
    void operator = (const TopoContainer & rhs);
 };
-#endif
 
+#endif

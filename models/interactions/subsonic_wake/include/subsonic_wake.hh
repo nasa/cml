@@ -23,8 +23,8 @@ NOTES:
      Body A - The wake-producing body
      Body B - The object inside the wake
 **********************************************************************/
-#ifndef SUBSONIC_WAKE_HH
-#define SUBSONIC_WAKE_HH
+#ifndef CML_SUBSONIC_WAKE_HH
+#define CML_SUBSONIC_WAKE_HH
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 

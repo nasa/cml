@@ -9,8 +9,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2024) (ANTARES) (new)))
 ***********************************************************************/
-#ifndef ENHANCED_LOGGING_SERIAL_VARIABLE_HH
-#define ENHANCED_LOGGING_SERIAL_VARIABLE_HH
+#ifndef CML_SERIAL_LOGGING_VARIABLE_HH
+#define CML_SERIAL_LOGGING_VARIABLE_HH
 
 #include <string>
 #include <fstream>

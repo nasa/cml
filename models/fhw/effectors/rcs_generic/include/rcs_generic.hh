@@ -23,8 +23,8 @@ PROGRAMMERS:
     ((Gary Turner) (Odyssey) (Apr 2017) (conversion to C++)))
 *******************************************************************************/
 
-#ifndef RCS_GENERIC_HH
-#define RCS_GENERIC_HH
+#ifndef CML_RCS_GENERIC_HH
+#define CML_RCS_GENERIC_HH
 
 #include <vector>
 #include <random>

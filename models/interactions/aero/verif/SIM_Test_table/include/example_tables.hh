@@ -5,8 +5,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (date) (project) (comment)))
 **********************************************************************/
 
-#ifndef EXAMPLE_TABLES_FOR_TESTING
-#define EXAMPLE_TABLES_FOR_TESTING
+#ifndef CML_EXAMPLE_TABLES_HH
+#define CML_EXAMPLE_TABLES_HH
 
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
 #include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"

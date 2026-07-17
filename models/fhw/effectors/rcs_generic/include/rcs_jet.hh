@@ -10,8 +10,8 @@ PROGRAMMERS:
        (initial object-oriented implementation)))
 **********************************************************************/
 
-#ifndef RCS_GENERIC_JET_HH
-#define RCS_GENERIC_JET_HH
+#ifndef CML_RCS_JET_HH
+#define CML_RCS_JET_HH
 
 #include <list>
 #include <vector>

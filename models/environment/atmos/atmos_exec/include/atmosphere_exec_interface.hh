@@ -15,8 +15,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_INTERFACE_HH
-#define ATMOS_EXEC_INTERFACE_HH
+#ifndef CML_ATMOSPHERE_EXEC_INTERFACE_HH
+#define CML_ATMOSPHERE_EXEC_INTERFACE_HH
 
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"

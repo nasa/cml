@@ -11,8 +11,8 @@ PROGRAMMERS:
                 (Library dependency warning fixing))
     ((G Turner) (OSR) (June 2019) (Added "no units" specification for Trick17)))
 **********************************************************************/
-#ifndef WAKE_BODIES_HH
-#define WAKE_BODIES_HH
+#ifndef CML_WAKE_BODIES_HH
+#define CML_WAKE_BODIES_HH
 
 #include "wake_params.hh"
 

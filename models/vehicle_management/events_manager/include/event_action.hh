@@ -41,8 +41,8 @@ PURPOSE: (
 PROGRAMMERS:
   (((Gary Turner) (OSR) (date) (project) (comment)))
 **********************************************************************/
-#ifndef CML_EVENT_ACTIONS_HH
-#define CML_EVENT_ACTIONS_HH
+#ifndef CML_EVENT_ACTION_HH
+#define CML_EVENT_ACTION_HH
 
 #include <list>
 #include <string>

@@ -25,8 +25,8 @@ Programmers:
   (((Gary Turner) (OSR) (Oct 2015) (Antares)  (initial version)))
 *******************************************************************************/
 
-#ifndef GRGM900C_LUNAR_GRAVITY
-#define GRGM900C_LUNAR_GRAVITY
+#ifndef CML_GRG_M900_C_LUNAR_GRAVITY_HH
+#define CML_GRG_M900_C_LUNAR_GRAVITY_HH
 
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
 
@@ -56,7 +56,7 @@ class GRGM900C_LunarGravity
   GRGM900C_LunarGravity ( const GRGM900C_LunarGravity &);
   GRGM900C_LunarGravity & operator= ( const GRGM900C_LunarGravity &);
 };
+
+
+
 #endif
-
-
-

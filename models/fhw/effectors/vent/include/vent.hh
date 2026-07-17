@@ -8,8 +8,8 @@ PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
 ************************************************************************/
 
-#ifndef CML_VENT_WITH_DYN_MASS_BODY_HH
-#define CML_VENT_WITH_DYN_MASS_BODY_HH
+#ifndef CML_VENT_HH
+#define CML_VENT_HH
 
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
