@@ -36,7 +36,25 @@ jobs:
           pip3 install --upgrade pip
           pip3 install .
 
-      - name: Include guard format
+      # The basenames of all header files need to be unique because our include
+      # guards only contain the all-caps basename, not the full paths to files.
+      # We don't check files in verif directories since those aren't user-facing
+      # and are only used for individual verification sims.
+      - name: Header file basenames are unique
+        run: |
+          violations="$(
+              git ls-files 'models/*.hh' 'models/*.h' 'utility/*.hh' 'utility/*.h' ':!*verif*' \
+              | awk -F/ '{print $NF}' \
+              | tr '[:upper:]' '[:lower:]' \
+              | sort \
+              | uniq -d
+          )"
+          if [ -n "$violations" ]; then
+            printf 'The following header files do not have unique, case-insensitive names:\n%s\n' "$violations" | tee header-file-name-issues.log
+            exit 1
+          fi
+
+      - name: Include guards use correct format
         run: |
           source .venv/bin/activate
           violations="$(checkguard -r -p "path 0 | upper | prepend CML_ " models utility)"
