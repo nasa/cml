@@ -9,8 +9,8 @@ PROGRAMMERS:
    )
 
 *******************************************************************************/
-#ifndef CML_T_R_STATE_PARAMETER_SET_HH
-#define CML_T_R_STATE_PARAMETER_SET_HH
+#ifndef CML_TR_STATE_PARAMETER_SET_HH
+#define CML_TR_STATE_PARAMETER_SET_HH
 
 /*****************************************************************************
 TR_ParameterSet

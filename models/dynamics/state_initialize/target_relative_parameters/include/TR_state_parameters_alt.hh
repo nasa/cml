@@ -21,8 +21,8 @@ NOTES:
   of the planet rotation rate, which the other implementation extracts from its
   pfix-position instance.))
 *******************************************************************************/
-#ifndef CML_T_R_STATE_PARAMETERS_ALT_HH
-#define CML_T_R_STATE_PARAMETERS_ALT_HH
+#ifndef CML_TR_STATE_PARAMETERS_ALT_HH
+#define CML_TR_STATE_PARAMETERS_ALT_HH
 
 #include "TR_state_param.hh"
 /*****************************************************************************
