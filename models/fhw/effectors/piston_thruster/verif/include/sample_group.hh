@@ -6,6 +6,8 @@
  *    ((Bingquan Wang) (OSR) (Sep 2017) (Antares)
  *                           (cleanup per table_interp_CPP refactoring)))
  ************************************************************************/
+#ifndef CML_SAMPLE_GROUP_HH
+#define CML_SAMPLE_GROUP_HH
 
 #include "trick/constant.h"
 #include "../../include/piston_thruster_group.hh"
@@ -164,3 +166,5 @@ class SamplePistonGroup : public PistonThrusterGroup
   SamplePistonGroup (const SamplePistonGroup&);
   SamplePistonGroup & operator = (const SamplePistonGroup&);
 };
+
+#endif

@@ -6,6 +6,8 @@ PROGRAMMERS:
       ((Gary Turner) (OSR) (Sep 2023) (ANTARES) (initial))
     )
 **********************************************************************/
+#ifndef CML_SAMPLE_CLASS_HH
+#define CML_SAMPLE_CLASS_HH
 
 #include "cml/models/utilities/buffers/include/simple_ring_buffer.hh"
 
@@ -45,3 +47,5 @@ struct SampleModel
     }
   }
 };
+
+#endif
