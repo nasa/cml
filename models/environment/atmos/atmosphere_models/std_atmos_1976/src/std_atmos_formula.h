@@ -12,8 +12,8 @@ PROGRAMMERS:
 
 ********************************************************************************/
 
-#ifndef STD_ATMOS_FORMULA_H
-#define STD_ATMOS_FORMULA_H
+#ifndef CML_STD_ATMOS_FORMULA_H
+#define CML_STD_ATMOS_FORMULA_H
 
 #include <cassert>
 #include <cmath>
@@ -93,5 +93,5 @@ static inline double log_interp(const double x_vals[],  //the data set of x-axis
   return std::exp(log_y);
 }
                                  
-#endif //STD_ATMOS_FORMULA_H
 
+#endif

@@ -17,8 +17,8 @@
    (((Gary Turner) (OSR) (May 2023) (Antares) (initial version))
    )
 *******************************************************************************/
-#ifndef ANTARES_SINGLE_INPUT_TABLE_FOR_VAR_DERIV_HH
-#define ANTARES_SINGLE_INPUT_TABLE_FOR_VAR_DERIV_HH
+#ifndef CML_SINGLE_INPUT_TABLE_VAR_WITH_DERIV_HH
+#define CML_SINGLE_INPUT_TABLE_VAR_WITH_DERIV_HH
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 

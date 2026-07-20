@@ -16,8 +16,8 @@ Programmers:
 
 *******************************************************************************/
 
-#ifndef JEOD_MASS_BODY_DETACH_IMPULSIVE_HH
-#define JEOD_MASS_BODY_DETACH_IMPULSIVE_HH
+#ifndef CML_MASS_BODY_DETACH_IMPULSIVE_HH
+#define CML_MASS_BODY_DETACH_IMPULSIVE_HH
 
 #include "jeod/models/dynamics/mass/include/class_declarations.hh"
 

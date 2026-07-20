@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CML_CML_MESSAGE_MOCK_HH
+#define CML_CML_MESSAGE_MOCK_HH
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include <gmock/gmock.h>
@@ -22,3 +23,4 @@ public:
 };
 
 } // namespace CMLMessage
+#endif

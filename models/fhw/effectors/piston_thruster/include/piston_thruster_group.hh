@@ -38,8 +38,8 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (June 2017) (Antares) (IV&V code review clean up)))
 *********************************************************************************/
 
-#ifndef PISTON_THRUSTER_GROUP_HH
-#define PISTON_THRUSTER_GROUP_HH
+#ifndef CML_PISTON_THRUSTER_GROUP_HH
+#define CML_PISTON_THRUSTER_GROUP_HH
 
 #include <list> // For std::list
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"

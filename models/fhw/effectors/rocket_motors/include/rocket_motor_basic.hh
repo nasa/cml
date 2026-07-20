@@ -12,8 +12,8 @@ PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
  ******************************************************************************/
 
-#ifndef CML_SOLID_ROCKET_MOTOR_BASIC_HH
-#define CML_SOLID_ROCKET_MOTOR_BASIC_HH
+#ifndef CML_ROCKET_MOTOR_BASIC_HH
+#define CML_ROCKET_MOTOR_BASIC_HH
 
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"

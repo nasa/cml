@@ -17,8 +17,8 @@ NOTES:
      Body A - The wake-producing body
      Body B - The object inside the wake
 **********************************************************************/
-#ifndef WAKE_EFFECTS_HH
-#define WAKE_EFFECTS_HH
+#ifndef CML_WAKE_EFFECTS_HH
+#define CML_WAKE_EFFECTS_HH
 
 #include <vector>
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"

@@ -12,8 +12,8 @@ PROGRAMMERS:
            CEV-LAS motors)))
  ******************************************************************************/
 
-#ifndef CML_SOLID_ROCKET_MOTOR_MULTI_NOZZLE_HH
-#define CML_SOLID_ROCKET_MOTOR_MULTI_NOZZLE_HH
+#ifndef CML_ROCKET_MOTOR_MULTI_NOZZLE_HH
+#define CML_ROCKET_MOTOR_MULTI_NOZZLE_HH
 
 #include "rocket_motor_table_thrust.hh"
 #include "rocket_motor_nozzle.hh"

@@ -7,8 +7,8 @@ Programmers:
    ((Nino Tarantino) (CACI) (April 2026) (CML) (Refactor for unit testing and mocking))
   )
 *******************************************************************************/
-#ifndef CML_MESSAGE_HANDLER_TEST_HH
-#define CML_MESSAGE_HANDLER_TEST_HH
+#ifndef CML_SAMPLE_MODEL_HH
+#define CML_SAMPLE_MODEL_HH
 #include <string>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

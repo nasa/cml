@@ -21,8 +21,8 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (June 2017) (Antares) (IV&V code review clean up)))
 *******************************************************************************/
 
-#ifndef PISTON_THRUSTER_HH
-#define PISTON_THRUSTER_HH
+#ifndef CML_PISTON_THRUSTER_HH
+#define CML_PISTON_THRUSTER_HH
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 

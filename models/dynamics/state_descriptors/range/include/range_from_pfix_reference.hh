@@ -14,8 +14,8 @@ Programmers:
 
 *******************************************************************************/
 
-#ifndef CML_RANGE_FROM_PFIX_REFERENCE
-#define CML_RANGE_FROM_PFIX_REFERENCE
+#ifndef CML_RANGE_FROM_PFIX_REFERENCE_HH
+#define CML_RANGE_FROM_PFIX_REFERENCE_HH
 
 #include "range_computation.hh"
 

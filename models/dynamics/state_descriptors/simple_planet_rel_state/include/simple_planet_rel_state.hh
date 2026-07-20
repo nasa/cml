@@ -10,8 +10,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2017) (Antares) (first cut)))
 **********************************************************************/
 
-#ifndef SIMPLE_PLANET_REL_STATE_HH
-#define SIMPLE_PLANET_REL_STATE_HH
+#ifndef CML_SIMPLE_PLANET_REL_STATE_HH
+#define CML_SIMPLE_PLANET_REL_STATE_HH
 
 #include <string>
 #include "jeod/models/dynamics/derived_state/include/relative_derived_state.hh"

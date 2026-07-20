@@ -8,8 +8,8 @@ PROGRAMMERS:
                                                   equality comparison))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
 ############################################################################*/
-#ifndef CML_FAULT_TRIGGER_HH
-#define CML_FAULT_TRIGGER_HH
+#ifndef CML_TRIGGER_HH
+#define CML_TRIGGER_HH
 
 #include <string>
 #include <limits> // std::numeric_limits

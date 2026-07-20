@@ -42,8 +42,8 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#ifndef ANTARES_DYN_MASS_GROUP_HH
-#define ANTARES_DYN_MASS_GROUP_HH
+#ifndef CML_DYNAMIC_MASS_GROUP_HH
+#define CML_DYNAMIC_MASS_GROUP_HH
 
 #include<vector>
 #include<list>

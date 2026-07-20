@@ -9,8 +9,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_ATMOS_BASE_HH
-#define ATMOS_EXEC_ATMOS_BASE_HH
+#ifndef CML_ATMOSPHERE_EXEC_ATMOS_BASE_HH
+#define CML_ATMOSPHERE_EXEC_ATMOS_BASE_HH
 
 #include <string>
 #include "atmosphere_exec_out.hh"

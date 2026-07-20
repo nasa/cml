@@ -13,8 +13,8 @@ PROGRAMMERS:
     capabilities in CML))
   )
 **********************************************************************/
-#ifndef CML_EVENT_MANAGEMENT_EVENT_TRIGGER_HH
-#define CML_EVENT_MANAGEMENT_EVENT_TRIGGER_HH
+#ifndef CML_EVENT_TRIGGER_HH
+#define CML_EVENT_TRIGGER_HH
 
 #include "cml/models/vehicle_management/events_manager/include/watch_values_delay.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

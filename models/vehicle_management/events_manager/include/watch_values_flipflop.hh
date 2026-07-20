@@ -28,8 +28,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2026/02) (ANTARES) (initial implementation)))
 *******************************************************************************/
-#ifndef WATCH_VALUES_FLIPFLOP_HH
-#define WATCH_VALUES_FLIPFLOP_HH
+#ifndef CML_WATCH_VALUES_FLIPFLOP_HH
+#define CML_WATCH_VALUES_FLIPFLOP_HH
 
 #include <list>
 

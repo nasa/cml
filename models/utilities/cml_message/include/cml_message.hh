@@ -13,8 +13,8 @@ Programmers:
    ((Nino Tarantino) (CACI) (April 2026) (CML) (Refactor for unit testing and mocking))
   )
 *******************************************************************************/
-#ifndef CML_MESSAGE_HANDLER_HH
-#define CML_MESSAGE_HANDLER_HH
+#ifndef CML_CML_MESSAGE_HH
+#define CML_CML_MESSAGE_HH
 
 // System includes
 #include <cstdio> // snprintf

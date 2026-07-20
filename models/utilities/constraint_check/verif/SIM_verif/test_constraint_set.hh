@@ -8,7 +8,8 @@ PROGRAMMERS:
     (New))
  )
 *******************************************************************************/
-
+#ifndef CML_TEST_CONSTRAINT_SET_HH
+#define CML_TEST_CONSTRAINT_SET_HH
 
 #include "../../include/constraint_set.hh"
 #include "../../include/threshold_constraint.hh"
@@ -181,3 +182,5 @@ class TestConstraintSet
   TestConstraintSet( const TestConstraintSet&);
   TestConstraintSet & operator=( const TestConstraintSet&);
 };
+
+#endif

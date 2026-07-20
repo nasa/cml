@@ -9,8 +9,8 @@ PROGRAMMERS:
     (Merging concepts found in former grok-events and CML-events))
   )
 ***********************************************************************/
-#ifndef CML_EVENT_MANAGEMENT_COMPOUND_EVENTS_MANAGER_HH
-#define CML_EVENT_MANAGEMENT_COMPOUND_EVENTS_MANAGER_HH
+#ifndef CML_COMPOUND_EVENT_MANAGER_HH
+#define CML_COMPOUND_EVENT_MANAGER_HH
 
 #include "cml/models/vehicle_management/events_manager/include/vehicle_events_manager.hh"
 #include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"

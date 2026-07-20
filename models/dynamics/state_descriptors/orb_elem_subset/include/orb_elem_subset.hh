@@ -17,8 +17,8 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#ifndef ANTARES_ORB_ELEM_SUBSET_HH
-#define ANTARES_ORB_ELEM_SUBSET_HH
+#ifndef CML_ORB_ELEM_SUBSET_HH
+#define CML_ORB_ELEM_SUBSET_HH
 
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 

@@ -4,8 +4,8 @@ PURPOSE: (A sample set for testing commandable actions)
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Feb 2022) (Antares) (verification)))
 ***********************************************************************/
-#ifndef SAMPLE_COMMANDABLE_ACTION_SET_HH
-#define SAMPLE_COMMANDABLE_ACTION_SET_HH
+#ifndef CML_SAMPLE_SET_HH
+#define CML_SAMPLE_SET_HH
 
 #include <string>
 #include "../../../include/commandable_action_set.hh"

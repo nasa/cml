@@ -14,8 +14,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_DRWP_HH
-#define ATMOS_EXEC_DRWP_HH
+#ifndef CML_ATMOSPHERE_EXEC_DRWP_HH
+#define CML_ATMOSPHERE_EXEC_DRWP_HH
 
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "cml/models/environment/atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh"

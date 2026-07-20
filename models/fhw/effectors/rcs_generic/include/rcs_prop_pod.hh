@@ -15,8 +15,8 @@ PROGRAMMERS:
 **********************************************************************/
 
 
-#ifndef RCS_GENERIC_PROP_POD_HH
-#define RCS_GENERIC_PROP_POD_HH
+#ifndef CML_RCS_PROP_POD_HH
+#define CML_RCS_PROP_POD_HH
 
 #include <vector>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

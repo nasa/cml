@@ -4,6 +4,7 @@ version = "0.2.0"
 description = "The JSC Engineering EG Division Common Model Library"
 dependencies = [
     "gcovr",
+    "guardonce",
     "numpy",
     "psutil",
     "pyyaml",

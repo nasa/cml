@@ -6,8 +6,8 @@
    (((Gary Turner) (OSR) (Sep 2022) (Antares) (initial)))
 ***********************************************************************/
 
-#ifndef ANTARES_SIM_SPEED_MONITOR_HH
-#define ANTARES_SIM_SPEED_MONITOR_HH
+#ifndef CML_SIM_SPEED_MONITOR_HH
+#define CML_SIM_SPEED_MONITOR_HH
 
 #include <chrono>
 

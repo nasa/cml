@@ -37,8 +37,8 @@ PROGRAMMERS:
    (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
 
 ********************************************************************************/
-#ifndef CML_STATE_OVERRIDE_CONTACT_MODEL_HH
-#define CML_STATE_OVERRIDE_CONTACT_MODEL_HH
+#ifndef CML_CONTACT_STATE_OVERRIDE_HH
+#define CML_CONTACT_STATE_OVERRIDE_HH
 
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"

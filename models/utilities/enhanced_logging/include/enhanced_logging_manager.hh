@@ -17,8 +17,8 @@ PROGRAMMERS:
     (Implementation loosely based heavily on DataCollect in GNC_PAR,
      with extensive upgrades)))
 ***********************************************************************/
-#ifndef CML_ENHANCED_LOGGING_BASE_MANAGER_HH
-#define CML_ENHANCED_LOGGING_BASE_MANAGER_HH
+#ifndef CML_ENHANCED_LOGGING_MANAGER_HH
+#define CML_ENHANCED_LOGGING_MANAGER_HH
 
 #include "base_logging_group.hh"
 #include "serial_logging_group.hh"

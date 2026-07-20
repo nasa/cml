@@ -8,8 +8,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Jan 2024) (ANTARES) (initial)))
 **********************************************************************/
-#ifndef ENHANCED_LOGGING_MANAGER_PROJECT_EXTENSION_HH
-#define ENHANCED_LOGGING_MANAGER_PROJECT_EXTENSION_HH
+#ifndef CML_PROJECT_LOGGING_MANAGER_HH
+#define CML_PROJECT_LOGGING_MANAGER_HH
 
 #include "cml/models/utilities/enhanced_logging/include/enhanced_logging_manager.hh"
 #include "cml/models/utilities/enhanced_logging/include/summary_logging_group.hh"

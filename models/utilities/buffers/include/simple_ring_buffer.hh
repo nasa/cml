@@ -15,8 +15,8 @@ ASSUMPTIONS:
  NOTES:
   STL provides a ring buffer with C++14.
 **********************************************************************/
-#ifndef CML_SIMPLE_RING_BUFFER
-#define CML_SIMPLE_RING_BUFFER
+#ifndef CML_SIMPLE_RING_BUFFER_HH
+#define CML_SIMPLE_RING_BUFFER_HH
 
 #include <vector>
 #include <string>

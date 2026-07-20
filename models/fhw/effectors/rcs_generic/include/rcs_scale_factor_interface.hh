@@ -7,8 +7,8 @@ PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (ANTARES) (Initial implementation)))
 ******************************************************************************/
 
-#ifndef RCS_SCALE_FACTORS_INTERFACE
-#define RCS_SCALE_FACTORS_INTERFACE
+#ifndef CML_RCS_SCALE_FACTOR_INTERFACE_HH
+#define CML_RCS_SCALE_FACTOR_INTERFACE_HH
 
 /*****************************************************************************
 RcsScaleFactorInterfaceJet

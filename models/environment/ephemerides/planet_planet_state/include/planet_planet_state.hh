@@ -24,8 +24,8 @@ PROGRAMMERS:
 
 ********************************************************************************/
 
-#ifndef ANTARES_PLANET_PLANET_STATE_HH
-#define ANTARES_PLANET_PLANET_STATE_HH
+#ifndef CML_PLANET_PLANET_STATE_HH
+#define CML_PLANET_PLANET_STATE_HH
 
 #include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"

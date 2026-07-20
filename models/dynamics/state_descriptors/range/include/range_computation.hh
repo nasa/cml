@@ -15,8 +15,8 @@ Programmers:
 
 *******************************************************************************/
 
-#ifndef CML_RANGE_COMPUTATION_VALUES
-#define CML_RANGE_COMPUTATION_VALUES
+#ifndef CML_RANGE_COMPUTATION_HH
+#define CML_RANGE_COMPUTATION_HH
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "pfix_reference_point.hh"

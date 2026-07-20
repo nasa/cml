@@ -29,8 +29,8 @@ PROGRAMMERS:
 
 ********************************************************************************/
 
-#ifndef STD_ATMOS_1976_H
-#define STD_ATMOS_1976_H
+#ifndef CML_STD_ATMOS_1976_HH
+#define CML_STD_ATMOS_1976_HH
 
 #include <cstddef>
 /** The main class to implement the computation of standard atmosphere model 1976 */
@@ -106,5 +106,5 @@ private:
    void initialize();
 } ;
 
-#endif // STD_ATMOS_1976_H
 
+#endif

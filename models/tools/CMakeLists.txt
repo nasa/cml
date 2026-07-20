@@ -4,9 +4,7 @@ add_cml_library(
         tools
 
     HEADERS
-        unit_test/models/data/include/unit_test_dd.h
         unit_test/models/include/unit_test.hh
-        unit_test/models/include/unit_test_proto.h
 
     SOURCES
         unit_test/models/src/unit_test.cc

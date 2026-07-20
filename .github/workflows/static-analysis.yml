@@ -1,0 +1,76 @@
+name: Static Analysis
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code-format:
+    runs-on: ubuntu-latest
+    container:
+      image: rockylinux:8
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install system dependencies
+        run: |
+          dnf install -y epel-release
+          dnf config-manager --enable powertools
+          dnf update -y
+          dnf install -y git python3-devel
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure environment
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Set up Python virtual environment
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip3 install --upgrade pip
+          pip3 install .
+
+      # The basenames of all header files need to be unique because our include
+      # guards only contain the all-caps basename, not the full paths to files.
+      # We don't check files in verif directories since those aren't user-facing
+      # and are only used for individual verification sims.
+      - name: Header file basenames are unique
+        run: |
+          violations="$(
+              git ls-files 'models/*.hh' 'models/*.h' 'utility/*.hh' 'utility/*.h' ':!*verif*' \
+              | awk -F/ '{print $NF}' \
+              | tr '[:upper:]' '[:lower:]' \
+              | sort \
+              | uniq -d
+          )"
+          if [ -n "$violations" ]; then
+            printf 'The following header files do not have unique, case-insensitive names:\n%s\n' "$violations" | tee header-file-name-issues.log
+            exit 1
+          fi
+
+      - name: Include guards use correct format
+        run: |
+          source .venv/bin/activate
+          violations="$(checkguard -r -p "path 0 | upper | prepend CML_ " models utility)"
+          if [ -n "$violations" ]; then
+            printf 'Invalid include guards for:\n%s\n' "$violations" | tee include-guard-issues.log
+            exit 1
+          fi
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-format-issues
+          path: "*.log"
+          if-no-files-found: warn
+          retention-days: 2

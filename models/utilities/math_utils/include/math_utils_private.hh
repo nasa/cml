@@ -1,5 +1,5 @@
-#ifndef MATH_UTILS_PRIVATE_HH
-#define MATH_UTILS_PRIVATE_HH
+#ifndef CML_MATH_UTILS_PRIVATE_HH
+#define CML_MATH_UTILS_PRIVATE_HH
 
 #include <cassert>
 #define _USE_MATH_DEFINES // M_PI
@@ -194,4 +194,4 @@ class MathUtilsPrivate {
     return res;
   }
 };
-#endif //MATH_UTILS_PRIVATE_HH
+#endif

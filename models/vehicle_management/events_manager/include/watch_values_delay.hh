@@ -6,8 +6,8 @@ PURPOSE: (Provides an extension to  WatchValuesBase that allows a delay
 PROGRAMMERS:
   (((Gary Turner) (OSR) (May 2023) (ANTARES) (enhancement)))
 **********************************************************************/
-#ifndef CML_WATCH_VALUES_BASE_DELAY_HH
-#define CML_WATCH_VALUES_BASE_DELAY_HH
+#ifndef CML_WATCH_VALUES_DELAY_HH
+#define CML_WATCH_VALUES_DELAY_HH
 
 #include "watch_values_base.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"

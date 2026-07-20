@@ -14,8 +14,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_SIMPLE_LOOKUP_WIND_HH
-#define ATMOS_EXEC_SIMPLE_LOOKUP_WIND_HH
+#ifndef CML_ATMOSPHERE_EXEC_SIMPLE_WINDS_HH
+#define CML_ATMOSPHERE_EXEC_SIMPLE_WINDS_HH
 
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"

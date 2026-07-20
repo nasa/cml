@@ -10,8 +10,8 @@ PROGRAMMERS:
     (Merging concepts found in former grok-events and CML-events))
   )
 ***********************************************************************/
-#ifndef CML_EVENT_MANAGEMENT_EVENT_TRIGGER_SET_HH
-#define CML_EVENT_MANAGEMENT_EVENT_TRIGGER_SET_HH
+#ifndef CML_EVENT_TRIGGER_SET_HH
+#define CML_EVENT_TRIGGER_SET_HH
 
 #include <list>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

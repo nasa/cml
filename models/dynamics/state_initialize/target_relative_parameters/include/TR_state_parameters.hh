@@ -20,8 +20,8 @@ NOTES:
   a 3-vector ... and does not require a planet-fixed position implementation
   to do the conversions.))
 *******************************************************************************/
-#ifndef CML_TARGET_RELATIVE_PARAMETERS_STATE_HH
-#define CML_TARGET_RELATIVE_PARAMETERS_STATE_HH
+#ifndef CML_TR_STATE_PARAMETERS_HH
+#define CML_TR_STATE_PARAMETERS_HH
 
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"

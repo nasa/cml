@@ -30,8 +30,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_HH
-#define ATMOS_EXEC_HH
+#ifndef CML_ATMOSPHERE_EXEC_HH
+#define CML_ATMOSPHERE_EXEC_HH
 
 
 #include "cml/models/environment/atmos/gust/include/gust.hh"

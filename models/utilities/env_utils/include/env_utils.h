@@ -1,5 +1,5 @@
-#ifndef ENV_UTILS_H
-#define ENV_UTILS_H
+#ifndef CML_ENV_UTILS_H
+#define CML_ENV_UTILS_H
 
 #include <cstdlib>
 #include <iostream>
@@ -36,4 +36,4 @@ inline const char* getenv_or_throw(const char* var_name)
     return value;
 }
 
-#endif // ENV_UTILS_H
+#endif

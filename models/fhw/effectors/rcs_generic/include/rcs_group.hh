@@ -14,8 +14,8 @@ PROGRAMMERS:
   )
 **********************************************************************/
 
-#ifndef RCS_JET_GROUP_HH
-#define RCS_JET_GROUP_HH
+#ifndef CML_RCS_GROUP_HH
+#define CML_RCS_GROUP_HH
 
 #include <vector>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

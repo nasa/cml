@@ -14,8 +14,8 @@
    )
 *******************************************************************************/
 
-#ifndef ANTARES_GENERIC_SINGLE_INPUT_TABLE_HH
-#define ANTARES_GENERIC_SINGLE_INPUT_TABLE_HH
+#ifndef CML_GENERIC_SINGLE_INPUT_TABLE_HH
+#define CML_GENERIC_SINGLE_INPUT_TABLE_HH
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 

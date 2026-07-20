@@ -12,8 +12,8 @@ PROGRAMMERS:
 (((Gary Turner) (OSR) (October, 2015) (initial version)))
 *******************************************************************************/
 
-#ifndef ANTARES_VECTOR3_INTEGRABLE_OBJECT_HH
-#define ANTARES_VECTOR3_INTEGRABLE_OBJECT_HH
+#ifndef CML_VECTOR3_INTEGRABLE_OBJECT_HH
+#define CML_VECTOR3_INTEGRABLE_OBJECT_HH
 
 #include "er7_utils/integration/core/include/integrable_object.hh"
 #include "er7_utils/integration/core/include/integrator_result.hh"

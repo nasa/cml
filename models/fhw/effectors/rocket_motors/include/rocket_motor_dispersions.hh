@@ -11,8 +11,8 @@ PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
  ******************************************************************************/
 
-#ifndef CML_SOLID_ROCKET_MOTOR_DISPERSIONS_HH
-#define CML_SOLID_ROCKET_MOTOR_DISPERSIONS_HH
+#ifndef CML_ROCKET_MOTOR_DISPERSIONS_HH
+#define CML_ROCKET_MOTOR_DISPERSIONS_HH
 
 class RocketMotorDispersions {
 public:

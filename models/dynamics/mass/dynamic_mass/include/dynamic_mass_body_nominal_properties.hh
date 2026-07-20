@@ -39,8 +39,8 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#ifndef ANTARES_DYN_MASS_BODY_NOMINAL_PROPERTIES_HH
-#define ANTARES_DYN_MASS_BODY_NOMINAL_PROPERTIES_HH
+#ifndef CML_DYNAMIC_MASS_BODY_NOMINAL_PROPERTIES_HH
+#define CML_DYNAMIC_MASS_BODY_NOMINAL_PROPERTIES_HH
 
 #include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
 
@@ -69,5 +69,5 @@ private:
    DynamicMassBodyNominalProperties& operator = (const DynamicMassBodyNominalProperties&);
 };
 
-#endif
 
+#endif

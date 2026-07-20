@@ -15,8 +15,8 @@ PROGRAMMERS:
    (((Gary Turner) (OSR) (September 2014) (New))
  ******************************************************************************/
 
-#ifndef ANTARES_STATE_INITIALIZE_HH
-#define ANTARES_STATE_INITIALIZE_HH
+#ifndef CML_STATE_INITIALIZE_HH
+#define CML_STATE_INITIALIZE_HH
 
 #include <string>
 

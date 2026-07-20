@@ -12,8 +12,8 @@ PROGRAMMERS:
      ((Susan Stachowiak) (NASA) (May 2017) (Added option for vertical wind component))
      ((Brian Birmingham) (OSR) (April 2022) (Added CML Table Interpolation)))
 ********************************************************************************/
-#ifndef CML_LOOKUP_ATMOS_WINDS_HH
-#define CML_LOOKUP_ATMOS_WINDS_HH
+#ifndef CML_LOOKUP_WINDS_HH
+#define CML_LOOKUP_WINDS_HH
 
 #include "cml/models/utilities/table_interp_cpp/include/simple_table_lookup.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"

@@ -38,8 +38,8 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#ifndef CML_DYN_MASS_BODY_HH
-#define CML_DYN_MASS_BODY_HH
+#ifndef CML_DYNAMIC_MASS_BODY_HH
+#define CML_DYNAMIC_MASS_BODY_HH
 
 #include "jeod/models/dynamics/mass/include/mass.hh"
 
@@ -101,5 +101,5 @@ class DynamicMassBody : public jeod::MassBody
 
 };
 
-#endif
 
+#endif

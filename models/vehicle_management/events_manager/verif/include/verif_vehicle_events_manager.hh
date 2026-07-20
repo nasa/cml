@@ -5,8 +5,8 @@ PURPOSE: (Provide a template of a set of events and how they might be
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2014) (Antares) (initial)))
 **********************************************************************/
-#ifndef VERIF_VEHICLE_EVENTS_MANAGER_HH
-#define VERIF_VEHICLE_EVENTS_MANAGER_HH
+#ifndef CML_VERIF_VEHICLE_EVENTS_MANAGER_HH
+#define CML_VERIF_VEHICLE_EVENTS_MANAGER_HH
 
 #include "../../include/vehicle_events_manager.hh"
 #include "../../include/watch_values_base.hh"

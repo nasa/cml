@@ -9,8 +9,8 @@ PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
 ############################################################################*/
-#ifndef CML_FAULT_FUNCTION_INDEPENDENT_VARIABLE_HH
-#define CML_FAULT_FUNCTION_INDEPENDENT_VARIABLE_HH
+#ifndef CML_INDEPENDENT_VARIABLE_HH
+#define CML_INDEPENDENT_VARIABLE_HH
 
 #include "untyped_variable.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

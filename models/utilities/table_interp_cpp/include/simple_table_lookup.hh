@@ -12,8 +12,8 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#ifndef ANTARES_SIMPLE_TABLE_LOOKUP_HH
-#define ANTARES_SIMPLE_TABLE_LOOKUP_HH
+#ifndef CML_SIMPLE_TABLE_LOOKUP_HH
+#define CML_SIMPLE_TABLE_LOOKUP_HH
 
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

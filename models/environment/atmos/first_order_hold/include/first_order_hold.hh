@@ -11,8 +11,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ANTARES_FIRST_ORDER_HOLD_HH
-#define ANTARES_FIRST_ORDER_HOLD_HH
+#ifndef CML_FIRST_ORDER_HOLD_HH
+#define CML_FIRST_ORDER_HOLD_HH
 
 #include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"

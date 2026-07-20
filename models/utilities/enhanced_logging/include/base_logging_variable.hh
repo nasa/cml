@@ -9,8 +9,8 @@ PURPOSE:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2024) (ANTARES) (new)))
 ***********************************************************************/
-#ifndef CML_ENHANCED_LOGGING_BASE_VARIABLE_HH
-#define CML_ENHANCED_LOGGING_BASE_VARIABLE_HH
+#ifndef CML_BASE_LOGGING_VARIABLE_HH
+#define CML_BASE_LOGGING_VARIABLE_HH
 
 #include <string>
 #include <fstream>

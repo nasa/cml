@@ -19,8 +19,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (November 2017) (New implementation))
   )
 *******************************************************************************/
-#ifndef ANTARES_SINGLE_INPUT_TABLE_FOR_QUATERNIONS_HH
-#define ANTARES_SINGLE_INPUT_TABLE_FOR_QUATERNIONS_HH
+#ifndef CML_SINGLE_INPUT_TABLE_FOR_QUATERNIONS_HH
+#define CML_SINGLE_INPUT_TABLE_FOR_QUATERNIONS_HH
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"

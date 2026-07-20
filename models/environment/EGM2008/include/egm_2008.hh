@@ -14,8 +14,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Feb 2021) (Antares) (initial)))
 **********************************************************************/
-#ifndef CML_EGM2008_HH
-#define CML_EGM2008_HH
+#ifndef CML_EGM_2008_HH
+#define CML_EGM_2008_HH
 
 // CML Dependencies
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"

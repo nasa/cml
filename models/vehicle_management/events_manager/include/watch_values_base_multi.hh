@@ -117,5 +117,5 @@ Purpose:(Unsubscribe from watch_a and watch_b to deactivate them.
   WatchValuesBase2 (const WatchValuesBase2& rhs);
   WatchValuesBase2& operator = (const WatchValuesBase2& rhs);
 };
-#endif
 
+#endif

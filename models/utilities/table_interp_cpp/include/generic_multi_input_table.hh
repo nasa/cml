@@ -13,8 +13,8 @@
     ((Bingquan Wang) (OSR) (Aug 2017) (Antares) (IVV code cleanup and refactored))
    )
 *******************************************************************************/
-#ifndef ANTARES_GENERIC_MULTI_INPUT_TABLE_HH
-#define ANTARES_GENERIC_MULTI_INPUT_TABLE_HH
+#ifndef CML_GENERIC_MULTI_INPUT_TABLE_HH
+#define CML_GENERIC_MULTI_INPUT_TABLE_HH
 
 #include <list>
 #include <string> // std::string

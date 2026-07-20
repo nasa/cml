@@ -12,8 +12,8 @@ LIBRARY DEPENDENCIES:
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
  ******************************************************************************/
-#ifndef CML_SOLID_ROCKET_MOTOR_TABLE_THRUST_HH
-#define CML_SOLID_ROCKET_MOTOR_TABLE_THRUST_HH
+#ifndef CML_ROCKET_MOTOR_TABLE_THRUST_HH
+#define CML_ROCKET_MOTOR_TABLE_THRUST_HH
 
 #include <vector>
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"

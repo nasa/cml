@@ -30,8 +30,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2024) (ANTARES) (new)))
 **********************************************************************/
-#ifndef CML_ENHANCED_LOGGING_SUMMARY_CONDITION_HH
-#define CML_ENHANCED_LOGGING_SUMMARY_CONDITION_HH
+#ifndef CML_SUMMARY_LOGGING_CONDITION_HH
+#define CML_SUMMARY_LOGGING_CONDITION_HH
 
 #include "cml/models/vehicle_management/compound_events/include/compound_event.hh"
 /*****************************************************************************
