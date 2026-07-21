@@ -2,7 +2,7 @@
 
 The Common Model Library accepts new models and updates to existing models from NASA
 simulation-developing groups and any other groups to whom CML provides value. Before
-submitting changes, please look at our [coding standards](docs/CML_Coding_Standards.pdf)
+submitting changes, please look at our [coding standards](docs/CML_Coding_Standards.rst)
 in the `docs` folder. If you're using an older version of CML, please also double check
 that the changes you're proposing have not already been integrated into CML in a more
 recent release.
@@ -58,7 +58,7 @@ When submitting a new model to CML, you must provide:
 
 Models must meet NPR 7150.2 Class A, B, C, or D to be accepted into CML. Additionally,
 all new models must have unit tests which cover at least 90% of source code lines and
-must be submitted alongside documentation which adequately describes the model. See the [coding standards](docs/CML_Coding_Standards.pdf) for more information.
+must be submitted alongside documentation which adequately describes the model. See the [coding standards](docs/CML_Coding_Standards.rst) for more information.
 
 Models must also provide sufficient value to CML to be accepted. Trivial models which
 contain only a handful of lines of code can add a large maintenance burden to the CML team
