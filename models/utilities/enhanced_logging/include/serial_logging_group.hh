@@ -89,7 +89,7 @@ class EnhancedLogging_SerialGroup : public EnhancedLogging_BaseGroup
 
   EnhancedLogging_SerialGroup( std::string name,
                                const double & dyn_time);
-  virtual ~EnhancedLogging_SerialGroup();
+  ~EnhancedLogging_SerialGroup() override;
 
   void initialize( const std::string &) override;
   void update() override;
@@ -113,12 +113,12 @@ class EnhancedLogging_SerialGroup : public EnhancedLogging_BaseGroup
 
   template <typename T>
   void add_variable( const T & var,
-                     std::string name,
+                     std::string var_name,
                      std::string units="--")
   {
     EnhancedLogging_BaseVariable * new_var =
         new EnhancedLogging_SerialVariableT<T>( var,
-                                                name,
+                                                var_name,
                                                 units);
     variables.push_back( new_var);
     allocated_variables.push_back( new_var);
@@ -127,7 +127,7 @@ class EnhancedLogging_SerialGroup : public EnhancedLogging_BaseGroup
   void add_variable_internal( EnhancedLogging_BaseVariable *);
 
 protected:
-  void deactivate();
+  void deactivate() override;
   void initialize_file() override;
 
  private: // remove operator=, copy-constructor from SWIG accessibility

@@ -13,10 +13,10 @@ PROGRAMMERS:
 Constructor
 ************************************************************************/
 Vent::Vent(
-     const double& dyn_time,
+     const double& dyn_time_in,
      DynamicMassBody& tank_in)
   :
-  SimpleVent( dyn_time),
+  SimpleVent( dyn_time_in),
   tank(tank_in),
   flowrate(0.0),
   exhaust_speed(0.0),

@@ -25,13 +25,13 @@ class GenericSingleInputTable : public GenericMultiInputTable
 {
  friend class SingleInputTableVarDeriv;
  public:
-  virtual bool initialize() override;
+  bool initialize() override;
   // use the same constructors as the parent class.
   using GenericMultiInputTable::GenericMultiInputTable;
-  GenericSingleInputTable() : GenericMultiInputTable(){};
+  GenericSingleInputTable() : GenericMultiInputTable(){}
  protected:
-  virtual void generate_base_values() override;
-  virtual bool generate_output() override;
+  void generate_base_values() override;
+  bool generate_output() override;
  private:
   // Disable the copy/assignment operators
   GenericSingleInputTable (const GenericSingleInputTable&);

@@ -75,7 +75,7 @@ protected:
 
 public:
   RocketMotorNozzle();
-  virtual ~RocketMotorNozzle(){};
+  virtual ~RocketMotorNozzle() = default;
 
   void initialize( double pos[3],
                    double T_struc_to_mf[3][3]);

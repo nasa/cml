@@ -70,7 +70,7 @@ public:
   are used instead in models using this class.
   This requires that SimpleTableLookup keep its default constructor form. */
   SimpleTableLookup();
-  virtual ~SimpleTableLookup(){};
+  ~SimpleTableLookup() override = default;
 
 
   bool load_dependent_data(
@@ -121,7 +121,7 @@ public:
            const TableIndependentVariable::Continuity   continuity =
                                             TableIndependentVariable::Linear);
 
-  virtual void initialize() override;
+  void initialize() override;
   GenericMultiInputTable * get_table();
 
 private:

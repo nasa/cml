@@ -32,7 +32,7 @@ class RangeSafetyData
 {
   public:
     RangeSafetyData();
-    virtual ~RangeSafetyData(){};
+    virtual ~RangeSafetyData() = default;
 
     // INPUT VALUES
     /*FIXME -- There should probably be some checks on these azimuths in that they should

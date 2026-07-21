@@ -12,6 +12,7 @@
 #     SOURCES: A list of the test source files.
 
 include_guard()
+include(SetCMLCompileWarnings)
 
 function(add_cml_tests)
     set(options)
@@ -52,6 +53,9 @@ function(add_cml_tests)
             cxx_std_17
     )
 
+    # Add warnings and instrument the build for code coverage if
+    # CML_CODE_COVERAGE is true.
+    set_cml_compile_warnings(${TEST_NAME})
     target_compile_options(${TEST_NAME}
         PRIVATE
             $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>

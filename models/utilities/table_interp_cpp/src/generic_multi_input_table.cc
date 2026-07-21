@@ -8,7 +8,7 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#include <cstddef> // NULL
+#include <cstddef>
 
 #include "../include/generic_multi_input_table.hh"
 
@@ -270,7 +270,7 @@ GenericMultiInputTable::add_independent(
   }
 
   if (index < size) {
-    if (independents[index].first != NULL) {
+    if (independents[index].first != nullptr) {
       CMLMessage::warn(
       __FILE__,__LINE__,"Table-variable connection error:\n",
       "Connecting dimension ",index, " of the table with an independent "
@@ -282,7 +282,7 @@ GenericMultiInputTable::add_independent(
   }
   else {
     // Fill the independents with NULL values up to the specified index.
-    TableIndependentVariable * null_ptr = NULL;
+    TableIndependentVariable * null_ptr = nullptr;
     for (size_t ii = size; ii < index; ++ii) {
       independents.push_back(IndepPair(null_ptr, lookup_method));
     }
@@ -416,10 +416,11 @@ GenericMultiInputTable::initialize()
         "At index ",ii,", the independent variable has only 1 data value.\n"
         "There is nothing to interpolate or look up for this value; it is\n"
         "being removed from the set of independents.\n");
-      independents.erase(independents.begin()+ii);
-      size_of_dimension.erase(size_of_dimension.begin()+ii+1);
+      const int index = static_cast<int>(ii);
+      independents.erase(independents.begin()+index);
+      size_of_dimension.erase(size_of_dimension.begin()+index+1);
       num_data_elements_per_increment_of_index.erase(
-            num_data_elements_per_increment_of_index.begin()+ii+1);
+            num_data_elements_per_increment_of_index.begin()+index+1);
       num_independents = independents.size();
       // Notes -
       //   - no increment, hold ii steady for next value which is now at

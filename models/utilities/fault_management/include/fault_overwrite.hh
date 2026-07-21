@@ -29,7 +29,7 @@ class FaultOverwrite : public Fault {
     :
     variable(var)
   {}
-  virtual ~FaultOverwrite(){}
+  ~FaultOverwrite() override = default;
 
   void overwrite_value() override { variable = faulted_value; }
 

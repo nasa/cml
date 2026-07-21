@@ -67,13 +67,13 @@ class IntervalInstantConstraint : public Constraint
   {
     set.constraints.push_back(this);
   }
-  virtual ~IntervalInstantConstraint(){};
+  ~IntervalInstantConstraint() override = default;
 
   /***************************************************************************
   * Name: initialize
   * Purpose: sanity checks
   ***************************************************************************/
-  void initialize()
+  void initialize() override
   {
     Constraint::initialize();
     /* If configuration is set to trip a violation when variable is:
@@ -95,7 +95,7 @@ class IntervalInstantConstraint : public Constraint
   * Name: update
   * Purpose: Main executable of this constraint.
   ***************************************************************************/
-  void update()
+  void update() override
   {
     if (!active) {return;}
 
@@ -169,13 +169,13 @@ class IntervalTimedConstraint : public Constraint
     set.constraints.push_back(this);
   }
 
-  virtual ~IntervalTimedConstraint(){};
+  ~IntervalTimedConstraint() override = default;
 
   /***************************************************************************
   * Name: initialize
   * Purpose: sanity checks
   ***************************************************************************/
-  void initialize()
+  void initialize() override
   {
     Constraint::initialize();
     /* If configuration is set to trip a violation when variable is:
@@ -197,7 +197,7 @@ class IntervalTimedConstraint : public Constraint
   * Name: update
   * Purpose: Main executable of this constraint.
   ***************************************************************************/
-  void update()
+  void update() override
   {
     if (!active) {return;}
 

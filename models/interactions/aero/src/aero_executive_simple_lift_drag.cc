@@ -94,6 +94,7 @@ void AeroExecutiveSimpleLiftDrag::update()
     lift_mag = dynamic_pressure * Aref * CL;
     drag_mag = dynamic_pressure * Aref * CD;
     break;
+  case constant_mag:
   default: // no action;
     break;
   }

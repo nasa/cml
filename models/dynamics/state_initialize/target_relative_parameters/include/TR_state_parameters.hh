@@ -64,7 +64,7 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
   TargetRelative_StateParameter();
 
   /* Destructor */
-  virtual ~TargetRelative_StateParameter(){};
+  ~TargetRelative_StateParameter() override = default;
 
   /* Public Methods */
   void initialize( double ref_geodetic_altitude,

@@ -49,7 +49,7 @@ class LvlhSeparationState : public SeparationState
  public:
   LvlhSeparationState();
   explicit LvlhSeparationState(jeod::LvlhFrame & lvlh);
-  virtual ~LvlhSeparationState();
+  ~LvlhSeparationState() override;
 
   void initialize ( jeod::DynManager & dyn_manager,
                     std::string planet_name,

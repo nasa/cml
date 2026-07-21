@@ -151,11 +151,11 @@ class AtmosRelativeState : public SubscriptionBase
   AtmosRelativeState( const jeod::DynBody       & body_ref,
                       ExtendedPlanetaryDerivedState & prs_ref,
                       AtmosphereExecInterface       & atmos_exec_ref);
-  virtual ~AtmosRelativeState(){};
+  ~AtmosRelativeState() override = default;
 
  protected:
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
 
   void update_zero_vel();
   void compute_angles();

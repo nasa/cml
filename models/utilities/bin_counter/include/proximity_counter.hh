@@ -60,11 +60,11 @@ class CML_ProximityCounter {
   void insert(double);
   void set_data( const std::vector<double> & targets);
   template <size_t n_targets>
-  void set_data( const double (&targets)[n_targets])
+  void set_data( const double (&new_targets)[n_targets])
   {
-    std::vector<double> targets_v( targets, targets+n_targets);
+    std::vector<double> targets_v( new_targets, new_targets+n_targets);
     set_data( targets_v);
-  };
+  }
 
  private: // not implemented
   CML_ProximityCounter(const CML_ProximityCounter&);

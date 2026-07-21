@@ -71,29 +71,29 @@ protected:
   // The arguments are passed through to the generic RocketMotor_Basic()
   // constructor.
   RocketMotor_TableThrust(
-                    DynamicMassGroup                   & mass_group,
+                    DynamicMassGroup                   & mass_group_in,
                     DynamicMassBody                    * mass_body,
                     DynamicMassString                  * mass_string,
                     DynamicMassBodyPropertiesInterface & mass_properties,
                     const double                       & time,
-                    const double                       * veh_cm,
-                    bool                                 use_mass_string);
+                    const double                       * veh_cm_in,
+                    bool                                 use_mass_string_in);
 public:
   RocketMotor_TableThrust( DynamicMassBody & mass,
                            const double    & time,
-                           const double    * veh_cm);
-  RocketMotor_TableThrust( DynamicMassGroup & mass_group,
+                           const double    * veh_cm_in);
+  RocketMotor_TableThrust( DynamicMassGroup & mass_group_in,
                            DynamicMassBody  & mass,
                            const double     & time,
-                           const double     * veh_cm);
+                           const double     * veh_cm_in);
   RocketMotor_TableThrust( DynamicMassString & string,
                            const double      & time,
-                           const double      * veh_cm);
-  RocketMotor_TableThrust( DynamicMassGroup  & mass_group,
+                           const double      * veh_cm_in);
+  RocketMotor_TableThrust( DynamicMassGroup  & mass_group_in,
                            DynamicMassString & string,
                            const double      & time,
-                           const double      * veh_cm);
-  virtual ~RocketMotor_TableThrust(){};
+                           const double      * veh_cm_in);
+  ~RocketMotor_TableThrust() override = default;
 
   void load_thrust_data(double * data,
                         size_t   num_elements);
@@ -111,13 +111,13 @@ public:
                         size_t   num_elements);
   void load_time_data(  std::vector<double> & data);
 
-  virtual void initialize() override;
-  virtual void update() override;
+  void initialize() override;
+  void update() override;
   void set_consumption_type( ConsumptionType);
-  virtual void shutdown_motor() override;
+  void shutdown_motor() override;
 
 protected:
-  virtual void start_motor() override;
+  void start_motor() override;
   void update_table();
   void compute_flow_rate_and_isp();
 private:

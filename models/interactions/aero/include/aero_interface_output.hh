@@ -49,22 +49,22 @@ public:
     jeod::Vector3::initialize(force);
     jeod::Vector3::initialize(torque);
     jeod::Vector3::initialize(moment_mrc);
-  };
+  }
 
   void zero_dsl() {
     drag_force = lift_force = side_force = LoD = 0.0;
-  };
+  }
 
   void zero_torque() {
     jeod::Vector3::initialize(torque);
     jeod::Vector3::initialize(moment_mrc);
-  };
+  }
 
   void zero_everything() {
     jeod::Vector3::initialize(force);
     zero_dsl();
     zero_torque();
-  };
+  }
 
 private:
   // Make the copy constructor and assignment operator private

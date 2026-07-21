@@ -40,9 +40,9 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
                                   size_t num_vars);
   explicit SingleInputTableForQuaternions(
                                     const DoublePtrVec & dependent_variables);
-  virtual ~SingleInputTableForQuaternions() {};
+  ~SingleInputTableForQuaternions() override = default;
 
-  virtual bool initialize() override;
+  bool initialize() override;
 
   void set_spherical_interp( bool new_flag) {
     sph_interp.use_spherical_interp = new_flag;
@@ -55,7 +55,7 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
   }
 
  protected:
-  virtual bool generate_output() override;
+  bool generate_output() override;
  private:
   // Disable the copy/assignment operators
   SingleInputTableForQuaternions (const SingleInputTableForQuaternions&);

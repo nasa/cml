@@ -100,8 +100,8 @@ Purpose:()
 void
 AtmosphereExecInterface::initialize()
 {
-  if (current_atmos == NULL ||
-      current_winds == NULL) {
+  if (current_atmos == nullptr ||
+      current_winds == nullptr) {
     CMLMessage::fail(
       __FILE__,__LINE__,"Error in initialization sequence.\n",
       "Pointers to current wind or atmosphere model were set to NULL\n"

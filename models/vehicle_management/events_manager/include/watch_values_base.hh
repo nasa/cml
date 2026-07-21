@@ -46,12 +46,12 @@ class WatchValuesBase : public WatchValuesBaseCore {
   WatchValuesBase()
      :
      reference_is_variable(false),
-     variable(NULL),
+     variable(nullptr),
      reference(), // no value; this is of watchType.
-     reference_ptr(NULL),
+     reference_ptr(nullptr),
      variable_at_activation(),
-     use_threshold_crossing_trigger(false) {};
-  virtual ~WatchValuesBase(){};
+     use_threshold_crossing_trigger(false) {}
+  ~WatchValuesBase() override = default;
 
 /*****************************************************************************
 set_watch
@@ -64,7 +64,7 @@ Purpose:(Sets the variable and the reference against which it will be compared)
     reference = ref;
     reference_is_variable = false;
     return;
-  };
+  }
   /***************************************************************************/
   //  reference is a variable-value
   /***************************************************************************/
@@ -79,7 +79,7 @@ Purpose:(Sets the variable and the reference against which it will be compared)
     reference_ptr = ref;
     reference_is_variable = true;
     return;
-  };
+  }
   /***************************************************************************/
   //     These methods are here for use with primitives only
   //     (e.g. double, int, bool, etc.)
@@ -94,15 +94,15 @@ Purpose:(Sets the variable and the reference against which it will be compared)
   void set_watch_primitives( const void * var, watchType ref) {
     const watchType * new_ptr = set_watch_primitives_test_ref_val( var);
     set_watch( *new_ptr, ref);
-  };
+  }
   void set_watch_primitives( const void * var, const void * ref) {
     const watchType * new_ptr = set_watch_primitives_test_ref_var( var,ref);
     const watchType * new_ref = reinterpret_cast<const watchType *>(ref);
     set_watch( *new_ptr, new_ref);
-  };
+  }
   const watchType * set_watch_primitives_test_ref_val( const void * var)
   {
-    if (var == NULL) {
+    if (var == nullptr) {
       CMLMessage::fail(
       __FILE__,__LINE__,"Critical failure in calling set_watch\n",
       "Trick was unable to find the specified watch variable.\n"
@@ -118,24 +118,24 @@ Purpose:(Sets the variable and the reference against which it will be compared)
       "behavior will be undefined. \n"
       "Double check the variable type.\n");
     return reinterpret_cast<const watchType *>(var);
-  };
+  }
   const watchType * set_watch_primitives_test_ref_var( const void * var, const void * ref)
   {
-    if (var == NULL && ref != NULL) {
+    if (var == nullptr && ref != nullptr) {
       CMLMessage::fail(
       __FILE__,__LINE__,"Critical failure in calling set_watch\n",
       "Trick was unable to find the specified watch variable.\n"
       "The pointer passed into the set_watch_primitives method is NULL.\n"
       "Check the variable for the correct name.\n");
     }
-    else if (var != NULL && ref == NULL) {
+    else if (var != nullptr && ref == nullptr) {
       CMLMessage::fail(
       __FILE__,__LINE__,"Critical failure in calling set_watch\n",
       "Trick was unable to find the specified reference variable.\n"
       "The pointer passed into the set_watch_primitives method is NULL.\n"
       "Check the variable for the correct name.\n");
     }
-    else if (var == NULL && ref == NULL) {
+    else if (var == nullptr && ref == nullptr) {
       CMLMessage::fail(
       __FILE__,__LINE__,"Critical failure in calling set_watch\n",
       "Trick was unable to find the specified watch and reference variables.\n"
@@ -151,7 +151,7 @@ Purpose:(Sets the variable and the reference against which it will be compared)
       "behavior will be undefined. \n"
       "Double check the variable type.\n");
     return reinterpret_cast<const watchType *>(var);
-  };
+  }
 
 
 /*****************************************************************************
@@ -162,7 +162,7 @@ Purpose:(Sets the reference value.  Used for changing default or previously
   void set_reference(watchType ref) {
     reference = ref;
     return;
-  };
+  }
 
  void set_dbl_reference(double ref) override {
     reference = static_cast<watchType>(ref);
@@ -178,7 +178,7 @@ NOTE - "virtual" ends here.  Classes deriving from here should not override
        but it is pure-virtual there.  This is the only true implementation of
        this method
 ******************************************************************************/
-  virtual bool test_crossing() override {
+  bool test_crossing() override {
     // Sanity check, although this can only be in the array if it is active.
     if (!active) {
       return false;
@@ -207,7 +207,7 @@ NOTE - "virtual" ends here.  Classes deriving from here should not override
     // use bools.
     int_event_triggered = event_triggered ? 1 : 0;
     return event_triggered;
-  };
+  }
 
 
  protected:
@@ -230,7 +230,7 @@ Purpose:(Split behavior based on whether the template class variable type
     else {  // default
       event_triggered = (*variable == reference);
     }
-  };
+  }
   /***************************************************************************/
   //         Define continuous-variable behavior
   /***************************************************************************/
@@ -278,7 +278,7 @@ Purpose:(Split behavior based on whether the template class variable type
       deactivate();
     }
     return;
-  };
+  }
 
 
 /*****************************************************************************
@@ -287,8 +287,8 @@ Purpose:(Completes the activation sequence, including verification that the
          appropriate data and pointers have been set in a compatible manner.)
 Assumption: (Both activate() and initialize() must have been called)
  ******************************************************************************/
-  virtual void activate() {
-    if (variable == NULL) {
+  void activate() override {
+    if (variable == nullptr) {
       CMLMessage::error (
       __FILE__, __LINE__, "Invalid Event/Watch activation: NULL variable:\n",
       "An attempt was made to activate a WatchValue instance with a NULL\n"
@@ -313,7 +313,7 @@ Assumption: (Both activate() and initialize() must have been called)
       }
     }
     return;
-  };
+  }
 
 /*****************************************************************************
 set_reference_relative_to_activation
@@ -336,7 +336,7 @@ Purpose:(Internal activation sub-method for case where reference is relative\
     }
     reference = !variable_at_activation;
     return;
-  };
+  }
   /***************************************************************************/
   // int
   /***************************************************************************/
@@ -366,7 +366,7 @@ Purpose:(Internal activation sub-method for case where reference is relative\
       "Using the originally specified reference value instead.\n");
       relative_to_activation = false;
     return;
-  };
+  }
 
 /*****************************************************************************
 increment_reference
@@ -381,7 +381,7 @@ Purpose:(Generates the new reference value.)
     // Increment the current value with the intended offset.
     reference += variable_at_activation;
     return;
-  };
+  }
 
  private:
   WatchValuesBase (const WatchValuesBase& rhs);

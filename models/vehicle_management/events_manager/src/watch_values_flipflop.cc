@@ -62,10 +62,10 @@ Purpose:
 *****************************************************************************/
 void
 WatchValuesFlipFlop::initialize(
-       std::list<WatchValuesBaseCore *> * active_watches)
+       std::list<WatchValuesBaseCore *> * active_watches_in)
 {
-  associated_watch.initialize(active_watches);
-  WatchValuesBaseCore::initialize(active_watches);
+  associated_watch.initialize(active_watches_in);
+  WatchValuesBaseCore::initialize(active_watches_in);
 }
 
 /*****************************************************************************

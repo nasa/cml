@@ -11,7 +11,6 @@ PROGRAMMERS:
     ((Brent Caughron) (OSR) (July 2017) (Antares) (IV&V model code cleanup))    )
 
 **********************************************************************************/
-#define _USE_MATH_DEFINES //M_PI
 #include <cmath> //M_PI, atan2
 #include <limits> //numeric_limits
 

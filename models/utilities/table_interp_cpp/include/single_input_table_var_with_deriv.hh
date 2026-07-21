@@ -57,9 +57,9 @@ class SingleInputTableVarDeriv : public GenericSingleInputTable
   SingleInputTableVarDeriv( const DoublePtrVec & dependent_variables,
                             const DoublePtrVec & dependent_variables_deriv);
 
-  virtual bool initialize() override;
+  bool initialize() override;
   protected:
-  virtual bool generate_output() override;
+  bool generate_output() override;
  private:
   // Disable the copy/assignment operators
   SingleInputTableVarDeriv (const SingleInputTableVarDeriv&);

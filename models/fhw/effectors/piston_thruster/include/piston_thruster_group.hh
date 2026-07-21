@@ -100,7 +100,7 @@ public:
     :
     mode(ReferenceDeltaV),
     max_time(0.0)
-  {};
+  {}
 };
 
 
@@ -130,16 +130,16 @@ protected:
 
 public:
   explicit PistonThrusterGroup( const double & time_in);
-  virtual ~PistonThrusterGroup(){};
+  ~PistonThrusterGroup() override = default;
 
-  virtual void initialize();
+  void initialize() override;
   virtual void update();
   void add_piston_thruster( PistonThruster & new_thruster);
   void set_mode( PistonThrusterGroupParams::ForceMethod new_mode);
 
 protected:
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
 
 private:
   PistonThrusterGroup(const PistonThrusterGroup& rhs);

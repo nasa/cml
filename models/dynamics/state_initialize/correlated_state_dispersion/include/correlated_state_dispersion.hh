@@ -297,7 +297,7 @@ class CorrelatedStateDispersion {
 
  public:
   CorrelatedStateDispersion();
-  ~CorrelatedStateDispersion(){};
+  ~CorrelatedStateDispersion() = default;
 
   void disperse_state( const jeod::RefFrameState & trans_base_wrt_cov_base,
                        const double (&rot_base_wrt_cov_base)[3][3],

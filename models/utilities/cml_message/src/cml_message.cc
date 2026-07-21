@@ -82,6 +82,8 @@ void publish(PublishLevel msg_level,
     preamble= ColorString::green("Status Report:");
     message = ColorString::green( text);
     break;
+  case Debug:
+    [[fallthrough]];
   default:
     preamble= "Debug Point";
     message = text;

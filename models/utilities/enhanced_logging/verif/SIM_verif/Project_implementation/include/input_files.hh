@@ -26,7 +26,7 @@ struct ProjectInputFiles
  public:
   ProjectInputFiles (VerifTestStruc &,
                      ProjectLoggingManager &);
-  virtual ~ProjectInputFiles(){};
+  virtual ~ProjectInputFiles() = default;
 
   void run_1a_predefined();
   void run_1b_modified_predefined();

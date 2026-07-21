@@ -26,7 +26,7 @@ WatchValuesBaseCore::WatchValuesBaseCore()
   direction(Undefined),
   delta_record(0.0),
   relative_to_activation_protected(false),
-  active_watches(0),
+  active_watches(nullptr),
   ext_bool_on(0),
   ext_bool_off(0),
   subscribe_models(0),

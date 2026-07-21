@@ -54,7 +54,7 @@ class QuaternionSphericalInterpolator
 
  public:
   QuaternionSphericalInterpolator();
-  virtual ~QuaternionSphericalInterpolator() {};
+  virtual ~QuaternionSphericalInterpolator() = default;
 
   void update();
   void set_epsilon_interp( double new_epsilon);

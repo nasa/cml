@@ -11,7 +11,6 @@ PROGRAMMERS:
 
 **********************************************************************************/
 
-#define _USE_MATH_DEFINES  // M_PI
 #include <cmath>           // M_PI, atan2, sqrt
 #include <vector>
 #include <cstdint> // uint32_t
@@ -381,19 +380,19 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
   //     This is typedef'd from float (4 byte).
   // - To change to a different binary file format, change the typedef on the
   //     lines below and the setting of "size_of_source*".
-  typedef uint32_t data_int;
-  typedef float    data_float;
-  if ((size_of_source_integer != sizeof(data_int)) ||
-      (size_of_source_float   != sizeof(data_float))) {
+  using data_int = uint32_t;
+  using data_float = float;
+  if ((LookupAtmosWinds::size_of_source_integer != sizeof(data_int)) ||
+      (LookupAtmosWinds::size_of_source_float   != sizeof(data_float))) {
     // unreachable sanity check. Tested in gdb by setting size_of_source_float.
     CMLMessage::fail( __FILE__, __LINE__,
       "DRWP load_file data type mismatch:\n",
       "Need to typedef data_int and data_float to be consistent with the "
       "expected data sizes."
       "\n  sizeof(data_int)       : ", sizeof(data_int),
-      "\n  size_of_source_integer : ", size_of_source_integer,
+      "\n  size_of_source_integer : ", LookupAtmosWinds::size_of_source_integer,
       "\n  sizeof(data_float)     : ", sizeof(data_int),
-      "\n  size_of_source_float   : ", size_of_source_float);
+      "\n  size_of_source_float   : ", LookupAtmosWinds::size_of_source_float);
   }
 
   // If we already have filled our allocated space for datasets, we can't add
@@ -420,13 +419,20 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
   // Position the reader to the beginning of the file
   BinFile.seekg (0, std::ios::beg);
 
+  // Alias the expected data sizes to signed values here, which std::ifstream requires.
+  const auto int_bytes_to_read =
+    static_cast<std::streamsize>(LookupAtmosWinds::size_of_source_integer);
+  const auto float_bytes_to_read =
+    static_cast<std::streamsize>(LookupAtmosWinds::size_of_source_float);
+
   //  Read the number of profiles and the number of altitudes
   // (the independent variable). There are constraints on these values because
   // they will be used to size new data arrays. The numbers are read in as
   // unsigned integers, so if the number in the file is negative, it will read
-  // in as a large positive integer.
+  // in as a large positive integer. We need to use reinterpret_cast since
+  // std::ifstream will output the data as char bytes.
   data_int number_of_profiles_;
-  BinFile.read(  (char *) &number_of_profiles_, size_of_source_integer );
+  BinFile.read(  reinterpret_cast<char*>(&number_of_profiles_), int_bytes_to_read );
   if( BinFile.fail()) {
     stream_error(__LINE__, drwpFileName_);
     return false;
@@ -438,7 +444,7 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
   }
 
   data_int number_of_altitudes_;
-  BinFile.read(  (char *) &number_of_altitudes_, size_of_source_integer );
+  BinFile.read(  reinterpret_cast<char*>(&number_of_altitudes_), int_bytes_to_read );
   if( BinFile.fail()) {
     stream_error(__LINE__, drwpFileName_);
     return false;
@@ -458,10 +464,12 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
   /********************   Loading independent variable data  ******************/
   // Define vector of floats to receive data from binary file
   // These data are the altitudes - the independent variable
-  // The array input_data will be used twice, hence the large dimension
-  data_float altitude_array_[number_of_altitudes_];
-  BinFile.read( (char *) altitude_array_,
-                number_of_altitudes_ * size_of_source_float);
+  // The array input_data will be used twice, hence the large dimension.
+  // We need to use reinterpret_cast since std::ifstream will output the data as
+  // char bytes.
+  std::vector<data_float> altitude_float_array_(number_of_altitudes_);
+  BinFile.read( reinterpret_cast<char*>(altitude_float_array_.data()),
+                number_of_altitudes_ * float_bytes_to_read);
   if( BinFile.fail()) {
     stream_error(__LINE__, drwpFileName_);
     return false;
@@ -470,8 +478,7 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
   // The table interpolation routines require the data to be of type double
   // cast from float to double is automatic, but cannot pass the float array
   // to load_independent_data, we need to convert it first.
-  std::vector<double> altitude_data_( altitude_array_,
-                                      altitude_array_ + number_of_altitudes_);
+  std::vector<double> altitude_data_( altitude_float_array_.begin(), altitude_float_array_.end());
 
   // Now try loading the independent data onto the table.
   if (!table_.load_independent_data( altitude,
@@ -483,9 +490,9 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
 
 
   // Next read in the wind profile numbers; these might not be sequential
-  data_int wind_profiles_[number_of_profiles_];
-  BinFile.read( (char *) wind_profiles_,
-                number_of_profiles_ * size_of_source_integer );
+  std::vector<data_int> wind_profiles_(number_of_profiles_);
+  BinFile.read( reinterpret_cast<char*>(wind_profiles_.data()),
+                number_of_profiles_ * int_bytes_to_read );
   if( BinFile.fail()) {
     stream_error(__LINE__, drwpFileName_);
     return false;
@@ -522,19 +529,21 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
   // Each profile has a wind number (integer) and a block of floats
   // representing the 5 (or 6) dependent variables for each calibrated altitude
   // There are (number of dependent variables) * (number of altitudes) data
-  // points, each of which occupies size_of_source_float bytes,
+  // points, each of which occupies float_bytes_to_read bytes,
   unsigned int pointsPerBlock_ =
                          number_of_altitudes_ * number_of_dependent_variables_;
-  unsigned int bytesPerBlock_  = size_of_source_float * pointsPerBlock_;
+  unsigned int bytesPerBlock_  = float_bytes_to_read * pointsPerBlock_;
 
   // For each profile, make sure that the first entry matches with the profile
   // number read in earlier (to wind_profiles_). This is a sanity check that we
   // are in the right place in the data file.
   // Note -- the reader has just finished reading the wind_profiles_ array;
   //         the next entry should be the profile number for the first profile.
+  // We need to use reinterpret_cast since std::ifstream will output the data as
+  // char bytes.
   for (size_t ii = 0; ii < number_of_profiles_; ii++) {
     data_int profile_number_;
-    BinFile.read( (char *) &profile_number_, size_of_source_integer );
+    BinFile.read( reinterpret_cast<char*>(&profile_number_), int_bytes_to_read );
     if( BinFile.fail()) {
       stream_error(__LINE__, drwpFileName_);
       return false;
@@ -574,26 +583,26 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
   //      representing the altitude data
   //  - an array of <number_of_profiles_> integers representing the wind numbers.
   // This adds up to this much space:
-  int bytesAtBeginning_ = size_of_source_integer * (2 + number_of_profiles_) +
-                          size_of_source_float   * number_of_altitudes_;
+  data_int bytesAtBeginning_ = LookupAtmosWinds::size_of_source_integer * (2 + number_of_profiles_) +
+                               LookupAtmosWinds::size_of_source_float   * number_of_altitudes_;
 
   // Then each profile occupies memory for:
   // - an integer to confirm the profile number
   // - bytesperBlock for the actual data.
-  int bytesPerProfile_ = bytesPerBlock_ + size_of_source_integer;
+  data_int bytesPerProfile_ = bytesPerBlock_ + LookupAtmosWinds::size_of_source_integer;
 
   // then we also bypass the integer at the front of the profile we actually
   // want; we have already checked that this integer has value = wind_number_
-  int bypass_ = bytesAtBeginning_ + (profile_ix_ * bytesPerProfile_) +
-                size_of_source_integer;
+  data_int bypass_ = bytesAtBeginning_ + (profile_ix_ * bytesPerProfile_) +
+                LookupAtmosWinds::size_of_source_integer;
 
   //  advance from the front of the file this many bytes; this puts us at the
   //  front of the desired profile.
   BinFile.seekg(bypass_, std::ios::beg);
 
   /*********  Loading profile data  ***********************/
-  data_float input_data_[pointsPerBlock_];
-  BinFile.read((char *) input_data_, bytesPerBlock_);
+  std::vector<data_float> input_data_(pointsPerBlock_);
+  BinFile.read(reinterpret_cast<char*>(input_data_.data()), bytesPerBlock_);
   // Possibly unreachable: causing a failure here is difficult because we
   // have already verified that the file can be read through this memory space.
   // Tested in gdb by manually setting bytesPerBlock_.
@@ -603,8 +612,7 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
   }
 
   // As before, to load the data we must convert it to double.
-  std::vector<double> dependent_variables_( input_data_,
-                                            input_data_ + pointsPerBlock_);
+  std::vector<double> dependent_variables_( input_data_.begin(), input_data_.end());
   std::vector<double *> dep_vec_;
   dep_vec_.push_back( &u );
   dep_vec_.push_back( &v );

@@ -21,7 +21,6 @@ PROGRAMMERS:
  ******************************************************************************/
 
 
-#include <cstdlib> // NULL
 #include <random> // default_random_engine,
                   // uniform_real_distribution,
                   // normal_distribution
@@ -85,7 +84,7 @@ StateInitialize::StateInitialize()
   free_stream_velocity{0.0, 0.0, 0.0},
   // protected values:
   initialized(false),
-  planet(NULL),
+  planet(nullptr),
   use_orbital_init(false),
   use_trans_init(true),
   use_rot_init(true),
@@ -137,7 +136,7 @@ StateInitialize::initialize(
   // Method fails if planet pointer is NULL.  but just to be sure (in case the
   // DynBodyInit method changes) check it again here.  Note, however, it is
   // not possible to test this line of code.
-  if (planet == NULL) {
+  if (planet == nullptr) {
     CMLMessage::fail(
       __FILE__, __LINE__, "Invalid configuration.\n",
       "Action named '", action_identifier, "' failed:\n" "Could not find planet named '", planet_name, "'");
@@ -342,6 +341,40 @@ StateInitialize::select_position_initializer()
       "Position init option not specified.  Use 'Off' to turn off");
     break;
 
+   case ICOPT_INERT_VEL_GAM_AZ:
+   case ICOPT_REL_VEL_GAM_AZ:
+   case EulerPfixVelvec_YPR:
+   case PfixUpCompAzimuth:
+   case ICOPT_EUL_YPR_BR:
+   case ICOPT_EUL_PYR_PL:
+   case ICOPT_EUL_RYP_FS:
+   case ICOPT_INERT_BODY_ROTMAT:
+   case ICOPT_EUL_YPR_INERT_BODY:
+    CMLMessage::warn(
+      __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
+      action_identifier, " error:\n"
+      "Deprecated init option specified. This will be removed in the future.");
+    [[fallthrough]];
+
+   case ICOPT_V_INERTIAL:
+   case InertialSpeedGammaAzimuth:
+   case PfixSpeedGammaAzimuth:
+   case EulerInertialVelvec_YPR:
+   case SunPointing_YPR:
+   case SunPointingEcliptic_PYR:
+   case PfixUpCompAzimuth_YPR:
+   case EulerNED_YPR:
+   case EulerBoostRef_YPR:
+   case EulerPlumbline_PYR:
+   case EulerFreestream_RYP:
+   case MatrixInertialBody:
+   case EulerInertial_YPR:
+   case BodyInertialRate:
+   case BodyPfixRate:
+   case Random:
+   case RotInit:
+   case RotInit_NED:
+   case TR_InertialSpeedGammaLatang:
    default:
     CMLMessage::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
@@ -439,6 +472,39 @@ StateInitialize::select_velocity_initializer()
       "Velocity init option not specified.  Use 'Off' to turn off");
     break;
 
+   case GEOD_LAT_LON_ALT:
+   case EulerPfixVelvec_YPR:
+   case PfixUpCompAzimuth:
+   case ICOPT_EUL_YPR_BR:
+   case ICOPT_EUL_PYR_PL:
+   case ICOPT_EUL_RYP_FS:
+   case ICOPT_INERT_BODY_ROTMAT:
+   case ICOPT_EUL_YPR_INERT_BODY:
+    CMLMessage::warn(
+      __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
+      action_identifier, " error:\n"
+      "Deprecated init option specified. This will be removed in the future.");
+    [[fallthrough]];
+
+   case ICOPT_R_INERTIAL:
+   case EulerInertialVelvec_YPR:
+   case SunPointing_YPR:
+   case SunPointingEcliptic_PYR:
+   case PfixUpCompAzimuth_YPR:
+   case EulerNED_YPR:
+   case EulerBoostRef_YPR:
+   case EulerPlumbline_PYR:
+   case EulerFreestream_RYP:
+   case MatrixInertialBody:
+   case EulerInertial_YPR:
+   case BodyInertialRate:
+   case BodyPfixRate:
+   case Random:
+   case RotInit:
+   case RotInit_NED:
+   case TR_GeodAlt_RngAng_RotAng:
+   case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_LT_90:
+   case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_GT_90:
    default:
     CMLMessage::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
@@ -492,6 +558,33 @@ StateInitialize::select_attitude_initializer()
     E_reference_body[2] = angle_of_attack;
     ref_body_sequence = jeod::Orientation::Roll_Yaw_Pitch;
     break;
+   case Unspecified:
+   case Inertial:
+   case Pfix:
+   case ICOPT_R_INERTIAL:
+   case ICOPT_V_INERTIAL:
+   case NED_Geodetic:
+   case GEOD_LAT_LON_ALT:
+   case NED_Geocentric:
+   case InertialSpeedGammaAzimuth:
+   case ICOPT_INERT_VEL_GAM_AZ:
+   case PfixSpeedGammaAzimuth:
+   case ICOPT_REL_VEL_GAM_AZ:
+   case OrbitalElements:
+   case EulerPfixVelvec_YPR:
+   case MatrixInertialBody:
+   case ICOPT_INERT_BODY_ROTMAT:
+   case BodyInertialRate:
+   case BodyPfixRate:
+   case Random:
+   case Off:
+   case TransInit:
+   case RotInit:
+   case RotInit_NED:
+   case TR_GeodAlt_RngAng_RotAng:
+   case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_LT_90:
+   case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_GT_90:
+   case TR_InertialSpeedGammaLatang:
    default:
     break; // No action, this covers options that do not need E_reference_body.
            // Note - "Unspecified" or illegal values will fail at the next
@@ -687,7 +780,7 @@ StateInitialize::select_attitude_initializer()
     if (att_rate_input_data_type != RotInit_NED) {
       ned_rot_init.set_items = jeod::RefFrameItems::Att;
     }
-    // fallthrough
+    [[fallthrough]];
    case Off:
     remove_from_rot_init( jeod::DynBodyInitRotState::Attitude);
     break;
@@ -699,6 +792,32 @@ StateInitialize::select_attitude_initializer()
       "Attitude init option not specified.  Use 'Off' to turn off");
     break;
 
+   case GEOD_LAT_LON_ALT:
+   case ICOPT_INERT_VEL_GAM_AZ:
+   case ICOPT_REL_VEL_GAM_AZ:
+   case EulerPfixVelvec_YPR:
+    CMLMessage::warn(
+      __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
+      action_identifier, " error:\n"
+      "Deprecated init option specified. This will be removed in the future.");
+    [[fallthrough]];
+
+   case Inertial:
+   case Pfix:
+   case ICOPT_R_INERTIAL:
+   case ICOPT_V_INERTIAL:
+   case NED_Geodetic:
+   case NED_Geocentric:
+   case InertialSpeedGammaAzimuth:
+   case PfixSpeedGammaAzimuth:
+   case OrbitalElements:
+   case BodyInertialRate:
+   case BodyPfixRate:
+   case TransInit:
+   case TR_GeodAlt_RngAng_RotAng:
+   case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_LT_90:
+   case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_GT_90:
+   case TR_InertialSpeedGammaLatang:
    default:
     CMLMessage::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
@@ -758,7 +877,7 @@ StateInitialize::select_att_rate_initializer()
     if (attitude_input_data_type != RotInit_NED) {
       ned_rot_init.set_items = jeod::RefFrameItems::Rate;
     }
-    // fallthrough
+    [[fallthrough]];
    case Off:
     remove_from_rot_init( jeod::DynBodyInitRotState::Rate);
     break;
@@ -770,6 +889,43 @@ StateInitialize::select_att_rate_initializer()
       "Attitude-rate init option not specified.  Use 'Off' to turn off");
     break;
 
+   case GEOD_LAT_LON_ALT:
+   case ICOPT_INERT_VEL_GAM_AZ:
+   case ICOPT_REL_VEL_GAM_AZ:
+   case EulerPfixVelvec_YPR:
+   case ICOPT_EUL_YPR_BR:
+   case ICOPT_EUL_PYR_PL:
+   case ICOPT_EUL_RYP_FS:
+   case ICOPT_INERT_BODY_ROTMAT:
+   case ICOPT_EUL_YPR_INERT_BODY:
+    CMLMessage::warn(
+      __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
+      action_identifier, " error:\n"
+      "Deprecated init option specified. This will be removed in the future.");
+    [[fallthrough]];
+
+   case Inertial:
+   case Pfix:
+   case ICOPT_R_INERTIAL:
+   case ICOPT_V_INERTIAL:
+   case NED_Geodetic:
+   case NED_Geocentric:
+   case InertialSpeedGammaAzimuth:
+   case PfixSpeedGammaAzimuth:
+   case OrbitalElements:
+   case EulerInertialVelvec_YPR:
+   case SunPointing_YPR:
+   case SunPointingEcliptic_PYR:
+   case EulerBoostRef_YPR:
+   case EulerPlumbline_PYR:
+   case EulerFreestream_RYP:
+   case MatrixInertialBody:
+   case EulerInertial_YPR:
+   case TransInit:
+   case TR_GeodAlt_RngAng_RotAng:
+   case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_LT_90:
+   case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_GT_90:
+   case TR_InertialSpeedGammaLatang:
    default:
     CMLMessage::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
@@ -936,7 +1092,7 @@ StateInitialize::generate_orbital_init_values(
 
   // If one of the states is NOT to be initialized this way, store off the
   // current value before it gets overwritten.
-  double temp_state[3];
+  double temp_state[3] {};
   if (position_input_data_type == Off) {
     jeod::Vector3::copy(subject->composite_body.state.trans.position,
                   temp_state);
@@ -1181,6 +1337,7 @@ StateInitialize::generate_pfix_ref_point_state()
      pfix_ref_point_state.update_from_ellip (pfix_ref_point);
      break;
 
+   case jeod::NorthEastDown::undefined:
    default:
      CMLMessage::fail (
         __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
@@ -1304,7 +1461,7 @@ void
 StateInitialize::generate_free_stream_velocity(
       double rel_wind_vel_inrtl[3])
 {
-  if (rel_wind_vel_inrtl == NULL) {
+  if (rel_wind_vel_inrtl == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__, jeod::BodyActionMessages::illegal_value, "\n",
       "input vector is NULL.  Cannot process.\n"
@@ -1464,7 +1621,7 @@ StateInitialize::overwrite_attitude_from_free_stream(
     return;
   }
 
-  if (rel_wind_inrtl == NULL) {
+  if (rel_wind_inrtl == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__, jeod::BodyActionMessages::illegal_value, "\n",
       "input vector is NULL.  Cannot process.\n"

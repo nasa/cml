@@ -70,13 +70,13 @@ class ValSetInstantConstraint : public Constraint
       test_list.push_back(&test);
     }
   }
-  virtual ~ValSetInstantConstraint(){};
+  ~ValSetInstantConstraint() override = default;
 
   /***************************************************************************
   * Name: initialize
   * Purpose: sanity checks
   ***************************************************************************/
-  void initialize()
+  void initialize() override
   {
     Constraint::initialize();
     /* If configuration is set to trip a violation when variable is:
@@ -98,7 +98,7 @@ class ValSetInstantConstraint : public Constraint
   * Name: update
   * Purpose: Main executable of this constraint.
   ***************************************************************************/
-  void update()
+  void update() override
   {
     if (!active) {return;}
 
@@ -172,13 +172,13 @@ class ValSetTimedConstraint : public Constraint
     set.constraints.push_back(this);
   }
 
-  virtual ~ValSetTimedConstraint(){};
+  ~ValSetTimedConstraint() override = default;
 
   /***************************************************************************
   * Name: initialize
   * Purpose: sanity checks
   ***************************************************************************/
-  void initialize()
+  void initialize() override
   {
     Constraint::initialize();
     /* If configuration is set to trip a violation when variable is:
@@ -200,7 +200,7 @@ class ValSetTimedConstraint : public Constraint
   * Name: update
   * Purpose: Main executable of this constraint.
   ***************************************************************************/
-  void update()
+  void update() override
   {
     if (!active) {return;}
 

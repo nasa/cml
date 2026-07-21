@@ -40,7 +40,7 @@ bool TR_Parameter_RefFrame::compute_frame(
     const double vec_A[3],
     const double vec_B[3])
 {
-  if (vec_A == NULL || vec_B == NULL) {
+  if (vec_A == nullptr || vec_B == nullptr) {
     CMLMessage::fail( __FILE__,__LINE__,
       "Error in generating frame ",name,"\n"
       "NULL vectors cannot be converted into target-reference frames.\n");

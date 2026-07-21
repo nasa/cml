@@ -58,10 +58,10 @@ class WakeGeneratingBody
       const double & freestream_mach,
       const double & freestream_density,
       const double & total_alpha);
-  virtual ~WakeGeneratingBody(){};
+  virtual ~WakeGeneratingBody() = default;
 
   void compute_freestream_vel_mag();
-  double get_total_alpha(){return total_alpha;};
+  double get_total_alpha(){return total_alpha;}
 
  private: // and undefined:
   WakeGeneratingBody (const WakeGeneratingBody& rhs);
@@ -111,15 +111,15 @@ class WakeFollowingBody
                     const double * inertial_vel,
                     WakeGeneratingBody & objectA_in,
                     const double * grid_origin_in);
-  virtual ~WakeFollowingBody(){};
+  virtual ~WakeFollowingBody() = default;
 
-  double get_area() const {return area;};
-  bool get_generate_force() const { return generate_force;};
-  virtual double get_drag_area() const {return 0.0;};
+  double get_area() const {return area;}
+  bool get_generate_force() const { return generate_force;}
+  virtual double get_drag_area() const {return 0.0;}
 
   virtual void compute_relative_state();
 
-  virtual void compute_force(double force_mag){(void)force_mag;};
+  virtual void compute_force(double force_mag){(void)force_mag;}
   virtual void set_generate_force(bool target) = 0;
 
  private: // and undefined:
@@ -140,8 +140,8 @@ class WakeFollowingBodyNoForce : public WakeFollowingBody
                             const double * inertial_vel,
                             WakeGeneratingBody & objectA_in,
                             const double * grid_origin_in);
-  virtual ~WakeFollowingBodyNoForce(){};
-  virtual void set_generate_force(bool target) override;
+  ~WakeFollowingBodyNoForce() override = default;
+  void set_generate_force(bool target) override;
 
  private:
   WakeFollowingBodyNoForce (const WakeFollowingBodyNoForce& rhs);
@@ -176,10 +176,10 @@ class WakeFollowingBodyWithForce : public WakeFollowingBody
                WakeGeneratingBody & objectA_in,
                const double * grid_origin_in);
 
-  virtual void set_generate_force(bool target) override;
-  virtual void compute_relative_state() override;
-  virtual void compute_force(double force_mag) override;
-  virtual double get_drag_area() const override {return Cd * area;};
+  void set_generate_force(bool target) override;
+  void compute_relative_state() override;
+  void compute_force(double force_mag) override;
+  double get_drag_area() const override {return Cd * area;}
 
  private:
   WakeFollowingBodyWithForce (const WakeFollowingBodyWithForce& rhs);

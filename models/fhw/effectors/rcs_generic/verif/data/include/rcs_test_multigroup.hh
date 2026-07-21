@@ -37,6 +37,6 @@ class RcsTestMultigroup : public RcsGeneric
  private:
    // Not implemented:
    RcsTestMultigroup (const RcsTestMultigroup& rhs);
-   RcsTestMultigroup & operator = (const RcsTestMultigroup& rhs);;
+   RcsTestMultigroup & operator = (const RcsTestMultigroup& rhs);
 };
 #endif

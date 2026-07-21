@@ -242,7 +242,7 @@ EnhancedLogging_Variable::process_ref_attributes()
      variable name and the array is expanded beyond the limit of the "name"
      specification.
   */
-  int index_count = 0;
+  unsigned int index_count = 0;
   if (name.back() == ']') {
     std::string name_base = name;
     while (name_base.back() == ']') {
@@ -263,7 +263,7 @@ EnhancedLogging_Variable::process_ref_attributes()
   */
   for (unsigned int ii = index_count; ii < 8; ++ii) {
     if (ref->attr->index[ii].size == 0) { break;}
-    array_size.push_back( ref->attr->index[ii].size);
+    array_size.push_back( static_cast<unsigned int>(ref->attr->index[ii].size));
   }
   // Flag the variable as trick-processed so we only need to do this once.
   trick_processed = true;

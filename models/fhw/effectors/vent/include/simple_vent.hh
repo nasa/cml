@@ -105,8 +105,8 @@ class SimpleVent {
  public:
   std::string name; /* (--) name of the vent */
 
-  explicit SimpleVent(const double& dyn_time);
-  virtual ~SimpleVent() {};
+  explicit SimpleVent(const double& dyn_time_in);
+  virtual ~SimpleVent() = default;
 
   virtual void use_impulse_mode(bool mode = true);
   void use_dynamic_mode(bool mode = true) { use_impulse_mode(!mode); }
@@ -165,17 +165,17 @@ class SimpleVent {
   virtual void update();
   virtual bool start_venting();
   virtual void stop_venting();
-  virtual void check_status() {}; // No conditional status to check on a simple-
-                                  // vent; this method is provided (and
-                                  // left empty) for polymorphic extension.
-  virtual void update_mass_demand() {};  //  Likewise, this is here (and
-                                         // empty) for polymorphic extension
+  virtual void check_status() {} // No conditional status to check on a simple-
+                                 // vent; this method is provided (and
+                                 // left empty) for polymorphic extension.
+  virtual void update_mass_demand() {}  //  Likewise, this is here (and
+                                        // empty) for polymorphic extension
 
   // Methods restricted because they are intended to be internal methods
   virtual bool check_configuration();
-  virtual void update_force() {}; // Force assumed held fixed during venting for
-                                  // a simple-vent; this method is provided (and
-                                  // left empty) for polymorphic extension.
+  virtual void update_force() {} // Force assumed held fixed during venting for
+                                 // a simple-vent; this method is provided (and
+                                 // left empty) for polymorphic extension.
   void set_impulse_internal();
   void set_duration_internal();
   virtual void set_force_internal();

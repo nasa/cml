@@ -51,7 +51,7 @@ public:
     CS(0.0), CL(0.0),
     CN_sym(0.0), CL_sym(0.0), Cm_sym(0.0),
     dCl_dp(0.0), dCm_dq(0.0), dCn_dr(0.0)
-  { };
+  { }
 };
 
 /*******************************************************************************
@@ -73,7 +73,7 @@ public:
     AeroCoefficientsCoreBase(),
     Cl_cg(0.0),  Cm_cg(0.0),  Cn_cg(0.0),
     Cl_mrc(0.0), Cm_mrc(0.0), Cn_mrc(0.0)
-  {};
+  {}
 };
 
 
@@ -95,7 +95,7 @@ public:
     :
     dCl_dq(0.0), dCl_dr(0.0), dCm_dp(0.0),
     dCm_dr(0.0), dCn_dp(0.0), dCn_dq(0.0)
-  {};
+  {}
 };
 
 /*******************************************************************************
@@ -119,7 +119,7 @@ public:
     :
     AeroCoefficientsCore(),
     AeroCoefficientsOffDiagExtension()
-    {};
+    {}
 };
 
 /*******************************************************************************
@@ -148,6 +148,6 @@ public:
     AeroCoefficientsCoreBase(),
     AeroCoefficientsOffDiagExtension(),
     Cl(0.0),  Cm(0.0),  Cn(0.0)
-  {};
+  {}
 };
 #endif

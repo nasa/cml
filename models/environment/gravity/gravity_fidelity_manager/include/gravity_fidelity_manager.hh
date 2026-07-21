@@ -57,9 +57,9 @@ class GravityFidelityManager : public SubscriptionBase
   GravityFidelityManager(  jeod::SphericalHarmonicsGravityControls & grav_controls,
                            const jeod::RefFrame                    & source_frame,
                            const jeod::RefFrame                    & target_frame);
-  virtual ~GravityFidelityManager(){};
+  ~GravityFidelityManager() override = default;
 
-  void initialize();
+  void initialize() override;
   void update();
 
  private:

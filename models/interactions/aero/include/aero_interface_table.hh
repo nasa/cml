@@ -39,13 +39,13 @@ public:
                       const double * const cg_position,
                       const double * const true_body_rates,
                       const double (&T_struc_to_body_in)[3][3]);
-  virtual ~AeroInterfaceTable(){};
+  ~AeroInterfaceTable() override = default;
 
-  virtual void initialize();
-  virtual void update() override;
+  void initialize() override;
+  void update() override;
 protected:
-  virtual void activate() override;
-  virtual void deactivate() override;
+  void activate() override;
+  void deactivate() override;
 
 private:
   // Make the copy constructor and assignment operator private

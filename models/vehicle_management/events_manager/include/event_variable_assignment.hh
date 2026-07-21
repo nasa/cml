@@ -20,7 +20,7 @@ EventVariableAssignementRef into a single polymorphic set of type VariableAssign
 class EventVariableAssignmentBase
 {
  public:
-  virtual ~EventVariableAssignmentBase(){};
+  virtual ~EventVariableAssignmentBase() = default;
   virtual void make_assignment() = 0;
 };
 

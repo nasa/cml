@@ -16,7 +16,7 @@ PROGRAMMERS:
 class SubscriptionTestClass : public SubscriptionBase
 {
   protected:
-  void activate() {
+  void activate() override {
     std::cout << "******** ACTIVATION FAILS ********\n\n";
     }
 };

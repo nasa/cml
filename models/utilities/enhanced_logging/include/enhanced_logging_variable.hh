@@ -176,7 +176,7 @@ class EnhancedLogging_VariableSet
      amalgamations of the vectors from the individual EnhancedLogging_Variable
      instances; the EnhancedLogging_Variable are responsible for creating
      and destroying these instances.*/
-  virtual ~EnhancedLogging_VariableSet(){};
+  virtual ~EnhancedLogging_VariableSet() = default;
 
   void add_variable(EnhancedLogging_SerialVariable & var);
   void add_variable(EnhancedLogging_SummaryVariable & var);

@@ -111,7 +111,7 @@ class WatchValuesBaseCore : public SubscriptionBase {
 
  public:
   WatchValuesBaseCore();
-  virtual ~WatchValuesBaseCore();
+  ~WatchValuesBaseCore() override;
 
 
   virtual void initialize( std::list<WatchValuesBaseCore *> * active_watch_in);

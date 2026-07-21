@@ -27,14 +27,14 @@ class RangeFromPfixReference : public RangeComputation
 {
  public:
   explicit RangeFromPfixReference(const jeod::PlanetFixedPosition & state_in);
-  virtual ~RangeFromPfixReference(){};
+  ~RangeFromPfixReference() override = default;
 
-  virtual void set_reference_data() override;
+  void set_reference_data() override;
 
  protected:
-  virtual void update_using_cartesian() override;
-  virtual void update_using_polar() override;
-  virtual void is_abstract() override {}; // Makes this class instantiable
+  void update_using_cartesian() override;
+  void update_using_polar() override;
+  void is_abstract() override {} // Makes this class instantiable
 
  private:
    // Copy constructor and assignment operator for this class are

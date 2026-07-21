@@ -242,6 +242,6 @@ class RcsJet {
  private:
    // Not implemented:
    RcsJet (const RcsJet& rhs);
-   RcsJet & operator = (const RcsJet& rhs);;
+   RcsJet & operator = (const RcsJet& rhs);
 };
 #endif

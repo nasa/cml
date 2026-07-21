@@ -53,9 +53,9 @@ class EnhancedLogging_BaseVariable
     if (name.empty()) { name = alias;}
   }
 
-  virtual ~EnhancedLogging_BaseVariable(){};
+  virtual ~EnhancedLogging_BaseVariable() = default;
 
-  virtual void initialize(){};
+  virtual void initialize(){}
 
   virtual void log_value(std::ofstream&) const = 0;
   virtual void log_value_fmt(std::ofstream&) const = 0;
@@ -70,7 +70,7 @@ class EnhancedLogging_BaseVariable
   virtual void log_value(size_t, std::ofstream&) const = 0;
   virtual void log_value_fmt(size_t, std::ofstream& stream) const = 0;
   virtual void populate_condition( size_t,
-                  EnhancedLogging_SummaryConditionBase::LoggingSpecification){};
-  virtual void reset_summary_val(size_t){};
+                  EnhancedLogging_SummaryConditionBase::LoggingSpecification){}
+  virtual void reset_summary_val(size_t){}
 };
 #endif

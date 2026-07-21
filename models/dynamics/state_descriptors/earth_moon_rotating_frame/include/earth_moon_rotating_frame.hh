@@ -48,10 +48,10 @@ class EarthMoonRotatingFrame : public EphemBasedPointingRefFrame {
  public:
   // Constructor and destructor
   explicit EarthMoonRotatingFrame (jeod::EphemeridesManager & ephem_manager);
-  virtual ~EarthMoonRotatingFrame(){};
+  ~EarthMoonRotatingFrame() override = default;
 
-  virtual void initialize();
-  virtual void update();
+  void initialize() override;
+  void update() override;
   void set_orientation(FrameOrientation orientation);
 
  // The copy constructor and assignment operator for this class are

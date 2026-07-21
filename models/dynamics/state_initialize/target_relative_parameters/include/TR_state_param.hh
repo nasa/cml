@@ -119,7 +119,7 @@ class TargetRelative_StateParam : public TR_ParameterSet
   TargetRelative_StateParam();
 
   /* Destructor */
-  virtual ~TargetRelative_StateParam(){};
+  virtual ~TargetRelative_StateParam() = default;
 
   /* Public Methods, establishing interfaces defined in the derived classes */
   virtual void initialize( const double R_Ref[3]) = 0;

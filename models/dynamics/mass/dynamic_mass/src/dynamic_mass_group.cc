@@ -31,7 +31,7 @@ DynamicMassGroup::DynamicMassGroup()
   total_consumed_mass(0.0),
   countdown_to_root_test(0),
   num_dyn_masses(0),
-  root_body_ptr(NULL)
+  root_body_ptr(nullptr)
 {
   subscribe_name = "DynamicMassGroup:";
 }
@@ -53,7 +53,7 @@ Purpose: (Adds a DynamicMassString to a group)
 void DynamicMassGroup::add_string_to_group(
     DynamicMassString * new_mass_string)
 {
-  if (new_mass_string == NULL) {
+  if (new_mass_string == nullptr) {
     CMLMessage::fail (
       __FILE__, __LINE__, "Setup error.\n",
       "A NULL pointer was given to the add_string_to_group (", name, ") function.\n"
@@ -260,7 +260,7 @@ void DynamicMassGroup::update_group_mass()
     // distinction is moot.
     if (!delta_mass_is_redistributed) {
       jeod::DynBody * root_dyn_body_ptr = root_body_ptr->dyn_owner;
-      if (root_dyn_body_ptr != NULL) { // root is a DynBody
+      if (root_dyn_body_ptr != nullptr) { // root is a DynBody
         root_dyn_body_ptr->set_state_source (
                                           jeod::RefFrameItems::Pos_Vel_Att_Rate,
                                           root_dyn_body_ptr->structure);
@@ -495,7 +495,7 @@ DynamicMassGroup::add_mass_to_group_internal(
     DynamicMassBody * mass,
     bool              send_err_msg)
 {
-  if (mass == NULL) {
+  if (mass == nullptr) {
     CMLMessage::fail (
       __FILE__, __LINE__, "Setup error.\n",
       "A NULL pointer was given to the add_mass_to_group (", name, ") function.\n"

@@ -166,18 +166,18 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
 
  public:
 
-   ExtendedPlanetaryDerivedState(void);
-   virtual ~ExtendedPlanetaryDerivedState(void){};
+   ExtendedPlanetaryDerivedState();
+   ~ExtendedPlanetaryDerivedState() override = default;
 
-   virtual void initialize(jeod::DynBody & subject_body, jeod::DynManager & dyn_manager);
+   void initialize(jeod::DynBody & subject_body, jeod::DynManager & dyn_manager) override;
 
-   virtual void update (void);
+   void update() override;
 
-   inline void subscribe_rel_vel()              { calc_rel_vel++;}
-   inline void subscribe_topocentric()          { calc_topocentric++;}
-   inline void subscribe_topocentric_altitude() { calc_topocentric_altitude++;}
-   inline void subscribe_topodetic()            { calc_topodetic++;}
-   inline void subscribe_pt_to_pt()             { calc_pt_to_pt++;}
+   void subscribe_rel_vel()              { calc_rel_vel++;}
+   void subscribe_topocentric()          { calc_topocentric++;}
+   void subscribe_topocentric_altitude() { calc_topocentric_altitude++;}
+   void subscribe_topodetic()            { calc_topodetic++;}
+   void subscribe_pt_to_pt()             { calc_pt_to_pt++;}
    void subscribe_hang_roll();
    void subscribe_boost_reference();
    void subscribe_plumbline();
@@ -190,18 +190,18 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
    unsubscribe_*()()
    Purpose: Decrement subscription of submodels by one
    *****************************************************************************/
-   inline void unsubscribe_rel_vel()              {calc_rel_vel--;}
-   inline void unsubscribe_topocentric()          {calc_topocentric--;}
-   inline void unsubscribe_topocentric_altitude() {calc_topocentric_altitude--;}
-   inline void unsubscribe_topodetic()            {calc_topodetic--;}
-   inline void unsubscribe_pt_to_pt()             {calc_pt_to_pt--;}
-   inline void unsubscribe_hang_roll()            {calc_hang_roll--;}
-   inline void unsubscribe_boost_reference()      {calc_boost_reference--;}
-   inline void unsubscribe_plumbline()            {calc_plumbline--;}
-   inline void unsubscribe_launch_range()         {launch_range.unsubscribe();}
-   inline void unsubscribe_landing_range()        {landing_range.unsubscribe();}
-   inline void unsubscribe_entry_range()          {entry_range.unsubscribe();}
-   inline void unsubscribe_range_safety()         {calc_range_safety--;}
+   void unsubscribe_rel_vel()              {calc_rel_vel--;}
+   void unsubscribe_topocentric()          {calc_topocentric--;}
+   void unsubscribe_topocentric_altitude() {calc_topocentric_altitude--;}
+   void unsubscribe_topodetic()            {calc_topodetic--;}
+   void unsubscribe_pt_to_pt()             {calc_pt_to_pt--;}
+   void unsubscribe_hang_roll()            {calc_hang_roll--;}
+   void unsubscribe_boost_reference()      {calc_boost_reference--;}
+   void unsubscribe_plumbline()            {calc_plumbline--;}
+   void unsubscribe_launch_range()         {launch_range.unsubscribe();}
+   void unsubscribe_landing_range()        {landing_range.unsubscribe();}
+   void unsubscribe_entry_range()          {entry_range.unsubscribe();}
+   void unsubscribe_range_safety()         {calc_range_safety--;}
 
 
    /*****************************************************************************
@@ -209,25 +209,24 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
    Purpose: Return whether or not model has at least one subscription to
             submodels
    *****************************************************************************/
-   inline bool is_rel_vel_subscribed()       {return (calc_rel_vel > 0);}
-   inline bool is_topocentric_subscribed()   {return (calc_topocentric > 0);}
-   inline bool is_topocentric_altitude_subscribed() {
-                                    return (calc_topocentric_altitude > 0);}
-   inline bool is_topodetic_subscribed()     {return (calc_topodetic > 0);}
-   inline bool is_pt_to_pt_subscribed()      {return (calc_pt_to_pt > 0);}
-   inline bool is_hang_roll_subscribed()     {return (calc_hang_roll > 0);}
-   inline bool is_boost_reference_subscribed() {return (calc_boost_reference>0);}
-   inline bool is_plumbline_subscribed()     {return (calc_plumbline > 0);}
-   inline bool is_launch_range_subscribed()  {return (using_launch_range);}
-   inline bool is_landing_range_subscribed() {return (using_landing_range);}
-   inline bool is_entry_range_subscribed()   {return (using_entry_range);}
-   inline bool is_range_safety_subscribed()  {return (calc_range_safety > 0);}
+   bool is_rel_vel_subscribed()       {return (calc_rel_vel > 0);}
+   bool is_topocentric_subscribed()   {return (calc_topocentric > 0);}
+   bool is_topocentric_altitude_subscribed() {return (calc_topocentric_altitude > 0);}
+   bool is_topodetic_subscribed()     {return (calc_topodetic > 0);}
+   bool is_pt_to_pt_subscribed()      {return (calc_pt_to_pt > 0);}
+   bool is_hang_roll_subscribed()     {return (calc_hang_roll > 0);}
+   bool is_boost_reference_subscribed() {return (calc_boost_reference>0);}
+   bool is_plumbline_subscribed()     {return (calc_plumbline > 0);}
+   bool is_launch_range_subscribed()  {return (using_launch_range);}
+   bool is_landing_range_subscribed() {return (using_landing_range);}
+   bool is_entry_range_subscribed()   {return (using_entry_range);}
+   bool is_range_safety_subscribed()  {return (calc_range_safety > 0);}
 
 protected:
    void init_boost_reference();
    void init_plumbline();
    void init_range_safety();
-   virtual void activate()  { active = true; update();}
+   void activate() override  { active = true; update();}
    void calculate_topocentric_altitude();
    void calculate_relative_vel();
    void calculate_relative_accel();

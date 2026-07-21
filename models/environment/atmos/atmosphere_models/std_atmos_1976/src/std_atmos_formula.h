@@ -1,6 +1,6 @@
 /******************************** TRICK HEADER **********************************
 PURPOSE:
-  (To provide the formula calculation and intertopation for the compution of 
+  (To provide the formula calculation and interpolation for the compution of
    U.S. Standard Atmosphere 1976 model.)
 
 REFERENCES:
@@ -62,8 +62,9 @@ static inline double interp(const double x_vals[],   //the data set of x-axis
   if (x <= x_vals[0]) return y_vals[0];
   if (x >= x_vals[tbl_len-1]) return y_vals[tbl_len-1];
  
+  // The x value is within the x breakpoints.
   const double *ptr = std::lower_bound(x_vals, x_vals+tbl_len, x);
-  const size_t idx = std::distance(x_vals, ptr);
+  const auto idx = static_cast<size_t>(std::distance(x_vals, ptr));
 
   assert(x_vals[idx]-x_vals[idx-1] > 0);
 
@@ -80,8 +81,9 @@ static inline double log_interp(const double x_vals[],  //the data set of x-axis
   if (x <= x_vals[0]) return y_vals[0];
   if (x >= x_vals[tbl_len-1]) return y_vals[tbl_len-1];
 
+  // The x value is within the x breakpoints.
   const double *ptr = std::lower_bound(x_vals, x_vals+tbl_len, x);
-  const size_t idx = std::distance(x_vals, ptr);
+  const auto idx = static_cast<size_t>(std::distance(x_vals, ptr));
 
   const double log_y2 = std::log(y_vals[idx]);
   const double log_y1 = std::log(y_vals[idx-1]);

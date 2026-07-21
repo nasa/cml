@@ -84,8 +84,8 @@ class RcsJetGroup {
 
   /****** Work space ******/
   bool   buffer_flag ;  /* (--)  Flag if buffering of commands is required */
-  int    buffer_on_size ; /* (--)  buffer size for on commands */
-  int    buffer_off_size; /* (--)  buffer size for off commands */
+  unsigned int buffer_on_size ; /* (--)  buffer size for on commands */
+  unsigned int buffer_off_size; /* (--)  buffer size for off commands */
   double delay_time_on;  /* (s)
       The delay into an rcs cycle before a command is executed = Modulus of
       total_on_delay / cycle time, note this is NOT a user input */
@@ -97,13 +97,13 @@ class RcsJetGroup {
   explicit RcsJetGroup( const unsigned int & num_prop_components);
   void initialize (double time_step);
   void set_blow_down( bool blow_down_);
-  bool get_blow_down() {return blow_down;};
-  unsigned int get_num_prop_components() {return num_prop_components;};
+  bool get_blow_down() {return blow_down;}
+  unsigned int get_num_prop_components() {return num_prop_components;}
 
  private:
    // Not implemented:
    RcsJetGroup (const RcsJetGroup& rhs);
-   RcsJetGroup & operator = (const RcsJetGroup& rhs);;
+   RcsJetGroup & operator = (const RcsJetGroup& rhs);
 };
 
 #endif

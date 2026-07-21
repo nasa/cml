@@ -46,7 +46,7 @@ public:
                  atmos_rel_state.free_stream_vel_mag,
                  cg_position_in,
                  true_body_rates_in)
-  { };
+  { }
 private:
   // Make the copy constructor and assignment operator private
   // (and unimplemented) to avoid erroneous copies.

@@ -34,7 +34,7 @@ class LaggedAtmosWind {
 
   LaggedAtmosWind();
   LaggedAtmosWind( const std::string& name);
-  virtual ~LaggedAtmosWind() {};
+  virtual ~LaggedAtmosWind() = default;
 
 
   void compute( double input_altitude);

@@ -30,7 +30,7 @@ CorrelatedStateDispersion::CorrelatedStateDispersion()
   sigma_limit(0.0),
   seed(12345),
   user_specified_distribution{0.0},
-  covariance{0.0},
+  covariance{{0.0}},
   corr_base_frame_name(""),
   TR_geodetic_altitude_disp(0.0),
   pos_error{0.0, 0.0, 0.0},
@@ -46,7 +46,7 @@ CorrelatedStateDispersion::CorrelatedStateDispersion()
   generator_seeded(false),
   dimension(6),
   random_vec{0.0},
-  sqrt_covariance{0.0},
+  sqrt_covariance{{0.0}},
   rand_uniform(0.0, 1.0),
   rand_norm(0.0, 1.0)
 {}
@@ -238,7 +238,7 @@ CorrelatedStateDispersion::apply_translational_dispersions(
      double position[3],
      double velocity[3])
 {
-  if (position == NULL || velocity == NULL) {
+  if (position == nullptr || velocity == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid input\n.",
       "One or both of the position and velocity vectors passed in are NULL.\n"
@@ -513,6 +513,7 @@ CorrelatedStateDispersion::generate_random_vec()
     }
     break;
 
+  case NoDispersion:
   default:
     CMLMessage::fail(
       __FILE__, __LINE__, "Invalid Dispersion Distribution\n",
@@ -728,7 +729,7 @@ CorrelatedStateDispersion::transform_TR_param(
      const double velocity[3])
 {
   /* TR_param.pfix-position.planet must have been configured prior to use */
-  if (TR_param.pfix_position.planet == NULL) {
+  if (TR_param.pfix_position.planet == nullptr) {
     CMLMessage::fail(
     __FILE__,__LINE__,"Invalid planet specification\n",
     "Planet has not been assigned to the PlanetFixedPosition instance\n"

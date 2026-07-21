@@ -91,7 +91,7 @@ class CommandableActionSet
  public:
   CommandableActionSet();
   CommandableActionSet(std::string name);
-  virtual ~CommandableActionSet(){};
+  virtual ~CommandableActionSet() = default;
 
   // main executable:
   void update();

@@ -85,7 +85,7 @@ struct ProjectLoggingManager : public EnhancedLogging_Manager
   ProjectLoggingManager( const double         & time,
                          const VerifTestStruc & sim_data,
                          CompoundEvent        & sample_event);
-  virtual ~ProjectLoggingManager(){};
+  ~ProjectLoggingManager() override = default;
 
 
  // Methods to populate pre-instantiated groups in a single call:

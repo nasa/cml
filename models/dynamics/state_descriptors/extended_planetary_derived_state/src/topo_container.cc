@@ -36,8 +36,8 @@ TopoContainer::TopoContainer(
    initialized(false),
    calc_rel_vel(calc_rel_vel_in),
    state(state_in),
-   planet_rot_state(NULL),
-   vehicle_rot_state(NULL)
+   planet_rot_state(nullptr),
+   vehicle_rot_state(nullptr)
 {}
 
 /*****************************************************************************

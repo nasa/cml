@@ -24,7 +24,7 @@ SimpleSpringGroup::SimpleSpringGroup()
   :
   enabled(true),
   num_springs(0),
-  spring_array(0),
+  spring_array(nullptr),
   action_body_is_child(true),
   separation_complete(false),
   total_force_struc_reaction{0,0,0},
@@ -41,10 +41,10 @@ SimpleSpringGroup::SimpleSpringGroup()
   T_spring_structure{{1,0,0},{0,1,0},{0,0,1}},
   T_action_reaction{{1,0,0},{0,1,0},{0,0,1}},
   moment_arm{0,0,0},
-  spring_frame(NULL),
-  separation_state(NULL),
-  action_body(NULL),
-  reaction_body(NULL)
+  spring_frame(nullptr),
+  separation_state(nullptr),
+  action_body(nullptr),
+  reaction_body(nullptr)
 {}
 
 /*******************************************************************************
@@ -102,7 +102,7 @@ SimpleSpringGroup::set_sep_state( SeparationState  & sep_state_in)
   jeod::RefFrame * sep_source = separation_state->get_source();
   // NOTE: Hitting this NULL check may be impossible do to other checks in
   // place from the separation state model.
-  if (sep_source == NULL) {
+  if (sep_source == nullptr) {
     CMLMessage::fail(
       __FILE__,__LINE__,"Invalid separation state:\n",
       "The provided separation state is not (yet) valid for use in the Springs"
@@ -115,7 +115,7 @@ SimpleSpringGroup::set_sep_state( SeparationState  & sep_state_in)
   }
 
   spring_frame = dynamic_cast<jeod::BodyRefFrame*>(sep_source);
-  if (spring_frame == NULL) {
+  if (spring_frame == nullptr) {
     CMLMessage::fail(
       __FILE__,__LINE__,"Invalid reference frame:\n",
       "The separation state provided is not valid for use in the Springs model.\n"
@@ -170,7 +170,7 @@ SimpleSpringGroup::set_bodies( const jeod::DynBody & action_body_in,
   // function. This scenario could happen if the set_bodies() and set_sep_state()
   // functions were called separately outside of the initialize() function. But
   // as normal use is to just use the initialize() function, this seems unlikely.
-  if (separation_state != NULL) {
+  if (separation_state != nullptr) {
     initialized = true;
   }
 }

@@ -66,9 +66,9 @@ class IndirectCommandableActionSet : public CommandableActionSet
     command_type( NoOp)
   { }
 
-  virtual ~IndirectCommandableActionSet(){};
+  ~IndirectCommandableActionSet() override = default;
 
-  void generate_fsw_command()
+  void generate_fsw_command() override
   {
     if      (current_commandable == &act1) command_type = ACT1;
     else if (current_commandable == &act2) command_type = ACT2;
@@ -108,9 +108,9 @@ class DirectCommandableActionSet : public CommandableActionSet
     error("error2", *this)
   { }
 
-  virtual ~DirectCommandableActionSet(){};
+  ~DirectCommandableActionSet() override = default;
 
-  void generate_fsw_command()
+  void generate_fsw_command() override
   {
     if      (current_commandable == &act1) fsw_bus.fsw1 = true;
     else if (current_commandable == &act2) fsw_bus.fsw2 = true;

@@ -84,7 +84,7 @@ class EnhancedLogging_SummaryConditionBase
     in response to which conditions.*/
 
   EnhancedLogging_SummaryConditionBase();
-  virtual ~EnhancedLogging_SummaryConditionBase(){};
+  virtual ~EnhancedLogging_SummaryConditionBase() = default;
 
   virtual void initialize();
 
@@ -108,7 +108,7 @@ class EnhancedLogging_SummaryConditionBool :
 
  public:
   explicit EnhancedLogging_SummaryConditionBool(const bool & event_triggered_);
-  virtual ~EnhancedLogging_SummaryConditionBool(){};
+  ~EnhancedLogging_SummaryConditionBool() override = default;
   bool update() override;
 
  private: // copy-construcotr, operator= not implemented and private.
@@ -134,7 +134,7 @@ class EnhancedLogging_SummaryConditionEvent :
     this condition.*/
 
   explicit EnhancedLogging_SummaryConditionEvent(const double & dyn_time);
-  virtual ~EnhancedLogging_SummaryConditionEvent(){};
+  ~EnhancedLogging_SummaryConditionEvent() override = default;
   void initialize() override;
   bool update() override;
  private: // copy-construcotr, operator= not implemented and private.
@@ -165,7 +165,7 @@ class EnhancedLogging_SummaryConditionEventRef :
     this condition.*/
  public:
   explicit EnhancedLogging_SummaryConditionEventRef( CompoundEvent & event_);
-  virtual ~EnhancedLogging_SummaryConditionEventRef(){};
+  ~EnhancedLogging_SummaryConditionEventRef() override = default;
   void initialize() override;
   bool update() override;
  private: // copy-constructor, operator= not implemented and private.
@@ -224,7 +224,7 @@ class EnhancedLogging_SummaryCondition_GroupData
   EnhancedLogging_SummaryCondition_GroupData (
                            EnhancedLogging_SummaryConditionBase & condition_,
                            unsigned int ID_);
-  virtual ~EnhancedLogging_SummaryCondition_GroupData(){};
+  virtual ~EnhancedLogging_SummaryCondition_GroupData() = default;
 
   void initialize();
   bool update(double time);

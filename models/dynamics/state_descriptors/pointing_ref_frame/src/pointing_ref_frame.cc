@@ -19,8 +19,8 @@ Constructor
 *****************************************************************************/
 PointingRefFrame::PointingRefFrame()
   :
-  originating_frame(NULL),
-  target_frame(NULL),
+  originating_frame(nullptr),
+  target_frame(nullptr),
   pointing_frame(),
   target_wrt_originating_state()
 {
@@ -50,7 +50,7 @@ PointingRefFrame::set_originating_frame(
       "frame.\nOriginating-frame remains at its current setting.");
     return;
   }
-  if (orig_frame == NULL) {
+  if (orig_frame == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Attempt to assign the originating-frame of PointingRefFrame ", pointing_frame.get_name(), " to be "
@@ -75,7 +75,7 @@ PointingRefFrame::set_target_frame(
       "frame.\nOriginating-frame remains at its current setting.");
     return;
   }
-  if (targ_frame == NULL) {
+  if (targ_frame == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Attempt to assign the target-frame of PointingRefFrame ", pointing_frame.get_name(), " to be "
@@ -217,7 +217,7 @@ Purpose:(run from model activation; common base method for this class and
 bool
 PointingRefFrame::setup_frames()
 {
-  if (target_frame == NULL || originating_frame == NULL) {
+  if (target_frame == nullptr || originating_frame == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Incomplete specification\n",
       "The target-frame and/or originating-frame of the\n"

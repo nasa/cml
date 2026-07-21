@@ -24,7 +24,7 @@ class TriggerGroup {
   public :
 
     TriggerGroup() : enabled(true) {}
-    virtual ~TriggerGroup(){}
+    virtual ~TriggerGroup() = default;
 
     ////    Operations    ////
 

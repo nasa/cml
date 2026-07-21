@@ -5,7 +5,6 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2018) (Antares) (initial))
    ((Brian Birmingham) (OSR) (July 2022) (Antares) (wind angle)))  
 **********************************************************************/
-#define _USE_MATH_DEFINES // M_PI
 #include <cmath>           // M_PI, sin, cos, atan2
 #include <vector>
 

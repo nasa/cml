@@ -75,7 +75,7 @@ class VerifVehicleEventsManager : public VehicleEventsManager
 
 
  public:
-  virtual void execution_follow_up(){};
+  void execution_follow_up() override{};
   VerifVehicleEventsManager(TrickLogging & trick_logging,
                             const double  & time)
       :

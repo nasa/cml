@@ -43,11 +43,11 @@ class EventTriggerSet : public WatchValuesSet
     value subject to the condition that the CompoundEvent is triggered. */
 
   EventTriggerSet();
-  virtual ~EventTriggerSet();
+  ~EventTriggerSet() override;
 
   void populate_conditional_reference_trigger_list();
   void update_conditional_trigger_references();
-  WatchValuesBaseCore * find_trigger( std::string name);
+  WatchValuesBaseCore * find_trigger( const std::string& trigger_name_in);
 
 
  private: // not implemented / deleted

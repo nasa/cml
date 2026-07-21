@@ -49,10 +49,10 @@ class ConstraintSet : public SubscriptionBase
     set.*/
 
   ConstraintSet();
-  virtual ~ConstraintSet(){};
-  void initialize();
+  ~ConstraintSet() override = default;
+  void initialize() override;
   void update();
-  void activate();
+  void activate() override;
   static bool constraint_disabled( const Constraint * c);
 
  private: // not implemented, not copyable.

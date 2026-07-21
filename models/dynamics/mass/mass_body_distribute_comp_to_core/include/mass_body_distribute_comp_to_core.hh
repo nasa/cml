@@ -63,7 +63,7 @@ class MassBodyDistributeCompToCore
  public:
   MassBodyDistributeCompToCore( jeod::MassBody & adjustable_body,
                                 jeod::MassBody & target_body);
-  virtual ~MassBodyDistributeCompToCore() {};
+  virtual ~MassBodyDistributeCompToCore() = default;
 
 
   bool update( const jeod::MassProperties & new_target_props);

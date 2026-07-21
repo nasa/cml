@@ -96,7 +96,7 @@ public:
     }
   };
 
-  virtual void apply( jeod::DynManager & dyn_manager)
+  void apply( jeod::DynManager & dyn_manager) override
   {  
     springs.action_body_is_child = child_is_action_body;
     springs.activate();

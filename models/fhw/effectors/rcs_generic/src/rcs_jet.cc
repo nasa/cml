@@ -131,6 +131,7 @@ RcsJet::initialize()
     force_cl = jeod::Vector3::vmag(force);
     jeod::Vector3::normalize( force, force_hat);
     break;
+   case RcsGeneric::input_force_error:
    default:
     // Error
     CMLMessage::fail(
@@ -809,6 +810,7 @@ RcsJet::compute_jet_forces()
    case Input_Errors:
     scaled_force = force_cl + force_cl_err;
     break;
+   case No_Errors:
    default:
     scaled_force = force_cl;
     break;
@@ -831,13 +833,14 @@ RcsJet::compute_jet_forces()
   switch (error) {
    case Input_Errors:
     apply_direction_error();
-    // fall-through
+    [[fallthrough]];
    case Calc_Always: // already applied in disperse_force()
    case Calc_Fire:
     jeod::Vector3::scale( force_hat_with_err,
                           scaled_force,
                           force);
     break;
+   case No_Errors:
    default:
     jeod::Vector3::scale( force_hat,
                           scaled_force,
@@ -1149,7 +1152,7 @@ Purpose:(Resets force_hat and renormalizes)
 void
 RcsJet::set_force_direction(double force_dir[3])
 {
-  if (force_dir == NULL) {
+  if (force_dir == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"NULL argument.\n",
       "The force direction input was a NULL argument. Exiting without "

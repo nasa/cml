@@ -60,7 +60,7 @@ class RcsBuildUpTrailOff
   RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
                       RcsBuildUpTrailOffJetData * const jet_,
                       const double& time);
-  virtual ~RcsBuildUpTrailOff() {};
+  virtual ~RcsBuildUpTrailOff() = default;
   virtual void build_up_trail_off_effects();
 
  private:

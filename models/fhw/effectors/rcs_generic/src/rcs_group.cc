@@ -11,6 +11,7 @@ PROGRAMMERS:
   )
 **********************************************************************/
 
+#include <algorithm>
 #include <cmath>  // abs
 #include "../include/rcs_group.hh"
 
@@ -58,9 +59,9 @@ RcsJetGroup::initialize(
   /* Set up command buffers and initialize delays */
   /************************************************/
   /* total on delay is sum of signal delay and valve reaction time (dead_time) */
-  double total_on_delay = signal_delay_time + on_dead_time;
+  double total_on_delay = std::max(0.0, signal_delay_time + on_dead_time);
   /* total off delay is sum of signal delay and valve reaction time (dead_time) */
-  double total_off_delay = signal_delay_time + off_dead_time;
+  double total_off_delay = std::max(0.0, signal_delay_time + off_dead_time);
 
   // Check to see if a buffer is needed:
   // if on or off delays are equal or greater than one time_step, then
@@ -70,8 +71,8 @@ RcsJetGroup::initialize(
 
   // buffer size is the number of full time-steps necessary before a command
   // will be seen
-  buffer_on_size  = static_cast<int>(total_on_delay  / time_step);
-  buffer_off_size = static_cast<int>(total_off_delay / time_step);
+  buffer_on_size  = static_cast<unsigned int>(total_on_delay  / time_step);
+  buffer_off_size = static_cast<unsigned int>(total_off_delay / time_step);
 
   /* delay time = remainder of last time_step before jet is turned on or off */
   delay_time_on = total_on_delay - buffer_on_size * time_step;

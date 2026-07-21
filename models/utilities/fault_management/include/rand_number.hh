@@ -27,7 +27,7 @@ class FaultRandNumber {
     };
 
     FaultRandNumber();
-    virtual ~FaultRandNumber(){}
+    virtual ~FaultRandNumber() = default;
 
     void initialize();
 

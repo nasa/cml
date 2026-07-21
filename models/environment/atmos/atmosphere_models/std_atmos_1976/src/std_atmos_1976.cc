@@ -110,10 +110,10 @@ void STD1976::update(const double &altitude_in  //the given geometric height
   if (altitude > alt_table[0]) { //form 0 km to 1000 km
     const double *itr = std::upper_bound(alt_table, alt_table+alt_num, H);
     if (itr == alt_table+alt_num) {
-      layer_number = (int)(alt_num-1);
+      layer_number = static_cast<int>(alt_num-1);
     }
     else {
-      layer_number = (int)(std::distance(alt_table, itr)-1);
+      layer_number = static_cast<int>(std::distance(alt_table, itr)-1);
     }
   }
 

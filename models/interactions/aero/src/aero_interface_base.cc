@@ -19,7 +19,7 @@ AeroInterfaceBase::AeroInterfaceBase( AtmosRelativeState & atmos_rel_state_in,
   :
   atmos_rel_state( atmos_rel_state_in),
   geodetic_altitude( geod_alt_in),
-  executive_ptr(NULL),
+  executive_ptr(nullptr),
   disable_aero_moments(false),
   disable_aero_damping(false),
   max_atmos_altitude(3.5E6) // This is an arbitrary value; atmosphere turns
@@ -46,7 +46,7 @@ AeroInterfaceBase::activate()
     return;
   }
 
-  if (executive_ptr == NULL) {
+  if (executive_ptr == nullptr) {
     // UNREACHABLE CODE. This base-class is abstract and the only 2
     // instantiable derivatives of it both set executive_ptr in their
     // constructors to be the address of a specific class instance.

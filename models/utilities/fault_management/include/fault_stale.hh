@@ -18,7 +18,7 @@ Purpose:(Manages injection of a stale-value fault.)
 template<typename T> class FaultStale : public Fault {
   public :
     explicit FaultStale(T& var);
-    virtual ~FaultStale(){}
+    ~FaultStale() override = default;
 
     void overwrite_value() override;
 

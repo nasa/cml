@@ -89,7 +89,7 @@ class EnhancedLogging_BaseGroup : public SubscriptionBase
  public:
   EnhancedLogging_BaseGroup( std::string name,
                              const double & dyn_time);
-  virtual ~EnhancedLogging_BaseGroup(){};
+  ~EnhancedLogging_BaseGroup() override = default;
 
   virtual void initialize( const std::string &);
   bool update_base();
@@ -126,8 +126,8 @@ class EnhancedLogging_BaseGroup : public SubscriptionBase
   *    implementation requires writing to a CSV, then converting that to HD5.
   */
 
-  virtual void initialize_file(){};
-  void activate();
+  virtual void initialize_file(){}
+  void activate() override;
   bool check_alias( const std::string & name,
                     const std::string & alias);
 

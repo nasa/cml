@@ -77,48 +77,48 @@ protected:
   // The first seven arguments are passed through to the generic 
   // RocketMotor_Basic constructor.
   RocketMotor_MultiNozzle(
-                    DynamicMassGroup                   & mass_group,
+                    DynamicMassGroup                   & mass_group_in,
                     DynamicMassBody                    * mass_body,
                     DynamicMassString                  * mass_string,
                     DynamicMassBodyPropertiesInterface & mass_properties,
                     const double                       & time,
-                    const double                       * veh_cm,
-                    bool                                 use_mass_string,
+                    const double                       * veh_cm_,
+                    bool                                 use_mass_string_in,
                     const double                       & atm_press);
 public:
   RocketMotor_MultiNozzle( DynamicMassBody & mass,
                            const double    & time,
                            const double    & atm_press_in,
-                           const double    * veh_cm);
-  RocketMotor_MultiNozzle( DynamicMassGroup & mass_group,
+                           const double    * veh_cm_in);
+  RocketMotor_MultiNozzle( DynamicMassGroup & mass_group_in,
                            DynamicMassBody  & mass,
                            const double     & time,
                            const double     & atm_press_in,
-                           const double     * veh_cm);
+                           const double     * veh_cm_in);
   RocketMotor_MultiNozzle( DynamicMassString & string,
                            const double      & time,
                            const double      & atm_press_in,
-                           const double      * veh_cm);
-  RocketMotor_MultiNozzle( DynamicMassGroup  & mass_group,
+                           const double      * veh_cm_in);
+  RocketMotor_MultiNozzle( DynamicMassGroup  & mass_group_in,
                            DynamicMassString & string,
                            const double      & time,
                            const double      & atm_press_in,
-                           const double      * veh_cm);
-  virtual ~RocketMotor_MultiNozzle(){};
+                           const double      * veh_cm_in);
+  ~RocketMotor_MultiNozzle() override = default;
 
   void add_nozzle( RocketMotorNozzle &);
-  virtual void initialize(size_t num_flex_elements = 0,
+  virtual void initialize(size_t num_flex_elements_in = 0,
                           const double * motor_lin_flex_in = nullptr,
                           const double * motor_rot_flex_in = nullptr);
-  void force_initialize(size_t num_flex_elements = 0,
+  void force_initialize(size_t num_flex_elements_in = 0,
                         const double * motor_lin_flex_in = nullptr,
                         const double * motor_rot_flex_in = nullptr);
 protected:
   virtual void initialize_nozzles();
 
 public:
-  virtual void update() override;
-  virtual void shutdown_motor() override;
+  void update() override;
+  void shutdown_motor() override;
 
   void enable_flex();
   void disable_flex() { using_flex = false; }

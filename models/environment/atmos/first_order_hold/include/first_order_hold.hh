@@ -37,7 +37,7 @@ class FirstOrderHold {
   FirstOrderHold( const double & dyn_time_in,
                   const ExtendedPlanetaryDerivedState & planet_state,
                   AtmosExecOutput & atmos_output_in);
-  virtual ~FirstOrderHold(){};
+  virtual ~FirstOrderHold() = default;
 
   void activate();
   void deactivate();

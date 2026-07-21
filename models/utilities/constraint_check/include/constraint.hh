@@ -74,7 +74,7 @@ class Constraint
 
  public:
   Constraint( size_t num_specs = 1);
-  virtual ~Constraint(){};
+  virtual ~Constraint() = default;
 
   virtual void initialize();
   virtual void update() = 0;

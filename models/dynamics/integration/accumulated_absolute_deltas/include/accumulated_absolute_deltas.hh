@@ -49,13 +49,13 @@ class AccumulatedAbsoluteDeltas : public SubscriptionBase
        and old_variable values */
   AccumulatedAbsoluteDeltas(  const double * variable_,
                               const unsigned int size_);
-  virtual ~AccumulatedAbsoluteDeltas();
+  ~AccumulatedAbsoluteDeltas() override;
 
-  virtual void initialize();
+  void initialize() override;
   void reset();
   void update();
  protected:
-  virtual void activate();
+  void activate() override;
  private:
   // Not implemented
   AccumulatedAbsoluteDeltas ( const AccumulatedAbsoluteDeltas &);

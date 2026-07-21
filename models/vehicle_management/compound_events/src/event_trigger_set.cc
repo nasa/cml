@@ -98,11 +98,11 @@ Purpose:
   Returns a reference to a trigger stored in allocated_triggers
 *****************************************************************************/
 WatchValuesBaseCore *
-EventTriggerSet::find_trigger( std::string name)
+EventTriggerSet::find_trigger( const std::string& trigger_name_in)
 {
   auto it = std::find_if( allocated_triggers.begin(), allocated_triggers.end(),
-                          [name](WatchValuesBaseCore* trigger_) {
-                            return (trigger_->name == name);}
+                          [trigger_name_in](WatchValuesBaseCore* trigger_) {
+                            return (trigger_->name == trigger_name_in);}
                         );
   if (it != allocated_triggers.end()) { return *it;}
 

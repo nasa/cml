@@ -65,7 +65,7 @@ public:
        The mass remaining to be potentially consumed.  >= 0.  */
 
    DynamicMassBodyPropertiesInterface();
-   virtual ~DynamicMassBodyPropertiesInterface() { };
+   virtual ~DynamicMassBodyPropertiesInterface() = default;
 };
 
 

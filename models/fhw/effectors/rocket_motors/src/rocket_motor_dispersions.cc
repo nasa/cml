@@ -10,7 +10,6 @@ LIBRARY DEPENDENCIES:
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
 *******************************************************************************/
-#include <cstddef> // NULL
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -51,7 +50,7 @@ RocketMotorDispersions::apply_dispersions(
   // bounds or correlations associated with tolerances, and has no knowledge
   // or responsibility for the generation of these dispersions.
 
-  if (position == NULL) {
+  if (position == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid calling argument\n",
       "Received position vector is NULL.\n"
@@ -62,7 +61,7 @@ RocketMotorDispersions::apply_dispersions(
   jeod::Vector3::incr( position_dispersion,
                  position);
 
-  if (T_parent_to_motor == NULL) {
+  if (T_parent_to_motor == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid calling argument\n",
       "Received transformation matrix is NULL.\n"

@@ -41,7 +41,7 @@ VelocitySet::VelocitySet(
    altitude_rate(0.0),
    initialized(false),
    T_inrtl_to_this(T_inrtl_this_in),
-   inrtl_velocity(NULL)
+   inrtl_velocity(nullptr)
 {}
 
 
@@ -56,7 +56,7 @@ VelocitySet::initialize(
   if (initialized) {
     return;
   }
-  if (vel_in == NULL) {
+  if (vel_in == nullptr) {
     CMLMessage::fail(
     __FILE__, __LINE__, "Invalid initialization\n",
     "Attempted to set the inrtl_velocity pointer to NULL.\n");

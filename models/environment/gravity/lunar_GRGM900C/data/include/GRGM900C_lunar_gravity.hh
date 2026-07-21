@@ -40,8 +40,8 @@ class GRGM900C_LunarGravity
    MAX_RES_900  = 900};
 
   GRGM900C_LunarGravity( GRGM900C_resolution resolution,
-                         jeod::SphericalHarmonicsGravitySource & grav_source);
-  ~GRGM900C_LunarGravity(){};
+                         jeod::SphericalHarmonicsGravitySource & grav_source_in);
+  ~GRGM900C_LunarGravity() = default;
  protected:
   jeod::SphericalHarmonicsGravitySource & grav_source;
   void populate_low_res(); // sets the lowest coefficients

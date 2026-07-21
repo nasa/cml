@@ -51,13 +51,13 @@ class WatchValuesDelay : public WatchValuesBase<watchType>
     delay_offset(0.0),
     reset_delay(false)
   {}
- virtual ~WatchValuesDelay(){};
+ ~WatchValuesDelay() override = default;
 /*****************************************************************************
 test_crossing
 Purpose: tests for the satisfaction of the trigger condition and the subsequent
          delay condition
 *****************************************************************************/
-  virtual bool test_crossing() {
+  bool test_crossing() override {
     if (!SubscriptionBase::active) {return false;}
 
     /* Prevent triggers from being evaluated more than once per logging cycle,

@@ -64,7 +64,7 @@ class ConstraintTest_ThresholdTimed : public ConstraintTestTimed
     ConstraintTestTimed(),
     threshold()
   {}
-  virtual ~ConstraintTest_ThresholdTimed(){};
+  ~ConstraintTest_ThresholdTimed() override = default;
 
   /***************************************************************************
   * Name: initialize
@@ -164,7 +164,7 @@ class ConstraintTest_IntervalTimed : public ConstraintTestTimed
     upper_bound(0),
     interval_bounds( ConstraintEnum::ClosedClosed)
   {}
-  virtual ~ConstraintTest_IntervalTimed(){};
+  ~ConstraintTest_IntervalTimed() override = default;
 
   /***************************************************************************
   * Name: initialize
@@ -252,7 +252,7 @@ class ConstraintTest_ValSetTimed : public ConstraintTestTimed
     ConstraintTestTimed(),
     values()
   {}
-  virtual ~ConstraintTest_ValSetTimed(){};
+  ~ConstraintTest_ValSetTimed() override = default;
 
   /***************************************************************************
   * Name: initialize

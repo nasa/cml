@@ -270,7 +270,7 @@ public:
                                  const bool  failed_flag = false)
   {
     return MathUtilsPrivate::div_fp<float>(dividend, divisor, failed_val, failed_flag);
-  };
+  }
 
   // Same functionality as the above, but for double type rather than float type.
   static double divide_protected( const double dividend,
@@ -279,7 +279,7 @@ public:
                                   const bool failed_flag = false)
   {
     return MathUtilsPrivate::div_fp<double>(dividend, divisor, failed_val, failed_flag);
-  };
+  }
 
   // Protected acos for input value:
   //   val >= 1.0: return 0
@@ -288,13 +288,13 @@ public:
   static float acos_protected( const float val)
   {
     return MathUtilsPrivate::acos_fp<float>(val);
-  };
+  }
 
   // Same functionality as the above, but for double type rather than float type.
   static double acos_protected( const double val)
   {
     return MathUtilsPrivate::acos_fp<double>(val);
-  };
+  }
 
   // Protected asin for input value:
   //   val >= 1.0:  return  PI/2
@@ -303,13 +303,13 @@ public:
   static float asin_protected( const float val)
   {
     return MathUtilsPrivate::asin_fp<float>(val);
-  };
+  }
 
   // Same functionality as the above, but for double type rather than float type.
   static double asin_protected( const double val)
   {
     return MathUtilsPrivate::asin_fp<double>(val);
-  };
+  }
     
   /* TODO Hirad Mirhashemi 2025/10.
   * DEPRECATED CONTENT. Remove after reasonable timeframe.*/
@@ -343,7 +343,7 @@ public:
                               const bool failed_flag = false)
   {
     return MathUtilsPrivate::log_fp<float>(val, failed_val, failed_flag, false);
-  };
+  }
 
   // Same functionality as the above, but for double type rather than float type
   static double log_protected( const double val,
@@ -351,7 +351,7 @@ public:
                                const bool failed_flag = false)
   {
     return MathUtilsPrivate::log_fp<double>(val, failed_val, failed_flag, false);
-  };
+  }
 
   // Same as log_protected but for base-10 log.
   static float log10_protected( const float val,
@@ -359,7 +359,7 @@ public:
                                 const bool failed_flag = false)
   {
     return MathUtilsPrivate::log_fp<float>(val, failed_val, failed_flag, true);
-  };
+  }
 
   // Same functionality as the above, but for double type rather than float type
   static double log10_protected( const double val,
@@ -367,7 +367,7 @@ public:
                                  const bool failed_flag = false)
   {
     return MathUtilsPrivate::log_fp<double>(val, failed_val, failed_flag, true);
-  };
+  }
 
 
 
@@ -998,6 +998,9 @@ implementation is found in src/math_utils.cc
 *****************************************************************************/
 template<> bool MathUtils::is_equal<float>( float val1, float val2);
 template<> bool MathUtils::is_equal<double>( double val1, double val2);
+
+// TODO: these don't make sense to support. Remove them in the future.
 template<> bool MathUtils::is_within_abs_tolerance<bool>( bool, bool, bool);
+template<> bool MathUtils::is_within_rel_tolerance<bool>( bool, bool, double);
 
 #endif

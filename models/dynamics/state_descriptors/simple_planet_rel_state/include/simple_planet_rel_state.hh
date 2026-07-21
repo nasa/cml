@@ -35,9 +35,9 @@ class SimplePlanetRelState : public SubscriptionBase,
   SimplePlanetRelState(std::string body_frame_name_,
                        std::string planet_frame_name);
 
-  virtual void initialize(jeod::DynBody & subject_body,
-                          jeod::DynManager & dyn_manager);
-  virtual void update();
+  void initialize(jeod::DynBody & subject_body,
+                          jeod::DynManager & dyn_manager) override;
+  void update() override;
  private:
   SimplePlanetRelState (const SimplePlanetRelState&);
   SimplePlanetRelState & operator = (const SimplePlanetRelState&);

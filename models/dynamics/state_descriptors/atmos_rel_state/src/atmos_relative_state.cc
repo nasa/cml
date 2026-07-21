@@ -40,7 +40,6 @@ PROGRAMMERS:
     )
 *******************************************************************************/
 
-#define _USE_MATH_DEFINES // M_PI
 #include <cmath>   // M_PI, isnan
 #include <cstring> // NULL
 #include "trick/constant.h" // conversions like RTD, LBFTON, MTF
@@ -108,7 +107,7 @@ AtmosRelativeState::AtmosRelativeState(
   planet_rel_state(planet_rel_state_ref),
   atmos_exec(atmos_exec_ref),
   atmos(atmos_exec.out),
-  reference_length(NULL),
+  reference_length(nullptr),
   compute_angles_subscriptions(0),
   complete_calculation_subscriptions(0),
   ref_length_null_msg_sent(false),
@@ -137,7 +136,7 @@ AtmosRelativeState::activate()
   }
 
   if (complete_calculation_subscriptions > 0 &&
-      reference_length == NULL) {
+      reference_length == nullptr) {
     CMLMessage::warn(
       __FILE__, __LINE__, "Atmosphere Relative State Setup error\n",
       "The flag to perform the complete calculation has been set but\n"
@@ -611,7 +610,7 @@ Purpose: compute Reynold Number
 void
 AtmosRelativeState::compute_reynolds_number()
 {
-  if (reference_length != NULL) {
+  if (reference_length != nullptr) {
     reynolds_number = MathUtils::divide_protected(
                         atmos.density*free_stream_vel_mag*(*reference_length),
                         atmos.dynamic_viscosity,

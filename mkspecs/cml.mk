@@ -55,8 +55,8 @@ ifeq (0, ${CML_TRICK_BUILD})
     include ${CML_HOME}/mkspecs/internal/cml_lib.mk
 endif
 
-TRICK_CXXFLAGS += -I${CML_HOME}/..
-TRICK_CFLAGS += -I${CML_HOME}/..
+TRICK_CXXFLAGS += -I${CML_HOME}/.. -D_USE_MATH_DEFINES
+TRICK_CFLAGS += -I${CML_HOME}/.. -D_USE_MATH_DEFINES
 
 # Include paths and libraries for libxml2
 ifeq ($(shell pkg-config --exists libxml-2.0 && echo $$?),0)

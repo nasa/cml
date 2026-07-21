@@ -73,18 +73,18 @@ class SphericalHarmonicsFastGravityControls : public jeod::SphericalHarmonicsGra
  public:
    SphericalHarmonicsFastGravityControls();
 
-   virtual ~SphericalHarmonicsFastGravityControls(){};
+   ~SphericalHarmonicsFastGravityControls() override = default;
 
-   virtual void initialize_control ( jeod::GravityManager &grav_manager);
+   void initialize_control ( jeod::GravityManager &grav_manager_in) override;
 
-   virtual void  calc_nonspherical ( const double integ_pos[3], // In: unused
+   void  calc_nonspherical ( const double integ_pos[3], // In: unused
                                      const double inertial_position[3], // In: M Point of interest, inrtl frm
                                      const jeod::GravityIntegFrame & grav_source_frame, // In: Unused
                                      double body_grav_accel[3], // Out: M/s2 Accel for given grav body
                                      double dgdx[3][3],         // Out: 1/s2 Gradient for given grav body
-                                     double & pot);             // Out: --   Potential
+                                     double & pot) override;    // Out: --   Potential
 
-   void reset_count_limit() { if (compute_count_limit) count_limit = 1;};
+   void reset_count_limit() { if (compute_count_limit) count_limit = 1;}
 
  // Make the copy constructor and assignment operator private
  // (and unimplemented) to avoid erroneous copies

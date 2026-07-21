@@ -52,7 +52,7 @@ class TargetRelative_StateParameter_Alt : public TargetRelative_StateParam
   TargetRelative_StateParameter_Alt();
 
   /* Destructor */
-  virtual ~TargetRelative_StateParameter_Alt(){};
+  ~TargetRelative_StateParameter_Alt() override = default;
 
   /* Public Methods */
   void initialize( const double R_Ref[3] ) override;

@@ -6,6 +6,7 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (Mar 2022) (Antares) (Initial)))
 *******************************************************************************/
 #include "../include/sSensorFaults.hh"
+#include <cstdlib>
 
 
 /*******************************************************************************
@@ -35,6 +36,7 @@ sSensorFaults::Injection( sSFault loc)
   case DOWNSTREAM:
     update(FaultManager::Location::Downstream);
     break;
+  case INVALID:
   default:
     update(FaultManager::Location::INVALID);
     break;
@@ -359,7 +361,7 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
   //   than testing whether (seed==0).
   temp_str = XmlHelper::xml_find_value(rand_node, "seed");
   if (temp_str != nullptr) {
-    rng.seed = strtol(temp_str, nullptr, 10);
+    rng.seed = std::strtoul(temp_str, nullptr, 10);
   }
 
   return true;
