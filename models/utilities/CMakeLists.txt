@@ -22,15 +22,6 @@ add_cml_library(
         constraint_check/include/valset_constraint.hh
         convert_string/include/convert_string.hh
         double_to_words/include/convert_double_to_words.hh
-        enhanced_logging/include/base_logging_group.hh
-        enhanced_logging/include/base_logging_variable.hh
-        enhanced_logging/include/enhanced_logging_manager.hh
-        enhanced_logging/include/enhanced_logging_variable.hh
-        enhanced_logging/include/serial_logging_group.hh
-        enhanced_logging/include/serial_logging_variable.hh
-        enhanced_logging/include/summary_logging_condition.hh
-        enhanced_logging/include/summary_logging_group.hh
-        enhanced_logging/include/summary_logging_variable.hh
         env_utils/include/env_utils.h
         fault_arch/include/sSensorFaults.hh
         fault_management/include/fault.hh
@@ -48,7 +39,6 @@ add_cml_library(
         fault_management/include/trigger.hh
         fault_management/include/trigger_group.hh
         fault_management/include/untyped_variable.hh
-        finite_difference/include/finite_difference.hh
         math_utils/include/ellipsoid_intersection.hh
         math_utils/include/math_utils.hh
         math_utils/include/math_utils_private.hh
@@ -84,14 +74,6 @@ add_cml_library(
         constraint_check/src/constraint_test_templates.cc
         constraint_check/src/constraint_test_timed_templates.cc
         double_to_words/src/convert_double_to_uint_words.cc
-        enhanced_logging/src/base_logging_group.cc
-        enhanced_logging/src/enhanced_logging_manager.cc
-        enhanced_logging/src/enhanced_logging_variable.cc
-        enhanced_logging/src/serial_logging_group.cc
-        enhanced_logging/src/serial_logging_variable.cc
-        enhanced_logging/src/summary_logging_condition.cc
-        enhanced_logging/src/summary_logging_group.cc
-        enhanced_logging/src/summary_logging_variable.cc
         fault_arch/src/sSensorFaults.cc
         fault_management/src/fault.cc
         fault_management/src/fault_function.cc
@@ -101,7 +83,6 @@ add_cml_library(
         fault_management/src/independent_variable.cc
         fault_management/src/rand_number.cc
         fault_management/src/trigger_group.cc
-        finite_difference/src/finite_difference.cc
         math_utils/src/math_utils.cc
         math_utils/src/quadratic_solver.cc
         subscriptions/src/subscriptions.cc

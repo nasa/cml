@@ -1,4 +1,0 @@
-
-Group: verif_group3
-condition_name {--}, condition_type {--},condition_count {--}, condition_first_time {s},condition_last_time {s}, verif_test.sim_data.i1{count}, verif_test.sim_data.b1{--}, verif_test.sim_data.s1{--}, verif_test.sim_data.e1{1}, x1_alias1{kg}, x2_alias1{N}
-Group3: Max from t=2 to i1 < -9, 4,      6,      3.000,      8.000,             13,     1,             test,              3,  31.6388847656249936,  -1.0333901697926717

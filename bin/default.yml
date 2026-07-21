@@ -1566,91 +1566,6 @@ SIM_lookup_simple_lookup_wind:
       compare:
       - models/environment/atmos/atmosphere_models/simple_lookup_wind/verif/SIM_lookup/RUN_windcomponents_zero/log_test_data.csv
         vs. models/environment/atmos/atmosphere_models/simple_lookup_wind/verif/SIM_lookup/verif_data/RUN_windcomponents_zero/log_test_data.csv
-SIM_math_utils_comparison_finite_difference:
-  model_dir: models/utilities/finite_difference
-  path: models/utilities/finite_difference/verif/SIM_math_utils_comparison
-  build_args: CML_OFFLINE_BUILD=1
-  runs:
-    RUN_not_nice_poly/input.py:
-      compare:
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_not_nice_poly/log_matrix_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_not_nice_poly/log_matrix_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_not_nice_poly/log_scalar_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_not_nice_poly/log_scalar_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_not_nice_poly/log_vector_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_not_nice_poly/log_vector_data.csv
-    RUN_not_nice_poly_vardt/input.py:
-      compare:
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_not_nice_poly_vardt/log_matrix_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_not_nice_poly_vardt/log_matrix_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_not_nice_poly_vardt/log_scalar_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_not_nice_poly_vardt/log_scalar_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_not_nice_poly_vardt/log_vector_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_not_nice_poly_vardt/log_vector_data.csv
-    RUN_polynomial/input.py:
-      compare:
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial/log_matrix_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial/log_matrix_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial/log_scalar_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial/log_scalar_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial/log_vector_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial/log_vector_data.csv
-    RUN_polynomial_halfstep/input.py:
-      compare:
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial_halfstep/log_matrix_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial_halfstep/log_matrix_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial_halfstep/log_scalar_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial_halfstep/log_scalar_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial_halfstep/log_vector_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial_halfstep/log_vector_data.csv
-    RUN_polynomial_vardt/input.py:
-      compare:
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial_vardt/log_matrix_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial_vardt/log_matrix_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial_vardt/log_scalar_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial_vardt/log_scalar_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial_vardt/log_vector_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial_vardt/log_vector_data.csv
-    RUN_polynomial_vardt__0.03/input.py:
-      compare:
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial_vardt__0.03/log_matrix_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial_vardt__0.03/log_matrix_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial_vardt__0.03/log_scalar_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial_vardt__0.03/log_scalar_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_polynomial_vardt__0.03/log_vector_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_polynomial_vardt__0.03/log_vector_data.csv
-    RUN_sine/input.py:
-      compare:
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine/log_matrix_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine/log_matrix_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine/log_scalar_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine/log_scalar_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine/log_vector_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine/log_vector_data.csv
-    RUN_sine_halfstep/input.py:
-      compare:
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine_halfstep/log_matrix_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine_halfstep/log_matrix_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine_halfstep/log_scalar_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine_halfstep/log_scalar_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine_halfstep/log_vector_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine_halfstep/log_vector_data.csv
-    RUN_sine_vardt/input.py:
-      compare:
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine_vardt/log_matrix_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine_vardt/log_matrix_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine_vardt/log_scalar_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine_vardt/log_scalar_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine_vardt/log_vector_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine_vardt/log_vector_data.csv
-    RUN_sine_vardt__0.01/input.py:
-      compare:
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine_vardt__0.01/log_matrix_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine_vardt__0.01/log_matrix_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine_vardt__0.01/log_scalar_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine_vardt__0.01/log_scalar_data.csv
-      - models/utilities/finite_difference/verif/SIM_math_utils_comparison/RUN_sine_vardt__0.01/log_vector_data.csv
-        vs. models/utilities/finite_difference/verif/SIM_math_utils_comparison/verif_data/RUN_sine_vardt__0.01/log_vector_data.csv
 SIM_multi_body_composite_dispersion_mass_body_dispersed_init:
   model_dir: models/dynamics/mass/mass_body_dispersed_init
   path: models/dynamics/mass/mass_body_dispersed_init/verif/SIM_multi_body_composite_dispersion
@@ -3211,22 +3126,6 @@ SIM_verif_events_manager:
         vs. models/vehicle_management/events_manager/verif/SIM_verif/verif_data/RUN_sim_stop_with_dyn_flag/log_events_manager_verif_triggers.csv
       - models/vehicle_management/events_manager/verif/SIM_verif/RUN_sim_stop_with_dyn_flag/log_events_manager_verif_vars.csv
         vs. models/vehicle_management/events_manager/verif/SIM_verif/verif_data/RUN_sim_stop_with_dyn_flag/log_events_manager_verif_vars.csv
-SIM_verif_finite_difference:
-  model_dir: models/utilities/finite_difference
-  path: models/utilities/finite_difference/verif/SIM_verif
-  build_args: CML_OFFLINE_BUILD=1
-  runs:
-    FAIL_divide_by_zero_fd/input.py:
-      returns: 1
-    FAIL_divide_by_zero_sd/input.py:
-      returns: 1
-    FAIL_overflow_fd/input.py:
-      returns: 1
-    FAIL_overflow_sd/input.py:
-      returns: 1
-    RUN_matrix/input.py: null
-    RUN_scalar/input.py: null
-    RUN_vector/input.py: null
 SIM_verif_first_order_hold:
   model_dir: models/environment/atmos/first_order_hold
   path: models/environment/atmos/first_order_hold/verif/SIM_verif
