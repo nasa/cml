@@ -120,7 +120,7 @@ jobs:
           clone-only: "true"
 
       - name: Generate compile commands
-        run: cmake --preset user-debug
+        run: cmake --preset user-debug --fresh
 
       # We're suppressing missing includes here. We build with Trick and JEOD set
       # as system include paths, which cppcheck deliberately does not attempt to

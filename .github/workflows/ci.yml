@@ -76,7 +76,7 @@ jobs:
       - name: Build CML and run unit tests
         run: |
           source .bashrc
-          cmake --workflow --preset dev
+          cmake --workflow --preset dev --fresh
 
       - name: Build verification sims
         id: build_verif_sims
