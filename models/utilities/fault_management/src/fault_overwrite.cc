@@ -20,7 +20,7 @@ Purpose:
               cast to 0.0 and 1.0
 *****************************************************************************/
 template<>
-bool FaultOverwrite<bool>::set_param( std::string param_name,
+bool FaultOverwrite<bool>::set_param( const std::string& param_name,
                                       double val_,
                                       bool)
 {

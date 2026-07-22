@@ -111,8 +111,7 @@ LaggedAtmosWind::compute( double input_altitude)
   // Now push this iterator through the list until it points to an altitude
   // below input_altitude. Note that this could result in "below" pointing
   // to nodes.end(), which isn't an actual node.
-  while ( input_altitude < below->altitude &&
-          below != nodes.end() ) {
+  while ( below != nodes.end() && input_altitude < below->altitude ) {
     // Increment "below" moves it to the right in the list, to a lower altitude
     ++below;
   }

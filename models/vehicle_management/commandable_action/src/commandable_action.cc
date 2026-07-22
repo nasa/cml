@@ -11,7 +11,7 @@ Programmers:
 *******************************************************************************/
 
 #include "../include/commandable_action.hh"
-
+#include <utility>
 
 /*****************************************************************************
 Constructors
@@ -37,7 +37,7 @@ CommandableAction::CommandableAction (
   :
   CommandableAction(manager_)
 {
-  name = name_;
+  name = std::move(name_);
 }
 /*****************************************************************************
 update

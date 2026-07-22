@@ -106,10 +106,18 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           echo "SSL_CERT_FILE=/etc/pki/tls/cert.pem" >> "$GITHUB_ENV"
 
-      - name: Clone Trick and JEOD
-        run: |
-          git clone --depth 1 https://github.com/nasa/trick.git --branch 25.1.0 ${{ env.TRICK_HOME }}
-          git clone --depth 1 https://github.com/nasa/jeod.git --branch jeod_v5.4.1 ${{ env.JEOD_HOME }}
+      - name: Clone Trick
+        uses: ./.github/actions/build-trick
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          clone-only: "true"
+
+      - name: Clone JEOD
+        uses: ./.github/actions/build-jeod
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          jeod-home: ${{ env.JEOD_HOME }}
+          clone-only: "true"
 
       - name: Generate compile commands
         run: cmake --preset user-debug
@@ -127,7 +135,7 @@ jobs:
             -j $(nproc) \
             --suppress=missingInclude \
             --suppress=unmatchedSuppression \
-            2> cppcheck-config.log
+            2> >(tee cppcheck-config.log >&2)
 
       # Note that we're ignoring a few large files which mostly just define data.
       # Cppcheck is absolutely horrible about processing files like those. Luckily,
@@ -147,7 +155,7 @@ jobs:
             --suppress=unusedFunction \
             --suppress=unmatchedSuppression \
             --error-exitcode=1 \
-            2> cppcheck-check.log
+            2> >(tee cppcheck-check.log >&2)
 
       - name: Upload logs on failure
         if: failure()

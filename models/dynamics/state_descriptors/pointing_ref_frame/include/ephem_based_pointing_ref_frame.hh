@@ -41,7 +41,7 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
   }
 
  public:
-  EphemBasedPointingRefFrame(jeod::EphemeridesManager & mgr)
+  explicit EphemBasedPointingRefFrame(jeod::EphemeridesManager & mgr)
     :
     PointingRefFrame(),
     ephem_manager(mgr)

@@ -14,6 +14,7 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
 #include "jeod/models/utils/math/include/vector3.hh"
+#include <utility>
 
 /*****************************************************************************
 Constructor
@@ -24,7 +25,7 @@ TR_Parameter_RefFrame::TR_Parameter_RefFrame(
   u_hat(),
   n_hat(),
   p_hat(),
-  name(name_)
+  name(std::move(name_))
 {}
 
 

@@ -64,21 +64,21 @@ class SeparationState : public SubscriptionBase
 
  public:
    SeparationState (void);
-   explicit SeparationState (std::string name);
+   explicit SeparationState (const std::string & name);
    ~SeparationState() override = default;
 
-   void initialize( jeod::DynManager & dyn_manager_in,
+   void initialize( [[maybe_unused]] jeod::DynManager & dyn_manager_in,
                     jeod::DynBody & source_body,
                     jeod::DynBody & subject_body,
-                    std::string source_name,
-                    std::string subject_name) // DEPRECATED
-   { (void)dyn_manager_in;
+                    const std::string & source_name,
+                    const std::string & subject_name) // DEPRECATED
+   {
      initialize(source_body, subject_body, source_name, subject_name);}
 
-   void initialize( jeod::DynManager & dyn_manager_in,
+   void initialize( [[maybe_unused]] jeod::DynManager & dyn_manager_in,
                     jeod::RefFrame     & source_frame,
                     jeod::BodyRefFrame & subject_frame) // DEPRECATED
-   { (void)dyn_manager_in;
+   {
      initialize(source_frame, subject_frame);}
 
 
@@ -86,22 +86,22 @@ class SeparationState : public SubscriptionBase
                     jeod::BodyRefFrame & subject_frame);
    void initialize( jeod::DynBody      & source_body,
                     jeod::BodyRefFrame & subject_frame,
-                    std::string    source_name = "");
+                    const std::string  & source_name = "");
    void initialize( jeod::RefFrame     & source_frame,
                     jeod::DynBody      & subject_body,
-                    std::string    subject_name = "");
+                    const std::string  & subject_name = "");
    void initialize( jeod::DynBody      & source_body,
                     jeod::DynBody      & subject_body,
-                    std::string    source_name = "",
-                    std::string    subject_name = "");
+                    const std::string  & source_name = "",
+                    const std::string  & subject_name = "");
    virtual void update( );
    jeod::RefFrame* get_source() {return source;}
    jeod::BodyRefFrame* get_subject() {return subject;}
 
  protected:
    jeod::BodyRefFrame *  initialize_find_frame (jeod::DynBody &,
-                                                std::string,
-                                                std::string);
+                                                const std::string &,
+                                                const std::string &);
    void activate() override;
    void deactivate() override;
 

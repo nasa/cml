@@ -66,14 +66,12 @@ jobs:
         uses: ./.github/actions/build-trick
         with:
           trick-home: ${{ env.TRICK_HOME }}
-          trick-version: 25.1.0
 
       - name: Build JEOD
         uses: ./.github/actions/build-jeod
         with:
           trick-home: ${{ env.TRICK_HOME }}
           jeod-home: ${{ env.JEOD_HOME }}
-          jeod-version: jeod_v5.4.1
 
       - name: Build CML and run unit tests
         run: |

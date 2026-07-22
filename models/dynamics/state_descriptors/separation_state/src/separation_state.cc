@@ -38,7 +38,7 @@ SeparationState::SeparationState()
   jeod::Vector3::initialize(rel_orientation.euler_angles);
 }
 //*****************************************************************************
-SeparationState::SeparationState( std::string name_)
+SeparationState::SeparationState( const std::string & name_)
   :
   SeparationState()
 {
@@ -80,7 +80,7 @@ void
 SeparationState::initialize(
        jeod::DynBody & source_body,
        jeod::BodyRefFrame & subject_frame,
-       std::string source_name)
+       const std::string & source_name)
 {
   if (!enabled) {
     return;
@@ -100,7 +100,7 @@ void
 SeparationState::initialize(
        jeod::RefFrame & source_frame,
        jeod::DynBody  & subject_body,
-       std::string      subject_name)
+       const std::string & subject_name)
 {
   if (!enabled) {
     return;
@@ -115,8 +115,8 @@ void
 SeparationState::initialize(
        jeod::DynBody & source_body,
        jeod::DynBody & subject_body,
-       std::string source_name,
-       std::string subject_name)
+       const std::string & source_name,
+       const std::string & subject_name)
 {
   if (!enabled) {
     return;
@@ -129,8 +129,8 @@ SeparationState::initialize(
 jeod::BodyRefFrame *
 SeparationState::initialize_find_frame(
        jeod::DynBody    & body,
-       std::string  frame_name,
-       std::string  body_type)
+       const std::string & frame_name,
+       const std::string & body_type)
 {
   jeod::BodyRefFrame * frame = nullptr;
   if (frame_name.empty()) {

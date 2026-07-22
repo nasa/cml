@@ -116,7 +116,7 @@ CML_TargetCounter::insert(int value)
    *     - If a target was identified, increment its count.
    */
   auto it = std::find_if( targets.begin(), targets.end(),
-                          [value](CML_TargetCounterElement & target) {
+                          [value](const CML_TargetCounterElement & target) {
                             return (target.value == value);}
                         );
   if (it != targets.end()) { (it->count)++;}
