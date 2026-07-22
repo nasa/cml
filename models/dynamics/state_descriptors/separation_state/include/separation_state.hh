@@ -67,18 +67,18 @@ class SeparationState : public SubscriptionBase
    explicit SeparationState (const std::string & name);
    ~SeparationState() override = default;
 
-   void initialize( [[maybe_unused]] jeod::DynManager & dyn_manager_in,
+   void initialize( jeod::DynManager & dyn_manager_in,
                     jeod::DynBody & source_body,
                     jeod::DynBody & subject_body,
                     const std::string & source_name,
                     const std::string & subject_name) // DEPRECATED
-   {
+   { (void)dyn_manager_in;
      initialize(source_body, subject_body, source_name, subject_name);}
 
-   void initialize( [[maybe_unused]] jeod::DynManager & dyn_manager_in,
+   void initialize( jeod::DynManager & dyn_manager_in,
                     jeod::RefFrame     & source_frame,
                     jeod::BodyRefFrame & subject_frame) // DEPRECATED
-   {
+   { (void)dyn_manager_in;
      initialize(source_frame, subject_frame);}
 
 
