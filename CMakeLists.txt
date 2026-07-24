@@ -104,6 +104,7 @@ set_target_properties(cml_shared PROPERTIES OUTPUT_NAME cml)
 # Iterate over each CML component (i.e., model directory). Include the associated
 # CMake file and add the sub-library as a target object for the main libcml.
 set(CML_HEADER_FILES)
+set(CML_SOURCE_FILES)
 set(CML_COMPONENTS
     dynamics
     environment
@@ -117,8 +118,23 @@ foreach (component ${CML_COMPONENTS})
     add_subdirectory(models/${component})
     target_sources(cml_static PRIVATE $<TARGET_OBJECTS:cml::${component}>)
     target_sources(cml_shared PRIVATE $<TARGET_OBJECTS:cml::${component}>)
+
+    # Save a list of all CML header files for use in other places. Headers are
+    # already stored as absolute paths.
     get_target_property(_COMPONENT_HEADERS cml::${component} HEADER_SET)
     list(APPEND CML_HEADER_FILES ${_COMPONENT_HEADERS})
+
+    # Save a list of all CML source files for use in other places. Note that source
+    # files are stored relative to their subdirectory, so we need to do a bit more
+    # work to convert these to absolute paths.
+    get_target_property(_COMPONENT_SRCDIR cml::${component} SOURCE_DIR)
+    get_target_property(_COMPONENT_SOURCES cml::${component} SOURCES)
+    foreach (_src ${_COMPONENT_SOURCES})
+        if (NOT IS_ABSOLUTE "${_src}")
+            set(_src "${_COMPONENT_SRCDIR}/${_src}")
+        endif()
+        list(APPEND CML_SOURCE_FILES "${_src}")
+    endforeach()
 endforeach()
 
 # Set library dependencies for libcml. This is mostly for unit test executables
@@ -159,6 +175,11 @@ endif()
 # Create Trickification target                                                 #
 # ---------------------------------------------------------------------------- #
 add_subdirectory(trickified)
+
+# ---------------------------------------------------------------------------- #
+# Build documentation                                                          #
+# ---------------------------------------------------------------------------- #
+add_subdirectory(docs)
 
 # ---------------------------------------------------------------------------- #
 # Set up installation targets                                                  #

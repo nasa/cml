@@ -92,7 +92,7 @@
             "name": "dev",
             "description": "CML developer build. If you're not directly working on CML, this isn't for you.",
             "configurePreset": "dev",
-            "targets": ["trickify", "install"]
+            "targets": ["trickify", "install", "doxygen"]
         }
     ],
 
