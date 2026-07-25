@@ -1,0 +1,22 @@
+dl.trickunits-block {
+    margin: 0.25em 0;
+}
+
+dl.trickunits-block > dt.trickunits-label {
+    display: inline;
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-weight: bold;
+}
+
+dl.trickunits-block > dd {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+dl.trickunits-block > dd > p {
+    display: inline;
+    margin: 0;
+}

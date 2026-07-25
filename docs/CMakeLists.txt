@@ -1,4 +1,5 @@
 set(CML_DOCS_OUTPUT_DIRECTORY ${cml_SOURCE_DIR}/build/docs)
+set(CML_XML_OUTPUT_DIRECTORY ${CML_DOCS_OUTPUT_DIRECTORY}/doxygen/xml)
 
 find_package(Doxygen)
 if (Doxygen_FOUND)
@@ -19,16 +20,21 @@ if (Doxygen_FOUND)
     # converts these to em-dashes.
     set(CML_FIX_DASHES_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/fix_em_dashes.sh)
 
+    # Lifts Trick units out of member descriptions into a dedicated <trickunits>
+    # element.
+    set(CML_EXTRACT_UNITS_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/extract_trick_units.py)
+
     # Add doxygen target. By doing it this way rather than with doxygen_add_docs()
     # it's easier to place the generated documentation in a shared area.
-    set(DOXYGEN_XML_OUTPUT_INDEX ${CML_DOCS_OUTPUT_DIRECTORY}/doxygen/xml/index.xml)
+    set(DOXYGEN_XML_OUTPUT_INDEX ${CML_XML_OUTPUT_DIRECTORY}/index.xml)
     add_custom_command(
         OUTPUT ${DOXYGEN_XML_OUTPUT_INDEX}
         DEPENDS
             Doxyfile.in
             ${CML_DOXYGEN_INPUTS}
         COMMAND ${DOXYGEN_EXECUTABLE} ${CONFIGURED_DOXYFILE}
-        COMMAND bash ${CML_FIX_DASHES_SCRIPT} ${CML_DOCS_OUTPUT_DIRECTORY}/doxygen/xml
+        COMMAND bash ${CML_FIX_DASHES_SCRIPT} ${CML_XML_OUTPUT_DIRECTORY}
+        COMMAND python3 ${CML_EXTRACT_UNITS_SCRIPT} ${CML_XML_OUTPUT_DIRECTORY}
         WORKING_DIRECTORY ${CML_DOCS_OUTPUT_DIRECTORY}
         COMMENT "Generating API documentation with Doxygen"
         VERBATIM
