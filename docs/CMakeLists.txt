@@ -15,6 +15,10 @@ if (Doxygen_FOUND)
     set(CONFIGURED_DOXYFILE ${CML_DOCS_OUTPUT_DIRECTORY}/Doxyfile)
     configure_file(Doxyfile.in ${CONFIGURED_DOXYFILE} @ONLY)
 
+    # Script that restores literal "--" in the generated xml. By default, Doxygen
+    # converts these to em-dashes.
+    set(CML_FIX_DASHES_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/fix_em_dashes.sh)
+
     # Add doxygen target. By doing it this way rather than with doxygen_add_docs()
     # it's easier to place the generated documentation in a shared area.
     set(DOXYGEN_XML_OUTPUT_INDEX ${CML_DOCS_OUTPUT_DIRECTORY}/doxygen/xml/index.xml)
@@ -24,6 +28,7 @@ if (Doxygen_FOUND)
             Doxyfile.in
             ${CML_DOXYGEN_INPUTS}
         COMMAND ${DOXYGEN_EXECUTABLE} ${CONFIGURED_DOXYFILE}
+        COMMAND bash ${CML_FIX_DASHES_SCRIPT} ${CML_DOCS_OUTPUT_DIRECTORY}/doxygen/xml
         WORKING_DIRECTORY ${CML_DOCS_OUTPUT_DIRECTORY}
         COMMENT "Generating API documentation with Doxygen"
         VERBATIM
@@ -45,6 +50,7 @@ if (Sphinx_FOUND)
         OUTPUT ${SPHINX_INDEX_FILE}
         COMMAND Sphinx::Sphinx -b html -Dbreathe_projects.CML=${CML_DOCS_OUTPUT_DIRECTORY}/doxygen/xml ${SPHINX_SOURCE} ${SPHINX_BUILD}
         DEPENDS
+            sphinx/conf.py
             sphinx/index.rst
             doxygen
             Doxyfile.in
