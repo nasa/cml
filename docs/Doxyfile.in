@@ -302,7 +302,7 @@ EXTENSION_MAPPING      =
 # case of backward compatibilities issues.
 # The default value is: YES.
 
-MARKDOWN_SUPPORT       = YES
+MARKDOWN_SUPPORT       = NO
 
 # When the TOC_INCLUDE_HEADINGS tag is set to a non-zero value, all headings up
 # to that level are automatically included in the table of contents, even if
@@ -1941,7 +1941,7 @@ DOCBOOK_OUTPUT         = docbook
 # The default value is: NO.
 # This tag requires that the tag GENERATE_DOCBOOK is set to YES.
 
-DOCBOOK_PROGRAMLISTING = NO
+DOCBOOK_PROGRAMLISTING = OFF
 
 #---------------------------------------------------------------------------
 # Configuration options for the AutoGen Definitions output
@@ -2165,7 +2165,7 @@ HIDE_UNDOC_RELATIONS   = YES
 # set to NO
 # The default value is: NO.
 
-HAVE_DOT               = NO
+HAVE_DOT               = @DOXYGEN_DOT_FOUND@
 
 # The DOT_NUM_THREADS specifies the number of dot invocations doxygen is allowed
 # to run in parallel. When set to 0 doxygen will base this on the number of
