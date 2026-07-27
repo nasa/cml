@@ -56,12 +56,15 @@ if (Sphinx_FOUND)
         OUTPUT ${SPHINX_INDEX_FILE}
         COMMAND Sphinx::Sphinx -b html -Dbreathe_projects.CML=${CML_DOCS_OUTPUT_DIRECTORY}/doxygen/xml ${SPHINX_SOURCE} ${SPHINX_BUILD}
         DEPENDS
-            sphinx/conf.py
-            sphinx/index.rst
             doxygen
             Doxyfile.in
             ${DOXYGEN_XML_OUTPUT_INDEX}
             ${CML_DOXYGEN_INPUTS}
+            CML_Coding_Standards.rst
+            sphinx/conf.py
+            sphinx/index.rst
+            sphinx/src/contributing/contributing.rst
+            sphinx/src/contributing/coding-standards.rst
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating documentation with Sphinx"
     )

@@ -14,7 +14,10 @@ release = '0.2.0'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["breathe", "sphinx.ext.graphviz"]
+extensions = [
+    "breathe",
+    "sphinx.ext.graphviz",
+]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -31,7 +34,7 @@ graphviz_output_format = "svg"
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'furo'
+html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_js_files = ['trickunits.js']
 html_css_files = ['trickunits.css']

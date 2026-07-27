@@ -122,7 +122,7 @@ Within each model's README.md file, the model's maturity level is specified:
 
 # Contributing
 
-See the [CONTRIBUTING](CONTRIBUTING.md) guide for more details.
+See the [CONTRIBUTING](CONTRIBUTING.rst) guide for more details.
 
 ## The `bin/` directory
 
