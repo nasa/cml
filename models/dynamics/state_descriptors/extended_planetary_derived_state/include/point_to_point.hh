@@ -39,7 +39,7 @@ Purpose:
 class PointToPointElement
 {
  public:
-  double position[3]; /* (m)
+  double position[3] {}; /* (m)
     This 3-array serves 2 purposes depending on which type of point this
     instance represents:
     - describes a point on the vehicle, expressed in the structural frame of
@@ -67,15 +67,15 @@ class PointToPointPosition
   friend class PointToPointManager;
 
  public:
-  double position[3]; /* (m)
+  double position[3] {}; /* (m)
     This 3-array describes the relative position of the vehicle-point from the
       planet-point, expressed in the pfix frame of the planet.*/
 
  protected:
-  double v_pos[3]; /* (m)
+  double v_pos[3] {}; /* (m)
     Copy of the position from the PointToPointElement representing the point on
     the vehicle.*/
-  double p_pos[3]; /* (m)
+  double p_pos[3] {}; /* (m)
     Copy of the position from the PointToPointElement representing the point on
     the planet.*/
   std::string v_name; /* (--) Name of the vehicle-based point that terminates
@@ -106,8 +106,8 @@ class PointToPointManager
  protected: // external references:
 
   const jeod::PlanetFixedPosition & B_wrt_P_in_P;
-  const jeod::DynBody             * dyn_body;
-  const jeod::RefFrameRot         * pfix_frame_rot_state;
+  const jeod::DynBody             * dyn_body {nullptr};
+  const jeod::RefFrameRot         * pfix_frame_rot_state {nullptr};
 
   bool initialized {false};  /* (--)
       Indicates that the model has been initialized and the DynBody and

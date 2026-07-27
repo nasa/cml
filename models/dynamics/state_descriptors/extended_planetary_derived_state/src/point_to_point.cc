@@ -47,9 +47,6 @@ PointToPointPosition::PointToPointPosition(
     std::string v_name_,
     std::string p_name_)
   :
-  position{0,0,0},
-  v_pos{0,0,0},
-  p_pos{0,0,0},
   v_name(std::move(v_name_)),
   p_name(std::move(p_name_))
 {}
@@ -57,9 +54,7 @@ PointToPointPosition::PointToPointPosition(
 PointToPointManager::PointToPointManager(
     const jeod::PlanetFixedPosition & B_wrt_P_in_P_)
   :
-  B_wrt_P_in_P( B_wrt_P_in_P_),
-  dyn_body( nullptr),
-  pfix_frame_rot_state( nullptr)
+  B_wrt_P_in_P( B_wrt_P_in_P_)
 {}
 
 /*****************************************************************************
