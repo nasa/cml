@@ -74,3 +74,70 @@ jobs:
           path: "*.log"
           if-no-files-found: warn
           retention-days: 2
+
+
+  clang-tidy:
+    runs-on: ubuntu-latest
+    container:
+      image: rockylinux:8
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install system dependencies
+        run: |
+          dnf install -y epel-release
+          dnf config-manager --enable powertools
+          dnf update -y
+          dnf install -y git make cmake gcc gcc-c++ libxml2-devel openmotif-devel \
+            perl perl-Digest-MD5 udunits2-devel zlib-devel libX11-devel libXt-devel \
+            python3-devel clang-tools-extra
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure environment
+        run: |
+          echo "CML_HOME=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+          echo "TRICK_HOME=$GITHUB_WORKSPACE/externals/trick" >> "$GITHUB_ENV"
+          echo "JEOD_HOME=$GITHUB_WORKSPACE/externals/jeod" >> "$GITHUB_ENV"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          echo "SSL_CERT_FILE=/etc/pki/tls/cert.pem" >> "$GITHUB_ENV"
+
+      - name: Clone Trick
+        uses: ./.github/actions/build-trick
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          clone-only: "true"
+
+      - name: Clone JEOD
+        uses: ./.github/actions/build-jeod
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          jeod-home: ${{ env.JEOD_HOME }}
+          clone-only: "true"
+
+      - name: Generate compile commands
+        run: cmake --preset user-debug --fresh
+
+      - name: Run clang-tidy
+        run: |
+          set -o pipefail
+          run-clang-tidy \
+            -p build/debug \
+            -j $(nproc) \
+            -quiet \
+            -extra-arg=-Wno-unknown-warning-option \
+            -extra-arg=-w \
+            2>&1 | tee clang-tidy.log
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clang-tidy-failure-logs
+          path: clang-tidy.log
+          if-no-files-found: warn
+          retention-days: 2

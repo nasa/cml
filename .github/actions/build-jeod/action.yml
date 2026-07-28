@@ -10,11 +10,16 @@ inputs:
     required: true
   jeod-version:
     description: JEOD git branch/tag to build
-    required: true
+    required: false
+    default: jeod_v5.4.1
   venv-path:
     description: Path to the Python virtual environment
     required: false
     default: .venv
+  clone-only:
+    description: If true, only clone JEOD and skip building it
+    required: false
+    default: "false"
 
 runs:
   using: composite
@@ -24,9 +29,16 @@ runs:
       env:
         TRICK_HOME: ${{ inputs.trick-home }}
       run: |
-        source ${{ inputs.venv-path }}/bin/activate
         git clone https://github.com/nasa/jeod.git \
+          --depth 1 \
           --branch ${{ inputs.jeod-version }} ${{ inputs.jeod-home }}
+
+        if [ "${{ inputs.clone-only }}" = "true" ]; then
+          echo "clone-only is true; skipping JEOD build and trickification."
+          exit 0
+        fi
+
+        source ${{ inputs.venv-path }}/bin/activate
         cd ${{ inputs.jeod-home }}
         make -f bin/jeod/makefile -j$(nproc) TRICK_BUILD=1
         cd ${{ inputs.jeod-home }}/trickified
