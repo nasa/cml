@@ -131,7 +131,7 @@ jobs:
             -quiet \
             -extra-arg=-Wno-unknown-warning-option \
             -extra-arg=-w \
-            2>&1 | tee clang-tidy.log
+            | tee clang-tidy.log
 
       - name: Upload logs on failure
         if: failure()
