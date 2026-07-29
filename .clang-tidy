@@ -1,4 +1,35 @@
 ---
+# Ignored warnings:
+#
+# bugprone:
+#     To be added in a future pull request
+#
+# clang-analyzer:
+#     clang-analyzer-optin.performance.Padding:
+#         Can end up being detrimental by suggesting that certain fields which
+#         were grouped together for logical coherence be split apart. It's more
+#         important that the data is easy to read than it is to save a few bytes
+#         of padding.
+#
+# misc:
+#     To be added in a future pull request
+#
+# modernize:
+#     To be added in a future pull request
+#
+# performance:
+#     To be added in a future pull request
+#
+# portability:
+#     To be added in a future pull request
+#
+# readability:
+#     To be added in a future pull request
+Checks: >
+    clang-*,
+    -clang-analyzer-optin.performance.Padding
+
 WarningsAsErrors: '*'
+
 HeaderFilterRegex: '(^|/)(models|utility)/.*'
 ...

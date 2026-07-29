@@ -68,8 +68,8 @@ void STD1976::initialize()
 void STD1976::update(const double &altitude_in  //the given geometric height
                     )
 {
-  static const size_t rmwx_num = sizeof(RMWX_table)/sizeof(RMWX_table[0]);
-  static const size_t ext_alt_num = sizeof(ext_alt_table)/sizeof(ext_alt_table[0]);
+  static const size_t rmwx_num = std::size(RMWX_table);
+  static const size_t ext_alt_num = std::size(ext_alt_table);
   static const size_t alt_num = get_alt_tbl_len();
 
   altitude = altitude_in;
@@ -110,10 +110,10 @@ void STD1976::update(const double &altitude_in  //the given geometric height
   if (altitude > alt_table[0]) { //form 0 km to 1000 km
     const double *itr = std::upper_bound(alt_table, alt_table+alt_num, H);
     if (itr == alt_table+alt_num) {
-      layer_number = static_cast<int>(alt_num-1);
+      layer_number = alt_num-1;
     }
     else {
-      layer_number = static_cast<int>(std::distance(alt_table, itr)-1);
+      layer_number = static_cast<size_t>(std::distance(alt_table, itr)-1);
     }
   }
 
