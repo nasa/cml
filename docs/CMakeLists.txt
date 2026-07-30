@@ -63,8 +63,11 @@ if (Sphinx_FOUND)
             CML_Coding_Standards.rst
             sphinx/conf.py
             sphinx/index.rst
+            sphinx/src/contributing/building-the-docs.rst
             sphinx/src/contributing/contributing.rst
             sphinx/src/contributing/coding-standards.rst
+            sphinx/src/contributing/getting-started.rst
+            sphinx/src/models/utilities/index.rst
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating documentation with Sphinx"
     )

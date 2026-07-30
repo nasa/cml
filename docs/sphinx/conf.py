@@ -37,4 +37,4 @@ graphviz_output_format = "svg"
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_js_files = ['trickunits.js']
-html_css_files = ['trickunits.css']
+html_css_files = ['trickunits.css', 'cml_theme.css']

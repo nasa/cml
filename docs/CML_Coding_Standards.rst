@@ -28,6 +28,7 @@
        | 03/31/2026
 
 .. contents:: Table of Contents
+   :local:
    :class: this-will-duplicate-information-and-it-is-still-useful-here
 
 Introduction

@@ -1,0 +1,20 @@
+/*
+ * CML-specific overrides to the default Sphinx theme.
+ */
+
+/* Make sure that links don't change color after clicking on them */
+div.wy-nav-content a:visited {
+        color: #2980B9;
+}
+div.version a:visited, div.version a{
+    color: white;
+}
+
+/* Make inline C++ expressions render in monospace */
+.rst-content code.cpp-expr,
+.rst-content .sig-inline.cpp-expr,
+.rst-content code.cpp-expr *,
+.rst-content .sig-inline.cpp-expr * {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas,
+                 "Liberation Mono", "Courier New", monospace !important;
+}
