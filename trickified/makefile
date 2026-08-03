@@ -8,9 +8,6 @@ export TRICKIFY_EXT_LIB_DIRS += :${JEOD_HOME}/models
 export TRICKIFY_PYTHON_DIR := python.zip
 export ICG_EXCLUDE += :${JEOD_HOME}/models
 
-ifeq ($(shell pkg-config --exists libxml-2.0 && echo $$?),0)
-    export TRICKIFY_CXX_FLAGS += $(shell pkg-config libxml-2.0 --cflags)
-endif
 
 # Due to limitations with Trickification and SWIG, the JEOD Trickified library
 # and build artifacts MUST exist for CML to Trickify properly.
