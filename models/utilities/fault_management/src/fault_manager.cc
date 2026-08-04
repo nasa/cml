@@ -1440,7 +1440,9 @@ TriggerBase* FaultManager::parse_trigger(
       // make_trigger.
       Trigger<std::string>* string_trigger =
         new Trigger<std::string>(*static_cast<std::string*>(Symbol->address));
-      string_trigger->set_value(value);
+      if (value != nullptr) {
+        string_trigger->set_value(value);
+      }
       new_trigger = string_trigger;
       break;
     }
