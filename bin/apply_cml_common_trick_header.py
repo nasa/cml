@@ -133,7 +133,7 @@ def generate_common_trick_header(original_header_str):
     formatted_comment_str = ""
     header_block_list = []
     header_block = ""
-    original_header_str = remove_astricks_comment_style(original_header_str)
+    original_header_str = remove_asterisks_comment_style(original_header_str)
 
     for key in regex_dict:
         if args.verbose:
