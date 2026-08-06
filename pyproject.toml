@@ -16,9 +16,11 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/nasa/cml/wiki"
+Homepage = "https://nasa.github.io/cml"
+Documentation = "https://nasa.github.io/cml"
+Repository = "https://github.com/nasa/cml"
 Issues = "https://github.com/nasa/cml/issues"
-Source = "https://github.com/nasa/cml"
+Changelog = "https://github.com/nasa/cml/blob/main/CHANGELOG"
 
 [build-system]
 requires = ["hatchling"]

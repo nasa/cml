@@ -21,4 +21,3 @@ TRICK_CXXFLAGS += -fsanitize=address,undefined
 TRICK_LDFLAGS += -fsanitize=address,undefined
 
 TRICK_CXXFLAGS += -I${JEOD_HOME}/..
-TRICK_EXEC_LINK_LIBS := $(filter-out -lintl,$(TRICK_EXEC_LINK_LIBS))

@@ -17,6 +17,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Install system dependencies
+        run: |
+          apt update
+          apt install cmake make git perl doxygen
+
       - name: Checkout code
         uses: actions/checkout@v4
 

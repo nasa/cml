@@ -18,3 +18,24 @@ div.version a:visited, div.version a{
     font-family: SFMono-Regular, Menlo, Monaco, Consolas,
                  "Liberation Mono", "Courier New", monospace !important;
 }
+
+/* Kill the horizontal scroll wrapper the RTD theme adds. */
+.wy-table-responsive {
+    overflow: visible !important;
+}
+
+/* Make tables fit the content width and lay out fixed. */
+.wy-table-responsive table {
+    width: 100% !important;
+    table-layout: fixed !important;
+}
+
+/* Allow cell contents to wrap (RTD sets white-space: normal on td
+   but nowrap on some elements; force wrapping + word breaking). */
+.wy-table-responsive table td,
+.wy-table-responsive table th {
+    white-space: normal !important;
+    word-wrap: break-word;      /* legacy name */
+    overflow-wrap: break-word;  /* modern name */
+    word-break: break-word;
+}

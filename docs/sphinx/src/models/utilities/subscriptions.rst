@@ -3,6 +3,7 @@ Subscriptions
 
 .. list-table:: Revision History
    :widths: 15 30 30 50
+   :header-rows: 1
 
    * - Version
      - Date
@@ -32,6 +33,8 @@ Subscriptions
 .. contents:: Table of Contents
    :local:
    :class: this-will-duplicate-information-and-it-is-still-useful-here
+
+________________________________________________________
 
 Introduction
 ============
@@ -70,6 +73,8 @@ that count is zero, the model does not need to run.
 This model handles that subscription count for all models that inherit
 it.
 
+________________________________________________________
+
 .. _requirements-1:
 
 Requirements
@@ -81,6 +86,8 @@ Requirements
    demands placed on the inheriting models.
 3. This model shall provide the option to permanently deactivate a
    model, preventing further demands from re-activating it.
+
+________________________________________________________
 
 Model Specifications
 ====================
@@ -115,6 +122,8 @@ Mathematical Formulation
 
 No mathematical formulation.
 
+________________________________________________________
+
 User's Guide
 ============
 
@@ -131,7 +140,7 @@ The design decision as to how disabling the model affects the
 subscription-count and pending-subscription-count is complicated. There
 are two possible results for each count - being that they are left
 untouched, or set to zero. Identifying the best default behavior
-requires consideration of how to process :cpp:func:`~SubscriptionBase::initialize`, :cpp:expr:`YourModel::update()`,
+requires consideration of how to process :cpp:func:`~SubscriptionBase::initialize`, ``YourModel::update()``,
 :cpp:func:`~SubscriptionBase::subscribe` and :cpp:func:`~SubscriptionBase::unsubscribe` calls while the model is disabled.
 
 It is generally desirable that a disabled model cannot be initialized.
@@ -140,7 +149,7 @@ important features that supports blocking of expensive and
 time-consuming initialization routines in models inheriting this
 capability when said models are not necessary for a particular scenario.
 
-Similarly, it is a required feature that calls to :cpp:expr:`YourModel::update()`
+Similarly, it is a required feature that calls to ``YourModel::update()``
 should not be processed while a model is *inactive*; this is the main
 purpose of the model. The activity flag can be set by a call to
 :cpp:func:`~SubscriptionBase::subscribe` if the model is initialized. Therefore, to support cases
@@ -152,7 +161,7 @@ therefore flagged with a message**; a model should not be simultaneously
 required (as suggested by the :cpp:func:`~SubscriptionBase::subscribe` call) and not available (as
 suggested by being disabled).
 
-Because of the inherent design associated with blocking :cpp:expr:`YourModel::update()` calls
+Because of the inherent design associated with blocking ``YourModel::update()`` calls
 for inactive models (previous paragraph), calls to :cpp:func:`~SubscriptionBase::subscribe` while
 a model is disabled are immediately flagged as errors and no further
 action is taken. This decision has implications on how to handle the
@@ -373,7 +382,7 @@ Activate
 ~~~~~~~~
 
 It may be desirable to include an automatic call to the model's regular
-execution (e.g. :cpp:expr:`YourModel::update()`) as a part of the activation process. This is
+execution (e.g. ``YourModel::update()``) as a part of the activation process. This is
 not included in the base implementation.
 
 It may also be necessary to subscribe to additional model dependencies.
@@ -390,6 +399,8 @@ Deactivate
 
 If the :cpp:func:`~SubscriptionBase::activate` call resulted in subscription to other models,
 these should be unsubscribed at :cpp:func:`~SubscriptionBase::deactivate`.
+
+________________________________________________________
 
 Verification
 ============
@@ -415,6 +426,8 @@ Code Coverage
    ------------------------------------------------------------------------------
    TOTAL                                         63       60    95%
    ------------------------------------------------------------------------------
+
+See detailed coverage information `here <https://coveralls.io/github/nasa/cml?branch=main>`_.
 
 Exceptions
 ----------
@@ -489,6 +502,7 @@ This run executes a sequence of subscribe and unsubscribe calls:
 
 .. list-table:: Logged Data
    :widths: 20 20 20 20 20
+   :header-rows: 1
 
    * - time
      - enabled
@@ -583,6 +597,7 @@ model initialization.
 
 .. list-table:: Logged Data
    :widths: 20 20 20 20 20
+   :header-rows: 1
 
    * - time
      - enabled
@@ -638,6 +653,7 @@ This run tests the sequence of subscription - disable - initialize. With this se
 
 .. list-table:: Logged Data
    :widths: 20 20 20 20 20
+   :header-rows: 1
 
    * - time
      - enabled
@@ -684,6 +700,7 @@ This run tests the sequence of subscription - initialize - disable. With this se
 
 .. list-table:: Logged Data
    :widths: 20 20 20 20 20
+   :header-rows: 1
 
    * - time
      - enabled
@@ -749,6 +766,7 @@ This run tests the effect of issuing subscriptions while disabled:
 
 .. list-table:: Logged Data
    :widths: 20 20 20 20 20
+   :header-rows: 1
 
    * - time
      - enabled
@@ -824,6 +842,7 @@ subscriptions:
 
 .. list-table:: Logged Data
    :widths: 20 20 20 20 20 20
+   :header-rows: 1
 
    * - time
      - initialize_on_failed_activation
@@ -861,8 +880,8 @@ RUN_08_getters
 
 This run tests the model's getter methods:
 
--  is_enabled(), is_initialized(), and is_active() are called and their results printed to the
-   console
+-  :cpp:func:`~SubscriptionBase::is_enabled`, :cpp:func:`~SubscriptionBase::is_initialized`, and :cpp:func:`~SubscriptionBase::is_active`
+   are called and their results printed to the console
 -  The model is :cpp:func:`~SubscriptionBase::initialize`\ d and :cpp:func:`~SubscriptionBase::subscribe`\ d to
 -  :cpp:func:`~SubscriptionBase::is_enabled`, :cpp:func:`~SubscriptionBase::is_initialized`, and :cpp:func:`~SubscriptionBase::is_active`
    are called and their results printed to the console
