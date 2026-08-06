@@ -30,6 +30,8 @@ if (Doxygen_FOUND)
         OUTPUT ${DOXYGEN_XML_OUTPUT_INDEX}
         DEPENDS
             Doxyfile.in
+            extract_trick_units.py
+            fix_en_dashes.py
             ${CML_DOXYGEN_INPUTS}
         COMMAND ${DOXYGEN_EXECUTABLE} ${CONFIGURED_DOXYFILE}
         COMMAND python3 ${CML_FIX_DASHES_SCRIPT} ${CML_XML_OUTPUT_DIRECTORY}

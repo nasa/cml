@@ -19,6 +19,6 @@ find_package_handle_standard_args(Sphinx
 
 if (Sphinx_FOUND AND NOT TARGET Sphinx::Sphinx)
     mark_as_advanced(Sphinx_EXECUTABLE)
-    add_executable(Sphinx::Sphinx IMPORTED)
+    add_executable(Sphinx::Sphinx IMPORTED GLOBAL)
     set_property(TARGET Sphinx::Sphinx PROPERTY IMPORTED_LOCATION ${Sphinx_EXECUTABLE})
 endif()
