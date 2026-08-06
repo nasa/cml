@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "The Common Model Library"
-copyright = "2026, National Aeronautics and Space Administration"
+copyright = "%Y, National Aeronautics and Space Administration"
 author = ""
 release = "0.2.0"
 
