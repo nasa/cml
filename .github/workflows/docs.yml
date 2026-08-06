@@ -19,8 +19,8 @@ jobs:
     steps:
       - name: Install system dependencies
         run: |
-          apt update
-          apt install cmake make git perl doxygen
+          sudo apt-get update
+          sudo apt-get install -y cmake make git libxml2 libxml2-dev perl doxygen
 
       - name: Checkout code
         uses: actions/checkout@v4
