@@ -385,7 +385,7 @@ variables instead.
 
 .. code-block:: cpp
 
-   #define ADD_ONE(input) (input + 1)
+   #define ADD_ONE(input) ((input) + 1)
 
    #define SPEED_OF_LIGHT 299792458.0
 
@@ -394,7 +394,7 @@ variables instead.
 .. code-block:: cpp
 
    template <typename Type>
-   constexpr Type add_one(const Type& input) {
+   [[nodiscard]] constexpr Type add_one(const Type& input) {
       return input + 1;
    }
 
@@ -424,19 +424,19 @@ dynamic memory management. Both of these options provide automated cleanup of th
 
 .. code-block:: cpp
 
-   double* my_vector = new double[num_elements];
+   auto* data = new double;
 
 **Example, correct** using the Trick memory manager
 
 .. code-block:: cpp
 
-   auto* my_vector = static_cast<double*>(trick_TMM->declare_var("double", num_elements));
+   auto* data = static_cast<double*>(trick_TMM->declare_var("double"));
 
 **Example, correct** using smart pointers
 
 .. code-block:: cpp
 
-   auto my_vector = std:make_unique<double[]>(num_elements);
+   auto data = std:make_unique<double>();
 
 **CML-BP-CPP-5**: Do not allocate significant memory in scheduled simulation jobs
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

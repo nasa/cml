@@ -98,7 +98,7 @@
             "name": "dev",
             "description": "CML developer build. If you're not directly working on CML, this isn't for you.",
             "configurePreset": "dev",
-            "targets": ["trickify", "install", "documentation"]
+            "targets": ["trickify", "install"]
         }
     ],
 
@@ -166,7 +166,7 @@
         {
             "name": "dev",
             "description": "CML developer build",
-            "displayName": "Build CML and all other extra targets, like tests and documentation",
+            "displayName": "Build CML and tests, and enable sanitizers",
             "steps": [
                 {
                     "type": "configure",

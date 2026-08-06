@@ -2,7 +2,7 @@ Subscriptions
 +++++++++++++
 
 .. list-table:: Revision History
-   :widths: 30 30 30 70
+   :widths: 15 30 30 50
 
    * - Version
      - Date
@@ -24,6 +24,10 @@ Subscriptions
      - September 2025
      - Hirad Mirhashemi
      - Updated verification and user's guide
+   * - 5
+     - August 2026
+     - Nino Tarantino
+     - Converted to reStructuredText and updated coverage
 
 .. contents:: Table of Contents
    :local:
@@ -117,6 +121,8 @@ User's Guide
 This model is not intended to be used as a stand-alone model, but rather
 as the base for other models that need to be activated or deactivated
 during a complex simulation.
+
+.. _notes-on-disabling-a-model:
 
 Notes on Disabling a Model
 --------------------------
@@ -224,7 +230,7 @@ The model provides three optional control flags:
 
    -  :cpp:member:`initialize_on_failed_activation = false <SubscriptionBase::initialize_on_failed_activation>`
       results in
-      setting the model’s *initialized* flag to false (indicating that
+      setting the model's *initialized* flag to false (indicating that
       initialization failed), but it retains its pending subscriptions.
    -  :cpp:member:`initialize_on_failed_activation = true <SubscriptionBase::initialize_on_failed_activation>` results in the model being
       marked as successfully initialized but the pending subscriptions
@@ -385,3 +391,492 @@ Deactivate
 If the :cpp:func:`~SubscriptionBase::activate` call resulted in subscription to other models,
 these should be unsubscribed at :cpp:func:`~SubscriptionBase::deactivate`.
 
+Verification
+============
+
+.. role:: magenta
+   :class: magenta
+
+Code Coverage
+-------------
+
+.. code-block:: text
+
+   ------------------------------------------------------------------------------
+                           GCC Code Coverage Report
+   Directory: .
+   ------------------------------------------------------------------------------
+   File                                       Lines     Exec  Cover   Missing
+   ------------------------------------------------------------------------------
+   models/utilities/subscriptions/include/subscriptions.hh
+                                                  7        4    57%   86,158,166
+   models/utilities/subscriptions/src/subscriptions.cc
+                                                 56       56   100%
+   ------------------------------------------------------------------------------
+   TOTAL                                         63       60    95%
+   ------------------------------------------------------------------------------
+
+Exceptions
+----------
+
+The destructor is marked uncovered because the destruction of a dynamically-allocated
+isntance of ``SubscriptionBase`` is not covered in testing. The compiler emits separate
+branches for non-dynamically allocated and dynamically allocated objects, and only the
+non-dynamically allocated case is tested.
+
+.. literalinclude:: /../../models/utilities/subscriptions/include/subscriptions.hh
+   :language: cpp
+   :lines: 86
+   :linenos:
+   :lineno-start: 86
+
+The :cpp:func:`SubscriptionBase::activate` and :cpp:func:`SubscriptionBase::deactivate` functions
+are not tested.
+
+.. literalinclude:: /../../models/utilities/subscriptions/include/subscriptions.hh
+   :language: cpp
+   :lines: 158
+   :linenos:
+   :lineno-start: 158
+
+.. literalinclude:: /../../models/utilities/subscriptions/include/subscriptions.hh
+   :language: cpp
+   :lines: 166
+   :linenos:
+   :lineno-start: 166
+
+Simulation Configurations
+-------------------------
+
+SIM_unit_subs
+~~~~~~~~~~~~~
+
+This verification simulation tests the full model by running different sequences of method calls. It
+ensures that the model correct tracks pending and active subscriptions before and after
+initialization, supports activation and deactivation based on those subscriptions, and allows the
+model to be fully disabled. The simulation also verifies that errors are raised appropriately
+according to the optional control flags.
+
+Unit-Test Cases
+---------------
+
+.. _verif-test-1:
+
+RUN_01_multiple_subscriptions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This run executes a sequence of subscribe and unsubscribe calls:
+
+-  t=0: :cpp:func:`~SubscriptionBase::subscribe` (number of subscriptions = 1, model activates)
+-  t=1: :cpp:func:`~SubscriptionBase::subscribe` (number of subscriptions = 2)
+-  t=2: :cpp:func:`~SubscriptionBase::unsubscribe` (number of subscriptions = 1)
+-  t=3: :cpp:func:`~SubscriptionBase::subscribe` (number of subscriptions = 2)
+-  t=4: :cpp:func:`~SubscriptionBase::unsubscribe` (number of subscriptions = 1)
+-  t=5: :cpp:func:`~SubscriptionBase::unsubscribe` (number of subscriptions = 0, model deactivates)
+-  t=6: :cpp:func:`~SubscriptionBase::unsubscribe` (results in a message about unsubscribing from an unsubscribed model)
+   
+   .. code-block:: text
+
+      Message: Pre-init unsubscribe error.
+      Instruction received to unsubscribe the model (unnamed-instance) but there are no
+      pending subscriptions.  Check your configuration.
+      Cannot process unsubscriptions in anticipation of incoming
+      subscriptions.
+      Command failed.
+      Model remains unsubscribed.
+
+-  t=7: :cpp:func:`~SubscriptionBase::unsubscribe` with :cpp:member:`~SubscriptionBase::quiet_unsubscribe_warning` flag set (no effect)
+
+.. list-table:: Logged Data
+   :widths: 20 20 20 20 20
+
+   * - time
+     - enabled
+     - active
+     - active subscription count
+     - pending subscription count
+   * - 0
+     - 1
+     - 0
+     - 0
+     - 1
+   * - 1
+     - 1
+     - 0
+     - 0
+     - 2
+   * - 2
+     - 1
+     - 0
+     - 0
+     - 1
+   * - 3
+     - 1
+     - 0
+     - 0
+     - 2
+   * - 4
+     - 1
+     - 0
+     - 0
+     - 1
+   * - 5
+     - 1
+     - 0
+     - 0
+     - 0
+   * - 6
+     - 1
+     - 0
+     - 0
+     - 0
+   * - 7
+     - 1
+     - 0
+     - 0
+     - 0
+
+
+RUN_02_not_initialized
+~~~~~~~~~~~~~~~~~~~~~~
+
+This run repeats the same sequence as :ref:`verif-test-1`, but without the model
+being initialized. This run verifies that :cpp:func:`~SubscriptionBase::subscribe` / :cpp:func:`~SubscriptionBase::unsubscribe` calls affect only the
+pending subscriptions count, and not the actual active status of the model. Throughout this run, the
+model remains inactive.
+
+-  t=0: :cpp:func:`~SubscriptionBase::subscribe` (number of pending subscriptions = 1)
+-  t=1: :cpp:func:`~SubscriptionBase::subscribe` (number of pending subscriptions = 2)
+-  t=2: :cpp:func:`~SubscriptionBase::unsubscribe` (number of pending subscriptions = 1)
+-  t=3: :cpp:func:`~SubscriptionBase::subscribe` (number of pending subscriptions = 2)
+-  t=4: :cpp:func:`~SubscriptionBase::unsubscribe` (number of pending subscriptions = 1)
+-  t=5: :cpp:func:`~SubscriptionBase::unsubscribe` (number of pending subscriptions = 0)
+-  t=6: :cpp:func:`~SubscriptionBase::unsubscribe` (results in a message about unsubscribing from a model with no pending
+   subscriptions)
+
+   .. code-block:: text
+
+      Message: Pre-init unsubscribe error.
+      Instruction received to unsubscribe the model (unnamed-instance) but there are no
+      pending subscriptions.  Check your configuration.
+      Cannot process unsubscriptions in anticipation of incoming
+      subscriptions.
+      Command failed.
+      Model remains unsubscribed.
+
+-  t=7: :cpp:func:`~SubscriptionBase::unsubscribe` with :cpp:member:`~SubscriptionBase::quiet_unsubscribe_warning` flag set (no effect)
+
+
+RUN_03_initialize_with_pending
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This run tests the ability of the model to transfer pending subscriptions to active subscriptions at
+model initialization.
+
+-  t=1: :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+   to 1)
+-  t=2: :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+   to 2)
+-  t=3: :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+   to 3)
+-  t=4: :cpp:func:`~SubscriptionBase::initialize` (model activates; 3 pending subscriptions are moved to active subscriptions)
+
+.. list-table:: Logged Data
+   :widths: 20 20 20 20 20
+
+   * - time
+     - enabled
+     - active
+     - active subscription count
+     - pending subscription count
+   * - 0
+     - 1
+     - 0
+     - 0
+     - 0
+   * - 1
+     - 1
+     - 0
+     - 0
+     - 1
+   * - 2
+     - 1
+     - 0
+     - 0
+     - 2
+   * - 3
+     - 1
+     - 0
+     - 0
+     - 3
+   * - 4
+     - 1
+     - 1
+     - 3
+     - 0
+
+RUN_04_subscribe_disable_init 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This run tests the sequence of subscription - disable - initialize. With this sequence:
+
+-  t=0:
+
+   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+      to 1)
+   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+      to 2)
+
+-  t=1: :cpp:func:`~SubscriptionBase::disable` (sets the enabled flag to false)
+
+-  t=2: :cpp:func:`~SubscriptionBase::initialize` (has no effect on a disabled model)
+
+.. note::
+
+   Disabling the model does not affect the pending subscription count. This is a somewhat
+   arbitrary design decision discussed in the :ref:`User's Guide <notes-on-disabling-a-model>`.
+
+.. list-table:: Logged Data
+   :widths: 20 20 20 20 20
+
+   * - time
+     - enabled
+     - active
+     - active subscription count
+     - pending subscription count
+   * - 0
+     - 1
+     - 0
+     - 0
+     - 2
+   * - 1
+     - 0
+     - 0
+     - 0
+     - 2
+   * - 2
+     - 0
+     - 0
+     - 0
+     - 2
+
+RUN_05_subscribe_init_disable
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This run tests the sequence of subscription - initialize - disable. With this sequence:
+
+-  t=0:
+
+   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+      to 1)
+   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+      to 2)
+
+-  t=1: :cpp:func:`~SubscriptionBase::initialize` (the pending subscriptions are applied, model activates, subscription count =
+   2)
+-  t=2: :cpp:func:`~SubscriptionBase::disable` (sets the enabled flag and active flag to false, leaving the subscriptions count
+   at 2)
+
+.. note::
+
+   Disabling the model while it is active does not result in changing the subscriptions count,
+   but this value is hereafter unreliable. See discussion in the :ref:`User's Guide <notes-on-disabling-a-model>`.
+
+.. list-table:: Logged Data
+   :widths: 20 20 20 20 20
+
+   * - time
+     - enabled
+     - active
+     - active subscription count
+     - pending subscription count
+   * - 0
+     - 1
+     - 0
+     - 0
+     - 2
+   * - 1
+     - 1
+     - 1
+     - 2
+     - 0
+   * - 2
+     - 0
+     - 0
+     - 2
+     - 0
+
+RUN_06_disabled
+~~~~~~~~~~~~~~~
+
+This run tests the effect of issuing subscriptions while disabled:
+
+-  t=0:
+
+   -  :cpp:func:`~SubscriptionBase::disable`
+   -  :cpp:func:`~SubscriptionBase::subscribe` (results in an error message, the model cannot be subscribed while disabled)
+
+   .. code-block:: text
+
+      Message: Subscription Error
+      Model (unnamed-instance) has been disabled for this scenario.
+      Cannot subscribe to a disabled model.
+
+-  t=1: :cpp:func:`~SubscriptionBase::unsubscribe` (no effect)
+
+-  t=2:
+
+   -  :cpp:func:`~SubscriptionBase::initialize` (no effect)
+   -  :cpp:func:`~SubscriptionBase::subscribe` (repeat of previous error message)
+
+   .. code-block:: text
+
+      Message: Subscription Error
+      Model (unnamed-instance) has been disabled for this scenario.
+      Cannot subscribe to a disabled model.
+
+   -  set :cpp:member:`quiet_disabled_warning = True <SubscriptionBase::quiet_disabled_warning>`
+   -  :cpp:func:`~SubscriptionBase::subscribe` (no error message posted, :cpp:member:`~SubscriptionBase::quiet_disabled_warning` resets)
+
+   .. code-block:: text
+
+      Checking on quiet_disabled_warning reset:
+      Before subscribe:  1
+      No error message during subscribe()
+      After  subscribe:  0
+
+-  t=3: :cpp:func:`~SubscriptionBase::unsubscribe` (no effect)
+
+.. list-table:: Logged Data
+   :widths: 20 20 20 20 20
+
+   * - time
+     - enabled
+     - active
+     - active subscription count
+     - pending subscription count
+   * - 0
+     - 0
+     - 0
+     - 0
+     - 0
+   * - 1
+     - 0
+     - 0
+     - 0
+     - 0
+   * - 2
+     - 0
+     - 0
+     - 0
+     - 0
+   * - 3
+     - 0
+     - 0
+     - 0
+     - 0
+
+RUN_07_activation_fails 
+~~~~~~~~~~~~~~~~~~~~~~~
+
+This run tests the consequences of failing to activate the model when initializing with pending
+subscriptions:
+
+-  t=0:
+
+   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+      to 1)
+   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+      to 2)
+   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+      to 3)
+
+-  t=1: :cpp:func:`~SubscriptionBase::initialize` called with initialize_on_failed_activation at default false (error message,
+   pending subscriptions retained but initialization failed)
+
+   .. code-block:: text
+
+      Message: Failure During Initialization.
+      The SubscriptionBase initialization for 'activation-failure test case' failed when the model
+      attempted to activate during initialization:
+       - activation sequence executed due to having pending subscriptions.
+      Model has been neither initialized nor activated
+      but pending subscriptions have been retained per setting of
+      configuration flag initialize_on_failed_activation.
+      Rerun <model>.initialize() to apply pending subscriptions and activate the model.
+
+-  t=2: :cpp:func:`~SubscriptionBase::initialize` called with :cpp:member:`~SubscriptionBase::initialize_on_failed_activation` set to true (error message, model
+   flagged as initialized but pending subscriptions are stripped)
+
+   .. code-block:: text
+
+      Message: Failure During Initialization.
+      The SubscriptionBase initialization for 'activation-failure test case' failed when the model
+      attempted to activate during initialization:
+       - activation sequence executed due to having pending subscriptions.
+      Model is marked as having been initialized but not activated;
+      pending-subscriptions have been removed per setting of
+      configuration flag initialize_on_failed_activation.
+      Re-subscribe to the model to activate it. 
+
+-  t=3: :cpp:func:`~SubscriptionBase::subscribe` called (forwards to :cpp:func:`~SubscriptionBase::activate`, which fails again; model remains inactive and
+   rejects the subscription)
+
+.. list-table:: Logged Data
+   :widths: 20 20 20 20 20 20
+
+   * - time
+     - initialize_on_failed_activation
+     - initialized
+     - active
+     - pending subscription count
+     - active subscription count
+   * - 0
+     - 0
+     - 0
+     - 0
+     - 3
+     - 0
+   * - 1
+     - 0
+     - 0
+     - 0
+     - 3
+     - 0
+   * - 2
+     - 1
+     - 1
+     - 0
+     - 0
+     - 0
+   * - 3
+     - 1
+     - 1
+     - 0
+     - 0
+     - 0
+
+RUN_08_getters
+~~~~~~~~~~~~~~
+
+This run tests the model's getter methods:
+
+-  is_enabled(), is_initialized(), and is_active() are called and their results printed to the
+   console
+-  The model is :cpp:func:`~SubscriptionBase::initialize`\ d and :cpp:func:`~SubscriptionBase::subscribe`\ d to
+-  :cpp:func:`~SubscriptionBase::is_enabled`, :cpp:func:`~SubscriptionBase::is_initialized`, and :cpp:func:`~SubscriptionBase::is_active`
+   are called and their results printed to the console
+
+.. code-block:: text
+
+   **********************************************************************
+   enabled: 1 (1)
+   initialized: 0 (0)
+   active: 0 (0)
+   **********************************************************************
+   Initialize and Subscribe
+   **********************************************************************
+   enabled: 1 (1)
+   initialized: 1 (1)
+   active: 1 (1)
+   ***********************************************************************

@@ -23,12 +23,13 @@ Follow our :doc:`Getting Started Guide <getting-started>` to set up a virtual en
 
     activate ${CML_HOME}/.venv/bin/activate
 
-If you're a CML developer, you can run the ``CMake`` ``dev`` preset to build all of CML, run unit tests, and build the
-documentation.
+If you're a CML developer, you can run the ``CMake`` ``dev`` preset to build all of CML and run unit tests, and then
+manually build the documentation.
 
 .. code-block:: bash
 
     cmake --workflow --preset dev
+    cmake --build --preset dev -t documentation
 
 If you're simply trying to build only the documentation, you can run the ``documentation`` preset instead.
 
@@ -52,13 +53,14 @@ Editing the Documentation
 -------------------------
 
 When live-editing the documentation, the recommended tool is `sphinx-autobuild <https://github.com/sphinx-doc/sphinx-autobuild>`_.
-``sphinx-autobuild`` is provided by our virtual environment. After :ref:`generating the documentation <initial-build>`, start
-``sphinx-autobuild`` in your terminal, making sure to provide the proper paths for it to find the Sphinx source and build
-directories:
+``sphinx-autobuild`` is provided by our virtual environment. After :ref:`generating the documentation <initial-build>`, run the
+``livehtml`` target in our Sphinx makefile, which is a wrapper around ``sphinx-autobuild`` with all the necessary options
+automatically provided.
 
 .. code-block:: bash
 
-    sphinx-autobuild docs/sphinx build/docs/sphinx -Dbreathe_projects.CML=${CML_HOME}/build/docs/doxygen/xml
+    cd docs/sphinx
+    make livehtml
 
 This will start a server and watch for changes to any of the reStructuredText files that make up the CML documentation,
 automatically rebuilding the documentation when you save your changes.
