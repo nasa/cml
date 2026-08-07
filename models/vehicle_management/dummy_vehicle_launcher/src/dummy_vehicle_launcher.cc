@@ -38,8 +38,8 @@ DummyVehicleLauncher::DummyVehicleLauncher(
     body(body_in),
     real_mass_body(real_body_in.mass),
     real_state_body(real_body_in),
-    intended_integ_body(NULL),
-    intended_integ_group(NULL)
+    intended_integ_body(nullptr),
+    intended_integ_group(nullptr)
 {
   body.translational_dynamics = false;
   body.rotational_dynamics = false;
@@ -57,8 +57,8 @@ DummyVehicleLauncher::DummyVehicleLauncher(
     body(body_in),
     real_mass_body(real_mass_body_in),
     real_state_body(real_state_body_in),
-    intended_integ_body(NULL),
-    intended_integ_group(NULL)
+    intended_integ_body(nullptr),
+    intended_integ_group(nullptr)
 {
   body.translational_dynamics = false;
   body.rotational_dynamics = false;
@@ -93,20 +93,20 @@ DummyVehicleLauncher::initialize_integ_group_actions()
   jeod::DynamicsIntegrationGroup * current_integ_group =
                      body.get_dynamics_integration_group();
 
-  if (current_integ_group != NULL) {
+  if (current_integ_group != nullptr) {
     current_integ_group->delete_dyn_body(body);
   }
 
   // Store this integration group for later resurrection UNLESS the user has
   // already specified a particular target for the future integration group.
-  if (intended_integ_group == NULL && intended_integ_body == NULL) {
-    if (current_integ_group == NULL) {
+  if (intended_integ_group == nullptr && intended_integ_body == nullptr) {
+    if (current_integ_group == nullptr) {
       CMLMessage::warn (
         __FILE__, __LINE__, "VehicleLauncher::InitializationError\n",
-        "The initialization of the dummy-vehicle-launcher for vehicle ", body.name, ""
+        "The initialization of the dummy-vehicle-launcher for vehicle ", body.name.get_name(), ""
         "\ndoes not have a specified integ group. If you're not setting "
         "\nthe integ group at a later time, it will try to use the same "
-        "\ninteg group as ", real_state_body.name, ".\n");
+        "\ninteg group as ", real_state_body.name.get_name(), ".\n");
     }
     intended_integ_group = current_integ_group;
   }
@@ -202,7 +202,7 @@ void
 DummyVehicleLauncher::set_intended_integ_group(
       jeod::DynamicsIntegrationGroup * tgt)
 {
-  if (tgt == NULL) {
+  if (tgt == nullptr) {
     CMLMessage::warn (
       __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
       "The intended integration group was not specified, default behavior \n"
@@ -214,7 +214,7 @@ DummyVehicleLauncher::set_intended_integ_group(
     integ_group_specified = true;
   }
   intended_integ_group = tgt;
-  intended_integ_body = NULL;
+  intended_integ_body = nullptr;
 }
 
 /*****************************************************************************
@@ -225,7 +225,7 @@ void
 DummyVehicleLauncher::set_intended_integ_body(
       jeod::DynBody * tgt)
 {
-  if (tgt == NULL) {
+  if (tgt == nullptr) {
     CMLMessage::warn (
       __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
       "The intended integration body was not specified, default behavior \n"
@@ -234,7 +234,7 @@ DummyVehicleLauncher::set_intended_integ_body(
   }
   integ_group_specified = true;
   intended_integ_body = tgt;
-  intended_integ_group = NULL;
+  intended_integ_group = nullptr;
 }
 
 /*****************************************************************************
@@ -249,14 +249,14 @@ DummyVehicleLauncher::set_intended_integ_body_state_body()
 {
   integ_group_specified = true;
   intended_integ_body = const_cast<jeod::DynBody *>(&real_state_body);
-  if (intended_integ_body == NULL) {
+  if (intended_integ_body == nullptr) {
     CMLMessage::warn (
       __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
       "The intended integration body was not specified, default behavior \n"
       "will be executed. This behavior may not be what the user intends, \n"
       "please check your setup.\n");
   }
-  intended_integ_group = NULL;
+  intended_integ_group = nullptr;
 }
 
 /*****************************************************************************
@@ -270,22 +270,22 @@ DummyVehicleLauncher::add_to_integ_group()
 {
   //  If intended group specified, it was already processed from launch().
   //  Otherwise, try the intended integ-body's group
-  if (intended_integ_body != NULL) {
+  if (intended_integ_body != nullptr) {
     intended_integ_group =
                     intended_integ_body->get_dynamics_integration_group();
   }
   // Last resort: if neither is specified, pick the real-state-body's group
-  else if ( intended_integ_group == NULL) {
+  else if ( intended_integ_group == nullptr) {
     // temporarily cast away the const-ness to allow access to the
     // real-state-body's integ group.
     intended_integ_group =
        const_cast<jeod::DynBody &>(real_state_body).get_dynamics_integration_group();
     // Last resort failed:
-    if ( intended_integ_group == NULL) {
+    if ( intended_integ_group == nullptr) {
       CMLMessage::error (
         __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
         "The intended integration group was not specified.\n"
-        "Unable to add vehicle ", body.name, " to any integration group.\n"
+        "Unable to add vehicle ", body.name.get_name(), " to any integration group.\n"
         "It will not be integrated.\n");
         return;
     }
@@ -311,10 +311,10 @@ DummyVehicleLauncher::process_inconsistent_setup()
 {
   jeod::DynamicsIntegrationGroup * current_integ_group =
                    body.get_dynamics_integration_group();
-  if (current_integ_group == NULL) {
+  if (current_integ_group == nullptr) {
     CMLMessage::warn (
       __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
-      "An intended integration group was specified, but the jeod::DynBody ", body.name, "\n"
+      "An intended integration group was specified, but the jeod::DynBody ", body.name.get_name(), "\n"
       "cannot be removed from its existing integration group.\n"
       "Ignoring specified values.\n");
     return;
@@ -325,7 +325,7 @@ DummyVehicleLauncher::process_inconsistent_setup()
     __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
     "The automated integration group switching was not activated,\n"
     "but an intended integration group was specified.\n"
-    "Removing the jeod::DynBody ", body.name, " from its current integration group\n"
+    "Removing the jeod::DynBody ", body.name.get_name(), " from its current integration group\n"
     "and moving it to the specified integration group.\n");
   current_integ_group->delete_dyn_body( body );
   add_to_integ_group_at_launch = true;

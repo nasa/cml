@@ -63,7 +63,6 @@ RangeComputation::RangeComputation( const jeod::PlanetFixedPosition & state_in )
   origin_position_unit_pfix{0.0, 0.0, 0.0},
   target_position_unit_pfix{0.0, 0.0, 0.0},
   origin_direction{0.0, 0.0, 0.0},
-  cos_totalrange_angle(0.0),
   pos_x_pos_unit_pfix{0.0, 0.0, 0.0},
   dir_x_pos_unit_pfix{0.0, 0.0, 0.0},
   state(state_in)
@@ -300,8 +299,8 @@ RangeComputation::update_using_cartesian()
   // Compute total range, this is velocity independent.
 
   // equation 19:
-  cos_totalrange_angle = jeod::Vector3::dot( origin_position_unit_pfix,
-                                       target_position_unit_pfix);
+  double cos_totalrange_angle = jeod::Vector3::dot( origin_position_unit_pfix,
+                                                    target_position_unit_pfix);
   totalrange_angle = MathUtils::acos_protected( cos_totalrange_angle);
 
   // Take the cross-product of the two positions to get a vector perpendicular

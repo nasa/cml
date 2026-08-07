@@ -12,10 +12,11 @@
     ((Brent Caughron) (OSR) (Oct 2020) (Code review and IV&V)))
 *******************************************************************************/
 
+#include <algorithm>
 #include <cmath>
-#include <cstring> // memcpy, memset
 #include <limits>  // min
 #include <fenv.h>  // fp exception
+#include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -586,7 +587,7 @@ MathUtils::generate_Q_enu_to_pfix( double longitude,
                             Q_uen_to_pfix);
   Q_uen_to_pfix.multiply( Q_enu_to_uen,
                           Q_enu_to_pfix);
-};
+}
 
 /*******************************************************************************
 polynomial
@@ -652,7 +653,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
                                     size_t   dimension_in,
                                     size_t   sub_mx_size)
 {
-  if (in_array == NULL) {
+  if (in_array == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid inputs\n",
       "The array containing the matrix to be decomposed is addressed with a "
@@ -660,7 +661,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
       "Aborting decomposition\n");
     return false;
   }
-  if (out_array == NULL) {
+  if (out_array == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid inputs\n",
       "The array to which the computed decomposition will be sent is "
@@ -714,12 +715,14 @@ MathUtils::cholesky_decomposition ( std::string origin,
 
   // Data comes in as a 1-d array; need to set this up as a 2-d array.
   // The incoming array might be a larger data array, containing the
-  // matrix and other bits and pieces.  If it is, just copy it anyway and
-  // then only use those bits of it that are needed; this is (probably)
-  // faster than if-blocks and copying row-by-row.
-
-  double  input_mx[dimension_in][dimension_in];
-  memcpy( input_mx, in_array, sizeof(input_mx));
+  // matrix and other bits and pieces, so we only copy the portion that's
+  // needed.
+  std::vector<std::vector<double>> input_mx(sub_mx_size, std::vector<double>(sub_mx_size));
+  for (size_t row = 0; row < sub_mx_size; ++row) {
+    const double* data_start = in_array + (row * dimension_in);
+    const double* data_end = data_start + sub_mx_size;
+    std::copy(data_start, data_end, input_mx[row].begin());
+  }
 
   // Perform quick check of symmetry
   bool is_symmetric = true;
@@ -748,8 +751,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
 
   // sqrt_mx will be sized to match in_array; its contents will be the
   //           desired output in the top left corner and 0 elsewhere.
-  double sqrt_mx[dimension_in][dimension_in];
-  memset( sqrt_mx, 0, sizeof(sqrt_mx));
+  std::vector<std::vector<double>> sqrt_mx(sub_mx_size, std::vector<double>(sub_mx_size));
 
   // Now process input_mx and generate out_local
   for (size_t ii = 0; ii < sub_mx_size; ii++) {
@@ -857,7 +859,10 @@ MathUtils::cholesky_decomposition ( std::string origin,
 
   // Copy the generated matrix back to the memory space passed in and return
   // true to indicate that the operation was successful.
-  memcpy( out_array, sqrt_mx, sizeof(sqrt_mx));
+  for (size_t row = 0; row < sub_mx_size; ++row) {
+    double* data_start = out_array + row * dimension_in;
+    std::copy(sqrt_mx[row].begin(), sqrt_mx[row].end(), data_start);
+  }
   return true;
 }
 
@@ -894,7 +899,7 @@ MathUtils::compute_backward_difference( const std::list<double> & history)
       {  11.0/6,  -3.0,  1.5, -1.0/3, 0   },
       {  25.0/12, -4.0,  3.0, -4.0/3, 0.25}}};
   double derivative = 0.0;
-  size_t order = std::min(history.size() - 1, (size_t)4);
+  size_t order = std::min(history.size() - 1, static_cast<size_t>(4));
 
   size_t ii = 0;
   for (std::list<double>::const_iterator it = history.begin();
@@ -998,4 +1003,15 @@ bool MathUtils::is_within_abs_tolerance<bool>( bool v1, bool v2, bool tol)
     v2, " has an ambiguous interpretation.\n"
     "Evaluated to ",ret,"\n");
   return ret;
+}
+
+/*****************************************************************************
+Name: is_within_rel_tolerance
+Purpose:
+    Template specialization for bool type
+*****************************************************************************/
+template<>
+bool MathUtils::is_within_rel_tolerance<bool>( bool value, bool expected, double tol)
+{
+  return is_within_abs_tolerance(value, expected, static_cast<bool>(tol));
 }

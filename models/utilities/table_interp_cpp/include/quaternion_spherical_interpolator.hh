@@ -10,8 +10,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (November 2017) (New implementation))
   )
 *******************************************************************************/
-#ifndef ANTARES_QUATERNION_SPHERICAL_INTERPOLATOR_HH
-#define ANTARES_QUATERNION_SPHERICAL_INTERPOLATOR_HH
+#ifndef CML_QUATERNION_SPHERICAL_INTERPOLATOR_HH
+#define CML_QUATERNION_SPHERICAL_INTERPOLATOR_HH
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
@@ -54,7 +54,7 @@ class QuaternionSphericalInterpolator
 
  public:
   QuaternionSphericalInterpolator();
-  virtual ~QuaternionSphericalInterpolator() {};
+  virtual ~QuaternionSphericalInterpolator() = default;
 
   void update();
   void set_epsilon_interp( double new_epsilon);

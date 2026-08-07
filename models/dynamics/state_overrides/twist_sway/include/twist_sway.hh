@@ -41,8 +41,8 @@ PROGRAMMERS:
    )
 ******************************************************************************/
 
-#ifndef ANTARES_TWIST_SWAY_HH
-#define ANTARES_TWIST_SWAY_HH
+#ifndef CML_TWIST_SWAY_HH
+#define CML_TWIST_SWAY_HH
 
 #include <list>
 #include <random> // std::mt19937
@@ -100,7 +100,7 @@ class TwistSwayParams
   unsigned int seed; /* (--)  Manually chosen random seed */
 
   TwistSwayParams();
-  virtual ~TwistSwayParams(){};
+  virtual ~TwistSwayParams() = default;
 };
 
 /*****************************************************************************
@@ -235,20 +235,20 @@ class TwistSway : public SubscriptionBase
 
 public:
   TwistSway(const double & time_ref);
-  virtual ~TwistSway(){};
+  ~TwistSway() override = default;
 
   void initialize(double end_time);
   bool update();
   void update_ecef();
 
   void set_end_time(double time);
-  bool get_active() {return active;};
+  bool get_active() {return active;}
   TwistSwayMagnitudes & get_fast_mag() {return fast_mag;}
   TwistSwayMagnitudes & get_slow_mag() {return slow_mag;}
 
  protected:
-  void activate();
-  void deactivate();
+  void activate() override;
+  void deactivate() override;
   void new_fast_perturbation();
   void new_slow_perturbation();
   void check_for_active_perturbations();

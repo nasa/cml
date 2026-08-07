@@ -30,7 +30,7 @@ friend class FaultManager;
 
     Fault();
 
-    virtual ~Fault() {}
+    virtual ~Fault() = default;
 
     ////    Operations    ////
 

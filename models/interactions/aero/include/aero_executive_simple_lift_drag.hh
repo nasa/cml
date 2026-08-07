@@ -68,12 +68,12 @@ public:
                        const double (&T_inrtl_traj_in)[3][3],
                        const double (&T_inrtl_struc_in)[3][3],
                        const double & mass_in);
-  virtual ~AeroExecutiveSimpleLiftDrag() {};
+  ~AeroExecutiveSimpleLiftDrag() override = default;
 
   void set_aero_type(AeroType aero_type);
 
-  virtual void initialize() override;
-  virtual void update() override;
+  void initialize() override;
+  void update() override;
 
 private:
   // Make the copy constructor and assignment operator private

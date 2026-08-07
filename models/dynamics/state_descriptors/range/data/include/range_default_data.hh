@@ -11,22 +11,22 @@ PROGRAMMERS:
 
 *************************************************************/
 
-#ifndef RANGE_MODEL_DEFAULT_DATA_HH 
-#define RANGE_MODEL_DEFAULT_DATA_HH 
+#ifndef CML_RANGE_DEFAULT_DATA_HH
+#define CML_RANGE_DEFAULT_DATA_HH
 
 #include "../../include/range_from_pfix_reference.hh"
 
 class RangeDefaultData
 {
   public:
-  RangeDefaultData(){};
-  virtual ~RangeDefaultData(){};
+  RangeDefaultData() = default;
+  virtual ~RangeDefaultData() = default;
 
   void launch_pad_KSC_39B(RangeFromPfixReference & launch);
 
 private:
    // Not implemented:
    RangeDefaultData (const RangeDefaultData& rhs);
-   void operator =  (const RangeDefaultData& rhs);;
+   void operator =  (const RangeDefaultData& rhs);
 };
 #endif

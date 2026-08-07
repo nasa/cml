@@ -91,7 +91,7 @@ LvlhSeparationState::initialize( jeod::DynManager & dyn_manager,
   if (subject_frame == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid frame name\n",
-      "The specified frame-name '", subject_name, "' on body-name '", subject_body.name, "' could not be found\n"
+      "The specified frame-name '", subject_name, "' on body-name '", subject_body.name.get_name(), "' could not be found\n"
       "by the dynamics manager.\n"
       "Initialization of LvlhSeparationState failed because the\n"
       "SeparationState requires a defined subject frame before it can\n"
@@ -121,7 +121,7 @@ LvlhSeparationState::initialize( jeod::DynManager & dyn_manager,
   if (lvlh_origin_frame == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid frame name\n",
-      "The specified frame-name '", source_name, "' on body-name '", source_body.name, "' could not be found\n"
+      "The specified frame-name '", source_name, "' on body-name '", source_body.name.get_name(), "' could not be found\n"
       "by the dynamics manager.\n"
       "Initialization of LvlhSeparationState failed because the LvlhFrame\n"
       "requires this frame to construct the LVLH frame.\n");

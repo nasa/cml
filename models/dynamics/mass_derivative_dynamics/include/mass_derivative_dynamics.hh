@@ -136,8 +136,8 @@ class MassDerivativeDynamics : public SubscriptionBase
   void set_include_velocity_effect(bool flag);
  protected:
   void default_settings();
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
   void update_force();
   void update_torque();
   void compute_torque_mx();

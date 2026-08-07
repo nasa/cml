@@ -43,8 +43,8 @@ WakeGeneratingBody::WakeGeneratingBody(
    freestream_vel_mag(0.0),
    unitvec_freestream{0.0, 0.0, 0.0}
 {
-  if (inertial_pos == NULL || inertial_vel == NULL || freestream_vel == NULL ||
-      CoM_wrt_struc_in == NULL) {
+  if (inertial_pos == nullptr || inertial_vel == nullptr || freestream_vel == nullptr ||
+      CoM_wrt_struc_in == nullptr) {
     CMLMessage::fail(
      __FILE__,__LINE__,"Invalid construction\n",
      "Null pointers passed in at construction time.\n");
@@ -73,7 +73,7 @@ WakeFollowingBody::WakeFollowingBody(
    pos_wrt_objectA_inrtl{ 0.0, 0.0, 0.0}
 
 {
-  if (inertial_pos == NULL || inertial_vel == NULL || grid_origin == NULL) {
+  if (inertial_pos == nullptr || inertial_vel == nullptr || grid_origin == nullptr) {
     CMLMessage::fail(
      __FILE__,__LINE__,"Invalid construction\n",
      "Null pointers passed in at construction time.\n");
@@ -196,7 +196,7 @@ void
 WakeFollowingBodyWithForce::compute_relative_state()
 {
   WakeFollowingBody::compute_relative_state();
-};
+}
 
 /*****************************************************************************
 set_generate_force

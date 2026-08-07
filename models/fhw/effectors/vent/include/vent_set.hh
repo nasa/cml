@@ -80,9 +80,9 @@ class VentSet : public SubscriptionBase {
   //    single tank.
   //  - investigate use of varargs or variadic templates to support a set
   //    of vents each running off its own specified DynMassBody.
-  virtual ~VentSet();
+  ~VentSet() override;
 
-  virtual void initialize();
+  void initialize() override;
   virtual void update();
   virtual void start_vent(unsigned int);
   virtual void start_vents();
@@ -96,8 +96,8 @@ class VentSet : public SubscriptionBase {
   void collect_force_torque();
   void apply_impulse();
   void apply_impulse_to_body( jeod::DynBody &);
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
 
  private:
   void start_vent_internal( SimpleVent * vent);

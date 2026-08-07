@@ -64,7 +64,7 @@ public:
                             double resolution,
                             unsigned int word_count,
                             unsigned int bit_size);
-  virtual ~ConvertDoubleToUintWords() {};
+  virtual ~ConvertDoubleToUintWords() = default;
 
   void update();
   void compute_significance();

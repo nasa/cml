@@ -8,8 +8,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Mar 2022) (Antares) (Initial)))
 *******************************************************************************/
-#ifndef CML_FAULT_ARCH_SENSORFAULT
-#define CML_FAULT_ARCH_SENSORFAULT
+#ifndef CML_SSENSORFAULTS_HH
+#define CML_SSENSORFAULTS_HH
 #include "cml/models/utilities/fault_management/include/fault_manager.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -39,8 +39,8 @@ Purpose:
 class sSensorFaults : public FaultManager
 {
   public:
-    sSensorFaults(){};
-    virtual ~sSensorFaults(){}
+    sSensorFaults() = default;
+    virtual ~sSensorFaults() = default;
 
     void Injection( sSFault loc);
 
@@ -49,19 +49,19 @@ class sSensorFaults : public FaultManager
   protected:
     bool parse_non_periodic_param( FaultFunctionParameter&  params,
                                    xmlNodePtr               function_node,
-                                   const char*              fault_name);
-    xmlNodePtr check_rand_in_params(xmlNodePtr  fault_node);
+                                   const char*              fault_name) override;
+    xmlNodePtr check_rand_in_params(xmlNodePtr  fault_node) override;
 
     bool parse_rand_number( FaultRandNumber&  rng,
                             xmlNodePtr        rand_node,
-                            const char*       fault_name);
+                            const char*       fault_name) override;
 
     bool parse_periodic_param( FaultFunctionParameter&  var_param,
                                xmlNodePtr               function_node,
                                const char*              param_name,
                                xmlNodePtr               ind_var_node,
                                const char*              fault_name,
-                               bool                     nom_required);
+                               bool                     nom_required) override;
 
   private:
     // Make the class non-copyable

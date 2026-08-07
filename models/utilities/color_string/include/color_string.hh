@@ -3,8 +3,8 @@ Purpose: (Apply ANSI color codes to strings in order to change the color of the
           text or the background of the text to a desired color.)
 *******************************************************************************/
 
-#ifndef COLOR_STRING_HH
-#define COLOR_STRING_HH
+#ifndef CML_COLOR_STRING_HH
+#define CML_COLOR_STRING_HH
 
 #include <string>
 

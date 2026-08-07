@@ -38,9 +38,9 @@ class MassBodyDispersedInit : public jeod::MassBodyInit,
 public:
   MassPropertiesDispersions disperse; /* (--) The dispersed values. */
   MassBodyDispersedInit();
-  virtual ~MassBodyDispersedInit(){};
+  ~MassBodyDispersedInit() override = default;
 
-  virtual void apply( jeod::DynManager & dyn_manager);
+  void apply( jeod::DynManager & dyn_manager) override;
 
 private: // and undefined:
   MassBodyDispersedInit (const MassBodyDispersedInit& rhs);

@@ -20,8 +20,8 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#ifndef ANTARES_DUMMY_VEHICLE_LAUNCHER_HH
-#define ANTARES_DUMMY_VEHICLE_LAUNCHER_HH
+#ifndef CML_DUMMY_VEHICLE_LAUNCHER_HH
+#define CML_DUMMY_VEHICLE_LAUNCHER_HH
 
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/mass/include/mass.hh"
@@ -63,7 +63,7 @@ class DummyVehicleLauncher
                         const jeod::DynBody & state);
   DummyVehicleLauncher( jeod::DynBody & this_body,
                         const jeod::DynBody & real_body);
-  virtual ~DummyVehicleLauncher(){};
+  virtual ~DummyVehicleLauncher() = default;
 
   void initialize_integ_group_actions();
   void launch();
@@ -80,6 +80,6 @@ class DummyVehicleLauncher
  private:
   // Not implemented:
   DummyVehicleLauncher (const DummyVehicleLauncher& rhs);
-  DummyVehicleLauncher& operator = (const DummyVehicleLauncher& rhs);;
+  DummyVehicleLauncher& operator = (const DummyVehicleLauncher& rhs);
 };
 #endif

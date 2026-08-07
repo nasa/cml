@@ -25,8 +25,8 @@ Programmers:
   (((Gary Turner) (OSR) (Oct 2015) (Antares)  (initial version)))
 *******************************************************************************/
 
-#ifndef GRGM900C_LUNAR_GRAVITY
-#define GRGM900C_LUNAR_GRAVITY
+#ifndef CML_GRGM900C_LUNAR_GRAVITY_HH
+#define CML_GRGM900C_LUNAR_GRAVITY_HH
 
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
 
@@ -40,8 +40,8 @@ class GRGM900C_LunarGravity
    MAX_RES_900  = 900};
 
   GRGM900C_LunarGravity( GRGM900C_resolution resolution,
-                         jeod::SphericalHarmonicsGravitySource & grav_source);
-  ~GRGM900C_LunarGravity(){};
+                         jeod::SphericalHarmonicsGravitySource & grav_source_in);
+  ~GRGM900C_LunarGravity() = default;
  protected:
   jeod::SphericalHarmonicsGravitySource & grav_source;
   void populate_low_res(); // sets the lowest coefficients
@@ -56,7 +56,7 @@ class GRGM900C_LunarGravity
   GRGM900C_LunarGravity ( const GRGM900C_LunarGravity &);
   GRGM900C_LunarGravity & operator= ( const GRGM900C_LunarGravity &);
 };
+
+
+
 #endif
-
-
-

@@ -12,6 +12,7 @@
 #     SOURCES: A list of the test source files.
 
 include_guard()
+include(SetCMLCompileWarnings)
 
 function(add_cml_tests)
     set(options)
@@ -35,16 +36,30 @@ function(add_cml_tests)
 
     target_link_libraries(${TEST_NAME}
         PRIVATE
+            cml::cml_mocks
+            cml::trick_mocks
+            cml::trick_unit_testing_libs
             cml::cml_shared
-            Trick::Trick
+            Trick::Core
             JEOD::JEOD
             GTest::gtest_main
             GTest::gmock_main
+            $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
+            $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     )
 
     target_compile_features(${TEST_NAME}
         PRIVATE
             cxx_std_17
+    )
+
+    # Add warnings and instrument the build for code coverage if
+    # CML_CODE_COVERAGE is true.
+    set_cml_compile_warnings(${TEST_NAME})
+    target_compile_options(${TEST_NAME}
+        PRIVATE
+            $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
+            $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     )
 
     include(GoogleTest)

@@ -16,8 +16,8 @@ Programmers:
 
 *******************************************************************************/
 
-#ifndef JEOD_MASS_BODY_DETACH_IMPULSIVE_HH
-#define JEOD_MASS_BODY_DETACH_IMPULSIVE_HH
+#ifndef CML_MASS_BODY_DETACH_IMPULSIVE_HH
+#define CML_MASS_BODY_DETACH_IMPULSIVE_HH
 
 #include "jeod/models/dynamics/mass/include/class_declarations.hh"
 
@@ -61,13 +61,13 @@ class MassBodyDetachImpulsive : public jeod::BodyAction {
     MassBodyDetachImpulsive ();
 
     // Destructor.
-    virtual ~MassBodyDetachImpulsive() {};
+    ~MassBodyDetachImpulsive() override = default;
 
     // initialize: Initialize the initializer.
-    virtual void initialize (jeod::DynManager & dyn_manager);
+    void initialize (jeod::DynManager & dyn_manager) override;
 
     // apply: Detach the body from its parent body.
-    virtual void apply (jeod::DynManager & dyn_manager);
+    void apply (jeod::DynManager & dyn_manager) override;
 
   protected:
     virtual void apply_impulse( jeod::DynBody          & dyn_body,

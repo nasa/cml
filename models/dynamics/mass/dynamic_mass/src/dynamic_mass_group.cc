@@ -31,7 +31,7 @@ DynamicMassGroup::DynamicMassGroup()
   total_consumed_mass(0.0),
   countdown_to_root_test(0),
   num_dyn_masses(0),
-  root_body_ptr(NULL)
+  root_body_ptr(nullptr)
 {
   subscribe_name = "DynamicMassGroup:";
 }
@@ -53,7 +53,7 @@ Purpose: (Adds a DynamicMassString to a group)
 void DynamicMassGroup::add_string_to_group(
     DynamicMassString * new_mass_string)
 {
-  if (new_mass_string == NULL) {
+  if (new_mass_string == nullptr) {
     CMLMessage::fail (
       __FILE__, __LINE__, "Setup error.\n",
       "A NULL pointer was given to the add_string_to_group (", name, ") function.\n"
@@ -260,7 +260,7 @@ void DynamicMassGroup::update_group_mass()
     // distinction is moot.
     if (!delta_mass_is_redistributed) {
       jeod::DynBody * root_dyn_body_ptr = root_body_ptr->dyn_owner;
-      if (root_dyn_body_ptr != NULL) { // root is a DynBody
+      if (root_dyn_body_ptr != nullptr) { // root is a DynBody
         root_dyn_body_ptr->set_state_source (
                                           jeod::RefFrameItems::Pos_Vel_Att_Rate,
                                           root_dyn_body_ptr->structure);
@@ -465,10 +465,10 @@ DynamicMassGroup::test_root_body()
           "There are multiple root bodies branching from the same Group.\n"
           "DynamicMassGroups must stay as one block in "
           "order for their updates to work.\n"
-          "Body called ", dyn_masses[0]->name, " has a root called ",
-          first_root->name, " while\n", "body called ",
-          dyn_masses[ii]->name, " has a root called ",
-          second_root->name, "");
+          "Body called ", dyn_masses[0]->name.get_name(), " has a root called ",
+          first_root->name.get_name(), " while\n", "body called ",
+          dyn_masses[ii]->name.get_name(), " has a root called ",
+          second_root->name.get_name(), "");
       }
     }
     root_body_ptr = const_cast<jeod::MassBody*>(first_root);
@@ -495,7 +495,7 @@ DynamicMassGroup::add_mass_to_group_internal(
     DynamicMassBody * mass,
     bool              send_err_msg)
 {
-  if (mass == NULL) {
+  if (mass == nullptr) {
     CMLMessage::fail (
       __FILE__, __LINE__, "Setup error.\n",
       "A NULL pointer was given to the add_mass_to_group (", name, ") function.\n"
@@ -509,7 +509,7 @@ DynamicMassGroup::add_mass_to_group_internal(
       if (send_err_msg) {
         CMLMessage::error(
           __FILE__,__LINE__,"Invalid object addition\n",
-          "Attempt to add a new DynamicMassBody (", mass->name, ") that is already assigned\n"
+          "Attempt to add a new DynamicMassBody (", mass->name.get_name(), ") that is already assigned\n"
           "to this group. \n"
           "Cannot duplicate a mass-body in a single group.\n");
       }

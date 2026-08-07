@@ -14,8 +14,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_SIMPLE_LOOKUP_WIND_HH
-#define ATMOS_EXEC_SIMPLE_LOOKUP_WIND_HH
+#ifndef CML_ATMOSPHERE_EXEC_SIMPLE_WINDS_HH
+#define CML_ATMOSPHERE_EXEC_SIMPLE_WINDS_HH
 
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
@@ -57,13 +57,13 @@ class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
                          SimpleLookupWind              & wind_table,
                          ExtendedPlanetaryDerivedState & planet_state,
                          AtmosExecOutput               & master_output);
-    virtual ~AtmosphereExec_SimpleLookupWind(){};
+    ~AtmosphereExec_SimpleLookupWind() override = default;
 
-    virtual void activate() override;
-    virtual void deactivate() override;
-    virtual bool initialize_winds() override {wind_table.initialize();
+    void activate() override;
+    void deactivate() override;
+    bool initialize_winds() override {wind_table.initialize();
                                               return true;}
-    virtual void update_winds() override;
+    void update_winds() override;
 
     void set_altitude_type(TopoType altitude_);
 

@@ -24,7 +24,7 @@ class FaultFunctionParameter {
 
   public:
     FaultFunctionParameter();
-    virtual ~FaultFunctionParameter(){};
+    virtual ~FaultFunctionParameter() = default;
 
     double get_value();
     void reset_nominal_with_new_rate(double new_rate);

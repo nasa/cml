@@ -14,8 +14,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Feb 2021) (Antares) (initial)))
 **********************************************************************/
-#ifndef CML_EGM2008_HH
-#define CML_EGM2008_HH
+#ifndef CML_EGM_2008_HH
+#define CML_EGM_2008_HH
 
 // CML Dependencies
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
@@ -49,9 +49,9 @@ class EGM2008_WGS84 : public SubscriptionBase
  public:
   EGM2008_WGS84( const double & wgs_84_lat,
                  const double & wgs_84_lon);
-  virtual ~EGM2008_WGS84() {};
+  ~EGM2008_WGS84() override = default;
 
-  void initialize();
+  void initialize() override;
   void load_data();
   void update();
 

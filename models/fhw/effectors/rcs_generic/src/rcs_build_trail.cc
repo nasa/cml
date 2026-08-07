@@ -13,7 +13,6 @@ PROGRAMMERS:
 #include "../include/rcs_build_trail.hh"
 
 #include <algorithm> // min
-#include <cstdlib> // NULL
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
@@ -26,7 +25,7 @@ RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
   active(false)
 {
   // NULL check
-  if (jet == NULL)
+  if (jet == nullptr)
   {
     CMLMessage::fail(__FILE__, __LINE__, "Invalid pointer\n",
       "Pointer to jet data is NULL! Cannot initialize RcsBuildUpTrailOff.\n");

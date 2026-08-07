@@ -38,8 +38,8 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#ifndef ANTARES_DYN_MASS_BODY_INTERPOLATION_HH
-#define ANTARES_DYN_MASS_BODY_INTERPOLATION_HH
+#ifndef CML_DYNAMIC_MASS_BODY_INTERPOLATION_HH
+#define CML_DYNAMIC_MASS_BODY_INTERPOLATION_HH
 
 #include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
@@ -135,7 +135,7 @@ public:
          Flag to modify the products of inertia in the inertia table. */
 
    explicit DynamicMassBodyInterpolation(const double &mass_in);
-   virtual ~DynamicMassBodyInterpolation(){};
+   virtual ~DynamicMassBodyInterpolation() = default;
 
    bool initialize();
    bool interpolate();

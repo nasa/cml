@@ -23,8 +23,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Nov 2017) (Antares) (initial)))
 **********************************************************************/
-#ifndef SINGLE_INPUT_TRANSPOSE_DATA_SET
-#define SINGLE_INPUT_TRANSPOSE_DATA_SET
+#ifndef CML_TABLE_LOOKUP__TRANSPOSE_DATA_HH
+#define CML_TABLE_LOOKUP__TRANSPOSE_DATA_HH
 
 #include <vector>
 #include <list>
@@ -99,7 +99,7 @@ class TableLookupTransposeDataSet_TableConfig
 
  public:
   TableLookupTransposeDataSet_TableConfig();
-  virtual ~TableLookupTransposeDataSet_TableConfig() {};
+  virtual ~TableLookupTransposeDataSet_TableConfig() = default;
 
  private: // called from TableLookupTransposeDataSet
   void initialize(size_t num_lines);
@@ -150,7 +150,7 @@ class TableLookupTransposeDataSet : public TableLookupSet
 
  public:
   TableLookupTransposeDataSet();
-  virtual ~TableLookupTransposeDataSet(){};
+  ~TableLookupTransposeDataSet() override = default;
 
   bool process_data( const std::string & filename,
                      size_t terminate_on_line = 100000);

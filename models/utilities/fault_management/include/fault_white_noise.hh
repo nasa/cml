@@ -19,7 +19,7 @@ Purpose:(Manages injection of a white-noise fault.)
 template<typename T> class FaultWhiteNoise : public Fault {
   public :
     explicit FaultWhiteNoise(T& variable);
-    virtual ~FaultWhiteNoise(){}
+    ~FaultWhiteNoise() override = default;
 
     void overwrite_value() override;
 

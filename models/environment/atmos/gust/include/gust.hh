@@ -9,8 +9,8 @@ PROGRAMMERS:
    (((Jon Berndt) (ESCG/Jacobs) (February 2008) (ANTARES) (Initial version))
     ((Brent Caughron) (Odyssey) (Sept. 2017) (Antares) (IV&V Code Review)))
 ********************************************************************************/
-#ifndef CML_GUST_MODEL_HH
-#define CML_GUST_MODEL_HH
+#ifndef CML_GUST_HH
+#define CML_GUST_HH
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -57,7 +57,7 @@ class GustModel
     cycling again after the current gust has completed.*/
 
   explicit GustModel(const double & time_in);
-  virtual ~GustModel(){};
+  virtual ~GustModel() = default;
 
   void   activate();
   void   update();

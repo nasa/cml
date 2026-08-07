@@ -4,8 +4,8 @@
  PROGRAMMERS:
    (((Gary Turner) (OSR) (Jul 2022) (ANTARES) (initial)))
 ***********************************************************************/
-#ifndef CML_XML_HELPER_TESTER
-#define CML_XML_HELPER_TESTER
+#ifndef CML_TEST_HH
+#define CML_TEST_HH
 
 #include <libxml/parser.h> // xmlParseFile, xmlNodePtr
 #include <cstring>
@@ -205,6 +205,8 @@ struct XmlHelperTester {
     }
 
     std::cout << "**********************************************************\n";
+
+    xmlFreeDoc(xml_file);
   }
 
 

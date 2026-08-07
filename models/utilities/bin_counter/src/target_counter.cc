@@ -92,11 +92,11 @@ CML_TargetCounter::set_data( int limit_a,
   int lower_limit = std::min( limit_a, limit_b);
   int upper_limit = std::max( limit_a, limit_b);
 
-  ntarget = upper_limit - lower_limit + 1;
+  ntarget = static_cast<size_t>(upper_limit - lower_limit) + 1;
   targets.resize(ntarget);
   target_data = targets.data();
   for (size_t ii = 0; ii < ntarget; ++ii) {
-    targets[ii].value = lower_limit + ii;
+    targets[ii].value = lower_limit + static_cast<int>(ii);
   }
 }
 

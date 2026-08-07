@@ -17,8 +17,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_STD_HH
-#define ATMOS_EXEC_STD_HH
+#ifndef CML_ATMOSPHERE_EXEC_STD_HH
+#define CML_ATMOSPHERE_EXEC_STD_HH
 
 #include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
 
@@ -36,10 +36,10 @@ class AtmosphereExec_STD : public AtmosphereExec_AtmosBase
     AtmosphereExec_STD( STD1976 & std_76_in,
                         const double    & topodetic_alt,
                         AtmosExecOutput & master_output);
-    virtual ~AtmosphereExec_STD(){};
+    ~AtmosphereExec_STD() override = default;
 
-    virtual bool initialize_atmos() override {return true;};
-    virtual void update_atmos() override;
+    bool initialize_atmos() override {return true;}
+    void update_atmos() override;
 
   private:
     AtmosphereExec_STD (const AtmosphereExec_STD&);

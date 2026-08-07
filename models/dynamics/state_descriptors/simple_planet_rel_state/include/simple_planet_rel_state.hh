@@ -10,8 +10,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2017) (Antares) (first cut)))
 **********************************************************************/
 
-#ifndef SIMPLE_PLANET_REL_STATE_HH
-#define SIMPLE_PLANET_REL_STATE_HH
+#ifndef CML_SIMPLE_PLANET_REL_STATE_HH
+#define CML_SIMPLE_PLANET_REL_STATE_HH
 
 #include <string>
 #include "jeod/models/dynamics/derived_state/include/relative_derived_state.hh"
@@ -35,9 +35,9 @@ class SimplePlanetRelState : public SubscriptionBase,
   SimplePlanetRelState(std::string body_frame_name_,
                        std::string planet_frame_name);
 
-  virtual void initialize(jeod::DynBody & subject_body,
-                          jeod::DynManager & dyn_manager);
-  virtual void update();
+  void initialize(jeod::DynBody & subject_body,
+                          jeod::DynManager & dyn_manager) override;
+  void update() override;
  private:
   SimplePlanetRelState (const SimplePlanetRelState&);
   SimplePlanetRelState & operator = (const SimplePlanetRelState&);

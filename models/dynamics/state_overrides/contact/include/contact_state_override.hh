@@ -37,8 +37,8 @@ PROGRAMMERS:
    (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
 
 ********************************************************************************/
-#ifndef CML_STATE_OVERRIDE_CONTACT_MODEL_HH
-#define CML_STATE_OVERRIDE_CONTACT_MODEL_HH
+#ifndef CML_CONTACT_STATE_OVERRIDE_HH
+#define CML_CONTACT_STATE_OVERRIDE_HH
 
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
@@ -107,8 +107,8 @@ class ContactStateOverride : public SubscriptionBase
     Needed because the model's active flag is protected by inheritance from
     SubscriptionBase.*/
 
-  ContactStateOverride(jeod::DynBody& reference_body,
-                       jeod::DynBody& override_body);
+  ContactStateOverride(jeod::DynBody& reference_body_in,
+                       jeod::DynBody& override_body_in);
 
   void update();
   void set_contact_normal(double contact_normal_in[3]);

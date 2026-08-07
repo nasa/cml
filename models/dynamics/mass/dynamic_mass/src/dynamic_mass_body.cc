@@ -318,7 +318,7 @@ DynamicMassBody::set_initial_position(
        bool overwrite_nominal,
        const double position_in[3])
 {
-  if (position_in == NULL) {
+  if (position_in == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid input.\n",
       "The position array passed in to the set_initial_position method is NULL."
@@ -343,7 +343,7 @@ Purpose:(provides a bias to the values in the lookup-tables such that the
 void
 DynamicMassBody::set_CM_offset(const double offset[3])
 {
-  if (offset == NULL) {
+  if (offset == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"set_CM_offset warning.\n",
       "DynamicMassBody::set_CM_offset method was called with a NULL argument.\n"

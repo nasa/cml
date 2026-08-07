@@ -8,7 +8,6 @@ PROGRAMMERS:
      ((Brent Caughron) (OSR) (Sept 2017) (Antares) (IV&V code review))
     )
 **********************************************************************************/
-#define _USE_MATH_DEFINES // M_PI
 #include <cmath> // std::cos, M_PI
 
 #include "jeod/models/utils/math/include/vector3.hh" // Vector3

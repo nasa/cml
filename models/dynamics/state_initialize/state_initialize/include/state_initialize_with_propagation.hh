@@ -39,8 +39,8 @@ PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2016) (New))
  ******************************************************************************/
 
-#ifndef STATE_INITIALIZE_INITIAL_PROPAGATION_HH
-#define STATE_INITIALIZE_INITIAL_PROPAGATION_HH
+#ifndef CML_STATE_INITIALIZE_WITH_PROPAGATION_HH
+#define CML_STATE_INITIALIZE_WITH_PROPAGATION_HH
 
 #include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
@@ -81,10 +81,10 @@ class StateInitializeWithPropagation : public StateInitialize
      propagation.  Default true.*/
 
   explicit StateInitializeWithPropagation( jeod::GravityManager & gravity_manager);
-  virtual ~StateInitializeWithPropagation(){};
+  ~StateInitializeWithPropagation() override = default;
 
-  virtual void initialize(  jeod::DynManager & dyn_manager ) override;
-  virtual void apply(  jeod::DynManager & dyn_manager ) override;
+  void initialize(  jeod::DynManager & dyn_manager ) override;
+  void apply(  jeod::DynManager & dyn_manager ) override;
 
  protected:
   void propagate_state();

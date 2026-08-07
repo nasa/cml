@@ -6,8 +6,8 @@ PROGRAMMERS:
   (((Andrew Spencer) (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor)))
 ############################################################################*/
-#ifndef CML_FAULT_UNTYPED_VARIABLE_HH
-#define CML_FAULT_UNTYPED_VARIABLE_HH
+#ifndef CML_UNTYPED_VARIABLE_HH
+#define CML_UNTYPED_VARIABLE_HH
 
 /*******************************************************************************
 UntypedVariableBase
@@ -19,8 +19,8 @@ Purpose:(Allows access to a variable's value without knowing its type at compile
 *******************************************************************************/
 class UntypedVariableBase {
   public:
-    UntypedVariableBase() {}
-    virtual ~UntypedVariableBase() {}
+    UntypedVariableBase() = default;
+    virtual ~UntypedVariableBase() = default;
     virtual double get_value() = 0;
 };
 
@@ -32,7 +32,7 @@ Purpose:(Provides UntypedVariableBase with access to a variable of any type.)
 template<typename T> class UntypedVariable : public UntypedVariableBase {
   public:
     explicit UntypedVariable(T& var) : variable(var) {}
-    virtual ~UntypedVariable(){}
+    ~UntypedVariable() override = default;
 
     double get_value() override { return static_cast<double>(variable); }
 

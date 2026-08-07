@@ -30,8 +30,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_HH
-#define ATMOS_EXEC_HH
+#ifndef CML_ATMOSPHERE_EXEC_HH
+#define CML_ATMOSPHERE_EXEC_HH
 
 
 #include "cml/models/environment/atmos/gust/include/gust.hh"
@@ -109,7 +109,7 @@ class AtmosphereExec : public AtmosphereExecInterface {
            ExtendedPlanetaryDerivedState & state_in,
            jeod::DynBody  & body_in);
 
-    virtual ~AtmosphereExec(){};
+    ~AtmosphereExec() override = default;
 
     void initialize( jeod::TimeStandard & time_in);
 
@@ -119,8 +119,8 @@ class AtmosphereExec : public AtmosphereExecInterface {
 
   protected:
     GramInterface gi_stub;  /* (--) Stub for GRAM-less implementations*/
-    virtual void activate() override;
-    virtual void deactivate() override;
+    void activate() override;
+    void deactivate() override;
 
     void initialize_atmosphere();
     void initialize_winds();

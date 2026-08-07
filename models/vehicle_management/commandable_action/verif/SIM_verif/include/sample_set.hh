@@ -4,8 +4,8 @@ PURPOSE: (A sample set for testing commandable actions)
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Feb 2022) (Antares) (verification)))
 ***********************************************************************/
-#ifndef SAMPLE_COMMANDABLE_ACTION_SET_HH
-#define SAMPLE_COMMANDABLE_ACTION_SET_HH
+#ifndef CML_SAMPLE_SET_HH
+#define CML_SAMPLE_SET_HH
 
 #include <string>
 #include "../../../include/commandable_action_set.hh"
@@ -66,9 +66,9 @@ class IndirectCommandableActionSet : public CommandableActionSet
     command_type( NoOp)
   { }
 
-  virtual ~IndirectCommandableActionSet(){};
+  ~IndirectCommandableActionSet() override = default;
 
-  void generate_fsw_command()
+  void generate_fsw_command() override
   {
     if      (current_commandable == &act1) command_type = ACT1;
     else if (current_commandable == &act2) command_type = ACT2;
@@ -108,9 +108,9 @@ class DirectCommandableActionSet : public CommandableActionSet
     error("error2", *this)
   { }
 
-  virtual ~DirectCommandableActionSet(){};
+  ~DirectCommandableActionSet() override = default;
 
-  void generate_fsw_command()
+  void generate_fsw_command() override
   {
     if      (current_commandable == &act1) fsw_bus.fsw1 = true;
     else if (current_commandable == &act2) fsw_bus.fsw2 = true;

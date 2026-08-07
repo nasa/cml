@@ -6,8 +6,8 @@
    (((Robert Phillips) (OSR) (May 2018) (Antares) (initial version))
    )
 *******************************************************************************/
-#ifndef ANTARES_INTERP_TABLE_TYPE_DEFS_HH
-#define ANTARES_INTERP_TABLE_TYPE_DEFS_HH
+#ifndef CML_TABLE_TYPE_DEFS_HH
+#define CML_TABLE_TYPE_DEFS_HH
 
 #include<vector>
 

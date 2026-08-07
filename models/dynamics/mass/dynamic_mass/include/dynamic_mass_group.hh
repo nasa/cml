@@ -42,8 +42,8 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#ifndef ANTARES_DYN_MASS_GROUP_HH
-#define ANTARES_DYN_MASS_GROUP_HH
+#ifndef CML_DYNAMIC_MASS_GROUP_HH
+#define CML_DYNAMIC_MASS_GROUP_HH
 
 #include<vector>
 #include<list>
@@ -114,7 +114,7 @@ class DynamicMassGroup : public SubscriptionBase {
   DynamicMassGroup(void);
   void add_mass_to_group( DynamicMassBody *mass);
   void add_string_to_group( DynamicMassString *string);
-  virtual void initialize();
+  void initialize() override;
   void update_group_mass();
   void series_flow(unsigned int index1,
                    unsigned int index2);

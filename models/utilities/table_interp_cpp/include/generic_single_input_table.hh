@@ -14,8 +14,8 @@
    )
 *******************************************************************************/
 
-#ifndef ANTARES_GENERIC_SINGLE_INPUT_TABLE_HH
-#define ANTARES_GENERIC_SINGLE_INPUT_TABLE_HH
+#ifndef CML_GENERIC_SINGLE_INPUT_TABLE_HH
+#define CML_GENERIC_SINGLE_INPUT_TABLE_HH
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -28,16 +28,17 @@ class GenericSingleInputTable : public GenericMultiInputTable
 #endif
  friend class SingleInputTableVarDeriv;
  public:
-  virtual bool initialize() override;
+  bool initialize() override;
   // use the same constructors as the parent class.
   using GenericMultiInputTable::GenericMultiInputTable;
-  GenericSingleInputTable() : GenericMultiInputTable(){};
+  GenericSingleInputTable() : GenericMultiInputTable(){}
  protected:
-  virtual void generate_base_values() override;
-  virtual bool generate_output() override;
+  void generate_base_values() override;
+  bool generate_output() override;
 #ifdef SWIG
 %mutable;
 #endif
+
  private:
   // Disable the copy/assignment operators
   GenericSingleInputTable (const GenericSingleInputTable&);

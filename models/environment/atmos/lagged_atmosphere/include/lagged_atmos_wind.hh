@@ -13,8 +13,8 @@ Author:
   )
 *******************************************************************************/
 
-#ifndef LAGGED_ATMOS_WIND_HH
-#define LAGGED_ATMOS_WIND_HH
+#ifndef CML_LAGGED_ATMOS_WIND_HH
+#define CML_LAGGED_ATMOS_WIND_HH
 
 #include <list>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -34,7 +34,7 @@ class LaggedAtmosWind {
 
   LaggedAtmosWind();
   LaggedAtmosWind( const std::string& name);
-  virtual ~LaggedAtmosWind() {};
+  virtual ~LaggedAtmosWind() = default;
 
 
   void compute( double input_altitude);

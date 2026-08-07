@@ -8,8 +8,8 @@ PROGRAMMERS:
     ((Gary Turner) (OSR) (January 2020) (Antares))
    )
  ******************************************************************************/
-#ifndef CML_EVENTS_VARIABLE_ASSIGNMENT_HH
-#define CML_EVENTS_VARIABLE_ASSIGNMENT_HH
+#ifndef CML_EVENT_VARIABLE_ASSIGNMENT_HH
+#define CML_EVENT_VARIABLE_ASSIGNMENT_HH
 
 /*****************************************************************************
 EventVariableAssignmentBase
@@ -20,7 +20,7 @@ EventVariableAssignementRef into a single polymorphic set of type VariableAssign
 class EventVariableAssignmentBase
 {
  public:
-  virtual ~EventVariableAssignmentBase(){};
+  virtual ~EventVariableAssignmentBase() = default;
   virtual void make_assignment() = 0;
 };
 

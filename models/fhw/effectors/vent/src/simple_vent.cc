@@ -14,9 +14,9 @@ PROGRAMMERS:
 /*************************************************************************
 Constructor
 *************************************************************************/
-SimpleVent::SimpleVent( const double& dyn_time)
+SimpleVent::SimpleVent( const double& dyn_time_in)
   :
-  dyn_time(dyn_time),
+  dyn_time(dyn_time_in),
   location{0.0, 0.0, 0.0},
   active(true),
   indefinite_duration(false),

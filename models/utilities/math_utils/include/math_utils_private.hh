@@ -1,8 +1,7 @@
-#ifndef MATH_UTILS_PRIVATE_HH
-#define MATH_UTILS_PRIVATE_HH
+#ifndef CML_MATH_UTILS_PRIVATE_HH
+#define CML_MATH_UTILS_PRIVATE_HH
 
 #include <cassert>
-#define _USE_MATH_DEFINES // M_PI
 #include <cmath>   // abs, isnan, isinf
 #include <algorithm> // std::max, min
 #include <cfenv>  // fp exception
@@ -45,7 +44,7 @@ class MathUtilsPrivate {
 
     bool res = false;
 
-    if (std::min(abs_val1, abs_val2) <= (T)(0.0)) { //for the zero case
+    if (std::min(abs_val1, abs_val2) <= static_cast<T>(0.0)) { //for the zero case
       res = (std::max(abs_val1, abs_val2) <=
                                     ulp*std::numeric_limits<T>::min() *
                                     std::numeric_limits<T>::epsilon());
@@ -115,11 +114,11 @@ class MathUtilsPrivate {
   template <typename T>
   static T acos_fp( const T val)
   {
-    if ((T)(-1.0) >= val) {
+    if (static_cast<T>(-1.0) >= val) {
      return M_PI;
     }
-    else if ((T)(1.0) <= val) {
-     return (T)(0.0);
+    else if (static_cast<T>(1.0) <= val) {
+     return static_cast<T>(0.0);
     }
 
     return std::acos(val);
@@ -132,10 +131,10 @@ class MathUtilsPrivate {
   template <typename T>
   static T asin_fp( const T val)
   {
-    if ((T)(-1.0) >= val) {
+    if (static_cast<T>(-1.0) >= val) {
      return -M_PI_2;
     }
-    else if ((T)(1.0) <= val) {
+    else if (static_cast<T>(1.0) <= val) {
      return M_PI_2;
     }
 
@@ -197,4 +196,4 @@ class MathUtilsPrivate {
     return res;
   }
 };
-#endif //MATH_UTILS_PRIVATE_HH
+#endif

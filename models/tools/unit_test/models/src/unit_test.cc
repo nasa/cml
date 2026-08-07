@@ -311,7 +311,8 @@ std::string UnitTestFramework::expand_env_variables(const std::string& input) {
 
     for (auto it = begin; it != end; ++it) {
         const std::smatch& match = *it;
-        result.append(input.substr(last_pos, match.position() - last_pos));  // text before match
+        const std::size_t substr_len = static_cast<std::size_t>(match.position()) - last_pos;
+        result.append(input.substr(last_pos, substr_len));  // text before match
 
         const std::string var_name = match[1].str();
         const char* env_val = std::getenv(var_name.c_str());
@@ -325,7 +326,7 @@ std::string UnitTestFramework::expand_env_variables(const std::string& input) {
             result.append(match[0].str());  // Keep the original "${VAR}"
             throw std::runtime_error("Missing environment variable: " + var_name);
         }
-        last_pos = match.position() + match.length();
+        last_pos = static_cast<std::size_t>(match.position() + match.length());
     }
 
     result.append(input.substr(last_pos));  // remaining text

@@ -89,12 +89,12 @@ public:
 
 
   explicit MassBodyCompositeDispersions (jeod::MassBody & target_body_in);
-  virtual ~MassBodyCompositeDispersions() {};
+  ~MassBodyCompositeDispersions() override = default;
 
   // The apply method is used when the class is functioning as a
   // jeod::BodyAction. The jeod::DynManager argument is not needed, except as a
   // pass-through to jeod::BodyAction::apply(...).
-  void apply(jeod::DynManager & dyn_manager);
+  void apply(jeod::DynManager & dyn_manager) override;
 
   // Note - the update method is overloaded; these methods are used when
   // the class is being used independently of the jeod::BodyAction -- and

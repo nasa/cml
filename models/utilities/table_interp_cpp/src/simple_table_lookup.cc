@@ -28,7 +28,7 @@ SimpleTableLookup::SimpleTableLookup()
   indep_data_loaded(false),
   dependent_data_loaded(false),
   data_reloading(false),
-  independent(NULL),
+  independent(nullptr),
   comprehensive_data_reload(false)
 {}
 
@@ -46,7 +46,7 @@ SimpleTableLookup::load_independent_data(
     const TableIndependentVariable::LookupMethod lookup,     //optional
     const TableIndependentVariable::Continuity   continuity) //optional
 {
-  if (data_in == NULL) {
+  if (data_in == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the data source array.\n"
@@ -201,7 +201,7 @@ SimpleTableLookup::load_dependent_data(
          const size_t   num_data_points,
          TableType      type) //optional
 {
-  if (data == NULL) {
+  if (data == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the data source array.\n"
@@ -242,21 +242,21 @@ SimpleTableLookup::load_dependent_data(
          const size_t   num_data_points_per_variable,
          TableType      type) //optional
 {
-  if (data == NULL) {
+  if (data == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the data source array.\n"
       "Data load failed.\n");
     return false;
   }
-  if (dependent_vars == NULL) {
+  if (dependent_vars == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the dependent-variables "
       "array.\nData load failed.\n");
     return false;
   }
-  std::vector<double *> scratch_vars(num_vars, NULL);
+  std::vector<double *> scratch_vars(num_vars, nullptr);
   for (unsigned int ii = 0; ii < num_vars; ++ii) {
     scratch_vars[ii] = dependent_vars + ii;
   }
@@ -276,14 +276,14 @@ SimpleTableLookup::load_dependent_data(
          const size_t      num_data_points_per_variable,
          TableType         type) //optional
 {
-  if (dependent_vars == NULL) {
+  if (dependent_vars == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the dependent-variables "
       "array.\nData load failed.\n");
     return false;
   }
-  std::vector<double *> scratch_vars(num_vars, NULL);
+  std::vector<double *> scratch_vars(num_vars, nullptr);
   for (unsigned int ii = 0; ii < num_vars; ++ii) {
     scratch_vars[ii] = dependent_vars + ii;
   }
@@ -300,7 +300,7 @@ SimpleTableLookup::load_dependent_data(
          const size_t         num_data_points_per_variable,
          TableType            type) //optional
 {
-  if (data == NULL) {
+  if (data == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the data source array.\n"

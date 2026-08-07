@@ -22,22 +22,22 @@ PROGRAMMERS:
 Constructor
 *****************************************************************************/
 RocketMotor_MultiNozzle::RocketMotor_MultiNozzle(
-    DynamicMassGroup                   & mass_group,
+    DynamicMassGroup                   & mass_group_in,
     DynamicMassBody                    * mass_body,
     DynamicMassString                  * mass_string,
     DynamicMassBodyPropertiesInterface & mass_properties,
     const double                       & time,
-    const double                       * veh_cm,
-    bool                                 use_mass_string,
+    const double                       * veh_cm_in,
+    bool                                 use_mass_string_in,
     const double                       & atm_press)
   :
-  RocketMotor_TableThrust( mass_group,
+  RocketMotor_TableThrust( mass_group_in,
                            mass_body,
                            mass_string,
                            mass_properties,
                            time,
-                           veh_cm,
-                           use_mass_string),
+                           veh_cm_in,
+                           use_mass_string_in),
   atmos_pressure(atm_press),
   motor_lin_flex(nullptr),
   motor_rot_flex(nullptr),
@@ -66,31 +66,31 @@ RocketMotor_MultiNozzle::RocketMotor_MultiNozzle(
     DynamicMassBody & mass,
     const double    & time,
     const double    & atm_press,
-    const double    * veh_cm)
+    const double    * veh_cm_in)
   :
   RocketMotor_MultiNozzle( mass_group_internal,
                            &mass,
                            nullptr,
                            mass.dynamic_properties,
                            time,
-                           veh_cm,
+                           veh_cm_in,
                            false,
                            atm_press)
 {}
 /****************************************************************************/
 RocketMotor_MultiNozzle::RocketMotor_MultiNozzle(
-    DynamicMassGroup & mass_group,
+    DynamicMassGroup & mass_group_in,
     DynamicMassBody  & mass,
     const double     & time,
     const double     & atm_press,
-    const double     * veh_cm)
+    const double     * veh_cm_in)
   :
-  RocketMotor_MultiNozzle( mass_group,
+  RocketMotor_MultiNozzle( mass_group_in,
                            &mass,
                            nullptr,
                            mass.dynamic_properties,
                            time,
-                           veh_cm,
+                           veh_cm_in,
                            false,
                            atm_press)
 {}
@@ -99,31 +99,31 @@ RocketMotor_MultiNozzle::RocketMotor_MultiNozzle(
     DynamicMassString & string,
     const double      & time,
     const double      & atm_press,
-    const double      * veh_cm)
+    const double      * veh_cm_in)
   :
   RocketMotor_MultiNozzle( mass_group_internal,
                            nullptr,
                            &string,
                            string,
                            time,
-                           veh_cm,
+                           veh_cm_in,
                            true,
                            atm_press)
 {}
 /****************************************************************************/
 RocketMotor_MultiNozzle::RocketMotor_MultiNozzle(
-    DynamicMassGroup  & mass_group,
+    DynamicMassGroup  & mass_group_in,
     DynamicMassString & string,
     const double      & time,
     const double      & atm_press,
-    const double      * veh_cm)
+    const double      * veh_cm_in)
   :
-  RocketMotor_MultiNozzle( mass_group,
+  RocketMotor_MultiNozzle( mass_group_in,
                            nullptr,
                            &string,
                            string,
                            time,
-                           veh_cm,
+                           veh_cm_in,
                            true,
                            atm_press)
 {}
@@ -214,12 +214,12 @@ force_initialize
 Purpose:(Allow for the ability to re-initialize the rocket motors if needed)
 *****************************************************************************/
 void
-RocketMotor_MultiNozzle::force_initialize(size_t num_flex_elements,
+RocketMotor_MultiNozzle::force_initialize(size_t num_flex_elements_in,
                                           const double * motor_lin_flex_in,
                                           const double * motor_rot_flex_in)
 {
   initialized = false;
-  initialize(num_flex_elements,
+  initialize(num_flex_elements_in,
              motor_lin_flex_in,
              motor_rot_flex_in);
 }

@@ -17,8 +17,8 @@ NOTES:
        end1 + s * (end2 - end1) satisfies the constraint, i.e.:
        (1-s)end1 + (s)end2      satisfies the constraint
 ***********************************************************************/
-#ifndef CML_MATHUTILS_ELLIPSOID_INTERSECTION_HH
-#define CML_MATHUTILS_ELLIPSOID_INTERSECTION_HH
+#ifndef CML_ELLIPSOID_INTERSECTION_HH
+#define CML_ELLIPSOID_INTERSECTION_HH
 
 #include <array>
 #include "math_utils.hh"
@@ -55,7 +55,7 @@ class EllipsoidIntersection{
            MathUtils::divide_protected( 1, r2),
            MathUtils::divide_protected( 1, r3)}
   {}
-  virtual ~EllipsoidIntersection(){};
+  virtual ~EllipsoidIntersection() = default;
 
 /*****************************************************************************
 update

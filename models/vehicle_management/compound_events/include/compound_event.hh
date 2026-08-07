@@ -9,8 +9,8 @@ PROGRAMMERS:
     (Merging concepts found in former grok-events and CML-events))
   )
 ***********************************************************************/
-#ifndef CML_EVENT_MANAGEMENT_COMPOUND_EVENTS_HH
-#define CML_EVENT_MANAGEMENT_COMPOUND_EVENTS_HH
+#ifndef CML_COMPOUND_EVENT_HH
+#define CML_COMPOUND_EVENT_HH
 
 #include <list>
 #include "cml/models/vehicle_management/events_manager/include/watch_values_delay.hh"
@@ -107,10 +107,10 @@ class CompoundEvent : public WatchValuesDelay<bool>
   // Methods
  public:
   explicit CompoundEvent( const double & time);
-  virtual ~CompoundEvent(){};
+  ~CompoundEvent() override = default;
 
-  void initialize( std::list<WatchValuesBaseCore *> * active_watches);
-  bool test_crossing();
+  void initialize( std::list<WatchValuesBaseCore *> * active_watches_in) override;
+  bool test_crossing() override;
   void test_crossing_iterative();
 
   // For Python input file support:
@@ -119,7 +119,7 @@ class CompoundEvent : public WatchValuesDelay<bool>
   bool update_no_manager();
 
  protected:
-  void activate();
+  void activate() override;
 //  void check_arming_trigger();
 
  private: // not implemented / deleted

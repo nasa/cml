@@ -12,8 +12,8 @@ PROGRAMMERS:
      ((Susan Stachowiak) (NASA) (May 2017) (Added option for vertical wind component))
      ((Brian Birmingham) (OSR) (April 2022) (Added CML Table Interpolation)))
 ********************************************************************************/
-#ifndef CML_LOOKUP_ATMOS_WINDS_HH
-#define CML_LOOKUP_ATMOS_WINDS_HH
+#ifndef CML_LOOKUP_WINDS_HH
+#define CML_LOOKUP_WINDS_HH
 
 #include "cml/models/utilities/table_interp_cpp/include/simple_table_lookup.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
@@ -52,7 +52,7 @@ public:
     at initialization of LookupAtmosWinds, and is now ready to be activated.*/
 
   DRWPTableLookup();
-  virtual ~DRWPTableLookup(){};
+  ~DRWPTableLookup() override = default;
   void verify( bool leave_active = false);
 };
 
@@ -162,7 +162,7 @@ public:
     This can only be modified via the method change_datafile_index(size_t).*/
   unsigned int number_of_datasets; /* (--)
     Total number of data-profiles stored. */
-  const size_t size_of_source_integer = 4; /* (--)
+  static const size_t size_of_source_integer = 4; /* (--)
     This value specifies the number of bytes occupied by the integer values
     in the binary data files.
     The raw data files (binary format) are currently composed of integer
@@ -172,7 +172,7 @@ public:
     separate the data stream into individual variables. If a binary file were
     to be written using a different format, it would be necessary to change
     the size that these variables occupy.*/
-  const size_t size_of_source_float = 4; /* (--)
+  static const size_t size_of_source_float = 4; /* (--)
     This value specifies the number of bytes occupied by the integer values
     in the binary data files.
     See size_of_source_integer description for details. */
@@ -187,9 +187,9 @@ public:
 
  public:
   LookupAtmosWinds();
-  virtual ~LookupAtmosWinds(){};
+  ~LookupAtmosWinds() override = default;
 
-  void initialize();
+  void initialize() override;
   void update(double altitude_in);
   void change_datafile_index(size_t index);
   bool change_profile();
@@ -209,7 +209,7 @@ public:
   void set_include_vertical_component(bool);
 
 protected:
-  void activate();
+  void activate() override;
   void compute_average_wind( size_t table_index,
                              bool   full_domain,
                              double min_altitude=0,

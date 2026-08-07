@@ -12,8 +12,8 @@ PROGRAMMERS:
 (((Gary Turner) (OSR) (October, 2015) (initial version)))
 *******************************************************************************/
 
-#ifndef ANTARES_VECTOR3_INTEGRABLE_OBJECT_HH
-#define ANTARES_VECTOR3_INTEGRABLE_OBJECT_HH
+#ifndef CML_VECTOR3_INTEGRABLE_OBJECT_HH
+#define CML_VECTOR3_INTEGRABLE_OBJECT_HH
 
 #include "er7_utils/integration/core/include/integrable_object.hh"
 #include "er7_utils/integration/core/include/integrator_result.hh"
@@ -42,30 +42,30 @@ class Vector3IntegrableObject : public SubscriptionBase,
     Vector3IntegrableObject(jeod::DynBody & body_in,
                             const double * deriv_ptr_in);
 
-    virtual ~Vector3IntegrableObject();
+    ~Vector3IntegrableObject() override;
 
-    virtual void initialize();
+    void initialize() override;
   protected:
     void zero_arrays();
-    virtual void activate();
-    virtual void deactivate();
+    void activate() override;
+    void deactivate() override;
   public:
 
     // Required by IntegrableObject
-    virtual void create_integrators (
+    void create_integrators (
       const er7_utils::IntegratorConstructor & generator,
       er7_utils::IntegrationControls & controls,
-      const er7_utils::TimeInterface & time_if);
+      const er7_utils::TimeInterface & time_if) override;
 
     // Destroy the integrators.
-    virtual void destroy_integrators (){integrator.destroy_integrator();};
+    void destroy_integrators () override{integrator.destroy_integrator();}
 
     // Reset the integrators.
-    virtual void reset_integrators () {integrator.reset_integrator();};
+    void reset_integrators () override {integrator.reset_integrator();}
 
     // Propagate state.
-    virtual er7_utils::IntegratorResult integrate ( double dyn_dt,
-                                                    unsigned int target_stage);
+    er7_utils::IntegratorResult integrate ( double dyn_dt,
+                                                    unsigned int target_stage) override;
 
 
   private:

@@ -9,8 +9,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (2023/10) (ANTARES)
     (Comprehensive overhaul of event management)))
 **********************************************************************/
-#ifndef GROK_EVENTS_PYTHON_INTERFACE_HH
-#define GROK_EVENTS_PYTHON_INTERFACE_HH
+#ifndef CML_COMPOUND_EVENT_PYTHON_INTERFACE_HH
+#define CML_COMPOUND_EVENT_PYTHON_INTERFACE_HH
 #include <string>
 #include <vector>
 
@@ -34,7 +34,7 @@ struct CompoundEventActionConfig
     target_ptr(nullptr),
     target_value_assignment(0.0),
     target_string_assignment("")
-  {};
+  {}
 };
 
 /*****************************************************************************

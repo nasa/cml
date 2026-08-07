@@ -6,8 +6,8 @@ Library Dependency:
   ((../src/scalar_integrable_object.cc))
 *******************************************************************************/
 
-#ifndef SCALAR_INTEGRABLE_OBJECT_HH
-#define SCALAR_INTEGRABLE_OBJECT_HH
+#ifndef CML_SCALAR_INTEGRABLE_OBJECT_HH
+#define CML_SCALAR_INTEGRABLE_OBJECT_HH
 
 #include "jeod/models/utils/integration/include/restartable_state_integrator.hh"
 #include "er7_utils/integration/core/include/integrable_object.hh"
@@ -26,17 +26,17 @@ public:
   ScalarIntegrableObject( double &value_in,
                           double &derivative_in);
 
-  virtual void create_integrators(
+  void create_integrators(
       const er7_utils::IntegratorConstructor &generator,
       er7_utils::IntegrationControls &controls,
-      const er7_utils::TimeInterface &time_if);
+      const er7_utils::TimeInterface &time_if) override;
 
-  virtual void destroy_integrators();
+  void destroy_integrators() override;
 
-  virtual void reset_integrators();
+  void reset_integrators() override;
 
-  virtual er7_utils::IntegratorResult integrate( double dyn_dt,
-                                                 unsigned int target_stage);
+  er7_utils::IntegratorResult integrate( double dyn_dt,
+                                                 unsigned int target_stage) override;
 
 private:
   #ifndef SWIG

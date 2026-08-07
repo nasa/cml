@@ -10,8 +10,8 @@ PROGRAMMERS:
     ((Bingquan Wang) (OSR) (Oct 2016) (Antares)
                 (Library dependency warning fixing)))
 **********************************************************************/
-#ifndef WAKE_PARAMS_HH
-#define WAKE_PARAMS_HH
+#ifndef CML_WAKE_PARAMS_HH
+#define CML_WAKE_PARAMS_HH
 
 /*****************************************************************************
 WakeParamsSub
@@ -32,7 +32,7 @@ class WakeParamsSub
     start_dist(0.0),
     stop_dist(0.0),
     radial_dist(0.0)
-  {};
+  {}
 };
 
 /*****************************************************************************
@@ -65,6 +65,6 @@ class WakeParams
     main_body_diameter(0.0),
     rev_flow(),
     prf()
-  {};
+  {}
 };
 #endif

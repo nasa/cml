@@ -14,8 +14,8 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
-#ifndef ATMOS_EXEC_GRAM_HH
-#define ATMOS_EXEC_GRAM_HH
+#ifndef CML_ATMOSPHERE_EXEC_GRAM_HH
+#define CML_ATMOSPHERE_EXEC_GRAM_HH
 
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 
@@ -165,7 +165,7 @@ class GramInterface
   /* Function Prototypes */
   /* ------------------- */
   GramInterface();
-  virtual ~GramInterface(){};
+  virtual ~GramInterface() = default;
 
   virtual void initialize(   // Return: -- Void
    double TSIM,      // IN: s      Simulation time
@@ -206,16 +206,16 @@ class AtmosphereExec_Gram : public AtmosphereExec_AtmosWindsBase
                         ExtendedPlanetaryDerivedState & planet_state_in,
                         const double & dyn_time_in,
                         AtmosExecOutput & master_output);
-    virtual ~AtmosphereExec_Gram(){};
+    ~AtmosphereExec_Gram() override = default;
 
-    virtual void activate() override;
-    virtual void deactivate() override;
+    void activate() override;
+    void deactivate() override;
     void set_time( int year, int month, int day, int hour, int min, double sec);
-    virtual bool initialize_atmos() override {return initialize();};
-    virtual bool initialize_winds() override {return initialize();};
+    bool initialize_atmos() override {return initialize();}
+    bool initialize_winds() override {return initialize();}
 
-    virtual void update_atmos() override;
-    virtual void update_winds() override;
+    void update_atmos() override;
+    void update_winds() override;
 
   protected:
     bool initialized; /* (--) Internal flag to indicate that initialize has run.*/

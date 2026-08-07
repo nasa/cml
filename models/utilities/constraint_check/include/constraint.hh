@@ -13,8 +13,8 @@ PROGRAMMERS:
    (New, based on GNC_PAR grok_duration_check and grok-violation models))
  )
 *******************************************************************************/
-#ifndef CML_CONSTRAINT_BASE_HH
-#define CML_CONSTRAINT_BASE_HH
+#ifndef CML_CONSTRAINT_HH
+#define CML_CONSTRAINT_HH
 
 #include <vector>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -74,7 +74,7 @@ class Constraint
 
  public:
   Constraint( size_t num_specs = 1);
-  virtual ~Constraint(){};
+  virtual ~Constraint() = default;
 
   virtual void initialize();
   virtual void update() = 0;

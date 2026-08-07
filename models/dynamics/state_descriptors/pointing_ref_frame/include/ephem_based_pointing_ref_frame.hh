@@ -31,7 +31,7 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
  protected:
   jeod::EphemeridesManager & ephem_manager; /* (--) Reference to the
                                                Ephemerides Manager*/
-  virtual void activate()
+  void activate() override
   {
     if( setup_frames()) {
       ephem_manager.update_ephemerides();
@@ -45,11 +45,11 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
     :
     PointingRefFrame(),
     ephem_manager(mgr)
-  {};
-  virtual ~EphemBasedPointingRefFrame(){};
+  {}
+  ~EphemBasedPointingRefFrame() override = default;
 
 
-  virtual void initialize()
+  void initialize() override
   {
     // Register the frame with the dynamics/ephem manager so that it can be
     // used to represent the state of a vehicle

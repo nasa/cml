@@ -55,7 +55,7 @@ class WatchValuesSet : public WatchValuesBaseCore
     encountered in the triggers vector will be recorded.*/
 
   WatchValuesSet();
-  virtual ~WatchValuesSet(){};
+  ~WatchValuesSet() override = default;
 
   void add_trigger( WatchValuesBaseCore & new_trigger);
   void initialize( std::list<WatchValuesBaseCore *> * active_watch_in) override;
@@ -64,8 +64,8 @@ class WatchValuesSet : public WatchValuesBaseCore
   std::string & get_trigger_name() {return trigger_name;}
 
  protected:
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
  private:
   WatchValuesSet (const WatchValuesSet&);
   WatchValuesSet& operator = (const WatchValuesSet&);

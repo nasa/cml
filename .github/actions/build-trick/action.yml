@@ -1,0 +1,27 @@
+name: Build Trick
+description: Clone, configure, and build Trick
+
+inputs:
+  trick-home:
+    description: Installation path for Trick
+    required: true
+  trick-version:
+    description: Trick git branch/tag to build
+    required: true
+  venv-path:
+    description: Path to the Python virtual environment
+    required: false
+    default: .venv
+
+runs:
+  using: composite
+  steps:
+    - name: Build Trick
+      shell: bash
+      run: |
+        source ${{ inputs.venv-path }}/bin/activate
+        git clone https://github.com/nasa/trick.git \
+          --branch ${{ inputs.trick-version }} ${{ inputs.trick-home }}
+        cd ${{ inputs.trick-home }}
+        ./configure
+        make -j$(nproc)

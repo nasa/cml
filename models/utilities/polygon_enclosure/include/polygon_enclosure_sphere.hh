@@ -590,9 +590,9 @@ Purpose:
         "Check configuration.\n");
     } else {
       for (unsigned int ii = 0; ii < N; ii++) {
-        std::copy( std::begin(vals[N]),
-                   std::end(vals[N]),
-                   vertices[N].data());
+        std::copy( std::begin(vals[ii]),
+                   std::end(vals[ii]),
+                   vertices[ii].begin());
       }
     }
   }

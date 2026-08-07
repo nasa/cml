@@ -45,7 +45,7 @@ intialize
 Purpose:(Because watch_a and watch_b are not loaded directly onto the manager,
          this class must call their respective initializations )
 *****************************************************************************/
-  void initialize( std::list<WatchValuesBaseCore *> * active_watch_in)
+  void initialize( std::list<WatchValuesBaseCore *> * active_watch_in) override
   {
     watch_a.initialize( active_watch_in);
     watch_b.initialize( active_watch_in);
@@ -58,7 +58,7 @@ test_crossing
 Purpose:(The logic to execute the individual test_crossing implementations
          and combine to give the overall result.)
 *****************************************************************************/
-  bool test_crossing()
+  bool test_crossing() override
   {
     bool a_triggered = watch_a.test_crossing();
     bool b_triggered = watch_b.test_crossing();
@@ -80,7 +80,7 @@ Purpose:( inheriting classes use this to implement their own specific
           execution.  It is called from test_crossing, which is NOT virtual.
           In the base class, nothing more needs doing.
 *****************************************************************************/
-  virtual bool specific_execution() {return false;};
+  bool specific_execution() override {return false;};
 
 
 /*****************************************************************************
@@ -90,7 +90,7 @@ Purpose:(Need to activate the watch_a and watch_b instances so that their
          active_watch list will get this class added to it, but not the
          watch_a and watch_b instances.
 *****************************************************************************/
-  virtual void activate()
+  void activate() override
   {
     watch_a.subscribe();
     watch_b.subscribe();
@@ -107,7 +107,7 @@ Purpose:(Unsubscribe from watch_a and watch_b to deactivate them.
          manager's active_watch list; it will remove it on the next pass when
          it identifies this watch as being inactive.
 *****************************************************************************/
-  virtual void deactivate()
+  void deactivate() override
   {
     watch_a.unsubscribe();
     watch_b.unsubscribe();
@@ -117,5 +117,5 @@ Purpose:(Unsubscribe from watch_a and watch_b to deactivate them.
   WatchValuesBase2 (const WatchValuesBase2& rhs);
   WatchValuesBase2& operator = (const WatchValuesBase2& rhs);
 };
-#endif
 
+#endif

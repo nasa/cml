@@ -5,8 +5,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (date) (project) (comment)))
 **********************************************************************/
 
-#ifndef EXAMPLE_TABLES_FOR_TESTING
-#define EXAMPLE_TABLES_FOR_TESTING
+#ifndef CML_EXAMPLE_TABLES_HH
+#define CML_EXAMPLE_TABLES_HH
 
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
 #include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
@@ -46,9 +46,9 @@ class SimpleAeroTableSet : public AeroTableSet
     include_diagonal_damping_unc_terms(true),
     include_off_diagonal_damping_unc_terms(true)
   {};
-  virtual ~SimpleAeroTableSet(){};
+  ~SimpleAeroTableSet() override = default;
 
-  virtual void initialize() {
+  void initialize() override {
     if (include_diagonal_damping_terms) {
       dep_var_list.push_back( &coefficients.dCl_dp);
       dep_var_list.push_back( &coefficients.dCm_dq);
@@ -140,7 +140,7 @@ class SimpleAeroTableSet_SYM_LDm : public SimpleAeroTableSet
     :
     SimpleAeroTableSet( executive, indep, "SYM_LDm")
     {};
-  virtual void initialize() {
+  void initialize() override {
     data_table_type = SYM_LDm;
     dep_var_list.push_back( &coefficients.CD);
     dep_var_list.push_back( &coefficients.CL_sym);
@@ -165,7 +165,7 @@ class SimpleAeroTableSet_SYM_ANm : public SimpleAeroTableSet
     :
     SimpleAeroTableSet( executive, indep,  "SYM_ANm")
     {};
-  virtual void initialize() {
+  void initialize() override {
     data_table_type = SYM_ANm;
     dep_var_list.push_back( &coefficients.CA);
     dep_var_list.push_back( &coefficients.CN_sym);
@@ -191,7 +191,7 @@ class SimpleAeroTableSet_XYZ : public SimpleAeroTableSet
 
     SimpleAeroTableSet( executive, indep, "XYZ")
     {};
-  virtual void initialize() {
+  void initialize() override {
     data_table_type = XYZ;
     dep_var_list.push_back( &coefficients.CX);
     dep_var_list.push_back( &coefficients.CY);
@@ -225,7 +225,7 @@ class SimpleAeroTableSet_AYN : public SimpleAeroTableSet
     :
     SimpleAeroTableSet( executive, indep, "AYN")
     {};
-  virtual void initialize() {
+  void initialize() override {
     data_table_type = AYN;
     dep_var_list.push_back( &coefficients.CA);
     dep_var_list.push_back( &coefficients.CY);
@@ -256,7 +256,7 @@ class SimpleAeroTableSet_AYN_unc : public SimpleAeroTableSet
     :
     SimpleAeroTableSet( executive, indep, "AYN_unc")
     {};
-  virtual void initialize() {
+  void initialize() override {
     data_table_type = AYN_unc;
     dep_var_list.push_back( &coefficients.CA);
     dep_var_list.push_back( &coefficients.CY);
@@ -285,7 +285,7 @@ class SimpleAeroTableSet_DSL : public SimpleAeroTableSet
     :
     SimpleAeroTableSet( executive, indep, "DSL")
     {};
-  virtual void initialize() {
+  void initialize() override {
     data_table_type = DSL;
     dep_var_list.push_back( &coefficients.CD);
     dep_var_list.push_back( &coefficients.CS);
@@ -319,7 +319,7 @@ class SimpleAeroTableSet_Incomplete : public SimpleAeroTableSet
 
     SimpleAeroTableSet( executive, indep, "Incomplete")
     {};
-  virtual void initialize() {
+  void initialize() override {
     dep_var_list.push_back( &coefficients.CA);
     SimpleAeroTableSet::initialize();
   }
@@ -372,9 +372,9 @@ class ExampleTableSet1 : public AeroTableSet
     dependents.set_output(dep_var_list);
   }
 
-  virtual ~ExampleTableSet1(){};
+  ~ExampleTableSet1() override = default;
 
-  virtual void initialize() {
+  void initialize() override {
     // don't try re-loading the data, but do still need to pass re-inits
     // through to AeroTableSet
     if (initialized) {

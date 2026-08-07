@@ -8,8 +8,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (date) (project) (comment)))
 **********************************************************************/
 
-#ifndef RCS_TEST_MULTIGROUP_HH
-#define RCS_TEST_MULTIGROUP_HH
+#ifndef CML_RCS_TEST_MULTIGROUP_HH
+#define CML_RCS_TEST_MULTIGROUP_HH
 
 #include "trick/units_conv.h" /* for unit conversion */
 #include "../../../include/rcs_generic_classes.hh"
@@ -37,6 +37,6 @@ class RcsTestMultigroup : public RcsGeneric
  private:
    // Not implemented:
    RcsTestMultigroup (const RcsTestMultigroup& rhs);
-   RcsTestMultigroup & operator = (const RcsTestMultigroup& rhs);;
+   RcsTestMultigroup & operator = (const RcsTestMultigroup& rhs);
 };
-#endif    
+#endif

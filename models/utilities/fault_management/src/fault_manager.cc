@@ -345,6 +345,8 @@ void FaultManager::parse() {
   // Note -- the fault_param_cache and trigger_value_cache pending assignments
   // are cleared in initialize() after this method has returned and after the
   // individual faults have been initialized.
+
+  xmlFreeDoc(doc);
 }
 
 
@@ -422,6 +424,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
   }
 
   Fault* new_fault = nullptr;
+  #pragma GCC diagnostic ignored "-Wswitch-enum" // Difficult to maintain otherwise
   switch (Symbol->attr->type) {
     case TRICK_CHARACTER:
       new_fault = make_fault<char>(
@@ -528,7 +531,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
     XmlHelper::xml_find_value(fault_node, "fire_limit");
   if (fire_limit_string != nullptr) {
     new_fault->is_fire_limited = true;
-    new_fault->fire_limit = strtol(fire_limit_string, nullptr, 10);
+    new_fault->fire_limit = std::strtoul(fire_limit_string, nullptr, 10);
   }
 
   for (xmlNodePtr trigger_group_node = fault_node->children;
@@ -955,6 +958,7 @@ bool FaultManager::parse_ind_variable(
     return false;
   }
 
+  #pragma GCC diagnostic ignored "-Wswitch-enum" // Difficult to maintain otherwise
   switch (Symbol->attr->type) {
     case TRICK_CHARACTER:
       ind_variable.initialize<char>(*static_cast<char*>(Symbol->address));
@@ -1060,7 +1064,7 @@ bool FaultManager::parse_periodic_param(
     return false;
   }
   // else translate value_string to param.nominal
-  param.nominal = strtod(value_string, nullptr);
+  param.nominal = std::strtod(value_string, nullptr);
 
   // Optional: make the parameter a linear function of some independent
   // variable.
@@ -1084,7 +1088,7 @@ bool FaultManager::parse_periodic_param(
     // intended to be constant.
   }
   else { // rate is specified
-    param.rate = strtod(value_string, nullptr);
+    param.rate = std::strtod(value_string, nullptr);
     // Default to using the same independent variable as the fault's main
     // function if no IndVariable specified.
     if (variable_node == nullptr) {
@@ -1141,7 +1145,7 @@ bool FaultManager::parse_non_periodic_param(
       "This fault will be ignored.\n");
     return false;
   }
-  params.rate = strtod(temp_string, nullptr);
+  params.rate = std::strtod(temp_string, nullptr);
   // "initial" and "nominal" are synonymous
   // If both are specified, "nominal" takes precedence.
   // If neither is specified, it defaults to 0 without comment.
@@ -1152,7 +1156,7 @@ bool FaultManager::parse_non_periodic_param(
   if (temp_string == nullptr) {
     params.nominal = 0;
   } else {
-    params.nominal = strtod(temp_string, nullptr);
+    params.nominal = std::strtod(temp_string, nullptr);
   }
   return true;
 }
@@ -1420,6 +1424,7 @@ TriggerBase* FaultManager::parse_trigger(
   }
 
   TriggerBase* new_trigger = nullptr;
+  #pragma GCC diagnostic ignored "-Wswitch-enum" // Difficult to maintain otherwise
   switch (Symbol->attr->type) {
     case TRICK_CHARACTER:
       new_trigger = make_trigger<char>(
@@ -1525,7 +1530,7 @@ TriggerBase* FaultManager::parse_trigger(
   const char* fire_limit_str = XmlHelper::xml_find_value( trigger_node,
                                                           "fire_limit");
   if (fire_limit_str != nullptr) {
-    new_trigger->set_trigger_count( strtoul( fire_limit_str, nullptr, 10));
+    new_trigger->set_trigger_count( std::strtoul( fire_limit_str, nullptr, 10));
   }
 
 
@@ -1645,7 +1650,7 @@ bool FaultManager::parse_rand_number(
   if ( rng.distribution_type == FaultRandNumber::GAUSSIAN) {
     temp_str = XmlHelper::xml_find_value(rand_node, "std_dev");
     if (temp_str != nullptr) {
-      rng.std_dev = strtod(temp_str, nullptr);
+      rng.std_dev = std::strtod(temp_str, nullptr);
     } else {
       CMLMessage::error( __FILE__, __LINE__,
         "XML input error parsing randomized configuration.\n",
@@ -1658,7 +1663,7 @@ bool FaultManager::parse_rand_number(
 
     temp_str = XmlHelper::xml_find_value(rand_node, "mean");
     if ( temp_str != nullptr) {
-      rng.mean = strtod(temp_str, nullptr);
+      rng.mean = std::strtod(temp_str, nullptr);
     } else {
       CMLMessage::warn(__FILE__, __LINE__,
         "XML input missing while parsing randomized "
@@ -1678,8 +1683,8 @@ bool FaultManager::parse_rand_number(
     // if min and max found, use them:
     if (min_str != nullptr &&
         max_str != nullptr) {
-      rng.lower_limit = strtod(min_str, nullptr);
-      rng.upper_limit = strtod(max_str, nullptr);
+      rng.lower_limit = std::strtod(min_str, nullptr);
+      rng.upper_limit = std::strtod(max_str, nullptr);
     }
 
     // else, look for the (rel_min, mean, rel_max) option:
@@ -1690,9 +1695,9 @@ bool FaultManager::parse_rand_number(
       if (min_str != nullptr &&
           max_str != nullptr &&
           temp_str != nullptr ) {
-        double mean_val = strtod(temp_str, nullptr);
-        rng.lower_limit = mean_val - std::abs(strtod(min_str, nullptr));
-        rng.upper_limit = mean_val + strtod(max_str, nullptr);
+        double mean_val = std::strtod(temp_str, nullptr);
+        rng.lower_limit = mean_val - std::abs(std::strtod(min_str, nullptr));
+        rng.upper_limit = mean_val + std::strtod(max_str, nullptr);
       }
       else {
         CMLMessage::error(__FILE__, __LINE__,
@@ -1719,7 +1724,7 @@ bool FaultManager::parse_rand_number(
   //    than testing whether (seed==0).
   temp_str = XmlHelper::xml_find_value(rand_node, "seed");
   if (temp_str != nullptr) {
-    rng.seed = strtol(temp_str, nullptr, 10);
+    rng.seed = std::strtoul(temp_str, nullptr, 10);
   }
 
   return true;

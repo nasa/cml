@@ -55,7 +55,7 @@ class ConstraintTest
 
  public:
   ConstraintTest();
-  virtual ~ConstraintTest(){};
+  virtual ~ConstraintTest() = default;
 
   virtual bool initialize() = 0;
   void count_violations();
@@ -127,7 +127,7 @@ class ConstraintTestTimed : public ConstraintTest
     this value does not reset if the numerical-test is satisfied.*/
 
   ConstraintTestTimed();
-  virtual ~ConstraintTestTimed(){};
+  ~ConstraintTestTimed() override = default;
 
   double get_time_limit() override {return time_limit;}
   void initialize_gap_time();

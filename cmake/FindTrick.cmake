@@ -9,16 +9,17 @@
 #     Trick_VERSION : the version string for the current Trick release
 #     Trick_HOST_CPU : output from trick-gte with the TRICK_HOST_CPU option
 #
-# Additionally, the following target is created that specifies Trick include
-# paths and libraries to link against:
 #
-#     Trick::Trick
+# Additionally, the following targets are created for users to link against:
+#
+#     Trick::Core    : Provides Trick include paths
+#     Trick::Library : Provides the prebuilt libtrick.a and other libraries
 #
 # When using find_package(Trick COMPONENTS ...), the following components are
 # possible:
 #
-#     Core    : The core Trick headers and scripts
-#     Library : A prebuilt libtrick
+#     Core    : Always found if Trick exists
+#     Library : Found if libtrick.a has already been built externally
 #
 # We search the following locations for Trick, in order:
 #     1. Using the TRICK_HOME environment variable
@@ -29,8 +30,8 @@
 set(Trick_Core_FOUND FALSE)
 set(Trick_Library_FOUND FALSE)
 
-add_library(trick INTERFACE)
-add_library(Trick::Trick ALIAS trick)
+add_library(trick_core INTERFACE)
+add_library(Trick::Core ALIAS trick_core)
 
 find_path(Trick_BIN_DIRECTORY
     NAMES trick-version
@@ -61,7 +62,7 @@ if (Trick_BIN_DIRECTORY)
 
     # Trick include directories are marked as system paths so we don't get any
     # compiler or linter warnings from them.
-    target_include_directories(trick SYSTEM
+    target_include_directories(trick_core SYSTEM
         INTERFACE
             ${Trick_INCLUDE_DIRECTORY}
             ${Trick_INCLUDE_DIRECTORY}/trick/compat
@@ -85,7 +86,7 @@ if (Trick_BIN_DIRECTORY)
         set(Trick_VERSION 0.0.0)
         set(Trick_VERSION_MAJOR 0)
     endif()
-    target_compile_definitions(trick
+    target_compile_definitions(trick_core
         INTERFACE
             TRICK_VER=${Trick_VERSION_MAJOR}
     )
@@ -114,6 +115,7 @@ if (Trick_BIN_DIRECTORY)
         # against it.
         set(Trick_Library_FOUND TRUE)
         add_library(trick_library STATIC IMPORTED)
+        add_library(Trick::Library ALIAS trick_library)
         set_target_properties(trick_library PROPERTIES IMPORTED_LOCATION ${Trick_LIBRARY})
         target_link_libraries(trick_library
             INTERFACE
@@ -121,7 +123,10 @@ if (Trick_BIN_DIRECTORY)
                 pthread
                 udunits2
         )
-        target_link_libraries(trick INTERFACE trick_library)
+        target_compile_definitions(trick_library
+            INTERFACE
+                TRICK_VER=${Trick_VERSION_MAJOR}
+        )
     else()
         set(_FAILURE_REASON "Could not find libtrick on your system!")
     endif()

@@ -10,8 +10,8 @@ PROGRAMMERS:
     (Merging concepts found in former grok-events and CML-events))
   )
 ***********************************************************************/
-#ifndef CML_EVENT_MANAGEMENT_EVENT_TRIGGER_SET_HH
-#define CML_EVENT_MANAGEMENT_EVENT_TRIGGER_SET_HH
+#ifndef CML_EVENT_TRIGGER_SET_HH
+#define CML_EVENT_TRIGGER_SET_HH
 
 #include <list>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -43,11 +43,11 @@ class EventTriggerSet : public WatchValuesSet
     value subject to the condition that the CompoundEvent is triggered. */
 
   EventTriggerSet();
-  virtual ~EventTriggerSet();
+  ~EventTriggerSet() override;
 
   void populate_conditional_reference_trigger_list();
   void update_conditional_trigger_references();
-  WatchValuesBaseCore * find_trigger( std::string name);
+  WatchValuesBaseCore * find_trigger( const std::string& trigger_name_in);
 
 
  private: // not implemented / deleted

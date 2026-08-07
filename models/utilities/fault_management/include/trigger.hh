@@ -8,8 +8,8 @@ PROGRAMMERS:
                                                   equality comparison))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
 ############################################################################*/
-#ifndef CML_FAULT_TRIGGER_HH
-#define CML_FAULT_TRIGGER_HH
+#ifndef CML_TRIGGER_HH
+#define CML_TRIGGER_HH
 
 #include <string>
 #include <limits> // std::numeric_limits
@@ -95,7 +95,7 @@ class TriggerBase {
       trigger_count(0),
       trigger_limit(0)
     {}
-    virtual ~TriggerBase() {}
+    virtual ~TriggerBase() = default;
 
     virtual bool operate() { return compare();}
 
@@ -150,7 +150,7 @@ class Trigger : public TriggerBase {
       initial_periodic_value(0.0),
       is_first_trigger(true)
     {}
-    virtual ~Trigger() {}
+    ~Trigger() override = default;
 
     ////    Operations    ////
 
@@ -203,7 +203,7 @@ template<> class Trigger<std::string> : public TriggerBase {
     ////    Constructors and destructors    ////
 
     explicit Trigger(const std::string& varString) : variable(varString) {}
-    virtual ~Trigger() {}
+    ~Trigger() override = default;
 
     ////    Operations    ////
 
@@ -217,6 +217,11 @@ template<> class Trigger<std::string> : public TriggerBase {
         case NE:
           success = value.compare(variable) != 0;
           break;
+        case LT:
+        case LE:
+        case GE:
+        case GT:
+        case Invalid:
         default: // "Less than" and "greater than" don't make sense for strings.
           success = false;
       }
@@ -248,7 +253,7 @@ template<> class Trigger<std::string> : public TriggerBase {
 template<> class Trigger<bool> : public TriggerBase {
   public:
     explicit Trigger(const bool& var) : variable(var) {}
-    virtual ~Trigger() {}
+    ~Trigger() override = default;
 
     bool compare() override { return (value == variable); }
     bool value; /* (--)
@@ -303,6 +308,7 @@ template<typename T> bool Trigger<T>::compare() {
       is_triggered = !TestEqual_Trait<T, std::numeric_limits<T>::is_integer>::
         test_equal(variable, value);
       break;
+    case Invalid:
     default:
       is_triggered = false;
   }

@@ -83,7 +83,7 @@ AtmosphereExec_Gram::AtmosphereExec_Gram(
   last_update_time(-1.0e30) // A very large negative number
 {
   name = "GRAM";
-  if (master_gram == NULL || master_gram == &gram_i) {
+  if (master_gram == nullptr || master_gram == &gram_i) {
     activate_gram_from_master = false;
   }
 }
@@ -102,7 +102,7 @@ AtmosphereExec_Gram::activate()
   // be necessary to populate these from an active set of common-block data
   // before running the GRAM model.
   if( activate_gram_from_master) {
-    if (master_gram == NULL) {
+    if (master_gram == nullptr) {
       CMLMessage::error(
       __FILE__,__LINE__,"Atmos-exec activation error\n",
       "Flags set such that GRAM will be initialized from an external\n"

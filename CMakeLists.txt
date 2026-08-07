@@ -25,9 +25,17 @@ option(CML_BUILD_UNIT_TESTS
 beforehand, and the CMake configuration step will fail if libtrick or libjeod \
 cannot be found." OFF)
 
+option(CML_BUILD_MOCKS
+"Build a library of mocked CML and Trick functionality. Users can set this \
+option to ON while keeping CML_BUILD_UNIT_TESTS OFF to build the CML mocks for \
+their tests but to not build the CML unit tests." OFF)
+
 option(CML_CODE_COVERAGE "Instrument the build to enable coverage profiling." OFF)
 
 option(CML_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors." OFF)
+
+option(CML_USE_SANITIZERS
+"Build with address sanitizer and undefined behavior sanitizer." OFF)
 
 # ---------------------------------------------------------------------------- #
 # Locate common CML dependencies:                                              #
@@ -43,8 +51,8 @@ option(CML_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors." OFF)
 # The final dependency is googletest for our unit tests, which we declare in   #
 # the externals directory. See below for an explanation.                       #
 # ---------------------------------------------------------------------------- #
-find_package(Trick 25.0.2 REQUIRED COMPONENTS Core OPTIONAL_COMPONENTS Library)
-find_package(JEOD 5.0 REQUIRED COMPONENTS Core OPTIONAL_COMPONENTS Library)
+find_package(Trick 25.1.0 REQUIRED COMPONENTS Core OPTIONAL_COMPONENTS Library)
+find_package(JEOD 5.4.1 REQUIRED COMPONENTS Core OPTIONAL_COMPONENTS Library)
 find_package(LibXml2 REQUIRED)
 
 if (NOT JEOD_Library_FOUND AND CML_BUILD_UNIT_TESTS)
@@ -65,10 +73,13 @@ set(CML_INSTALL_DIR ${cml_SOURCE_DIR}/lib/${Trick_HOST_CPU})
 add_subdirectory(externals EXCLUDE_FROM_ALL)
 
 # ---------------------------------------------------------------------------- #
-# Enable unit tests                                                            #
+# Include project-wide utilities.                                              #
 # ---------------------------------------------------------------------------- #
+add_subdirectory(utility)
+
 if (CML_BUILD_UNIT_TESTS)
     enable_testing()
+    target_link_libraries(jeod_library INTERFACE cml::trick_unit_testing_libs)
 endif()
 
 # ---------------------------------------------------------------------------- #
@@ -115,6 +126,8 @@ endforeach()
 target_link_libraries(cml_static
     PUBLIC
         LibXml2::LibXml2
+    INTERFACE
+        $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
     PRIVATE
         $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
 )
@@ -148,6 +161,7 @@ else()
     target_link_libraries(cml_shared
         PUBLIC
             LibXml2::LibXml2
+            $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
         PRIVATE
             $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
     )
@@ -164,6 +178,11 @@ target_include_directories(cml_static
     INTERFACE
         ${cml_SOURCE_DIR}/..
 )
+
+# If we're building tests, link against the shared library to get include paths.
+if (TARGET cml_mocks)
+    target_link_libraries(cml_mocks PRIVATE cml::cml_shared)
+endif()
 
 # ---------------------------------------------------------------------------- #
 # Create Trickification target                                                 #

@@ -19,8 +19,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (November 2017) (New implementation))
   )
 *******************************************************************************/
-#ifndef ANTARES_SINGLE_INPUT_TABLE_FOR_QUATERNIONS_HH
-#define ANTARES_SINGLE_INPUT_TABLE_FOR_QUATERNIONS_HH
+#ifndef CML_SINGLE_INPUT_TABLE_FOR_QUATERNIONS_HH
+#define CML_SINGLE_INPUT_TABLE_FOR_QUATERNIONS_HH
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
@@ -43,9 +43,9 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
                                   size_t num_vars);
   explicit SingleInputTableForQuaternions(
                                     const DoublePtrVec & dependent_variables);
-  virtual ~SingleInputTableForQuaternions() {};
+  ~SingleInputTableForQuaternions() override = default;
 
-  virtual bool initialize() override;
+  bool initialize() override;
 
   void set_spherical_interp( bool new_flag) {
     sph_interp.use_spherical_interp = new_flag;
@@ -58,7 +58,7 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
   }
 
  protected:
-  virtual bool generate_output() override;
+  bool generate_output() override;
 #ifdef SWIG
 %mutable;
 #endif

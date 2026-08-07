@@ -66,7 +66,7 @@ Purpose:
   Initialize the event and its triggers as configured at sim-initialization.
 *****************************************************************************/
 void
-CompoundEvent::initialize(std::list<WatchValuesBaseCore *> * active_watches)
+CompoundEvent::initialize(std::list<WatchValuesBaseCore *> * active_watches_in)
 {
   if (!enabled) {return;}
 
@@ -86,7 +86,7 @@ CompoundEvent::initialize(std::list<WatchValuesBaseCore *> * active_watches)
    * action. If the triggers were to be initialized first, then the event
    * initialization could result in a detection based on poory-configured or
    * not-configured data values that the triggers are monitoring.*/
-  WatchValuesDelay::initialize( active_watches);
+  WatchValuesDelay::initialize( active_watches_in);
 
   // Note -- we do not need to add the WatchValuesSet to the Events
   // Manager because this event is managing them separately.
@@ -95,14 +95,14 @@ CompoundEvent::initialize(std::list<WatchValuesBaseCore *> * active_watches)
   action_triggers.add_self_to_manager_active_list = false;
 
   if (arming_triggers.get_num_triggers() > 0) {
-    arming_triggers.initialize( active_watches);
+    arming_triggers.initialize( active_watches_in);
     if (disarming_triggers.get_num_triggers() > 0) {
-      disarming_triggers.initialize( active_watches);
+      disarming_triggers.initialize( active_watches_in);
     }
   }
 
   if (action_triggers.get_num_triggers() > 0) {
-    action_triggers.initialize( active_watches);
+    action_triggers.initialize( active_watches_in);
     event_has_action_triggers = true;
   }
 }

@@ -13,8 +13,8 @@ PROGRAMMERS:
                              Interface, split CML model from CEV model)))
 ******************************************************************************/
 
-#ifndef RCS_BUILD_TRAIL_HH
-#define RCS_BUILD_TRAIL_HH
+#ifndef CML_RCS_BUILD_TRAIL_HH
+#define CML_RCS_BUILD_TRAIL_HH
 
 /*****************************************************************************
 RcsBuildUpTrailOffJetData
@@ -60,7 +60,7 @@ class RcsBuildUpTrailOff
   RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
                       RcsBuildUpTrailOffJetData * const jet_,
                       const double& time);
-  virtual ~RcsBuildUpTrailOff() {};
+  virtual ~RcsBuildUpTrailOff() = default;
   virtual void build_up_trail_off_effects();
 
  private:

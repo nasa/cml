@@ -22,16 +22,6 @@ add_cml_library(
         constraint_check/include/valset_constraint.hh
         convert_string/include/convert_string.hh
         double_to_words/include/convert_double_to_words.hh
-        double_to_words/include/double_to_words.h
-        enhanced_logging/include/base_logging_group.hh
-        enhanced_logging/include/base_logging_variable.hh
-        enhanced_logging/include/enhanced_logging_manager.hh
-        enhanced_logging/include/enhanced_logging_variable.hh
-        enhanced_logging/include/serial_logging_group.hh
-        enhanced_logging/include/serial_logging_variable.hh
-        enhanced_logging/include/summary_logging_condition.hh
-        enhanced_logging/include/summary_logging_group.hh
-        enhanced_logging/include/summary_logging_variable.hh
         env_utils/include/env_utils.h
         fault_arch/include/sSensorFaults.hh
         fault_management/include/fault.hh
@@ -49,7 +39,6 @@ add_cml_library(
         fault_management/include/trigger.hh
         fault_management/include/trigger_group.hh
         fault_management/include/untyped_variable.hh
-        finite_difference/include/finite_difference.hh
         math_utils/include/ellipsoid_intersection.hh
         math_utils/include/math_utils.hh
         math_utils/include/math_utils_private.hh
@@ -59,12 +48,6 @@ add_cml_library(
         polygon_enclosure/include/polygon_enclosure_sphere.hh
         sim_speed_monitor/include/sim_speed_monitor.hh
         subscriptions/include/subscriptions.hh
-        table_interp/include/osiris_math.h
-        table_interp/include/osiris_math_impl.h
-        table_interp/include/table_angle_impl.h
-        table_interp/include/table_interp.h
-        table_interp/include/table_interp_helper.h
-        table_interp/include/table_interp_impl.h
         table_interp_cpp/include/abstract_table_lookup.hh
         table_interp_cpp/include/generic_multi_input_table.hh
         table_interp_cpp/include/generic_single_input_table.hh
@@ -91,15 +74,6 @@ add_cml_library(
         constraint_check/src/constraint_test_templates.cc
         constraint_check/src/constraint_test_timed_templates.cc
         double_to_words/src/convert_double_to_uint_words.cc
-        double_to_words/src/double_to_uint_words.c
-        enhanced_logging/src/base_logging_group.cc
-        enhanced_logging/src/enhanced_logging_manager.cc
-        enhanced_logging/src/enhanced_logging_variable.cc
-        enhanced_logging/src/serial_logging_group.cc
-        enhanced_logging/src/serial_logging_variable.cc
-        enhanced_logging/src/summary_logging_condition.cc
-        enhanced_logging/src/summary_logging_group.cc
-        enhanced_logging/src/summary_logging_variable.cc
         fault_arch/src/sSensorFaults.cc
         fault_management/src/fault.cc
         fault_management/src/fault_function.cc
@@ -109,7 +83,6 @@ add_cml_library(
         fault_management/src/independent_variable.cc
         fault_management/src/rand_number.cc
         fault_management/src/trigger_group.cc
-        finite_difference/src/finite_difference.cc
         math_utils/src/math_utils.cc
         math_utils/src/quadratic_solver.cc
         subscriptions/src/subscriptions.cc
@@ -135,5 +108,6 @@ add_cml_tests(
         utilities
 
     SOURCES
+        cml_message/test/cml_message_test.cc
         table_interp_cpp/test/table_independent_variable_test.cc
 )

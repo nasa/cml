@@ -67,7 +67,6 @@ PROGRAMMERS:
    ((Gary Turner) (OSR) (Apr 2017) (Antares) (Conversion to Object-oriented)))
 **********************************************************************/
 
-#include <cstddef> // NULL
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/rcs_generic.hh"
@@ -82,7 +81,7 @@ Purpose:()
 RcsGeneric::RcsGeneric(
     const unsigned int num_propellant_components_)
   :
-  cm (NULL),
+  cm (nullptr),
   num_propellant_components(num_propellant_components_),
   prop_loss_on(num_propellant_components, 0.0),
   prop_loss_off(num_propellant_components, 0.0),
@@ -137,7 +136,7 @@ RcsGeneric::initialize(
   }
 
   cm = center_of_mass;
-  if (cm == NULL) {
+  if (cm == nullptr) {
     CMLMessage::fail(
     __FILE__,__LINE__,"Invalid array.\n",
     "The center of mass must be specified.\n");
@@ -153,7 +152,7 @@ RcsGeneric::initialize(
   generator.seed(seed);
 
   for (unsigned int ii=0; ii< jets.size(); ii++) {
-    if (jets.at(ii) == NULL) {
+    if (jets.at(ii) == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "One of the jets pointers is NULL.\n"
@@ -161,7 +160,7 @@ RcsGeneric::initialize(
     }
   }
   for (unsigned int ii=0; ii< prop_pods.size(); ii++) {
-    if (prop_pods.at(ii) == NULL) {
+    if (prop_pods.at(ii) == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "One of the prop-pod pointers is NULL.\n"
@@ -169,7 +168,7 @@ RcsGeneric::initialize(
     }
   }
   for (unsigned int ii=0; ii< groups.size(); ii++) {
-    if (groups.at(ii) == NULL) {
+    if (groups.at(ii) == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "One of the group pointers is NULL.\n"
@@ -295,7 +294,7 @@ bool
 RcsGeneric::update_part_I(
    const void * rcs_command)
 {
-  if (rcs_command == NULL) {
+  if (rcs_command == nullptr) {
     CMLMessage::error(
     __FILE__,__LINE__,"Invalid arguments.\n",
     "RcsGeneric model was fed with a NULL command set.\n"

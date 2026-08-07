@@ -43,10 +43,10 @@ MassBodyDistributeCompToCore::check_configuration()
   if ( !adjustable_body.is_progeny_of(target_body)) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid adjustments in Mass Tree\n",
-      "The adjustable-body (", adjustable_body.name, ") is not a progeny of\n"
-      "the target body (", target_body.name, ").\n"
-      "Consequently, adjusting the mass properties of ", adjustable_body.name,
-      "\ncannnot affect the composite-properties of ", target_body.name, ".\n"
+      "The adjustable-body (", adjustable_body.name.get_name(), ") is not a progeny of\n"
+      "the target body (", target_body.name.get_name(), ").\n"
+      "Consequently, adjusting the mass properties of ", adjustable_body.name.get_name(),
+      "\ncannnot affect the composite-properties of ", target_body.name.get_name(), ".\n"
       "Aborting adjustment.\n");
     return false;
   }
@@ -114,7 +114,7 @@ MassBodyDistributeCompToCore::update(
   // Set the update-flags again and update the entire tree.
   adjustable_body.set_update_flag();
   jeod::MassBody * root_body = const_cast<jeod::MassBody *> (target_body.get_root_body());
-  if (root_body != NULL) {
+  if (root_body != nullptr) {
     root_body->update_mass_properties();
   }
   else {
@@ -308,8 +308,8 @@ MassBodyDistributeCompToCore::check_for_valid_mass_properties()
   // If any error message is generated, this will be the beginning of it
   std::ostringstream err_msg;
   err_msg << "It is physically impossible to achieve specified composite mass\n"
-    << "properties of " << target_body.name << " by changing the core mass\n"
-    << "properties of " << adjustable_body.name << ":\n";
+    << "properties of " << target_body.name.get_name() << " by changing the core mass\n"
+    << "properties of " << adjustable_body.name.get_name() << ":\n";
   bool mass_invalid = false;
   if (adjustable_body.core_properties.mass <= 0.0) {
      err_msg << "* The mass would have a non-positive value of "
@@ -342,7 +342,7 @@ MassBodyDistributeCompToCore::check_for_valid_mass_properties()
       CMLMessage::error(__FILE__, __LINE__,
         "Invalid mass properties resulting from MassBodyDistributeCompToCore\n",
          err_msg.str(), "Because the fail_if_mass_invalid flag has been set to false, the\n"
-        "simulation will continue with impossible mass properties for ", adjustable_body.name, ".\n");
+        "simulation will continue with impossible mass properties for ", adjustable_body.name.get_name(), ".\n");
     }
   }
 }

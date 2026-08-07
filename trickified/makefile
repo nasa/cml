@@ -1,6 +1,7 @@
 TRICKIFY := $(TRICK_HOME)/share/trick/makefiles/trickify.mk
 
-INSTALL_DIR ?= $(abspath $(lastword $(MAKEFILE_LIST)))
+CML_HOME ?= $(abspath $(lastword $(MAKEFILE_LIST))/../..)
+INSTALL_DIR ?= $(abspath $(lastword $(MAKEFILE_LIST))/..)
 
 export TRICKIFY_OBJECT_NAME := cml_trickified.o
 export TRICKIFY_CXX_FLAGS := -I${CML_HOME}/.. -I${JEOD_HOME}/.. -I${JEOD_HOME}/models -isystem${TRICK_HOME}/include -isystem${TRICK_HOME}/trick_source -O2 -g -w

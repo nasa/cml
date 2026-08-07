@@ -23,8 +23,8 @@ NOTES:
      Body A - The wake-producing body
      Body B - The object inside the wake
 **********************************************************************/
-#ifndef SUBSONIC_WAKE_HH
-#define SUBSONIC_WAKE_HH
+#ifndef CML_SUBSONIC_WAKE_HH
+#define CML_SUBSONIC_WAKE_HH
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
@@ -67,14 +67,14 @@ class SubsonicWake : public SubscriptionBase
                WakeGeneratingBody & objectA_in,
                WakeFollowingBody  & objectB_in,
                WakeEffectsOut & effects_output_in);
-  virtual ~SubsonicWake(){};
+  ~SubsonicWake() override = default;
 
-  virtual void initialize();
+  void initialize() override;
   void update();
 
  protected:
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
   virtual void query_objB()=0; // just to make it abstract
 
  private: // and undefined:
@@ -100,7 +100,7 @@ class SubsonicWakeNoForce : public SubsonicWake
      WakeEffectsOut & effects_in);
 
  protected:
-  virtual void query_objB() override{}; // just to make it instantiable
+  void query_objB() override{} // just to make it instantiable
 
  private: // and undefined:
   SubsonicWakeNoForce (const SubsonicWakeNoForce& rhs);
@@ -126,10 +126,10 @@ class SubsonicWakeWithForce : public SubsonicWake
      WakeGeneratingBody & objectA_in,
      WakeEffectsOut & effects_in);
 
-  virtual void deactivate() override;
+  void deactivate() override;
 
  protected:
-  virtual void query_objB() override{}; // just to make it instantiable
+  void query_objB() override{} // just to make it instantiable
 
  private: // and undefined:
   SubsonicWakeWithForce (const SubsonicWakeWithForce& rhs);

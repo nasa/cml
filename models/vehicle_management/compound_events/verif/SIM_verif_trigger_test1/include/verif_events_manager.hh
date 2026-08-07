@@ -4,8 +4,8 @@ PURPOSE: (A pre-compiled, SWIG-friendly events manager)
 PROGRAMMERS:
   (((Gary Turner) (OSR) (01/2024) (ANTARES) (initial)))
 **********************************************************************/
-#ifndef CML_VERIFICATION_COMPOUND_EVENTS_MANAGER_HH
-#define CML_VERIFICATION_COMPOUND_EVENTS_MANAGER_HH
+#ifndef CML_VERIF_EVENTS_MANAGER_HH
+#define CML_VERIF_EVENTS_MANAGER_HH
 
 #include "../../../include/compound_event_manager.hh"
 #include "sample_sim_data.hh"

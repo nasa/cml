@@ -85,9 +85,9 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
               const jeod::RefFrameTrans & inrtl_state,
               const jeod::Planet & planet,
               const double & grav_mu);
-  virtual ~ImpactPoint(){};
+  ~ImpactPoint() override = default;
   
-  void initialize();
+  void initialize() override;
   void initialize( double ref_pos[3]);
   void update();
 
@@ -95,7 +95,7 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
   void update_equatorial();
   void update_non_equatorial();
   void update_time();
-  virtual void activate();
+  void activate() override;
 
  private:
    // Copy constructor and assignment operator for this class are

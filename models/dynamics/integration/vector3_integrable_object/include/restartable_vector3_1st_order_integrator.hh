@@ -9,8 +9,8 @@ PROGRAMMERS:
 (((Gary Turner) (OSR) (October, 2015) (initial version)))
 *******************************************************************************/
 
-#ifndef ANTARES_RESTARTABLE_VECTOR3_INTEGRATOR_HH
-#define ANTARES_RESTARTABLE_VECTOR3_INTEGRATOR_HH
+#ifndef CML_RESTARTABLE_VECTOR3_1ST_ORDER_INTEGRATOR_HH
+#define CML_RESTARTABLE_VECTOR3_1ST_ORDER_INTEGRATOR_HH
 
 #include "er7_utils/integration/core/include/first_order_ode_integrator.hh"
 #include "jeod/models/utils/container/include/simple_checkpointable.hh"
@@ -28,7 +28,7 @@ constructor
     RestartableVector3FirstOrderODEIntegrator ()
     :
     jeod::SimpleCheckpointable(),
-    integrator(NULL),
+    integrator(nullptr),
     integrator_manager(integrator)
     {
       JEOD_REGISTER_CLASS (RestartableVector3FirstOrderODEIntegrator);
@@ -37,7 +37,7 @@ constructor
 /*****************************************************************************
 destructor
 *****************************************************************************/
-    virtual ~RestartableVector3FirstOrderODEIntegrator () { };
+    ~RestartableVector3FirstOrderODEIntegrator () override = default;
 
 /*****************************************************************************
 create_integrator
@@ -57,7 +57,7 @@ Purpose:(
 destroy_integrator
 Purpose:(Destroy the integrator.)
 *****************************************************************************/
-    void destroy_integrator () { integrator_manager.destroy_integrator(); };
+    void destroy_integrator () { integrator_manager.destroy_integrator(); }
 
 #ifndef SWIG
 /*****************************************************************************
@@ -105,7 +105,7 @@ Purpose:(
 simple_restore
 Purpose:(Restore the integrator on restart.)
 *****************************************************************************/
-    virtual void simple_restore ()
+    void simple_restore () override
     {
       integrator_manager.set_integrator_reference (integrator);
       integrator_manager.simple_restore ();

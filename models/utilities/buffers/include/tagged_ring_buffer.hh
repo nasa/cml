@@ -17,8 +17,8 @@ ASSUMPTIONS:
  NOTES:
  ((Boost provides a ring buffer implementation.))
 **********************************************************************/
-#ifndef CML_TAGGED_RING_BUFFER
-#define CML_TAGGED_RING_BUFFER
+#ifndef CML_TAGGED_RING_BUFFER_HH
+#define CML_TAGGED_RING_BUFFER_HH
 
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "simple_ring_buffer.hh"
@@ -68,7 +68,7 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
     CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >(name),
     require_exact_tag(false)
   {};
-  virtual ~CMLTaggedRingBuffer(){};
+  ~CMLTaggedRingBuffer() override = default;
 
 
 /*****************************************************************************

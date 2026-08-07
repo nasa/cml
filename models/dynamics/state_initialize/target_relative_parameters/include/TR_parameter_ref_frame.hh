@@ -15,8 +15,8 @@ PROGRAMMERS:
    )
 
 *******************************************************************************/
-#ifndef CML_TARGET_RELATIVE_PARAMETERS_REFFRAME_HH
-#define CML_TARGET_RELATIVE_PARAMETERS_REFFRAME_HH
+#ifndef CML_TR_PARAMETER_REF_FRAME_HH
+#define CML_TR_PARAMETER_REF_FRAME_HH
 
 #include <string>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -47,7 +47,7 @@ class TR_Parameter_RefFrame {
 
   public:
     explicit TR_Parameter_RefFrame(std::string name);
-    virtual ~TR_Parameter_RefFrame() {};
+    virtual ~TR_Parameter_RefFrame() = default;
 
     bool compute_frame( const double vec_A[3],
                         const double vec_B[3]);

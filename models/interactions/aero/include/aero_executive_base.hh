@@ -67,7 +67,7 @@ public:
     subscribe_name = "AeroExecutiveBase:";
   }
 
-  virtual void deactivate() {
+  void deactivate() override {
     output.zero_everything();
     SubscriptionBase::deactivate();
   }

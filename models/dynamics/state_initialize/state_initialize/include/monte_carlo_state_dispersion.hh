@@ -14,8 +14,8 @@ PROGRAMMERS:
     )
 ******************************************************************************/
 
-#ifndef ANTARES_MONTE_CARLO_STATE_DISPERSION_HH
-#define ANTARES_MONTE_CARLO_STATE_DISPERSION_HH
+#ifndef CML_MONTE_CARLO_STATE_DISPERSION_HH
+#define CML_MONTE_CARLO_STATE_DISPERSION_HH
 
 #include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -53,7 +53,7 @@ class MonteCarloStateDispersion {
 
  public:
   explicit MonteCarloStateDispersion(jeod::DynBodyInitTransState & trans_init);
-  virtual ~MonteCarloStateDispersion(){};
+  virtual ~MonteCarloStateDispersion() = default;
 
   void disperse_trans_state();
 

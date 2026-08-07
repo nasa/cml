@@ -91,7 +91,7 @@ class CommandableAction
   explicit CommandableAction( CommandableActionSet & manager_);
   CommandableAction( std::string            name_,
                      CommandableActionSet & manager_);
-  virtual ~CommandableAction(){};
+  virtual ~CommandableAction() = default;
 
   void update();
   void force_command();

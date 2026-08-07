@@ -83,7 +83,7 @@ class PointingRefFrame : public SubscriptionBase {
 
   // Constructor:
   PointingRefFrame();
-  virtual ~PointingRefFrame(){};
+  ~PointingRefFrame() override = default;
 
   void set_originating_frame (jeod::RefFrame * originating_frame);
   void set_target_frame (jeod::RefFrame * target_frame);
@@ -92,8 +92,8 @@ class PointingRefFrame : public SubscriptionBase {
 
  protected:
   bool setup_frames();
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
 
  // The copy constructor and assignment operator for this class are
  // declared private and are not implemented.

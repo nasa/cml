@@ -317,7 +317,7 @@ AbstractTableLookup::verify_independent_name(
   }
 
   TableIndependentVariable *ret = AbstractTableLookup::lookup_independent(name_in);
-  if (ret != NULL) {
+  if (ret != nullptr) {
     CMLMessage::fail(
       __FILE__, __LINE__, "Invalid variable addition\n",
       "The attempted addition of an independent variable to a table set\n"
@@ -355,7 +355,7 @@ Purpose:(Verifies that the output variable from any table is unique and
 void
 AbstractTableLookup::verify_and_add_dependent_variable(double *variable_ptr)
 {
-  if (variable_ptr == NULL) {
+  if (variable_ptr == nullptr) {
     CMLMessage::fail(
       __FILE__, __LINE__, "Invalid table addition\n",
       "One of the output variables from the table lookup has no target to "

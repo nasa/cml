@@ -30,7 +30,8 @@
             "hidden": true,
             "binaryDir": "build/debug",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
         },
         {
@@ -39,8 +40,10 @@
             "hidden": true,
             "cacheVariables": {
                 "CML_BUILD_UNIT_TESTS": "OFF",
+                "CML_BUILD_MOCKS": "OFF",
                 "CML_CODE_COVERAGE": "OFF",
-                "CML_WARNINGS_AS_ERRORS": "OFF"
+                "CML_WARNINGS_AS_ERRORS": "OFF",
+                "CML_USE_SANITIZERS": "OFF"
             }
         },
         {
@@ -49,8 +52,10 @@
             "hidden": true,
             "cacheVariables": {
                 "CML_BUILD_UNIT_TESTS": "ON",
+                "CML_BUILD_MOCKS": "ON",
                 "CML_CODE_COVERAGE": "ON",
-                "CML_WARNINGS_AS_ERRORS": "ON"
+                "CML_WARNINGS_AS_ERRORS": "ON",
+                "CML_USE_SANITIZERS": "ON"
             }
         },
         {

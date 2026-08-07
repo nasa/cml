@@ -38,8 +38,8 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (June 2017) (Antares) (IV&V code review clean up)))
 *********************************************************************************/
 
-#ifndef PISTON_THRUSTER_GROUP_HH
-#define PISTON_THRUSTER_GROUP_HH
+#ifndef CML_PISTON_THRUSTER_GROUP_HH
+#define CML_PISTON_THRUSTER_GROUP_HH
 
 #include <list> // For std::list
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
@@ -100,7 +100,7 @@ public:
     :
     mode(ReferenceDeltaV),
     max_time(0.0)
-  {};
+  {}
 };
 
 
@@ -130,16 +130,16 @@ protected:
 
 public:
   explicit PistonThrusterGroup( const double & time_in);
-  virtual ~PistonThrusterGroup(){};
+  ~PistonThrusterGroup() override = default;
 
-  virtual void initialize();
+  void initialize() override;
   virtual void update();
   void add_piston_thruster( PistonThruster & new_thruster);
   void set_mode( PistonThrusterGroupParams::ForceMethod new_mode);
 
 protected:
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
 
 private:
   PistonThrusterGroup(const PistonThrusterGroup& rhs);

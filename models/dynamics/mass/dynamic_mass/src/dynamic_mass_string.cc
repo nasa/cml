@@ -176,7 +176,7 @@ Purpose: (Adds a DynamicMassBody to a string)
 void DynamicMassString::add_mass_to_string( // Return: -- void
     DynamicMassBody * new_mass_body)  /* In: -- DynamicMassBody to be added */
 {
-  if (new_mass_body == NULL) {
+  if (new_mass_body == nullptr) {
     CMLMessage::fail (
       __FILE__, __LINE__, "Setup error.\n",
       "A NULL pointer was given to the add_mass_to_string function. "
@@ -189,7 +189,7 @@ void DynamicMassString::add_mass_to_string( // Return: -- void
     if (new_mass_body == (*it)) {
       CMLMessage::error(
         __FILE__,__LINE__,"Invalid object addition\n",
-        "Attempt to add a new DynamicMassBody (", new_mass_body->name, ") that is already assigned\n"
+        "Attempt to add a new DynamicMassBody (", new_mass_body->name.get_name(), ") that is already assigned\n"
         "to this string. \n"
         "Cannot duplicate a mass-body on a single string.\n");
       return;

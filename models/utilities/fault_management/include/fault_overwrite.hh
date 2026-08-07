@@ -9,8 +9,8 @@ PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
 ############################################################################*/
-#ifndef FaultOverwrite_H
-#define FaultOverwrite_H
+#ifndef CML_FAULT_OVERWRITE_HH
+#define CML_FAULT_OVERWRITE_HH
 
 #include "fault.hh"
 
@@ -29,7 +29,7 @@ class FaultOverwrite : public Fault {
     :
     variable(var)
   {}
-  virtual ~FaultOverwrite(){}
+  ~FaultOverwrite() override = default;
 
   void overwrite_value() override { variable = faulted_value; }
 

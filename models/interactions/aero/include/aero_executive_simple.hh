@@ -69,12 +69,12 @@ public:
                        const double * const free_stream_vel_in,
                        const double (&T_inrtl_struc_in)[3][3],
                        const double & mass_in);
-  virtual ~AeroExecutiveSimple() {};
+  ~AeroExecutiveSimple() override = default;
 
   void set_drag_type(DragType drag_type);
 
-  virtual void initialize();
-  virtual void update() override;
+  void initialize() override;
+  void update() override;
 
 private:
   // Make the copy constructor and assignment operator private

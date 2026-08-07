@@ -6,8 +6,8 @@ PROGRAMMERS:
      (((Robert Phillips) (OSR) (Feb 19) (ANTARES) (created initial version)))
 ****************************************************************************** */
 
-#ifndef ANTARES_ATMOS_REL_STATE_TEST_HH
-#define ANTARES_ATMOS_REL_STATE_TEST_HH
+#ifndef CML_ATMOS_REL_STATE_TEST_HH
+#define CML_ATMOS_REL_STATE_TEST_HH
 
 #include "../../include/atmos_relative_state.hh"
 
@@ -20,7 +20,7 @@ public:
      const jeod::DynBody       & body_ref,
      ExtendedPlanetaryDerivedState & pds_ref,
      AtmosphereExecInterface       & atmos_exec_ref);
-   virtual ~AtmosRelStateTest(){};
+   ~AtmosRelStateTest() override = default;
 
    void compute_euler_angles();
 

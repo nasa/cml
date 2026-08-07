@@ -23,8 +23,8 @@ PROGRAMMERS:
     ((Gary Turner) (Odyssey) (Apr 2017) (conversion to C++)))
 *******************************************************************************/
 
-#ifndef RCS_GENERIC_HH
-#define RCS_GENERIC_HH
+#ifndef CML_RCS_GENERIC_HH
+#define CML_RCS_GENERIC_HH
 
 #include <vector>
 #include <random>
@@ -126,15 +126,15 @@ class RcsGeneric : public SubscriptionBase {
   size_t num_jets;  /* (count) number of jets at initialization (output only).*/
 
   explicit RcsGeneric (const unsigned int num_propellant_components_);
-  virtual ~RcsGeneric() {};
+  ~RcsGeneric() override = default;
 
   virtual void initialize( double   time_step,
                            const double * center_of_mass);
   void update( const int  * rcs_command);
   void update( const bool * rcs_command);
 
-  const double * get_cm() {return cm;};
-  bool get_calc_flow_rate() {return calc_flow_rate;};
+  const double * get_cm() {return cm;}
+  bool get_calc_flow_rate() {return calc_flow_rate;}
   double get_prop_loss_on(unsigned int ii) {return prop_loss_on.at(ii);}
   double get_prop_loss_off(unsigned int ii) {return prop_loss_off.at(ii);}
 

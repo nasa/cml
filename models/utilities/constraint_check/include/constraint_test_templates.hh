@@ -12,8 +12,8 @@ PROGRAMMERS:
    (New, based on GNC_PAR grok_duration_check and grok-violation models))
  )
 *******************************************************************************/
-#ifndef CML_CONSTRAINT_TEST_INSTANT_TEMPLATE_HH
-#define CML_CONSTRAINT_TEST_INSTANT_TEMPLATE_HH
+#ifndef CML_CONSTRAINT_TEST_TEMPLATES_HH
+#define CML_CONSTRAINT_TEST_TEMPLATES_HH
 
 #include <list>
 #include <algorithm> // any_of
@@ -57,7 +57,7 @@ class ConstraintTest_Threshold : public ConstraintTest
     ConstraintTest(),
     threshold()
   {}
-  virtual ~ConstraintTest_Threshold(){};
+  ~ConstraintTest_Threshold() override = default;
 
   /***************************************************************************
   * Name: initialize
@@ -148,7 +148,7 @@ class ConstraintTest_Interval : public ConstraintTest
     upper_bound(0),
     interval_bounds( ConstraintEnum::ClosedClosed)
   {}
-  virtual ~ConstraintTest_Interval(){};
+  ~ConstraintTest_Interval() override = default;
 
   /***************************************************************************
   * Name: initialize
@@ -225,7 +225,7 @@ class ConstraintTest_ValSet : public ConstraintTest
     ConstraintTest(),
     values()
   {}
-  virtual ~ConstraintTest_ValSet(){};
+  ~ConstraintTest_ValSet() override = default;
 
   /***************************************************************************
   * Name: initialize

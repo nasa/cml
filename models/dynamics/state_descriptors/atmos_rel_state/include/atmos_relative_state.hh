@@ -28,8 +28,8 @@ PROGRAMMERS:
          (Conversion to C++ and interface to planet-rel-state.)))
 ****************************************************************************** */
 
-#ifndef ANTARES_ATMOS_RELATIVE_STATE_HH
-#define ANTARES_ATMOS_RELATIVE_STATE_HH
+#ifndef CML_ATMOS_RELATIVE_STATE_HH
+#define CML_ATMOS_RELATIVE_STATE_HH
 
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -151,11 +151,11 @@ class AtmosRelativeState : public SubscriptionBase
   AtmosRelativeState( const jeod::DynBody       & body_ref,
                       ExtendedPlanetaryDerivedState & prs_ref,
                       AtmosphereExecInterface       & atmos_exec_ref);
-  virtual ~AtmosRelativeState(){};
+  ~AtmosRelativeState() override = default;
 
  protected:
-  virtual void activate();
-  virtual void deactivate();
+  void activate() override;
+  void deactivate() override;
 
   void update_zero_vel();
   void compute_angles();

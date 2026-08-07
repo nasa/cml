@@ -10,9 +10,7 @@ PROGRAMMERS:
             true parameters, simplified methods)))
 
 ******************************************************************************/
-#define _USE_MATH_DEFINES
 #include <cmath>  // M_PI, sin, cos
-#include <cstddef> // NULL
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -60,7 +58,7 @@ RocketMotorNozzle::initialize(
    double position_struc_to_motor_frame[3],
    double T_struc_to_motor_frame[3][3]) // pass-through
 {
-  if (T_struc_to_motor_frame == NULL)
+  if (T_struc_to_motor_frame == nullptr)
   {
     CMLMessage::fail(
       __FILE__,__LINE__,"Invalid initialization data.\n",
@@ -68,7 +66,7 @@ RocketMotorNozzle::initialize(
       "to motor frame.\nCannot perform correct transformation.\n");
   }
 
-  if (position_struc_to_motor_frame == NULL)
+  if (position_struc_to_motor_frame == nullptr)
   {
     CMLMessage::fail(
       __FILE__,__LINE__,"Invalid initialization parameters\n",

@@ -79,7 +79,7 @@ public:
                                          not an input array. */
 
   MassPropertiesDispersions();
-  virtual ~MassPropertiesDispersions(){};
+  virtual ~MassPropertiesDispersions() = default;
 
   void disp_mag_random_number_generator();
   void generate_inertia_tensor( bool poi_are_negative_integrals);
@@ -131,7 +131,7 @@ public:
     negative integral -int(x y dm). Default true. */
 
   MassPropertiesDispersionsFlags();
-  virtual ~MassPropertiesDispersionsFlags(){};
+  virtual ~MassPropertiesDispersionsFlags() = default;
 private:
   MassPropertiesDispersionsFlags (const MassPropertiesDispersionsFlags& rhs);
   MassPropertiesDispersionsFlags & operator = (

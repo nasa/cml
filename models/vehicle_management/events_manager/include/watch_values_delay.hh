@@ -6,8 +6,8 @@ PURPOSE: (Provides an extension to  WatchValuesBase that allows a delay
 PROGRAMMERS:
   (((Gary Turner) (OSR) (May 2023) (ANTARES) (enhancement)))
 **********************************************************************/
-#ifndef CML_WATCH_VALUES_BASE_DELAY_HH
-#define CML_WATCH_VALUES_BASE_DELAY_HH
+#ifndef CML_WATCH_VALUES_DELAY_HH
+#define CML_WATCH_VALUES_DELAY_HH
 
 #include "watch_values_base.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
@@ -51,13 +51,13 @@ class WatchValuesDelay : public WatchValuesBase<watchType>
     delay_offset(0.0),
     reset_delay(false)
   {}
- virtual ~WatchValuesDelay(){};
+ ~WatchValuesDelay() override = default;
 /*****************************************************************************
 test_crossing
 Purpose: tests for the satisfaction of the trigger condition and the subsequent
          delay condition
 *****************************************************************************/
-  virtual bool test_crossing() {
+  bool test_crossing() override {
     if (!SubscriptionBase::active) {return false;}
 
     /* Prevent triggers from being evaluated more than once per logging cycle,

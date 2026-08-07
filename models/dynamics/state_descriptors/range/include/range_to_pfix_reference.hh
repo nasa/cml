@@ -14,8 +14,8 @@ Programmers:
 
 *******************************************************************************/
 
-#ifndef CML_RANGE_TO_PFIX_REFERENCE
-#define CML_RANGE_TO_PFIX_REFERENCE
+#ifndef CML_RANGE_TO_PFIX_REFERENCE_HH
+#define CML_RANGE_TO_PFIX_REFERENCE_HH
 
 #include "range_computation.hh"
 
@@ -34,15 +34,15 @@ class RangeToPfixReference : public RangeComputation
   explicit RangeToPfixReference( const jeod::PlanetFixedPosition & state_in);
   RangeToPfixReference( const jeod::PlanetFixedPosition & state_in,
                         const double (&direction)[3]);
-  virtual ~RangeToPfixReference(){};
+  ~RangeToPfixReference() override = default;
 
-  virtual void set_reference_data() override;
+  void set_reference_data() override;
   void update ();
 
  protected:
-  virtual void update_using_cartesian() override;
-  virtual void update_using_polar() override;
-  virtual void is_abstract() override {}; // Makes this class instantiable
+  void update_using_cartesian() override;
+  void update_using_polar() override;
+  void is_abstract() override {} // Makes this class instantiable
 
  private:
 

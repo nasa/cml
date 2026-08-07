@@ -18,8 +18,8 @@
    )
 *******************************************************************************/
 
-#ifndef ANTARES_RANGE_SAFETY_DATA_HH
-#define ANTARES_RANGE_SAFETY_DATA_HH
+#ifndef CML_RANGE_SAFETY_DATA_HH
+#define CML_RANGE_SAFETY_DATA_HH
 
 
 /*
@@ -32,7 +32,7 @@ class RangeSafetyData
 {
   public:
     RangeSafetyData();
-    virtual ~RangeSafetyData(){};
+    virtual ~RangeSafetyData() = default;
 
     // INPUT VALUES
     /*FIXME -- There should probably be some checks on these azimuths in that they should

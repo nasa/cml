@@ -16,8 +16,8 @@ PROGRAMMERS:
    )
 
 *******************************************************************************/
-#ifndef CML_TARGET_RELATIVE_PARAMETERS_STATE_BASELINE_HH
-#define CML_TARGET_RELATIVE_PARAMETERS_STATE_BASELINE_HH
+#ifndef CML_TR_STATE_PARAM_HH
+#define CML_TR_STATE_PARAM_HH
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -119,7 +119,7 @@ class TargetRelative_StateParam : public TR_ParameterSet
   TargetRelative_StateParam();
 
   /* Destructor */
-  virtual ~TargetRelative_StateParam(){};
+  virtual ~TargetRelative_StateParam() = default;
 
   /* Public Methods, establishing interfaces defined in the derived classes */
   virtual void initialize( const double R_Ref[3]) = 0;
@@ -159,5 +159,5 @@ class TargetRelative_StateParam : public TR_ParameterSet
   TargetRelative_StateParam ( const TargetRelative_StateParam&);
   TargetRelative_StateParam & operator = ( const TargetRelative_StateParam&);
 };
-#endif
 
+#endif

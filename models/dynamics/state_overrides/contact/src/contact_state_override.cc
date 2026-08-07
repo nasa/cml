@@ -19,11 +19,11 @@ PROGRAMMERS:
 /*****************************************************************************
 Constructor
 *****************************************************************************/
-ContactStateOverride::ContactStateOverride(jeod::DynBody& reference_body,
-                                           jeod::DynBody& override_body)
+ContactStateOverride::ContactStateOverride(jeod::DynBody& reference_body_in,
+                                           jeod::DynBody& override_body_in)
   :
-  reference_body(reference_body),
-  override_body(override_body),
+  reference_body(reference_body_in),
+  override_body(override_body_in),
   deactivation_threshold(0.0),
   contact_normal(),
   contact_pos_overridestruc_wrt_refstruc(),
@@ -158,11 +158,11 @@ ContactStateOverride::override_state()
     // Identify the root body and cast away the const-ness so we can move it
     jeod::DynBody* override_root = const_cast<jeod::DynBody*>(
                                              override_body.get_root_body());
-    if (override_root == NULL) {
+    if (override_root == nullptr) {
       CMLMessage::error(
         __FILE__,__LINE__,"Unidentified mass tree error\n"
         "The mass-tree returned a NULL pointer for the root of the tree\n"
-        "containing the override-body (", override_body.name,"(.\n"
+        "containing the override-body (", override_body.name.get_name(),"(.\n"
         "This should not happen.\n"
         "Aborting state override.\n");
       return;

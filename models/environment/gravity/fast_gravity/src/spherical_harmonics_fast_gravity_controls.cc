@@ -52,9 +52,9 @@ SphericalHarmonicsFastGravityControls::SphericalHarmonicsFastGravityControls()
 *******************************************************************************/
 void
 SphericalHarmonicsFastGravityControls::initialize_control ( // Return: --   Void
-    jeod::GravityManager &grav_manager)          // In:     -- Ref to gravity manager
+    jeod::GravityManager &grav_manager_in)          // In:     -- Ref to gravity manager
 {
-  jeod::SphericalHarmonicsGravityControls::initialize_control(grav_manager);
+  jeod::SphericalHarmonicsGravityControls::initialize_control(grav_manager_in);
 
   if (fast_enabled) {
     gradient = true;  // Must compute gradient.

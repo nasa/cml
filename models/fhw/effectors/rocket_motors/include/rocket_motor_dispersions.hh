@@ -11,8 +11,8 @@ PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
  ******************************************************************************/
 
-#ifndef CML_SOLID_ROCKET_MOTOR_DISPERSIONS_HH
-#define CML_SOLID_ROCKET_MOTOR_DISPERSIONS_HH
+#ifndef CML_ROCKET_MOTOR_DISPERSIONS_HH
+#define CML_ROCKET_MOTOR_DISPERSIONS_HH
 
 class RocketMotorDispersions {
 public:
@@ -29,7 +29,7 @@ public:
               nominal motor frame; accounts for manufacturing tolerances. */
 
   RocketMotorDispersions();
-  virtual ~RocketMotorDispersions(){};
+  virtual ~RocketMotorDispersions() = default;
 
   void apply_dispersions( double position[3],
                           double T_parent_to_motor[3][3]);

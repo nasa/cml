@@ -9,8 +9,8 @@ PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
 ############################################################################*/
-#ifndef CML_FAULT_RAND_NUMBER_HH
-#define CML_FAULT_RAND_NUMBER_HH
+#ifndef CML_RAND_NUMBER_HH
+#define CML_RAND_NUMBER_HH
 
 #include <random> // std::mt19937, std::*_distribution
 
@@ -27,7 +27,7 @@ class FaultRandNumber {
     };
 
     FaultRandNumber();
-    virtual ~FaultRandNumber(){}
+    virtual ~FaultRandNumber() = default;
 
     void initialize();
 

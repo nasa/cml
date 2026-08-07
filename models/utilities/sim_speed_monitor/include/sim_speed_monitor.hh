@@ -6,8 +6,8 @@
    (((Gary Turner) (OSR) (Sep 2022) (Antares) (initial)))
 ***********************************************************************/
 
-#ifndef ANTARES_SIM_SPEED_MONITOR_HH
-#define ANTARES_SIM_SPEED_MONITOR_HH
+#ifndef CML_SIM_SPEED_MONITOR_HH
+#define CML_SIM_SPEED_MONITOR_HH
 
 #include <chrono>
 
@@ -23,13 +23,13 @@ class SimSpeedMonitor : public SubscriptionBase {
  public:
   double sim_speed;
 
-  SimSpeedMonitor(){};
+  SimSpeedMonitor() = default;
 
-  virtual ~SimSpeedMonitor(){};
+  ~SimSpeedMonitor() override = default;
 
   // Note -- model is self-initializing, this gets called on the first pass
   // through calculate_rate(...)
-  void initialize() {
+  void initialize() override {
     cycle_time = std::chrono::steady_clock::now();
     SubscriptionBase::initialize();
   }

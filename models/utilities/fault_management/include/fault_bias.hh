@@ -19,7 +19,7 @@ template<typename T> class FaultBias : public Fault {
   public :
 
     explicit FaultBias(T& var);
-    virtual ~FaultBias(){}
+    ~FaultBias() override = default;
 
     void overwrite_value() override;
 

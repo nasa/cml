@@ -8,8 +8,8 @@ PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
 ************************************************************************/
 
-#ifndef CML_VENT_WITH_DYN_MASS_BODY_HH
-#define CML_VENT_WITH_DYN_MASS_BODY_HH
+#ifndef CML_VENT_HH
+#define CML_VENT_HH
 
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
@@ -33,11 +33,11 @@ class Vent : public SimpleVent {
 
 
  public:
-  Vent(const double& dyn_time,
-       DynamicMassBody& tank_);
-  virtual ~Vent() {};
+  Vent(const double& dyn_time_in,
+       DynamicMassBody& tank_in);
+  ~Vent() override = default;
 
-  virtual void use_impulse_mode(bool mode = true) override;
+  void use_impulse_mode(bool mode = true) override;
   void set_force_magnitude(double force_, bool hold_impulse = false) override;
   void set_force_vector(double force_[3], bool hold_impulse = false) override;
   void set_flowrate( double flowrate,

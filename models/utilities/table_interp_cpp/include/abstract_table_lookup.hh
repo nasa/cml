@@ -17,8 +17,8 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#ifndef ANTARES_ABSTRACT_TABLE_LOOKUP_HH
-#define ANTARES_ABSTRACT_TABLE_LOOKUP_HH
+#ifndef CML_ABSTRACT_TABLE_LOOKUP_HH
+#define CML_ABSTRACT_TABLE_LOOKUP_HH
 
 #include "generic_multi_input_table.hh"
 #include "table_independent_variable.hh"
@@ -76,9 +76,9 @@ public:
   };
 
   AbstractTableLookup();
-  virtual ~AbstractTableLookup();
+  ~AbstractTableLookup() override;
 
-  virtual void initialize();
+  void initialize() override;
   virtual bool update();
 
   virtual GenericMultiInputTable * create_table(

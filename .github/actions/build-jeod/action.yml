@@ -1,0 +1,33 @@
+name: Build JEOD
+description: Clone, build, and Trickify JEOD
+
+inputs:
+  trick-home:
+    description: Path to an existing Trick build
+    required: true
+  jeod-home:
+    description: Installation path for JEOD
+    required: true
+  jeod-version:
+    description: JEOD git branch/tag to build
+    required: true
+  venv-path:
+    description: Path to the Python virtual environment
+    required: false
+    default: .venv
+
+runs:
+  using: composite
+  steps:
+    - name: Build JEOD
+      shell: bash
+      env:
+        TRICK_HOME: ${{ inputs.trick-home }}
+      run: |
+        source ${{ inputs.venv-path }}/bin/activate
+        git clone https://github.com/nasa/jeod.git \
+          --branch ${{ inputs.jeod-version }} ${{ inputs.jeod-home }}
+        cd ${{ inputs.jeod-home }}
+        make -f bin/jeod/makefile -j$(nproc) TRICK_BUILD=1
+        cd ${{ inputs.jeod-home }}/trickified
+        make -j$(nproc)

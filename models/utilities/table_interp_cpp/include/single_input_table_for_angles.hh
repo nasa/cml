@@ -22,8 +22,8 @@ PROGRAMMERS:
    ((Bingquan Wang) (OSR) (August 2014) (IV&V cleanup and refactored))
   )
 *******************************************************************************/
-#ifndef ANTARES_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
-#define ANTARES_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
+#ifndef CML_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
+#define CML_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
 
 #include <cstdarg> // for variadic function arguments
 
@@ -51,11 +51,11 @@ class SingleInputTableForAngles : public GenericSingleInputTable
                              bool output_in_radians = true);
   SingleInputTableForAngles( const DoublePtrVec & dependent_variables,
                              bool output_in_radians = true);
-  virtual ~SingleInputTableForAngles() {};
+  ~SingleInputTableForAngles() override = default;
 
-  virtual bool initialize() override;
+  bool initialize() override;
  protected:
-  virtual bool generate_output() override;
+  bool generate_output() override;
   void bound_to_half_circle( double & angle);
 #ifdef SWIG
 %mutable;

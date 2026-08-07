@@ -18,21 +18,21 @@ PROGRAMMERS:
 Constructor
 *****************************************************************************/
 RocketMotor_TableThrust::RocketMotor_TableThrust(
-    DynamicMassGroup                   & mass_group,
+    DynamicMassGroup                   & mass_group_in,
     DynamicMassBody                    * mass_body,
     DynamicMassString                  * mass_string,
     DynamicMassBodyPropertiesInterface & mass_properties,
     const double                       & time,
-    const double                       * veh_cm,
-    bool                                 use_mass_string)
+    const double                       * veh_cm_in,
+    bool                                 use_mass_string_in)
   :
-  RocketMotor_Basic( mass_group,
+  RocketMotor_Basic( mass_group_in,
                      mass_body,
                      mass_string,
                      mass_properties,
                      time,
-                     veh_cm,
-                     use_mass_string),
+                     veh_cm_in,
+                     use_mass_string_in),
   thrust_fraction(0.0),
   thrust_max(0.0),
   table_set(),
@@ -57,58 +57,58 @@ RocketMotor_TableThrust::RocketMotor_TableThrust(
 RocketMotor_TableThrust::RocketMotor_TableThrust(
     DynamicMassBody & mass,
     const double    & time,
-    const double    * veh_cm)
+    const double    * veh_cm_in)
   :
   RocketMotor_TableThrust( mass_group_internal,
                            &mass,
-                           NULL,
+                           nullptr,
                            mass.dynamic_properties,
                            time,
-                           veh_cm,
+                           veh_cm_in,
                            false)
 {}
 /****************************************************************************/
 RocketMotor_TableThrust::RocketMotor_TableThrust(
-    DynamicMassGroup & mass_group,
+    DynamicMassGroup & mass_group_in,
     DynamicMassBody  & mass,
     const double     & time,
-    const double     * veh_cm)
+    const double     * veh_cm_in)
   :
-  RocketMotor_TableThrust( mass_group,
+  RocketMotor_TableThrust( mass_group_in,
                            &mass,
-                           NULL,
+                           nullptr,
                            mass.dynamic_properties,
                            time,
-                           veh_cm,
+                           veh_cm_in,
                            false)
 {}
 /****************************************************************************/
 RocketMotor_TableThrust::RocketMotor_TableThrust(
     DynamicMassString & string,
     const double      & time,
-    const double      * veh_cm)
+    const double      * veh_cm_in)
   :
   RocketMotor_TableThrust( mass_group_internal,
-                           NULL,
+                           nullptr,
                            &string,
                            string,
                            time,
-                           veh_cm,
+                           veh_cm_in,
                            true)
 {}
 /****************************************************************************/
 RocketMotor_TableThrust::RocketMotor_TableThrust(
-    DynamicMassGroup  & mass_group,
+    DynamicMassGroup  & mass_group_in,
     DynamicMassString & string,
     const double      & time,
-    const double      * veh_cm)
+    const double      * veh_cm_in)
   :
-  RocketMotor_TableThrust( mass_group,
-                           NULL,
+  RocketMotor_TableThrust( mass_group_in,
+                           nullptr,
                            &string,
                            string,
                            time,
-                           veh_cm,
+                           veh_cm_in,
                            true)
 {}
 
@@ -364,6 +364,8 @@ RocketMotor_TableThrust::set_consumption_type( ConsumptionType type_in)
   }
   else {
     switch (type_in) {
+     case Undefined:
+     case ConstantFlow:
      default:
        break;
      case PropConsumptionIsp:
@@ -395,6 +397,7 @@ RocketMotor_TableThrust::set_consumption_type( ConsumptionType type_in)
   table_set.enable_table_interp( &mburn_table, false);
 
   switch (consumption_type) {
+  case Undefined:
   case ConstantFlow:
   default:
     break;
@@ -476,7 +479,7 @@ RocketMotor_TableThrust::compute_flow_rate_and_isp()
     else {
       mass_flow_rate = MathUtils::divide_protected( delta_mass, dt, 0.0);
     }
-    // fallthrough
+    [[fallthrough]];
   case Undefined:
   case ConstantFlow:
   case PropConsumptionMdot:

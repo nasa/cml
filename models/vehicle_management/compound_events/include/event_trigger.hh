@@ -13,8 +13,8 @@ PROGRAMMERS:
     capabilities in CML))
   )
 **********************************************************************/
-#ifndef CML_EVENT_MANAGEMENT_EVENT_TRIGGER_HH
-#define CML_EVENT_MANAGEMENT_EVENT_TRIGGER_HH
+#ifndef CML_EVENT_TRIGGER_HH
+#define CML_EVENT_TRIGGER_HH
 
 #include "cml/models/vehicle_management/events_manager/include/watch_values_delay.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -178,8 +178,8 @@ class EventTrigger : public WatchValuesDelay<T>,
      * class's test_crossing_dbl() method from high up in the WatchValues
      * inheritance tree.*/
     WatchValuesBase<T>::use_threshold_crossing_trigger = true;
-  };
-  virtual ~EventTrigger(){};
+  }
+  ~EventTrigger() override = default;
 
 
  protected:
@@ -223,7 +223,7 @@ Notes:
   in WatchValuesBase prior to entry into this method.
 ******************************************************************************/
   void test_crossing_dbl( double var_val,
-                          double ref_val)
+                          double ref_val) override
   {
     if (this->reference_is_variable) {
       if (relative_to_activation_ET) {
@@ -411,7 +411,7 @@ Notes:
       Threshold value = f(v_0) + delta
    So then we will be testing, e.g: f(v) > f(v_0) + delta
  ******************************************************************************/
-  void activate() {
+  void activate() override {
     if (this->variable == nullptr) {
       CMLMessage::error ( __FILE__, __LINE__,
         "Invalid Event/Watch activation: nullptr variable:\n",
@@ -520,7 +520,7 @@ Notes:
 
     // All actions complete, set the active flag and exit.
     this->active = true;
-  };
+  }
 
  private:
   EventTrigger (const EventTrigger& rhs);

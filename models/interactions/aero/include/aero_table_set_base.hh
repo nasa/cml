@@ -134,16 +134,16 @@ public:
                     AeroCoefficientsTable & coefficients_out,
                     AeroCoefficientsDisp  & uncertainties_out);
 
-  virtual ~AeroTableSetBase() {};
+  ~AeroTableSetBase() override = default;
 
-  virtual void initialize();
+  void initialize() override;
   void configure_table();
-  bool get_damping_in_table() { return aero_damping_in_table;};
-  AeroDataTableType get_table_type() { return data_table_type;};
+  bool get_damping_in_table() { return aero_damping_in_table;}
+  AeroDataTableType get_table_type() { return data_table_type;}
   AeroDampingType get_damping_on_diag_in_table() {
-                         return aero_damping_on_diag_in_table;};
+                         return aero_damping_on_diag_in_table;}
   AeroDampingType get_damping_off_diag_in_table() {
-                         return aero_damping_off_diag_in_table;};
+                         return aero_damping_off_diag_in_table;}
 
   void set_table_type(AeroDataTableType new_type);
 

@@ -575,7 +575,7 @@ TableLookupTransposeDataSet::remove_config(
       return false;
   }
   else {
-    table_config.erase(table_config.begin() + ix_del);
+    table_config.erase(table_config.begin() + static_cast<int>(ix_del));
   }
   return true;
 }

@@ -9,8 +9,8 @@ PROGRAMMERS:
     (Merging concepts found in former grok-events and CML-events))
   )
 ***********************************************************************/
-#ifndef CML_EVENT_MANAGEMENT_COMPOUND_EVENTS_MANAGER_HH
-#define CML_EVENT_MANAGEMENT_COMPOUND_EVENTS_MANAGER_HH
+#ifndef CML_COMPOUND_EVENT_MANAGER_HH
+#define CML_COMPOUND_EVENT_MANAGER_HH
 
 #include "cml/models/vehicle_management/events_manager/include/vehicle_events_manager.hh"
 #include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
@@ -51,10 +51,10 @@ class CompoundEventsManager : public VehicleEventsManager
     Default: true.*/
 
   explicit CompoundEventsManager(const double & time);
-  virtual ~CompoundEventsManager();
+  ~CompoundEventsManager() override;
 
-  void initialize();
-  void update();
+  void initialize() override;
+  void update() override;
 
   void add_event(WatchValuesBaseCore &);
   CompoundEvent& create_event();
@@ -181,7 +181,7 @@ class CompoundEventsManager : public VehicleEventsManager
  private:
   // execution_follow_up is a pure-virtual method in VehicleEventsManager.
   // It is not needed in this type of events-manager so is defined empty.
-  void execution_follow_up(){};
+  void execution_follow_up() override {}
 
 
   template <typename T>
