@@ -59,6 +59,7 @@ class AtmosphereExecInterface : public SubscriptionBase
                             const jeod::DynBody  & body);
     ~AtmosphereExecInterface() override = default;
 
+    using SubscriptionBase::initialize;
     void initialize() override;
 
     std::string get_current_atmos_name() {

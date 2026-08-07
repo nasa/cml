@@ -39,6 +39,7 @@ public:
   // NOTE - initialize(jeod::DynManager) is called from Dynamics Manager as a
   // consequence of adding this body action with the add_body_action method
   // call.
+  using jeod::BodyDetach::initialize;
   void initialize( const jeod::DynBody & parent,
                    SeparationState & sep_state)
   {
@@ -97,7 +98,7 @@ public:
   };
 
   void apply( jeod::DynManager & dyn_manager) override
-  {  
+  {
     springs.action_body_is_child = child_is_action_body;
     springs.activate();
     jeod::BodyDetach::apply(dyn_manager);

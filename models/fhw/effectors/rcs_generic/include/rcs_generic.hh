@@ -128,6 +128,7 @@ class RcsGeneric : public SubscriptionBase {
   explicit RcsGeneric (const unsigned int num_propellant_components_);
   ~RcsGeneric() override = default;
 
+  using SubscriptionBase::initialize;
   virtual void initialize( double   time_step,
                            const double * center_of_mass);
   void update( const int  * rcs_command);

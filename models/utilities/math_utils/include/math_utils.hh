@@ -236,7 +236,7 @@ public:
       return false;
     }
     return ((val2 > val1) ?
-                val1 + tol >= val2 : 
+                val1 + tol >= val2 :
                 val2 + tol >= val1);
   }
   template <typename T>
@@ -310,11 +310,11 @@ public:
   {
     return MathUtilsPrivate::asin_fp<double>(val);
   }
-    
+
   /* TODO Hirad Mirhashemi 2025/10.
   * DEPRECATED CONTENT. Remove after reasonable timeframe.*/
-  static float sqrt( float val) 
-  { 
+  static float sqrt( float val)
+  {
     CMLMessage::inform(__FILE__,__LINE__,
       "Deprecated method used: sqrt.\n"
       "This method name was not sufficiently descriptive.\n"
@@ -322,7 +322,7 @@ public:
     return sqrt_protected(val);
   }
   static double sqrt( double val)
-  { 
+  {
     CMLMessage::inform(__FILE__,__LINE__,
       "Deprecated method used: sqrt.\n"
       "This method name was not sufficiently descriptive.\n"
@@ -975,7 +975,7 @@ Purpose:
     // [in] = [C_decomp] * [C_decomp]'  => [inv(in)] = [inv(C)]' * [inv(C)]
     // and the inverse of the decomposed matrix is arithmetically simple to
     // compute.
-    double C_inv[dimension][dimension] = {0};
+    double C_inv[dimension][dimension] = {{0}};
     for ( size_t ii = 0; ii < dimension; ii++) {
       // Note -- division by zero already checked above and method has
       // returned if any diagonal elements are zero.

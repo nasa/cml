@@ -54,5 +54,21 @@ class LaggedAtmosPayloadData {
     jeod::Vector3::copy(orig.planetodetic_wind_velocity,
                         planetodetic_wind_velocity);
   }
+
+
+  LaggedAtmosPayloadData& operator=(const LaggedAtmosPayloadData& rhs)
+  {
+    if (this != &rhs) {
+      altitude = rhs.altitude;
+      density = rhs.density;
+      speed_of_sound = rhs.speed_of_sound;
+
+      jeod::Vector3::copy(rhs.planetodetic_wind_velocity,
+                          planetodetic_wind_velocity);
+    }
+    return *this;
+  }
+
+
 };
 #endif
