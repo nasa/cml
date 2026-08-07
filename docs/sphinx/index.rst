@@ -9,13 +9,13 @@ The models are primarily intended for use in conjunction with NASA's
 `Trick Simulation framework <https://nasa.github.io/trick/>`_.
 These models are comprised of:
 
-- :doc:`Dynamics models <src/models/dynamics/index>` which initialize or describe a spacecraft's state.
-- :doc:`Environment models <src/models/environment/index>` which implement celestial body gravitational and atmospheric effects.
-- :doc:`Flight hardware models <src/models/fhw/index>` which model the physics of sensors, actuators, and avionics.
-- :doc:`Interaction models <src/models/interactions/index>` of a spacecraft's immediate orbital environment on its equations of motion.
-- :doc:`Vehicle management models <src/models/vehicle_management/index>` for event-handling logic and flight software emulation.
-- :doc:`Miscellaneous numerical utility models <src/models/utilities/index>` frequently used in spacecraft simulations.
-- :doc:`Tools <src/models/tools/index>` for verification testing in a Trick simulation environment.
+- :doc:`Dynamics models <models/dynamics/index>` which initialize or describe a spacecraft's state.
+- :doc:`Environment models <models/environment/index>` which implement celestial body gravitational and atmospheric effects.
+- :doc:`Flight hardware models <models/fhw/index>` which model the physics of sensors, actuators, and avionics.
+- :doc:`Interaction models <models/interactions/index>` of a spacecraft's immediate orbital environment on its equations of motion.
+- :doc:`Vehicle management models <models/vehicle_management/index>` for event-handling logic and flight software emulation.
+- :doc:`Miscellaneous numerical utility models <models/utilities/index>` frequently used in spacecraft simulations.
+- :doc:`Tools <models/tools/index>` for verification testing in a Trick simulation environment.
 
 .. toctree::
     :maxdepth: 2
@@ -24,13 +24,13 @@ These models are comprised of:
     :titlesonly:
     :hidden:
 
-    src/models/dynamics/index
-    src/models/environment/index
-    src/models/fhw/index
-    src/models/interactions/index
-    src/models/vehicle_management/index
-    src/models/tools/index
-    src/models/utilities/index
+    models/dynamics/index
+    models/environment/index
+    models/fhw/index
+    models/interactions/index
+    models/vehicle_management/index
+    models/tools/index
+    models/utilities/index
 
 .. toctree::
     :maxdepth: 1
@@ -39,10 +39,10 @@ These models are comprised of:
     :titlesonly:
     :hidden:
 
-    src/contributing/getting-started
-    src/contributing/contributing
-    src/contributing/coding-standards
-    src/contributing/building-the-docs
+    contributing/getting-started
+    contributing/contributing
+    contributing/coding-standards
+    contributing/building-the-docs
 
 .. toctree::
    :maxdepth: 1

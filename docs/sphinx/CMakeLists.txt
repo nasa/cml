@@ -18,12 +18,12 @@ if (TARGET Doxygen::doxygen AND Sphinx_FOUND)
             _static/cml_theme.css
             _static/trickunits.css
             _static/trickunits.js
-            src/contributing/building-the-docs.rst
-            src/contributing/coding-standards.rst
-            src/contributing/contributing.rst
-            src/contributing/getting-started.rst
-            src/models/utilities/index.rst
-            src/models/utilities/subscriptions.rst
+            contributing/building-the-docs.rst
+            contributing/coding-standards.rst
+            contributing/contributing.rst
+            contributing/getting-started.rst
+            models/utilities/index.rst
+            models/utilities/subscriptions.rst
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating documentation with Sphinx"
     )
