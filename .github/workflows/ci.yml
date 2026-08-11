@@ -1,7 +1,7 @@
 # This is the main workflow for testing CML. It sets up dependencies, builds
 # CML, runs unit tests, builds and runs verification sims, and checks to make
 # sure that the committed verification data is reproducible.
-name: Build and Test CML
+name: Continuous Integration
 
 on:
   push:
@@ -15,8 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build and Test
+  test:
     runs-on: ubuntu-latest
     container:
       image: rockylinux:8
