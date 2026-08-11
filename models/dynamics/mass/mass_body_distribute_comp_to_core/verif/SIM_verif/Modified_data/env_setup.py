@@ -3,7 +3,7 @@ dynamics.dyn_manager_init.mode = trick.DynManagerInit.EphemerisMode_EmptySpace
 dynamics.dyn_manager_init.central_point_name = "Space"
 
 for ii in range(3):
-  so.body[ii].name = "body_"+str(ii)
+  so.body[ii].set_name("body_"+str(ii))
 
   so.mass_init[ii].set_subject_body( so.body[ii] )
   so.mass_init[ii].properties.mass = 3.0-ii

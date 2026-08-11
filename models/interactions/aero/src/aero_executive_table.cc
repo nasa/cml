@@ -564,7 +564,7 @@ AeroExecutiveTable::aero_forces_moments()
       //   Added a safety threshold, set at construction time to prevent this
       //   from blowing up when unexpected winds produce small momentary
       //   free-stream velocities.
-      double L_over_V = Lref / (l_over_v_scale * fsv_mag);
+      double L_over_V = Lref / (static_cast<double>(l_over_v_scale) * fsv_mag);
       double body_rate_aero_frm[3];
       jeod::Vector3::transform( T_body_to_aero_frame,
                           environment.get_true_body_rates(),
