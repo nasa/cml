@@ -44,6 +44,12 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
     FunctionType type; /* (--)
       The type of function to add to the fault variable. */
 
+// SWIG doesn't respect deleted copy constructors or assignment operators if you
+// include an instance of a class you're inheriting from as a member variable
+// without this guard.
+#ifdef SWIG
+%immutable;
+#endif
     // Periodic function parameters
     FaultFunctionParameter frequency; /* (--)
       The frequency of the periodic functions as a linear function of some
@@ -58,6 +64,9 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
       independent variable. Note: the model treats phase such that the model
       is cyclic with a phase shift of 1.0. The phase-offset represents the
       fraction of a period, not a measure of radians or degrees.*/
+#ifdef SWIG
+%mutable;
+#endif
 
   protected:
     double freq_int; /* (--)

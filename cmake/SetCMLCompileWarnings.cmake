@@ -19,6 +19,10 @@ function(set_cml_compile_warnings TARGET)
         -Wextra
         -Wpedantic
 
+        # TODO Nino Tarantino 8/11/2026: Re-enable as part of
+        # https://github.com/nasa/cml/issues/27
+        -Wno-overloaded-virtual
+
         # Stricter warnings.
         -Walloca
         -Wcast-align

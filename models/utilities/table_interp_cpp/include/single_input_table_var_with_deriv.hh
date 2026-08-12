@@ -27,9 +27,18 @@
 class SingleInputTableVarDeriv : public GenericSingleInputTable
 {
  public:
+// SWIG doesn't respect deleted copy constructors or assignment operators if you
+// include an instance of a class you're inheriting from as a member variable
+// without this guard.
+#ifdef SWIG
+%immutable;
+#endif
   GenericSingleInputTable  derivs; /* (--)
     A parallel instance of GenericSingleInputTable used to manage the data
     for the first-derivative variable.*/
+#ifdef SWIG
+%mutable;
+#endif
   bool omit_derivative_vals; /* (--)
     Flag indicating whether this dual-data table is to be used to populate
     the first-derivative variables as well as the zeroth-derivative

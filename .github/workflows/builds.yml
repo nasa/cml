@@ -1,0 +1,76 @@
+# This workflow tests the CML build on other supported operating systems.
+name: Builds
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rocky-linux-9:
+    runs-on: ubuntu-latest
+    container:
+      image: rockylinux:9
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install system dependencies
+        run: |
+          dnf install -y epel-release
+          dnf update -y
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --enable crb
+          dnf install -y \
+            bison clang clang-devel cmake diffutils flex gcc \
+            gcc-c++ git java-17-openjdk-devel \
+            libxml2-devel llvm-devel llvm-static maven ncurses-devel \
+            openmotif openmotif-devel perl perl-Digest-MD5 python3-devel \
+            swig udunits2 udunits2-devel which zlib-devel \
+            gtest-devel gmock-devel libasan liblsan libubsan
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure environment
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> "$GITHUB_ENV"
+          echo "CML_HOME=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+          echo "TRICK_HOME=$GITHUB_WORKSPACE/externals/trick" >> "$GITHUB_ENV"
+          echo "JEOD_HOME=$GITHUB_WORKSPACE/externals/jeod" >> "$GITHUB_ENV"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          echo "SSL_CERT_FILE=/etc/pki/tls/cert.pem" >> "$GITHUB_ENV"
+
+      - name: Set up Python virtual environment
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip3 install --upgrade pip
+          pip3 install .
+
+      - name: Build Trick
+        uses: ./.github/actions/build-trick
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+
+      - name: Build JEOD
+        uses: ./.github/actions/build-jeod
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          jeod-home: ${{ env.JEOD_HOME }}
+
+      - name: Trickify CML
+        run: make -C trickified
+
+      - name: Build CML
+        run: |
+          cmake --preset dev
+          cmake --build --preset dev -t cml_shared -t cml_static
