@@ -1,6 +1,6 @@
 export CML_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export CTEST_PARALLEL_LEVEL=10
-export ASAN_OPTIONS="suppressions=${CML_HOME}/utility/sanitizers/asan.supp"
+export ASAN_OPTIONS="suppressions=${CML_HOME}/utility/sanitizers/asan.supp:fast_unwind_on_malloc=0"
 export LSAN_OPTIONS="suppressions=${CML_HOME}/utility/sanitizers/lsan.supp"
 
 venv="${CML_HOME}/.venv/bin/activate"

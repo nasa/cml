@@ -16,3 +16,4 @@ leak:*numpy*
 # Ignore other leaks that we can't do anything about.
 leak:vasprintf
 leak:libudunits*
+leak:jeod::*
