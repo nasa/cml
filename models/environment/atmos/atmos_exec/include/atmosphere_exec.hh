@@ -111,7 +111,6 @@ class AtmosphereExec : public AtmosphereExecInterface {
 
     ~AtmosphereExec() override = default;
 
-    using AtmosphereExecInterface::initialize;
     void initialize( jeod::TimeStandard & time_in);
 
     void update ();

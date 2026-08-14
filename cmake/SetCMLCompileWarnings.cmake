@@ -65,7 +65,6 @@ function(set_cml_compile_warnings TARGET)
         -Wuseless-cast
     )
 
-
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
        # GCC -> add GCC-only warnings
        list(APPEND CML_CPP_WARNING_FLAGS ${GCC_ONLY_WARNINGS})

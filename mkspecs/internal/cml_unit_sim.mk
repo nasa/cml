@@ -49,16 +49,20 @@ TRICK_CXXFLAGS += -I${JEOD_HOME}/..
 # macOS (Darwin) specific fixes
 # ============================================================
 UNAME_S := $(shell uname -s)
-
 ifeq ($(UNAME_S),Darwin)
 
 # ------------------------------------------------------------
 # 1. Strip Trick's auto-added -std=c++11 and -std=c++14
+# 2. Add -Wno-overloaded-virtual to Apple builds
 # ------------------------------------------------------------
 TRICK_IO_CXXFLAGS := $(filter-out -std=c++11 -std=c++14,$(TRICK_IO_CXXFLAGS))
 TRICK_IO_CXXFLAGS += -std=c++17
 
 TRICK_CXXFLAGS := $(filter-out -std=c++11 -std=c++14,$(TRICK_CXXFLAGS))
 TRICK_CXXFLAGS += -std=c++17
+
+TRICK_CXXFLAGS += -Wno-overloaded-virtual
+TRICK_CFLAGS   += -Wno-overloaded-virtual
+TRICK_IO_CXXFLAGS += -Wno-overloaded-virtual
 
 endif

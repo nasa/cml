@@ -114,7 +114,6 @@ class WatchValuesBaseCore : public SubscriptionBase {
   ~WatchValuesBaseCore() override;
 
 
-  using SubscriptionBase::initialize;
   virtual void initialize( std::list<WatchValuesBaseCore *> * active_watch_in);
   void set_direction(int arg);
 

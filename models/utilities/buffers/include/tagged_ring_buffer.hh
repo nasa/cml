@@ -82,7 +82,6 @@ Note:
   intermediate instance.
   The code is ugly to read, but simplified with the use of aliases.
 *****************************************************************************/
-  using CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >::buffer_data;
   virtual void buffer_data( T_Tag t,
                             const T_Data & d)
   {

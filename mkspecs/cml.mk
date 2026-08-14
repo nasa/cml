@@ -63,5 +63,3 @@ ifeq ($(shell pkg-config --exists libxml-2.0 && echo $$?),0)
     TRICK_CXXFLAGS += $(shell pkg-config libxml-2.0 --cflags)
     TRICK_LDFLAGS += $(shell pkg-config libxml-2.0 --libs)
 endif
-
-SDK_PATH := $(shell xcrun --sdk macosx --show-sdk-path)

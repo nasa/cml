@@ -67,7 +67,6 @@ class SeparationState : public SubscriptionBase
    explicit SeparationState (std::string name);
    ~SeparationState() override = default;
 
-   using SubscriptionBase::initialize;
    void initialize( jeod::DynManager & dyn_manager_in,
                     jeod::DynBody & source_body,
                     jeod::DynBody & subject_body,

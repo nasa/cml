@@ -237,7 +237,6 @@ public:
   TwistSway(const double & time_ref);
   ~TwistSway() override = default;
 
-  using SubscriptionBase::initialize;
   void initialize(double end_time);
   bool update();
   void update_ecef();
