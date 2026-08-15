@@ -128,7 +128,7 @@ void
 Constraint::activate()
 {
   if (!enabled || !initialized) {return;}
-  for (auto test: test_list) {
+  for (auto* test: test_list) {
     test->activate();
   }
   active = true;

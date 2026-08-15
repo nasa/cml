@@ -86,7 +86,7 @@ Purpose:(Determines whether any trigger group is triggered.)
 *******************************************************************************/
 bool Fault::is_triggered() {
   bool is_triggered = false;
-  for (auto tg : trigger_groups) {
+  for (auto* tg : trigger_groups) {
     is_triggered = tg->operate() || is_triggered;
     // Operate on all trigger groups (even if it has already been determined
     // that one of them is triggered) because periodic triggers should be
