@@ -745,7 +745,8 @@ StateInitialize::select_attitude_initializer()
    {
     generate_random(att_random_seed);
     random_value *= M_PI; // Half of the random rotation angle about the x-axis
-    double sinhalf = std::sin(random_value), coshalf = std::cos(random_value);
+    double sinhalf = std::sin(random_value);
+    double coshalf = std::cos(random_value);
     double temp = std::sqrt(2 * (random_unit_vector[0] + 1));
     jeod::Quaternion random_att;
     // random_unit_vector is the new orientation of the x-axis
