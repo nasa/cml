@@ -33,7 +33,6 @@ public:
   /***************************************************************************/
   AeroExecutiveTable  executive; /* (--) The executable component. */
 
-public:
   AeroInterfaceTable( AtmosRelativeState & atmos_rel_state_in,
                       const double & geodetic_altitude,
                       const double * const cg_position,

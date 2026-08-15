@@ -54,7 +54,6 @@ class RangeValues
   double total_range_ref_rad;   /* (m) Total range arc-length using
                                        reference radius */
 
- public:
   RangeValues();
   virtual ~RangeValues() = default;
  private:

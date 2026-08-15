@@ -63,7 +63,6 @@ public:
           maximum acceleration of 1E6 m/s^2. Can be adjusted to accommodate
           extreme cases. */
 
-public:
   AeroExecutiveSimple( AeroInterfaceOutput & output_ref,
                        const double & dynamic_pressure,
                        const double * const free_stream_vel_in,

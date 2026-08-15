@@ -62,7 +62,6 @@ public:
           maximum acceleration of 1E6 m/s^2. Can be adjusted to accommodate
           extreme cases. */
 
-public:
   AeroExecutiveSimpleLiftDrag( AeroInterfaceOutput & output_ref,
                        const double & dynamic_pressure,
                        const double (&T_inrtl_traj_in)[3][3],

@@ -53,7 +53,7 @@ public:
   // Outputs
   /***************************************************************************/
   AeroInterfaceOutput output; /* (--) output of the model. */
-public:
+
   AeroInterfaceBase( AtmosRelativeState & atmos_rel_state_in,
                      const double       & geodetic_altitude);
 

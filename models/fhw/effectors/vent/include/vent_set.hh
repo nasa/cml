@@ -101,8 +101,7 @@ class VentSet : public SubscriptionBase {
 
  private:
   void start_vent_internal( SimpleVent * vent);
-
- private:
+ 
   VentSet(const VentSet&);
   VentSet& operator = (const VentSet&);
 };

@@ -165,8 +165,7 @@ class WakeFollowingBodyWithForce : public WakeFollowingBody
 
   // Model output
   double force[3];  /* (N) output force in struc frame.*/
-
- public:
+ 
   WakeFollowingBodyWithForce(
                const double & area_in,
                const double * inertial_pos,
