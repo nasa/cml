@@ -118,7 +118,7 @@ Purpose:(Looks up a fault by name. If no fault with that name is found, returns
 Fault* FaultManager::get_fault( std::string name) {
   for (unsigned int ii = 0; ii < Location_count; ii++) {
     for (auto fault : faults[ii]) {
-      if (name.compare(fault->name) == 0) {
+      if (name == fault->name) {
         return fault;
       }
     }
@@ -135,7 +135,7 @@ Purpose:(Looks up a trigger by name. If no trigger with that name is found,
 *******************************************************************************/
 TriggerBase* FaultManager::get_trigger( std::string name) {
   for (auto trigger : triggers) {
-    if (name.compare(trigger->name) == 0) {
+    if (name == trigger->name) {
       return trigger;
     }
   }

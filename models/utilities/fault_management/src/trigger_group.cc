@@ -52,7 +52,7 @@ bool TriggerGroup::set_trigger_enable( std::string trigger_name,
 {
   bool trigger_found = false;
   for (auto& it : triggers) {
-    if (trigger_name.compare(it.second->name) == 0) {
+    if (trigger_name == it.second->name) {
       it.first = enable_flag;
       trigger_found = true;
     }

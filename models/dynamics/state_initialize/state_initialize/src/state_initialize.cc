@@ -630,8 +630,7 @@ StateInitialize::select_attitude_initializer()
     //      using a passthrough option and may not have been set at all if
     //      using an orbital-elements specification.
     if( use_trans_init_passthrough &&
-           (reference_ref_frame_name_inertial.compare(
-                                 trans_init.reference_ref_frame_name) == 0)) {
+           (reference_ref_frame_name_inertial == trans_init.reference_ref_frame_name)) {
       CMLMessage::fail (
         __FILE__, __LINE__, "StateInitialization::invalid_configuration\n",
         "Rot init is being configured using the sun-vehicle vector.\n"

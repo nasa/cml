@@ -57,7 +57,7 @@ Purpose:(Generic method for setting fault parameters. For this type of fault,
 *******************************************************************************/
 template<typename T>
 bool FaultBias<T>::set_param(std::string param_name, double value, bool) {
-  if (param_name.compare("bias") == 0) {
+  if (param_name == "bias") {
     bias = value;
   } else {
     return Fault::set_param(param_name, value);

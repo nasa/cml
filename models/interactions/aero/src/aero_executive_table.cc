@@ -110,7 +110,7 @@ AeroExecutiveTable::change_table( std::string new_name)
 {
   // Check trivial case - change commanded to current table.
   if (current_table != nullptr) {
-    if (current_table->name.compare(new_name) == 0) {
+    if (current_table->name == new_name) {
       CMLMessage::inform(
         __FILE__,__LINE__,"Redundant request\n",
         "Request to change table to ", new_name, ", but already using that table.\n"
@@ -121,7 +121,7 @@ AeroExecutiveTable::change_table( std::string new_name)
   for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
                                                  it != data_tables_vector.end();
                                                  ++it) {
-    if ( (*it)->name.compare(new_name) == 0) {
+    if ( (*it)->name == new_name) {
       configure_new_table(*it);
       return;
     }
@@ -184,7 +184,7 @@ AeroExecutiveTable::add_table( AeroTableSetBase * table)
         "Check configuration for possibility of duplicate additions.\n"
         "Continuing with the addition of this table.\n");
     }
-    else if ((*it)->name.compare( table->name) == 0) {
+    else if ((*it)->name == table->name) {
       CMLMessage::warn(
         __FILE__,__LINE__,"Duplication of Aero table.\n",
         "An AeroTableSetBase with this name (", (*it)->name, ") has previously been added.\n"

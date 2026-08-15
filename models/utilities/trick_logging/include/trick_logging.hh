@@ -213,7 +213,7 @@ class TrickLogging {
         return nullptr;
       }
       for (Trick::DataRecordGroup * group:group_list) {
-        if (group->group_name.compare(name) == 0) {
+        if (group->group_name == name) {
           return group;
         }
       }

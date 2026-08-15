@@ -387,7 +387,7 @@ AbstractTableLookup::lookup_independent(
   auto it = std::find_if(
                  independents.begin(), independents.end(),
                  [var_name] (TableIndependentVariable * var_) {
-                   return (var_name.compare(var_->get_name()) == 0);
+                   return (var_name == var_->get_name());
                  });
   if (it == independents.end()) { return nullptr; }
   return *it;

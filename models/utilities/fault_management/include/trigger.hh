@@ -212,10 +212,10 @@ template<> class Trigger<std::string> : public TriggerBase {
 
       switch (Operator) {
         case EQ:
-          success = value.compare(variable) == 0;
+          success = value == variable;
           break;
         case NE:
-          success = value.compare(variable) != 0;
+          success = value != variable;
           break;
         case LT:
         case LE:

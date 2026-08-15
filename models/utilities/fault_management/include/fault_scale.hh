@@ -58,7 +58,7 @@ Purpose:(Generic method for setting parameters. For this type of fault, can be
 *******************************************************************************/
 template<typename T>
 bool FaultScale<T>::set_param(std::string param_name, double value, bool) {
-  if (param_name.compare("scale_factor") == 0) {
+  if (param_name == "scale_factor") {
     scale_factor = value;
   } else {
     return Fault::set_param(param_name, value);
