@@ -41,7 +41,9 @@ Purpose:(Makes sure all dependencies are in place before executing)
 void
 AtmosphereExec_SimpleLookupWind::activate()
 {
-  if (active) return; // no action needed
+  if (active) {
+    return; // no action needed
+  }
 
   if (altitude_type == Topocentric) {
     subscribe_to_topocentric_altitude();
@@ -57,7 +59,9 @@ Purpose:(Removes subscriptions)
 void
 AtmosphereExec_SimpleLookupWind::deactivate()
 {
-  if (!active) return; // no action needed.
+  if (!active) {
+    return; // no action needed.
+  }
 
   if (altitude_type == Topocentric ) {
     planet_state.unsubscribe_topocentric_altitude();
@@ -74,7 +78,9 @@ Purpose:(Executes the table lookup, then takes the output from the
 void
 AtmosphereExec_SimpleLookupWind::update_winds()
 {
-  if (!active) return;
+  if (!active) {
+    return;
+  }
 
   // Quick check that update is necessary:
   // NOTE - altitude_ptr is set at construction; it may be reset via

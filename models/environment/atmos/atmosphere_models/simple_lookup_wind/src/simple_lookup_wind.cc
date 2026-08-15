@@ -42,7 +42,9 @@ Purpose:(Initializes the model)
 void
 SimpleLookupWind::initialize()
 {
-  if (initialized) return;
+  if (initialized) {
+    return;
+  }
 
   // Split based on which set of tables to use.
   if (wind_components_specified) {
@@ -85,7 +87,9 @@ Purpose:(Main executive.  Executes the table-lookup and converts to desired
 void
 SimpleLookupWind::update(double altitude_in)
 {
-  if (!active) return;
+  if (!active) {
+    return;
+  }
 
   // Make a copy of the argument; this is the variable that the table-lookups
   // will use as an input.

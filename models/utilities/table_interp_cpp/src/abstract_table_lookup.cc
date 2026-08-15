@@ -226,8 +226,9 @@ AbstractTableLookup::create_table(
   DoublePtrVec variables(num_vars);
   va_list variables_in;
   va_start(variables_in, variable_0);
-  if (0 < num_vars)
+  if (0 < num_vars) {
     variables[0] = variable_0;
+  }
   for (size_t ii = 1; ii < num_vars; ++ii) {
     variables[ii] = va_arg(variables_in, double*);
   }
@@ -401,7 +402,9 @@ bool
 AbstractTableLookup::is_table_interp_enabled(
     const GenericMultiInputTable *tbl) const
 {
-  if ((tbl == nullptr) || tables.empty()) {return false;}
+  if ((tbl == nullptr) || tables.empty()) {
+    return false;
+  }
   auto it = std::find_if( tables.begin(), tables.end(),
                           [tbl] (const TableItem_t & table_) {
                             return (table_.first == tbl);
@@ -419,7 +422,9 @@ void
 AbstractTableLookup::enable_table_interp(
     const GenericMultiInputTable *tbl, bool flag)
 {
-  if ((tbl == nullptr) || tables.empty()) return;
+  if ((tbl == nullptr) || tables.empty()) {
+    return;
+  }
 
   auto it = std::find_if( tables.begin(), tables.end(),
                           [tbl] (const TableItem_t & table_) {

@@ -19,7 +19,9 @@ Purpose:(Finds an XML node with the given name at the same level as the
 specified node.)
 *******************************************************************************/
 xmlNodePtr XmlHelper::xml_find(xmlNodePtr node, const char* name) {
-  if ((node == nullptr) || (name == nullptr)) return nullptr;
+  if ((node == nullptr) || (name == nullptr)) {
+    return nullptr;
+  }
 
   for(; node != nullptr; node=node->next) {
     if(xml_name_match(node, name)) {
@@ -35,7 +37,9 @@ xml_find_child
 Purpose:(Finds a child XML node with the given name.)
 *******************************************************************************/
 xmlNodePtr XmlHelper::xml_find_child(xmlNodePtr node, const char* name) {
-  if ((node == nullptr) || (name == nullptr)) return nullptr;
+  if ((node == nullptr) || (name == nullptr)) {
+    return nullptr;
+  }
 
   return xml_find(node->children, name);
 }
@@ -50,7 +54,9 @@ Purpose:
    entire subtree through all generations.)
 *****************************************************************************/
 xmlNodePtr XmlHelper::xml_find_progeny(xmlNodePtr node, const char* name) {
-  if ((node == nullptr) || (name == nullptr)) return nullptr;
+  if ((node == nullptr) || (name == nullptr)) {
+    return nullptr;
+  }
 
   xmlNodePtr found_node = nullptr;
   xmlNodePtr search_node = node->children;
@@ -75,7 +81,9 @@ const char* XmlHelper::xml_find_value(
   const char* name,
   bool allow_case)
 {
-  if ((node == nullptr) || (name == nullptr)) return nullptr;
+  if ((node == nullptr) || (name == nullptr)) {
+    return nullptr;
+  }
 
   for(xmlAttrPtr val = node->properties; val != nullptr; val = val->next) {
     // XML uses unsigned chars to represent strings, but it is much more
@@ -113,7 +121,9 @@ xml_name_match
 Purpose:(Checks if an XML node has the given name.)
 *******************************************************************************/
 bool XmlHelper::xml_name_match(xmlNodePtr node, const char* name) {
-  if ((node == nullptr) || (name == nullptr)) return false;
+  if ((node == nullptr) || (name == nullptr)) {
+    return false;
+  }
 
   // See the comment in xml_find_value
   return strcmp(xml_convert_ptr(node->name), name) == 0;

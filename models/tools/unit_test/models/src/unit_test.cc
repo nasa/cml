@@ -113,7 +113,9 @@ Assignment Operator
 *****************************************************************************/
 SweepSet& SweepSet::operator = (const SweepSet &other)
 {
-  if (this == &other) return *this;
+  if (this == &other) {
+    return *this;
+  }
   variable = other.variable;
   start = other.start;
   end = other.end;
@@ -666,7 +668,9 @@ UnitTestFramework::update_sweeps()
     // increment_sweep returns true if the sweep of that variable is complete
     sweep_complete_ = it->increment_sweep();
     // if this variable is still sweeping, don't need to go on to the next one.
-    if (!sweep_complete_) break;
+    if (!sweep_complete_) {
+      break;
+    }
   }
   // if sweep_complete_ is true at this point, that means that all sweep sets
   // finished on this cycle.  In that case, the whole unit-test is complete,

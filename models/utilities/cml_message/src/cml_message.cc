@@ -54,7 +54,9 @@ void publish(PublishLevel msg_level,
              int         line,
              const std::string & text)
 {
-  if (msg_level > publish_level) return;
+  if (msg_level > publish_level) {
+    return;
+  }
 
   // Colorize the string:
   std::string preamble;

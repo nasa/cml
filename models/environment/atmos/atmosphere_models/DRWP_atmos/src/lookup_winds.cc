@@ -99,7 +99,9 @@ DRWPTableLookup::verify( bool leave_active)
       "\ndid not activate.");
   }
   // and then deactivate it again
-  if (!leave_active) unsubscribe();
+  if (!leave_active) {
+    unsubscribe();
+  }
 
   // mark it as verified:
   verified = true;
@@ -115,7 +117,9 @@ LookupAtmosWinds::initialize()
   // If model has already been initialized, skip it.
   // Initialization of the model includes initialization of all the data
   // tables loaded into the model.
-  if (initialized || !enabled) return;
+  if (initialized || !enabled) {
+    return;
+  }
 
 
   // Make sure that all loaded tables are fully formed and ready to use.
@@ -179,7 +183,9 @@ Purpose:  (Performs the table interpolation)
 void
 LookupAtmosWinds::update(double altitude_in)
 {
-  if (!active) return;
+  if (!active) {
+    return;
+  }
 
   // Apply any required bias to offset the altitude floor-datum as used in
   // the data tables from the altitude floor-datum as provided by the simulation
@@ -328,7 +334,9 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
                                   bool         contains_vertical_component_,
                                   unsigned int wind_number_)
 {
-  if (!enabled) return false;
+  if (!enabled) {
+    return false;
+  }
 
   if (initialized && !block_warnings) {
     CMLMessage::inform( __FILE__,__LINE__,
@@ -776,7 +784,9 @@ void LookupAtmosWinds::calculate_speed_of_sound()
                         (SOS_fair_hi_alt - SOS_fair_lo_alt) *
                         (SOS_hi_alt_const - SOS_no_fair);
   }
-  else SOS = SOS_hi_alt_const;
+  else {
+    SOS = SOS_hi_alt_const;
+  }
 }
 
 /*************************************************************************

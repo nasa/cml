@@ -34,7 +34,9 @@ RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
 
 void RcsBuildUpTrailOff::build_up_trail_off_effects()
 {
-  if (!active) return;
+  if (!active) {
+    return;
+  }
 
   for (unsigned int id = 0; id < interface.num_jets; id++)
   {

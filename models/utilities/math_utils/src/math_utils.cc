@@ -745,7 +745,9 @@ MathUtils::cholesky_decomposition ( std::string origin,
         break;
       }
     }
-    if (!is_symmetric) break;
+    if (!is_symmetric) {
+      break;
+    }
   }
 
   // sqrt_mx will be sized to match in_array; its contents will be the

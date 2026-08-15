@@ -95,7 +95,9 @@ Purpose:(Activates the model, creates necessary subscriptions)
 void
 AtmosphereExec_Gram::activate()
 {
-  if (active) return;
+  if (active) {
+    return;
+  }
 
   // GRAM operation utilizes Fortran common blocks, which are assumed
   // populated with values appropriate to the current vehicle config.  It may

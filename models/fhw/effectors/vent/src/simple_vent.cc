@@ -768,7 +768,9 @@ Purpose:
 void SimpleVent::set_force_internal()
 {
   // sanity check, just in case:
-  if (!impulse_mag_set || !duration_set || !initialized) return;
+  if (!impulse_mag_set || !duration_set || !initialized) {
+    return;
+  }
 
   force_mag =  MathUtils::divide_protected( impulse_mag,
                                             duration,

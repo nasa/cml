@@ -218,8 +218,9 @@ DynamicMassBodyInterpolation::interpolate()
       "Check your configuration.\n");
   }
 
-  if (!table_lookup_set.update())
+  if (!table_lookup_set.update()) {
     return false;
+  }
 
   // The table-interpolation mdoel is configured to assign product-of-inertia
   // values into the lower-diagonal of the inertia matrix.  Copy those values

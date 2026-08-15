@@ -35,7 +35,9 @@ Purpose:
 void
 EGM2008_WGS84::initialize()
 {
-  if (!enabled) return;
+  if (!enabled) {
+    return;
+  }
 
   load_data();
   table_set.subscribe();
@@ -61,7 +63,9 @@ Purpose:
 void
 EGM2008_WGS84::update()
 {
-  if (!active) return;
+  if (!active) {
+    return;
+  }
 
   table_set.update();
 }
