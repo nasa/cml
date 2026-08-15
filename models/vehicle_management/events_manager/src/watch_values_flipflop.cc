@@ -111,7 +111,7 @@ WatchValuesFlipFlopDelayed::test_crossing()
      in an active delay process).*/
   else {
     baseline_delay_value = delay_variable;
-    delay_value = (new_state)? up_delay : down_delay;
+    delay_value = new_state? up_delay : down_delay;
     /* evaluate the delay; it could be configured to 0.0 in which case the
        delay will be ignored  and the event will trigger just as though it was
        a WatchValuesFlipFlop instance.*/

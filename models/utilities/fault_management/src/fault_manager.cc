@@ -776,7 +776,7 @@ template<typename T> Fault* FaultManager::make_fault_overwrite(
 
   FaultOverwrite<T>* new_fault = new FaultOverwrite<T>(variable);
 
-  new_fault->faulted_value = (random_value) ?
+  new_fault->faulted_value = random_value ?
                              generate_random_value<T>() :
                              ConvertString::convert<T>(overwrite_string);
 

@@ -379,5 +379,5 @@ TargetRelative_StateParameter::compute_position_magnitude()
   //-----------------------------------------------------
   // Return position magnitude that gives desired geodetic altitude
   //-----------------------------------------------------
-  return(Rmag);
+  return Rmag;
 }
