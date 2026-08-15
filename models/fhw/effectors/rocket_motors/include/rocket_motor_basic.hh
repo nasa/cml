@@ -168,7 +168,7 @@ public:
   virtual void hold_motor();
   virtual void shutdown_motor();
 
-  double get_mass() { return dyn_mass_properties.consumable_mass; }
+  double get_mass() const { return dyn_mass_properties.consumable_mass; }
   MotorStatus get_status() { return status; }
 
 protected:

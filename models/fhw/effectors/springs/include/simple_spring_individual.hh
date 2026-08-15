@@ -46,7 +46,7 @@ protected:
 public:
   SimpleSpringIndividual(); 
   void set_active( bool arg){active = arg;}
-  bool get_active(){return active;}
+  bool get_active() const {return active;}
   void initialize();
   double calculate_force( double distance,
                           double speed);

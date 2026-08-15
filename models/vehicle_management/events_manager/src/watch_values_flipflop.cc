@@ -255,7 +255,7 @@ Purpose:
   Returns true if the delay conditions have been satisfied.
 *****************************************************************************/
 bool
-WatchValuesFlipFlopDelayed::evaluate_delay()
+WatchValuesFlipFlopDelayed::evaluate_delay() const
 {
   return (std::abs( delay_variable - baseline_delay_value) >= delay_value);
 }

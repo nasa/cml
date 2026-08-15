@@ -173,9 +173,9 @@ class RcsPropPod{
   void compute_jets_on( bool mult_jet_flag );
   double get_flow_rate_scale_factor( const unsigned int component_index);
   double get_thrust_factor();
-  unsigned int get_max_num_jets_on();
+  unsigned int get_max_num_jets_on() const;
   void set_thrust_factor(unsigned int index, double value);
-  bool is_healthy(){ return (health != HealthFail);}
+  bool is_healthy() const { return (health != HealthFail);}
 
  private:
    // Not implemented:

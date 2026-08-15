@@ -61,7 +61,7 @@ class WakeGeneratingBody
   virtual ~WakeGeneratingBody() = default;
 
   void compute_freestream_vel_mag();
-  double get_total_alpha(){return total_alpha;}
+  double get_total_alpha() const {return total_alpha;}
 
  private: // and undefined:
   WakeGeneratingBody (const WakeGeneratingBody& rhs);

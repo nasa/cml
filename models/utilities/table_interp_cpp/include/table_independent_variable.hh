@@ -206,9 +206,9 @@ public:
 
   bool is_table_increasing() const { return table_values_increasing;}
   bool is_data_loaded() const { return data_loaded;}
-  bool is_off_table() {return off_table_back || off_table_front;}
-  bool is_off_table_back() {return off_table_back;}
-  bool is_off_table_front() {return off_table_front;}
+  bool is_off_table() const {return off_table_back || off_table_front;}
+  bool is_off_table_back() const {return off_table_back;}
+  bool is_off_table_front() const {return off_table_front;}
   bool in_back_of(  const double val1, const double val2) const;
   bool in_front_of( const double val1, const double val2) const;
 

@@ -143,7 +143,7 @@ class AtmosRelativeState : public SubscriptionBase
   void unsubscribe_complete_calculation();
   void subscribe_angles_calculation();
   void unsubscribe_angles_calculation();
-  unsigned int get_angles_subscription_count() {
+  unsigned int get_angles_subscription_count() const {
     return compute_angles_subscriptions;
   }
   void compute_T_inrtl_traj();

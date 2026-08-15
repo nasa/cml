@@ -119,23 +119,23 @@ class SimpleVent {
   virtual void set_impulse_vector( double impulse[3],
                                    bool hold_force_mag = true);
 
-  double get_force_magnitude() { return force_mag; }
-  double get_impulse_magnitude() { return impulse_mag; }
-  double get_duration() { return duration; }
-  double get_start_time() { return start_time; }
-  double get_stop_time() { return stop_time; }
+  double get_force_magnitude() const { return force_mag; }
+  double get_impulse_magnitude() const { return impulse_mag; }
+  double get_duration() const { return duration; }
+  double get_start_time() const { return start_time; }
+  double get_stop_time() const { return stop_time; }
   void get_direction(double direction_[3])
           { jeod::Vector3::copy(direction, direction_); }
   void get_force(double force_[3]) { jeod::Vector3::copy(force, force_); }
   void get_impulse(double impulse_[3]) { jeod::Vector3::copy(impulse, impulse_); }
-  bool direction_is_set() { return direction_set; }
-  bool force_is_set() { return force_set; }
-  bool force_magnitude_is_set() { return force_mag_set; }
-  bool impulse_is_set() { return impulse_set; }
-  bool impulse_magnitude_is_set() { return impulse_mag_set; }
-  bool duration_is_set() { return duration_set; }
-  bool is_venting() { return venting; }
-  bool is_impulse_mode() { return apply_as_impulse; }
+  bool direction_is_set() const { return direction_set; }
+  bool force_is_set() const { return force_set; }
+  bool force_magnitude_is_set() const { return force_mag_set; }
+  bool impulse_is_set() const { return impulse_set; }
+  bool impulse_magnitude_is_set() const { return impulse_mag_set; }
+  bool duration_is_set() const { return duration_set; }
+  bool is_venting() const { return venting; }
+  bool is_impulse_mode() const { return apply_as_impulse; }
 
   void unset_direction() {direction_set = false;
                           force_set = false;

@@ -53,7 +53,7 @@ class SingleInputTableForAngles : public GenericSingleInputTable
   bool initialize() override;
  protected:
   bool generate_output() override;
-  void bound_to_half_circle( double & angle);
+  void bound_to_half_circle( double & angle) const;
  private:
   // Disable the copy/assignment operators
   SingleInputTableForAngles (const SingleInputTableForAngles&);

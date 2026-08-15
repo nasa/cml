@@ -228,7 +228,7 @@ class RcsJet {
                  double force_dir_x, double force_dir_y, double force_dir_z);
   void scale_self_impingement();
   void set_isp( double new_isp);
-  double get_isp() {return isp;}
+  double get_isp() const {return isp;}
  protected:
   void compute_component_flow_rates();
   void blow_down();

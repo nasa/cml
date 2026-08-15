@@ -153,7 +153,7 @@ Purpose:(sets the value to be in the range (-pi, pi])
 *****************************************************************************/
 void
 SingleInputTableForAngles::bound_to_half_circle(
-   double & angle)
+   double & angle) const
 {
   while (angle > half_circle) {
     angle -= 2 * half_circle;

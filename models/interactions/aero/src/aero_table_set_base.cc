@@ -207,7 +207,7 @@ verify_aero_damping
 Purpose:()
 *******************************************************************************/
 AeroTableSetBase::AeroDampingType
-AeroTableSetBase::verify_aero_damping( std::string type)
+AeroTableSetBase::verify_aero_damping( std::string type) const
 {
   if (coef_data_present) {
     if (!uncertainty_data_present) {

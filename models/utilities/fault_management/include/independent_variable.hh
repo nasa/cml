@@ -31,7 +31,7 @@ class FaultFunctionIndependentVariable {
 
     double get_value();
 
-    bool is_initialized() { return initialized; }
+    bool is_initialized() const { return initialized; }
 
     bool relative_value; /* (--)
       If true (default), reports the value of the variable minus its reference

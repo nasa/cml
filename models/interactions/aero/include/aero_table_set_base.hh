@@ -138,7 +138,7 @@ public:
 
   void initialize() override;
   void configure_table();
-  bool get_damping_in_table() { return aero_damping_in_table;}
+  bool get_damping_in_table() const { return aero_damping_in_table;}
   AeroDataTableType get_table_type() { return data_table_type;}
   AeroDampingType get_damping_on_diag_in_table() {
                          return aero_damping_on_diag_in_table;}
@@ -151,7 +151,7 @@ protected:
   void query_aero_damping();
   void query_on_diag_aero_damping();
   void query_off_diag_aero_damping();
-  AeroDampingType verify_aero_damping(std::string type);
+  AeroDampingType verify_aero_damping(std::string type) const;
 
 private:
   // Make the copy constructor and assignment operator private

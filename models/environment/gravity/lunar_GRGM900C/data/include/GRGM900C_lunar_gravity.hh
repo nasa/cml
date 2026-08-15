@@ -44,12 +44,12 @@ class GRGM900C_LunarGravity
   ~GRGM900C_LunarGravity() = default;
  protected:
   jeod::SphericalHarmonicsGravitySource & grav_source;
-  void populate_low_res(); // sets the lowest coefficients
-  void populate_med_res(); // sets coefficients 41-150
-  void populate_high_res();// sets coefficients 151-400
-  void populate_max_res_a(); // sets coefficients 401-625
-  void populate_max_res_b(); // sets coefficients 626-792
-  void populate_max_res_c(); // sets coefficients 793-900
+  void populate_low_res() const; // sets the lowest coefficients
+  void populate_med_res() const; // sets coefficients 41-150
+  void populate_high_res() const;// sets coefficients 151-400
+  void populate_max_res_a() const; // sets coefficients 401-625
+  void populate_max_res_b() const; // sets coefficients 626-792
+  void populate_max_res_c() const; // sets coefficients 793-900
 
  private:
   // Not implemented.

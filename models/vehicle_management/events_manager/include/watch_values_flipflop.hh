@@ -140,7 +140,7 @@ class WatchValuesFlipFlopDelayed : public WatchValuesFlipFlop
                               const double & delay_variable);
   bool test_crossing() override;
  protected:
-  bool evaluate_delay();
+  bool evaluate_delay() const;
  private:
   WatchValuesFlipFlopDelayed( const WatchValuesFlipFlopDelayed&) = delete;
   WatchValuesFlipFlopDelayed& operator=(

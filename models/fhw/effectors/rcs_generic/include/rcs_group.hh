@@ -97,8 +97,8 @@ class RcsJetGroup {
   explicit RcsJetGroup( const unsigned int & num_prop_components);
   void initialize (double time_step);
   void set_blow_down( bool blow_down_);
-  bool get_blow_down() {return blow_down;}
-  unsigned int get_num_prop_components() {return num_prop_components;}
+  bool get_blow_down() const {return blow_down;}
+  unsigned int get_num_prop_components() const {return num_prop_components;}
 
  private:
    // Not implemented:

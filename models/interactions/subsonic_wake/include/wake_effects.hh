@@ -76,7 +76,7 @@ class WakeEffectsBase : public SubscriptionBase
                    const WakeParamsSub & params_in);
 
   virtual void update() = 0;
-  bool get_in_region(){return in_region;}
+  bool get_in_region() const {return in_region;}
 
  protected:
   void deactivate() override {

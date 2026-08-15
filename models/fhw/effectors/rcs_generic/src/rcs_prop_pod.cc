@@ -320,7 +320,7 @@ get_max_num_jets_on
 Purpose:(Returns the protected max_num_jets_on value)
 *****************************************************************************/
 unsigned int
-RcsPropPod::get_max_num_jets_on()
+RcsPropPod::get_max_num_jets_on() const
 {
   return max_num_jets_on;
 }

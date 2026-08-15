@@ -124,7 +124,7 @@ public:
   void disable_flex() { using_flex = false; }
   void set_flex_threshold(double new_threshold);
 
-  size_t get_num_noz() { return num_noz; }
+  size_t get_num_noz() const { return num_noz; }
 
 private:
   // Not implemented:

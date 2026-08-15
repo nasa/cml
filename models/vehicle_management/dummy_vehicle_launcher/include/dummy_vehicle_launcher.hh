@@ -71,7 +71,7 @@ class DummyVehicleLauncher
   void set_intended_integ_body(jeod::DynBody * tgt);
   void set_intended_integ_body_state_body();
 
-  bool get_active() {return active;}
+  bool get_active() const {return active;}
 
  protected:
   void add_to_integ_group();

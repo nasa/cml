@@ -74,7 +74,7 @@ Purpose:
   conditionally-assigned reference.
 *****************************************************************************/
 bool
-EventTriggerBase::has_conditional_reference()
+EventTriggerBase::has_conditional_reference() const
 {
   return ((comparison_logic == MAX_CONDITIONAL_FIRST) ||
           (comparison_logic == MIN_CONDITIONAL_FIRST) ||

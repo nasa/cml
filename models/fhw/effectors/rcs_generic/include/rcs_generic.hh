@@ -134,7 +134,7 @@ class RcsGeneric : public SubscriptionBase {
   void update( const bool * rcs_command);
 
   const double * get_cm() {return cm;}
-  bool get_calc_flow_rate() {return calc_flow_rate;}
+  bool get_calc_flow_rate() const {return calc_flow_rate;}
   double get_prop_loss_on(unsigned int ii) {return prop_loss_on.at(ii);}
   double get_prop_loss_off(unsigned int ii) {return prop_loss_off.at(ii);}
 
