@@ -16,10 +16,6 @@ PROGRAMMERS:
 Constructor
 *****************************************************************************/
 AbstractTableLookup::AbstractTableLookup()
-  :
-  independents(),
-  dependents(),
-  tables_to_destroy()
 {
   subscribe_name = "AbstractTableLookup:";
 }

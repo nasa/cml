@@ -21,11 +21,9 @@ Constructors
 *****************************************************************************/
 CML_BinCounter::CML_BinCounter()
   :
-  bins(),
   bins_ready(false),
   nbin(),
-  bin_data(nullptr),
-  name()
+  bin_data(nullptr)
 {}
 /****************************************************************************/
 CML_BinCounter::CML_BinCounter(

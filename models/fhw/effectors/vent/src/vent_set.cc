@@ -25,9 +25,6 @@ VentSet::VentSet(jeod::DynBody & dyn_body_,
   start_vents_at_activation(false),
   force{0.0, 0.0, 0.0},
   torque{0.0, 0.0, 0.0},
-  vents(),
-  dynamic_vents(),
-  impulsive_vents(),
   ang_impulse{0.0, 0.0, 0.0}
 {
   subscribe_name = "VentSet:";

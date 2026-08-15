@@ -31,7 +31,6 @@ TableIndependentVariable::TableIndependentVariable(
   index_prox(0),
   index(0),
   variable(variable_in),
-  name(),
   size(0),
   data_loaded(false),
   initialized(false),

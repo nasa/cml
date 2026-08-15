@@ -18,10 +18,8 @@ Constructor
 *****************************************************************************/
 CML_TargetCounter::CML_TargetCounter()
   :
-  targets(),
   ntarget(0),
-  target_data(nullptr),
-  name()
+  target_data(nullptr)
 {}
 /****************************************************************************/
 CML_TargetCounter::CML_TargetCounter(

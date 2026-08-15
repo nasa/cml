@@ -13,7 +13,6 @@ Constructor
 *****************************************************************************/
 WatchValuesSet::WatchValuesSet()
   :
-  triggers(),
   require_all(false),
   record_trigger_name(false)
 {}

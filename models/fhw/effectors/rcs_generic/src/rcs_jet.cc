@@ -68,7 +68,6 @@ RcsJet::RcsJet(
   scaled_force(0.0),
   total_delay_on(0.0),
   total_delay_off(0.0),
-  commands(),
   command(false),
   nfired(0),
   sum_time(0.0),

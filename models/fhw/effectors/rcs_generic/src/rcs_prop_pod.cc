@@ -19,7 +19,6 @@ Constructor
 RcsPodComponent::RcsPodComponent(
    unsigned int max_num_jets_on)
    :
-   fake_interface(),
    mass_consumed_step( &fake_interface.mass_consumed_step),
    consumable_mass(    &fake_interface.consumable_mass),
    using_dyn_mass(false),

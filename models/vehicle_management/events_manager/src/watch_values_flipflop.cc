@@ -21,10 +21,7 @@ WatchValuesFlipFlop::WatchValuesFlipFlop(
   WatchValuesBaseCore & associated_watch_)
   :
   associated_watch( associated_watch_),
-  state(false),
-  down_disable_models(),
-  down_assignments(),
-  down_actions()
+  state(false)
 {
   multi_shot = true;
   associated_watch.multi_shot = true;

@@ -28,7 +28,6 @@ class GenericSingleInputTable : public GenericMultiInputTable
   bool initialize() override;
   // use the same constructors as the parent class.
   using GenericMultiInputTable::GenericMultiInputTable;
-  GenericSingleInputTable() : GenericMultiInputTable(){}
  protected:
   void generate_base_values() override;
   bool generate_output() override;

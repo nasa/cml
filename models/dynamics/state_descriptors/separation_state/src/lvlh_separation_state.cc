@@ -18,8 +18,6 @@ Constructor
 *****************************************************************************/
 LvlhSeparationState::LvlhSeparationState()
   :
-  SeparationState(),
-  lvlh(),
   planet_centered_inertial(nullptr),
   lvlh_origin_frame(nullptr),
   lvlh_ref(lvlh),
@@ -28,8 +26,6 @@ LvlhSeparationState::LvlhSeparationState()
 /****************************************************************************/
 LvlhSeparationState::LvlhSeparationState( jeod::LvlhFrame & lvlh_)
   :
-  SeparationState(),
-  lvlh(),
   planet_centered_inertial(nullptr),
   lvlh_origin_frame(nullptr),
   lvlh_ref(lvlh_),

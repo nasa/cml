@@ -27,8 +27,6 @@ Notes: - Class inherits constructors from GenericSingleInputTable
 *****************************************************************************/
 SingleInputTableVarDeriv::SingleInputTableVarDeriv()
   :
-  GenericSingleInputTable(),
-  derivs(),
   omit_derivative_vals(false),
   use_linear_interpolation(false)
 {}

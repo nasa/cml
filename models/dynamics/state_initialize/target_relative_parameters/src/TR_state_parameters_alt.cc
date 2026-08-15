@@ -21,7 +21,6 @@ Constructor
 *****************************************************************************/
 TargetRelative_StateParameter_Alt::TargetRelative_StateParameter_Alt()
   :
-  TargetRelative_StateParam(),
   target_point{0.0, 0.0, 0.0},
   omega_planet{0.0, 0.0, 0.0},
   target_r_mag(0.0)

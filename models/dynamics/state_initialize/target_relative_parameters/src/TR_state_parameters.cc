@@ -22,13 +22,11 @@ Constructor
 *****************************************************************************/
 TargetRelative_StateParameter::TargetRelative_StateParameter()
   :
-  TargetRelative_StateParam(),
   target_point_altitude(0.0),
   target_point_latitude(0.0),
   target_point_longitude(0.0),
   tolerance(1e-08),
-  iter_limit(1000),
-  pfix_position()
+  iter_limit(1000)
 {}
 
 /*****************************************************************************

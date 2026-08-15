@@ -41,9 +41,7 @@ Purpose: (Constructor)
 ********************************************************************************/
 DynamicMassBody::DynamicMassBody()
 :
-  jeod::MassBody(),
   dynamic_properties(core_properties.mass),
-  nominal_properties(),
   residual_mass(-1.0),
   interp_enabled(false),
   dyn_mass_initialized(false),

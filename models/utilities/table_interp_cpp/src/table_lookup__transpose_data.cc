@@ -34,23 +34,18 @@ constructors
 TableLookupTransposeDataSet_TableConfig::
                                      TableLookupTransposeDataSet_TableConfig()
   :
-  name(),
   block_independent_addition(false),
   index_low(0),
   index_high(0),
-  indices(),
   table_ptr(nullptr),
-  dependent_variables(),
   table_type(AbstractTableLookup::Generic),
   lookup_method( TableIndependentVariable::Interp),
-  data_scratch(),
   num_variables(0),
   total_num_lines(0)
 {}
 /****************************************************************************/
 TableLookupTransposeDataSet::TableLookupTransposeDataSet()
   :
-  table_config(),
   independent_var(nullptr),
   indep_continuity(TableIndependentVariable::Linear),
   populate_independent_from_file(false),

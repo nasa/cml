@@ -22,16 +22,10 @@ PROGRAMMERS:
 Constructors
 *****************************************************************************/
 SingleInputTableForQuaternions::SingleInputTableForQuaternions()
-  :
-  GenericSingleInputTable(),
-  sph_interp()
 {}
 /****************************************************************************/
 SingleInputTableForQuaternions::SingleInputTableForQuaternions(
      jeod::Quaternion & quat)
-  :
-  GenericSingleInputTable(),
-  sph_interp()
 {
   add_dependent( quat.scalar);
   add_dependent( quat.vector[0]);
@@ -43,15 +37,13 @@ SingleInputTableForQuaternions::SingleInputTableForQuaternions(
      double *dependent_variables,
      size_t num_vars)
   :
-  GenericSingleInputTable( dependent_variables, num_vars),
-  sph_interp()
+  GenericSingleInputTable( dependent_variables, num_vars)
 {}
 /****************************************************************************/
 SingleInputTableForQuaternions::SingleInputTableForQuaternions(
      const DoublePtrVec & dependent_variables)
   :
-  GenericSingleInputTable( dependent_variables),
-  sph_interp()
+  GenericSingleInputTable( dependent_variables)
 {}
 
 /*****************************************************************************

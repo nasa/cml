@@ -16,9 +16,6 @@ Constructor
 *****************************************************************************/
 FaultFunctionBase::FaultFunctionBase() :
   type(Linear),
-  frequency(),
-  amplitude(),
-  phase_offset(),
   freq_int(0.0),
   ind_prev(0.0),
   freq_prev(0.0)

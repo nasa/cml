@@ -21,7 +21,6 @@ AeroTableSetBase::AeroTableSetBase(
      AeroCoefficientsTable & coefficients_out,
      AeroCoefficientsDisp  & uncertainties_out)
    :
-   TableLookupSet(),
 
    coefficients( coefficients_out),
    uncertainty_ref( uncertainties_out),
@@ -32,7 +31,6 @@ AeroTableSetBase::AeroTableSetBase(
    T_struc_to_aero_frame{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
    mrc_position{0.0, 0.0, 0.0},
    uncertainties_expressed_as_percent(false),
-   uncertainty(),
    aero_damping_in_table(false),
    data_table_type( Unspecified),
    aero_damping_on_diag_in_table( NotInTable),

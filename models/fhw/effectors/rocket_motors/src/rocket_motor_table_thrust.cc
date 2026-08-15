@@ -35,7 +35,6 @@ RocketMotor_TableThrust::RocketMotor_TableThrust(
                      use_mass_string_in),
   thrust_fraction(0.0),
   thrust_max(0.0),
-  table_set(),
   thrust_table(thrust_magnitude),
   isp_table(isp),
   mdot_table(mass_flow_rate),

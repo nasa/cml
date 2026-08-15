@@ -33,7 +33,6 @@ PistonThrusterGroupInputs::PistonThrusterGroupInputs( const double & time_in,
   deltaV(0.0),
   load_mass(0.0),
   load_profile(1.0),
-  table_set(),
   load_pct_table( load_profile),
   time_table( time_in),
   thrust_table( thrust_in)
@@ -45,9 +44,6 @@ PistonThrusterGroup::PistonThrusterGroup( const double & time_in)
   :
   input( time_in,
          force_mag),
-  param(),
-  out_A(),
-  out_B(),
   force_mag(0.0),
   start_time(0.0),
   time( time_in)

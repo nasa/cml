@@ -30,7 +30,6 @@ Constructors
 SingleInputTableForAngles::SingleInputTableForAngles(
      bool output_in_radians_) // optional, default to true
   :
-  GenericSingleInputTable(),
   output_in_radians(output_in_radians_),
   half_circle(M_PI)
 {}

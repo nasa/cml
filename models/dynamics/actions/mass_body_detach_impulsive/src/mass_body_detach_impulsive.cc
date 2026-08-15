@@ -30,8 +30,6 @@ Purpose: (Construct a MassBodyDetachImpulsive.)
 MassBodyDetachImpulsive::MassBodyDetachImpulsive()
   :
   impulse_magnitude(0.0),
-  subject_point_name(),
-  parent_point_name(),
   separation_speed(0.0),
   sep_speed_spec_by_user(false)
 {}

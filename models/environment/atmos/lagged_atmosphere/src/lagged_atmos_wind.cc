@@ -21,14 +21,11 @@ Constructors
 *****************************************************************************/
 LaggedAtmosWind::LaggedAtmosWind()
   :
-  data_out(),
   model_name("LaggedAtmosWind"),
   min_delta_altitude(1E-2), /* essentially 0, while guaranteeing uniqueness
                                of the node altitudes. */
   max_delta_altitude(75),
-  initialized(false),
-  nodes(),
-  above()
+  initialized(false)
 {
   // mark that data_out is invalid, this will be assigned when data_out
   // is populated.

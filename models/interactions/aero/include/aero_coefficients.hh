@@ -70,7 +70,6 @@ public:
 
   AeroCoefficientsCore()
     :
-    AeroCoefficientsCoreBase(),
     Cl_cg(0.0),  Cm_cg(0.0),  Cn_cg(0.0),
     Cl_mrc(0.0), Cm_mrc(0.0), Cn_mrc(0.0)
   {}
@@ -115,11 +114,7 @@ class AeroCoefficientsTable : public AeroCoefficientsCore,
                               public AeroCoefficientsOffDiagExtension
 {
 public:
-  AeroCoefficientsTable()
-    :
-    AeroCoefficientsCore(),
-    AeroCoefficientsOffDiagExtension()
-    {}
+  AeroCoefficientsTable() = default;
 };
 
 /*******************************************************************************
@@ -145,8 +140,6 @@ public:
 
   AeroCoefficientsDisp()
     :
-    AeroCoefficientsCoreBase(),
-    AeroCoefficientsOffDiagExtension(),
     Cl(0.0),  Cm(0.0),  Cn(0.0)
   {}
 };

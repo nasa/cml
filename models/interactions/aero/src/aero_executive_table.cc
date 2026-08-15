@@ -59,13 +59,9 @@ AeroExecutiveTable::AeroExecutiveTable(AeroInterfaceOutput & output_ref,
   threshold_min_free_stream_vel_mag(1.0), // Arbitrary threshold.
 
   dispersion_active(false),
-  bias(),
-  uncertainty(),
-  random(),
   load_all_tables_at_init(false),
   l_over_v_scale( Lref_over_Vmag),
-  mrc_position(),
-  coefficients()
+  mrc_position()
 {}
 
 

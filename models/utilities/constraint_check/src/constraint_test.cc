@@ -30,7 +30,6 @@ ConstraintTest::ConstraintTest()
 // ***************************************************************************
 ConstraintTestTimed::ConstraintTestTimed()
   :
-  ConstraintTest(),
   use_timer(true),
   time_limit (0.0),
   gap_time_limit (0.0),

@@ -18,7 +18,6 @@ PROGRAMMERS:
 GramInterface::GramInterface()
 :
   out(),
-  input(),
   cache()
 {
 }

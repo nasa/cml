@@ -30,14 +30,7 @@ GenericMultiInputTable::GenericMultiInputTable()
   trivial_case(true),
   output_ptrs_set(false),
   data_loaded(false),
-  initialized(false),
-  data(),
-  size_of_dimension(),
-  data_point_weight(),
-  data_point_index(),
-  num_data_elements_per_increment_of_index(),
-  output(),
-  independents()
+  initialized(false)
 {}
 /****************************************************************************/
 GenericMultiInputTable::GenericMultiInputTable(

@@ -27,7 +27,6 @@ WakeEffectsBase::WakeEffectsBase(
      const WakeFollowingBody & objectB_in,
      const WakeParamsSub & params_in)
    :
-   SubscriptionBase(),
    objectA(objectA_in),
    objectB(objectB_in),
    params(params_in),

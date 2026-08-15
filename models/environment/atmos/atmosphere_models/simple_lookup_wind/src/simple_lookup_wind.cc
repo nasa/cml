@@ -24,14 +24,12 @@ SimpleLookupWind::SimpleLookupWind()
   wind_magnitude_horizontal(0.0),
   wind_magnitude(0.0),
   wind_vertical_up(0.0),
-  dir_mag_table_set(),
   altitude_table(altitude_placeholder),
   wind_blowing_from_table(wind_blowing_from),
   wind_magnitude_table(wind_magnitude_horizontal),
   wind_vertical_up_table(wind_vertical_up),
   
   wind_component{0.0, 0.0, 0.0},
-  component_table_set(),
   wind_blowing_from_warning(false)
 {}
 

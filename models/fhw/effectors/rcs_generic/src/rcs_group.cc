@@ -35,8 +35,6 @@ RcsJetGroup::RcsJetGroup(
   min_off_time(0.0),
   mixture_ratio (0.0),
   isp_prop_comp_ratio(num_prop_components, 0.0),
-  bd_force_coef(),
-  bd_isp_coef(),
   bd_pressure_limit(0.0),
   buffer_flag(false),
   buffer_on_size (0),

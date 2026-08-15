@@ -51,8 +51,6 @@ StateInitialize::StateInitialize()
   ned_rot_init(),
   correlation(),
   monte_carlo_dispersion(trans_init),
-  TR_param(),
-  planet_name(),
   ref_point_altitude(0.0),
   ref_point_latitude(0.0),
   ref_point_longitude(0.0),

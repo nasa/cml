@@ -27,10 +27,6 @@ CompoundEventsManager::CompoundEventsManager(
   const double & time_)
   :
   time(time_),
-  allocated_events(),
-  managed_triggers(),
-  allocated_triggers(),
-  allocated_triggers_(),
   enabled(true)
 {}
 /****************************************************************************/

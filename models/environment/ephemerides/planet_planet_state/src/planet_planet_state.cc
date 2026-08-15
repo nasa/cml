@@ -29,8 +29,6 @@ Constructor
 PlanetPlanetState::PlanetPlanetState(
    jeod::DynManager & dyn_mgr_in)
    :
-   from_frame_name(),
-   to_frame_name(),
    position_vector_only(true),
    state(),
    dyn_manager(dyn_mgr_in),
@@ -46,8 +44,6 @@ PlanetPlanetState::PlanetPlanetState(
    jeod::RefFrame & to_frame_in,
    jeod::RefFrame & from_frame_in)
    :
-   from_frame_name(),
-   to_frame_name(),
    position_vector_only(true),
    state(),
    dyn_manager(dyn_mgr_in),

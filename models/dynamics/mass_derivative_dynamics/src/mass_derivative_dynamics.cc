@@ -60,9 +60,6 @@ MassDerivativeDynamics::MassDerivativeDynamics(
   pseudo_torque{0.0, 0.0, 0.0},
   pseudo_force{0.0, 0.0, 0.0},
   pseudo_dv{0.0, 0.0, 0.0},
-  propellant_mass_history(),
-  R_propellant_history(),
-  inertia_history(),
 
   last_time(0.0),
   dt (0.0),

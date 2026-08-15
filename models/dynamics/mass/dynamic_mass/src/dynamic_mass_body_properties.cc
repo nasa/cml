@@ -29,7 +29,6 @@ DynamicMassBodyPropertiesInterface::DynamicMassBodyPropertiesInterface()
 //*******************************************************************************
 DynamicMassBodyProperties::DynamicMassBodyProperties(const double &mass_in)
   :
-  DynamicMassBodyPropertiesInterface(),
   mass_bias(0.0),
   mass_dispersion_flag(false),
   interpolation(mass_in)

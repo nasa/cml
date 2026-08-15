@@ -61,15 +61,11 @@ TwistSway::TwistSway(
       const double & external_clock_)
   :
   perturb_algorithm(GrowHoldDecay),
-  params(),
-  Q_enu_to_ecef(),
   dp_enu{0.0, 0.0, 0.0},
   dv_enu{0.0, 0.0, 0.0},
-  Q_enu_to_ts(),
   w_ts_wrt_enu_in_enu{0.0, 0.0, 0.0},
   dp_ecef{0.0, 0.0, 0.0},
   dv_ecef{0.0, 0.0, 0.0},
-  Q_ecef_to_ts(),
   w_ts_wrt_enu_in_ecef{0.0, 0.0, 0.0},
 
   external_clock(external_clock_),
@@ -86,10 +82,6 @@ TwistSway::TwistSway(
   p_factor_slow(0.0),
   ix_fast_next(0),
   ix_slow_next(0),
-  fast_list(),
-  slow_list(),
-  fast_mag(),
-  slow_mag(),
   sway_parallel(0.0),
   sway_normal(0.0),
   twist_angle(0.0),

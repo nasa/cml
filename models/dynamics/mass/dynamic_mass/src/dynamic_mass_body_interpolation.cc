@@ -35,7 +35,6 @@ DynamicMassBodyInterpolation::DynamicMassBodyInterpolation(const double &mass_in
   poi_dep_xy(inertia[0][1]),
   poi_dep_xz(inertia[0][2]),
   poi_dep_yz(inertia[1][2]),
-  table_lookup_set(),
   tab_mass_flag(false),
   tab_cg_flag(false),
   tab_moi_flag(false),

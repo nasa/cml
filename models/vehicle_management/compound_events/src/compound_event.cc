@@ -27,10 +27,6 @@ CompoundEvent::CompoundEvent(
   :
   WatchValuesDelay(time_),
   time(time_),
-  name(),
-  arming_triggers(),
-  disarming_triggers(),
-  action_triggers(),
   allow_immediate_actions(false),
   deactivate_at_disarm(false),
   arm_trigger_check_period(0.0),

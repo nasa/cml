@@ -41,7 +41,6 @@ Purpose: Constructor
 *************************************************************************/
 ExtendedPlanetaryDerivedState::ExtendedPlanetaryDerivedState()
   :
-  PlanetaryDerivedState(),
   hang_angle_body_vec{0.0, 0.0, 0.0},
   roll_wrt_hdg_body_vec{0.0, 0.0, 0.0},
   br_ref_longitude(0.0),
@@ -54,7 +53,6 @@ ExtendedPlanetaryDerivedState::ExtendedPlanetaryDerivedState()
   entry_range(state),
   topocentric_altitude(0.0),
   pt_to_pt(state),
-  range_safety(),
   topodetic( state.ellip_coords,
              calc_rel_vel),
   topocentric( state.sphere_coords,

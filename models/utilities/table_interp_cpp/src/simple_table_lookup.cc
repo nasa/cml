@@ -23,7 +23,6 @@ Purpose: (Constructor)
 ********************************************************************************/
 SimpleTableLookup::SimpleTableLookup()
   :
-  AbstractTableLookup(),
   lookup_method(TableIndependentVariable::Interp),
   indep_data_loaded(false),
   dependent_data_loaded(false),
