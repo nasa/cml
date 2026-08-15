@@ -492,7 +492,7 @@ RocketMotor_MultiNozzle::enable_flex()
   // If not initialized, set using_flex = true; these will then be checked at
   // initialization.
   if ( !initialized ||
-       (motor_lin_flex && motor_rot_flex && (num_flex_elements==3* num_noz))) {
+       ((motor_lin_flex != nullptr) && (motor_rot_flex != nullptr) && (num_flex_elements==3* num_noz))) {
     using_flex = true;
   }
   else {

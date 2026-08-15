@@ -117,7 +117,7 @@ void
 Constraint::count_violations()
 {
   if (violated != prev_violated) {
-    violation_count += violated;
+    violation_count += static_cast<unsigned int>(violated);
     prev_violated = violated;
   }
 }

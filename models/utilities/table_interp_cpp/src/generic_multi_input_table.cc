@@ -619,7 +619,7 @@ GenericMultiInputTable::populate_output(
   }
 
   const size_t num_vars = var_ptr_list.size();
-  if (!num_vars) {
+  if (num_vars == 0) {
     CMLMessage::fail(
       __FILE__,__LINE__,"Construction error:\n",
      "There should be at least 1 output for each table.  A zero-sized vector\n"

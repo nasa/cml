@@ -156,7 +156,7 @@ CompoundEventsManager::set_trigger_dbl_reference(
   double ref)
 {
   WatchValuesBaseCore * trigger = CompoundEventsManager::get_trigger(name);
-  if (trigger) {
+  if (trigger != nullptr) {
     CompoundEventsManager::set_trigger_dbl_reference( *trigger,
                                                       ref);
   }
@@ -195,7 +195,7 @@ CompoundEventsManager::set_trigger_delay_offset(
   double ref)
 {
   WatchValuesBaseCore * trigger = CompoundEventsManager::get_trigger(name);
-  if (trigger) {
+  if (trigger != nullptr) {
     CompoundEventsManager::set_trigger_delay_offset( *trigger,
                                                      ref);
   }

@@ -402,8 +402,8 @@ void VentSet::apply_impulse_to_body(jeod::DynBody & root_body)
 
 
   double inverse_inertia[3][3];
-  if ( !jeod::Matrix3x3::invert_symmetric( root_body.mass.composite_properties.inertia,
-                                     inverse_inertia)) {
+  if ( jeod::Matrix3x3::invert_symmetric( root_body.mass.composite_properties.inertia,
+                                     inverse_inertia) == 0) {
     double delta_w[3];
     jeod::Vector3::transform( inverse_inertia,
                               ang_impulse,
@@ -459,11 +459,11 @@ void VentSet::start_vent_internal(SimpleVent * vent)
     return;
   }
   if (vent->apply_as_impulse) {
-    if (!std::count(impulsive_vents.begin(), impulsive_vents.end(), vent)) {
+    if (std::count(impulsive_vents.begin(), impulsive_vents.end(), vent) == 0) {
       impulsive_vents.push_back(vent);
     }
   }
-  else if (!std::count(dynamic_vents.begin(), dynamic_vents.end(), vent)) {
+  else if (std::count(dynamic_vents.begin(), dynamic_vents.end(), vent) == 0) {
     dynamic_vents.push_back(vent);
   }
 }

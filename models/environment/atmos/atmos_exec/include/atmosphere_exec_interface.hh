@@ -63,12 +63,12 @@ class AtmosphereExecInterface : public SubscriptionBase
 
     std::string get_current_atmos_name() {
         std::string name = "N/A";
-        if (current_atmos) { name = current_atmos->name; }
+        if (current_atmos != nullptr) { name = current_atmos->name; }
         return name;
     }
     std::string get_current_winds_name() {
         std::string name = "N/A";
-        if (current_winds) { name = current_winds->name; }
+        if (current_winds != nullptr) { name = current_winds->name; }
         return name;
     }
 

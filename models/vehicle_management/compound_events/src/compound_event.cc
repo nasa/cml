@@ -33,7 +33,7 @@ CompoundEvent::CompoundEvent(
   action_triggers(),
   allow_immediate_actions(false),
   deactivate_at_disarm(false),
-  arm_trigger_check_period(false),
+  arm_trigger_check_period(0.0),
   disarm_trigger_check_period(0.0),
   action_trigger_check_period(0.0),
   event_has_action_triggers(false),

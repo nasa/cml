@@ -303,7 +303,7 @@ Assumption: (Both activate() and initialize() must have been called)
     }
     active = true;
     if (add_self_to_manager_active_list) {
-      if (!active_watches) {
+      if (active_watches == nullptr) {
         CMLMessage::error( __FILE__,__LINE__,
           "Activating watch with internal instruction to add itself to\n"
           "the active-watch list, but has no access to that list.\n"

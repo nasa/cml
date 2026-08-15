@@ -61,7 +61,7 @@ void
 ImpactPoint::initialize(
     double reference_position_pfix[3])
 {
-  if (!reference_position_pfix) {
+  if (reference_position_pfix == nullptr) {
     CMLMessage::fail(__FILE__, __LINE__, "Null pointer\n", 
                          "The input pointer 'reference_position_pfix' is null.");  
   }

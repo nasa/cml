@@ -93,7 +93,7 @@ TableIndependentVariable::load_data(
        const double* const data_in,
        size_t size_in)
 {
-  if (!data_in) {
+  if (data_in == nullptr) {
     CMLMessage::error(
       __FILE__, __LINE__, "Data load error.\n",
       "The given pointer to data table for independent variable ",name,
@@ -101,7 +101,7 @@ TableIndependentVariable::load_data(
     return false;
   }
 
-  if (!size_in) {
+  if (size_in == 0u) {
     CMLMessage::error(
       __FILE__, __LINE__, "Data load error.\n",
       "The given size for data for independent variable ",name,

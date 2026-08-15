@@ -47,10 +47,10 @@ LvlhSeparationState::~LvlhSeparationState()
     // that this model has taken over management of.  So if we have
     // unsubscribed everything, we need to give the subscription back to
     // allow LvlhFrame to unsubscribe.
-    if ( planet_centered_inertial) {
+    if ( planet_centered_inertial != nullptr) {
       planet_centered_inertial->subscribe();
     }
-    if (lvlh_origin_frame) {
+    if (lvlh_origin_frame != nullptr) {
       lvlh_origin_frame->subscribe();
     }
   }

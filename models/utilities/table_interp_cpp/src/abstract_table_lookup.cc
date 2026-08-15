@@ -401,7 +401,7 @@ bool
 AbstractTableLookup::is_table_interp_enabled(
     const GenericMultiInputTable *tbl) const
 {
-  if (!tbl || tables.empty()) {return false;}
+  if ((tbl == nullptr) || tables.empty()) {return false;}
   auto it = std::find_if( tables.begin(), tables.end(),
                           [tbl] (const TableItem_t & table_) {
                             return (table_.first == tbl);
@@ -419,7 +419,7 @@ void
 AbstractTableLookup::enable_table_interp(
     const GenericMultiInputTable *tbl, bool flag)
 {
-  if (!tbl || tables.empty()) return;
+  if ((tbl == nullptr) || tables.empty()) return;
 
   auto it = std::find_if( tables.begin(), tables.end(),
                           [tbl] (const TableItem_t & table_) {

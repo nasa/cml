@@ -300,14 +300,14 @@ void FaultManager::parse() {
 
   xmlDocPtr doc = xmlParseFile(fault_file.c_str());
 
-  if (!doc) {
+  if (doc == nullptr) {
     CMLMessage::fail(__FILE__, __LINE__,
       "Fault Management Error\n",
       "\nThe following fault file could not be opened.\n", fault_file, "");
     // Terminated
   }
   xmlNodePtr root = doc->children;
-  if (!root) {
+  if (root == nullptr) {
     // Unreachable code, manually tested.
     CMLMessage::fail(__FILE__, __LINE__,
       "Fault Management Error\n",

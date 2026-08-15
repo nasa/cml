@@ -240,7 +240,7 @@ ExtendedPlanetaryDerivedState::update()
   }
 
   if (calc_hang_roll>0) {
-    if (!calc_rel_vel)
+    if (calc_rel_vel == 0)
     {
       //if rel_vel has not been subscribed, then explicitly update it.
       topodetic.relative_vel.update();

@@ -316,7 +316,7 @@ std::string UnitTestFramework::expand_env_variables(const std::string& input) {
 
         const std::string var_name = match[1].str();
         const char* env_val = std::getenv(var_name.c_str());
-        if (env_val) 
+        if (env_val != nullptr) 
         {
             result.append(env_val);
         } else 
