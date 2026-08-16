@@ -61,7 +61,7 @@ class PfixReferencePoint : public jeod::PlanetFixedPosition
   PfixReferencePoint();
   ~PfixReferencePoint() override = default;
 
-  void set_point (double & ref_radius, bool & ref_point_set);
+  void set_point (double & reference_radius, bool & ref_point_set);
   void set_direction (bool & use_polar, bool & ref_point_set);
 
  private:

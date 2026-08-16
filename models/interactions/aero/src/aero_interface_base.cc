@@ -15,10 +15,10 @@ PROGRAMMERS:
 Constructor
 *******************************************************************************/
 AeroInterfaceBase::AeroInterfaceBase( AtmosRelativeState & atmos_rel_state_in,
-                                      const double & geod_alt_in)
+                                      const double & geodetic_altitude_in)
   :
   atmos_rel_state( atmos_rel_state_in),
-  geodetic_altitude( geod_alt_in),
+  geodetic_altitude( geodetic_altitude_in),
   executive_ptr(nullptr),
   disable_aero_moments(false),
   disable_aero_damping(false),

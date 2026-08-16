@@ -65,7 +65,7 @@ public:
 
   AeroExecutiveSimple( AeroInterfaceOutput & output_ref,
                        const double & dynamic_pressure,
-                       const double * const free_stream_vel_in,
+                       const double * const free_stream_vel_unit_in,
                        const double (&T_inrtl_struc_in)[3][3],
                        const double & mass_in);
   ~AeroExecutiveSimple() override = default;

@@ -78,7 +78,7 @@ public:
   virtual ~RocketMotorNozzle() = default;
 
   void initialize( double pos[3],
-                   double T_struc_to_mf[3][3]);
+                   double T_struc_to_motor_frame[3][3]);
   void shutdown_nozzle();
 
 protected:

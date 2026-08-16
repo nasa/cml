@@ -69,7 +69,7 @@ public:
                                      double (&T_inrtl_vnc)[3][3]);
 
 
-  static void generate_T_pfix_to_enu( const double position_ecef[3],
+  static void generate_T_pfix_to_enu( const double position_pfix[3],
                                       double T_pfix_to_enu[3][3]);
   static void generate_Q_enu_to_pfix( double longitude,
                                       double latitude,
@@ -94,12 +94,12 @@ public:
   // passed in, along with the size of 1 dimension of the array (e.g. 6x6 array
   // is sized "6").  An optional 5th argument allows processing a smaller
   // sub-matrix.
-  static bool cholesky_decomposition( std::string caller_id,
+  static bool cholesky_decomposition( std::string origin,
                                       const double * in_array,
                                       double * out_array,
-                                      size_t size_in,
-                                      size_t size_out = 0); // optional for
-                                                            // sub-matrices
+                                      size_t dimension_in,
+                                      size_t sub_mx_size = 0); // optional for
+                                                               // sub-matrices
 
 
   // Compute the backward difference of a variable given its history specified

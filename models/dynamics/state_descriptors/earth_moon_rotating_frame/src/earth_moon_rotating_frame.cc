@@ -19,9 +19,9 @@ Constructor
 Purpose:  (Construct a EarthMoonRotatingFrame object.)
 *******************************************************************************/
 EarthMoonRotatingFrame::EarthMoonRotatingFrame (
-     jeod::EphemeridesManager & ephem_mgr)
+     jeod::EphemeridesManager & ephem_manager)
   :
-  EphemBasedPointingRefFrame(ephem_mgr),
+  EphemBasedPointingRefFrame(ephem_manager),
   orientation(EMB_Moon),
   reverse_xy(false)
 { }

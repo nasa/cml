@@ -216,7 +216,7 @@ class RcsJet {
           RcsPropPod & prop_pod_,
           RcsJetGroup & group_);
   void initialize();
-  void update (bool command_);
+  void update (bool new_command);
   void compute_jet_forces();
   void compute_prop_consumption();
   void get_force_direction(double force_dir[3]);
@@ -227,7 +227,7 @@ class RcsJet {
   void set_force_direction(
                  double force_dir_x, double force_dir_y, double force_dir_z);
   void scale_self_impingement();
-  void set_isp( double new_isp);
+  void set_isp( double isp_);
   double get_isp() const {return isp;}
  protected:
   void compute_component_flow_rates();

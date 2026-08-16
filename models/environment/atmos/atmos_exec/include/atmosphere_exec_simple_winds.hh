@@ -65,7 +65,7 @@ class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
                                               return true;}
     void update_winds() override;
 
-    void set_altitude_type(TopoType altitude_);
+    void set_altitude_type(TopoType type);
 
   private:
     AtmosphereExec_SimpleLookupWind (const AtmosphereExec_SimpleLookupWind&);

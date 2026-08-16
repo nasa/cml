@@ -234,7 +234,7 @@ class TwistSway : public SubscriptionBase
 
 
 public:
-  TwistSway(const double & time_ref);
+  TwistSway(const double & external_clock_);
   ~TwistSway() override = default;
 
   void initialize(double end_time);

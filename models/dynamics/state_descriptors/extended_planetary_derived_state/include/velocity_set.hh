@@ -47,7 +47,7 @@ class VelocitySet{
             pointer to either the relative- or inertial- velocity 3-vector */
 
  public:
-  explicit VelocitySet(const double (&T_inrtl_topo_in)[3][3]);
+  explicit VelocitySet(const double (&T_inrtl_this_in)[3][3]);
   void initialize(const double * vel_in);
   void update();
 

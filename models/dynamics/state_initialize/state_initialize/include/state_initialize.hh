@@ -317,7 +317,7 @@ class StateInitialize : public jeod::DynBodyInit
   void generate_random(int seed);
   void verify_compatibility();
 
-  void generate_free_stream_velocity( double rel_wind_inrtl[3]);
+  void generate_free_stream_velocity( double rel_wind_vel_inrtl[3]);
   void remove_from_trans_init(  jeod::DynBodyInitTransState::StateItems item);
   void remove_from_rot_init(  jeod::DynBodyInitRotState::StateItems item);
 

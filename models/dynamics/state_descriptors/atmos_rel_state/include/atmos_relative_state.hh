@@ -136,7 +136,7 @@ class AtmosRelativeState : public SubscriptionBase
 
 
  public:
-  void set_reference_length( const double * ref_length_ptr);
+  void set_reference_length( const double * ref_length_in);
   void update();
 
   void subscribe_complete_calculation();
@@ -149,7 +149,7 @@ class AtmosRelativeState : public SubscriptionBase
   void compute_T_inrtl_traj();
 
   AtmosRelativeState( const jeod::DynBody       & body_ref,
-                      ExtendedPlanetaryDerivedState & prs_ref,
+                      ExtendedPlanetaryDerivedState & planet_rel_state_ref,
                       AtmosphereExecInterface       & atmos_exec_ref);
   ~AtmosRelativeState() override = default;
 

@@ -996,12 +996,12 @@ Purpose:
     Template specialization for bool type
 *****************************************************************************/
 template<>
-bool MathUtils::is_within_abs_tolerance<bool>( bool v1, bool v2, bool tol)
+bool MathUtils::is_within_abs_tolerance<bool>( bool val1, bool val2, bool tol)
 {
-  bool ret = tol || (v1 == v2);
+  bool ret = tol || (val1 == val2);
   CMLMessage::error( __FILE__, __LINE__,
-    "Testing whether boolean ",v1, " is within boolean ",tol,", of boolean ",
-    v2, " has an ambiguous interpretation.\n"
+    "Testing whether boolean ",val1, " is within boolean ",tol,", of boolean ",
+    val2, " has an ambiguous interpretation.\n"
     "Evaluated to ",ret,"\n");
   return ret;
 }

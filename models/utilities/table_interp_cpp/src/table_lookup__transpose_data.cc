@@ -124,12 +124,12 @@ Purpose:(Parses a line of data, extracting the appropriate pieces.)
 *****************************************************************************/
 void
 TableLookupTransposeDataSet_TableConfig::parse_line(
-    size_t line_index, // first line is numbered 0
+    size_t line_num, // first line is numbered 0
     const DoubleVec & data_line)
 {
   // take the data off this line and put it in the scratch storage space.
   for (size_t ix = 0; ix < num_variables; ++ix) {
-    data_scratch[ ix*total_num_lines + line_index] = data_line[indices[ix]];
+    data_scratch[ ix*total_num_lines + line_num] = data_line[indices[ix]];
   }
 }
 

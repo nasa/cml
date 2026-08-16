@@ -41,7 +41,7 @@ Purpose:(sets the originating_frame pointer)
 *****************************************************************************/
 void
 PointingRefFrame::set_originating_frame(
-    jeod::RefFrame * orig_frame)
+    jeod::RefFrame * originating_frame_in)
 {
   if (active) {
     CMLMessage::error(
@@ -50,14 +50,14 @@ PointingRefFrame::set_originating_frame(
       "frame.\nOriginating-frame remains at its current setting.");
     return;
   }
-  if (orig_frame == nullptr) {
+  if (originating_frame_in == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Attempt to assign the originating-frame of PointingRefFrame ", pointing_frame.get_name(), " to be "
       "NULL.\nThis is not a valid setting.\nAttempt failed.\n");
     return;
   }
-  originating_frame = orig_frame;
+  originating_frame = originating_frame_in;
 }
 
 /*****************************************************************************
@@ -66,7 +66,7 @@ Purpose:(sets the target_frame pointer)
 *****************************************************************************/
 void
 PointingRefFrame::set_target_frame(
-    jeod::RefFrame * targ_frame)
+    jeod::RefFrame * target_frame_in)
 {
   if (active) {
     CMLMessage::error(
@@ -75,14 +75,14 @@ PointingRefFrame::set_target_frame(
       "frame.\nOriginating-frame remains at its current setting.");
     return;
   }
-  if (targ_frame == nullptr) {
+  if (target_frame_in == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Attempt to assign the target-frame of PointingRefFrame ", pointing_frame.get_name(), " to be "
       "NULL.\nThis is not a valid setting.\nAttempt failed.\n");
     return;
   }
-  target_frame = targ_frame;
+  target_frame = target_frame_in;
 }
 
 /*******************************************************************************

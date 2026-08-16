@@ -55,7 +55,7 @@ public:
   AeroInterfaceOutput output; /* (--) output of the model. */
 
   AeroInterfaceBase( AtmosRelativeState & atmos_rel_state_in,
-                     const double       & geodetic_altitude);
+                     const double       & geodetic_altitude_in);
 
   ~AeroInterfaceBase() override = default;
 

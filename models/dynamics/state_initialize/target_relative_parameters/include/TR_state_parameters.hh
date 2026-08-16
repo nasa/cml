@@ -87,12 +87,12 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
   void compute_position_from_params( InputPosAngle input_theta_type);
   void compute_position_from_params( double        geodetic_altitude,
                                      double        theta_Rng,
-                                     double        theta_Rot_or_Cross,
+                                     double        theta_Rot_OR_phi,
                                      InputPosAngle input_theta_type,
                                      double        (&R_PCPF)[3]);
   void compute_position_from_params_SWIG( double        geodetic_altitude,
                                           double        theta_Rng,
-                                          double        theta_Rot_or_Cross,
+                                          double        theta_Rot_OR_phi,
                                           InputPosAngle input_theta_type,
                                           double        R_PCPF[3]);
 

@@ -183,11 +183,11 @@ public:
 
   virtual bool update();
 
-  void bias_data(double bias, size_t idx1, size_t idx2);
+  void bias_data(double bias, size_t ix_start, size_t ix_stop);
   void bias_data(double bias, size_t idx) { bias_data( bias, idx, idx);}
   void bias_data(double bias) {bias_data( bias, 0, data.size()-1);}
 
-  void scale_data(double scale, size_t idx1, size_t idx2);
+  void scale_data(double scale, size_t ix_start, size_t ix_stop);
   void scale_data(double scale, size_t idx) { scale_data( scale, idx, idx);}
   void scale_data(double scale) {scale_data( scale, 0, data.size()-1);}
 

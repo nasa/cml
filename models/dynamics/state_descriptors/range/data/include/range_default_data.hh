@@ -22,7 +22,7 @@ class RangeDefaultData
   RangeDefaultData() = default;
   virtual ~RangeDefaultData() = default;
 
-  void launch_pad_KSC_39B(RangeFromPfixReference & launch);
+  void launch_pad_KSC_39B(RangeFromPfixReference & pad);
 
 private:
    // Not implemented:

@@ -140,8 +140,8 @@ class RcsGeneric : public SubscriptionBase {
 
   void set_prop_loss_on(  unsigned int ix, double value);
   void set_prop_loss_off( unsigned int ix, double value);
-  void set_mult_jet_flag (bool mult_jet_flag);
-  void set_calc_flow_rate(bool calc_flow_rate);
+  void set_mult_jet_flag (bool new_value);
+  void set_calc_flow_rate(bool new_value);
 
  protected:
   void compute_force_and_fuel();

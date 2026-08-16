@@ -61,7 +61,7 @@ class LvlhSeparationState : public SeparationState
   void initialize ( jeod::DynManager   & dyn_manager,
                     jeod::BasePlanet   & planet,
                     jeod::BodyRefFrame & subject_frame,
-                    jeod::BodyRefFrame & source_frame);
+                    jeod::BodyRefFrame & lvlh_origin_frame_);
 
   void initialize ( jeod::DynManager   & dyn_manager,
                     jeod::BodyRefFrame & subject_frame);

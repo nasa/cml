@@ -88,7 +88,7 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
   ~ImpactPoint() override = default;
   
   void initialize() override;
-  void initialize( double ref_pos[3]);
+  void initialize( const double reference_position_pfix[3]);
   void update();
 
  protected:

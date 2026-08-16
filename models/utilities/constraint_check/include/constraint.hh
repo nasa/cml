@@ -73,7 +73,7 @@ class Constraint
     If the tests do not include time limits, this value will remain 0.0*/
 
  public:
-  Constraint( size_t num_specs = 1);
+  Constraint( size_t num_tests_ = 1);
   virtual ~Constraint() = default;
 
   virtual void initialize();

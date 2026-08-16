@@ -329,7 +329,7 @@ Note:
 *****************************************************************************/
 bool
 LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
-                                  bool         contains_vertical_component_,
+                                  bool         file_contains_vertical_wind_component,
                                   unsigned int wind_number_)
 {
   if (!enabled) {
@@ -463,9 +463,9 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
   }
 
   // dependent variables are u, v, T, P, rho.
-  // w is included if contains_vertical_component_ is True
+  // w is included if file_contains_vertical_wind_component is True
   unsigned int number_of_dependent_variables_ =
-                                            contains_vertical_component_ ? 6 : 5;
+                                            file_contains_vertical_wind_component ? 6 : 5;
 
   /********************   Loading independent variable data  ******************/
   // Define vector of floats to receive data from binary file
@@ -624,7 +624,7 @@ LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
   dep_vec_.push_back( &v );
   // If including vertical wind-speed, include w in the dependent variables,
   // and record that in the table.
-  if (contains_vertical_component_) {
+  if (file_contains_vertical_wind_component) {
     dep_vec_.push_back( &w );
     table_.initialized_with_vertical_component = true;
   }

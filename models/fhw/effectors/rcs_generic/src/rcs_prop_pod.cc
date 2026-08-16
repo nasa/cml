@@ -71,17 +71,17 @@ Purpose:(pushes the dynamic-mass-interface through to the specified component)
 *****************************************************************************/
 void
 RcsPropPod::set_dyn_mass_interface(
-      unsigned int component_ix,
+      unsigned int component_index,
       DynamicMassBodyPropertiesInterface & dyn_mass_interface)
 {
-  if (component_ix >= components.size()) {
+  if (component_index >= components.size()) {
     CMLMessage::error(
     __FILE__,__LINE__,"Assignment error\n",
-    "Cannot assign a dyn-mass interface to component index ", component_ix, " because\n"
+    "Cannot assign a dyn-mass interface to component index ", component_index, " because\n"
     "there are only ", components.size(), " components (so max index is ", components.size()-1, ").\n");
   }
   else {
-    components.at(component_ix).set_dyn_mass_interface( dyn_mass_interface);
+    components.at(component_index).set_dyn_mass_interface( dyn_mass_interface);
     using_dyn_mass = true;
   }
 }
@@ -277,20 +277,20 @@ Purpose:(returns the scale-factor for the specified component in the pod
 *****************************************************************************/
 double
 RcsPropPod::get_flow_rate_scale_factor(
-   const unsigned int component_ix)
+   const unsigned int component_index)
 {
   if (num_jets_on == 0) {
     return 1.0;
   }
-  if (component_ix >= components.size()) {
+  if (component_index >= components.size()) {
     CMLMessage::error(
     __FILE__,__LINE__,"Assignment error\n",
-    "Cannot extract the flow-rate scale-factor from component index ", component_ix, "\n"
+    "Cannot extract the flow-rate scale-factor from component index ", component_index, "\n"
     "because there are only ", components.size(), " components (so max index is ", components.size()-1, ").\n");
     return 0.0;
   }
 
-  return components.at(component_ix).flow_rate_sf[num_jets_on-1];
+  return components.at(component_index).flow_rate_sf[num_jets_on-1];
 }
 
 

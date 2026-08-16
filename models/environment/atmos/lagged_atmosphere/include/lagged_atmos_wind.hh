@@ -41,8 +41,8 @@ class LaggedAtmosWind {
   void compute_with_query( double input_altitude);
 
   void update_history( const LaggedAtmosPayloadData & payload_data);
-  void set_min_delta_altitude( double min_delta_altitude);
-  void set_max_delta_altitude( double max_delta_altitude);
+  void set_min_delta_altitude( double min_new);
+  void set_max_delta_altitude( double max_new);
 
   protected:
   std::string model_name; /* (--)

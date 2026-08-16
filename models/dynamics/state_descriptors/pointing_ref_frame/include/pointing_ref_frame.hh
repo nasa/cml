@@ -85,8 +85,8 @@ class PointingRefFrame : public SubscriptionBase {
   PointingRefFrame();
   ~PointingRefFrame() override = default;
 
-  void set_originating_frame (jeod::RefFrame * originating_frame);
-  void set_target_frame (jeod::RefFrame * target_frame);
+  void set_originating_frame (jeod::RefFrame * originating_frame_in);
+  void set_target_frame (jeod::RefFrame * target_frame_in);
 
   virtual void update();
 

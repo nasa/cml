@@ -123,13 +123,13 @@ class MassDerivativeDynamics : public SubscriptionBase
   MassDerivativeDynamics( const double & time,
                           const jeod::MassProperties & propellant_properties,
                           const double R_nozzle[3],
-                          jeod::DynBody & vehicle);
+                          jeod::DynBody & body_);
   MassDerivativeDynamics( const double & time,
                           const double & propellant_mass,
-                          const double (& intrinsic_prop_inertia)[3][3],
+                          const double (& intrinsic_prop_inertia_)[3][3],
                           const double R_propellant[3],
                           const double R_nozzle[3],
-                          jeod::DynBody & vehicle);
+                          jeod::DynBody & body_);
 
   void update();
   void update_force_torque() {update_force(); update_torque();}

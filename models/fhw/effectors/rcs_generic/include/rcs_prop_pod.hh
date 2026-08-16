@@ -163,7 +163,7 @@ class RcsPropPod{
               const double & time_step);
   virtual ~RcsPropPod() = default;
 
-  void set_dyn_mass_interface( unsigned int component_ix,
+  void set_dyn_mass_interface( unsigned int component_index,
                 DynamicMassBodyPropertiesInterface & dyn_mass_interface);
   void activate_dyn_mass();
   void deactivate_dyn_mass();

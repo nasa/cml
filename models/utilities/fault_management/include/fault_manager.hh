@@ -123,7 +123,7 @@ class FaultManager {
     // other tags for variable names.
     virtual xmlNodePtr check_rand_in_params(xmlNodePtr) {return nullptr;}
 
-    virtual bool parse_non_periodic_param( FaultFunctionParameter& var_param,
+    virtual bool parse_non_periodic_param( FaultFunctionParameter& params,
                                            xmlNodePtr function_node,
                                            const char* fault_name);
 

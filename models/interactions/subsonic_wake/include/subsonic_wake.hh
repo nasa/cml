@@ -97,7 +97,7 @@ class SubsonicWakeNoForce : public SubsonicWake
      const double * bodyB_inertial_vel_in,
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
-     WakeEffectsOut & effects_in);
+     WakeEffectsOut & effects_output_in);
 
  protected:
   void query_objB() override{} // just to make it instantiable
@@ -124,7 +124,7 @@ class SubsonicWakeWithForce : public SubsonicWake
      const double (& bodyB_T_struc_to_body_in)[3][3],
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
-     WakeEffectsOut & effects_in);
+     WakeEffectsOut & effects_output_in);
 
   void deactivate() override;
 

@@ -42,14 +42,14 @@ MassDerivativeDynamics::MassDerivativeDynamics(
 MassDerivativeDynamics::MassDerivativeDynamics(
     const double & time,
     const double & propellant_mass_,
-    const double (& inertia_)[3][3],
+    const double (& intrinsic_prop_inertia_)[3][3],
     const double R_propellant_[3],
     const double R_nozzle_[3],
     jeod::DynBody & body_)
   :
   current_time(time),
   propellant_mass(propellant_mass_),
-  intrinsic_prop_inertia(inertia_),
+  intrinsic_prop_inertia(intrinsic_prop_inertia_),
   R_propellant( R_propellant_),
   R_nozzle( R_nozzle_),
   body( body_),

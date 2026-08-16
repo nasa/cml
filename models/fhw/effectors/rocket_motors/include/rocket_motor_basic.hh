@@ -147,11 +147,11 @@ protected:
                     const double                       * veh_cm_in,
                     bool                                 use_mass_string_in);
 public:
-  RocketMotor_Basic(DynamicMassBody & mass_in,
+  RocketMotor_Basic(DynamicMassBody & mass_body_in,
                     const double    & time_in,
                     const double    * veh_cm_in);
   RocketMotor_Basic(DynamicMassGroup & mass_group_in,
-                    DynamicMassBody  & mass_in,
+                    DynamicMassBody  & mass_body_in,
                     const double     & time_in,
                     const double     * veh_cm_in);
   RocketMotor_Basic(DynamicMassString & string_in,
