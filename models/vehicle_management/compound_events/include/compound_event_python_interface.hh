@@ -29,11 +29,8 @@ struct CompoundEventActionConfig
   std::string target_string_assignment;
   CompoundEventActionConfig()
     :
-    name(""),
-    datatype(""),
     target_ptr(nullptr),
-    target_value_assignment(0.0),
-    target_string_assignment("")
+    target_value_assignment(0.0)
   {}
 };
 

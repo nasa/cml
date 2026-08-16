@@ -25,7 +25,6 @@ Constructors
 *****************************************************************************/
 DRWPTableLookup::DRWPTableLookup()
   :
-  drwpFileName(""),
   profile_number(2),
   initialized_with_vertical_component(false),
   verified(false)
@@ -34,7 +33,6 @@ DRWPTableLookup::DRWPTableLookup()
 /****************************************************************************/
 LookupAtmosWinds::LookupAtmosWinds()
   :
-  drwpFileName(""),
   wind_number(2),
   include_vertical_component(false),
   block_warnings(false),
