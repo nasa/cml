@@ -448,7 +448,7 @@ void
 DynamicMassGroup::test_root_body()
 {
   countdown_to_root_test = countdown_reset;
-  if (dyn_masses.size() >=1) {
+  if (!dyn_masses.empty()) {
     // set one root identification for reference
     const jeod::MassBody* first_root = dyn_masses[0]->get_root_body();
 

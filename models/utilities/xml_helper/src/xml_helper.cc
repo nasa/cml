@@ -102,7 +102,7 @@ const char* XmlHelper::xml_find_value(
       if (allow_case) {
         std::string left(xml_convert_ptr(val->name));
         std::string right(name);
-        if (left.length() > 0 && right.length() > 0) {
+        if (!left.empty() && !right.empty()) {
           left[0]  = toupper( left[0]);
           right[0] = toupper(right[0]);
           if (left == right) {

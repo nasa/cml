@@ -257,7 +257,7 @@ TableLookupTransposeDataSet::process_data(
   // PART B: Check and process dependent data.
   //***************************************************************************
   // Verify that no tables have already been assigned to this manager:
-  if (tables.size() != 0) {
+  if (!tables.empty()) {
     CMLMessage::warn(
       __FILE__,__LINE__,"Unexpected configuration.\n",
       "Found data tables already added to this manager.\n"
@@ -489,7 +489,7 @@ TableLookupTransposeDataSet::check_independent()
 
   // If none have been added, or an invalid instance has been added,
   // create a new TableIndependentVariable.
-  if (independents.size() == 0 || independents.at(0) == nullptr) {
+  if (independents.empty() || independents.at(0) == nullptr) {
     // Must have knowledge of the independent variable
     if (independent_var == nullptr) {
       CMLMessage::fail(
