@@ -86,7 +86,7 @@ public:
 
   void apply_correlations();
   void scale_mass( double nominal);
-  void scale_position( double nominal[3]);
+  void scale_position( const double nominal[3]);
   void scale_moi( double nominal_xx,
                   double nominal_yy,
                   double nominal_zz);

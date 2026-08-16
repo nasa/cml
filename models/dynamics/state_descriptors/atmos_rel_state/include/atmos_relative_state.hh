@@ -136,7 +136,7 @@ class AtmosRelativeState : public SubscriptionBase
 
 
  public:
-  void set_reference_length( double * ref_length_ptr);
+  void set_reference_length( const double * ref_length_ptr);
   void update();
 
   void subscribe_complete_calculation();
