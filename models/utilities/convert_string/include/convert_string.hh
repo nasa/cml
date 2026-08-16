@@ -110,8 +110,8 @@ bool ConvertString::convert_numeric<bool>(const char* str) {
   }
   // otherwise return false, but first check for comparison against "false"
   // and drop an error message if neither "true" nor "false" is identified.
-  else if (!(strcmp(str, "false") == 0 || strcmp(str, "False") == 0 ||
-               strcmp(str, "FALSE") == 0))
+  else if (strcmp(str, "false") != 0 && strcmp(str, "False") != 0 &&
+               strcmp(str, "FALSE") != 0)
   {
     CMLMessage::error(
       __FILE__, __LINE__, "Unrecognized Boolean String\n",

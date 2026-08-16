@@ -90,12 +90,7 @@ void
 RcsPodComponent::set_dyn_mass_interface(
      DynamicMassBodyPropertiesInterface & dyn_mass_interface)
 {
-  if (&dyn_mass_interface != &fake_interface) {
-    using_dyn_mass = true;
-  }
-  else {
-    using_dyn_mass = false;
-  }
+  using_dyn_mass = &dyn_mass_interface != &fake_interface;
   mass_consumed_step = &dyn_mass_interface.mass_consumed_step;
   consumable_mass = &dyn_mass_interface.consumable_mass;
 }

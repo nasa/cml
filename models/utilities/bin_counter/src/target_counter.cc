@@ -127,16 +127,6 @@ Purpose: Checks whether the specified value is in the targets vector
 bool
 CML_TargetCounter::does_val_exist(int val)
 {
-
-  /* Note: can use std::any_of here.
-   *       We only need to test until one target (any target) meets the
-   *       condition, and then we can return true. If we get to the end
-   *       without finding any targets, return false. */
-  if (std::any_of( targets.begin(), targets.end(),
-      [val](CML_TargetCounterElement & target_)
-                                          {return (val == target_.value);}))
-  {
-    return true;
-  }
-  return false;
+  return std::any_of( targets.begin(), targets.end(),
+      [val](CML_TargetCounterElement & target_) {return (val == target_.value);});
 }
