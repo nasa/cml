@@ -1585,7 +1585,7 @@ void
 StateInitialize::generate_random(int seed)
 {
   std::default_random_engine generator;
-  generator.seed(static_cast<typename decltype(generator)::result_type>(seed));
+  generator.seed(static_cast<decltype(generator)::result_type>(seed));
   std::normal_distribution<double> rand_norm(0.0, 1.0);
 
   for (unsigned int ii = 0; ii < 3; ii++) {
