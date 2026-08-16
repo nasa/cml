@@ -133,8 +133,8 @@ class ConstraintTest_ThresholdTimed : public ConstraintTestTimed
   }
 };
 // Forward declaration of template specializations:
-template<> bool ConstraintTest_ThresholdTimed<double>::query_equals(double);
-template<> bool ConstraintTest_ThresholdTimed<float>::query_equals(float);
+template<> bool ConstraintTest_ThresholdTimed<double>::query_equals(double variable);
+template<> bool ConstraintTest_ThresholdTimed<float>::query_equals(float variable);
 
 
 /*****************************************************************************

@@ -146,7 +146,7 @@ class RcsGeneric : public SubscriptionBase {
  protected:
   void compute_force_and_fuel();
   void apply_self_impingement();
-  bool update_part_I(const void *);
+  bool update_part_I(const void * rcs_command);
   void update_part_II();
   void check_mult_jet_flag_init();
 

@@ -56,7 +56,7 @@ class CompoundEventsManager : public VehicleEventsManager
   void initialize() override;
   void update() override;
 
-  void add_event(WatchValuesBaseCore &);
+  void add_event(WatchValuesBaseCore & event);
   CompoundEvent& create_event();
   void add_trigger(WatchValuesBaseCore* new_trigger);
 

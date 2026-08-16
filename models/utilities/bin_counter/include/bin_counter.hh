@@ -64,7 +64,7 @@ class CML_BinCounter {
                   bool closed_ends = true);
   virtual ~CML_BinCounter() = default;
 
-  void insert(double);
+  void insert(double value);
   void set_data( const std::vector<double> & edges,
                  bool closed_ends = true);
   void set_data( double limit_a,

@@ -206,7 +206,7 @@ public:
 
   // Legacy capability, deprecated.
   void test_for_reinitialize();
-  void set_include_vertical_component(bool);
+  void set_include_vertical_component(bool unused);
 
 protected:
   void activate() override;
@@ -216,7 +216,7 @@ protected:
                              double max_altitude=0);
   void calculate_speed_of_sound();
   void calculate_wind_mag_dir();
-  void stream_error(int, const std::string&);
+  void stream_error(int line, const std::string& drwpFileName_);
 private:
   // private and unimplemented; cannot be used.
   LookupAtmosWinds (const LookupAtmosWinds&);

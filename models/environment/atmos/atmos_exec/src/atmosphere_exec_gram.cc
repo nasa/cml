@@ -22,16 +22,16 @@ GramInterface::GramInterface()
 {
 }
 void GramInterface::initialize( // Return: -- Void
- double ,
- double ,
- double ,
- double ,
- int    ,
- int    ,
- int    ,
- int    ,
- int    ,
- double )
+  [[maybe_unused]] double TSIM,
+  [[maybe_unused]] double HGRAM,
+  [[maybe_unused]] double THGRAM,
+  [[maybe_unused]] double PHGRAM,
+  [[maybe_unused]] int    GR_YEAR,
+  [[maybe_unused]] int    GR_MONTH,
+  [[maybe_unused]] int    GR_DAY,
+  [[maybe_unused]] int    GR_HOUR,
+  [[maybe_unused]] int    GR_MIN,
+  [[maybe_unused]] double GR_SEC)
 {
   CMLMessage::fail( __FILE__,__LINE__,
     "Missing derived GramInterface\n",
@@ -42,10 +42,10 @@ void GramInterface::initialize( // Return: -- Void
 }
 
 void GramInterface::update(
-   double ,
-   double ,
-   double ,
-   double )
+  [[maybe_unused]] double TSIM,
+  [[maybe_unused]] double H_GC,
+  [[maybe_unused]] double ALONG,
+  [[maybe_unused]] double GCLAT)
 {
   CMLMessage::fail( __FILE__,__LINE__,
     "Missing derived GramInterface\n",

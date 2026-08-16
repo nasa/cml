@@ -33,7 +33,7 @@ class FaultOverwrite : public Fault {
 
   void overwrite_value() override { variable = faulted_value; }
 
-  bool set_param(std::string param_name, double val_, bool) override;
+  bool set_param(std::string param_name, double val_, bool reset_nominal) override;
 
  private:
   FaultOverwrite(const FaultOverwrite&) = delete;
@@ -50,8 +50,9 @@ template<typename T>
 bool FaultOverwrite<T>::set_param(
   std::string param_name,
   double val_,
-  bool)
+  bool reset_nominal)
 {
+  (void)reset_nominal;
   if (param_name == "value") {
     faulted_value = val_;
     return true;
@@ -63,5 +64,5 @@ bool FaultOverwrite<T>::set_param(
 template<>
 bool FaultOverwrite<bool>::set_param( std::string param_name,
                                       double val_,
-                                      bool);
+                                      bool reset_nominal);
 #endif

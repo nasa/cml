@@ -99,9 +99,9 @@ class SeparationState : public SubscriptionBase
    jeod::BodyRefFrame* get_subject() {return subject;}
 
  protected:
-   jeod::BodyRefFrame *  initialize_find_frame (jeod::DynBody &,
-                                                std::string,
-                                                std::string);
+   jeod::BodyRefFrame *  initialize_find_frame (jeod::DynBody & body,
+                                                std::string frame_name,
+                                                std::string body_type);
    void activate() override;
    void deactivate() override;
 

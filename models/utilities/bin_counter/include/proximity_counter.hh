@@ -57,7 +57,7 @@ class CML_ProximityCounter {
     Name of group (for debugging purposes)*/
   CML_ProximityCounter();
   explicit CML_ProximityCounter(const std::vector<double> & targets_);
-  void insert(double);
+  void insert(double value);
   void set_data( const std::vector<double> & targets);
   template <size_t n_targets>
   void set_data( const double (&new_targets)[n_targets])

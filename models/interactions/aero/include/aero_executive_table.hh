@@ -178,7 +178,7 @@ public:
   void update() override;
 protected:
   void activate() override;
-  void configure_new_table(AeroTableSetBase *);
+  void configure_new_table(AeroTableSetBase * new_table);
   void trig_functions();
   void post_process_table_data();
   void aero_forces_moments();

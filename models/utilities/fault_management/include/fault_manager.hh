@@ -121,7 +121,11 @@ class FaultManager {
     // the next few functions are virtual to support inserting an interface to
     // another fault-management service (such as fault_arch) that may use
     // other tags for variable names.
-    virtual xmlNodePtr check_rand_in_params(xmlNodePtr) {return nullptr;}
+    virtual xmlNodePtr check_rand_in_params(xmlNodePtr unused)
+    {
+      (void)unused;
+      return nullptr;
+    }
 
     virtual bool parse_non_periodic_param( FaultFunctionParameter& params,
                                            xmlNodePtr function_node,

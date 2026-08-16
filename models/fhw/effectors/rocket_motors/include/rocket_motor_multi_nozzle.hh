@@ -106,7 +106,7 @@ public:
                            const double      * veh_cm_in);
   ~RocketMotor_MultiNozzle() override = default;
 
-  void add_nozzle( RocketMotorNozzle &);
+  void add_nozzle( RocketMotorNozzle & nozzle);
   virtual void initialize(size_t num_flex_elements_in = 0,
                           const double * motor_lin_flex_in = nullptr,
                           const double * motor_rot_flex_in = nullptr);

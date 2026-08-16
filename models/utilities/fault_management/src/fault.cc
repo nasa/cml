@@ -70,8 +70,8 @@ Purpose:(Generic method for setting fault parameters. This base method is
          called if the child class does not recognize the parameter name.)
 *******************************************************************************/
 bool Fault::set_param( std::string param_name,
-                       double,
-                       bool)
+                       [[maybe_unused]] double value,
+                       [[maybe_unused]] bool reset_nominal)
 {
   CMLMessage::error(__FILE__, __LINE__,
     "Fault Management Error\n",

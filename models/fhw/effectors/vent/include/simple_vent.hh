@@ -152,8 +152,8 @@ class SimpleVent {
                          indefinite_duration = true;}
 
   // Allow access to Vent methods through SimpleVent pointers
-  virtual void set_flowrate( double, bool = true);
-  virtual void set_exhaust_speed( double, bool = true);
+  virtual void set_flowrate( double val, bool  flag = true);
+  virtual void set_exhaust_speed( double val, bool  flag = true);
   virtual double get_flowrate();
   virtual double get_exhaust_speed();
   virtual bool flowrate_is_set() { return false; }

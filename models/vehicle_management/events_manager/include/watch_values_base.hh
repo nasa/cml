@@ -216,8 +216,10 @@ Purpose:(Split behavior based on whether the template class variable type
   //         Define discrete-variable behavior
   /***************************************************************************/
   template<typename varType>
-  void test_crossing( const varType*)
+  void test_crossing( const varType* unused)
   {
+    (void)unused;
+
     // Check for treating discrete variable as a continuous variable:
     if (use_threshold_crossing_trigger) {
       test_crossing_dbl( static_cast<double>(*variable),
@@ -231,13 +233,15 @@ Purpose:(Split behavior based on whether the template class variable type
   /***************************************************************************/
   //         Define continuous-variable behavior
   /***************************************************************************/
-  void test_crossing( const float *)
+  void test_crossing( const float * unused)
   {
+    (void)unused;
     test_crossing_dbl( *variable, reference);
   }
   /***************************************************************************/
-   void test_crossing(const double *)
+   void test_crossing(const double * unused)
   {
+    (void)unused;
     test_crossing_dbl( *variable, reference);
   }
   //***************************************************************************
@@ -318,8 +322,9 @@ Purpose:(Internal activation sub-method for case where reference is relative\
 *****************************************************************************/
   // ** bool type **
   // *************************************************************************
-  void set_reference_relative_to_activation(const bool*)
+  void set_reference_relative_to_activation(const bool* unused)
   {
+    (void)unused;
     if (reference == variable_at_activation) {
         CMLMessage::warn(
           __FILE__,__LINE__,"Possible unintended behavior with bool event\n",
@@ -334,24 +339,34 @@ Purpose:(Internal activation sub-method for case where reference is relative\
   /***************************************************************************/
   // int
   /***************************************************************************/
-  void set_reference_relative_to_activation(const int*)
-  { increment_reference();}
+  void set_reference_relative_to_activation(const int* unused)
+  {
+    (void)unused;
+    increment_reference();
+  }
   /***************************************************************************/
   // double, same behavior as int
   /***************************************************************************/
-  void set_reference_relative_to_activation(const double*)
-  { increment_reference();}
+  void set_reference_relative_to_activation(const double* unused)
+  {
+    (void)unused;
+    increment_reference();
+  }
   /***************************************************************************/
   // float, same behavior as int
   /***************************************************************************/
-  void set_reference_relative_to_activation(const float*)
-  { increment_reference();}
+  void set_reference_relative_to_activation(const float* unused)
+  {
+    (void)unused;
+    increment_reference();
+  }
   /***************************************************************************/
   // all other data types
   /***************************************************************************/
   template<typename varType>
-  void set_reference_relative_to_activation(varType*)
+  void set_reference_relative_to_activation(varType* unused)
   {
+    (void)unused;
     CMLMessage::error (
       __FILE__, __LINE__, "Invalid Event/Watch activation: undefined behavior:\n",
       "A watch was activated with the flag to watch for a value to be\n"

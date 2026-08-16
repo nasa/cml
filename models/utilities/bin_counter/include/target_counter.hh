@@ -53,8 +53,8 @@ class CML_TargetCounter {
   CML_TargetCounter( int limit_a,
                      int limit_b);
 
-  void insert(int);
-  bool does_val_exist(int);
+  void insert(int value);
+  bool does_val_exist(int val);
 
   void set_data( const std::vector<int> & targets);
   void set_data( int limit_a,

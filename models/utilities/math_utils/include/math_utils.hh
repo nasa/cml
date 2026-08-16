@@ -1000,7 +1000,7 @@ template<> bool MathUtils::is_equal<float>( float val1, float val2);
 template<> bool MathUtils::is_equal<double>( double val1, double val2);
 
 // TODO: these don't make sense to support. Remove them in the future.
-template<> bool MathUtils::is_within_abs_tolerance<bool>( bool, bool, bool);
-template<> bool MathUtils::is_within_rel_tolerance<bool>( bool, bool, double);
+template<> bool MathUtils::is_within_abs_tolerance<bool>( bool val1, bool val2, bool tol);
+template<> bool MathUtils::is_within_rel_tolerance<bool>( bool value, bool expected, double tol);
 
 #endif

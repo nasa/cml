@@ -113,7 +113,7 @@ public:
 
   void initialize() override;
   void update() override;
-  void set_consumption_type( ConsumptionType);
+  void set_consumption_type( ConsumptionType type_in);
   void shutdown_motor() override;
 
 protected:

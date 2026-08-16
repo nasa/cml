@@ -233,8 +233,9 @@ template<> class Trigger<std::string> : public TriggerBase {
     std::string value; /* (--)
       The value to which the trigger string is compared. */
 
-    void set_value( double) override
+    void set_value( double unused) override
       {
+        (void)unused;
         CMLMessage::error(
           __FILE__, __LINE__, "Fault Management Error in Trigger configuration.\n",
           "Arithmetic value assigned to trigger-value in Trigger <", name, ">.\n"
