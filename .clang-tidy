@@ -26,6 +26,12 @@
 # readability:
 #     readability-avoid-const-params-in-decls:
 #         Doesn't actually matter.
+#     readability-convert-member-functions-to-static:
+#         We may want to re-enable this in the future but for now it really
+#         just adds confusion.
+#     readability-else-after-return:
+#         We'll rely on manual review for most of these cases, but it shouldn't
+#         be applied globally as a rule.
 #     readability-function-cognitive-complexity:
 #         We'll decide manually during code reviews whether there's a problem
 #         with a function's cognitive complexity.
@@ -48,6 +54,8 @@ Checks: >
     -clang-analyzer-optin.performance.Padding,
     readability-*,
         -readability-avoid-const-params-in-decls,
+        -readability-convert-member-functions-to-static,
+        -readability-else-after-return,
         -readability-function-cognitive-complexity,
         -readability-function-size,
         -readability-identifier-length,
