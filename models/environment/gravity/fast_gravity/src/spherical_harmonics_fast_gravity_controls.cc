@@ -12,6 +12,7 @@ Programmers:
 
 *******************************************************************************/
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
@@ -260,8 +261,6 @@ SphericalHarmonicsFastGravityControls::calc_nonspherical(// Return: --   Void
   }
   else {
      count_limit = std::floor(count_limit / ratio_compare);
-     if (count_limit < 1) {
-       count_limit = 1;
-     }
+     count_limit = std::max<unsigned int>(count_limit, 1);
   }
 }

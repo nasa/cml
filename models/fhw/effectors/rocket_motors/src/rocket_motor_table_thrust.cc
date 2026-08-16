@@ -10,6 +10,8 @@ PROGRAMMERS:
    ((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
 *******************************************************************************/
 
+#include <algorithm>
+
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/rocket_motor_table_thrust.hh"
@@ -121,12 +123,7 @@ RocketMotor_TableThrust::load_thrust_data(
     double * data,
     size_t   num_elements)
 {
-  thrust_max = 0.0; // redundant, constructor assigns = 0, just a reminder.
-  for (size_t ii = 0; ii < num_elements; ++ii) {
-    if (data[ii] > thrust_max) {
-      thrust_max = data[ii];
-    }
-  }
+  thrust_max = *std::max_element(data, data + num_elements);
   std::vector<size_t> sizes;
   sizes.push_back(1);
   sizes.push_back( num_elements);
@@ -137,12 +134,7 @@ void
 RocketMotor_TableThrust::load_thrust_data(
     std::vector<double> & data)
 {
-  thrust_max = 0.0; // redundant, constructor assigns = 0, just a reminder.
-  for (size_t ii = 0; ii < data.size(); ++ii) {
-    if (data[ii] > thrust_max) {
-      thrust_max = data[ii];
-    }
-  }
+  thrust_max = *std::max_element(data.begin(), data.end());
   std::vector<size_t> sizes;
   sizes.push_back(1);
   sizes.push_back( data.size());
