@@ -63,7 +63,6 @@ Purpose:(Sets the variable and the reference against which it will be compared)
     variable = &var;
     reference = ref;
     reference_is_variable = false;
-    return;
   }
   /***************************************************************************/
   //  reference is a variable-value
@@ -78,7 +77,6 @@ Purpose:(Sets the variable and the reference against which it will be compared)
     variable = &var;
     reference_ptr = ref;
     reference_is_variable = true;
-    return;
   }
   /***************************************************************************/
   //     These methods are here for use with primitives only
@@ -161,7 +159,6 @@ Purpose:(Sets the reference value.  Used for changing default or previously
 *****************************************************************************/
   void set_reference(watchType ref) {
     reference = ref;
-    return;
   }
 
  void set_dbl_reference(double ref) override {
@@ -277,7 +274,6 @@ Purpose:(Split behavior based on whether the template class variable type
       "larger or smaller than the reference.\n  Deactivating the watch.\n");
       deactivate();
     }
-    return;
   }
 
 
@@ -312,7 +308,6 @@ Assumption: (Both activate() and initialize() must have been called)
         active_watches->push_back(this);
       }
     }
-    return;
   }
 
 /*****************************************************************************
@@ -335,7 +330,6 @@ Purpose:(Internal activation sub-method for case where reference is relative\
           "flips value relative to its value at activation.\n");
     }
     reference = !variable_at_activation;
-    return;
   }
   /***************************************************************************/
   // int
@@ -365,7 +359,6 @@ Purpose:(Internal activation sub-method for case where reference is relative\
       "No method has been provided to modify the current value.\n"
       "Using the originally specified reference value instead.\n");
       relative_to_activation = false;
-    return;
   }
 
 /*****************************************************************************
@@ -380,7 +373,6 @@ Purpose:(Generates the new reference value.)
     }
     // Increment the current value with the intended offset.
     reference += variable_at_activation;
-    return;
   }
 
  private:

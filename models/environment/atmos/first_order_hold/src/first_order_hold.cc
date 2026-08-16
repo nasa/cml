@@ -52,7 +52,6 @@ FirstOrderHold::activate()
   jeod::Vector3::copy( out.wind_velocity_td,
                  reference_wind);
   FO_init = true;
-  return;
 }
 /*****************************************************************************
 deactivate
@@ -189,5 +188,4 @@ FirstOrderHold::update()
   } else {
     out.wind_angle_blowing_from = out.wind_angle_blowing_to + M_PI;
   }
-  return;
 }

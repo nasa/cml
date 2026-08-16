@@ -60,7 +60,6 @@ TopoContainer::initialize(
   relative_vel.initialize(inrtl_rel_vel_in);   // Likewise
 
   initialized = true;
-  return;
 }
 
 
@@ -99,6 +98,4 @@ TopoContainer::update()
   }
 
   inertial_vel.update();
-
-  return;
 }

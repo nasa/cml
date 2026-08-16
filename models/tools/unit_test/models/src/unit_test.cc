@@ -217,7 +217,6 @@ UnitTestFramework::initialize()
     configure_from_definition_file();
   }
   initialized = true;
-  return;
 }
 
 /*****************************************************************************
@@ -241,7 +240,6 @@ UnitTestFramework::update()
   else {
     update_file();
   }
-  return;
 }
 
 /*****************************************************************************
@@ -719,5 +717,4 @@ UnitTestFramework::update_file()
     commands.push_back(commands.front());
   }
   commands.pop_front();
-  return;
 }

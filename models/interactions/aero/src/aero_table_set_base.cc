@@ -151,7 +151,6 @@ AeroTableSetBase::query_aero_damping()
   query_off_diag_aero_damping();
   aero_damping_in_table = (aero_damping_on_diag_in_table != 0) ||
                           (aero_damping_off_diag_in_table != 0);
-  return;
 }
 
 /*******************************************************************************

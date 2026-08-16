@@ -126,7 +126,6 @@ Vector3IntegrableObject::initialize()
       "Integration of this type cannot proceed.\n");
   }
   SubscriptionBase::initialize();
-  return;
 }
 /*****************************************************************************
 activate
@@ -183,7 +182,6 @@ Vector3IntegrableObject::activate()
 
   dyn_body->add_integrable_object( *this);
   active = true;
-  return;
 }
 
 /*****************************************************************************
@@ -237,7 +235,6 @@ Vector3IntegrableObject::deactivate()
   dyn_body->remove_integrable_object(*this);
 
   active = false;
-  return;
 }
 
 

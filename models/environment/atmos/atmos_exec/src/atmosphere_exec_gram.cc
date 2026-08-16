@@ -39,7 +39,6 @@ void GramInterface::initialize( // Return: -- Void
     "does not exist for this AtmosphereExec_Gram instance. This base class method\n"
     "is used only as a non-functional stub to support the Atmosphere Exec architecture\n"
     "when GRAM is not available.\n");
-    return;
 }
 
 void GramInterface::update(
@@ -54,7 +53,6 @@ void GramInterface::update(
     "does not exist for this AtmosphereExec_Gram instance. This base class method\n"
     "is used only as a non-functional stub to support the Atmosphere Exec architecture\n"
     "when GRAM is not available.\n");
-    return;
 }
 
 /*****************************************************************************

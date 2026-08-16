@@ -98,7 +98,6 @@ AeroExecutiveTable::change_table( unsigned int new_ix)
       "Request to switch to table at index ", new_ix, ", but there are only ", data_tables_vector.size(), " tables "
       "available.\nRequest failed. Continuing with existing table (", current_table->name, ").\n");
   }
-  return;
 }
 /******************************************************************************/
 void
