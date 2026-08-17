@@ -381,7 +381,7 @@ void SimpleVent::set_exhaust_speed( double val, bool flag)
 get_flowrate
 Purpose:(Placeholder for Vent class)
 *****************************************************************************/
-double SimpleVent::get_flowrate()
+double SimpleVent::get_flowrate() const
 {
   CMLMessage::error(
     __FILE__,__LINE__,"Invalid request\n",
@@ -393,7 +393,7 @@ double SimpleVent::get_flowrate()
 get_exhaust_speed
 Purpose:(Placeholder for Vent class)
 *****************************************************************************/
-double SimpleVent::get_exhaust_speed()
+double SimpleVent::get_exhaust_speed() const
 {
   CMLMessage::error(
     __FILE__,__LINE__,"Invalid request\n",

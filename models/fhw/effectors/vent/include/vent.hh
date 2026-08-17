@@ -45,10 +45,10 @@ class Vent : public SimpleVent {
   void set_exhaust_speed( double exhaust_speed,
                           bool   hold_flowrate = true) override;
 
-  double get_flowrate() override { return flowrate; }
-  double get_exhaust_speed() override { return exhaust_speed; }
-  bool flowrate_is_set() override { return flowrate_set; }
-  bool exhaust_speed_is_set() override { return exhaust_set; }
+  double get_flowrate() const override { return flowrate; }
+  double get_exhaust_speed() const override { return exhaust_speed; }
+  bool flowrate_is_set() const override { return flowrate_set; }
+  bool exhaust_speed_is_set() const override { return exhaust_set; }
 
   void unset_exhaust_speed() {exhaust_set = false;}
   void unset_flowrate() {flowrate_set = false;}

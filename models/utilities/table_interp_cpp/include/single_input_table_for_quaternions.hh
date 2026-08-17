@@ -34,7 +34,7 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
   QuaternionSphericalInterpolator sph_interp; /* (--)
       Instance of the interpolator.*/
  public:
-  SingleInputTableForQuaternions( );
+  SingleInputTableForQuaternions( ) = default;
   SingleInputTableForQuaternions( jeod::Quaternion & quat);
   SingleInputTableForQuaternions( double *dependent_variables,
                                   size_t num_vars);

@@ -26,7 +26,7 @@ class XmlHelper {
                                      bool allow_case = false);
   static bool xml_name_match(        xmlNodePtr node, const char* name);
 
-  static const char * xml_convert_ptr (const void * unused);
+  static const char * xml_convert_ptr (const void * in);
   static const char * xml_convert_ptr (const char * in);
   static const char * xml_convert_ptr (const unsigned char * in);
  private:

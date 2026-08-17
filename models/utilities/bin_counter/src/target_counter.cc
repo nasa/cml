@@ -125,8 +125,8 @@ does_val_exist
 Purpose: Checks whether the specified value is in the targets vector
 *****************************************************************************/
 bool
-CML_TargetCounter::does_val_exist(int val)
+CML_TargetCounter::does_val_exist(int val) const
 {
   return std::any_of( targets.begin(), targets.end(),
-      [val](CML_TargetCounterElement & target_) {return (val == target_.value);});
+      [val](const auto & target_) {return (val == target_.value);});
 }

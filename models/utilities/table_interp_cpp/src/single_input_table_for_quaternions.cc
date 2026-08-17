@@ -21,9 +21,6 @@ PROGRAMMERS:
 /*****************************************************************************
 Constructors
 *****************************************************************************/
-SingleInputTableForQuaternions::SingleInputTableForQuaternions()
-{}
-/****************************************************************************/
 SingleInputTableForQuaternions::SingleInputTableForQuaternions(
      jeod::Quaternion & quat)
 {

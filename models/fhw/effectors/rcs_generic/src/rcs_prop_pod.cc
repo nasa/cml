@@ -277,7 +277,7 @@ Purpose:(returns the scale-factor for the specified component in the pod
 *****************************************************************************/
 double
 RcsPropPod::get_flow_rate_scale_factor(
-   const unsigned int component_index)
+   const unsigned int component_index) const
 {
   if (num_jets_on == 0) {
     return 1.0;
@@ -299,7 +299,7 @@ get_thrust_factor
 Purpose:(Returns the currently used value from the thrust_factor vector)
 *****************************************************************************/
 double
-RcsPropPod::get_thrust_factor()
+RcsPropPod::get_thrust_factor() const
 {
   if (num_jets_on == 0) {
     return 1.0;
@@ -307,16 +307,6 @@ RcsPropPod::get_thrust_factor()
   else {
     return thrust_factor.at(num_jets_on-1);
   }
-}
-
-/*****************************************************************************
-get_max_num_jets_on
-Purpose:(Returns the protected max_num_jets_on value)
-*****************************************************************************/
-unsigned int
-RcsPropPod::get_max_num_jets_on() const
-{
-  return max_num_jets_on;
 }
 
 /*****************************************************************************

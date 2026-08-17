@@ -9,6 +9,7 @@ PROGRAMMERS:
                       (Refactor to utilize new CML capabilities))
    )
 *******************************************************************************/
+#include <algorithm>
 #include <cstring> // NULL
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -414,14 +415,10 @@ Purpose:(Tests whether a specified dynamic-mass-body is in this group.)
 *****************************************************************************/
 bool
 DynamicMassGroup::is_body_in_group(
-   DynamicMassBody * mass_body_query)
+   DynamicMassBody * mass_body_query) const
 {
-  for (unsigned int ii = 0; ii < dyn_masses.size(); ++ii) {
-    if (dyn_masses[ii] == mass_body_query) {
-      return true;
-    }
-  }
-  return false;
+  return std::any_of(dyn_masses.begin(), dyn_masses.end(),
+    [mass_body_query](auto& element) {return element == mass_body_query;});
 }
   
 /*****************************************************************************
@@ -430,14 +427,10 @@ Purpose:(Tests whether a specified dynamic-mass-string is in this group.)
 *****************************************************************************/
 bool
 DynamicMassGroup::is_string_in_group(
-   DynamicMassString * mass_string_query)
+   DynamicMassString * mass_string_query) const
 {
-  for (auto it = mass_strings.begin(); it != mass_strings.end(); ++it) {
-    if (*it == mass_string_query) {
-      return true;
-    }
-  }
-  return false;
+  return std::any_of(mass_strings.begin(), mass_strings.end(),
+    [mass_string_query](auto& element) {return element == mass_string_query;});
 }
 
 /*******************************************************************************

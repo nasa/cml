@@ -171,11 +171,11 @@ class RcsPropPod{
   bool mass_available();
   void increment_mass_consumption( std::vector<double> & jet_consumption);
   void compute_jets_on( bool mult_jet_flag );
-  double get_flow_rate_scale_factor( const unsigned int component_index);
-  double get_thrust_factor();
-  unsigned int get_max_num_jets_on() const;
+  double get_flow_rate_scale_factor( const unsigned int component_index) const;
+  double get_thrust_factor() const;
+  unsigned int get_max_num_jets_on() const {return max_num_jets_on;}
   void set_thrust_factor(unsigned int index, double value);
-  bool is_healthy() const { return (health != HealthFail);}
+  bool is_healthy() const { return health != HealthFail;}
 
  private:
    // Not implemented:

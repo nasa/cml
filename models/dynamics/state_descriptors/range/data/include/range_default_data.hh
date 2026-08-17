@@ -16,13 +16,14 @@ PROGRAMMERS:
 
 #include "../../include/range_from_pfix_reference.hh"
 
+// TODO Nino Tarantino: this needs to be a single free function, not a class.
 class RangeDefaultData
 {
   public:
   RangeDefaultData() = default;
   virtual ~RangeDefaultData() = default;
 
-  void launch_pad_KSC_39B(RangeFromPfixReference & pad);
+  void launch_pad_KSC_39B(RangeFromPfixReference & pad) const;
 
 private:
    // Not implemented:

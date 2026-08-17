@@ -138,7 +138,7 @@ Purpose:(
    Passes char* straight back,
    Rejects everything else.
 *****************************************************************************/
-const char * XmlHelper::xml_convert_ptr( [[maybe_unused]] const void*  unused)
+const char * XmlHelper::xml_convert_ptr( [[maybe_unused]] const void* in)
 {
   return nullptr;
 }

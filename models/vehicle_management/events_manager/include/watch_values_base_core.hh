@@ -135,8 +135,8 @@ class WatchValuesBaseCore : public SubscriptionBase {
   }
   void add_action( EventActionBase& action) { actions.push_back(&action);}
 
-  virtual void set_dbl_reference(double unused) {(void)unused;}
-  virtual void set_delay_offset(double unused) {(void)unused;}
+  virtual void set_dbl_reference(double ref) {(void)ref;}
+  virtual void set_delay_offset(double ref) {(void)ref;}
 
   virtual bool test_crossing() = 0;
   virtual bool specific_execution(){ return false;}

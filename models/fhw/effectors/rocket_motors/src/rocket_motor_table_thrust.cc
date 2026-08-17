@@ -123,10 +123,14 @@ RocketMotor_TableThrust::load_thrust_data(
     double * data,
     size_t   num_elements)
 {
+  if (num_elements == 0) {
+    CMLMessage::fail(
+      __FILE__, __LINE__, "Attempted to load invalid thrust data. "
+      "Cannot load thrust data of size 0!");
+    return;
+  }
   thrust_max = *std::max_element(data, data + num_elements);
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( num_elements);
+  const std::vector<size_t> sizes {1, num_elements};
   thrust_table.load_data( data, sizes);
 }
 /****************************************************************************/
@@ -134,10 +138,14 @@ void
 RocketMotor_TableThrust::load_thrust_data(
     std::vector<double> & data)
 {
+  if (data.empty()) {
+    CMLMessage::fail(
+      __FILE__, __LINE__, "Attempted to load invalid thrust data. "
+      "Cannot load thrust data of size 0!");
+    return;
+  }
   thrust_max = *std::max_element(data.begin(), data.end());
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( data.size());
+  const std::vector<size_t> sizes {1, data.size()};
   thrust_table.load_data( data, sizes);
 }
 

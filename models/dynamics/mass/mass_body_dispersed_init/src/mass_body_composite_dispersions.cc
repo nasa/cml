@@ -27,7 +27,6 @@ MassBodyCompositeDispersions::MassBodyCompositeDispersions (
   :
   target_body( target_body_in),
   fail_if_mass_invalid(false),
-  nominal(),
   adjustable_body(nullptr),
   detach_sub_tree(nullptr)
 {

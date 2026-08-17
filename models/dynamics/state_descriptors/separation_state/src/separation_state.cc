@@ -24,7 +24,6 @@ Purpose: (Constructor)
 SeparationState::SeparationState()
   :
   generate_euler_angles(true),
-  rel_state(),
   separation_distance(0.0),
   separation_rate(0.0),
   frames_subscribed(false),

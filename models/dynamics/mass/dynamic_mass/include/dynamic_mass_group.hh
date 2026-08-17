@@ -121,8 +121,8 @@ class DynamicMassGroup : public SubscriptionBase {
   void initiate_dry_mass_config();
   void revert_dry_mass_config();
 
-  bool is_body_in_group( DynamicMassBody * mass_body_query);
-  bool is_string_in_group( DynamicMassString * mass_string_query);
+  bool is_body_in_group( DynamicMassBody * mass_body_query) const;
+  bool is_string_in_group( DynamicMassString * mass_string_query) const;
  protected:
   void test_root_body();
   void add_mass_to_group_internal( DynamicMassBody *mass,

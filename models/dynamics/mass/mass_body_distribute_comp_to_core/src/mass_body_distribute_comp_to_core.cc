@@ -25,7 +25,6 @@ MassBodyDistributeCompToCore::MassBodyDistributeCompToCore (
   target_body( target_body_in),
   adjustable_body( adjustable_body_in),
   fail_if_mass_invalid(true),
-  target_properties(),
   old_mass(0.0)
 {}
 

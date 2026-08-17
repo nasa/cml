@@ -45,11 +45,6 @@ StateInitialize::StateInitialize()
   velocity_input_data_type(Unspecified),
   attitude_input_data_type(Unspecified),
   att_rate_input_data_type(Unspecified),
-  orb_elem_init(),
-  trans_init(),
-  rot_init(),
-  ned_rot_init(),
-  correlation(),
   monte_carlo_dispersion(trans_init),
   ref_point_altitude(0.0),
   ref_point_latitude(0.0),
@@ -1655,7 +1650,7 @@ Purpose:( Some options must be consistent across pos-vel and across
           att-att-rate.  This ensures that consistency)
 *****************************************************************************/
 void
-StateInitialize::verify_compatibility()
+StateInitialize::verify_compatibility() const
 {
   if ((force_match_trans &&
        (position_input_data_type != velocity_input_data_type))) {

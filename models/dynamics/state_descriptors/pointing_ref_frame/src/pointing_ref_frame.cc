@@ -20,9 +20,7 @@ Constructor
 PointingRefFrame::PointingRefFrame()
   :
   originating_frame(nullptr),
-  target_frame(nullptr),
-  pointing_frame(),
-  target_wrt_originating_state()
+  target_frame(nullptr)
 {
   // Initialize the frame's state:
   // The position and velocity will always be 0

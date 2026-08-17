@@ -30,7 +30,6 @@ PlanetPlanetState::PlanetPlanetState(
    jeod::DynManager & dyn_mgr_in)
    :
    position_vector_only(true),
-   state(),
    dyn_manager(dyn_mgr_in),
    from_frame(nullptr),
    to_frame(nullptr),
@@ -45,7 +44,6 @@ PlanetPlanetState::PlanetPlanetState(
    jeod::RefFrame & from_frame_in)
    :
    position_vector_only(true),
-   state(),
    dyn_manager(dyn_mgr_in),
    from_frame(&from_frame_in),
    to_frame(&to_frame_in),

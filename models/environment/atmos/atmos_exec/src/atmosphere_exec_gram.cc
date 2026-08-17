@@ -21,6 +21,7 @@ GramInterface::GramInterface()
   cache()
 {
 }
+
 void GramInterface::initialize( // Return: -- Void
   [[maybe_unused]] double TSIM,
   [[maybe_unused]] double HGRAM,

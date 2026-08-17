@@ -154,10 +154,10 @@ class SimpleVent {
   // Allow access to Vent methods through SimpleVent pointers
   virtual void set_flowrate( double val, bool  flag = true);
   virtual void set_exhaust_speed( double val, bool  flag = true);
-  virtual double get_flowrate();
-  virtual double get_exhaust_speed();
-  virtual bool flowrate_is_set() { return false; }
-  virtual bool exhaust_speed_is_set() { return false; }
+  virtual double get_flowrate() const;
+  virtual double get_exhaust_speed() const;
+  virtual bool flowrate_is_set() const { return false; }
+  virtual bool exhaust_speed_is_set() const { return false; }
 
  protected:
   // Methods restricted so as to limit access to VentSet only
