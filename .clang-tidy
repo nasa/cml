@@ -66,4 +66,10 @@ Checks: >
 WarningsAsErrors: '*'
 
 HeaderFilterRegex: '(^|/)(models|utility)/.*'
+
+CheckOptions:
+  - key: readability-inconsistent-declaration-parameter-name.Strict
+    value: true
+  - key: readability-operators-representation.BinaryOperators
+    value: "&&;&=;&;|;~;!;!=;||;|=;^;^="
 ...
