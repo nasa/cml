@@ -200,11 +200,14 @@ public:
                       unsigned int       wind_number_);
   void compute_average_wind();
   void compute_average_wind( size_t table_index);
-  void compute_average_wind( double min_alt,
-                             double max_alt);
+  void compute_average_wind( double min_altitude,
+                             double max_altitude);
   void compute_average_wind( size_t table_index,
-                             double min_alt,
-                             double max_alt);
+                             double min_altitude,
+                             double max_altitude);
+  void compute_average_wind_interp( double min_altitude,
+                                    double max_altitude,
+                                    double step_altitude);
 
   // Legacy capability, deprecated.
   void test_for_reinitialize();
@@ -214,8 +217,12 @@ protected:
   void activate() override;
   void compute_average_wind( size_t table_index,
                              bool   full_domain,
-                             double min_alt=0,
-                             double max_alt=0);
+                             double min_altitude=0,
+                             double max_altitude=0);
+  void compute_average_wind_interp( size_t table_index,
+                                    double min_altitude=0,
+                                    double max_altitude=0,
+                                    double altitude_incr=0);
   void calculate_speed_of_sound();
   void calculate_wind_mag_dir();
   void stream_error(int line, const std::string& drwpFileName_);
