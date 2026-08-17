@@ -113,7 +113,7 @@ class DynamicMassGroup : public SubscriptionBase {
  public:
   DynamicMassGroup(void);
   void add_mass_to_group( DynamicMassBody *mass);
-  void add_string_to_group( DynamicMassString *string);
+  void add_string_to_group( DynamicMassString *new_mass_string);
   void initialize() override;
   void update_group_mass();
   void series_flow(unsigned int upstream_ix,

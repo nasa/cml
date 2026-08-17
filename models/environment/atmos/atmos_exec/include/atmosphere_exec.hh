@@ -92,7 +92,7 @@ class AtmosphereExec : public AtmosphereExecInterface {
 
     AtmosphereExec(
            GramInterface   & gram_i_in,
-           LookupAtmosWinds   & DRWP_atmos_in,
+           LookupAtmosWinds   & drwp_atmos_in,
            STD1976            & std76_in,
            SimpleLookupWind   & simple_wind_in,
            const GramInterface * master_gram_in,
@@ -102,7 +102,7 @@ class AtmosphereExec : public AtmosphereExecInterface {
 
     // GRAM-less constructor
     AtmosphereExec(
-           LookupAtmosWinds   & DRWP_atmos_in,
+           LookupAtmosWinds   & drwp_atmos_in,
            STD1976            & std76_in,
            SimpleLookupWind   & simple_wind_in,
            const double       & dyn_time_in,

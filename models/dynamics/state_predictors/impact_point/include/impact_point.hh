@@ -83,8 +83,8 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
   // Constructor
   ImpactPoint(const double & time,
               const jeod::RefFrameTrans & inrtl_state,
-              const jeod::Planet & planet,
-              const double & grav_mu);
+              const jeod::Planet & planet_in,
+              const double & grav_mu_in);
   ~ImpactPoint() override = default;
   
   void initialize() override;

@@ -24,11 +24,11 @@ LvlhSeparationState::LvlhSeparationState()
   using_external_lvlh(false)
 {}
 /****************************************************************************/
-LvlhSeparationState::LvlhSeparationState( jeod::LvlhFrame & lvlh_)
+LvlhSeparationState::LvlhSeparationState( jeod::LvlhFrame & lvlh_frame)
   :
   planet_centered_inertial(nullptr),
   lvlh_origin_frame(nullptr),
-  lvlh_ref(lvlh_),
+  lvlh_ref(lvlh_frame),
   using_external_lvlh(true)
 {}
 

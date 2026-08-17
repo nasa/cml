@@ -64,13 +64,13 @@ public:
           extreme cases. */
 
   AeroExecutiveSimple( AeroInterfaceOutput & output_ref,
-                       const double & dynamic_pressure,
+                       const double & dynamic_pressure_in,
                        const double * const free_stream_vel_unit_in,
                        const double (&T_inrtl_struc_in)[3][3],
                        const double & mass_in);
   ~AeroExecutiveSimple() override = default;
 
-  void set_drag_type(DragType drag_type);
+  void set_drag_type(DragType drag_type_in);
 
   void initialize() override;
   void update() override;

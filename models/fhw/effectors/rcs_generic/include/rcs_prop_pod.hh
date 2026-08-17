@@ -66,9 +66,9 @@ class RcsPodComponent{
   void incr_mass_consumed_step(double incr) {*mass_consumed_step += incr;}
 
  protected:
-  void set_dyn_mass_interface( DynamicMassBodyPropertiesInterface & interface);
+  void set_dyn_mass_interface( DynamicMassBodyPropertiesInterface & dyn_mass_interface);
   bool mass_available();
-  void increment_mass_consumption( double consumption);
+  void increment_mass_consumption( double jet_consumption);
 
  private:
    // Don't declare copy constructor and operator to allow
@@ -158,9 +158,9 @@ class RcsPropPod{
        jets from each pod are on times the thrust for each jet */
   unsigned int num_jets_on;   /* (--) Number of jets firing from a prop pod */
 
-  RcsPropPod( unsigned int max_num_jets_on,
+  RcsPropPod( unsigned int max_num_jets_on_,
               unsigned int num_components_,
-              const double & time_step);
+              const double & time_step_);
   virtual ~RcsPropPod() = default;
 
   void set_dyn_mass_interface( unsigned int component_index,

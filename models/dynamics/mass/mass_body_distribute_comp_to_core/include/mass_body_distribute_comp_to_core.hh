@@ -61,8 +61,8 @@ class MassBodyDistributeCompToCore
   double old_mass; /* (kg) the original mass of the adjustable_body. */
 
  public:
-  MassBodyDistributeCompToCore( jeod::MassBody & adjustable_body,
-                                jeod::MassBody & target_body);
+  MassBodyDistributeCompToCore( jeod::MassBody & adjustable_body_in,
+                                jeod::MassBody & target_body_in);
   virtual ~MassBodyDistributeCompToCore() = default;
 
 

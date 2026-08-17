@@ -46,7 +46,7 @@ class TR_Parameter_RefFrame {
 
 
   public:
-    explicit TR_Parameter_RefFrame(std::string name);
+    explicit TR_Parameter_RefFrame(std::string name_);
     virtual ~TR_Parameter_RefFrame() = default;
 
     bool compute_frame( const double vec_A[3],

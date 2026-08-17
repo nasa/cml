@@ -40,9 +40,9 @@ class Vent : public SimpleVent {
   void use_impulse_mode(bool mode = true) override;
   void set_force_magnitude(double force_, bool hold_impulse = false) override;
   void set_force_vector(double force_[3], bool hold_impulse = false) override;
-  void set_flowrate( double flowrate,
+  void set_flowrate( double flowrate_,
                      bool hold_exhaust = true) override;
-  void set_exhaust_speed( double exhaust_speed,
+  void set_exhaust_speed( double exhaust_speed_,
                           bool   hold_flowrate = true) override;
 
   double get_flowrate() const override { return flowrate; }

@@ -54,9 +54,9 @@ class AtmosphereExecInterface : public SubscriptionBase
   public:
     AtmosExecOutput   out;             /* (--) Atmos exec outputs */
 
-    AtmosphereExecInterface(const double & dyn_time,
-                            ExtendedPlanetaryDerivedState & planet_state,
-                            const jeod::DynBody  & body);
+    AtmosphereExecInterface(const double & dyn_time_in,
+                            ExtendedPlanetaryDerivedState & planet_state_in,
+                            const jeod::DynBody  & body_in);
     ~AtmosphereExecInterface() override = default;
 
     void initialize() override;

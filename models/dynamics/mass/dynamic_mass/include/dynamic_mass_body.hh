@@ -81,7 +81,7 @@ class DynamicMassBody : public jeod::MassBody
   void initialize_dyn_mass(); // Run AFTER MassBodyInit.
   bool update_mass();
   void set_initial_position( bool overwrite_nominal,
-                             const double pos[3]);
+                             const double position_in[3]);
   void set_CM_offset(const double offset[3]);
   bool get_dyn_mass_initialized() const {return dyn_mass_initialized;}
 

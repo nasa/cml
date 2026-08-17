@@ -47,9 +47,9 @@ class EclipseCalculator : public SubscriptionBase
       visible by veh_struc_frame.*/
 
 
-  EclipseCalculator(const double & time,
-                    jeod::DynManager & dyn_manager,
-                    jeod::RefFrame & vehicle_frame);
+  EclipseCalculator(const double & time_,
+                    jeod::DynManager & dyn_manager_,
+                    jeod::RefFrame & vehicle_frame_);
   ~EclipseCalculator() override = default;
 
   void initialize() override;

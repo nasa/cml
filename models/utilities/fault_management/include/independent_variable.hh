@@ -25,7 +25,7 @@ class FaultFunctionIndependentVariable {
     FaultFunctionIndependentVariable();
     ~FaultFunctionIndependentVariable();
 
-    template<typename T> void initialize(T& variable);
+    template<typename T> void initialize(T& var);
 
     void reset();
 

@@ -60,10 +60,10 @@ public:
                                            that represent convert_value. */
 
 
-  ConvertDoubleToUintWords( const double & convert_value,
-                            double resolution,
-                            unsigned int word_count,
-                            unsigned int bit_size);
+  ConvertDoubleToUintWords( const double & in_convert_value,
+                            double in_resolution,
+                            unsigned int in_word_count,
+                            unsigned int in_bit_size);
   virtual ~ConvertDoubleToUintWords() = default;
 
   void update();

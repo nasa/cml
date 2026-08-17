@@ -48,8 +48,8 @@ class PointToPointElement
       planet (for a planet-based point)*/
 
   std::string name; /* (--) the name of the point. */
-  PointToPointElement( std::string name,
-                       double      position[3]);
+  PointToPointElement( std::string name_,
+                       double      position_[3]);
   PointToPointElement( const PointToPointElement & orig);
   virtual ~PointToPointElement() = default;
   // Accept default operator=; it isn't used in the implementation.
@@ -84,9 +84,9 @@ class PointToPointPosition
                               relative-position vector originates.*/
 
  public:
-  PointToPointPosition( std::string v_name,
-                        std::string p_name);
-  PointToPointPosition( const PointToPointPosition & original);
+  PointToPointPosition( std::string v_name_,
+                        std::string p_name_);
+  PointToPointPosition( const PointToPointPosition & orig);
   virtual ~PointToPointPosition() = default;
   // Accept default operator=; it isn't used in the implementation.
 
@@ -122,8 +122,8 @@ class PointToPointManager
 
 
  public:
-  void initialize( const jeod::DynBody     & dyn_body,
-                   const jeod::RefFrameRot & pfix_frame_rot_state);
+  void initialize( const jeod::DynBody     & dyn_body_,
+                   const jeod::RefFrameRot & pfix_frame_rot_state_);
   void update();
   void add_vehicle_point( std::string pt_name,
                           double      pt_pos[3]);

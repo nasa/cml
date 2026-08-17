@@ -111,12 +111,12 @@ class SimpleVent {
   virtual void use_impulse_mode(bool mode = true);
   void use_dynamic_mode(bool mode = true) { use_impulse_mode(!mode); }
 
-  void set_direction(double direction[3]);
-  void set_duration(double duration, bool hold_force = true);
+  void set_direction(double direction_in[3]);
+  void set_duration(double duration_, bool hold_force = true);
   virtual void set_force_magnitude(double force_, bool hold_impulse = false);
   virtual void set_force_vector(double force_[3], bool hold_impulse = false);
-  virtual void set_impulse_magnitude(double impulse, bool hold_force = true);
-  virtual void set_impulse_vector( double impulse[3],
+  virtual void set_impulse_magnitude(double impulse_, bool hold_force = true);
+  virtual void set_impulse_vector( double impulse_[3],
                                    bool hold_force_mag = true);
 
   double get_force_magnitude() const { return force_mag; }

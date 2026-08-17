@@ -62,7 +62,7 @@ class DummyVehicleLauncher
                         const jeod::MassBody & real_mass_body_in,
                         const jeod::DynBody & real_state_body_in);
   DummyVehicleLauncher( jeod::DynBody & this_body,
-                        const jeod::DynBody & real_body);
+                        const jeod::DynBody & real_body_in);
   virtual ~DummyVehicleLauncher() = default;
 
   void initialize_integ_group_actions();

@@ -54,8 +54,8 @@ class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
   public:
 
     AtmosphereExec_SimpleLookupWind(
-                         SimpleLookupWind              & wind_table,
-                         ExtendedPlanetaryDerivedState & planet_state,
+                         SimpleLookupWind              & wind_table_in,
+                         ExtendedPlanetaryDerivedState & planet_state_in,
                          AtmosExecOutput               & master_output);
     ~AtmosphereExec_SimpleLookupWind() override = default;
 

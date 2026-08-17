@@ -27,8 +27,8 @@ class AeroInterfaceSimple : public AeroInterfaceBase
 public:
   AeroExecutiveSimple executive; /* (--) The simple executive. */
 
-  AeroInterfaceSimple( AtmosRelativeState & atmos_rel_state,
-                       const double & geodetic_altitude,
+  AeroInterfaceSimple( AtmosRelativeState & atmos_rel_state_in,
+                       const double & geodetic_altitude_in,
                        const double (&T_inrtl_struc)[3][3],
                        const double & mass);
   ~AeroInterfaceSimple() override = default;

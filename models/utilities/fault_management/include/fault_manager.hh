@@ -131,7 +131,7 @@ class FaultManager {
                                            xmlNodePtr function_node,
                                            const char* fault_name);
 
-    virtual bool parse_periodic_param( FaultFunctionParameter& var_param,
+    virtual bool parse_periodic_param( FaultFunctionParameter& param,
                                        xmlNodePtr function_node,
                                        const char* param_name,
                                        xmlNodePtr ind_var_node,

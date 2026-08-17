@@ -33,7 +33,7 @@ class RangeToPfixReference : public RangeComputation
  public:
   explicit RangeToPfixReference( const jeod::PlanetFixedPosition & state_in);
   RangeToPfixReference( const jeod::PlanetFixedPosition & state_in,
-                        const double (&direction)[3]);
+                        const double (&direction_)[3]);
   ~RangeToPfixReference() override = default;
 
   void set_reference_data() override;

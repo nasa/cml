@@ -163,15 +163,15 @@ private:
 public:
   TableIndependentVariable( const double &variable_in,
                             double frac_eps_in=1.0e-9);
-  TableIndependentVariable( const std::string &name,
+  TableIndependentVariable( const std::string &name_in,
                             const double &variable_in,
                             double frac_eps_in=1.0e-9);
   TableIndependentVariable( const double &variable_in,
-                            const Continuity continuity,
+                            const Continuity continuity_in,
                             double frac_eps_in=1.0e-9);
-  TableIndependentVariable( const std::string &name,
+  TableIndependentVariable( const std::string &name_in,
                             const double &variable_in,
-                            const Continuity continuity,
+                            const Continuity continuity_in,
                             double frac_eps_in=1.0e-9);
   virtual ~TableIndependentVariable() = default;
 

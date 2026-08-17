@@ -50,7 +50,7 @@ class CompoundEventsManager : public VehicleEventsManager
     This flag supports the disabling of undesirable components.
     Default: true.*/
 
-  explicit CompoundEventsManager(const double & time);
+  explicit CompoundEventsManager(const double & time_);
   ~CompoundEventsManager() override;
 
   void initialize() override;

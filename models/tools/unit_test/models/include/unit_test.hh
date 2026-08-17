@@ -37,10 +37,10 @@ class SweepSet {
   double epsilon;    /* (--)
       the threshold for determining whether the sweep has reached "end". */
  public:
-  SweepSet( double & variable,
-            double start,
-            double end,
-            double incr);
+  SweepSet( double & variable_in,
+            double start_in,
+            double end_in,
+            double incr_in);
   SweepSet(const SweepSet &other);
   SweepSet& operator = (const SweepSet &other);
 

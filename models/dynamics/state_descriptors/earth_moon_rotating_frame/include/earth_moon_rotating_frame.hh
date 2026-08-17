@@ -52,7 +52,7 @@ class EarthMoonRotatingFrame : public EphemBasedPointingRefFrame {
 
   void initialize() override;
   void update() override;
-  void set_orientation(FrameOrientation orientation);
+  void set_orientation(FrameOrientation new_orientation);
 
  // The copy constructor and assignment operator for this class are
  // declared private and are not implemented.

@@ -48,7 +48,7 @@ class LvlhSeparationState : public SeparationState
 
  public:
   LvlhSeparationState();
-  explicit LvlhSeparationState(jeod::LvlhFrame & lvlh);
+  explicit LvlhSeparationState(jeod::LvlhFrame & lvlh_frame);
   ~LvlhSeparationState() override;
 
   void initialize ( jeod::DynManager & dyn_manager,

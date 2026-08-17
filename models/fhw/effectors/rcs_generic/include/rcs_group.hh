@@ -94,7 +94,7 @@ class RcsJetGroup {
       of total_off_delay / cycle time, note this is NOT a user input */
 
 
-  explicit RcsJetGroup( const unsigned int & num_prop_components);
+  explicit RcsJetGroup( const unsigned int & num_prop_components_);
   void initialize (double time_step);
   void set_blow_down( bool blow_down_);
   bool get_blow_down() const {return blow_down;}

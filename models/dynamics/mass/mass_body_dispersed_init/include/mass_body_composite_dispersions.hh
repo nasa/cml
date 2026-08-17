@@ -107,7 +107,7 @@ public:
   //   target body because the core-properties of higher bodies do not affect
   //   the composite-properties of lower bodies.
   void update();
-  void update( jeod::MassBody & adjustable);
+  void update( jeod::MassBody & adjustable_body_);
 
 private:
   void update_internal();

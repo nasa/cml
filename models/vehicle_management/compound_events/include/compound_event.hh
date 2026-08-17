@@ -106,7 +106,7 @@ class CompoundEvent : public WatchValuesDelay<bool>
 
   // Methods
  public:
-  explicit CompoundEvent( const double & time);
+  explicit CompoundEvent( const double & time_);
   ~CompoundEvent() override = default;
 
   void initialize( std::list<WatchValuesBaseCore *> * active_watches_in) override;

@@ -48,8 +48,8 @@ public:
   void set_active( bool arg){active = arg;}
   bool get_active() const {return active;}
   void initialize();
-  double calculate_force( double distance,
-                          double speed);
+  double calculate_force( double separation_distance,
+                          double separation_speed);
 private:
   // operator= and copy constructor declared private and not implemented
   SimpleSpringIndividual(const SimpleSpringIndividual& rhs);

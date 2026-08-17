@@ -33,7 +33,7 @@ class SimplePlanetRelState : public SubscriptionBase,
                                   reference-height. */
 
   SimplePlanetRelState(std::string body_frame_name_,
-                       std::string planet_frame_name);
+                       std::string planet_frame_name_);
 
   void initialize(jeod::DynBody & subject_body,
                           jeod::DynManager & dyn_manager) override;

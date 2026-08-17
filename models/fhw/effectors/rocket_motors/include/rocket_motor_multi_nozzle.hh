@@ -82,27 +82,27 @@ protected:
                     DynamicMassString                  * mass_string,
                     DynamicMassBodyPropertiesInterface & mass_properties,
                     const double                       & time,
-                    const double                       * veh_cm_,
+                    const double                       * veh_cm_in,
                     bool                                 use_mass_string_in,
                     const double                       & atm_press);
 public:
   RocketMotor_MultiNozzle( DynamicMassBody & mass,
                            const double    & time,
-                           const double    & atm_press_in,
+                           const double    & atm_press,
                            const double    * veh_cm_in);
   RocketMotor_MultiNozzle( DynamicMassGroup & mass_group_in,
                            DynamicMassBody  & mass,
                            const double     & time,
-                           const double     & atm_press_in,
+                           const double     & atm_press,
                            const double     * veh_cm_in);
   RocketMotor_MultiNozzle( DynamicMassString & string,
                            const double      & time,
-                           const double      & atm_press_in,
+                           const double      & atm_press,
                            const double      * veh_cm_in);
   RocketMotor_MultiNozzle( DynamicMassGroup  & mass_group_in,
                            DynamicMassString & string,
                            const double      & time,
-                           const double      & atm_press_in,
+                           const double      & atm_press,
                            const double      * veh_cm_in);
   ~RocketMotor_MultiNozzle() override = default;
 

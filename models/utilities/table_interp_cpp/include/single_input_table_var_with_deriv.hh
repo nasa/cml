@@ -61,7 +61,7 @@ class SingleInputTableVarDeriv : public GenericSingleInputTable
   SingleInputTableVarDeriv( double *dependent_variables,
                             double *dependent_variables_derivs,
                             size_t num_vars);
-  SingleInputTableVarDeriv( double & dependent_var,
+  SingleInputTableVarDeriv( double & dependent_variable,
                             double & dependent_variable_derivs);
   SingleInputTableVarDeriv( const DoublePtrVec & dependent_variables,
                             const DoublePtrVec & dependent_variables_deriv);

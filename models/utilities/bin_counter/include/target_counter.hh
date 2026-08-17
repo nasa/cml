@@ -56,7 +56,7 @@ class CML_TargetCounter {
   void insert(int value);
   bool does_val_exist(int val) const;
 
-  void set_data( const std::vector<int> & targets);
+  void set_data( const std::vector<int> & targets_);
   void set_data( int limit_a,
                  int limit_b);
   template <size_t n_targets>
