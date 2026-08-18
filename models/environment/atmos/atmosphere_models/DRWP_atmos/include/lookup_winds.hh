@@ -222,7 +222,7 @@ protected:
   void compute_average_wind_interp( size_t table_index,
                                     double min_altitude=0,
                                     double max_altitude=0,
-                                    double altitude_incr=0);
+                                    double step_altitude=0);
   void calculate_speed_of_sound();
   void calculate_wind_mag_dir();
   void stream_error(int line, const std::string& drwpFileName_);

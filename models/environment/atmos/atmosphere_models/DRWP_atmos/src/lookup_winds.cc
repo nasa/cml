@@ -20,8 +20,7 @@ PROGRAMMERS:
 #include <vector>
 #include <cstdint>
 #include <fstream>
-//#include <cstring> // strerror
-//#include <iostream>
+#include <algorithm>
 
 #include "../include/lookup_winds.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -788,7 +787,8 @@ LookupAtmosWinds::compute_average_wind_interp(
     // Leave average at zero-vector
     return;
   }
-  size_t num_alts = (max_alt_ - min_alt_) / step_altitude + 1;
+  const size_t num_alts = 1 +
+                   static_cast<size_t>((max_alt_ - min_alt_) / step_altitude);
   for (size_t alt = 0; alt < num_alts; ++alt) {
     altitude = min_alt_ + static_cast<double>(alt) * step_altitude;
     table_.update();

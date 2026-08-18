@@ -234,7 +234,7 @@ class RcsJet {
   void scale_self_impingement();
   void set_isp( double isp_);
   double get_isp() const {return isp;}
-  
+
   const double & get_sum_consumption() const {return sum_consumption;}
 
  protected:

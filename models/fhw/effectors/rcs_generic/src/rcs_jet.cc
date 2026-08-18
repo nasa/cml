@@ -38,7 +38,6 @@ RcsJet::RcsJet(
   component_flow_rate( prop_pod.components.size()),
   component_consumption( prop_pod.components.size()),
   sum_component_consumption( prop_pod.components.size())
-
 {
   // Start the command list with an "Off":
   commands.push_back(false);
@@ -210,15 +209,18 @@ void
 RcsJet::update(
    bool new_command)
 {
-  // Reset delta_time_on.
-  // delta_time_on is how much "effective" time the jet will be on in this
-  // cycle. "Effective" means that the same amount of momentum will be
-  // imparted on the vehicle if the jet was on at its steady state value for
-  // delta_time_on as would be imparted if the jet was on for the actual time
-  // with the actual thrust level.
-  // During build_up and trail_off the force is assumed to have a constant slope */
+  /* Reset delta_time_on.
+     delta_time_on is how much "effective" time the jet will be on in this
+     cycle. "Effective" means that the same amount of momentum will be
+     imparted on the vehicle if the jet was on at its steady state value for
+     delta_time_on as would be imparted if the jet was on for the actual time
+     with the actual thrust level.
+     During build_up and trail_off the force is assumed to have a constant slope */
   delta_time_on = 0.0;
 
+  // Zero-out the component-consumption values for this cycle to allow
+  // increments to be accumulated from the start-up, shut-down processes and
+  // from compute_prop_consumption().
   std::fill(component_consumption.begin(), component_consumption.end(), 0.0);
 
   //****************************/
@@ -855,7 +857,7 @@ RcsJet::compute_prop_consumption()
       }
     }
   }
-  
+
   // Accumulate component consumption:
   for (unsigned int ii = 0; ii < component_consumption.size(); ++ii) {
     sum_component_consumption[ii] += component_consumption[ii];
