@@ -848,7 +848,7 @@ Note:
    be in calculate_wind_mag_dir; at the start, set w to 0.0 if its population
    should be blocked
 *****************************************************************************/
-void LookupAtmosWinds::set_include_vertical_component([[maybe_unused]] bool unused)
+void LookupAtmosWinds::set_include_vertical_component([[maybe_unused]] bool deprecated)
 {
   CMLMessage::error(
     __FILE__,__LINE__,"Call made to "

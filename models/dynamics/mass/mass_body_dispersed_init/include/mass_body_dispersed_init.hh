@@ -37,7 +37,7 @@ class MassBodyDispersedInit : public jeod::MassBodyInit,
                               public MassPropertiesDispersionsFlags {
 public:
   MassPropertiesDispersions disperse; /* (--) The dispersed values. */
-  MassBodyDispersedInit();
+  MassBodyDispersedInit() = default;
   ~MassBodyDispersedInit() override = default;
 
   void apply( jeod::DynManager & dyn_manager) override;

@@ -66,7 +66,7 @@ class ConstraintTest
 
   bool is_initialized() const {return initialized;}
   void set_violation_condition( ConstraintEnum::ViolationCondition cond);
-  ConstraintEnum::ViolationCondition get_violation_condition() {
+  ConstraintEnum::ViolationCondition get_violation_condition() const {
                                                return violation_condition;}
   bool get_violation() const {return violation;}
  protected:

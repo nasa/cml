@@ -146,7 +146,6 @@ class PointToPointManager
   PointToPointManager( const jeod::PlanetFixedPosition & B_wrt_P_in_P_);
   virtual ~PointToPointManager() = default;
  private:
-
   // copy-constructor, operator= both declared private and unimplemented.
   PointToPointManager ( const PointToPointManager &);
   PointToPointManager & operator = ( const PointToPointManager &);

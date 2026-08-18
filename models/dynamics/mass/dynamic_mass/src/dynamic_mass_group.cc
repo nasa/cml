@@ -10,7 +10,6 @@ PROGRAMMERS:
    )
 *******************************************************************************/
 #include <algorithm>
-#include <cstring> // NULL
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "../include/dynamic_mass_group.hh"

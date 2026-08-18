@@ -61,12 +61,12 @@ class AtmosphereExecInterface : public SubscriptionBase
 
     void initialize() override;
 
-    std::string get_current_atmos_name() {
+    std::string get_current_atmos_name() const {
         std::string name = "N/A";
         if (current_atmos != nullptr) { name = current_atmos->name; }
         return name;
     }
-    std::string get_current_winds_name() {
+    std::string get_current_winds_name() const {
         std::string name = "N/A";
         if (current_winds != nullptr) { name = current_winds->name; }
         return name;

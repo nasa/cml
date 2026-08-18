@@ -16,12 +16,6 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 
 /*******************************************************************************
-Constructor
-*******************************************************************************/
-MassBodyDispersedInit::MassBodyDispersedInit()
-{}
-
-/*******************************************************************************
 apply
 PURPOSE:(Applies the body-action after first adding the dispersions to the
          nominal values. Nominal values are inherited.)

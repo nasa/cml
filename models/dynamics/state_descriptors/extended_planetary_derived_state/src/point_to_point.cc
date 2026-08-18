@@ -57,7 +57,7 @@ void add_point(
   // TODO Nino Tarantino 8/16/26: this neesd to be fixed
   for (auto it = element_list.begin();
             it != element_list.end(); ++it) {
-    if ((*it).name == pt_name) {
+    if (it->name == pt_name) {
       CMLMessage::error(
         __FILE__,__LINE__,"Invalid name specified.\n",
         "Specified name (", pt_name, ") is already registered as a ", list_type, "-point.\n"

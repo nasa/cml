@@ -714,7 +714,6 @@ ExtendedPlanetaryDerivedState::analyze_range_safety()
   range_safety.YVRT = inplane_mag *
                std::cos(range_safety.pad_azimuth - range_safety.YVRT_Azi);
   range_safety.ZVRT = range_safety.XVP[2];
-
 }
 
 /*************************************************************************
@@ -758,5 +757,4 @@ ExtendedPlanetaryDerivedState::calculate_relative_accel()
   // a_{p:p} = relative_accel - omega_cross_omega_cross_r - two_omega_cross_v
   jeod::Vector3::decr(omega_cross_omega_cross_r, relative_accel);
   jeod::Vector3::decr(two_omega_cross_v, relative_accel);
-
 }

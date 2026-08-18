@@ -206,7 +206,7 @@ public:
 
   // Legacy capability, deprecated.
   void test_for_reinitialize();
-  void set_include_vertical_component(bool unused);
+  void set_include_vertical_component(bool deprecated);
 
 protected:
   void activate() override;
