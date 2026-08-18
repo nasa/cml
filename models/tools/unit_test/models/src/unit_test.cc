@@ -34,12 +34,12 @@ extern Trick::IPPython* the_pip;
 Constructor
 *****************************************************************************/
 SweepSet::SweepSet(
-            double & variable_in,
+            double & variable_out,
             double start_in,
             double end_in,
             double incr_in)
   :
-  variable(variable_in),
+  variable(variable_out),
   start( start_in),
   end( end_in),
   increment( incr_in),

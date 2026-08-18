@@ -129,6 +129,12 @@ RocketMotor_TableThrust::load_thrust_data(
       "Cannot load thrust data of size 0!");
     return;
   }
+  if (data == nullptr) {
+    CMLMessage::fail(
+      __FILE__, __LINE__, "Attempted to load invalid thrust data. "
+      "Thrust data pointer cannot be null!");
+    return;
+  }
   thrust_max = *std::max_element(data, data + num_elements);
   const std::vector<size_t> sizes {1, num_elements};
   thrust_table.load_data( data, sizes);

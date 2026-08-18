@@ -76,8 +76,8 @@ public:
   double get_angle_of_sideslip() const { return angle_of_sideslip;}
   double get_phi_roll() const { return phi_roll;}
   double get_free_stream_vel_mag() const { return free_stream_vel_mag;}
-  const double * get_cg_position() { return cg_position;}
-  const double * get_true_body_rates() { return true_body_rates;}
+  const double * get_cg_position() const { return cg_position;}
+  const double * get_true_body_rates() const { return true_body_rates;}
 
 private:
   // Make the copy constructor and assignment operator private

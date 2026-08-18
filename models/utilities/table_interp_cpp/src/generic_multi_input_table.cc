@@ -979,11 +979,11 @@ Purpose:(Bias specified elements in the data array by the specified offset.)
 void
 GenericMultiInputTable::bias_data(
         double bias,
-        size_t ix_start,
-        size_t ix_stop)
+        size_t idx_start,
+        size_t idx_stop)
 {
-  if (index_checks(ix_start, ix_stop, "bias")) { return; }
-  for (size_t ii = ix_start; ii <= ix_stop; ++ii) {
+  if (index_checks(idx_start, idx_stop, "bias")) { return; }
+  for (size_t ii = idx_start; ii <= idx_stop; ++ii) {
     data[ii] += bias;
   }
 }
@@ -995,11 +995,11 @@ Purpose:(scale specified elements in the data array by the specified factor.)
 void
 GenericMultiInputTable::scale_data(
         double scale,
-        size_t ix_start,
-        size_t ix_stop)
+        size_t idx_start,
+        size_t idx_stop)
 {
-  if (index_checks(ix_start, ix_stop, "scale")) { return; }
-  for (size_t ii = ix_start; ii <= ix_stop; ++ii) {
+  if (index_checks(idx_start, idx_stop, "scale")) { return; }
+  for (size_t ii = idx_start; ii <= idx_stop; ++ii) {
     data[ii] *= scale;
   }
 }
@@ -1010,8 +1010,8 @@ Purpose:(Index checks common to bias_data and scale_data.)
 *****************************************************************************/
 bool
 GenericMultiInputTable::index_checks(
-        size_t & ix_start,
-        size_t & ix_stop,
+        size_t & idx_start,
+        size_t & idx_stop,
         std::string func)
 {
   // Note - data_loaded implies data.size() > 0.
@@ -1023,25 +1023,25 @@ GenericMultiInputTable::index_checks(
       "Check sequencing.\n");
     return true;
   }
-  if (ix_start > ix_stop) {
+  if (idx_start > idx_stop) {
     CMLMessage::warn(
       __FILE__,__LINE__,"Invalid arguments\n",
       "Call made to ",func," data between two indices with the start index (",
-      ix_start,")\n"
-      "higher than the stop index (",ix_stop,").  This could be an error.\n"
+      idx_start,")\n"
+      "higher than the stop index (",idx_stop,").  This could be an error.\n"
       "Will ",func," the data values between these indices.\n");
-    size_t ix_scratch = ix_start;
-    ix_start = ix_stop;
-    ix_stop = ix_scratch;
+    size_t idx_scratch = idx_start;
+    idx_start = idx_stop;
+    idx_stop = idx_scratch;
   }
-  if (ix_stop >= data.size()) {
+  if (idx_stop >= data.size()) {
     CMLMessage::warn(__FILE__, __LINE__, "Invalid index\n",
-      "Call made to ",func," data with the stop index (",ix_stop,
+      "Call made to ",func," data with the stop index (",idx_stop,
       ") past the end of the list.\n"
       "Will ",func," all data between the start index and\n"
       "the end of the list.\n");
-    if (ix_start >= data.size()) { return true; }
-    ix_stop = data.size() - 1;
+    if (idx_start >= data.size()) { return true; }
+    idx_stop = data.size() - 1;
   }
   return false;
 }

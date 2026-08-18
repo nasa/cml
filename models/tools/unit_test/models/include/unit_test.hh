@@ -37,7 +37,7 @@ class SweepSet {
   double epsilon;    /* (--)
       the threshold for determining whether the sweep has reached "end". */
  public:
-  SweepSet( double & variable_in,
+  SweepSet( double & variable_out,
             double start_in,
             double end_in,
             double incr_in);

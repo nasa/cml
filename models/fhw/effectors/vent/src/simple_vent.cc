@@ -355,10 +355,10 @@ void SimpleVent::set_impulse_vector(double impulse_[3], bool hold_force_mag)
 set_flowrate
 Purpose:(Placeholder for Vent class)
 *****************************************************************************/
-void SimpleVent::set_flowrate( double val, bool flag)
+void SimpleVent::set_flowrate( double val, bool hold_exhaust_speed)
 {
   (void) val;
-  (void) flag;
+  (void) hold_exhaust_speed;
   CMLMessage::error(
     __FILE__,__LINE__,"Invalid setting\n",
     "A simple vent '", name, "' does not model mass flow; it has no flowrate");
@@ -368,10 +368,10 @@ void SimpleVent::set_flowrate( double val, bool flag)
 set_exhaust_speed
 Purpose:(Placeholder for Vent class)
 *****************************************************************************/
-void SimpleVent::set_exhaust_speed( double val, bool flag)
+void SimpleVent::set_exhaust_speed( double val, bool hold_flowrate)
 {
   (void) val;
-  (void) flag;
+  (void) hold_flowrate;
   CMLMessage::error(
     __FILE__,__LINE__,"Invalid setting\n",
     "A simple vent '", name, "' does not model mass flow; it has no exhaust speed");

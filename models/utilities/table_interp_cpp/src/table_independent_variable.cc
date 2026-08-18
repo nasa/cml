@@ -251,8 +251,8 @@ Purpose:(Bias specified elements in the data array by the specified offset.)
 void
 TableIndependentVariable::bias_data(
         double bias,
-        size_t ix_start,
-        size_t ix_stop)
+        size_t idx_start,
+        size_t idx_stop)
 {
   // Note - data_loaded implies data.size() > 0.
   if (!data_loaded) {
@@ -263,16 +263,16 @@ TableIndependentVariable::bias_data(
       "Check sequencing.\n");
     return;
   }
-  if (ix_start > ix_stop) {
+  if (idx_start > idx_stop) {
     CMLMessage::warn(
       __FILE__,__LINE__,"Invalid arguments\n",
       "Call made to bias data between two indices with the start index (",
-      ix_start,")\n"
-      "higher than the stop index (",ix_stop,").  This could be an error.\n"
+      idx_start,")\n"
+      "higher than the stop index (",idx_stop,").  This could be an error.\n"
       "Bias will be applied to the data values between these indices.\n");
-    size_t ix_scratch = ix_start;
-    ix_start = ix_stop;
-    ix_stop = ix_scratch;
+    size_t idx_scratch = idx_start;
+    idx_start = idx_stop;
+    idx_stop = idx_scratch;
   }
 
   // Make a copy of the existing data, modify it and recheck it for validity
@@ -281,7 +281,7 @@ TableIndependentVariable::bias_data(
   bool tab_val_incr_copy = table_values_increasing;
 
   // modify it:
-  for (size_t ii = ix_start; ii <= ix_stop; ++ii) {
+  for (size_t ii = idx_start; ii <= idx_stop; ++ii) {
     data_copy[ii] += bias;
   }
   if (!check_monotonicity(data_copy)) {
@@ -300,7 +300,7 @@ TableIndependentVariable::bias_data(
     // Apply the same change to the original data.
     // Note - this trivial computation is faster than a lookup to
     //        reassign value from data_copy.
-    for (size_t ii = ix_start; ii <= ix_stop; ++ii) {
+    for (size_t ii = idx_start; ii <= idx_stop; ++ii) {
       data[ii] += bias;
     }
   }
@@ -313,8 +313,8 @@ Purpose:(scale specified elements in the data array by the specified factor.)
 void
 TableIndependentVariable::scale_data(
         double scale,
-        size_t ix_start,
-        size_t ix_stop)
+        size_t idx_start,
+        size_t idx_stop)
 {
   if (!data_loaded) {
     CMLMessage::warn(
@@ -324,16 +324,16 @@ TableIndependentVariable::scale_data(
       "Check sequencing.\n");
     return;
   }
-  if (ix_start > ix_stop) {
+  if (idx_start > idx_stop) {
     CMLMessage::warn(
       __FILE__,__LINE__,"Invalid arguments\n",
       "Call made to scale data between two indices with the start index (",
-      ix_start,")\n"
-      "higher than the stop index (",ix_stop,").  This could be an error.\n"
+      idx_start,")\n"
+      "higher than the stop index (",idx_stop,").  This could be an error.\n"
       "Scale will be applied to the data values between these indices.\n");
-    size_t ix_scratch = ix_start;
-    ix_start = ix_stop;
-    ix_stop = ix_scratch;
+    size_t idx_scratch = idx_start;
+    idx_start = idx_stop;
+    idx_stop = idx_scratch;
   }
 
   // Make a copy of the existing data, modify it and recheck it for validity
@@ -341,7 +341,7 @@ TableIndependentVariable::scale_data(
   std::vector<double> data_copy (data);
   bool tab_val_incr_copy = table_values_increasing;
 
-  for (size_t ii = ix_start; ii <= ix_stop; ++ii) {
+  for (size_t ii = idx_start; ii <= idx_stop; ++ii) {
     data_copy[ii] *= scale;
   }
   if (!check_monotonicity(data_copy)) {
@@ -360,7 +360,7 @@ TableIndependentVariable::scale_data(
     // Apply the same change to the original data.
     // Note - this trivial computation is faster than a lookup to
     //        reassign value from data_copy.
-    for (size_t ii = ix_start; ii <= ix_stop; ++ii) {
+    for (size_t ii = idx_start; ii <= idx_stop; ++ii) {
       data[ii] *= scale;
     }
   }
