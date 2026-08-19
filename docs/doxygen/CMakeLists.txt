@@ -18,9 +18,9 @@ if (Doxygen_FOUND)
     # converts these to en-dashes.
     set(CML_FIX_DASHES_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/fix_en_dashes.py)
 
-    # Lifts Trick units out of member descriptions into a dedicated <trickunits>
-    # element. We use this to move the unit descriptions to their own dedicated
-    # section of member variable descriptions in the generated HTML.
+    # Script that pulls Trick units out of member descriptions into a dedicated
+    # <trickunits> element. We use this to move the unit descriptions to their own
+    # dedicated section of member variable descriptions in the generated HTML.
     set(CML_EXTRACT_UNITS_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/extract_trick_units.py)
 
     # Add doxygen target. By doing it this way rather than with doxygen_add_docs()

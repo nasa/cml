@@ -66,9 +66,9 @@ that you include CML in your project as a submodule.
 .. code-block:: shell
 
    # Clone with ssh:
-   git submodule add -b RELEASE_TAG git@github.com:nasa/cml.git cml
+   git submodule add -b ${CML_RELEASE_TAG} git@github.com:nasa/cml.git cml
    # Clone with HTTPS:
-   git submodule add -b RELEASE_TAG https://github.com/nasa/cml.git cml
+   git submodule add -b ${CML_RELEASE_TAG} https://github.com/nasa/cml.git cml
 
 .. tip::
 
@@ -120,3 +120,25 @@ the model in question.
    verification has not been completed. Level-4 may indicate a previously-level-5 model has since been edited
    and is awaiting a delta-verification review.
 5. Model is mature, it has been comprehensively documented and independently verified.
+
+________________________________________________________
+
+Contact
+-------
+
+.. list-table::
+   :widths: 30 50 30
+   :header-rows: 1
+
+   * - Name
+     - Role
+     - GitHub Username
+   * - Nino Tarantino
+     - CML Lead
+     - `@ninotarantino <https://github.com/ninotarantino>`_
+   * - Dan Jordan
+     - CML Maintainer
+     - `@ddj116 <https://github.com/ddj116>`_
+   * - Gary Turner
+     - Author of many CML models
+     - `@garyt2 <https://github.com/garyt2>`_

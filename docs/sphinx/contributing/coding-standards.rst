@@ -125,6 +125,8 @@ Updates to existing CML code will also be checked for adherence to the coding st
 Unlike a new model submission, NPR 7150.2 and NASA-STD-7009 documentation is not required unless the model’s
 classification has changed.
 
+________________________________________________________
+
 .. _model-coding-standards:
 
 Model Coding Standards
@@ -136,6 +138,8 @@ source code into the main branch of the CML codebase.
 Model Coding Standards are broken into categories depending on the language used. CML-MCS-GENERAL standards apply to all
 code, regardless of language. CML-MCS-CPP standards apply to C++ code. CML-MCS-PYTHON standards apply to Python code.
 
+________________________________________________________
+
 **CML-MCS-GENERAL-1**: All Trick-based simulation model code shall be written in the C++ programming language
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -145,6 +149,8 @@ written in C++.
 
 **Enforcement**: Static analysis and Pull Request Review.
 
+________________________________________________________
+
 **CML-MCS-GENERAL-2**: All scripts required to maintain model code must be committed at the time of Pull Request Review
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -153,12 +159,16 @@ These scripts must also be committed and live alongside the model so that the mo
 
 **Enforcement**: Pull Request Review.
 
+________________________________________________________
+
 **CML-MCS-GENERAL-3**: Source code shall not contain ITAR, EAR, or CUI data
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 **Rationale**: CML is an open-source project and must not contain sensitive data.
 
 **Enforcement**: Pull Request Review.
+
+________________________________________________________
 
 **CML-MCS-GENERAL-4**: Source code shall be formatted in accordance with a common stylesheet
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -168,6 +178,8 @@ history contains only impactful changes to the code rather than formatting tweak
 enforcement tool and stylesheet may differ between languages.
 
 **Enforcement**: Static analysis operating off of a common stylesheet available to developers and users.
+
+________________________________________________________
 
 **CML-MCS-GENERAL-5**: Commented-out code shall only be allowed when accompanied by an associated project issue, point of contact email address, and current date
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -183,6 +195,8 @@ that the code will be un-commented or removed by a certain date.
 
     // TODO jane.doe@nasa.gov 01/01/2000: uncomment when addressing issue #1.
     //my_type.nonexistent_field = 1;
+
+________________________________________________________
 
 **CML-MCS-CPP-1**: Source code shall live within the “cml” C++ namespace
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -205,6 +219,8 @@ CML library.
 
    }
 
+________________________________________________________
+
 **CML-MCS-CPP-2**: Header files shall direct Trick to place generated interface code in the “cml” Python module via the Trick header “PYTHON MODULE” directive
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -223,12 +239,16 @@ consumers of the CML library.
     * PYTHON_MODULE: (cml)
     */
 
+________________________________________________________
+
 **CML-MCS-CPP-3**: Source code shall use the .hh file extension for headers and the .cc file extension for source files
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 **Rationale**: Consistent codebases are easier to use and maintain.
 
 **Enforcement**: Static analysis.
+
+________________________________________________________
 
 **CML-MCS-CPP-4**: Functions and types limited in scope to the implementation details of a module shall be placed in an unnamed namespace within the corresponding module source file
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -249,6 +269,8 @@ may confuse users. Unnamed namespaces are the modern equivalent to static functi
    }
 
    }
+
+________________________________________________________
 
 **CML-MCS-CPP-5**: Structs shall be used only for passive objects with all public fields that have no invariants
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -282,12 +304,16 @@ have protected or private fields, if such encapsulation is necessary, then class
        double coefficient_of_friction {};
    };
 
+________________________________________________________
+
 **CML-MCS-CPP-6**: Source code shall compile with no warnings
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 **Rationale**: Compiler warnings signify that something may be wrong with the code and should rarely be ignored.
 
 **Enforcement**: Automated builds in GitHub Actions treat warnings as errors.
+
+________________________________________________________
 
 **CML-MCS-CPP-7**: Source code shall pass review by linters without generating any warnings
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -297,6 +323,8 @@ feedback on potential code quality issues. These warnings should rarely be ignor
 
 **Enforcement**: Linters are run in a GitHub Action and produce a failing result upon detecting an error.
 
+________________________________________________________
+
 **CML-MCS-CPP-8**: Source code shall have associated unit tests which cover at least 90% of lines with meaningful tests
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -304,6 +332,8 @@ feedback on potential code quality issues. These warnings should rarely be ignor
 spacecraft simulations.
 
 **Enforcement**: Manual review of code coverage artifacts generated in a GitHub Action during Pull Request Review.
+
+________________________________________________________
 
 **CML-MCS-CPP-9**: Source code shall compile using the ISO/IEC 14882 C++17 standard
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -313,12 +343,16 @@ features and maintain interoperability with other open-source libraries.
 
 **Enforcement**: All toolchains use the minimum supported C++ standard.
 
+________________________________________________________
+
 **CML-MCS-CPP-10**: Source code shall have associated documentation which includes, at minimum, the model’s public API, a users’ guide, assumptions and limitations, and details about prior verification and validation activities
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 **Rationale**: Code without documentation cannot be effectively maintained or used.
 
 **Enforcement**: Pull Request Review.
+
+________________________________________________________
 
 **CML-MCS-PYTHON-1**: Source code shall not call exec(), eval(), or otherwise evaluate an arbitrary string as Python code
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -343,6 +377,8 @@ instead of ``exec(open())``.
    from Modified_data.utils import some_function_from_utils
    some_function_from_utils()
 
+________________________________________________________
+
 **CML-MCS-PYTHON-2**: Methods which accept keyword arguments shall document all allowable keyword arguments
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -366,6 +402,8 @@ a function.
        """
        implementation(*args, **kwargs)
 
+________________________________________________________
+
 .. _best-practice-coding-standards:
 
 Best Practice Coding Standards
@@ -374,6 +412,8 @@ Best Practice Coding Standards
 These standards cover best practice for the code within CML. These standards are not required to be met at the time of
 integration into the main CML branch but should be met as soon as possible afterwards. Like the
 :ref:`model-coding-standards`, CML Best Practice Coding Standards are grouped by programming language.
+
+________________________________________________________
 
 **CML-BP-CPP-1**: Do not define macros
 ++++++++++++++++++++++++++++++++++++++
@@ -400,6 +440,8 @@ variables instead.
 
    inline constexpr double SPEED_OF_LIGHT = 299792458.0;
 
+________________________________________________________
+
 **CML-BP-CPP-2**: Do not invoke undefined behavior
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -408,10 +450,14 @@ variables instead.
 **Note**: Most undefined behavior will be caught by static analysis tools and will be required to be addressed during
 Pull Request Review.
 
+________________________________________________________
+
 **CML-BP-CPP-3**: Do not use global variables
 +++++++++++++++++++++++++++++++++++++++++++++
 
 **Rationale**: Global variables often lead to “spaghetti code” which is difficult to maintain and understand.
+
+________________________________________________________
 
 **CML-BP-CPP-4**: Do not use the “new” or “delete” keywords
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -438,6 +484,8 @@ dynamic memory management. Both of these options provide automated cleanup of th
 
    auto data = std:make_unique<double>();
 
+________________________________________________________
+
 **CML-BP-CPP-5**: Do not allocate significant memory in scheduled simulation jobs
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -446,11 +494,15 @@ analysis. Frequently reallocating memory during such jobs introduces performance
 design. Some reallocation may be expected during certain simulation events, but most memory allocation should occur
 during simulation initialization.
 
+________________________________________________________
+
 **CML-BP-CPP-6**: Favor composition over inheritance
 ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 **Rationale**: Frequent use of inheritance can make a codebase difficult to understand. Often, composition allows for
 easier code maintenance and testability.
+
+________________________________________________________
 
 **CML-BP-PYTHON-1**: Use docstrings
 +++++++++++++++++++++++++++++++++++
@@ -463,6 +515,8 @@ easier code maintenance and testability.
 
    def foo(bar) -> None:
        """Foos a bar."""
+
+________________________________________________________
 
 **CML-BP-PYTHON-2**: Use type annotations
 +++++++++++++++++++++++++++++++++++++++++
@@ -478,11 +532,15 @@ types allowed as inputs or expected as outputs from functions are not always eas
        """Attempt to connect to a port on a host."""
        return implementation(port, hostname)
 
+________________________________________________________
+
 **CML-BP-PYTHON-3**: Functions should always return the same number of items, preferably only one item
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 **Rationale**: Functions which return a variable number of arguments depending on the logic path taken are brittle and
 require users to understand the inner workings of the function which they are accessing.
+
+________________________________________________________
 
 **CML-BP-PYTHON-4**: Do not use classes in code intended for use in Trick input files
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -490,6 +548,8 @@ require users to understand the inner workings of the function which they are ac
 **Rationale**: Classes are designed to hold state and provide access control to data, while Trick input files are
 designed to be a purely procedural interface to a simulation. Frequent overuse of classes in Trick input files has
 proven repeatedly to negatively impact code usability and maintainability. Use free functions instead.
+
+________________________________________________________
 
 Coding Standards Waiver
 -----------------------

@@ -77,4 +77,4 @@ automatically rebuilding the documentation when you save your changes.
 
 See the `reStructuredText documentation <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_ for examples
 and references on writing reStructuredText. If you prefer, you may also choose to write documentation in Markdown and convert it
-to reStructureText using tools like ``pandoc``.
+to reStructuredText using tools like ``pandoc``.

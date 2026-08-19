@@ -112,10 +112,7 @@ No dependencies.
 Model Structure
 ~~~~~~~~~~~~~~~
 
-.. doxygenclass:: SubscriptionBase
-   :members:
-   :protected-members:
-   :undoc-members:
+.. doxygenfile:: subscriptions.hh
 
 Mathematical Formulation
 ------------------------

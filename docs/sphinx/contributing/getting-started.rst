@@ -8,6 +8,8 @@ to use CML, following these instructions is not necessary.
    :local:
    :class: this-will-duplicate-information-and-it-is-still-useful-here
 
+________________________________________________________
+
 First-time Setup
 ----------------
 
@@ -19,9 +21,9 @@ Setting up a Virtual Environment
 ++++++++++++++++++++++++++++++++
 
 The scripts which manage testing CML content leverage `TrickOps <https://github.com/nasa/trick/tree/master/share/trick/trickops>`_
-modules which themselves require valid ``python3`` virtual environments to be created and activated with
-content defined by ``${TRICK_HOME}/share/trick/trickops/requirements.txt``. Additionally, CML model input files
-and various static analysis tools require non-system packages like ``numpy`` and ``gcovr``.
+modules which themselves require valid ``python3`` `virtual environments <https://docs.python.org/3/library/venv.html>`_
+to be created and activated with content defined by ``${TRICK_HOME}/share/trick/trickops/requirements.txt``. Additionally,
+some CML model input files and various static analysis tools require non-system packages like ``numpy`` and ``gcovr``.
 
 To create and manage your virtual environment, CML recommends using `uv <https://docs.astral.sh/uv/>`_.
 
@@ -44,7 +46,7 @@ Configuring Your Environment
 ++++++++++++++++++++++++++++
 
 CML requires several environment variables to be defined to properly configure some of the tools we use for
-development, such as address sanitizer suppressions. These variables are defined in the root level ``.bashrc``
+development, such as address sanitizer options. These variables are defined in the root level ``.bashrc``
 file. Simply run the following command to activate it.
 
 .. code-block:: shell
@@ -82,8 +84,10 @@ In order to use CML models, your workflow must have access to compatible version
 and ``${JEOD_HOME}`` environment variables must point to valid installations of Trick and JEOD, respectively. Currently,
 we require:
 
--  `Trick 25.1.0 <https://github.com/nasa/trick>`_ or newer.
--  `JEOD 5.4.1 <https://github.com/nasa/jeod>`_ or newer.
+.. Note below: we define the required versions in our top-level CMake file and extract them in conf.py.
+
+-  `Trick <https://github.com/nasa/trick>`_ |TrickVersionRequired| or newer.
+-  `JEOD <https://github.com/nasa/jeod>`_ |JEODVersionRequired| or newer.
 
 .. note::
 
@@ -116,6 +120,8 @@ To build JEOD, we recommend also cloning it into the ``externals/`` directory.
     make -f bin/jeod/makefile -j$(nproc) TRICK_BUILD=1
     make -C trickified -j$(nproc)
 
+________________________________________________________
+
 Building CML
 ------------
 
@@ -129,10 +135,12 @@ preset to build CML and run the unit tests in a single command.
 This will generate build scripts in the ``${CML_HOME}/build/debug`` directory, build CML, and run unit tests.
 It will also install the CML libraries into ``${CML_HOME}/lib``.
 
+________________________________________________________
+
 Running Verification Simulations
 --------------------------------
 
-A majority of our models are testing in a Trick environment. You can build, run, and analyze verification
+A majority of our models are tested in a Trick environment. You can build, run, and analyze verification
 simulation outputs using the ``bin/test.py`` script.
 
 .. code-block:: shell

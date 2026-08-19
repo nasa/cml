@@ -19,16 +19,17 @@ into CML in a more recent release.
 Proposed contributions should be submitted to CML in the form of a Pull
 Request in CML's `core repository <https://github.com/nasa/cml>`__. When
 your change is ready for review by the CML team, take your pull request
-out of draft status. Each pull request should contain a cohesive,
-minimal set of changes to the CML codebase. If you are feeding back
-multiple unrelated changes to CML, please open multiple pull requests.
-This helps us review contributions faster and maintain a coherent Git
-history.
+out of draft status. The CML team will automatically be assigned to review
+your pull request. Each pull request should contain a cohesive, minimal
+set of changes to the CML codebase. If you are feeding back multiple
+unrelated changes to CML, please open multiple pull requests. This helps
+us review contributions faster and maintain a coherent Git history.
 
 CML maintains a robust testing pipeline which ensures that modifications
 to the code do not break existing functionality. Changes which result in
 a failed continuous integration (CI) pipeline will not be accepted under
-any circumstances.
+any circumstances. We generally won't review pull requests until the CI
+pipeline shows all tests passing.
 
 Getting Access
 --------------
@@ -37,8 +38,17 @@ You must have a NASA identity to push to this repository. To obtain
 contributor privileges, fill out the `HQ AGCY NASA GitHub
 Collaborator <http://nams.nasa.gov/nams/asset/227756>`__ request. For
 the business justification, state that you need contributor permissions
-for the cml repository. After that request is approved, you will have
-the ability to push changes to CML.
+for the cml repository. After that request is approved, your GitHub profile
+should show that you're a member of the `NASA organization <https://github.com/nasa>`_
+and you should have the ability to push changes to CML.
+
+.. note::
+  If you're already a member of the NASA organization and you're unable to push
+  to CML, message Nino Tarantino on Teams to be added to the NASA GitHub Team
+  that grants write access to the CML repository.
+
+External Contributors
+---------------------
 
 If you do not have a NASA identity or do not wish to submit a GitHub
 Collaborator request, you may still contribute to CML. Create a
