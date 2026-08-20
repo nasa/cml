@@ -62,6 +62,11 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
+# Necessary for labelling a system of equations with a single equation number.
+mathjax3_config = {
+    "tex": {"tags": "ams"}
+}
+
 # -- Breathe configuration ---------------------------------------------------
 # Breathe is our link between the Doxygen-generated XML data for the source
 # code and the Sphinx documentation generator.

@@ -22,6 +22,7 @@ if (TARGET Doxygen::doxygen AND Sphinx_FOUND)
             contributing/coding-standards.rst
             contributing/contributing.rst
             contributing/getting-started.rst
+            models/dynamics/pointing-ref-frame.rst
             models/utilities/index.rst
             models/utilities/subscriptions.rst
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

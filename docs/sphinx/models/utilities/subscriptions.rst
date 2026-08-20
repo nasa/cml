@@ -75,8 +75,6 @@ it.
 
 ________________________________________________________
 
-.. _requirements-1:
-
 Requirements
 ============
 
@@ -97,12 +95,6 @@ Architectural Considerations
 
 Existing External Capabilities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Inheritance
-^^^^^^^^^^^
-
-The :cpp:class:`SubscriptionBase` class that forms this model is a base class with
-no inheritance.
 
 Support
 ^^^^^^^

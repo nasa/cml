@@ -14,15 +14,13 @@ Programmers:
 
 #include "../include/pointing_ref_frame.hh"
 
-/*****************************************************************************
-Constructor
-*****************************************************************************/
+/**
+ * @details Initializes the frame with zero vectors for the position and velocity.
+ *          The angular velocity is set to a unit vector along the z-axis. The
+ *          transformation matrix is initialized as the identity matrix, and the
+ *          attitude quaternion is set to the identity quaternion.
+ */
 PointingRefFrame::PointingRefFrame()
-  :
-  originating_frame(nullptr),
-  target_frame(nullptr),
-  pointing_frame(),
-  target_wrt_originating_state()
 {
   // Initialize the frame's state:
   // The position and velocity will always be 0
@@ -35,10 +33,7 @@ PointingRefFrame::PointingRefFrame()
   pointing_frame.state.rot.Q_parent_this.make_identity();
 }
 
-/*****************************************************************************
-set_originating_frame
-Purpose:(sets the originating_frame pointer)
-*****************************************************************************/
+// Set the Originating Frame pointer
 void
 PointingRefFrame::set_originating_frame(
     jeod::RefFrame * orig_frame)
@@ -60,10 +55,7 @@ PointingRefFrame::set_originating_frame(
   originating_frame = orig_frame;
 }
 
-/*****************************************************************************
-set_target_frame
-Purpose:(sets the target_frame pointer)
-*****************************************************************************/
+// Set the Target Frame pointer
 void
 PointingRefFrame::set_target_frame(
     jeod::RefFrame * targ_frame)
@@ -85,11 +77,11 @@ PointingRefFrame::set_target_frame(
   target_frame = targ_frame;
 }
 
-/*******************************************************************************
-update
-Purpose:  (Updates the state of the pointing frame, specifically its
-           orientation and angular rate.)
-*******************************************************************************/
+/**
+ * @note Since the Pointing Frame is defined with its origin at co-located with
+ *       the Originating Frame's origin, only the orientation and angular rate
+ *       will change.
+ */
 void
 PointingRefFrame::update()
 {
@@ -208,12 +200,7 @@ PointingRefFrame::update()
   pointing_frame.state.rot.compute_quaternion();
 }
 
-
-/*****************************************************************************
-setup_frames
-Purpose:(run from model activation; common base method for this class and
-         its derivatives.)
-*****************************************************************************/
+// Run from model activation; common base method for this class and its derivatives
 bool
 PointingRefFrame::setup_frames()
 {
@@ -237,10 +224,7 @@ PointingRefFrame::setup_frames()
   return true;
 }
 
-/*****************************************************************************
-activate
-Purpose:(Activates the model when its subscription count rises from 0 to 1)
-*****************************************************************************/
+// Activate the model when its subscription count rises from 0 to 1
 void
 PointingRefFrame::activate()
 {
@@ -278,12 +262,7 @@ PointingRefFrame::activate()
   */
 }
 
-
-
-/*****************************************************************************
-deactivate
-Purpose:(Deactivates the model when its subscription count drops to 0)
-*****************************************************************************/
+// Deactivate the model when its subscription count drops to 0
 void
 PointingRefFrame::deactivate()
 {
