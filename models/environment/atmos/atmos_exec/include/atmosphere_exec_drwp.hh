@@ -37,6 +37,8 @@ class AtmosphereExec_Drwp : public AtmosphereExec_AtmosWindsBase
                          ExtendedPlanetaryDerivedState & planet_state_in,
                          AtmosExecOutput               & master_output);
     ~AtmosphereExec_Drwp() override = default;
+    AtmosphereExec_Drwp (const AtmosphereExec_Drwp&) = delete;
+    AtmosphereExec_Drwp & operator = (const AtmosphereExec_Drwp&) = delete;
 
     void activate() override;
     void deactivate() override;
@@ -47,9 +49,5 @@ class AtmosphereExec_Drwp : public AtmosphereExec_AtmosWindsBase
 
   protected:
     bool initialize();
-
-  private:
-    AtmosphereExec_Drwp (const AtmosphereExec_Drwp&);
-    AtmosphereExec_Drwp & operator = (const AtmosphereExec_Drwp&);
 };
 #endif

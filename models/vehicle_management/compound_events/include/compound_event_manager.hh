@@ -53,6 +53,8 @@ class CompoundEventsManager : public VehicleEventsManager
 
   explicit CompoundEventsManager(const double & time);
   ~CompoundEventsManager() override;
+  CompoundEventsManager( const CompoundEventsManager&) = delete;
+  CompoundEventsManager& operator=( const CompoundEventsManager&) = delete;
 
   void initialize() override;
   void update() override;
@@ -228,9 +230,5 @@ class CompoundEventsManager : public VehicleEventsManager
 
     return reinterpret_cast<T*>(var_name_ref->address);
   }
-
-  // Copy-constructor and operator= not implemented / deleted
-  CompoundEventsManager( const CompoundEventsManager&);
-  CompoundEventsManager& operator=( const CompoundEventsManager&);
 };
 #endif

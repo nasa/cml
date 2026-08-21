@@ -109,6 +109,8 @@ class ContactStateOverride : public SubscriptionBase
 
   ContactStateOverride(jeod::DynBody& reference_body_in,
                        jeod::DynBody& override_body_in);
+  ContactStateOverride(const ContactStateOverride&) = delete;
+  ContactStateOverride& operator = (const ContactStateOverride&) = delete;
 
   void update();
   void set_contact_normal(double contact_normal_in[3]);
@@ -122,13 +124,6 @@ class ContactStateOverride : public SubscriptionBase
   void override_state_root( jeod::BodyRefFrame& integ_frame,
                             double pos_integ_frame_wrt_override_struc[3],
                             const jeod::Quaternion & override_struc_to_integ_frame);
-  #ifndef SWIG // SWIG does not like the override keyword.
   void activate() override;
-  #endif
-
- private:
-  // Make class non-copyable
-  ContactStateOverride(const ContactStateOverride&);
-  ContactStateOverride& operator = (const ContactStateOverride&);
 };
 #endif

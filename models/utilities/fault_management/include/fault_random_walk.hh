@@ -20,6 +20,8 @@ template <typename T> class FaultRandomWalk : public Fault {
   public :
     explicit FaultRandomWalk(T& var);
     ~FaultRandomWalk() override = default;
+    FaultRandomWalk(const FaultRandomWalk&) = delete;
+    FaultRandomWalk& operator = (const FaultRandomWalk&) = delete;
 
     void overwrite_value() override;
 
@@ -34,9 +36,6 @@ template <typename T> class FaultRandomWalk : public Fault {
     T& variable; /* (--) The variable to fault. */
     T random_walk_value; /* (--)
       The value that is added to the variable when it's faulted. */
-
-    FaultRandomWalk(const FaultRandomWalk&);
-    FaultRandomWalk& operator = (const FaultRandomWalk&);
 };
 
 

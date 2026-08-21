@@ -19,6 +19,8 @@ template<typename T> class FaultScale : public Fault {
   public :
     explicit FaultScale(T& var);
     ~FaultScale() override = default;
+    FaultScale(const FaultScale&) = delete;
+    FaultScale& operator = (const FaultScale&) = delete;
 
     void overwrite_value() override;
 
@@ -29,9 +31,6 @@ template<typename T> class FaultScale : public Fault {
 
   private:
     T& variable; /* (--) The variable to fault. */
-
-    FaultScale(const FaultScale&);
-    FaultScale& operator = (const FaultScale&);
 };
 
 

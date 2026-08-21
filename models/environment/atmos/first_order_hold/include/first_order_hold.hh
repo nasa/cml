@@ -38,6 +38,8 @@ class FirstOrderHold {
                   const ExtendedPlanetaryDerivedState & planet_state,
                   AtmosExecOutput & atmos_output_in);
   virtual ~FirstOrderHold() = default;
+  FirstOrderHold (const FirstOrderHold&) = delete;
+  FirstOrderHold & operator = (const FirstOrderHold&) = delete;
 
   void activate();
   void deactivate();
@@ -48,8 +50,5 @@ class FirstOrderHold {
   const ExtendedPlanetaryDerivedState & planet_state; /* (--)
            reference to vehicle's planet-state.*/
   AtmosExecOutput & out;   /* (--) reference to atmos-exec output struct */
- private:
-  FirstOrderHold (const FirstOrderHold&);
-  FirstOrderHold & operator = (const FirstOrderHold&);
 };
 #endif

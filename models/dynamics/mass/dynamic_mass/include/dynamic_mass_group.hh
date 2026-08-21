@@ -112,6 +112,8 @@ class DynamicMassGroup : public SubscriptionBase {
 
  public:
   DynamicMassGroup(void);
+  DynamicMassGroup (const DynamicMassGroup&) = delete;
+  DynamicMassGroup& operator = (const DynamicMassGroup&) = delete;
   void add_mass_to_group( DynamicMassBody *mass);
   void add_string_to_group( DynamicMassString *string);
   void initialize() override;
@@ -127,10 +129,5 @@ class DynamicMassGroup : public SubscriptionBase {
   void test_root_body();
   void add_mass_to_group_internal( DynamicMassBody *mass,
                                    bool send_err_msg);
-
- private:
-  // To disable the copy/assignment operations
-  DynamicMassGroup (const DynamicMassGroup&);
-  DynamicMassGroup& operator = (const DynamicMassGroup&);
 };
 #endif

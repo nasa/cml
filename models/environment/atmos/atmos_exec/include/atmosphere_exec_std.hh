@@ -37,12 +37,10 @@ class AtmosphereExec_STD : public AtmosphereExec_AtmosBase
                         const double    & topodetic_alt,
                         AtmosExecOutput & master_output);
     ~AtmosphereExec_STD() override = default;
+    AtmosphereExec_STD (const AtmosphereExec_STD&) = delete;
+    AtmosphereExec_STD & operator = (const AtmosphereExec_STD&) = delete;
 
     bool initialize_atmos() override {return true;}
     void update_atmos() override;
-
-  private:
-    AtmosphereExec_STD (const AtmosphereExec_STD&);
-    AtmosphereExec_STD & operator = (const AtmosphereExec_STD&);
 };
 #endif

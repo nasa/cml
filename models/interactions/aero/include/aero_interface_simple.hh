@@ -32,14 +32,10 @@ public:
                        const double (&T_inrtl_struc)[3][3],
                        const double & mass);
   ~AeroInterfaceSimple() override = default;
+  AeroInterfaceSimple (const AeroInterfaceSimple &) = delete;
+  AeroInterfaceSimple & operator = (const AeroInterfaceSimple &) = delete;
 
   void initialize() override;
   void update() override;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroInterfaceSimple (const AeroInterfaceSimple &);
-  AeroInterfaceSimple & operator = (const AeroInterfaceSimple &);
 };
 #endif

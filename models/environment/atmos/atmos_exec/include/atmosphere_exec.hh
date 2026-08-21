@@ -111,6 +111,9 @@ class AtmosphereExec : public AtmosphereExecInterface {
 
     ~AtmosphereExec() override = default;
 
+    AtmosphereExec (const AtmosphereExec&) = delete;
+    AtmosphereExec & operator = (const AtmosphereExec&) = delete;
+
     void initialize( jeod::TimeStandard & time_in);
 
     void update ();
@@ -125,10 +128,6 @@ class AtmosphereExec : public AtmosphereExecInterface {
     void initialize_atmosphere();
     void initialize_winds();
     void add_gust();
-
-  private:
-    AtmosphereExec (const AtmosphereExec&);
-    AtmosphereExec & operator = (const AtmosphereExec&);
 };
 
 #endif

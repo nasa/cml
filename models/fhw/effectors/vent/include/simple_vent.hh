@@ -107,6 +107,8 @@ class SimpleVent {
 
   explicit SimpleVent(const double& dyn_time_in);
   virtual ~SimpleVent() = default;
+  SimpleVent(const SimpleVent&) = delete;
+  SimpleVent& operator= (const SimpleVent&) = delete;
 
   virtual void use_impulse_mode(bool mode = true);
   void use_dynamic_mode(bool mode = true) { use_impulse_mode(!mode); }
@@ -179,9 +181,5 @@ class SimpleVent {
   void set_impulse_internal();
   void set_duration_internal();
   virtual void set_force_internal();
-
- private:
-  SimpleVent(const SimpleVent&);
-  SimpleVent& operator= (const SimpleVent&);
 };
 #endif

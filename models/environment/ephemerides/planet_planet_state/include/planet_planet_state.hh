@@ -58,6 +58,8 @@ class PlanetPlanetState : public SubscriptionBase
                      jeod::RefFrame & to_frame,
                      jeod::RefFrame & from_frame);
   ~PlanetPlanetState() override = default;
+  PlanetPlanetState (const PlanetPlanetState&) = delete;
+  PlanetPlanetState& operator = (const PlanetPlanetState&) = delete;
 
   void initialize() override;
   void update();
@@ -65,10 +67,5 @@ class PlanetPlanetState : public SubscriptionBase
  protected:
   void activate() override;
   void deactivate() override;
-
- private:
-   // Not implemented:
-   PlanetPlanetState (const PlanetPlanetState&);
-   PlanetPlanetState& operator = (const PlanetPlanetState&);
 };
 #endif

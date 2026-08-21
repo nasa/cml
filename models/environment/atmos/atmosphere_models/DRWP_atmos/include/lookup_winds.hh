@@ -188,6 +188,8 @@ public:
  public:
   LookupAtmosWinds();
   ~LookupAtmosWinds() override = default;
+  LookupAtmosWinds (const LookupAtmosWinds&) = delete;
+  LookupAtmosWinds & operator = (const LookupAtmosWinds&) = delete;
 
   void initialize() override;
   void update(double altitude_in);
@@ -217,9 +219,5 @@ protected:
   void calculate_speed_of_sound();
   void calculate_wind_mag_dir();
   void stream_error(int, const std::string&);
-private:
-  // private and unimplemented; cannot be used.
-  LookupAtmosWinds (const LookupAtmosWinds&);
-  LookupAtmosWinds & operator = (const LookupAtmosWinds&);
 };
 #endif

@@ -29,12 +29,10 @@ class GenericSingleInputTable : public GenericMultiInputTable
   // use the same constructors as the parent class.
   using GenericMultiInputTable::GenericMultiInputTable;
   GenericSingleInputTable() : GenericMultiInputTable(){}
+  GenericSingleInputTable (const GenericSingleInputTable&) = delete;
+  GenericSingleInputTable& operator = (const GenericSingleInputTable&) = delete;
  protected:
   void generate_base_values() override;
   bool generate_output() override;
- private:
-  // Disable the copy/assignment operators
-  GenericSingleInputTable (const GenericSingleInputTable&);
-  GenericSingleInputTable& operator = (const GenericSingleInputTable&);
 };
 #endif

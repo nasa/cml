@@ -78,6 +78,8 @@ class DynamicMassBody : public jeod::MassBody
 
  public:
   DynamicMassBody ();
+  DynamicMassBody (const DynamicMassBody&) = delete;
+  DynamicMassBody& operator = (const DynamicMassBody&) = delete;
   void initialize_dyn_mass(); // Run AFTER MassBodyInit.
   bool update_mass();
   void set_initial_position( bool overwrite_nominal,
@@ -93,12 +95,6 @@ class DynamicMassBody : public jeod::MassBody
  protected:
   void update_mass_internal();
   bool interpolate_properties();
-
- private:
-  // To disable the copy/assignment operations
-  DynamicMassBody (const DynamicMassBody&);
-  DynamicMassBody& operator = (const DynamicMassBody&);
-
 };
 
 

@@ -75,6 +75,8 @@ class Constraint
  public:
   Constraint( size_t num_specs = 1);
   virtual ~Constraint() = default;
+  Constraint( const Constraint &) = delete;
+  Constraint & operator=( const Constraint &) = delete;
 
   virtual void initialize();
   virtual void update() = 0;
@@ -84,11 +86,5 @@ class Constraint
  protected:
   void count_violations();
   void post_update();
-
-
-
- private: // not implemented; not copyable
-  Constraint( const Constraint &);
-  Constraint & operator=( const Constraint &);
 };
 #endif

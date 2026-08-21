@@ -30,6 +30,7 @@
 Checks: >
     clang-*,
         -clang-analyzer-optin.performance.Padding,
+    modernize-use-equals-delete,
     performance-*,
         -performance-enum-size
 

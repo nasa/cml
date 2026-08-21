@@ -49,14 +49,12 @@ class SingleInputTableForAngles : public GenericSingleInputTable
   explicit SingleInputTableForAngles( const DoublePtrVec & dependent_variables,
                                       bool output_in_radians = true);
   ~SingleInputTableForAngles() override = default;
+  SingleInputTableForAngles (const SingleInputTableForAngles&) = delete;
+  SingleInputTableForAngles& operator = (const SingleInputTableForAngles&) = delete;
 
   bool initialize() override;
  protected:
   bool generate_output() override;
   void bound_to_half_circle( double & angle);
- private:
-  // Disable the copy/assignment operators
-  SingleInputTableForAngles (const SingleInputTableForAngles&);
-  SingleInputTableForAngles& operator = (const SingleInputTableForAngles&);
 };
 #endif

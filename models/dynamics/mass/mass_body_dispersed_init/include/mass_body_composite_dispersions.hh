@@ -89,6 +89,9 @@ public:
 
 
   explicit MassBodyCompositeDispersions (jeod::MassBody & target_body_in);
+  MassBodyCompositeDispersions(const MassBodyCompositeDispersions&) = delete;
+  MassBodyCompositeDispersions & operator = (
+                               const MassBodyCompositeDispersions&) = delete;
   ~MassBodyCompositeDispersions() override = default;
 
   // The apply method is used when the class is functioning as a
@@ -113,9 +116,5 @@ private:
   void update_internal();
   void comp_to_core_updates();
   void process_dispersions();
-
-  MassBodyCompositeDispersions(const MassBodyCompositeDispersions&);
-  MassBodyCompositeDispersions & operator = (
-                               const MassBodyCompositeDispersions&);
 };
 #endif

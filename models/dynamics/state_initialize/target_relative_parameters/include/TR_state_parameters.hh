@@ -66,6 +66,11 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
   /* Destructor */
   ~TargetRelative_StateParameter() override = default;
 
+  /* Deleted copy constructor and copy assignment operator */
+  TargetRelative_StateParameter (const TargetRelative_StateParameter&) = delete;
+  TargetRelative_StateParameter & operator = (
+                                 const TargetRelative_StateParameter&) = delete;
+
   /* Public Methods */
   void initialize( double ref_geodetic_altitude,
                    double ref_geodetic_latitude,
@@ -102,10 +107,5 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
   bool initialize_check_config();
   void initialize_internal(const double R_Ref_PCPF[3]);
   double compute_position_magnitude();
-
-  // copy-constructor and operator= made empty to prevent misuse.
-  TargetRelative_StateParameter (const TargetRelative_StateParameter&);
-  TargetRelative_StateParameter & operator = (
-                                 const TargetRelative_StateParameter&);
 };
 #endif

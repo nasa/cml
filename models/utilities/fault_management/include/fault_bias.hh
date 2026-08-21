@@ -20,6 +20,8 @@ template<typename T> class FaultBias : public Fault {
 
     explicit FaultBias(T& var);
     ~FaultBias() override = default;
+    FaultBias(const FaultBias&) = delete;
+    FaultBias& operator = (const FaultBias&) = delete;
 
     void overwrite_value() override;
 
@@ -29,9 +31,6 @@ template<typename T> class FaultBias : public Fault {
 
   private:
     T& variable; /* (--) The variable to fault. */
-
-    FaultBias(const FaultBias&);
-    FaultBias& operator = (const FaultBias&);
 };
 
 

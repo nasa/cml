@@ -41,6 +41,8 @@ class Vector3IntegrableObject : public SubscriptionBase,
     explicit Vector3IntegrableObject(jeod::DynBody & body_in);
     Vector3IntegrableObject(jeod::DynBody & body_in,
                             const double * deriv_ptr_in);
+    Vector3IntegrableObject& operator = (const Vector3IntegrableObject& rhs) = delete;
+    Vector3IntegrableObject(const Vector3IntegrableObject& rhs) = delete;
 
     ~Vector3IntegrableObject() override;
 
@@ -74,9 +76,5 @@ class Vector3IntegrableObject : public SubscriptionBase,
 #ifndef SWIG
     RestartableVector3FirstOrderODEIntegrator integrator; //!< trick_units(--)
 #endif
-
-    // Assignment and copy constructors are private and unimplemented
-    Vector3IntegrableObject& operator = (const Vector3IntegrableObject& rhs);
-    Vector3IntegrableObject(const Vector3IntegrableObject& rhs);
 };
 #endif

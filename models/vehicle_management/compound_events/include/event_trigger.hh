@@ -182,6 +182,8 @@ class EventTrigger : public WatchValuesDelay<T>,
     WatchValuesBase<T>::use_threshold_crossing_trigger = true;
   }
   ~EventTrigger() override = default;
+  EventTrigger (const EventTrigger& rhs) = delete;
+  EventTrigger& operator = (const EventTrigger& rhs) = delete;
 
 
  protected:
@@ -523,9 +525,5 @@ Notes:
     // All actions complete, set the active flag and exit.
     this->active = true;
   }
-
- private:
-  EventTrigger (const EventTrigger& rhs);
-  EventTrigger& operator = (const EventTrigger& rhs);
 };
 #endif
