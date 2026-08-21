@@ -25,6 +25,7 @@ Pointing Reference Frame
 .. contents:: Table of Contents
    :local:
    :class: this-will-duplicate-information-and-it-is-still-useful-here
+   :depth: 4
 
 ________________________________________________________
 
@@ -99,14 +100,14 @@ Model Specifications
 Architectural Considerations
 ----------------------------
 
-The model consists of the primary *PointingRefFrame* class and the specialized extension of it,
-*EphemBasedPointingRefFrame*. The *PointingRefFrame* class includes access to a reference frame
+The model consists of the primary :cpp:class:`PointingRefFrame` class and the specialized extension of it,
+:cpp:class:`EphemBasedPointingRefFrame`. The :cpp:class:`PointingRefFrame` class includes access to a reference frame
 instance as a class member, instead of directly inheriting from *RefFrame* to allow inheritance from
 :cpp:class:`SubscriptionBase` for standard activation and deactivation of the model. The
-*EphemBasedPointingRefFrame* class inherits from *PointingRefFrame* for scenarios where at least one
-of the *Originating-Frame* or *Target-Frame* are frames managed by the *EphemeridesManager*. This
-extended class provides a reference to the *EphemeridesManager* to update the ephemerides alongside
-the *PointingRefFrame* behavior.
+:cpp:class:`EphemBasedPointingRefFrame` class inherits from :cpp:class:`PointingRefFrame` for scenarios where at least one
+of the *Originating-Frame* or *Target-Frame* are frames managed by the ``jeod::EphemeridesManager``. This
+extended class provides a reference to the ``jeod::EphemeridesManager`` to update the ephemerides alongside
+the :cpp:class:`PointingRefFrame` behavior.
 
 .. _model-structure:
 
@@ -239,6 +240,7 @@ and :math:`\mathbf{\hat{y}}`. This is trivially shown by expressing the inner pr
 multiplication: :math:`{{\mathbf{V_{\mathit{rel}}} \cdot \mathbf{\hat{y}}} = \mathbf{{V_{\mathit{rel}}}^{T}}}\mathbf{\hat{y}}`.
 However, they must be expressed in the same reference frame.
 
+.. _singularities:
 
 Singularities in ``PointingRefFrame`` Construction
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -545,6 +547,8 @@ N/A
 Simulation Configurations
 -------------------------
 
+.. _sim-verif:
+
 SIM_verif
 ~~~~~~~~~
 
@@ -554,17 +558,10 @@ reference frame using two arbitrary reference frames A and B corresponding to th
 verify the relative velocity of the body to the Pointing Reference Frame, as seen from the pointing
 reference frame.
 
-#. 
+________________________________________________________
 
-   #. 
-
-      #. 
-
-         #. .. rubric:: 
-               :name: section-2
-
-         #. .. rubric:: RUN_01_Geometric
-               :name: run_01_geometric
+RUN_01_Geometric
+################
 
 This test verifies that the Pointing Reference Frame is properly constructed with the correct
 orientation and angular velocity throughout a variety of configurations, and that the relative
@@ -573,26 +570,23 @@ correct.
 
 The default setup for these unit tests includes these states in the inertial axes (+X, +Y, +Z):
 
--  originating-frame is at rest at the origin:
--  target-frame is located atand moving in
--  vehicle is located atand moving in
+-  Originating-Frame is at rest at the origin:
+   :math:`\mathbf{R_{O}^{I}} = \begin{bmatrix}0 & 0 & 0\end{bmatrix}`,
+   :math:`\mathbf{V_{O}^{I}} = \begin{bmatrix}0 & 0 & 0\end{bmatrix}`.
+-  Target-Frame is located at :math:`\mathbf{R_{T}^{I}} = \begin{bmatrix}10 & 0 & 0\end{bmatrix}`
+   and moving in :math:`\mathbf{V_{T}^{I}} = \begin{bmatrix}0 & 5 & 0\end{bmatrix}`.
+-  vehicle is located at :math:`\mathbf{R_{v}^{I}} = \begin{bmatrix}10 & 0 & 0\end{bmatrix}` and
+   moving in :math:`\mathbf{V_{v}^{I}} = \begin{bmatrix}0 & 0 & 0\end{bmatrix}`.
 
 All references to the vehicle relative position and velocity are with respect to the origin of the
 Pointing Reference Frame and are expressed in the Pointing Reference Frame axes. The relative
 velocity is also observed from the perspective of the Pointing Reference Frame.
 
-#. 
 
-   #. 
+Default Configuration
+^^^^^^^^^^^^^^^^^^^^^
 
-      #. 
-
-         #. 
-
-            #. .. rubric::  Default Configuration
-                  :name: default-configuration
-
-Setup: All input states are in the default configuration.
+**Setup**: All input states are in the default configuration.
 
 **Expected Results:** Pointing frame aligns with +X (*Target-Frame* direction), +Y (*Target-Frame*
 velocity), +Z (angular momentum direction). Vehicle lies on pointing frame x-axis and its relative
@@ -600,29 +594,14 @@ velocity opposes the *Target-Frame* motion.
 
 Results:
 
-+----------+-------------+-------------+-------------+-------------+-------------+-------------+
-| Time (s) | .. math:    | .. math:    | .. math::   | ..          | ..          | ..          |
-|          | : \mathbf{R | : \mathbf{V |  \omega_{z} | math:: \mat | math:: \mat | math:: \mat |
-|          | _{v/\mathit | _{v/\mathit |             | hbf{{\wideh | hbf{{\wideh | hbf{{\wideh |
-|          | {PRF}}^{\ma | {PRF}}^{\ma |             | at{x}}^{T}} | at{y}}^{T}} | at{z}}^{T}} |
-|          | thit{PRF}}} | thit{PRF}}} |             |             |             |             |
-+----------+-------------+-------------+-------------+-------------+-------------+-------------+
-| 0        | [10,0,0]    | [0,-5,0]    | 0.5         | [1,0,0]     | [0,1,0]     | [0,0,1]     |
-+----------+-------------+-------------+-------------+-------------+-------------+-------------+
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| Time (s) | :math:`\mathbf{R}_{v/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\mathbf{V}_{v/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\omega_{z}`    | :math:`\mathbf{\hat{x}}^{T}`     | :math:`\mathbf{\hat{y}}^{T}`     | :math:`\mathbf{\hat{z}}^{T}` |
++==========+====================================================+====================================================+=======================+==================================+==================================+==============================+
+| 0        | [10,0,0]                                           | [0,-5,0]                                           | 0.5                   | [1,0,0]                          | [0,1,0]                          | [0,0,1]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: 
-                  :name: section-3
-
-            #. .. rubric::  Offset Positions in 3D
-                  :name: offset-positions-in-3d
+Offset Positions in 3D
+^^^^^^^^^^^^^^^^^^^^^^
 
 **Setup:** *Originating-*, *Target-Frames*, and vehicle positions are all offset by [5,5,5] to
 maintain same relative position and motion.
@@ -631,20 +610,12 @@ maintain same relative position and motion.
 
 Results:
 
-= ======== ======== === ======= ======= =======
-1 [10,0,0] [0,-5,0] 0.5 [1,0,0] [0,1,0] [0,0,1]
-= ======== ======== === ======= ======= =======
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 1        | [10,0,0]                                           | [0,-5,0]                                           | 0.5                   | [1,0,0]                          | [0,1,0]                          | [0,0,1]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Vehicle Diagonally Located in 3D
-                  :name: vehicle-diagonally-located-in-3d
+Vehicle Diagonally Located in 3D
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Setup:** Vehicle position is diagonally offset in the YZ-plane to be located at [10,-10,10].
 
@@ -653,20 +624,12 @@ same as the vehicle inertial position, and it moves in the pointing frame x- and
 
 Results:
 
-= =========== ========= === ======= ======= =======
-2 [10,-10,10] [-5,-5,0] 0.5 [1,0,0] [0,1,0] [0,0,1]
-= =========== ========= === ======= ======= =======
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 2        | [10,-10,10]                                        | [-5,-5,0]                                          | 0.5                   | [1,0,0]                          | [0,1,0]                          | [0,0,1]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Vehicle Moving in +X
-                  :name: vehicle-moving-in-x
+Vehicle Moving in +X
+^^^^^^^^^^^^^^^^^^^^
 
 **Setup:** Vehicle now has velocity of [10,0,0] (along +X), while the *Target-Frame* still moves in
 +Y with the same velocity [0,5,0].
@@ -677,20 +640,12 @@ in addition to the previous opposing *Target-Frame* motion in the pointing frame
 
 Results:
 
-= ======== ========= === ======= ======= =======
-3 [10,0,0] [10,-5,0] 0.5 [1,0,0] [0,1,0] [0,0,1]
-= ======== ========= === ======= ======= =======
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 3        | [10,0,0]                                           | [10,-5,0]                                          | 0.5                   | [1,0,0]                          | [0,1,0]                          | [0,0,1]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric::  Vehicle Moving in +X, -Y, and +Z
-                  :name: vehicle-moving-in-x--y-and-z
+Vehicle Moving in +X, -Y, and +Z
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Setup:** Vehicle now has velocity of [10,-10,10], while the *Target-Frame* still moves in +Y with
 the same velocity [0,5,0].
@@ -701,20 +656,12 @@ and z-axes, in addition to the previous opposing *Target-Frame* motion in the po
 
 Results:
 
-= ======== =========== === ======= ======= =======
-4 [10,0,0] [10,-15,10] 0.5 [1,0,0] [0,1,0] [0,0,1]
-= ======== =========== === ======= ======= =======
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 4        | [10,0,0]                                           | [10,-15,10]                                        | 0.5                   | [1,0,0]                          | [0,1,0]                          | [0,0,1]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Target Moving in -Y
-                  :name: target-moving-in--y
+Target Moving in -Y
+^^^^^^^^^^^^^^^^^^^
 
 **Setup:** *Target-Frame* now moves in opposite direction (along -Y) with velocity [0,-5,0].
 
@@ -723,20 +670,12 @@ configuration. Pointing frame y- and z-axes are in the opposite direction.
 
 Results:
 
-= ======== ======== === ======= ======== ========
-5 [10,0,0] [0,-5,0] 0.5 [1,0,0] [0,-1,0] [0,0,-1]
-= ======== ======== === ======= ======== ========
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 5        | [10,0,0]                                           | [0,-5,0]                                           | 0.5                   | [1,0,0]                          | [0,-1,0]                         | [0,0,-1]                     |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Target Moving in +Z
-                  :name: target-moving-in-z
+Target Moving in +Z
+^^^^^^^^^^^^^^^^^^^
 
 **Setup:** *Target-Frame* now moves in +Z with velocity [0,0,5] instead of +Y.
 
@@ -746,20 +685,12 @@ vector) shifts to -Y, aligning the pointing frame y-axis with +Z to maintain a r
 
 Results:
 
-= ======== ======== === ======= ======= ========
-6 [10,0,0] [0,-5,0] 0.5 [1,0,0] [0,0,1] [0,-1,0]
-= ======== ======== === ======= ======= ========
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 6        | [10,0,0]                                           | [0,-5,0]                                           | 0.5                   | [1,0,0]                          | [0,0,1]                          | [0,-1,0]                     |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Target in +Y, Moving in +X
-                  :name: target-in-y-moving-in-x
+Target in +Y, Moving in +X
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Setup:** *Target-Frame* lies along +Y at position [0,10,0] and moves in +X with velocity [5,0,0].
 
@@ -769,20 +700,12 @@ position lies on pointing frame y-axis and it moves in the direction of the poin
 
 Results:
 
-= ======== ======= === ======= ======= ========
-7 [0,10,0] [5,0,0] 0.5 [0,1,0] [1,0,0] [0,0,-1]
-= ======== ======= === ======= ======= ========
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 7        | [0,10,0]                                           | [5,0,0]                                            | 0.5                   | [0,1,0]                          | [1,0,0]                          | [0,0,-1]                     |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Target in +Y, Moving in +Z
-                  :name: target-in-y-moving-in-z
+Target in +Y, Moving in +Z
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Setup:** *Target-Frame* lies along +Y at position [0,10,0] and moves in +Z with velocity [0,0,5].
 
@@ -792,20 +715,12 @@ position lies on pointing frame z-axis with zero velocity.
 
 Results:
 
-= ======== ======= === ======= ======= =======
-8 [0,0,10] [0,0,0] 0.5 [0,1,0] [0,0,1] [1,0,0]
-= ======== ======= === ======= ======= =======
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 8        | [0,0,10]                                           | [0,0,0]                                            | 0.5                   | [0,1,0]                          | [0,0,1]                          | [1,0,0]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric::  Target in +Z, Moving in +X
-                  :name: target-in-z-moving-in-x
+Target in +Z, Moving in +X
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Setup:** *Target-Frame* lies along +Z at position [0,0,10] and moves in +X with velocity [5,0,0].
 
@@ -815,20 +730,12 @@ pointing frame y-axis and it moves in the direction of the pointing frame x-axis
 
 Results:
 
-= ======== ======= === ======= ======= =======
-9 [0,10,0] [5,0,0] 0.5 [0,0,1] [1,0,0] [0,1,0]
-= ======== ======= === ======= ======= =======
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 9        | [0,10,0]                                           | [5,0,0]                                            | 0.5                   | [0,0,1]                          | [1,0,0]                          | [0,1,0]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Target in +Z, Moving in +Y
-                  :name: target-in-z-moving-in-y
+Target in +Z, Moving in +Y
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Setup:** *Target-Frame* lies along +Z at position [0,0,10] and moves in +Y with velocity [0,5,0].
 
@@ -838,20 +745,12 @@ pointing frame opposite z-axis with zero velocity.
 
 Results:
 
-== ========= ======= === ======= ======= ============
-10 [0,0,-10] [0,0,0] 0.5 [0,0,1] [0,1,0] [**-1,0,0]**
-== ========= ======= === ======= ======= ============
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 10       | [0,0,-10]                                          | [0,0,0]                                            | 0.5                   | [0,0,1]                          | [0,1,0]                          | **[-1,0,0]**                 |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Target Moving Diagonally in XY
-                  :name: target-moving-diagonally-in-xy
+Target Moving Diagonally in XY
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Setup:** *Target-Frame* and vehicle located at position [10,10,0], and the *Target-Frame* moves
 diagonally with velocity [-5,5,0].
@@ -863,20 +762,12 @@ direction opposite of the pointing-frame y-axis.
 
 Results:
 
-== =========== =========== === ================ ================= =======
-11 [14.14,0,0] [0,-7.07,0] 0.5 [0.707, 0.707,0] [-0.707, 0.707,0] [0,0,1]
-== =========== =========== === ================ ================= =======
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 11       | [14.14,0,0]                                        | [0,-7.07,0]                                        | 0.5                   | [0.707,0.707,0]                  | [-0.707,0.707,0]                 | [0,0,1]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Target and Vehicle in 3D
-                  :name: target-and-vehicle-in-3d
+Target and Vehicle in 3D
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Setup:** *Target-Frame* and vehicle located at position [5,5,5], and the *Target-Frame* moves in
 +Z with velocity [0,0,5].
@@ -890,20 +781,12 @@ the other cases, because the *Target-Frame* velocity is less orthogonal to the p
 
 Results:
 
-== ========== ============ ===== =================== ===================== ================
-12 [8.66,0,0] [0,-4.082,0] 0.471 [0.577,0.577,0.577] [-0.408,-0.408,0.816] [0.707,-0.707,0]
-== ========== ============ ===== =================== ===================== ================
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 12       | [8.66,0,0]                                         | [0,-4.082,0]                                       | 0.471                 | [0.577,0.577,0.577]              | [-0.408,-0.408,0.816]            | [0.707,-0.707,0]             |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Origin Moving in -Y
-                  :name: origin-moving-in--y
+Origin Moving in -Y
+^^^^^^^^^^^^^^^^^^^
 
 **Setup:** *Originating-Frame* now moves in -Y with velocity [0,-5,0], the opposite of the previous
 *Target-Frame* motion.
@@ -914,80 +797,90 @@ configuration results.
 
 Results:
 
-== ======== ======== === ======= ======= =======
-13 [10,0,0] [0,-5,0] 1.0 [1,0,0] [0,1,0] [0,0,1]
-== ======== ======== === ======= ======= =======
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 13       | [10,0,0]                                           | [0,-5,0]                                           | 1.0                   | [1,0,0]                          | [0,1,0]                          | [0,0,1]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-|image1|\ |image2|\ |image3|
+________________________________________________________
 
-|image4|\ |image5|\ |image6|
-
-#. 
-
-   #. 
-
-      #. 
-
-         #. .. rubric:: 
-               :name: section-4
-
-         #. .. rubric:: ERROR_bad_frames
-               :name: error_bad_frames
+ERROR_bad_frames
+################
 
 This test verifies the errors that result from incorrect configurations and warnings from cases
 where the Pointing Reference Frame axes aren't well defined and need to be alternatively handled
-using the methodology in Section 3.2.2.a.
+using the methodology described in the :ref:`Singularities <singularities>` section.
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric::  Configuration Frames are NULL
-                  :name: configuration-frames-are-null
+Configuration Frames are NULL
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If the *Originating-Frame* or the *Target-Frame* are set to a NULL value during intialization, the
 model will broadcast a respective error.
 
-.. image:: Pictures/1000000100000394000001AD99C6EFC3C1CEF683.png
-   :width: 6.9252in
-   :height: 3.2429in
+.. code-block:: text
 
-#. 
+   ***************************************************************
+   Set originating frame to NULL
+   ***************************************************************
 
-   #. 
+   Non-critical Error detected at
+   Trick Sim-time: 0
+   File: /nobackup2/ataranti/cml/models/dynamics/state_descriptors/pointing_ref_frame/src/pointing_ref_frame.cc
+   Line: 50
+   Message: Configuration error
+   Attempt to assign the originating-frame of PointingRefFrame PointingFrame to be NULL.
+   This is not a valid setting.
+   Attempt failed.
 
-      #. 
+   ***************************************************************
+   Set target frame to NULL
+   ***************************************************************
 
-         #. 
+   Non-critical Error detected at
+   Trick Sim-time: 0
+   File: /nobackup2/ataranti/cml/models/dynamics/state_descriptors/pointing_ref_frame/src/pointing_ref_frame.cc
+   Line: 72
+   Message: Configuration error
+   Attempt to assign the target-frame of PointingRefFrame PointingFrame to be NULL.
+   This is not a valid setting.
+   Attempt failed.
 
-            #. .. rubric::  Changing Configuration after Model Activation
-                  :name: changing-configuration-after-model-activation
 
-If the Pointing Reference Frame model is already activated through its *subscribe()*, any attempt to
-change the *Originating-Frame* or *Target-Frame* will result in the model broadcasting a respective
-error.
+Changing Configuration after Model Activation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: Pictures/100000010000039A00000194C1D28CF981755DC2.png
-   :width: 6.9252in
-   :height: 3.0339in
+If the Pointing Reference Frame model is already activated through its :cpp:func:`~SubscriptionBase::subscribe`
+method, any attempt to change the *Originating-Frame* or *Target-Frame* will result in the model broadcasting
+a respective error.
 
-#. 
+.. code-block:: text
 
-   #. 
+   ***************************************************************
+   t=0.0 Reset originating frame specification
+   ***************************************************************
 
-      #. 
+   Non-critical Error detected at
+   Trick Sim-time: 0
+   File: /nobackup2/ataranti/cml/models/dynamics/state_descriptors/pointing_ref_frame/src/pointing_ref_frame.cc
+   Line: 43
+   Message: Reconfiguration error
+   Once activated, the PointingRefFrame PointingFrame cannot change its originating frame.
+   Originating-frame remains at its current setting.
 
-         #. 
+   ***************************************************************
+   t=0.0 Reset target frame specification
+   ***************************************************************
 
-            #. .. rubric:: 
-                  :name: section-5
+   Non-critical Error detected at
+   Trick Sim-time: 0
+   File: /nobackup2/ataranti/cml/models/dynamics/state_descriptors/pointing_ref_frame/src/pointing_ref_frame.cc
+   Line: 65
+   Message: Reconfiguration error
+   Once activated, the PointingRefFrame PointingFrame cannot change its target frame.
+   Originating-frame remains at its current setting.
 
-            #. .. rubric:: Relative Position Vector is Zero (Proximity Warning)
-                  :name: relative-position-vector-is-zero-proximity-warning
+
+Relative Position Vector is Zero (Proximity Warning)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the Pointing Reference Frame encounters a situation where the *Originating-Frame* and
 *Target-Frame* are very close to each other, the relative position vector between the frames will
@@ -1002,28 +895,16 @@ velocity of zero.
 
 Results:
 
-+----------+-------------+-------------+-------------+-------------+-------------+-------------+
-| Time (s) | .. math:    | .. math:    | .. math::   | ..          | ..          | ..          |
-|          | : \mathbf{R | : \mathbf{V |  \omega_{z} | math:: \mat | math:: \mat | math:: \mat |
-|          | _{v/\mathit | _{v/\mathit |             | hbf{{\wideh | hbf{{\wideh | hbf{{\wideh |
-|          | {PRF}}^{\ma | {PRF}}^{\ma |             | at{x}}^{T}} | at{y}}^{T}} | at{z}}^{T}} |
-|          | thit{PRF}}} | thit{PRF}}} |             |             |             |             |
-+----------+-------------+-------------+-------------+-------------+-------------+-------------+
-| 0        | [3,2,-1]    | [8,2,-4]    | 1           | [0,0,1]     | [0,1,0]     | [-1,0,0]    |
-+----------+-------------+-------------+-------------+-------------+-------------+-------------+
-| 1        | [3,2,-1]    | [6,5,-4]    | 0           | [0,0,1]     | [0,1,0]     | [-1,0,0]    |
-+----------+-------------+-------------+-------------+-------------+-------------+-------------+
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| Time (s) | :math:`\mathbf{R}_{v/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\mathbf{V}_{v/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\omega_{z}`    | :math:`\mathbf{\hat{x}}^{T}`     | :math:`\mathbf{\hat{y}}^{T}`     | :math:`\mathbf{\hat{z}}^{T}` |
++==========+====================================================+====================================================+=======================+==================================+==================================+==============================+
+| 0        | [3,2,-1]                                           | [8,2,-4]                                           | 1                     | [0,0,1]                          | [0,1,0]                          | [-1,0,0]                     |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 1        | [3,2,-1]                                           | [6,5,-4]                                           | 0                     | [0,0,1]                          | [0,1,0]                          | [-1,0,0]                     |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric:: Relative Position and Velocity Vectors are Aligned (Alternative 1)
-                  :name: relative-position-and-velocity-vectors-are-aligned-alternative-1
+Relative Position and Velocity Vectors are Aligned (Alternative 1)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the Pointing Reference Frame encounters a situation where the relative position and velocity
 vectors between the *Originating-Frame* and *Target-Frame* are very close to being aligned, the
@@ -1042,21 +923,14 @@ preserving the previous y-axis orientation from t=2.
 
 Results:
 
-= ======== ======== = ======== ======= ========
-2 [0,0,-1] [6,5,-4] 1 [0,0,1]  [0,1,0] [-1,0,0]
-3 [0,0,1]  [-6,5,4] 0 [0,0,-1] [0,1,0] [1,0,0]
-= ======== ======== = ======== ======= ========
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 2        | [0,0,-1]                                           | [6,5,-4]                                           | 1                     | [0,0,1]                          | [0,1,0]                          | [-1,0,0]                     |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 3        | [0,0,1]                                            | [-6,5,4]                                           | 0                     | [0,0,-1]                         | [0,1,0]                          | [1,0,0]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. 
-
-            #. .. rubric::  Relative Position and Velocity Vectors are Aligned (Alternative 2)
-                  :name: relative-position-and-velocity-vectors-are-aligned-alternative-2
+Relative Position and Velocity Vectors are Aligned (Alternative 2)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Similar to the previous test, when the relative position and velocity vectors are very close to
 being aligned, the cross product of these vectors will produce an undefined z-axis. In the
@@ -1076,39 +950,55 @@ the x-axis from t=4 and z-axis from t=3, thus preserving the previous z-axis ori
 
 Results:
 
-= ======= ======== = ======== ======= =======
-3 [0,0,1] [-6,5,4] 0 [0,0,-1] [0,1,0] [1,0,0]
-4 [0,0,1] [5,6,4]  0 [0,1,0]  [0,0,1] [1,0,0]
-= ======= ======== = ======== ======= =======
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 3        | [0,0,1]                                            | [-6,5,4]                                           | 0                     | [0,0,-1]                         | [0,1,0]                          | [1,0,0]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 4        | [0,0,1]                                            | [5,6,4]                                            | 0                     | [0,1,0]                          | [0,0,1]                          | [1,0,0]                      |
++----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
-#. 
+________________________________________________________
 
-   #. 
-
-      #. 
-
-         #. .. rubric:: FAIL_unassigned_frames
-               :name: fail_unassigned_frames
+FAIL_unassigned_frames
+######################
 
 This test verifies that when the model is initialized without specifying the *Target-Frame* and/or
-*Originating-Frame,* an error is broadcast, the model is stopped and returns the boolean *False.*
+*Originating-Frame,* an error is broadcast, the model is stopped and returns the boolean ``false``.
 
-.. image:: Pictures/10000001000003960000017E0B1EF006C4362DBE.png
-   :width: 6.9252in
-   :height: 2.8811in
+.. code-block:: text
 
-#. 
+   Non-critical Error detected at
+   Trick Sim-time: 0
+   File: /nobackup2/ataranti/cml/models/dynamics/state_descriptors/pointing_ref_frame/src/pointing_ref_frame.cc
+   Line: 209
+   Message: Incomplete specification
+   The target-frame and/or originating-frame of the
+   Pointing_Reference-Frame have not been assigned.
+   The Pointing-Reference-Frame PointingFrame cannot be activated.
 
-   #. 
 
-      #. .. rubric:: SIM_Ephem
-            :name: sim_ephem
+   Non-critical Error detected at
+   Trick Sim-time: 0
+   File: /nobackup2/ataranti/cml/models/utilities/subscriptions/src/subscriptions.cc
+   Line: 133
+   Message: Failure During Initialization.
+   The SubscriptionBase initialization for 'unnamed-instance' failed when the model
+   attempted to activate during initialization:
+   - activation sequence executed due to having pending subscriptions.
+   Model has been neither initialized nor activated
+   but pending subscriptions have been retained per setting of
+   configuration flag initialize_on_failed_activation.
+   Rerun <model>.initialize() to apply pending subscriptions and activate the model.
 
-This verification simulation tests the functionality of the *EphemBasedPointingRefFrame* class and
-is limited to the very small differences between this class and its base class, *PointingRefFrame.*
-It illustrates the potential pitfalls of using a *PointingRefFrame* instance rather than an
-*EphemBasedPointingRefFrame* instance when either the *Target-Frame* and/or *Originating-Frame* are
-managed by the Ephemerides Manager. See *FAIL_noephem_only* and *FAIL_noephem_with_subscriptions*
+________________________________________________________
+
+SIM_Ephem
+~~~~~~~~~
+
+This verification simulation tests the functionality of the :cpp:class:`EphemBasedPointingRefFrame` class and
+is limited to the very small differences between this class and its base class, :cpp:class:`PointingRefFrame`.
+It illustrates the potential pitfalls of using a :cpp:class:`PointingRefFrame` instance rather than an
+:cpp:class:`EphemBasedPointingRefFrame` instance when either the *Target-Frame* and/or *Originating-Frame* are
+managed by the Ephemerides Manager. See :ref:`FAIL_noephem_only <fail-noephem_only>` and :ref:`FAIL_noephem_with_subscriptions <fail_noephem_with_subscriptions>`
 for easy mistakes to avoid.
 
 All the runs in this simulation define the Pointing Reference Frames to track the Earth and Sun
@@ -1116,148 +1006,102 @@ relative positions and motion, with an individual subject vehicle fixed on the E
 enable verification of the relative state of the vehicle with respect to the pointing reference
 frame.
 
-Since the *PointingRefFrame* was already geometrically verified in *SIM_verif*, the purpose of
-logging the following data is to determine which frame, *EphemBasedPointingRefFrame* or
-*PointingRefFrame* is actively driving the relative state updates, and whether the inertial
+Since the :cpp:class:`PointingRefFrame` was already geometrically verified in :ref:`SIM_verif <sim-verif>`, the purpose of
+logging data in this simulation is to determine which frame, :cpp:class:`EphemBasedPointingRefFrame` or
+:cpp:class:`PointingRefFrame` is actively driving the relative state updates, and whether the inertial
 positions of the Earth and Sun are being updated via the EphemeridesManager.
 
-+---------------+---------------+---------------+---------------+---------------+---------------+
-| Time (s)      | ..            | .. math:: \ma | EphemBasedPoi | Poi           |               |
-|               |  math:: \math | thbf{R_{\math | ntingRefFrame | ntingRefFrame |               |
-|               | bf{R_{\mathit | it{Sun}}^{I}} |               | (Non-Ephem)   |               |
-|               | {Earth}}^{I}} |               |               |               |               |
-+---------------+---------------+---------------+---------------+---------------+---------------+
-| .. math:: \ma | .. math:: \ma | .. math       | .. math:: \ma | .. math:: \ma | .. math       |
-| thbf{R_{v/\ma | thbf{V_{v/\ma | :: \omega_{z} | thbf{R_{v/\ma | thbf{V_{v/\ma | :: \omega_{z} |
-| thit{PRF}}^{\ | thit{PRF}}^{\ |               | thit{PRF}}^{\ | thit{PRF}}^{\ |               |
-| mathit{PRF}}} | mathit{PRF}}} |               | mathit{PRF}}} | mathit{PRF}}} |               |
-+---------------+---------------+---------------+---------------+---------------+---------------+
+________________________________________________________
 
-#. 
+.. _run_01_ephem_only:
 
-   #. 
-
-      #. 
-
-         #. .. rubric:: 
-               :name: section-6
-
-         #. .. rubric:: RUN_01_ephem_only
-               :name: run_01_ephem_only
+RUN_01_ephem_only
+#################
 
 This test demonstrates the recommended implementation for a Pointing Reference Frame that depends on
 frames managed by the Ephemerides Manager.
 
-Setup: Run only the *EphemBasedPointingRefFrame* and its associated relative state.
+**Setup**: Run only the :cpp:class:`EphemBasedPointingRefFrame` and its associated relative state.
 
-Expected Results: Only the *EphemBasedPointingRefFrame* instance and its relative vehicle state are
-updated, not the *PointingRefFrame* instance. The inertial positions of the Earth and Sun are also
-updated through the *EphemBasedPointingRefFrame* connection to the Ephemerides Manager.
+**Expected Results**: Only the :cpp:class:`EphemBasedPointingRefFrame` instance and its relative vehicle state are
+updated, not the :cpp:class:`PointingRefFrame` instance. The inertial positions of the Earth and Sun are also
+updated through the :cpp:class:`EphemBasedPointingRefFrame` connection to the Ephemerides Manager.
 
-Results:
+**Results**: Results match expected.
 
-|image7|\ |image8|
+________________________________________________________
 
-|image9|\ |image10|\ |image11|
+RUN_02_both
+###########
 
-|image12|\ |image13|\ |image14|
-
-#. 
-
-   #. 
-
-      #. 
-
-         #. .. rubric:: RUN_02_both
-               :name: run_02_both
-
-This test demontrates that since *EphemBasedPointingRefFrame* can add its Ephemeris-based frames to
-the Ephemeris tree through the Ephemerides Manager, *PointingRefFrame* can indirectly track those
+This test demontrates that since :cpp:class:`EphemBasedPointingRefFrame` can add its Ephemeris-based frames to
+the Ephemeris tree through the Ephemerides Manager, :cpp:class:`PointingRefFrame` can indirectly track those
 same frames despite not having a connection to the Ephemerides Manager. The effect of this hidden
-dependency becomes evident in the *FAIL_noephem_only* test, where removing the
-*EphemBasedPointingRefFrame* causes the base *PointingRefFrame* to lose access to the
+dependency becomes evident in the :ref:`FAIL_noephem_only <fail-noephem_only>` test, where removing the
+:cpp:class:`EphemBasedPointingRefFrame` causes the base :cpp:class:`PointingRefFrame` to lose access to the
 Ephemeris-based frames.
 
-Setup: Runs both the *EphemBasedPointingRefFrame,* the base *PointingRefFrame*, and their associated
+**Setup**: Runs both the :cpp:class:`EphemBasedPointingRefFrame`, the base :cpp:class:`PointingRefFrame`, and their associated
 relative states.
 
-Expected Results: Both the *EphemBasedPointingRefFrame* and the *PointingRefFrame* instances are
+**Expected Results**: Both the :cpp:class:`EphemBasedPointingRefFrame` and the :cpp:class:`PointingRefFrame` instances are
 updated with their associated relative vehicle states. The inertial positions of the Earth and Sun
-are also updated through the *EphemBasedPointingRefFrame* connection to the Ephemerides Manager.
+are also updated through the :cpp:class:`EphemBasedPointingRefFrame` connection to the Ephemerides Manager.
 
-Results:
+**Results**: Results match expected.
 
-|image15|\ |image16|
+________________________________________________________
 
-|image17|\ |image18|\ |image19|
 
-|image20|\ |image21|\ |image22|
+RUN_03_ephem_only_resubscribe
+#############################
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. .. rubric:: 
-               :name: section-7
-
-         #. .. rubric:: RUN_03_ephem_only_resubscribe
-               :name: run_03_ephem_only_resubscribe
-
-This test is similar to *RUN_01_ephem_only*, in that only the *EphemBasedPointingRefFrame* and its
+This test is similar to :ref:`RUN_01_ephem_only <run_01_ephem_only>`, in that only the :cpp:class:`EphemBasedPointingRefFrame` and its
 associated relative-state are computed. However, this test highlights the expected behavior when the
 model is initially deactivated and later reactivated successfully, in constrast with
-*FAIL_noephem_with_subscriptions*, where reactivation fails. It serves to verify that the
-*EphemBasedPointingRefFrame* can correctly resume updating relative states and ephemeris-driven
+:ref:`FAIL_noephem_with_subscriptions <fail_noephem_with_subscriptions>`, where reactivation fails. It serves to verify that the
+:cpp:class:`EphemBasedPointingRefFrame` can correctly resume updating relative states and ephemeris-driven
 positions after being re-subscribed mid-simulation.
 
-Setup: Run only the *EphemBasedPointingRefFrame* and its associated relative state. Model is
+**Setup**: Run only the :cpp:class:`EphemBasedPointingRefFrame` and its associated relative state. Model is
 initially deactivated and later reactivated during the simulation at t=300000.
 
-Expected Results: The *EphemBasedPointingRefFrame* instance and its relative vehicle state are
+**Expected Results**: The :cpp:class:`EphemBasedPointingRefFrame` instance and its relative vehicle state are
 initialized at t=0 and not updated anymore until after t=300000. Similarly, the Sun inertial
 reference frame state won't be updated until that point as it is deactivated through
-*EphemBasedPointingRefFrame's target-frame*. However, the Earth inertial reference frame state
+:cpp:class:`EphemBasedPointingRefFrame`'s *Target-Frame*. However, the Earth inertial reference frame state
 continues updating as it is used as the integration frame for the subject vehicle.
 
-Results:
+**Results**: Results match expected.
 
-|image23|\ |image24|\ |image25|
+________________________________________________________
 
-|image26|\ |image27|\ |image28|
+.. _fail-noephem_only:
 
-|image29|\ |image30|\ |image31|
+FAIL_noephem_only
+#################
 
-#. 
-
-   #. 
-
-      #. 
-
-         #. .. rubric:: FAIL_noephem_only
-               :name: fail_noephem_only
-
-This test runs only the base *PointingRefFrame* and its associated relative state while still using
+This test runs only the base :cpp:class:`PointingRefFrame` and its associated relative state while still using
 Ephemeris-based frames like the Earth inertial and Sun inertial as the *Originating-Frame* and
-*Target-Frame*. The *PointingRefFrame* doesn't have access to the Ephemerides Manager unlike
-*EphemBasedPointingRefFrame*, which causes the test to fail as the Ephemeris reference frame tree
+*Target-Frame*. The :cpp:class:`PointingRefFrame` doesn't have access to the Ephemerides Manager unlike
+:cpp:class:`EphemBasedPointingRefFrame`, which causes the test to fail as the Ephemeris reference frame tree
 was not built.
 
-.. image:: Pictures/100000010000022D000000AEC32180F59FEAA725.png
-   :width: 4.7354in
-   :height: 1.4791in
+.. code-block:: text
 
-#. 
+   *********************************************************
+   Terminal error.  Ephem tree has not been built.
+   Sun.inertial and Earth.inertial are not the same tree
+   *********************************************************
 
-   #. 
+________________________________________________________
 
-      #. 
+.. _fail_noephem_with_subscriptions:
 
-         #. .. rubric:: FAIL_noephem_with_subscriptions
-               :name: fail_noephem_with_subscriptions
+FAIL_noephem_with_subscriptions
+###############################
 
-This test is similar to *FAIL_noephem_only,* in that only the base *PointingRefFrame* and its
+This test is similar to :ref:`FAIL_noephem_only <fail-noephem_only>` in that only the base :cpp:class:`PointingRefFrame` and its
 associated relative state are computed while still using Ephemeris-based frames. However, this test
 specifically highlights the behavior that happens when a separate model, one dependent on either the
 *Originating-Frame* or *Target-Frame*, activates and deactivates those same Ephemeris-based frames
@@ -1268,114 +1112,24 @@ initialization.
 In this test, the input file acts as a "lurking model" that also depends on the Sun inertial frame.
 At the start of the simulation, this lurking model adds the Sun inertial frame to the Ephemeris tree
 and activates the frame. Although this setup is intended for the lurking model's own functionality,
-it incidentally enables the *PointingRefFrame* to initialize successfully, since the required frame
+it incidentally enables the :cpp:class:`PointingRefFrame` to initialize successfully, since the required frame
 is present in the Ephemeris tree at that time. After initialization, the lurking model deactivates
 the Sun inertial frame, removing it from the Ephemeris tree. To avoid failure at this point, the
-*PointingRefFrame* is also deactivated. Later in the simulation (at t=300000), the lurking model
-reactivates the Sun inertial frame, and the *PointingRefFrame* is re-enabled to test its
+:cpp:class:`PointingRefFrame` is also deactivated. Later in the simulation (at t=300000), the lurking model
+reactivates the Sun inertial frame, and the :cpp:class:`PointingRefFrame` is re-enabled to test its
 functionality using that frame. However, the simulation fails at this point, because the Ephemeris
-tree is not automatically rebuilt upon reactivation of the Sun inertial frame or *PointingRefFrame,*
-unlike the *EphemBasedPointingRefFrame*. As a result, the Earth inertial and Sun inertial frame
+tree is not automatically rebuilt upon reactivation of the Sun inertial frame or :cpp:class:`PointingRefFrame`,
+unlike the :cpp:class:`EphemBasedPointingRefFrame`. As a result, the Earth inertial and Sun inertial frame
 remain disconnected in the Ephemeris tree, failing at the computation of the relative state between
 the two frames. In conclusion, when using Ephemeris-based frames without the
-*EphemBasedPointingRefFrame*, the Ephemeris tree must be rebuilt everytime the model is
+:cpp:class:`EphemBasedPointingRefFrame`, the Ephemeris tree must be rebuilt everytime the model is
 re-subscribed to ensure the *Originating-Frame* and *Target-Frame* are dynamically connected (though
-the recommended approach is to use *EphemBasedPointingRefFrame*, which handles this automatically).
+the recommended approach is to use :cpp:class:`EphemBasedPointingRefFrame`, which handles this automatically).
 
-.. image:: Pictures/1000000100000249000001052560A70AFB72E373.png
-   :width: 4.9563in
-   :height: 2.211in
+.. code-block:: text
 
-.. |image1| image:: Pictures/100000010000018F000000DF06DF524173D534ED.png
-   :width: 2.7846in
-   :height: 1.5563in
-.. |image2| image:: Pictures/1000000100000164000001061A269C53BDB88DDC.png
-   :width: 2.1563in
-   :height: 1.5571in
-.. |image3| image:: Pictures/1000000100000083000000E0639094AA7CA31919.png
-   :width: 0.9138in
-   :height: 1.5634in
-.. |image4| image:: Pictures/1000000100000195000000DC59D20B2409D92066.png
-   :width: 2.1209in
-   :height: 1.152in
-.. |image5| image:: Pictures/1000000100000191000000DFAE2F859BC8FB20BE.png
-   :width: 2.0717in
-   :height: 1.152in
-.. |image6| image:: Pictures/100000010000018E000000DDE662C22D71AD4852.png
-   :width: 2.1283in
-   :height: 1.1508in
-.. |image7| image:: Pictures/10000001000001DD000000D1B52A837B6C2AAAE2.png
-   :width: 3.2744in
-   :height: 1.4346in
-.. |image8| image:: Pictures/10000001000001D7000000D3A2360BA82E855597.png
-   :width: 3.2028in
-   :height: 1.4346in
-.. |image9| image:: Pictures/10000001000001D4000000D1A4486562D6CF8642.png
-   :width: 2.7366in
-   :height: 1.2217in
-.. |image10| image:: Pictures/10000001000001F9000000D87D9BDA5E781C8356.png
-   :width: 2.8736in
-   :height: 1.2291in
-.. |image11| image:: Pictures/10000001000000BA000000D2943A32603F50BFB9.png
-   :width: 1.0799in
-   :height: 1.2189in
-.. |image12| image:: Pictures/100000010000016C000000D293B645E09C668224.png
-   :width: 2.6626in
-   :height: 1.5362in
-.. |image13| image:: Pictures/100000010000016D000000D0FDF51FB2554E0288.png
-   :width: 2.6783in
-   :height: 1.5264in
-.. |image14| image:: Pictures/1000000100000026000000D0A4EF0DA57E0C341D.png
-   :width: 0.2783in
-   :height: 1.5228in
-.. |image15| image:: Pictures/10000001000001DE000000D4B3E6157C5B19F5A8.png
-   :width: 3.2744in
-   :height: 1.4346in
-.. |image16| image:: Pictures/10000001000001D5000000D291C83036BF198253.png
-   :width: 3.2028in
-   :height: 1.4346in
-.. |image17| image:: Pictures/10000001000001D3000000D228CCAC1EDF41FBF1.png
-   :width: 2.7366in
-   :height: 1.2217in
-.. |image18| image:: Pictures/10000001000001F9000000D1D73D577CD342CEE3.png
-   :width: 2.8736in
-   :height: 1.2291in
-.. |image19| image:: Pictures/10000001000000B7000000D10074602451234B57.png
-   :width: 1.0799in
-   :height: 1.2189in
-.. |image20| image:: Pictures/10000001000001DB000000D0D04940CD1EC9EAA4.png
-   :width: 2.7437in
-   :height: 1.2016in
-.. |image21| image:: Pictures/1000000100000206000000D275FBE9EE2DD2FB7F.png
-   :width: 2.9366in
-   :height: 1.1902in
-.. |image22| image:: Pictures/10000001000000AA000000D1CA2B3AECB0D45021.png
-   :width: 0.9689in
-   :height: 1.1902in
-.. |image23| image:: Pictures/1000000100000041000000D23CCCD20D9B328391.png
-   :width: 0.4465in
-   :height: 1.4417in
-.. |image24| image:: Pictures/10000001000001DC000000D01BF6C7A27A47C146.png
-   :width: 3.2744in
-   :height: 1.4346in
-.. |image25| image:: Pictures/10000001000001D5000000D03E7F97D8318F7D81.png
-   :width: 3.2028in
-   :height: 1.4346in
-.. |image26| image:: Pictures/10000001000001D2000000D2BCF442FB1DD84C2A.png
-   :width: 2.7366in
-   :height: 1.2217in
-.. |image27| image:: Pictures/10000001000001F8000000D1C614C2C7D9AFB138.png
-   :width: 2.8736in
-   :height: 1.2291in
-.. |image28| image:: Pictures/10000001000000BA000000D301764F87AA10E74D.png
-   :width: 1.0799in
-   :height: 1.2189in
-.. |image29| image:: Pictures/1000000100000165000000D0F8A66EC2A63F5734.png
-   :width: 2.6626in
-   :height: 1.5362in
-.. |image30| image:: Pictures/1000000100000160000000D15068E4826945D7FC.png
-   :width: 2.6783in
-   :height: 1.5264in
-.. |image31| image:: Pictures/100000010000001E000000D1C0A6562BB1C7221E.png
-   :width: 0.2783in
-   :height: 1.5228in
+   *********************************************************************
+   Terminal error.  Sun.inertial is not in tree.
+   Even though sun.inertial is newly active, the Ephemeris tree has not
+   been rebuilt, so the frame does not exist in the tree.
+   *********************************************************************

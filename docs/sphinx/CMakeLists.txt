@@ -22,9 +22,15 @@ if (TARGET Doxygen::doxygen AND Sphinx_FOUND)
             contributing/coding-standards.rst
             contributing/contributing.rst
             contributing/getting-started.rst
+            models/dynamics/index.rst
             models/dynamics/pointing-ref-frame.rst
+            models/environment/index.rst
+            models/fhw/index.rst
+            models/interactions/index.rst
+            models/tools/index.rst
             models/utilities/index.rst
             models/utilities/subscriptions.rst
+            models/vehicle_management/index.rst
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating documentation with Sphinx"
     )
