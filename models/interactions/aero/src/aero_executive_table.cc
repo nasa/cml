@@ -345,6 +345,7 @@ AeroExecutiveTable::configure_new_table( AeroTableSetBase * new_table)
       "it. If this error is reached, something is behaving unexpectedly.\n"
       "Terminating");
       // Exit here!!
+    return;
   }
 
   // Turn off the current table

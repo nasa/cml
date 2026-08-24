@@ -1645,6 +1645,7 @@ StateInitialize::overwrite_attitude_from_free_stream(
     CMLMessage::fail(
       __FILE__, __LINE__, "Invalid configuration\n",
       "The subject provided must be a valid DynBody.");
+    return;
   }
   dyn_body->set_attitude_matrix(rot_init.orientation.trans,
                                 dyn_body->composite_body);

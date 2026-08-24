@@ -261,7 +261,7 @@ RocketMotor_TableThrust::load_time_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_time_data(
-    std::vector<double> & data)
+    const std::vector<double> & data)
 {
   table_time.load_data( data);
 }

@@ -69,7 +69,7 @@ set_param
 Purpose:(Generic method for setting fault parameters. This base method is
          called if the child class does not recognize the parameter name.)
 *******************************************************************************/
-bool Fault::set_param( std::string param_name,
+bool Fault::set_param( const std::string& param_name,
                        double,
                        bool)
 {

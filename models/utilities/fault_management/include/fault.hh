@@ -41,7 +41,7 @@ friend class FaultManager;
 
     void add_trigger_group(TriggerGroup& trigger_group);
 
-    virtual bool set_param(std::string param_name,
+    virtual bool set_param(const std::string& param_name,
                            double value,
                            bool reset_nominal = false);
 

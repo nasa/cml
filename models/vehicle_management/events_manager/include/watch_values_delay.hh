@@ -42,7 +42,7 @@ class WatchValuesDelay : public WatchValuesBase<watchType>
   bool reset_delay; /* (--)
     Flag to reset the delay, set from another watch values delay typically.*/
 
-  WatchValuesDelay( const double & delay_ref_)
+  explicit WatchValuesDelay( const double & delay_ref_)
     :
     WatchValuesBase<watchType>(),
     delay_ref( delay_ref_),

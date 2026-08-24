@@ -256,7 +256,7 @@ template<> class Trigger<bool> : public TriggerBase {
     ~Trigger() override = default;
 
     bool compare() override { return (value == variable); }
-    bool value; /* (--)
+    bool value {false}; /* (--)
       The value to which the trigger variable is compared. */
 
     void set_value( double val) override

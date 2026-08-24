@@ -37,7 +37,7 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
     void initialize() override;
     void reset() override;
     void overwrite_value() override = 0;
-    bool set_param(std::string param_name,
+    bool set_param(const std::string& param_name,
                    double value,
                    bool modify_nominal_with_rate = false) override;
 

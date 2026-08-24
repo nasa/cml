@@ -35,7 +35,7 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
       Instance of the interpolator.*/
  public:
   SingleInputTableForQuaternions( );
-  SingleInputTableForQuaternions( jeod::Quaternion & quat);
+  explicit SingleInputTableForQuaternions( jeod::Quaternion & quat);
   SingleInputTableForQuaternions( double *dependent_variables,
                                   size_t num_vars);
   explicit SingleInputTableForQuaternions(

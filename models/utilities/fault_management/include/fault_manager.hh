@@ -13,6 +13,7 @@ PROGRAMMERS:
 #define CML_FAULT_MANAGER_HH
 
 #include <list>
+#include <string>
 #include "trick/MemoryManager.hh" // REF2, trick_MM
 #include "fault.hh"
 #include "fault_bias.hh"
@@ -56,7 +57,7 @@ class FaultManager {
     static const unsigned int Location_count = 5; /* (--)
       The number of possible Locations. INVALID doesn't count. */
     static Location translate_location(const char* str);
-    static Location translate_location(const std::string str) {
+    static Location translate_location(const std::string& str) {
       return translate_location(str.c_str());
     }
 #endif
@@ -71,21 +72,21 @@ class FaultManager {
     void update(const Location& location);
 #endif
 
-    Fault* get_fault(std::string name);
-    TriggerBase* get_trigger(std::string name);
+    Fault* get_fault(const std::string& name);
+    TriggerBase* get_trigger(const std::string& name);
 
-    bool set_fault_enabled(std::string fault_name, bool enable_flag);
-    bool set_fault_trigger_enabled( std::string fault_name,
-                                    std::string trigger_name,
+    bool set_fault_enabled(const std::string& fault_name, bool enable_flag);
+    bool set_fault_trigger_enabled( const std::string& fault_name,
+                                    const std::string& trigger_name,
                                     bool enable_flag);
 
-    bool set_fault_param( std::string fault_name,
-                          std::string param_name,
+    bool set_fault_param( const std::string& fault_name,
+                          const std::string& param_name,
                           double value,
                           bool modify_nominal_with_rate = false);
 
-    bool set_trigger_value(std::string trigger_name, double value);
-    void unset_trigger_count( std::string trigger_name);
+    bool set_trigger_value(const std::string& trigger_name, double value);
+    void unset_trigger_count( const std::string& trigger_name);
 
   protected:
     void parse();

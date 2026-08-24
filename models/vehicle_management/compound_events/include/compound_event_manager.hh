@@ -17,6 +17,7 @@ PROGRAMMERS:
 #include "compound_event.hh"
 #include "event_trigger.hh"
 #include "trick/memorymanager_c_intf.h" //used for ref_attributes()
+#include <utility>
 
 class CompoundEventsManager : public VehicleEventsManager
 {
@@ -81,7 +82,7 @@ class CompoundEventsManager : public VehicleEventsManager
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
     new_trigger->comparison_logic = comparison;
-    new_trigger->name = name;
+    new_trigger->name = std::move(name);
     new_trigger->SubscriptionBase::initialize();
     return *new_trigger;
   }
@@ -97,20 +98,20 @@ class CompoundEventsManager : public VehicleEventsManager
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
     new_trigger->comparison_logic = comparison;
-    new_trigger->name = name;
+    new_trigger->name = std::move(name);
     new_trigger->SubscriptionBase::initialize();
     return *new_trigger;
   }
 
   template <typename T>
-  EventTrigger<T>& create_trigger(const std::string var_name,
+  EventTrigger<T>& create_trigger(const std::string& var_name,
                                   T ref,
                                   EventTriggerBase::TriggerCondition comparison,
-                                  std::string name = "")
+                                  const std::string & name = "")
   {
     T* var = address_from_name(var_name, ref);
-    T& var_ref = *var;
     if (var != nullptr) {
+      T& var_ref = *var;
       return create_trigger(var_ref, ref, comparison, name);
     }
     else {
@@ -121,14 +122,14 @@ class CompoundEventsManager : public VehicleEventsManager
   }
 
   template <typename T>
-  EventTrigger<T>& create_trigger(const std::string var_name,
+  EventTrigger<T>& create_trigger(const std::string& var_name,
                                   T * ref,
                                   EventTriggerBase::TriggerCondition comparison,
-                                  std::string name = "")
+                                  const std::string & name = "")
    {
     T* var = address_from_name(var_name, *ref);
-    T& var_ref = *var;
     if (var != nullptr) {
+      T& var_ref = *var;
       return create_trigger(var_ref, ref, comparison, name);
     }
     else {
@@ -149,7 +150,7 @@ class CompoundEventsManager : public VehicleEventsManager
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
     new_trigger->set_direction( direction);
-    new_trigger->name = name;
+    new_trigger->name = std::move(name);
     new_trigger->SubscriptionBase::initialize();
     return *new_trigger;
   }
@@ -165,7 +166,7 @@ class CompoundEventsManager : public VehicleEventsManager
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
     new_trigger->set_direction( direction);
-    new_trigger->name = name;
+    new_trigger->name = std::move(name);
     new_trigger->SubscriptionBase::initialize();
     return *new_trigger;
   }
@@ -185,7 +186,7 @@ class CompoundEventsManager : public VehicleEventsManager
 
 
   template <typename T>
-  T* address_from_name(const std::string var_name, T ref)
+  T* address_from_name(const std::string & var_name, T ref)
   {
     // Used for create_trigger(const std::string...)
     // Returns a pointer to the variable specified by var_name, or nullptr if existence checks don't pass.

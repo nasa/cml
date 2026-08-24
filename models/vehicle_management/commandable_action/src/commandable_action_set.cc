@@ -30,7 +30,7 @@ Programmers:
 *******************************************************************************/
 
 #include "../include/commandable_action_set.hh"
-
+#include <utility>
 
 /*****************************************************************************
 Constructors
@@ -46,7 +46,7 @@ CommandableActionSet::CommandableActionSet (std::string name_)
   :
   CommandableActionSet()
 {
-  name= name_;
+  name = std::move(name_);
 }
 
 /*****************************************************************************

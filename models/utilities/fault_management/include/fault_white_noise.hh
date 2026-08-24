@@ -23,7 +23,7 @@ template<typename T> class FaultWhiteNoise : public Fault {
 
     void overwrite_value() override;
 
-    bool set_param(std::string param_name, double value, bool b) override;
+    bool set_param(const std::string& param_name, double value, bool b) override;
 
     FaultRandNumber noise; /* (--) Random number generator. */
 
@@ -55,7 +55,7 @@ Purpose:(Generic method for setting fault parameters. For this type of fault,
          can be used to set parameters of the random number generator.)
 *******************************************************************************/
 template<typename T>
-bool FaultWhiteNoise<T>::set_param(std::string param_name, double value, bool) {
+bool FaultWhiteNoise<T>::set_param(const std::string& param_name, double value, bool) {
   if (param_name.compare("mean") == 0) {
     noise.mean = value;
   } else if (param_name.compare("std_dev") == 0) {

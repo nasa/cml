@@ -109,7 +109,7 @@ public:
   void load_mburn_data( std::vector<double> & data);
   void load_time_data(  double * data,
                         size_t   num_elements);
-  void load_time_data(  std::vector<double> & data);
+  void load_time_data(  const std::vector<double> & data);
 
   void initialize() override;
   void update() override;

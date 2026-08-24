@@ -22,7 +22,7 @@ template<typename T> class FaultScale : public Fault {
 
     void overwrite_value() override;
 
-    bool set_param(std::string param_name, double value, bool) override;
+    bool set_param(const std::string& param_name, double value, bool) override;
 
     T scale_factor; /* (--)
       The scale value to apply to the variable when it's faulted. */
@@ -57,7 +57,7 @@ Purpose:(Generic method for setting parameters. For this type of fault, can be
          used to set the scale value.)
 *******************************************************************************/
 template<typename T>
-bool FaultScale<T>::set_param(std::string param_name, double value, bool) {
+bool FaultScale<T>::set_param(const std::string& param_name, double value, bool) {
   if (param_name.compare("scale_factor") == 0) {
     scale_factor = value;
   } else {

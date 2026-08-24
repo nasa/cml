@@ -33,7 +33,7 @@ class LaggedAtmosWind {
     Set of data interpolated from the history at the specified altitude.*/
 
   LaggedAtmosWind();
-  LaggedAtmosWind( const std::string& name);
+  explicit LaggedAtmosWind( const std::string& name);
   virtual ~LaggedAtmosWind() = default;
 
 
