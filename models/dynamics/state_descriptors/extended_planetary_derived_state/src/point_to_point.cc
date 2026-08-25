@@ -198,7 +198,7 @@ PointToPointManager::add_point(
   const std::string & pt_name,
   double pt_pos[3],
   std::list<PointToPointElement> & element_list,
-  std::string list_type)
+  const std::string & list_type)
 {
   // pt_pos is checked for NULL on the passthrough when creating the new
   // element.

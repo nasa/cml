@@ -149,7 +149,7 @@ class PointToPointManager
   void add_point( const std::string & pt_name,
                   double      pt_pos[3],
                   std::list< PointToPointElement>  & element_list,
-                  std::string list_type);
+                  const std::string & list_type);
 
   // copy-constructor, operator= both declared private and unimplemented.
   PointToPointManager ( const PointToPointManager &);

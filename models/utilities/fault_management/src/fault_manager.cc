@@ -12,6 +12,7 @@ PROGRAMMERS:
 #include <cstdlib> // strtod, strtol, etc.
 #include <cstring> // strcmp
 #include <cmath>   // abs
+#include <unordered_map>
 #include <libxml/parser.h> // xmlParseFile, xmlNodePtr
 #include "cml/models/utilities/convert_string/include/convert_string.hh"
 
@@ -49,17 +50,18 @@ FaultManager::~FaultManager() {
 translate_location
 Purpose:(Translates a string into a Location.)
 *******************************************************************************/
-FaultManager::Location FaultManager::translate_location( const char* str) {
-  if (strcmp(str, "INIT") == 0) {
-    return Location::Initialize;
-  } else if (strcmp(str, "UPSTREAM") == 0) {
-    return Location::Upstream;
-  } else if (strcmp(str, "INTERMEDIATE_1") == 0) {
-    return Location::Intermediate_1;
-  } else if (strcmp(str, "INTERMEDIATE_2") == 0) {
-    return Location::Intermediate_2;
-  } else if (strcmp(str, "DOWNSTREAM") == 0) {
-    return Location::Downstream;
+FaultManager::Location FaultManager::translate_location(const std::string& str) {
+  static const std::unordered_map<std::string, Location> location_map {
+    {"INIT", Location::Initialize},
+    {"UPSTREAM", Location::Upstream},
+    {"INTERMEDIATE_1", Location::Intermediate_1},
+    {"INTERMEDIATE_2", Location::Intermediate_2},
+    {"DOWNSTREAM", Location::Downstream}
+  };
+
+  const auto location = location_map.find(str);
+  if (location != location_map.end()) {
+    return location->second;
   } else {
     return Location::INVALID;
   }

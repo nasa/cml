@@ -324,9 +324,9 @@ Note:
      within the file.
 *****************************************************************************/
 bool
-LookupAtmosWinds::load_DRWP_file( std::string  drwpFileName_,
-                                  bool         contains_vertical_component_,
-                                  unsigned int wind_number_)
+LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
+                                  bool               contains_vertical_component_,
+                                  unsigned int       wind_number_)
 {
   if (!enabled) return false;
 

@@ -165,8 +165,8 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
 Purpose:(Applies an impulse at a MassPoint for parent and subject bodies)
 *******************************************************************************/
 void
-MassBodyDetachImpulsive::apply_impulse( jeod::DynBody          & dyn_body,
-                                        std::string  mass_point_name)
+MassBodyDetachImpulsive::apply_impulse( jeod::DynBody     & dyn_body,
+                                        const std::string & mass_point_name)
 {
   const jeod::MassPoint * mass_point = dyn_body.mass.find_mass_point(mass_point_name);
   if (mass_point == nullptr) {

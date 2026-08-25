@@ -61,15 +61,15 @@ class CompoundEventsManager : public VehicleEventsManager
   CompoundEvent& create_event();
   void add_trigger(WatchValuesBaseCore* new_trigger);
 
-  WatchValuesBaseCore * get_trigger(std::string name);
+  WatchValuesBaseCore * get_trigger(const std::string & name);
   void set_trigger_dbl_reference(WatchValuesBaseCore & trigger, double ref);
-  void set_trigger_dbl_reference(std::string name, double ref);
+  void set_trigger_dbl_reference(const std::string & name, double ref);
 
   // void set_trigger_comparison_logic(WatchValuesBaseCore * trigger, double ref);
   // void set_trigger_comparison_logic(std::string name, double ref);
 
   void set_trigger_delay_offset(WatchValuesBaseCore & trigger, double ref);
-  void set_trigger_delay_offset(std::string name, double ref);
+  void set_trigger_delay_offset(const std::string & name, double ref);
 
   template <typename T>
   EventTrigger<T>& create_trigger(const T & var,

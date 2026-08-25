@@ -51,12 +51,12 @@ class LvlhSeparationState : public SeparationState
   explicit LvlhSeparationState(jeod::LvlhFrame & lvlh);
   ~LvlhSeparationState() override;
 
-  void initialize ( jeod::DynManager & dyn_manager,
-                    std::string planet_name,
-                    jeod::DynBody   & subject_body,
-                    jeod::DynBody   & source_body,
-                    std::string subject_name = "",
-                    std::string source_name = "");
+  void initialize ( jeod::DynManager  & dyn_manager,
+                    const std::string & planet_name,
+                    jeod::DynBody     & subject_body,
+                    jeod::DynBody     & source_body,
+                    const std::string & subject_name = "",
+                    const std::string & source_name = "");
 
   void initialize ( jeod::DynManager   & dyn_manager,
                     jeod::BasePlanet   & planet,

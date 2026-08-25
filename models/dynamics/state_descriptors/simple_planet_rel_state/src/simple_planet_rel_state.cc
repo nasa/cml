@@ -16,8 +16,8 @@ PROGRAMMERS:
 Constructor
 *****************************************************************************/
 SimplePlanetRelState::SimplePlanetRelState(
-     const std::string body_frame_name_,
-     const std::string planet_frame_name_)
+     const std::string & body_frame_name_,
+     const std::string & planet_frame_name_)
   :
   SubscriptionBase(),
   RelativeDerivedState(),

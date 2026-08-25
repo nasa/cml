@@ -1019,7 +1019,7 @@ bool
 GenericMultiInputTable::index_checks(
         size_t & ix_start,
         size_t & ix_stop,
-        std::string func)
+        const std::string & func)
 {
   // Note - data_loaded implies data.size() > 0.
   if (!data_loaded) {
