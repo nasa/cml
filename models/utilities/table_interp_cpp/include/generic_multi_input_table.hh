@@ -119,7 +119,7 @@ class GenericMultiInputTable
   virtual bool generate_output();
   bool precheck_output();
   void generate_trivial_output();
-  bool index_checks(size_t & idx1, size_t & idx2, std::string func);
+  bool index_checks(size_t & idx1, size_t & idx2, const std::string & func);
 
  private:
   bool load_data_internal_check( const SizeVec &dim_list );

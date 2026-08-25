@@ -106,7 +106,7 @@ AeroExecutiveTable::change_table( unsigned int new_ix)
 }
 /******************************************************************************/
 void
-AeroExecutiveTable::change_table( std::string new_name)
+AeroExecutiveTable::change_table( const std::string & new_name)
 {
   // Check trivial case - change commanded to current table.
   if (current_table != nullptr) {

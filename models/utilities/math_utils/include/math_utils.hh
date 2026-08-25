@@ -94,7 +94,7 @@ public:
   // passed in, along with the size of 1 dimension of the array (e.g. 6x6 array
   // is sized "6").  An optional 5th argument allows processing a smaller
   // sub-matrix.
-  static bool cholesky_decomposition( std::string caller_id,
+  static bool cholesky_decomposition( const std::string & caller_id,
                                       const double * in_array,
                                       double * out_array,
                                       size_t size_in,

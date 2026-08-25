@@ -121,7 +121,7 @@ Purpose:
   Returns a trigger based on its name.
 *****************************************************************************/
 WatchValuesBaseCore *
-CompoundEventsManager::get_trigger(std::string name)
+CompoundEventsManager::get_trigger(const std::string & name)
 {
   auto it = std::find_if( managed_triggers.begin(), managed_triggers.end(),
                           [name](WatchValuesBaseCore * trigger_) {
@@ -152,7 +152,7 @@ CompoundEventsManager::set_trigger_dbl_reference(
 /****************************************************************************/
 void
 CompoundEventsManager::set_trigger_dbl_reference(
-  std::string name,
+  const std::string & name,
   double ref)
 {
   WatchValuesBaseCore * trigger = CompoundEventsManager::get_trigger(name);
@@ -191,7 +191,7 @@ CompoundEventsManager::set_trigger_delay_offset(
 /****************************************************************************/
 void
 CompoundEventsManager::set_trigger_delay_offset(
-  std::string name,
+  const std::string & name,
   double ref)
 {
   WatchValuesBaseCore * trigger = CompoundEventsManager::get_trigger(name);

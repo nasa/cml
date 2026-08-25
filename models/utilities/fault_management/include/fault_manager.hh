@@ -56,10 +56,7 @@ class FaultManager {
     };
     static const unsigned int Location_count = 5; /* (--)
       The number of possible Locations. INVALID doesn't count. */
-    static Location translate_location(const char* str);
-    static Location translate_location(const std::string& str) {
-      return translate_location(str.c_str());
-    }
+    static Location translate_location(const std::string& str);
 #endif
 
     ////    Operations    ////

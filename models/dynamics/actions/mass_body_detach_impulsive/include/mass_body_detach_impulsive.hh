@@ -70,8 +70,8 @@ class MassBodyDetachImpulsive : public jeod::BodyAction {
     void apply (jeod::DynManager & dyn_manager) override;
 
   protected:
-    virtual void apply_impulse( jeod::DynBody          & dyn_body,
-                                std::string  mass_point_name);
+    virtual void apply_impulse( jeod::DynBody     & dyn_body,
+                                const std::string &  mass_point_name);
 
   private:
     // not implemented

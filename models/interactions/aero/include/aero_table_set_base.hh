@@ -151,7 +151,7 @@ protected:
   void query_aero_damping();
   void query_on_diag_aero_damping();
   void query_off_diag_aero_damping();
-  AeroDampingType verify_aero_damping(std::string type);
+  AeroDampingType verify_aero_damping(const std::string & type);
 
 private:
   // Make the copy constructor and assignment operator private

@@ -18,7 +18,9 @@
 #     To be added in a future pull request
 #
 # performance:
-#     To be added in a future pull request
+#     performance-enum-size:
+#         May enable in the future, but doesn't really buy us anything and might
+#         not play well with SWIG.
 #
 # portability:
 #     To be added in a future pull request
@@ -27,7 +29,9 @@
 #     To be added in a future pull request
 Checks: >
     clang-*,
-    -clang-analyzer-optin.performance.Padding
+        -clang-analyzer-optin.performance.Padding,
+    performance-*,
+        -performance-enum-size
 
 WarningsAsErrors: '*'
 

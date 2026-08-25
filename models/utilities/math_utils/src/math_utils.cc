@@ -646,7 +646,7 @@ Purpose:( Effectively takes the square root of a matrix such that
             enough to hold the generated array.)
 *******************************************************************************/
 bool
-MathUtils::cholesky_decomposition ( std::string origin,
+MathUtils::cholesky_decomposition ( const std::string & origin,
                                     const double * in_array,
                                     double * out_array,
                                     size_t   dimension_in,
