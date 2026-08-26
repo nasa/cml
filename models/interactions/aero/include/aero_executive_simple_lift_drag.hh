@@ -13,7 +13,8 @@ PROGRAMMERS:
 #define CML_AERO_EXECUTIVE_SIMPLE_LIFT_DRAG_HH
 
 #include "aero_executive_base.hh"
-#include "cml/models/interactions/aero/include/aero_interface_output.hh"
+
+class AeroInterfaceOutput;
 
 /*******************************************************************************
 AeroExecutiveSimpleLiftDrag

@@ -16,7 +16,7 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/quaternion/include/quat.hh" // jeod::Quaternion
+#include "jeod/models/utils/quaternion/include/quat.hh"
 #include <algorithm>
 #include <cstddef>
 

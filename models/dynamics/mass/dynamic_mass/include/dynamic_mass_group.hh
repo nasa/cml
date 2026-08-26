@@ -52,7 +52,10 @@ PROGRAMMERS:
 
 #include "dynamic_mass_body.hh"
 #include "dynamic_mass_string.hh"
-#include "jeod/models/dynamics/mass/include/mass.hh"
+
+namespace jeod {
+class MassBody;
+}
 
 class DynamicMassGroup : public SubscriptionBase {
  public:

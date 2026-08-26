@@ -26,14 +26,14 @@ PROGRAMMERS:
 #define CML_IMPACT_POINT_HH
 
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
-#include "jeod/models/environment/planet/include/planet.hh"
 #include "cml/models/dynamics/state_descriptors/range/include/range_from_pfix_reference.hh"
 #include "cml/models/dynamics/state_descriptors/orb_elem_subset/include/orb_elem_subset.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
-// Forward declaration
+namespace jeod {
+class Planet;
 class RefFrameTrans;
+}
 
 class ImpactPoint : public jeod::PlanetFixedPosition, 
                     public SubscriptionBase 

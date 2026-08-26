@@ -8,8 +8,8 @@ PROGRAMMERS:
 #ifndef CML_WATCH_VALUES_BASE_MULTI_HH
 #define CML_WATCH_VALUES_BASE_MULTI_HH
 
-#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 #include "watch_values_base.hh"
+#include "watch_values_base_core.hh"
 #include <list>
 
 template <typename A, typename B>

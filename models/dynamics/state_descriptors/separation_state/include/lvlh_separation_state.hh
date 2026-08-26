@@ -15,14 +15,17 @@ PROGRAMMERS:
 #ifndef CML_LVLH_SEPARATION_STATE_HH
 #define CML_LVLH_SEPARATION_STATE_HH
 
-#include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
-#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
-#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
-#include "jeod/models/environment/planet/include/base_planet.hh"
 #include "jeod/models/utils/lvlh_frame/include/lvlh_frame.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "separation_state.hh"
 #include <string>
+
+namespace jeod {
+class BasePlanet;
+class BodyRefFrame;
+class DynBody;
+class DynManager;
+class RefFrame;
+}
 
 class LvlhSeparationState : public SeparationState
 {

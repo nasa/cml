@@ -42,7 +42,10 @@ PROGRAMMERS:
 #include <string>
 
 #include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameters.hh" // TargetRelative_StateParameter
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
+
+namespace jeod {
+class RefFrameState;
+}
 
 
 class CorrelatedStateDispersion {

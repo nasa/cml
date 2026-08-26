@@ -19,12 +19,12 @@ Programmers:
 #define CML_RANGE_COMPUTATION_HH
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 #include "pfix_reference_point.hh"
 
 namespace jeod {
 class RefFrameTrans;
 class Planet;
+class PlanetFixedPosition;
 }
 
 /*****************************************************************************

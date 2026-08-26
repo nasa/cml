@@ -18,7 +18,8 @@ PROGRAMMERS:
 
 #include "aero_interface_base_extended.hh"
 #include "aero_executive_table.hh"
-#include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
+
+class AtmosRelativeState;
 
 /*******************************************************************************
 AeroInterfaceTable

@@ -16,7 +16,8 @@ PROGRAMMERS:
 
 #include "aero_interface_base.hh"
 #include "aero_executive_simple.hh"
-#include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
+
+class AtmosRelativeState;
 
 /*******************************************************************************
 AeroInterfaceSimple

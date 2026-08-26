@@ -14,8 +14,6 @@ PROGRAMMERS:
 #ifndef CML_WAKE_BODIES_HH
 #define CML_WAKE_BODIES_HH
 
-
-
 /*****************************************************************************
 WakeGeneratingBody
 Purpose:(The body that is generating the wake)

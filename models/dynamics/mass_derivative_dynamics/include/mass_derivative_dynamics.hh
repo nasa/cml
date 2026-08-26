@@ -15,12 +15,15 @@ PROGRAMMERS:
 #define CML_MASS_DERIVATIVE_DYNAMICS_HH
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "jeod/models/dynamics/mass/include/mass_properties.hh"
-#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 
 #include <cstddef>
 #include <vector>
 #include <list>
+
+namespace jeod {
+class DynBody;
+class MassProperties;
+}
 
 /*****************************************************************************
 MassDerivativeDynamics

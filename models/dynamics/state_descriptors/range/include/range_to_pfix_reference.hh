@@ -17,10 +17,11 @@ Programmers:
 #ifndef CML_RANGE_TO_PFIX_REFERENCE_HH
 #define CML_RANGE_TO_PFIX_REFERENCE_HH
 
-#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 #include "range_computation.hh"
 
+namespace jeod {
 class PlanetFixedPosition;
+}
 
 class RangeToPfixReference : public RangeComputation
 {

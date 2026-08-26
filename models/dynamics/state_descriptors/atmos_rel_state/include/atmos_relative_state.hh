@@ -31,12 +31,14 @@ PROGRAMMERS:
 #ifndef CML_ATMOS_RELATIVE_STATE_HH
 #define CML_ATMOS_RELATIVE_STATE_HH
 
-#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
-#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_interface.hh"
-#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
 
+namespace jeod {
+class DynBody;
+}
+class AtmosphereExecInterface;
+class AtmosExecOutput;
+class ExtendedPlanetaryDerivedState;
 
 class AtmosRelativeState : public SubscriptionBase
 {

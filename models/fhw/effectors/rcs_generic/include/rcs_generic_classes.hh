@@ -1,5 +1,0 @@
-#ifndef CML_RCS_GENERIC_CLASSES_HH
-#define CML_RCS_GENERIC_CLASSES_HH
-
-
-#endif

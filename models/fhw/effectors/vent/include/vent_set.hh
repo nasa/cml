@@ -13,7 +13,7 @@ PROGRAMMERS:
 #define CML_VENT_SET_HH
 
 #include <cstddef>
-#include <vector> // vector
+#include <vector>
 #include <list>
 #include "jeod/models/dynamics/dyn_body/include/class_declarations.hh"
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
