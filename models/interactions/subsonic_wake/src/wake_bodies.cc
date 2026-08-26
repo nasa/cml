@@ -9,8 +9,8 @@ PROGRAMMERS:
 **********************************************************************/
 
 #include <cmath> // sqrt
-#include <cstring> // NULL
 #include <limits> // numeric_limits<double>::min
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "../include/wake_bodies.hh"

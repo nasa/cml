@@ -11,9 +11,12 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <cmath>  /* abs */
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
 
+#include "../include/TR_state_param.hh"
+#include "../include/TR_state_parameter_set.hh"
 #include "../include/TR_state_parameters.hh"
 
 

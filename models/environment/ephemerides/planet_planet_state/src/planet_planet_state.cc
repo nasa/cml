@@ -18,8 +18,10 @@ PROGRAMMERS:
 
 ********************************************************************************/
 
-#include <cstring> // NULL
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 #include "../include/planet_planet_state.hh"
 

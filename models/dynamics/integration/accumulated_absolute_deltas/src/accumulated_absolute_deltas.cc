@@ -12,6 +12,8 @@ PROGRAMMERS:
 #include <new>
 
 #include "../include/accumulated_absolute_deltas.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 /*****************************************************************************
 Constructor

@@ -10,8 +10,14 @@ PROGRAMMERS:
 ********************************************************************************/
 
 #include "../include/lvlh_separation_state.hh"
+#include "../include/separation_state.hh"
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
+#include "jeod/models/environment/planet/include/base_planet.hh"
+#include <string>
 
 /*****************************************************************************
 Constructor

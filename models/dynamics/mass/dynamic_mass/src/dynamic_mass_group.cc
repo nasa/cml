@@ -9,10 +9,15 @@ PROGRAMMERS:
                       (Refactor to utilize new CML capabilities))
    )
 *******************************************************************************/
-#include <cstring> // NULL
+#include <list>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_items.hh"
 
+#include "../include/dynamic_mass_body.hh"
 #include "../include/dynamic_mass_group.hh"
+#include "../include/dynamic_mass_string.hh"
 
 /*******************************************************************************
 Method: DynamicMassGroup

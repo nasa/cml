@@ -6,6 +6,7 @@
 ***********************************************************************/
 
 #include "../include/subscriptions.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 subscribe

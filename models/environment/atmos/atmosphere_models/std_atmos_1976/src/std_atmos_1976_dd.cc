@@ -19,9 +19,9 @@ PROGRAMMERS:
 ********************************************************************************/
 
 #include <cmath>
+#include <cstddef>
 #include <iterator> // std::size for C-style arrays
 
-#include "trick/trick_math.h"  //for M_PI
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "../include/std_atmos_1976.hh"

@@ -7,6 +7,7 @@ Programmers:
 
 *******************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 

@@ -10,6 +10,7 @@ PROGRAMMERS:
 #include <cmath>
 #include "../include/quaternion_spherical_interpolator.hh"
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 

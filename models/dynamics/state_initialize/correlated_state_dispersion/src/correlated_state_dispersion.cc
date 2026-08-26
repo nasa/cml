@@ -8,10 +8,15 @@ PROGRAMMERS:
                Trick rand_num, added option for user-input dispersions)))
 ************************************************************************/
 
-#include <cstring>  // memset
-#include <cmath>    // sqrt
-#include "jeod/models/utils/math/include/vector3.hh"    // jeod::Vector3::*
-#include "jeod/models/utils/math/include/matrix3x3.hh"  // jeod::Matrix3x3::*
+#include <cmath>
+#include <random>
+#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameter_set.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "../include/correlated_state_dispersion.hh"
 

@@ -16,8 +16,14 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "../include/mass_body_composite_dispersions.hh"
+#include "../include/mass_properties_dispersions.hh"
 
 #include "cml/models/dynamics/mass/mass_body_distribute_comp_to_core/include/mass_body_distribute_comp_to_core.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/body_action/include/body_action.hh"
+#include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 /*******************************************************************************
 Constructor

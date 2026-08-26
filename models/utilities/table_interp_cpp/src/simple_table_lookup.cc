@@ -12,9 +12,14 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <vector>
 
+#include "../include/abstract_table_lookup.hh"
 #include "../include/simple_table_lookup.hh"
+#include "../include/table_independent_variable.hh"
+#include "../include/table_type_defs.hh"
 
 
 /********************************************************************************

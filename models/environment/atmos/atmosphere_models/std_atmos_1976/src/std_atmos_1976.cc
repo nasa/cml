@@ -32,6 +32,7 @@ PROGRAMMERS:
 
 #include <cmath>
 #include <algorithm>
+#include <cstddef>
 #include <iterator>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

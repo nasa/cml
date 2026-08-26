@@ -12,8 +12,10 @@ PROGRAMMERS:
 *******************************************************************************/
 #include "../include/TR_parameter_ref_frame.hh"
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include <cmath>
+#include <string>
 #include <utility>
 
 /*****************************************************************************

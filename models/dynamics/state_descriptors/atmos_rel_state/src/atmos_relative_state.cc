@@ -41,8 +41,9 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <cmath>   // M_PI, isnan
-#include <cstring> // NULL
-#include "trick/constant.h" // conversions like RTD, LBFTON, MTF
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_interface.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/orientation/include/orientation.hh" // Orientation
 #include "jeod/models/utils/math/include/vector3.hh"    // Vector3
 #include "jeod/models/utils/math/include/matrix3x3.hh"  // Matrix3x3

@@ -8,7 +8,9 @@ PROGRAMMERS:
 ############################################################################*/
 
 #include "../include/fault.hh"
+#include "../include/trigger_group.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 /*****************************************************************************
 Constructor

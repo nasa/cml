@@ -8,7 +8,10 @@ PROGRAMMERS:
 *****************************************************************************/
 
 #include "../include/eclipse_calculator.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "jeod/models/utils/math/include/vector3.hh" // vmag
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 /*****************************************************************************
 Constructor

@@ -10,6 +10,10 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "../include/constraint.hh"
+#include "../include/constraint_enum.hh"
+#include "../include/constraint_test.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
 
 
 /*****************************************************************************

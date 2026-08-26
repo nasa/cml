@@ -8,6 +8,9 @@ PROGRAMMERS:
     )
 ******************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 #include "../include/monte_carlo_state_dispersion.hh"

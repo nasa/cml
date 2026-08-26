@@ -11,10 +11,12 @@ Author:
 
 #include "../include/lagged_atmos_wind.hh"
 
-#include "jeod/models/utils/math/include/vector3.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include <cstddef>
+#include <iterator>
 #include <string>
 /*****************************************************************************
 Constructors

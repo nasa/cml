@@ -11,6 +11,8 @@ PROGRAMMERS:
 #include <cstddef>
 
 #include "../include/generic_multi_input_table.hh"
+#include "../include/table_independent_variable.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 // NOTE - using [index] rather than .at(index) to index STL-vectors primarily
 //        because doing so is much faster.

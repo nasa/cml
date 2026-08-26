@@ -5,13 +5,16 @@ PROGRAMMERS:
   (((Jeremy Rea) (NASA) (March 2025) (Antares) (initial version, based on AeroExecutiveSimple)))
 *******************************************************************************/
 
-#include <cstring>  // NULL
+#include <cmath>
+#include <cstdlib>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"  // Matrix3x3
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include "../include/aero_executive_base.hh"
 #include "../include/aero_executive_simple_lift_drag.hh"
+#include "../include/aero_interface_output.hh"
 
 /*******************************************************************************
 Constructor:

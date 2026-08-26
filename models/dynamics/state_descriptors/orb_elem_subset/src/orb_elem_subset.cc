@@ -14,6 +14,8 @@ PROGRAMMERS:
 
 #include <cmath>
 #include "jeod/models/environment/planet/include/planet.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "../include/orb_elem_subset.hh"
 

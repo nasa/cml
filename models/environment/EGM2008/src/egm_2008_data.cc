@@ -11,6 +11,7 @@ PROGRAMMERS:
 // Local header:
 #include "../include/egm_2008.hh"
 
+#include <cstddef>
 #include <vector>
 
 /*****************************************************************************

@@ -27,6 +27,12 @@ PROGRAMMERS:
 //    needed), so it adds to the computation load.  - Gary Turner ~ 2015
 
 #include <cmath>  // acos
+#include <limits>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/derived_state/include/planetary_derived_state.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/dynamics/dyn_manager/include/class_declarations.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"

@@ -12,11 +12,15 @@ PROGRAMMERS:
 #include <cmath>      // fabs
 #include <cfloat>     // DBL_EPSILON
 #include <algorithm>  // std::max
+#include <cstddef>
+#include <cstdlib>
 #include <iostream>   // std::cout
+#include <list>
 #include <sstream>    // std::istringstream
 #include <fstream>    // std::ifstream
-#include <pthread.h>  // for pthreads - sending commands.
 #include <regex>
+#include <stdexcept>
+#include <string>
 
 #include "../include/unit_test.hh"
 

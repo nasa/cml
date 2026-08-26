@@ -10,10 +10,13 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Jan 2021) (Antares) (Code review and IV&V)))
 *******************************************************************************/
 
-#include <cstring> // NULL
+#include "cml/models/dynamics/state_descriptors/separation_state/include/separation_state.hh"
+#include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 #include "../include/simple_spring_group.hh"
 

@@ -17,7 +17,10 @@ ASSUMPTIONS AND LIMITATIONS:
      ((Gary Turner) (OSR) (March 2015) (Modification to make more generic))
     )
 *******************************************************************************/
-#include <cstring> // NULL
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dynamics_integration_group.hh"
+#include "jeod/models/dynamics/mass/include/mass.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 

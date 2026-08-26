@@ -8,9 +8,21 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#include <algorithm> //std::find, find_if, any_of
+#include "../include/abstract_table_lookup.hh"
+#include "../include/generic_multi_input_table.hh"
+#include "../include/generic_single_input_table.hh"
+#include "../include/single_input_table_for_angles.hh"
+#include "../include/single_input_table_for_quaternions.hh"
+#include "../include/single_input_table_var_with_deriv.hh"
+#include "../include/table_independent_variable.hh"
 
-#include "../include/table_lookup_set.hh"
+#include <algorithm> //std::find, find_if, any_of
+#include <cstdarg>
+#include <cstddef>
+#include <vector>
+
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 /*****************************************************************************
 Constructor

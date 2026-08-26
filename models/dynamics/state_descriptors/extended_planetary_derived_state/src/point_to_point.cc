@@ -20,8 +20,14 @@ PROGRAMMERS:
 #include "../include/point_to_point.hh"
 
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
+#include <list>
+#include <string>
 #include <utility>
 
 /*****************************************************************************

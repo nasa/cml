@@ -12,7 +12,10 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <algorithm>
-#include <cmath> // floor
+#include <cmath>
+#include <cstddef>
+#include <vector>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/table_independent_variable.hh"

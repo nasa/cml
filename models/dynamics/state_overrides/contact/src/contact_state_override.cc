@@ -11,8 +11,10 @@ PROGRAMMERS:
 
 ********************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "../include/contact_state_override.hh"
 

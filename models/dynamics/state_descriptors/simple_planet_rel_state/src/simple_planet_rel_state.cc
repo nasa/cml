@@ -10,6 +10,11 @@ PROGRAMMERS:
 #include <string>
 
 #include "../include/simple_planet_rel_state.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/derived_state/include/relative_derived_state.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/dynamics/dyn_manager/include/class_declarations.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 
 /*****************************************************************************

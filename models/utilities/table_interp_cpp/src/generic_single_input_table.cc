@@ -10,7 +10,11 @@
    )
 *******************************************************************************/
 
+#include "../include/generic_multi_input_table.hh"
 #include "../include/generic_single_input_table.hh"
+#include "../include/table_independent_variable.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
 
 
 /*****************************************************************************

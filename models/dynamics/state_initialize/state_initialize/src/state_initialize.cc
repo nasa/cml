@@ -20,18 +20,22 @@ PROGRAMMERS:
    (((Gary Turner) (OSR) (September 2014) (New))
  ******************************************************************************/
 
+#include <cmath>
+#include <random>
 
-#include <random> // default_random_engine,
-                  // uniform_real_distribution,
-                  // normal_distribution
-
-
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/dynamics/body_action/include/dyn_body_init.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
-#include "jeod/models/utils/memory/include/jeod_alloc.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "jeod/models/dynamics/body_action/include/body_action_messages.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_items.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "../include/state_initialize.hh"
 

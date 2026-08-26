@@ -13,8 +13,11 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
+#include <cstddef>
 #include <limits>
+#include <vector>
 #include "../include/bin_counter.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 Constructors

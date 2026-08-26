@@ -18,6 +18,10 @@ PROGRAMMERS:
 
 /* Model Includes */
 #include "../include/compound_event.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_delay.hh"
+#include <list>
 
 /*****************************************************************************
 Constructor

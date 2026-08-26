@@ -7,10 +7,10 @@ PROGRAMMERS:
 
 *************************************************************/
 
-#include <cmath> // M_PI_2
 #include "trick/constant.h" // DTR, degrees to radians.
 
 #include "../../include/pfix_reference_point.hh" // enumeration
+#include "../../include/range_from_pfix_reference.hh"
 #include "../include/range_default_data.hh"
 
 

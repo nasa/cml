@@ -11,6 +11,7 @@ Programmers:
 *******************************************************************************/
 
 #include "../include/commandable_action.hh"
+#include "../include/commandable_action_set.hh"
 #include <utility>
 
 /*****************************************************************************

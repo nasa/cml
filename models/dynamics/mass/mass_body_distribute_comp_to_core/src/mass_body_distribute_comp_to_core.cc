@@ -13,6 +13,10 @@ Programmers:
 #include <sstream> // ostringstream
 
 #include "../include/mass_body_distribute_comp_to_core.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 
 /*****************************************************************************

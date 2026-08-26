@@ -12,8 +12,10 @@ PROGRAMMERS:
 **********************************************************************/
 
 #include <algorithm>
-#include <cmath>  // abs
+#include <vector>
 #include "../include/rcs_group.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 
 /*****************************************************************************

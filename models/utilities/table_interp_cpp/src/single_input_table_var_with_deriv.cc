@@ -13,7 +13,11 @@
    (((Gary Turner) (OSR) (May 2023) (Antares) (initial version))
    )
 *******************************************************************************/
+#include "../include/generic_single_input_table.hh"
 #include "../include/single_input_table_var_with_deriv.hh"
+#include "../include/table_type_defs.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
 
 
 /*****************************************************************************

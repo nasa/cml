@@ -12,6 +12,9 @@ PROGRAMMERS:
 **********************************************************************/
 
 #include "../include/rcs_prop_pod.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <vector>
 
 /*****************************************************************************
 Constructor

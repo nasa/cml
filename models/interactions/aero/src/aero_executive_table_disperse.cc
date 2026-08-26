@@ -7,6 +7,8 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "../include/aero_executive_table.hh"
+#include "../include/aero_table_set_base.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*******************************************************************************
 process_prelim_uncertainties

@@ -10,7 +10,11 @@ Programmers:
 *******************************************************************************/
 
 #include <string>
+#include "cml/models/dynamics/state_descriptors/pointing_ref_frame/include/ephem_based_pointing_ref_frame.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 #include "../include/earth_moon_rotating_frame.hh"
 

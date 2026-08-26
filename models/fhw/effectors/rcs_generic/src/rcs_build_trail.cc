@@ -11,6 +11,7 @@ PROGRAMMERS:
 ******************************************************************************/
 
 #include "../include/rcs_build_trail.hh"
+#include "../include/rcs_scale_factor_interface.hh"
 
 #include <algorithm> // min
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

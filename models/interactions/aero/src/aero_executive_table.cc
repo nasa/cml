@@ -13,12 +13,16 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <cmath>   // sin, cos
-#include <cstring> // NULL
+#include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+#include "../include/aero_environment.hh"
+#include "../include/aero_executive_base.hh"
 #include "../include/aero_executive_table.hh"
+#include "../include/aero_interface_output.hh"
+#include "../include/aero_table_set_base.hh"
 
 /*******************************************************************************
 Constructors

@@ -12,6 +12,7 @@ PROGRAMMERS:
    )
 *******************************************************************************/
 
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

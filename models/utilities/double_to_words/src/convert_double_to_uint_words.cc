@@ -15,6 +15,9 @@ PROGRAMMERS:
 *******************************************************************************/
 //Local Headers
 #include "../include/convert_double_to_words.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstdint>
+#include <vector>
 
 /*******************************************************************************
 Purpose:(Run the class function that calls the variables and creates the

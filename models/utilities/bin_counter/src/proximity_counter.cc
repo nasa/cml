@@ -15,6 +15,9 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "../include/proximity_counter.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <vector>
 
 /*****************************************************************************
 Constructors

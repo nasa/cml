@@ -12,6 +12,8 @@ PROGRAMMERS:
 **********************************************************************************/
 
 #include <cmath>           // M_PI, atan2, sqrt
+#include <cstddef>
+#include <ios>
 #include <vector>
 #include <cstdint> // uint32_t
 #include <fstream> // ifstream
@@ -19,6 +21,9 @@ PROGRAMMERS:
 //#include <iostream>
 
 #include "../include/lookup_winds.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 /*****************************************************************************
 Constructors

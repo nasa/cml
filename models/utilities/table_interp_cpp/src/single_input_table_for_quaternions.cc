@@ -16,7 +16,12 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
+#include "../include/generic_single_input_table.hh"
 #include "../include/single_input_table_for_quaternions.hh"
+#include "../include/table_type_defs.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
+#include <cstddef>
 
 /*****************************************************************************
 Constructors

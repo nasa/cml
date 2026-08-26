@@ -13,7 +13,9 @@ PROGRAMMERS:
 #include "../include/mass_body_dispersed_init.hh"
 
 // JEOD headers:
+#include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 /*******************************************************************************
 Constructor

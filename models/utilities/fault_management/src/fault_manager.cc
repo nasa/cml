@@ -8,13 +8,29 @@ PROGRAMMERS:
 ############################################################################*/
 
 
+#include "../include/fault_bias.hh"
+#include "../include/fault_function.hh"
 #include "../include/fault_manager.hh"
-#include <cstdlib> // strtod, strtol, etc.
-#include <cstring> // strcmp
-#include <cmath>   // abs
+#include "../include/fault_overwrite.hh"
+#include "../include/fault_random_walk.hh"
+#include "../include/fault_scale.hh"
+#include "../include/fault_stale.hh"
+#include "../include/fault_white_noise.hh"
+#include "../include/independent_variable.hh"
+#include "../include/trigger.hh"
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <libxml/parser.h>
+#include <string>
 #include <unordered_map>
-#include <libxml/parser.h> // xmlParseFile, xmlNodePtr
+#include <utility>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/convert_string/include/convert_string.hh"
+#include "cml/models/utilities/xml_helper/include/xml_helper.hh"
+#include "trick/MemoryManager.hh"
+#include "trick/parameter_types.h"
+#include "trick/reference.h"
 
 bool FaultManager::global_enabled = true;
 

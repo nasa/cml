@@ -9,7 +9,11 @@ PROGRAMMERS:
 ***********************************************************************/
 
 #include <algorithm> // find_if
+#include <string>
+#include "../include/event_trigger.hh"
 #include "../include/event_trigger_set.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 
 
 /*****************************************************************************

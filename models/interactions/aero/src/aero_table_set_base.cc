@@ -8,9 +8,10 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
+#include <string>
 
+#include "../include/aero_coefficients.hh"
 #include "../include/aero_table_set_base.hh"
 
 /*******************************************************************************

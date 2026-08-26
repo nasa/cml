@@ -10,8 +10,18 @@ PROGRAMMERS:
    ((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
 *******************************************************************************/
 
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include <algorithm>
+#include <cstddef>
+#include <vector>
 
+#include "../include/rocket_motor_basic.hh"
 #include "../include/rocket_motor_table_thrust.hh"
 
 /*****************************************************************************

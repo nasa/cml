@@ -11,7 +11,10 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <algorithm> // any_of, find_if
+#include <cstddef>
+#include <vector>
 #include "../include/target_counter.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 Constructor

@@ -13,13 +13,18 @@
 *******************************************************************************/
 
 #include <algorithm>
+#include <array>
+#include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <limits>  // min
 #include <fenv.h>  // fp exception
+#include <list>
 #include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
 
 #include "../include/math_utils.hh"
 

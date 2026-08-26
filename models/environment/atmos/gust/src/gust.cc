@@ -10,6 +10,7 @@ PROGRAMMERS:
 **********************************************************************************/
 #include <cmath> // std::cos, M_PI
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh" // Vector3
 
 #include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*

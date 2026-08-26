@@ -10,6 +10,7 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <cmath> // sqrt
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 
 #include "../include/apsides_predictor.hh"

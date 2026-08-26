@@ -7,7 +7,10 @@ PROGRAMMERS:
 
 *******************************************************************************/
 
-#include "../include/watch_values_base.hh"
+#include "../include/watch_values_base_core.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include <list>
 
 /*****************************************************************************
 Constructor

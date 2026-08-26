@@ -18,9 +18,15 @@ PROGRAMMERS:
  ((Brent Caughron) (OSR) (Sept. 2017) (IV&V code review)))
 *******************************************************************************/
 
-#include <cstring> // NULL
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "er7_utils/integration/core/include/integration_controls.hh"
+#include "er7_utils/integration/core/include/integrator_constructor.hh"
+#include "er7_utils/integration/core/include/integrator_result.hh"
+#include "er7_utils/integration/core/include/time_interface.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dynamics_integration_group.hh"
+#include "jeod/models/utils/memory/include/jeod_alloc.hh"
+#include "jeod/models/utils/sim_interface/include/config.hh"
 
 #include "../include/vector3_integrable_object.hh"
 
