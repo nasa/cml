@@ -4,8 +4,9 @@ import argparse
 import regex, re
 import sys
 import textwrap
+from enum import Enum
 
-'''
+"""
 assumptions:
     The file's trick header starts with /* or // and ends with */ or //
     If those characters are found in the trick header contents,
@@ -13,21 +14,21 @@ assumptions:
     you will get undefined behavior with this script
 
 exit codes:
-    -1 - too many characters in line
-    -2 - invalid indentation
-    -3 - invalid python module
-    -4 - no python module found
-    -5 - inline parenthesis found with trick comment header i.e. PYTHON_MODULE: (some.module)
+    -1 : too many characters in line
+    -2 : invalid indentation
+    -3 : invalid python module
+    -4 : no python module found
+    -5 : inline parentheses found with trick comment header i.e. PYTHON_MODULE: (some.module)
 
 This script takes a CML source file and checks if the Trick header
 meets the desired parameters. With the --check_format argument, the file
 is checked and a zero return code is returned if the file meets the
 standards. Without the --check_format argument, the file gets rewritten
 with the common Trick header format
-'''
+"""
 
 
-# trick comment header : [re for inline open parenthesis check, regex string for header contents]
+# trick comment header : [re for inline open parentheses check, regex string for header contents]
 regex_dict = {"DOC TITLE"                   : [r"(?is)doc title:[^\S\r\n]*\(", r"(?is)doc title\s*:\s*(?P<block>\((?:[^()]+|(?P>block))*\))"],
               "PURPOSE"                     : [r"(?is)purpose:[^\S\r\n]*\(", r"(?is)purpose\s*:\s*(?P<block>\((?:[^()]+|(?P>block))*\))"],
               "REFERENCE"                   : [r"(?is)reference:[^\S\r\n]*\(", r"(?is)reference\s*:\s*(?P<block>\((?:[^()]+|(?P>block))*\))"],
@@ -44,13 +45,34 @@ regex_dict = {"DOC TITLE"                   : [r"(?is)doc title:[^\S\r\n]*\(", r
               "PROGRAMMERS"                 : [r"(?is)programmers:[^\S\r\n]*\(", r"(?is)programmers\s*:\s*(?P<block>\((?:[^()]+|(?P>block))*\))"],
               "LANGUAGE"                    : [r"(?is)language:[^\S\r\n]*\(", r"(?is)language\s*:\s*(?P<block>\((?:[^()]+|(?P>block))*\))"]}
 
-exit_code_dict = {-1 : "error: too many characters in line",
-                  -2 : "error: invalid indentation",
-                  -3 : "warning: invalid python module",
-                  -4 : "warning: no python module found",
-                  -5 : "error: inline parenthesis"}
+class WARNING (Enum): 
+    """ 
+    Enum that represents PYTHON_MODULE related warnings that will eventually be errors.
+    This Enum will be deleted once invalid or no python module found becomes an error.
+    """
+    INVALID_PYTHON_MODULE     = -3
+    NO_PYTHON_MODULE_FOUND    = -4 
+
+class Error (Enum):
+    """ 
+    Enum that represents the list of errors this script handles for the common Trick header format.
+    """
+    TOO_MANY_CHARACTERS_IN_LINE = -1
+    INVALID_INDENTATION         = -2
+    #INVALID_PYTHON_MODULE       = -3
+    #NO_PYTHON_MODULE_FOUND      = -4 
+    INLINE_PARENTHESES          = -5
 
 def check_inline_open_parens(text):
+    """!
+    Returns True if a source file contains Trick header field contents on the same line as the Trick header title.
+    i.e `PURPOSE: (invalid text)` will return True
+
+    Inputs:
+    -------
+    text : str
+    	A line of text from a source file
+    """
     for key in regex_dict.keys():
         res = bool(re.search(regex_dict[key][0], text))
         # inline colon found for a trick header comment
@@ -60,15 +82,33 @@ def check_inline_open_parens(text):
 
 
 def read_file(in_file):
-    with open(in_file, 'r') as orig:
+    """
+    Reads a source file into a string.
+
+    Inputs:
+    -------
+    in_file: file
+        Input file to be converted to a string.
+    """
+    with open(in_file, 'r') as orig: 
         return(orig.read())
 
 
 def check_trick_header_format(original_header_str):
+    """
+    Returns a non-zero int specifying an error found within the source file.
+    A list is generated in the main function containing the 'file_name: exit_reason'.
+
+    Inputs:
+    -------
+    original_header_str : str
+        The source file being processed as a string.
+
+    """
     for line in original_header_str.splitlines():
         if len(line) > args.character_limit:
-            exit_code_list.append(in_file + ": " + exit_code_dict[-1])
-            return(-1)
+            exit_code_list.append(in_file + ": " + Error.TOO_MANY_CHARACTERS_IN_LINE.name)
+            return(Error.TOO_MANY_CHARACTERS_IN_LINE.value)
         if line.lstrip().startswith("/*") or\
            line.endswith("*/")            or\
            line.lstrip().startswith("\\") or\
@@ -80,19 +120,27 @@ def check_trick_header_format(original_header_str):
             if leading_spaces != (args.indent_width+1) and\
                leading_spaces != args.indent_width     and\
                leading_spaces != (args.indent_width+3):
-                exit_code_list.append(in_file + ": " + exit_code_dict[-2])
-                return(-2)
+                exit_code_list.append(in_file + ": " + Error.INVALID_INDENTATION.name)
+                return(Error.INVALID_INDENTATION.value)
     if in_file.endswith((".h",".hh")) and check_python_module_str(original_header_str) == False:
-        exit_code_list.append(in_file + ": " + exit_code_dict[-3])
+        exit_code_list.append(in_file + ": " + WARNING.INVALID_PYTHON_MODULE.name)
         # uncomment the line below when we want to fail this script if anything other than (cml) or (cml.*) is present for a PYTHON_MODULE
-        #return(-3)
+        #return(Error.INVALID_PYTHON_MODULE.value)
     if check_inline_open_parens(original_header_str) == True:
-        exit_code_list.append(in_file + ": " + exit_code_dict[-4])
-        return(-4)
+        exit_code_list.append(in_file + ": " + WARNING.INLINE_PARENTHESES.name)
+        return(WARNING.INLINE_PARENTHESES.value)
     return(0)
 
 
 def get_original_comment(in_file):
+    """ 
+    Returns a list of strings containing the Trick header block from a source file.
+
+    Inputs:
+    -------
+    in_file : file
+        The name of the input file being processed.
+    """
     original_comment = []
     read_line_flag = False
     with open(in_file, 'r') as orig:
@@ -109,6 +157,22 @@ def get_original_comment(in_file):
 
 
 def remove_asterisks_comment_style(text):
+    """ 
+    Returns a string that removes the first asterisks in C/C++ style comment within a Trick header (example below).
+     
+       before              after
+       ------              ------
+    /*                 | /*
+     * PURPOSE:        |    PURPOSE:  
+     *   (example)     |     (example)
+     * 	               |    
+     */                |  */
+
+    Inputs:
+    -------
+    text : str
+        The original header Trick header from a source file as a string.
+    """
     res_line = []
     for line in text.splitlines(keepends=True):
         if line.lstrip().startswith("/*")  == True or line.endswith("*/") == True:
@@ -120,6 +184,14 @@ def remove_asterisks_comment_style(text):
 
 
 def strip_outer_parens(text):
+    """
+    Removes sequential parentheses at the beginning and end of a block of text if they are found.
+
+    Inputs:
+    -------
+    text : str
+        A block of a trick header. i.e. the result of the PURPOSE section.
+    """
     # remove first "(\n" or "("
     text = re.sub(r'\(\n|\(', '', text, count=1)
 
@@ -130,6 +202,14 @@ def strip_outer_parens(text):
     return res[::-1]
 
 def generate_common_trick_header(original_header_str):
+    """
+    Returns the formatted Trick header as a string based on the specified command line arguments.
+
+    Inputs:
+    -------
+    original_header_str : str
+        The original header block from a source file as a string.
+    """
     formatted_comment_str = ""
     header_block_list = []
     header_block = ""
@@ -155,9 +235,9 @@ def generate_common_trick_header(original_header_str):
             while header_block_list and header_block_list[-1] == "":
                 header_block_list.pop()
 
-            # This block of code fixes an issue where a file has been proccessed with this script
+            # This block of code fixes an issue where a file has been processed with this script
             # with a character limit of 100, then again with a lesser character limit, the PURPOSE and
-            # ICG blocks will have a weird indentation since we are removing the parethesis.
+            # ICG blocks will have a weird indentation since we are removing the parentheses.
             if key == "PURPOSE":
                 if header_block_list[0] == "(" and header_block_list[-1] == ")":
                     header_block_list = header_block_list[1:-1]
@@ -197,18 +277,26 @@ def generate_common_trick_header(original_header_str):
                 formatted_comment_str += " "*(args.indent_width+1) + header_block_line
             formatted_comment_str += " "*args.indent_width + ")\n\n"
         elif key == "PYTHON_MODULE" and in_file.endswith((".h",".hh")):
-            exit_code_list.append(in_file + ": " + exit_code_dict[-3])
+            exit_code_list.append(in_file + ": " + WARNING.NO_PYTHON_MODULE_FOUND.name)
 
     return(formatted_comment_str)
 
 
 def check_python_module_str(text):
+    """
+    Returns True if the PYTHON_MODULE block contains a module that starts with cml.*
+
+    Inputs:
+    -------
+    text : str
+        The original Trick header from a source file as a string.
+    """
     trick_pattern = regex.compile(regex_dict["PYTHON_MODULE"][1])
     trick_match = trick_pattern.search(text)
     if trick_match:
         header_block = trick_match.group("block")
 
-    # this function turns contents within nested parenthesis into a list
+    # this function turns contents within nested parentheses into a list
     # i.e (abc(def)ghi(jkl)) -> ['(def)', '(jkl)', '(abc(def)ghi(jkl))']
     # then checks each item if it starts with "cml"
     pattern = regex.compile(r"\((?:[^()]+|(?R))*\)")
@@ -221,6 +309,10 @@ def check_python_module_str(text):
 
 
 def get_args():
+    """
+    Return an args object that contains options and parameters for this script.
+    Run this script with --help to see the available options.
+    """
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-w', '--indent_width', type=int, help='number of spaces to indent text', action="store")
@@ -233,7 +325,9 @@ def get_args():
     return args
 
 def print_args(args):
-
+    """   
+    Prints result of the args object set from the command line.
+    """
     print("indent_width    = ",args.indent_width)
     print("character_limit = ",args.character_limit)
     print("check_format    = ",args.check_format)
@@ -280,9 +374,10 @@ if __name__ == '__main__':
             with open(in_file, "w") as file:
                 file.write(formatted_file_str)
 
-    for file in exit_code_list:
-        print(file)
-    if any("error:" in line for line in exit_code_list) == False:
+    for file_name in exit_code_list:
+        print(file_name)
+    # If no Error Enums found in exit_code_list, success!
+    if any(item in target_string for item in Error.__members__.keys() for target_string in exit_code_list) == False:
         print("File(s) meet the common format standard")
         sys.exit(0)
     else:
