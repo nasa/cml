@@ -9,7 +9,7 @@ PROGRAMMERS:
 #include "../include/vent.hh"
 
 // JEOD header
-#include "utils/math/include/vector3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 /*************************************************************************
 Constructor
