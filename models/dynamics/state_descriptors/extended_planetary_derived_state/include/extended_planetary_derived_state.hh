@@ -168,7 +168,7 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
 
    ExtendedPlanetaryDerivedState();
    ~ExtendedPlanetaryDerivedState() override = default;
-   using SubscriptionBase::initialize;
+
    void initialize(jeod::DynBody & subject_body, jeod::DynManager & dyn_manager) override;
 
    void update() override;

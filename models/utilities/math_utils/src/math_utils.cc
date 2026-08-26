@@ -600,10 +600,10 @@ MathUtils::polynomial( double x,
                        const double failed_val,
                        const bool   failed_flag)
 {
-  fenv_t env;
+  std::fenv_t env;
   // Temporary disable fp exceptions, storing the set of
   // previously configured exceptions.
-  const int fe_prev = feholdexcept(&env);
+  const int fe_prev = std::feholdexcept(&env);
   assert(-1 != fe_prev);  // If -1, there was a failure
 
   double x_to_i = 1.0;
@@ -630,7 +630,7 @@ MathUtils::polynomial( double x,
     }
     sum = failed_val;
   }
-  fesetenv(&env); // restore the previous settings of fp exceptions
+  std::fesetenv(&env); // restore the previous settings of fp exceptions
   return sum;
 }
 

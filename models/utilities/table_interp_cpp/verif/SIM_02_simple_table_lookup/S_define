@@ -14,7 +14,7 @@ Descending data runs with only 1 dependent while ascending data runs with 2 to p
 class TestingModelSimObject : public Trick::SimObject {
   public:
    double            independent;
-   double            dependent[12][2]; // (--) 11 tables, 2 data per table
+   double            dependent[12][2]; // (--) 12 tables, 2 data per table
    double            indep_incr;       // (--) increment per cycle.
    int               frame_count;
    int               reverse_on_count;

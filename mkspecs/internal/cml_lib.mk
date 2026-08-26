@@ -88,7 +88,7 @@ TRICK_EXT_LIB_DIRS += :${CML_SOURCE_DIRS}
 TRICK_LDFLAGS += -L${CML_LIBRARY_DIR}
 ifeq (1, $(CML_USE_STATIC_LIB))
     TRICK_LDFLAGS += -l:libcml.a
-else ifeq ($(findstring Darwin,$(trick-gte TRICK_HOST_CPU)),)
+else ifeq ($(trick-gte TRICK_HOST_CPU),Darwin)
     TRICK_LDFLAGS += -Wl,-rpath,${CML_LIBRARY_DIR} -lcml
 else
     TRICK_LDFLAGS += -Wl,-rpath=${CML_LIBRARY_DIR} -lcml

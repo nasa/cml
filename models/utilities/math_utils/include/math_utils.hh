@@ -975,7 +975,7 @@ Purpose:
     // [in] = [C_decomp] * [C_decomp]'  => [inv(in)] = [inv(C)]' * [inv(C)]
     // and the inverse of the decomposed matrix is arithmetically simple to
     // compute.
-    double C_inv[dimension][dimension] = {{0}};
+    double C_inv[dimension][dimension] = {};
     for ( size_t ii = 0; ii < dimension; ii++) {
       // Note -- division by zero already checked above and method has
       // returned if any diagonal elements are zero.

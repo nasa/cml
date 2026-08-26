@@ -134,7 +134,6 @@ class RangeComputation : public RangeValues,
   RangeComputation(const jeod::PlanetFixedPosition & state_in);
   ~RangeComputation() override = default;
 
-  using SubscriptionBase::initialize;
   virtual void initialize( const jeod::Planet & planet_in);
   void set_reference_data_query(); /*
       external call to determine whether there is sufficient data to

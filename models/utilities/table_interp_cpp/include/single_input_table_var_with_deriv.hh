@@ -26,9 +26,6 @@
 
 class SingleInputTableVarDeriv : public GenericSingleInputTable
 {
-#ifdef SWIG
-%immutable;
-#endif
  public:
   GenericSingleInputTable  derivs; /* (--)
     A parallel instance of GenericSingleInputTable used to manage the data
@@ -63,9 +60,6 @@ class SingleInputTableVarDeriv : public GenericSingleInputTable
   bool initialize() override;
   protected:
   bool generate_output() override;
-#ifdef SWIG
-%mutable;
-#endif
  private:
   // Disable the copy/assignment operators
   SingleInputTableVarDeriv (const SingleInputTableVarDeriv&);

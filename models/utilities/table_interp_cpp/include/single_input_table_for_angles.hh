@@ -31,9 +31,6 @@ PROGRAMMERS:
 
 class SingleInputTableForAngles : public GenericSingleInputTable
 {
-#ifdef SWIG
-%immutable;
-#endif
  public:
   bool output_in_radians; /* (--)
        Flag indicating that the output data will be interpreted as radians.
@@ -57,9 +54,6 @@ class SingleInputTableForAngles : public GenericSingleInputTable
  protected:
   bool generate_output() override;
   void bound_to_half_circle( double & angle);
-#ifdef SWIG
-%mutable;
-#endif
  private:
   // Disable the copy/assignment operators
   SingleInputTableForAngles (const SingleInputTableForAngles&);
