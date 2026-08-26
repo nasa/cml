@@ -62,7 +62,6 @@ class CompoundEvent : public WatchValuesDelay<bool>
     HoldAction    = 3,
     PostAction    = 4
   };
-  std::string name; /* (--) Optional name for debugging purposes.*/
   EventTriggerSet arming_triggers; /* (--)
     Set of triggers for arming the event.*/
   EventTriggerSet disarming_triggers; /* (--)

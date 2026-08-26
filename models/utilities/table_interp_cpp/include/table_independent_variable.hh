@@ -161,8 +161,8 @@ private:
   const double FRAC_EPS;   /* (--) the gate value to consider fraction as zero. */
 
 public:
-  TableIndependentVariable( const double &variable_in,
-                            double frac_eps_in=1.0e-9);
+  explicit TableIndependentVariable( const double &variable_in,
+                                     double frac_eps_in=1.0e-9);
   TableIndependentVariable( const std::string &name,
                             const double &variable_in,
                             double frac_eps_in=1.0e-9);

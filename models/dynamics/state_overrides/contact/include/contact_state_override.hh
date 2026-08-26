@@ -57,7 +57,7 @@ class ContactStateOverride : public SubscriptionBase
        location as long as the body's position is computed to be at a
        physically impossible location.*/
 
-  bool contact_detected; /* (--)
+  bool contact_detected {false}; /* (--)
     Flag set to indicate that the contact plane has been broken.*/
 
   double deactivation_threshold; /* (m)

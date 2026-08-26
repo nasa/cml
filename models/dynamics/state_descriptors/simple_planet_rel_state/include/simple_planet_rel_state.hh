@@ -32,8 +32,8 @@ class SimplePlanetRelState : public SubscriptionBase,
   double altitude;         /* (m) height of the frame-of-interest above the
                                   reference-height. */
 
-  SimplePlanetRelState(std::string body_frame_name_,
-                       std::string planet_frame_name);
+  SimplePlanetRelState(const std::string & body_frame_name_,
+                       const std::string & planet_frame_name);
 
   void initialize(jeod::DynBody & subject_body,
                           jeod::DynManager & dyn_manager) override;

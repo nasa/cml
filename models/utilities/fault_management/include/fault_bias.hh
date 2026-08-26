@@ -23,7 +23,7 @@ template<typename T> class FaultBias : public Fault {
 
     void overwrite_value() override;
 
-    bool set_param(std::string param_name, double value, bool b) override;
+    bool set_param(const std::string& param_name, double value, bool b) override;
 
     T bias; /* (--) The bias to apply when the variable is faulted. */
 
@@ -56,8 +56,8 @@ Purpose:(Generic method for setting fault parameters. For this type of fault,
          can be used to set the bias.)
 *******************************************************************************/
 template<typename T>
-bool FaultBias<T>::set_param(std::string param_name, double value, bool) {
-  if (param_name.compare("bias") == 0) {
+bool FaultBias<T>::set_param(const std::string& param_name, double value, bool) {
+  if (param_name == "bias") {
     bias = value;
   } else {
     return Fault::set_param(param_name, value);

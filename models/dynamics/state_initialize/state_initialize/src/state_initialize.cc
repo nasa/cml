@@ -1586,7 +1586,8 @@ Note -- see documentatation for CorrelatedStateDispersion for demonstration of
 void
 StateInitialize::generate_random(int seed)
 {
-  std::default_random_engine generator(seed);
+  std::default_random_engine generator;
+  generator.seed(static_cast<typename decltype(generator)::result_type>(seed));
   std::normal_distribution<double> rand_norm(0.0, 1.0);
 
   for (unsigned int ii = 0; ii < 3; ii++) {
@@ -1644,6 +1645,7 @@ StateInitialize::overwrite_attitude_from_free_stream(
     CMLMessage::fail(
       __FILE__, __LINE__, "Invalid configuration\n",
       "The subject provided must be a valid DynBody.");
+    return;
   }
   dyn_body->set_attitude_matrix(rot_init.orientation.trans,
                                 dyn_body->composite_body);

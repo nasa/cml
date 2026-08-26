@@ -106,7 +106,7 @@ AeroExecutiveTable::change_table( unsigned int new_ix)
 }
 /******************************************************************************/
 void
-AeroExecutiveTable::change_table( std::string new_name)
+AeroExecutiveTable::change_table( const std::string & new_name)
 {
   // Check trivial case - change commanded to current table.
   if (current_table != nullptr) {
@@ -345,6 +345,7 @@ AeroExecutiveTable::configure_new_table( AeroTableSetBase * new_table)
       "it. If this error is reached, something is behaving unexpectedly.\n"
       "Terminating");
       // Exit here!!
+    return;
   }
 
   // Turn off the current table
@@ -564,7 +565,7 @@ AeroExecutiveTable::aero_forces_moments()
       //   Added a safety threshold, set at construction time to prevent this
       //   from blowing up when unexpected winds produce small momentary
       //   free-stream velocities.
-      double L_over_V = Lref / (l_over_v_scale * fsv_mag);
+      double L_over_V = Lref / (static_cast<double>(l_over_v_scale) * fsv_mag);
       double body_rate_aero_frm[3];
       jeod::Vector3::transform( T_body_to_aero_frame,
                           environment.get_true_body_rates(),

@@ -12,6 +12,7 @@ PROGRAMMERS:
 #include <cstdlib> // strtod, strtol, etc.
 #include <cstring> // strcmp
 #include <cmath>   // abs
+#include <unordered_map>
 #include <libxml/parser.h> // xmlParseFile, xmlNodePtr
 #include "cml/models/utilities/convert_string/include/convert_string.hh"
 
@@ -49,17 +50,18 @@ FaultManager::~FaultManager() {
 translate_location
 Purpose:(Translates a string into a Location.)
 *******************************************************************************/
-FaultManager::Location FaultManager::translate_location( const char* str) {
-  if (strcmp(str, "INIT") == 0) {
-    return Location::Initialize;
-  } else if (strcmp(str, "UPSTREAM") == 0) {
-    return Location::Upstream;
-  } else if (strcmp(str, "INTERMEDIATE_1") == 0) {
-    return Location::Intermediate_1;
-  } else if (strcmp(str, "INTERMEDIATE_2") == 0) {
-    return Location::Intermediate_2;
-  } else if (strcmp(str, "DOWNSTREAM") == 0) {
-    return Location::Downstream;
+FaultManager::Location FaultManager::translate_location(const std::string& str) {
+  static const std::unordered_map<std::string, Location> location_map {
+    {"INIT", Location::Initialize},
+    {"UPSTREAM", Location::Upstream},
+    {"INTERMEDIATE_1", Location::Intermediate_1},
+    {"INTERMEDIATE_2", Location::Intermediate_2},
+    {"DOWNSTREAM", Location::Downstream}
+  };
+
+  const auto location = location_map.find(str);
+  if (location != location_map.end()) {
+    return location->second;
   } else {
     return Location::INVALID;
   }
@@ -115,7 +117,7 @@ get_fault
 Purpose:(Looks up a fault by name. If no fault with that name is found, returns
          nullptr.)
 *******************************************************************************/
-Fault* FaultManager::get_fault( std::string name) {
+Fault* FaultManager::get_fault( const std::string& name) {
   for (unsigned int ii = 0; ii < Location_count; ii++) {
     for (auto fault : faults[ii]) {
       if (name.compare(fault->name) == 0) {
@@ -133,7 +135,7 @@ get_trigger
 Purpose:(Looks up a trigger by name. If no trigger with that name is found,
          returns nullptr.)
 *******************************************************************************/
-TriggerBase* FaultManager::get_trigger( std::string name) {
+TriggerBase* FaultManager::get_trigger( const std::string& name) {
   for (auto trigger : triggers) {
     if (name.compare(trigger->name) == 0) {
       return trigger;
@@ -149,8 +151,8 @@ set_fault_enabled
 Purpose:(Enables or disables a fault.)
 *******************************************************************************/
 bool FaultManager::set_fault_enabled(
-  std::string fault_name,
-  bool        enable_flag)
+  const std::string& fault_name,
+  bool enable_flag)
 {
   if (parsed) {
     Fault* fault = get_fault(fault_name);
@@ -184,9 +186,9 @@ Purpose:(Enables or disables a trigger for a specific fault. Triggers that are
          shared by multiple faults are disabled on a fault-by-fault basis.)
 *******************************************************************************/
 bool FaultManager::set_fault_trigger_enabled(
-  std::string fault_name,
-  std::string trigger_name,
-  bool        enable_flag)
+  const std::string& fault_name,
+  const std::string& trigger_name,
+  bool enable_flag)
 {
   if (parsed) {
     Fault* fault = get_fault(fault_name);
@@ -226,10 +228,10 @@ Purpose:(Sets the value of a fault parameter. What these parameters can be
          depends on the type of fault.)
 *******************************************************************************/
 bool FaultManager::set_fault_param(
-  std::string fault_name,
-  std::string param_name,
-  double      value,
-  bool        modify_nominal_with_rate)
+  const std::string& fault_name,
+  const std::string& param_name,
+  double value,
+  bool modify_nominal_with_rate)
 {
   if (parsed) {
     Fault* fault = get_fault(fault_name);
@@ -258,8 +260,8 @@ set_trigger_value
 Purpose:(Sets a trigger value.)
 *******************************************************************************/
 bool FaultManager::set_trigger_value(
-  std::string trigger_name,
-  double      value)
+  const std::string& trigger_name,
+  double value)
 {
   if (parsed) {
     TriggerBase* trigger = get_trigger(trigger_name);
@@ -283,7 +285,7 @@ bool FaultManager::set_trigger_value(
 unset_trigger_count
 Purpose:(Removes the trigger-count-limit for the specified trigger.)
 *******************************************************************************/
-void FaultManager::unset_trigger_count( std::string trigger_name) {
+void FaultManager::unset_trigger_count( const std::string& trigger_name) {
   if (parsed) {
     TriggerBase* trigger = get_trigger(trigger_name);
 
@@ -1440,7 +1442,9 @@ TriggerBase* FaultManager::parse_trigger(
       // make_trigger.
       Trigger<std::string>* string_trigger =
         new Trigger<std::string>(*static_cast<std::string*>(Symbol->address));
-      string_trigger->set_value(value);
+      if (value != nullptr) {
+        string_trigger->set_value(value);
+      }
       new_trigger = string_trigger;
       break;
     }

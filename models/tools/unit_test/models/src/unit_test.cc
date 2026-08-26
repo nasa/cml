@@ -699,7 +699,7 @@ UnitTestFramework::update_file()
   // If the user has specified titles in the data file, print them out
   if ( !titles.empty()) {
     if (!titles.front().empty()) {
-      std::cout << titles.front() << std::endl;
+      std::cout << titles.front() << '\n';
     }
     if (cycle_data) {
       titles.push_back(titles.front());

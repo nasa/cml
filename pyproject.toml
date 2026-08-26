@@ -8,6 +8,7 @@ dependencies = [
     "numpy",
     "psutil",
     "pyyaml",
+    "regex",
 ]
 
 [project.urls]

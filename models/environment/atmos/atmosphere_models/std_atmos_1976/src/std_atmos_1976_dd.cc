@@ -19,6 +19,7 @@ PROGRAMMERS:
 ********************************************************************************/
 
 #include <cmath>
+#include <iterator> // std::size for C-style arrays
 
 #include "trick/trick_math.h"  //for M_PI
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -97,14 +98,14 @@ STD1976::PY_table[87]      = {3.7338E-1, 3.1259E-1, 2.6173E-1, 2.1919E-1, 1.8359
 
 size_t STD1976::get_alt_tbl_len()
 {
-  const size_t alt_tbl_len = sizeof(alt_table)/sizeof(double);
+  static const size_t alt_tbl_len = std::size(alt_table);
   for (size_t i=1; i<alt_tbl_len; ++i) {
     if (alt_table[i] <= alt_table[i-1]) {
       CMLMessage::fail(__FILE__, __LINE__, "Data out of order.\n", "Data in table alt_table should be in increasing order.");
     }
   }
 
-  const size_t ext_alt_tbl_len = sizeof(ext_alt_table)/sizeof(double);
+  static const size_t ext_alt_tbl_len = std::size(ext_alt_table);
   for (size_t i=1; i<ext_alt_tbl_len; ++i) {
     if (ext_alt_table[i] <= ext_alt_table[i-1]) {
       CMLMessage::fail(__FILE__, __LINE__, "Data out of order.\n", "Data in table ext_alt_table should be in increasing order.");

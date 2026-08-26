@@ -68,9 +68,9 @@ set_param
 Purpose:(Generic method for setting fault parameters. For this type of fault,
          can be used to set function parameters.)
 *******************************************************************************/
-bool FaultFunctionBase::set_param( std::string param_name,
-                                   double      value,
-                                   bool        modify_nominal_with_rate)
+bool FaultFunctionBase::set_param( const std::string& param_name,
+                                   double value,
+                                   bool modify_nominal_with_rate)
 {
   if (param_name.compare("initial") == 0 ||
       param_name.compare("nominal") == 0 ) {

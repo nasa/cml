@@ -44,10 +44,10 @@ class SingleInputTableForAngles : public GenericSingleInputTable
   SingleInputTableForAngles( double *dependent_variables,
                              size_t num_vars,
                              bool output_in_radians = true);
-  SingleInputTableForAngles( double & dependent_var,
-                             bool output_in_radians = true);
-  SingleInputTableForAngles( const DoublePtrVec & dependent_variables,
-                             bool output_in_radians = true);
+  explicit SingleInputTableForAngles( double & dependent_var,
+                                      bool output_in_radians = true);
+  explicit SingleInputTableForAngles( const DoublePtrVec & dependent_variables,
+                                      bool output_in_radians = true);
   ~SingleInputTableForAngles() override = default;
 
   bool initialize() override;

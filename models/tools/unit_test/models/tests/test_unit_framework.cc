@@ -1,5 +1,9 @@
+#include <cstdlib>
+#include <exception>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include "../include/unit_test.hh" 
+#include "mocks/cml/cml_message_mock.hh"
 
 // Create a test subclass to access protected methods (if needed)
 class UnitTestFrameworkTest : public UnitTestFramework {
@@ -19,7 +23,7 @@ TEST(UnitTestFrameworkTest, DefaultConstructorInitializesState) {
 }
 
 TEST(UnitTestFrameworkTest, ExpandEnvVariableKnown) {
-    setenv("MY_TEST_PATH", "/tmp/testdir", 1);  // POSIX-compatible
+    setenv("MY_TEST_PATH", "/tmp/testdir", 1);
     UnitTestFrameworkTest utf;
 
     std::string input = "${MY_TEST_PATH}/file.txt";
@@ -29,19 +33,17 @@ TEST(UnitTestFrameworkTest, ExpandEnvVariableKnown) {
 }
 
 TEST(UnitTestFrameworkTest, ExpandEnvVariableUnknownThrows) {
+    using testing::_;
+    using testing::HasSubstr;
+
+    CMLMessage::Mock cml_message_mock;
+
     unsetenv("NON_EXISTENT_VAR");
     UnitTestFrameworkTest utf;
 
+    EXPECT_CALL(
+        cml_message_mock,
+        publish(CMLMessage::Error, _, _, HasSubstr("'NON_EXISTENT_VAR' is not set")));
     std::string input = "${NON_EXISTENT_VAR}/file.txt";
-
-    try {
-        utf.expand_env_variables(input);
-        FAIL() << "Expected std::runtime_error due to missing environment variable";
-    } catch (const std::runtime_error& e) {
-        std::string msg = e.what();
-        EXPECT_NE(msg.find("NON_EXISTENT_VAR"), std::string::npos)
-            << "Error message should mention the missing variable name";
-    } catch (...) {
-        FAIL() << "Expected std::runtime_error but caught a different exception type";
-    }
+    EXPECT_THROW(utf.expand_env_variables(input), std::runtime_error);
 }

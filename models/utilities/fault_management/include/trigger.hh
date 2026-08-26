@@ -15,6 +15,7 @@ PROGRAMMERS:
 #include <limits> // std::numeric_limits
 #include <cstring> // strcmp
 #include <cmath> // std::abs(), std::fmod(), std::max()
+#include <utility>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh" // check_equal
 
@@ -241,7 +242,7 @@ template<> class Trigger<std::string> : public TriggerBase {
           "Cannot process an arithmetic value into a string.\n"
           "Assignment failed.\n");
       }
-    void set_value( std::string val) { value.assign(val);}
+    void set_value( std::string val) { value = std::move(val);}
   private:
     const std::string& variable; /* (--)
       The trigger string. Its value determines when the trigger is triggered. */
@@ -256,7 +257,7 @@ template<> class Trigger<bool> : public TriggerBase {
     ~Trigger() override = default;
 
     bool compare() override { return (value == variable); }
-    bool value; /* (--)
+    bool value {false}; /* (--)
       The value to which the trigger variable is compared. */
 
     void set_value( double val) override

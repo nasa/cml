@@ -76,7 +76,7 @@ QuaternionSphericalInterpolator::update()
         CMLMessage::error( __FILE__, __LINE__,
             "Error in Spherical interpolation. Quat_1 is invalid.\n"
             "Zeroing Quat_1.\nReturning normalized Quat_0.");
-        quat_out.copy_from(quat_0);
+        quat_out = quat_0;
         return;
       }
     }
@@ -86,7 +86,7 @@ QuaternionSphericalInterpolator::update()
           "Error in Spherical interpolation. Quat_0 is invalid.\n"
           "Zeroing Quat_0.\nReturning normalized Quat_1.");
       quat_1.normalize();
-      quat_out.copy_from(quat_1);
+      quat_out = quat_1;
       return;
     }
 

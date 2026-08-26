@@ -1,0 +1,39 @@
+---
+# Ignored warnings:
+#
+# bugprone:
+#     To be added in a future pull request
+#
+# clang-analyzer:
+#     clang-analyzer-optin.performance.Padding:
+#         Can end up being detrimental by suggesting that certain fields which
+#         were grouped together for logical coherence be split apart. It's more
+#         important that the data is easy to read than it is to save a few bytes
+#         of padding.
+#
+# misc:
+#     To be added in a future pull request
+#
+# modernize:
+#     To be added in a future pull request
+#
+# performance:
+#     performance-enum-size:
+#         May enable in the future, but doesn't really buy us anything and might
+#         not play well with SWIG.
+#
+# portability:
+#     To be added in a future pull request
+#
+# readability:
+#     To be added in a future pull request
+Checks: >
+    clang-*,
+        -clang-analyzer-optin.performance.Padding,
+    performance-*,
+        -performance-enum-size
+
+WarningsAsErrors: '*'
+
+HeaderFilterRegex: '(^|/)(models|utility)/.*'
+...

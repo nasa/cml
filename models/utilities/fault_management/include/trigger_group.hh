@@ -32,7 +32,7 @@ class TriggerGroup {
 
     void add_trigger(TriggerBase& trigger);
 
-    bool set_trigger_enable(std::string trigger_name, bool enable_flag);
+    bool set_trigger_enable(const std::string& trigger_name, bool enable_flag);
 
     ////    Attributes    ////
 

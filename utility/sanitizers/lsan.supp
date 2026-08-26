@@ -1,6 +1,7 @@
 # Ignore any leaks coming from Trick that we can't control.
 leak:Trick::DataRecordGroup::DataRecordGroup
 leak:Trick::FrameLog::default_data
+leak:Trick::MemoryManager::declare_var
 leak:Trick::MemoryManager::ref_attributes
 leak:Trick::MulticastGroup::MulticastGroup
 leak:Trick::UnitsMap::add_param
@@ -15,3 +16,4 @@ leak:*numpy*
 # Ignore other leaks that we can't do anything about.
 leak:vasprintf
 leak:libudunits*
+leak:jeod::*

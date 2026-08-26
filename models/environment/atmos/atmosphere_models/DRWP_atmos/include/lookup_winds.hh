@@ -193,9 +193,9 @@ public:
   void update(double altitude_in);
   void change_datafile_index(size_t index);
   bool change_profile();
-  bool load_DRWP_file(std::string  drwpFileName,
-                      bool         file_contains_vertical_wind_component,
-                      unsigned int wind_number);
+  bool load_DRWP_file(const std::string&  drwpFileName,
+                      bool                file_contains_vertical_wind_component,
+                      unsigned int        wind_number);
   void compute_average_wind();
   void compute_average_wind( size_t table_index);
   void compute_average_wind( double min_altitude,

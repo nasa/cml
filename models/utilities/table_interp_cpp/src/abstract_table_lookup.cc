@@ -360,6 +360,7 @@ AbstractTableLookup::verify_and_add_dependent_variable(double *variable_ptr)
       __FILE__, __LINE__, "Invalid table addition\n",
       "One of the output variables from the table lookup has no target to "
       "populate.\nAll output data must have a specified target.\n");
+    return;
   }
 
   if (is_a_dependent_variable(*variable_ptr)) {

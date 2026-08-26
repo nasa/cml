@@ -47,7 +47,7 @@ public:
    double dynamic_viscosity ;             /* (N*s/m2)      Dynamic viscosity         */
    double molecular_weight ;              /* --            Molecular weight          */
    double mean_free_path;                 /* (m)           Mean free path            */
-   int    layer_number ;                  /* --            Layer number               */
+   size_t layer_number ;                  /* --            Layer number               */
   
    /** constructor, and initialize the 
    *   state as that at mean sea level.

@@ -70,5 +70,7 @@ class LaggedAtmosPayloadData {
   }
 
 
+  // copy assignment operator
+  LaggedAtmosPayloadData& operator=(const LaggedAtmosPayloadData& orig) = default;
 };
 #endif

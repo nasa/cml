@@ -7,11 +7,16 @@ inputs:
     required: true
   trick-version:
     description: Trick git branch/tag to build
-    required: true
+    required: false
+    default: 25.1.0
   venv-path:
     description: Path to the Python virtual environment
     required: false
     default: .venv
+  clone-only:
+    description: If true, only clone Trick and skip building it
+    required: false
+    default: "false"
 
 runs:
   using: composite
@@ -19,9 +24,16 @@ runs:
     - name: Build Trick
       shell: bash
       run: |
-        source ${{ inputs.venv-path }}/bin/activate
         git clone https://github.com/nasa/trick.git \
+          --depth 1 \
           --branch ${{ inputs.trick-version }} ${{ inputs.trick-home }}
+
+        if [ "${{ inputs.clone-only }}" = "true" ]; then
+          echo "clone-only is true; skipping Trick build."
+          exit 0
+        fi
+
+        source ${{ inputs.venv-path }}/bin/activate
         cd ${{ inputs.trick-home }}
         ./configure
         make -j$(nproc)

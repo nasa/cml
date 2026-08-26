@@ -170,7 +170,7 @@ public:
   ~AeroExecutiveTable() override = default;
 
   void change_table(unsigned int new_ix);
-  void change_table(std::string table_name);
+  void change_table(const std::string & table_name);
   void change_table(AeroTableSetBase & new_table);
   void add_table(AeroTableSetBase * new_table);
 
