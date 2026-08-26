@@ -14,6 +14,7 @@ PROGRAMMERS:
 #define CML_AERO_EXECUTIVE_SIMPLE_HH
 
 #include "aero_executive_base.hh"
+#include "cml/models/interactions/aero/include/aero_interface_output.hh"
 
 /*******************************************************************************
 AeroExecutiveSimple

@@ -17,7 +17,7 @@ Author:
 #define CML_LAGGED_ATMOS_WIND_HH
 
 #include <list>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 #include "lagged_atmos_payload_data.hh"
 

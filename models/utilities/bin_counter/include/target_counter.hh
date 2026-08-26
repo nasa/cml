@@ -15,8 +15,9 @@ PROGRAMMERS:
 #ifndef CML_TARGET_COUNTER_HH
 #define CML_TARGET_COUNTER_HH
 
+#include <cstddef>
+#include <string>
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 CML_TargetCounterElement

@@ -30,10 +30,15 @@
 Checks: >
     clang-*,
         -clang-analyzer-optin.performance.Padding,
+    misc-inclue-cleaner,
     performance-*,
         -performance-enum-size
 
 WarningsAsErrors: '*'
 
 HeaderFilterRegex: '(^|/)(models|utility)/.*'
+
+CheckOptions:
+    - key: misc-include-cleaner.IgnoreHeaders
+      value: 'math.h;cmath;' # Only for M_PI. Remove when we go to C++20.
 ...

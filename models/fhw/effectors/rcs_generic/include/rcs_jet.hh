@@ -16,10 +16,6 @@ PROGRAMMERS:
 #include <list>
 #include <vector>
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
-#include "jeod/models/utils/quaternion/include/quat.hh"
 
 #include "rcs_prop_pod.hh"
 #include "rcs_group.hh"

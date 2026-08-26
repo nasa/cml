@@ -13,8 +13,10 @@ PROGRAMMERS:
 #define CML_RESTARTABLE_VECTOR3_1ST_ORDER_INTEGRATOR_HH
 
 #include "er7_utils/integration/core/include/first_order_ode_integrator.hh"
+#include "er7_utils/integration/core/include/integrator_constructor.hh"
+#include "er7_utils/integration/core/include/integrator_result.hh"
+#include "er7_utils/interface/include/config.hh"
 #include "jeod/models/utils/container/include/simple_checkpointable.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/memory/include/jeod_alloc.hh"
 #include "jeod/models/utils/integration/include/restartable_state_integrator_templates.hh"
 

@@ -18,6 +18,7 @@ PROGRAMMERS:
 #define CML_ATMOSPHERE_EXEC_SIMPLE_WINDS_HH
 
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
 #include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
 
 #include "atmosphere_exec_atmos_base.hh"

@@ -19,13 +19,13 @@ Programmers:
 #ifndef CML_MASS_BODY_DETACH_IMPULSIVE_HH
 #define CML_MASS_BODY_DETACH_IMPULSIVE_HH
 
-#include "jeod/models/dynamics/mass/include/class_declarations.hh"
+#include "jeod/models/dynamics/dyn_manager/include/class_declarations.hh"
 
 // Model includes
 #include "jeod/models/dynamics/body_action/include/class_declarations.hh"
 #include "jeod/models/dynamics/body_action/include/body_action.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 namespace jeod {
 class DynBody;

@@ -16,8 +16,9 @@ PROGRAMMERS:
 #ifndef CML_CONSTRAINT_HH
 #define CML_CONSTRAINT_HH
 
+#include <string>
+#include <cstddef>
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "constraint_enum.hh"
 #include "constraint_test.hh"

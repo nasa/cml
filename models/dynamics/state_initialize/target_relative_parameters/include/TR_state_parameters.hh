@@ -23,6 +23,7 @@ NOTES:
 #ifndef CML_TR_STATE_PARAMETERS_HH
 #define CML_TR_STATE_PARAMETERS_HH
 
+#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameter_set.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 

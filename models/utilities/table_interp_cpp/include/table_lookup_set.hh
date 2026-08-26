@@ -14,9 +14,8 @@ PROGRAMMERS:
 #ifndef CML_TABLE_LOOKUP_SET_HH
 #define CML_TABLE_LOOKUP_SET_HH
 
-#include <vector>
+#include <cstddef>
 #include <string>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "abstract_table_lookup.hh"
 #include "generic_multi_input_table.hh"
 #include "table_independent_variable.hh"

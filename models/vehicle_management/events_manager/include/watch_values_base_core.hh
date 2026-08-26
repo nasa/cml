@@ -20,7 +20,6 @@ PROGRAMMERS:
 
 #include <list>
 #include <string>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "event_variable_assignment.hh"

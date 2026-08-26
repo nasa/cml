@@ -45,14 +45,14 @@ PROGRAMMERS:
 #ifndef CML_DYNAMIC_MASS_GROUP_HH
 #define CML_DYNAMIC_MASS_GROUP_HH
 
+#include <string>
 #include<vector>
 #include<list>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh" // for moving-mass option
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "dynamic_mass_body.hh"
 #include "dynamic_mass_string.hh"
+#include "jeod/models/dynamics/mass/include/mass.hh"
 
 class DynamicMassGroup : public SubscriptionBase {
  public:

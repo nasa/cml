@@ -27,6 +27,8 @@ PROGRAMMERS:
 
 #include "dynamic_mass_body.hh"
 #include "dynamic_mass_body_properties.hh"
+#include <list>
+#include <cstddef>
 
 class DynamicMassString  : public DynamicMassBodyPropertiesInterface
 {

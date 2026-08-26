@@ -32,7 +32,6 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
 #include "jeod/models/dynamics/body_action/include/body_action.hh" // jeod::BodyAction
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 // Local headers:
 #include "mass_properties_dispersions.hh" // MassPropertiesDispersions

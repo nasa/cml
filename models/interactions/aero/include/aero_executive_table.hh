@@ -24,6 +24,9 @@ PROGRAMMERS:
 #include "aero_table_set_base.hh"
 #include "aero_environment.hh"
 #include "aero_interface_output.hh"
+#include <vector>
+#include "cml/models/interactions/aero/include/aero_coefficients.hh"
+#include <string>
 
 /*******************************************************************************
 AeroExecutiveTable

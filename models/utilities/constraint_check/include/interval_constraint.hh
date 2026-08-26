@@ -11,12 +11,14 @@ PROGRAMMERS:
 #ifndef CML_INTERVAL_CONSTRAINT_HH
 #define CML_INTERVAL_CONSTRAINT_HH
 
+#include "cml/models/utilities/constraint_check/include/constraint_enum.hh"
 #include "constraint.hh"
 #include "constraint_test_templates.hh"
 #include "constraint_test_timed_templates.hh"
 #include "constraint_set.hh"
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
 
 
 /*****************************************************************************

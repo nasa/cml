@@ -10,11 +10,12 @@ PROGRAMMERS:
 #ifndef CML_WATCH_VALUES_SPECIFIC__JEOD_HH
 #define CML_WATCH_VALUES_SPECIFIC__JEOD_HH
 
+#include <cstddef>
 #include <list>
 #include <utility> // std::pair
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 
-#include "watch_values_specific.hh" // for SWIG template definitions
 
 /*****************************************************************************
 WatchValuesGravityAdjust

@@ -12,7 +12,6 @@ PROGRAMMERS:
 #ifndef CML_GUST_HH
 #define CML_GUST_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 class GustModel

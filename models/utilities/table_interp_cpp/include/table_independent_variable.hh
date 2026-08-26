@@ -15,8 +15,10 @@ PROGRAMMERS:
 #ifndef CML_TABLE_INDEPENDENT_VARIABLE_HH
 #define CML_TABLE_INDEPENDENT_VARIABLE_HH
 
+#include <cstddef>
 #include <string>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <vector>
+#include <utility>
 
 #include "table_type_defs.hh"
 

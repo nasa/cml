@@ -20,6 +20,7 @@ PROGRAMMERS:
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 
 #include "atmosphere_exec_atmos_base.hh"
+#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
 
 /* START Stubbed classes / structures for CML usage */
 struct GramOut

@@ -22,11 +22,12 @@ PROGRAMMERS:
 #ifndef CML_SINGLE_INPUT_TABLE_FOR_QUATERNIONS_HH
 #define CML_SINGLE_INPUT_TABLE_FOR_QUATERNIONS_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/table_interp_cpp/include/table_type_defs.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
 
 #include "generic_single_input_table.hh"
 #include "quaternion_spherical_interpolator.hh"
+#include <cstddef>
 
 class SingleInputTableForQuaternions : public GenericSingleInputTable
 {

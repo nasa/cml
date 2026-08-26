@@ -18,8 +18,8 @@ Programmers:
 #ifndef CML_EARTH_MOON_ROTATING_FRAME_HH
 #define CML_EARTH_MOON_ROTATING_FRAME_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/dynamics/state_descriptors/pointing_ref_frame/include/ephem_based_pointing_ref_frame.hh"
+#include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
 
 /*****************************************************************************
 EarthMoonRotatingFrame

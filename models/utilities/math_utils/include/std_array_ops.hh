@@ -15,8 +15,6 @@ PROGRAMMERS:
 #include <algorithm>
 #include <array>
 #include <cmath>
-#include <cstdint>
-#include <limits>
 #include <ostream>
 #include "math_utils.hh"
 

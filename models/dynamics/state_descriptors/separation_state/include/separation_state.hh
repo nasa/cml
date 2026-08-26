@@ -18,13 +18,14 @@ PROGRAMMERS:
 #ifndef CML_SEPARATION_STATE_HH
 #define CML_SEPARATION_STATE_HH
 
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "jeod/models/utils/orientation/include/orientation.hh"
 #include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 
 class SeparationState : public SubscriptionBase

@@ -18,7 +18,6 @@ Programmers:
 
 #include "jeod/models/utils/ref_frames/include/ref_frame.hh" // RefFrame
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh" // jeod::RefFrameState
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
                                                            // SubscriptionBase
 

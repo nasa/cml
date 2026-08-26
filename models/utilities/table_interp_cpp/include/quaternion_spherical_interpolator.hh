@@ -13,7 +13,6 @@ PROGRAMMERS:
 #ifndef CML_QUATERNION_SPHERICAL_INTERPOLATOR_HH
 #define CML_QUATERNION_SPHERICAL_INTERPOLATOR_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
 
 // NOTE - this does not attempt to get any values or put any values anywhere.

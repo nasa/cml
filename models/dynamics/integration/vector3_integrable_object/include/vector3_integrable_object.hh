@@ -17,7 +17,6 @@ PROGRAMMERS:
 
 #include "er7_utils/integration/core/include/integrable_object.hh"
 #include "er7_utils/integration/core/include/integrator_result.hh"
-#include "jeod/models/utils/integration/include/restartable_state_integrator.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 

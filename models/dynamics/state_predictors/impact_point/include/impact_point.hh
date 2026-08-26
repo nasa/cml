@@ -30,6 +30,7 @@ PROGRAMMERS:
 #include "cml/models/dynamics/state_descriptors/range/include/range_from_pfix_reference.hh"
 #include "cml/models/dynamics/state_descriptors/orb_elem_subset/include/orb_elem_subset.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 // Forward declaration
 class RefFrameTrans;

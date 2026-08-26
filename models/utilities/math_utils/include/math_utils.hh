@@ -17,6 +17,7 @@
 #ifndef CML_MATH_UTILS_HH
 #define CML_MATH_UTILS_HH
 
+#include <array>
 #include <vector>  // mainly for std::vector use
 #include <string>  // mainly for std::string use
 #include <list>

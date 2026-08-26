@@ -28,7 +28,6 @@ Programmers:
 #include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
 #include "jeod/models/dynamics/mass/include/mass_point_state.hh" // MassPointState
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************

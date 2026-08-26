@@ -16,9 +16,12 @@ PROGRAMMERS:
 #ifndef CML_MASS_BODY_DETACH_WITH_SPRINGS_HH
 #define CML_MASS_BODY_DETACH_WITH_SPRINGS_HH
 
+#include "cml/models/dynamics/state_descriptors/separation_state/include/separation_state.hh"
 #include "jeod/models/dynamics/body_action/include/body_detach.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "simple_spring_group.hh"
 
 /* spring specific info for each spring */

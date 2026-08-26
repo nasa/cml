@@ -19,12 +19,10 @@ Programmers:
 // System includes
 #include <cstdio> // snprintf
 #include <string>
-#include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <utility>
 
-#include "jeod/models/utils/named_item/include/named_item.hh"
 #include "cml/models/utilities/color_string/include/color_string.hh"
 
 namespace CMLMessage {

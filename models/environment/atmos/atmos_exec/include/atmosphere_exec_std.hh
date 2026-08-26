@@ -20,6 +20,7 @@ PROGRAMMERS:
 #ifndef CML_ATMOSPHERE_EXEC_STD_HH
 #define CML_ATMOSPHERE_EXEC_STD_HH
 
+#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
 #include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
 
 #include "atmosphere_exec_atmos_base.hh"

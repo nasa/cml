@@ -34,6 +34,10 @@ PROGRAMMERS:
 #define CML_ATMOSPHERE_EXEC_HH
 
 
+#include "cml/models/environment/atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh"
+#include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
+#include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "cml/models/environment/atmos/gust/include/gust.hh"
 #include "cml/models/environment/atmos/first_order_hold/include/first_order_hold.hh"
 
@@ -42,6 +46,7 @@ PROGRAMMERS:
 #include "atmosphere_exec_gram.hh"
 #include "atmosphere_exec_simple_winds.hh"
 #include "atmosphere_exec_std.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 
 namespace jeod {
     class TimeStandard;

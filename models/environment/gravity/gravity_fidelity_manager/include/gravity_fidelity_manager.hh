@@ -12,6 +12,7 @@ PROGRAMMERS:
 #ifndef CML_GRAVITY_FIDELITY_MANAGER_HH
 #define CML_GRAVITY_FIDELITY_MANAGER_HH
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "cml/models/utilities/table_interp_cpp/include/simple_table_lookup.hh"

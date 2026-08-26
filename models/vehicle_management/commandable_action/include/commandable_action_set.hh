@@ -37,7 +37,6 @@ PROGRAMMERS:
 #include <string>
 #include <list>
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 // forward declaration
 class CommandableAction;

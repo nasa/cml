@@ -41,6 +41,8 @@ PROGRAMMERS:
 #ifndef CML_DYNAMIC_MASS_BODY_INTERPOLATION_HH
 #define CML_DYNAMIC_MASS_BODY_INTERPOLATION_HH
 
+#include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
+#include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 

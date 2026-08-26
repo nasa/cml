@@ -20,7 +20,6 @@ PROGRAMMERS:
 
 #include <cstdint>
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 void convert_double_to_uint_words( double convert_value,
                                    double resolution,

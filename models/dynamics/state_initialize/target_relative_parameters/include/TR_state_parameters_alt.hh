@@ -25,6 +25,7 @@ NOTES:
 #define CML_TR_STATE_PARAMETERS_ALT_HH
 
 #include "TR_state_param.hh"
+#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameter_set.hh"
 /*****************************************************************************
 TargetRelative_StateParameter_Alt
 Purpose:
