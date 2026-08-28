@@ -16,7 +16,16 @@ struct TestStruc
   double x;
   int i;
   TestStruc() : x(1.1), i(1){};
-  TestStruc( const TestStruc & rhs)  = default;
+  TestStruc( const TestStruc & rhs) : x(rhs.x), i(rhs.i){};
+  TestStruc& operator=(const TestStruc& rhs)
+  {
+    if (this != &rhs)
+    {
+      x = rhs.x;
+      i = rhs.i;
+    }
+    return *this;
+  }
 };
 
 struct SampleModel

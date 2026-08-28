@@ -4,7 +4,7 @@
 #include <cassert>
 #include <cmath>   // abs, isnan, isinf
 #include <algorithm> // std::max, min
-#include <fenv.h>  // fp exception
+#include <cfenv>  // fp exception
 #include <limits>  // std::numeric_limits::min, epsilon
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -34,8 +34,9 @@ class MathUtilsPrivate {
                            const T val2,
                            const T ulp)
   {
+    std::fenv_t env;
     //temporary disable fp exceptions
-    const int fe_prev = fedisableexcept(FE_ALL_EXCEPT);
+    const int fe_prev = std::feholdexcept(&env);
     assert(-1 != fe_prev);
 
     const T abs_val1 = std::abs(val1);
@@ -59,7 +60,7 @@ class MathUtilsPrivate {
            );
     }
 
-    feenableexcept(fe_prev); // restore the previous settings of fp exceptions
+    std::fesetenv(&env); // restore the previous settings of fp exceptions
     return res;
   }
 
@@ -73,9 +74,10 @@ class MathUtilsPrivate {
                     const T failed_val,
                     const bool failed_flag)
   {
+    std::fenv_t env;
     // Temporary disable fp exceptions, storing the
     // set of previously configured exceptions.
-    const int fe_prev = fedisableexcept(FE_ALL_EXCEPT);
+    const int fe_prev = std::feholdexcept(&env);
     assert(-1 != fe_prev); // If -1, there was a failure
 
     T res = dividend/divisor;
@@ -101,7 +103,7 @@ class MathUtilsPrivate {
       res = failed_val;
     }
 
-    feenableexcept(fe_prev); // restore the previous settings of fp exceptions
+    std::fesetenv(&env); // restore the previous settings of fp exceptions
     return res;
   }
 
@@ -165,9 +167,10 @@ class MathUtilsPrivate {
                    const bool failed_flag,
                    const bool base10)
   {
+    std::fenv_t env;
     // Temporary disable fp exceptions, storing the set of
     // previously configured exceptions.
-    const int fe_prev = fedisableexcept(FE_ALL_EXCEPT);
+    const int fe_prev = std::feholdexcept(&env);
     assert(-1 != fe_prev); // If -1, there was a failure
 
     T res;
@@ -189,7 +192,7 @@ class MathUtilsPrivate {
       }
     }
 
-    feenableexcept(fe_prev); // restore the previous settings of fp exceptions
+    std::fesetenv(&env); // restore the previous settings of fp exceptions
     return res;
   }
 };

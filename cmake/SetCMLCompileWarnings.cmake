@@ -12,6 +12,11 @@
 include_guard()
 
 function(set_cml_compile_warnings TARGET)
+    # If the compiler is GCC, continue. Otherwise, return immediately.
+    if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        return()
+    endif()
+
     set(CML_SHARED_WARNING_FLAGS
         # Keep these first since we may override some of the levels set for
         # certain warnings below.

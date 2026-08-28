@@ -58,7 +58,7 @@ endif
 TRICK_CXXFLAGS += -I${CML_HOME}/.. -D_USE_MATH_DEFINES
 TRICK_CFLAGS += -I${CML_HOME}/.. -D_USE_MATH_DEFINES
 
-# Include paths and libraries for libxml2
+# Include paths and libraries for libxml2 for linux
 ifeq ($(shell pkg-config --exists libxml-2.0 && echo $$?),0)
     TRICK_CXXFLAGS += $(shell pkg-config libxml-2.0 --cflags)
     TRICK_LDFLAGS += $(shell pkg-config libxml-2.0 --libs)

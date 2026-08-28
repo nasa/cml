@@ -65,7 +65,7 @@ class WatchValuesBaseCore : public SubscriptionBase {
   std::string name; /* (--)
     Name, primarily for debugging purposes. May be left blank.*/
   bool locked; /* (--)
-    Boolean used to lock at each cycle, so each WatchValuesBase cannot be 
+    Boolean used to lock at each cycle, so each WatchValuesBase cannot be
     tested more than once per cycle, leading to unintended behavior.*/
   bool externally_managed; /* (--)
     Boolean setting that bool "locked" is set to once trigger is evaluated

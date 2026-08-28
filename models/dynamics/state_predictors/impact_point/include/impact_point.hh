@@ -19,7 +19,7 @@ PROGRAMMERS:
         (New implementation of ball_impact for Antares))
     ((Bingquan Wang) (OSR) (May 2014)
         (cleaned up the code per its IV&V code review))
-   )   
+   )
  ******************************************************************************/
 
 #ifndef CML_IMPACT_POINT_HH
@@ -34,12 +34,12 @@ PROGRAMMERS:
 // Forward declaration
 class RefFrameTrans;
 
-class ImpactPoint : public jeod::PlanetFixedPosition, 
-                    public SubscriptionBase 
+class ImpactPoint : public jeod::PlanetFixedPosition,
+                    public SubscriptionBase
 {
  protected:
   const double & dyn_time; /* (s) Reference to the simulation's dynamic time.*/
-  const jeod::Planet & planet_ref; /* (--) 
+  const jeod::Planet & planet_ref; /* (--)
        Reference to the central planet. Note - planet_ref is the reference;
        "planet" is a pointer to the same place that is inherited from
        PlanetFixedPosition but is not used in this model. */
@@ -60,7 +60,7 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
 
   //INPUT
   bool auto_off; /* (--) Turns off automatically when vehicle hits the ground */
-  double iteration_threshold; /* (m) 
+  double iteration_threshold; /* (m)
        The threshold distance between the orbital position and the planet
        surface at which the iteration is considered to have converged. */
   unsigned int iteration_count_max; /* (--) max number of iterations */
@@ -70,7 +70,7 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
   double time_to_impact; /* (s) Time until impact */
   double time_of_impact; /* (s) Simulation dynamic time of predicted impact. */
   ImpactType impact_type; /* (--) Identifies type of impact. */
-  RangeFromPfixReference  launch_range; /* (--) 
+  RangeFromPfixReference  launch_range; /* (--)
        The range from the reference point, typically the launch site. */
 
  protected:
@@ -86,7 +86,7 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
               const jeod::Planet & planet,
               const double & grav_mu);
   ~ImpactPoint() override = default;
-  
+
   void initialize() override;
   void initialize( double ref_pos[3]);
   void update();
@@ -103,5 +103,5 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
   ImpactPoint(const ImpactPoint&);
   ImpactPoint & operator = (const ImpactPoint&);
 };
- 
+
 #endif

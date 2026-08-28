@@ -43,6 +43,7 @@ public:
 
   void initialize() override;
   void update() override;
+
 protected:
   void activate() override;
   void deactivate() override;

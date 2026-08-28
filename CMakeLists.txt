@@ -131,13 +131,42 @@ target_link_libraries(cml_static
     PRIVATE
         $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
 )
-target_link_libraries(cml_shared
-    PUBLIC
-        LibXml2::LibXml2
-        $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
-    PRIVATE
-        $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
-)
+
+if(APPLE)
+    message(STATUS "Configuring macOS-specific linking for cml_shared")
+
+    target_link_libraries(cml_shared
+        PUBLIC
+            LibXml2::LibXml2
+            ${JEOD_LIBRARY}
+            ${Trick_LIBRARY}
+            ${Trick_liber7_utils}
+            ${Trick_libtrick_mm}
+            ${Trick_libtrick_math}
+            ${Trick_libtrick_comm}
+            ${Trick_libtrick_connection_handlers}
+            ${Trick_libtrick_units}
+            ${Trick_libtrick_pyip}
+            /opt/homebrew/lib/libudunits2.dylib
+            ${Trick_libtrick_var_binary_parser}
+            ${Trick_libconversions}
+        PRIVATE
+            $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
+    )
+
+else()
+    message(STATUS "Configuring Linux-specific linking for cml_shared")
+
+    # Linux does NOT require explicit Trick/JEOD linking for shared libraries
+    target_link_libraries(cml_shared
+        PUBLIC
+            LibXml2::LibXml2
+            $<$<BOOL:${CML_USE_SANITIZERS}>:-fsanitize=address,undefined>
+        PRIVATE
+            $<$<BOOL:${CML_CODE_COVERAGE}>:--coverage>
+    )
+
+endif()
 
 # Set include directories for libcml. This is mostly for unit test executables
 # that rely on libcml.

@@ -178,6 +178,7 @@ public:
   void update() override;
 protected:
   void activate() override;
+
   void configure_new_table(AeroTableSetBase *);
   void trig_functions();
   void post_process_table_data();
