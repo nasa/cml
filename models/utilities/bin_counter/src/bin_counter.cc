@@ -206,8 +206,8 @@ CML_BinCounter::insert(double value)
   // Consider only values below upper edge and only if model passed sanity
   // check.
   if (bins_ready && value <= bins[nbin-1].bin_ceil) {
-    for (int ii = nbin - 1; ii >= 0; ii--) {
-      const auto bin_index = static_cast<size_t>(ii);
+    for (int ii = static_cast<int>(nbin) - 1; ii >= 0; ii--) {
+      const size_t bin_index = static_cast<size_t>(ii);
       if (value >= bins[bin_index].bin_floor) {
         bins[bin_index].count++;
         return;

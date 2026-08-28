@@ -2,7 +2,12 @@
 # Ignored warnings:
 #
 # bugprone:
-#     To be added in a future pull request
+#     bugprone-easily-swappable-parameters:
+#         May end up hurting readability in many cases. However, in the future
+#         we may want to set the MinimumLength option to a higher number to
+#         warn on excessively long argument lists of the same type.
+#     bugprone-reserved-identifier:
+#         Will be enabled in the future (https://github.com/nasa/cml/issues/87).
 #
 # clang-analyzer:
 #     clang-analyzer-optin.performance.Padding:
@@ -28,6 +33,9 @@
 # readability:
 #     To be added in a future pull request
 Checks: >
+    bugprone-*,
+        -bugprone-easily-swappable-parameters,
+        -bugprone-reserved-identifier,
     clang-*,
         -clang-analyzer-optin.performance.Padding,
     performance-*,
