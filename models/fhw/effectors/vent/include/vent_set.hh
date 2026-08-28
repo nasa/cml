@@ -69,7 +69,7 @@ class VentSet : public SubscriptionBase {
           DynamicMassBody & tank);
   VentSet(jeod::DynBody & dyn_body_,
           const double & time,
-          std::vector<DynamicMassBody *>& tank_array);
+          const std::vector<DynamicMassBody *>& tank_array);
   // TODO Turner 2020/01
   //  - implement a Vent type running off a DynamicMassString rather than a
   //    single tank.

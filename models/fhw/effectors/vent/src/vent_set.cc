@@ -71,7 +71,7 @@ VentSet::VentSet(
 VentSet::VentSet(
         jeod::DynBody& dyn_body_,
         const double & time,
-        std::vector<DynamicMassBody *>& tank_array)
+        const std::vector<DynamicMassBody *>& tank_array)
   :
   VentSet(dyn_body_, time)
 {
