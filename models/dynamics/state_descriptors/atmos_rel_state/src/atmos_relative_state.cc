@@ -11,7 +11,8 @@ REFERENCE:
      ((SORT - Aero Functions) (AROVAR.f) (AROATT.f)))
 
 LIBRARY DEPENDENCIES:
-    ((utils/orientation/src/eigen_rotation.cc)
+    ((cml/models/utilities/cml_message/src/cml_message.cc)
+     (utils/orientation/src/eigen_rotation.cc)
      (utils/orientation/src/euler_angles.cc)
      (utils/quaternion/src/quat_from_mat.cc)
      (utils/quaternion/src/quat_to_mat.cc)

@@ -3,6 +3,9 @@ PURPOSE:
    (Provide the coordinate axes of a reference frame defined by 2 vectors and
    used in multiple places in the TargetRelative_StateParameter class)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))

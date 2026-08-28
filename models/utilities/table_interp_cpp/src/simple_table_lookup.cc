@@ -2,6 +2,9 @@
 PURPOSE:
   (Table lookup model)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2014) (New implementation for C++ models))
    ((Bingquan Wang) (OSR) (Nov 2016) (Fixed the mismatch of new[] and delete))

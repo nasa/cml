@@ -2,6 +2,9 @@
 PURPOSE:
   (definitions for the single-variable methods for the n-dimensional lookup tables)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (dec 2015) (Antares) (initial version))
    ((Bingquan Wang) (OSR) (aug 2017) (Antares) (IVV code cleanup and refactored))

@@ -3,6 +3,9 @@ PURPOSE: (Uses JEOD radiation pressure model components to generate an
           illumination fraction without executing the whole radiation
           pressure model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2019) (Antares) (initial)))
 *****************************************************************************/

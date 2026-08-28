@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Generic vent model with mass depletion)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (initial version)))
 ************************************************************************/

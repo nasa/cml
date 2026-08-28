@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Provide a simple table-lookup capability for winds)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2018) (Antares) (initial))
    ((Brian Birmingham) (OSR) (July 2022) (Antares) (wind angle)))  

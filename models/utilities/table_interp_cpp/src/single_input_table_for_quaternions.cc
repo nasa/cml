@@ -4,6 +4,10 @@ PURPOSE:
   represent one quaternion sets.  This table has access to the
   spherical interpolation algorithm)
 
+LIBRARY DEPENDENCIES:
+  ((quaternion_spherical_interpolator.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS:
   (This table contains 4 dependent variables - a quaternion - and a single
   independent variable.)

@@ -6,7 +6,8 @@ PURPOSE: (Models the effect of a rapidly changing mass and inertia tensor.
           will still be handled)
 
 LIBRARY DEPENDENCY:
-   ((cml/models/utilities/math_utils/src/math_utils.cc)
+   ((cml/models/utilities/cml_message/src/cml_message.cc)
+    (cml/models/utilities/math_utils/src/math_utils.cc)
    )
 
 PROGRAMMERS:

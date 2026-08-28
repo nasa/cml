@@ -1,6 +1,10 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Disperses the state)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/utilities/math_utils/src/math_utils.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (February 2015) (Antares) (Initial version))
    ((Brenton Caughron) (OSR) (Oct. 2017) (Antares) (IV&V Code Review))

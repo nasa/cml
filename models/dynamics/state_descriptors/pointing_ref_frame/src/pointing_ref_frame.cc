@@ -2,6 +2,9 @@
 Purpose:
   (Define methods for defining and updating the pointing frame.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   ( ((Michael McCarthy, Gary Turner) (OSR) (June 2019) (Antares) (initial))
   )

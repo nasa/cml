@@ -2,6 +2,9 @@
 PURPOSE:
    (Dynamic Mass Group methods)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (March 2014)
                        (New implementation of dynamic mass for JEOD 2.x))

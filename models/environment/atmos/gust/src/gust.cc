@@ -2,6 +2,9 @@
 PURPOSE:
     (Simple 1 - cosine gust model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
     (((Jon Berndt) (ESCG/Jacobs) (02/08) (ANTARES) (initial version))
      ((Gary Turner) (OSR) (2016) (Antares) (C++))

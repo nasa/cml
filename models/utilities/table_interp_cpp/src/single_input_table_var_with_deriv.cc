@@ -9,6 +9,9 @@
       cubic polynomial so also depends on the values of the data for the
       base-variable.)
 
+ LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (May 2023) (Antares) (initial version))
    )

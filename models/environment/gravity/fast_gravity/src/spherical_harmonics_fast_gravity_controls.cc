@@ -2,6 +2,9 @@
 Purpose:
   (Define member functions for the SphericalHarmonicsFastGravityControls class.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
  (((Gary Turner) (OSR) (May 2014) (Antares) (Implementation of Blair Thompson's
                      algorithm originally written for earlier JEOD))

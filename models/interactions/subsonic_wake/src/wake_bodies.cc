@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Definition of the bodies in the wake profile.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   ( ((Gary Turner) (OSR) (Mar 2016) (Antares)
                 (New adaptation to meet Antares coding standards))

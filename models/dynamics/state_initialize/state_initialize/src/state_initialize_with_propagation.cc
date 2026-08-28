@@ -4,6 +4,9 @@ PURPOSE: (Allows the specification of a known state at a time other than the
           to the desired simulation-start-time and then used to initialize the
           simulation.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
    (( Initial propagation assumes that the primary gravity-body rotates on
       its z-axis, and that 3rd-bodies are static for the duration of the

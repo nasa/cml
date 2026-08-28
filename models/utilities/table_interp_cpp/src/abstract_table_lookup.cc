@@ -3,6 +3,15 @@ PURPOSE:
   (Table lookup model master controller, AbstractTableLookup is the base class for the
    table manager classes AbstractTableLookup and SimpleTableLookup.)
 
+LIBRARY DEPENDENCIES:
+  ((generic_multi_input_table.cc)
+   (generic_single_input_table.cc)
+   (single_input_table_for_angles.cc)
+   (single_input_table_for_quaternions.cc)
+   (single_input_table_var_with_deriv.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc)
+  )
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Oct 2017) (New implementation))
   )
@@ -16,7 +25,7 @@ PROGRAMMERS:
 #include "../include/single_input_table_var_with_deriv.hh"
 #include "../include/table_independent_variable.hh"
 
-#include <algorithm> //std::find, find_if, any_of
+#include <algorithm>
 #include <cstdarg>
 #include <cstddef>
 #include <vector>

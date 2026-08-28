@@ -2,6 +2,9 @@
 PURPOSE:    (To provide a Trick-friendly unit-test framework)
 REFERENCES: (../models-C by Jason Arnold)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Jason Arnold) (Titan) (Jul 2005))
    ((Gary Turner) (OSR) (Oct 2016)

@@ -3,7 +3,8 @@ PURPOSE: (Class for manipulating sets of vents and aggregating forces and
           moments)
 
 LIBRARY DEPENDENCY:
-  (../src/vent_set.cc)
+  ((../src/vent_set.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc))
 
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))

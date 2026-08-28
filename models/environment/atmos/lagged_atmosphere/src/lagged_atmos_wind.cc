@@ -2,6 +2,9 @@
 Purpose:
    (Define methods for the class LaggedAtmosWind.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Author:
  (((Gary Turner) (OSR) (Jan 2021) (Antares)
     (Based on LaggedAtmosphere and LaggedWinds by Jeff Semrau,

@@ -2,6 +2,9 @@
 PURPOSE:
   (Spherical interpolation algorithm for handling quaternion interpolation.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (November 2017) (New implementation))
   )

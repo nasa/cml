@@ -2,6 +2,9 @@
 Purpose:
  (Produce wind generated twist and sway motion)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
  (
  ((Rob Gillis) (Emergent) (Dec 2011) (CEV) (Initial version for ground contact model))

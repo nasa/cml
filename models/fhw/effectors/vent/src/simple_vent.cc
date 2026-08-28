@@ -2,6 +2,9 @@
 PURPOSE: (Simple vent force model - calculates force and torque from a vent
           but does not model mass depletion)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
  ************************************************************************/

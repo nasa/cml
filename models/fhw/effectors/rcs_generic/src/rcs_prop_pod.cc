@@ -5,6 +5,9 @@ PURPOSE: (The RcsPropPod provides a convenient mechanism for grouping
   had several instances of RCS_PPOD that needed instantiating; this object
   represents a very similar concept to RCS_PPOD.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation))

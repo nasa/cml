@@ -3,6 +3,9 @@ PURPOSE:
   (Table lookup model component representing the independent variable and its
    lookup)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (New implementation))
    ((Bingquan Wang) (OSR) (Apr 2017) (Fixed the compilation warning of float-point

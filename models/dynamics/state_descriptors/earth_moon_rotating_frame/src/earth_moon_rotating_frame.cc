@@ -3,6 +3,9 @@ Purpose:
   (Define methods for configuring an EphemBasedPointingRefFrame for the
    Earth-Moon system.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   ( ((Gary Turner) (OSR) (Aug 2019) (Antares) (initial))
   )

@@ -6,6 +6,9 @@ PURPOSE:
    the bodies are assumed to be in contact and their relative state is
    overridden such that it is equal to the nominal separation.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
 

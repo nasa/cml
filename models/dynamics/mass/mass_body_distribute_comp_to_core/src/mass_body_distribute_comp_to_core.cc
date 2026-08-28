@@ -5,6 +5,9 @@ Purpose:
    of a compound body.
   )
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   (((Gary Turner) (OSR) (April 2018) (Antares) (Initial version))
    ((Daniel Ghan) (OSR) (August 2020) (Antares) (Added sanity checks)))

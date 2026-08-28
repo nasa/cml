@@ -3,6 +3,9 @@ PURPOSE:
   (Define structure and function prototypes for counting the number of
   times some variable of type double has a value that falls into specified bins
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS:
   (Bin edges are monotonically increasing and bins are numerically adjacent.)
 

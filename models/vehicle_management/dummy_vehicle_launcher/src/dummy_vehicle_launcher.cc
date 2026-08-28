@@ -6,6 +6,9 @@
     environment responses, or for applying a current vehicle state to another
     body with a different mass.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
     (Requires two sets of data inputs, one for the mass and one for the state.
      These data may come from a single vehicle, or from 2 different vehicles,

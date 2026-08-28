@@ -2,6 +2,9 @@
 PURPOSE:
     (Doppler Radar Wind Pairs model using CML table interpolation routines)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
     (((Scott Schuh)  (NASA) (Jan 2015) (Initial model implementation and verif))
      ((Edgar Medina) (NASA) (Feb 2015) (Integration into SIM_em1))

@@ -7,6 +7,9 @@ PURPOSE:
    ORB_INIT, and ICOPT models, and CEV's Corr_State_Init_T and
    State_Init_Exec_T structures and the state_init_exec method.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCE:
   (This is a reworking of the following models from old CML:
     cml/models/dynamics/state_init_exec/src/state_init_exec.cpp

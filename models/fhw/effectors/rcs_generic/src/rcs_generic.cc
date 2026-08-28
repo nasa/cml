@@ -12,6 +12,9 @@ PURPOSE: (The front-end of the rcs-generic model, which provides a
     Robert Bailey/LinCom/87, Douglas Hamilton/RSOC/95 and partially based on
     rcs_generic by Willian Othon/LinCom/93)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCE:
     ((Trick code - rcs_orbiter.c by John Whynott/McDonnell Douglas/91,
       Robert Bailey/LinCom/87, Douglas Hamilton/RSOC/95)

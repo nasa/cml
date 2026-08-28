@@ -21,6 +21,7 @@
 // This sim object models Earth using the GGM02C gravity model, and RNP model.
 //=============================================================================
 
+##include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 ##include "jeod/models/environment/planet/include/planet.hh"
 ##include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
 ##include "cml/models/environment/atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh"

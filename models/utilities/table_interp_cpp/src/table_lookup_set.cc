@@ -2,6 +2,9 @@
 PURPOSE:
   (Table lookup model master controller)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (New implementation))
    ((Bingquan Wang) (OSR) (Aug 2017) (IVV code cleanup and refactored))

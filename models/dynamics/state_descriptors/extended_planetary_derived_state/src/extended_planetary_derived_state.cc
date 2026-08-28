@@ -7,6 +7,9 @@ PURPOSE:
     Pad SEU and left-handed pad frames,
     Hang and Roll angles )
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (June 2014)
                       (New implementation of PlanetaryDerivedState for Antares))

@@ -3,6 +3,9 @@ Purpose:
  (Defines the methods in the CommandableAction class -- see
  commandable_action.hh for details)
 
+ Library dependencies:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
  (
   ((Gary Turner) (OSR) (02/22) (Generic concept developed while

@@ -16,6 +16,9 @@ PURPOSE: (Provides a table-lookup-set when the data is presented in a
           This class supports data presented in the latter format.  The data
           may be subdivided into as many tables as necessary or desired.
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Nov 2017) (Antares) (initial)))
 **********************************************************************/

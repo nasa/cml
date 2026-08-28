@@ -4,6 +4,9 @@ PURPOSE: (Provides an accumulation of an integrated value, accumulating
           itself.  This gives the total change rather than the net change
           -- which can be easily obtained from the variable itself.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2017) (Antares) (new)))
 **********************************************************************/

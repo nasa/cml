@@ -2,6 +2,9 @@
 PURPOSE:
 (Manages the watched variables)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
 (((Gary Turner) (OSR) (October 2014) (Antares))
 

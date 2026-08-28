@@ -3,6 +3,9 @@ PURPOSE:
   (This model computes the offset between the WGS-84 ellipsoid and the
    EGM-2008 geoid.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCE:
   (https://earth-info.nga.mil/GandG/wgs84/gravitymod/egm2008/egm08_wgs84.html
    on February 11, 2021.)

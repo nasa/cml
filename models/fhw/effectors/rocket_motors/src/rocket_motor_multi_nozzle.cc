@@ -3,6 +3,9 @@ PURPOSE:
   (Provide an enhanced solid-motor model with multiple nozzles and
      optional flex effects..)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares)
          (initial, providing features dictated by requirements for

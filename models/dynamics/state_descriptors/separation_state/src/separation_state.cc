@@ -2,6 +2,9 @@
 PURPOSE:
    (Implements the methods in the SeparationState class)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (April 2014) (Antares) (Replaces SEPKIN))
     ((Gary Turner) (OSR) (December 2014) (Antares)

@@ -5,7 +5,8 @@ Purpose:
 Library dependencies:
   ((dynamics/body_action/src/body_action.cc)
    (dynamics/body_action/src/body_action_messages.cc)
-   (dynamics/mass/src/mass_point_state.cc))
+   (dynamics/mass/src/mass_point_state.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc))
 
 Programmers:
   (((Gary Turner) (OSR) (December 2011) (TS21 contribution) (Initial version)))

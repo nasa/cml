@@ -4,7 +4,7 @@ Purpose:
   in JEOD.)
 
 Library Dependency:
- ((../src/cml_message.cc))
+ ((cml/models/utilities/cml_message/src/cml_message.cc))
 
 PYTHON_MODULE: (CMLMessage)
 

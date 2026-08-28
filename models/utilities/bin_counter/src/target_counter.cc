@@ -3,6 +3,9 @@ PURPOSE:
   (Define structure and function prototypes for counting the number of
   times some integer variable has specific values.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (
     ((Matthew Elmer, Gary Turner) (OSR) (Jun 2023)

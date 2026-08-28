@@ -4,6 +4,9 @@ PURPOSE:
    (Defines the class that is used for computing relative states between two
    bodies, and expressing that in the LVLH frame of one of them.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2020) (Antares) (new)))
 

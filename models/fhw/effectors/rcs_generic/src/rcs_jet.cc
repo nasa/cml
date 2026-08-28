@@ -2,6 +2,10 @@
 PURPOSE:
   (Simple model of a single reaction control system jet.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/utilities/math_utils/src/math_utils.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (Initial object-oriented implementation)))

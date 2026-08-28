@@ -5,7 +5,8 @@ PURPOSE:
    of a compound body.)
 
 LIBRARY DEPENDENCIES:
-  (cml/models/dynamics/mass/mass_body_distribute_comp_to_core/src/mass_body_distribute_comp_to_core.cc)
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/dynamics/mass/mass_body_distribute_comp_to_core/src/mass_body_distribute_comp_to_core.cc))
 
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2018) (Antares) (Initial version))
