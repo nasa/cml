@@ -50,6 +50,7 @@ template <typename... Args>
 std::string collate_args(Args&&... args)
 {
   std::ostringstream text;
+  // NOLINTNEXTLINE(bugprone-unintended-char-ostream-output)
   (text << ... << std::forward<Args>(args));
   return text.str();
 }
