@@ -120,16 +120,13 @@ MassBodyCompositeDispersions::update_internal()
   // If the specified properties are for the entire tree (below the
   // target-body), we only need to apply the composite-to-core modifier.
 
-  // If no detach-point has been specified, just apply the modifier:
-  if ( detach_sub_tree == nullptr) {
-    comp_to_core_updates();
-  }
+  // If no detach-point has been specified, just apply the modifier.
   // If the detach-point has been specified and is superior to the target-body
   // (so the sub-tree below the target-body would be unaffected by
   // detaching at the detach-point), or if the detach_sub_tree is set as a
   // different mass tree from the target-body then,
-  // similarly just apply the modifier:
-  else if (!detach_sub_tree->is_progeny_of( target_body)) {
+  // also just apply the modifier:
+  if (detach_sub_tree == nullptr || !detach_sub_tree->is_progeny_of( target_body)) {
     comp_to_core_updates();
   }
   // If the detach-point is defined, and is between the adjustable-body and
