@@ -321,7 +321,7 @@ RocketMotor_MultiNozzle::initialize_nozzles()
      "Zeroing the scale-factor on all nozzles.\n");
   }
   else {
-    sf_scale = MathUtils::divide_protected( num_noz,
+    sf_scale = MathUtils::divide_protected( static_cast<double>(num_noz),
                                             total_dispersed_scale_factor,
                                             0.0);
   }
@@ -389,7 +389,7 @@ RocketMotor_MultiNozzle::update()
   // checked and enforced to be equal to the number of nozzles.
   // NOTE - num_noz != 0 verified at initialization, resulting in termination if
   // it failed.
-  double thrust_per_sf = thrust_magnitude / num_noz;
+  double thrust_per_sf = thrust_magnitude / static_cast<double>(num_noz);
   // Start by initializing the system values to allow incremental accumulation
   jeod::Vector3::initialize(thrust);
   jeod::Vector3::initialize(thrust_vac);

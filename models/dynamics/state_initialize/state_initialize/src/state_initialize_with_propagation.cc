@@ -214,7 +214,7 @@ void
 StateInitializeWithPropagation::rk4_integration()
 {
   // Adjust the specified step size so that it hits the target perfectly
-  unsigned int num_steps(std::round(std::abs( propagation_time / time_step)));
+  unsigned int num_steps(std::lround(std::abs( propagation_time / time_step)));
   time_step = propagation_time / num_steps;
 
 

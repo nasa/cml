@@ -565,9 +565,9 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   // Grab a record of the current position, wind the file to the end and grab
   // a record of the position there. These should match. If they don't, the
   // parsing went awry.
-  int file_pos_ = BinFile.tellg();
+  auto file_pos_ = BinFile.tellg();
   BinFile.seekg (0, std::ios::end);
-  int file_end_ = BinFile.tellg();
+  auto file_end_ = BinFile.tellg();
   if (file_pos_ != file_end_) {
     CMLMessage::fail(__FILE__, __LINE__,
       "DRWP binary file size does not match size of all data read");
@@ -741,7 +741,7 @@ LookupAtmosWinds::compute_average_wind(
     // Leave average at zero-vector
   }
   else {
-    jeod::Vector3::scale( (1.0/num_alts),
+    jeod::Vector3::scale( (1.0/static_cast<double>(num_alts)),
                     average_wind);
     // We just populated the model's output data with values from an altitude
     // that is not the current altitude. If the model is currently active, that

@@ -32,7 +32,9 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 // Forward declaration
+namespace jeod {
 class RefFrameTrans;
+}
 
 class ImpactPoint : public jeod::PlanetFixedPosition, 
                     public SubscriptionBase 

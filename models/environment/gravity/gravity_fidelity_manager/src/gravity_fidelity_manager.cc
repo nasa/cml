@@ -72,7 +72,7 @@ GravityFidelityManager::update()
   // data type.  Therefore, even though degree and order are unsigned int
   // types, they must be stored as double.
   grav_controls.degree =
-  grav_controls.order = std::round(degree_order);
+  grav_controls.order = std::lround(degree_order);
 
   grav_controls.spherical = (grav_controls.degree == 0);
 }

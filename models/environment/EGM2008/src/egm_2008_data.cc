@@ -21,12 +21,10 @@ EGM2008_WGS84::load_data()
 {
   double rad_per_deg = 1.0/57.29577951308231;
 
-  // I could use std::iota and std::transform to build these in vectors, but
-  // there seems little advantage:
   constexpr size_t lat_size = 181;
   double lat_vec[lat_size];
   for (size_t ii = 0; ii < lat_size; ++ii) {
-    lat_vec[ii] = (90.0-ii) * rad_per_deg;
+    lat_vec[ii] = (90.0-static_cast<double>(ii)) * rad_per_deg;
   }
   tiv_lat.load_data( lat_vec,
                      lat_size);
@@ -34,7 +32,7 @@ EGM2008_WGS84::load_data()
   constexpr size_t lon_size = 361;
   double lon_vec[lon_size];
   for (size_t ii = 0; ii < lon_size; ++ii) {
-    lon_vec[ii] = ii * rad_per_deg;
+    lon_vec[ii] = static_cast<double>(ii) * rad_per_deg;
   }
   tiv_lon.load_data(lon_vec,
                     lon_size);

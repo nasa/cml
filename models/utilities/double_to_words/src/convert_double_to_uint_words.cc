@@ -122,7 +122,7 @@ ConvertDoubleToUintWords::check_values()
   // word_count -- set all words to their max value and leave.
   if (convert_value >= significance.at(word_count) - 0.5*resolution) {
     for (unsigned int ii = 0; ii < word_count; ii++) {
-      words.at(ii) = max_uint_f;
+      words.at(ii) = static_cast<unsigned int>(max_uint_f);
     }
     // If the if statement is tripped write out a message with the inform
     // severity so that it can be viewed as wanted by the user
@@ -174,7 +174,7 @@ ConvertDoubleToUintWords::compute_significance()
 {
 
   // First identify the largest value expressable by an unsigned int
-  max_uint = 2.0*(1UL<<(bit_size-1));
+  max_uint = 2.0*static_cast<double>(1UL<<(bit_size-1));
   max_uint_f = max_uint - 1.0;
 
   // Find the first (i.e. least-significant) zero element of the word-array

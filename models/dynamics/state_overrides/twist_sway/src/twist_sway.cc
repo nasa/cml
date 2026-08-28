@@ -358,7 +358,7 @@ TwistSway::check_for_active_perturbations()
   // Only need to check for removal when there are perturbations currently
   // being processed
   if (!fast_list.empty()) {
-    double t_remove = T_fast * (ix_fast_next - fast_list.size()) -
+    double t_remove = T_fast * static_cast<double>(ix_fast_next - fast_list.size()) -
                          params.tau * params.limit_ln_epsilon;
     if (perturb_algorithm == GrowHoldDecay) {
       t_remove += T_fast;
@@ -373,7 +373,7 @@ TwistSway::check_for_active_perturbations()
   // Note - this is almost code duplication except that the time-constant
   // changed from tau to taul.
   if (!slow_list.empty()) {
-    double t_remove = T_slow * (ix_slow_next - slow_list.size()) -
+    double t_remove = T_slow * static_cast<double>(ix_slow_next - slow_list.size()) -
                          params.taul * params.limit_ln_epsilon;
     if (perturb_algorithm == GrowHoldDecay) {
       t_remove += T_slow;

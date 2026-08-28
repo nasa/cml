@@ -246,7 +246,7 @@ RcsPropPod::compute_jets_on(
     // back out number of active jets: total momentum divided by momentum of
     // each jet.  NOTE: if one jet is on for less than half of time_step,
     // num_jets_on will round down to 0
-    num_jets_on = std::round(equiv_momentum /
+    num_jets_on = std::lround(equiv_momentum /
                                      (nominal_thrust * time_step));
   }
   else {

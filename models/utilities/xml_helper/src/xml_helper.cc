@@ -95,8 +95,8 @@ const char* XmlHelper::xml_find_value(
         std::string left(xml_convert_ptr(val->name));
         std::string right(name);
         if (left.length() > 0 && right.length() > 0) {
-          left[0]  = toupper( left[0]);
-          right[0] = toupper(right[0]);
+          left[0]  = static_cast<char>(std::toupper( left[0]));
+          right[0] = static_cast<char>(std::toupper(right[0]));
           if (left == right) {
             return xml_convert_ptr(val->children->content);
           }
