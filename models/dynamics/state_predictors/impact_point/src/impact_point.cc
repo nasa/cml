@@ -13,7 +13,7 @@ PROGRAMMERS:
    )
 *******************************************************************************/
 
-#include <cmath>   // sin, cos
+#include <cmath>
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/math/include/vector3.hh"

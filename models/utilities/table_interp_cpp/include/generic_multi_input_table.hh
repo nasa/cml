@@ -17,7 +17,7 @@
 #define CML_GENERIC_MULTI_INPUT_TABLE_HH
 
 #include <cstddef>
-#include <string> // std::string
+#include <string>
 
 #include "table_independent_variable.hh"
 #include "table_type_defs.hh"

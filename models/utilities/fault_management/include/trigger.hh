@@ -12,12 +12,12 @@ PROGRAMMERS:
 #define CML_TRIGGER_HH
 
 #include <string>
-#include <limits> // std::numeric_limits
-#include <cstring> // strcmp
-#include <cmath> // std::abs(), std::fmod(), std::max()
+#include <limits>
+#include <cstring>
+#include <cmath>
 #include <utility>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // check_equal
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 /*******************************************************************************
 TestEqual_Trait

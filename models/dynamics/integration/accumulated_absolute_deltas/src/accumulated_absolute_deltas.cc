@@ -11,7 +11,7 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2017) (Antares) (new)))
 **********************************************************************/
 
-#include <cmath>   // abs
+#include <cmath>
 #include <new>
 
 #include "../include/accumulated_absolute_deltas.hh"

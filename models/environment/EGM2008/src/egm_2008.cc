@@ -14,7 +14,6 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (Feb 2021) (Antares) (initial)))
 **********************************************************************/
 
-// Local header:
 #include "../include/egm_2008.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"

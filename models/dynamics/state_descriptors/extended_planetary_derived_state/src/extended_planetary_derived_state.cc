@@ -29,7 +29,7 @@ PROGRAMMERS:
 //    position (already have) and rotational relative state (may not be
 //    needed), so it adds to the computation load.  - Gary Turner ~ 2015
 
-#include <cmath>  // acos
+#include <cmath>
 #include <limits>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"

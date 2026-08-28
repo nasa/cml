@@ -14,7 +14,7 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "../include/constraint_enum.hh"
 #include "../include/constraint_test.hh"
 

@@ -43,7 +43,7 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
 #include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
-#include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
 

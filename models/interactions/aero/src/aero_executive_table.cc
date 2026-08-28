@@ -12,7 +12,7 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
 *******************************************************************************/
 
-#include <cmath>   // sin, cos
+#include <cmath>
 #include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"

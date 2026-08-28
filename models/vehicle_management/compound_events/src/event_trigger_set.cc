@@ -8,7 +8,7 @@ PROGRAMMERS:
   )
 ***********************************************************************/
 
-#include <algorithm> // find_if
+#include <algorithm>
 #include <string>
 #include "../include/event_trigger.hh"
 #include "../include/event_trigger_set.hh"

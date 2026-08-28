@@ -13,7 +13,7 @@ Programmers:
    ((Daniel Ghan) (OSR) (August 2020) (Antares) (Added sanity checks)))
 *******************************************************************************/
 
-#include <sstream> // ostringstream
+#include <sstream>
 
 #include "../include/mass_body_distribute_comp_to_core.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

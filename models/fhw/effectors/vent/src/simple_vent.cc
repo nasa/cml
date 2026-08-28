@@ -11,7 +11,6 @@ PROGRAMMERS:
 
 #include "../include/simple_vent.hh"
 
-// JEOD header
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "jeod/models/utils/math/include/vector3.hh"

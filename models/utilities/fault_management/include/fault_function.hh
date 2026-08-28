@@ -12,7 +12,7 @@ PROGRAMMERS:
 #ifndef CML_FAULT_FUNCTION_HH
 #define CML_FAULT_FUNCTION_HH
 
-#include <cmath> // M_PI
+#include <cmath>
 #include "fault.hh"
 #include "fault_function_parameter.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

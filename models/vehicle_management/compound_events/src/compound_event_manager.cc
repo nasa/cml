@@ -16,7 +16,6 @@ PROGRAMMERS:
 *******************************************************************************/
 
 
-/* Model Includes */
 #include "../include/compound_event.hh"
 #include "../include/compound_event_manager.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

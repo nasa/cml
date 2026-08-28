@@ -12,15 +12,15 @@ PROGRAMMERS:
     vectors, and lists))
   )
 ***************************************************************************/
-#include <cmath>      // fabs
-#include <cfloat>     // DBL_EPSILON
-#include <algorithm>  // std::max
+#include <cmath>
+#include <cfloat>
+#include <algorithm>
 #include <cstddef>
 #include <cstdlib>
-#include <iostream>   // std::cout
+#include <iostream>
 #include <list>
-#include <sstream>    // std::istringstream
-#include <fstream>    // std::ifstream
+#include <sstream>
+#include <fstream>
 #include <regex>
 #include <stdexcept>
 #include <string>

@@ -25,7 +25,7 @@
      )
 *******************************************************************************/
 
-#include <cmath> //fabs
+#include <cmath>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/dynamics/mass/include/mass.hh"
 #include "jeod/models/utils/math/include/vector3.hh"

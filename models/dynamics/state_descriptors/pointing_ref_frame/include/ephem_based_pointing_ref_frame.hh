@@ -15,7 +15,6 @@ Programmers:
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
-                                                        // EphemeridesManager
 #include "pointing_ref_frame.hh"
 
 /*****************************************************************************

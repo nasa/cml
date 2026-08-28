@@ -20,7 +20,7 @@ PROGRAMMERS:
 
 #include <cmath>
 #include <cstddef>
-#include <iterator> // std::size for C-style arrays
+#include <iterator>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 

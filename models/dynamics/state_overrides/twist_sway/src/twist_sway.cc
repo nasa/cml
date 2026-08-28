@@ -15,9 +15,9 @@ Programmers:
  )
 
 *******************************************************************************/
-#include <cmath> // M_PI, exp, pow
+#include <cmath>
 #include <list>
-#include <random> // std::uniform_real_distribution
+#include <random>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"

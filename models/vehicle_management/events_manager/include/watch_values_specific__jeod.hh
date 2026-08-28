@@ -12,7 +12,7 @@ PROGRAMMERS:
 
 #include <cstddef>
 #include <list>
-#include <utility> // std::pair
+#include <utility>
 #include "watch_values_base.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 

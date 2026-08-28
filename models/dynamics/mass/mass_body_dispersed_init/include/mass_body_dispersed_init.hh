@@ -17,10 +17,8 @@ PROGRAMMERS:
 #ifndef CML_MASS_BODY_DISPERSED_INIT_HH
 #define CML_MASS_BODY_DISPERSED_INIT_HH
 
-// JEOD headers:
 #include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
 
-// Local headers:
 #include "mass_properties_dispersions.hh"
 
 // Forward Declarations:

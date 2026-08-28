@@ -10,7 +10,7 @@ PROGRAMMERS:
 #ifndef CML_AERO_ENVIRONMENT_HH
 #define CML_AERO_ENVIRONMENT_HH
 
-#include <cstring>  // NULL
+#include <cstring>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*******************************************************************************

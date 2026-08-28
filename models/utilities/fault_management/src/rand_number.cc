@@ -9,7 +9,7 @@ PROGRAMMERS:
 
 
 #include "../include/rand_number.hh"
-#include <ctime> // time
+#include <ctime>
 #include <random>
 
 /*****************************************************************************

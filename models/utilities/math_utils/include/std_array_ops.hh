@@ -11,7 +11,7 @@ PROGRAMMERS:
 
 #ifndef SWIG
 
-#include <stddef.h> // size_t
+#include <stddef.h>
 #include <algorithm>
 #include <array>
 #include <cmath>

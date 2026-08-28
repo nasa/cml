@@ -17,8 +17,8 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <limits>  // min
-#include <fenv.h>  // fp exception
+#include <limits>
+#include <fenv.h>
 #include <list>
 #include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"

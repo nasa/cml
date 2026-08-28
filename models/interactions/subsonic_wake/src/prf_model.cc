@@ -18,7 +18,7 @@ NOTES:
      Body B - The object inside the wake
 **********************************************************************/
 
-#include <cmath> //sqrt
+#include <cmath>
 #include <cstddef>
 #include <vector>
 #include "../include/wake_bodies.hh"

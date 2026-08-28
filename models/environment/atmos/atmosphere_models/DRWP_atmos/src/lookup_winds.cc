@@ -14,12 +14,12 @@ PROGRAMMERS:
 
 **********************************************************************************/
 
-#include <cmath>           // M_PI, atan2, sqrt
+#include <cmath>
 #include <cstddef>
 #include <ios>
 #include <vector>
-#include <cstdint> // uint32_t
-#include <fstream> // ifstream
+#include <cstdint>
+#include <fstream>
 //#include <cstring> // strerror
 //#include <iostream>
 

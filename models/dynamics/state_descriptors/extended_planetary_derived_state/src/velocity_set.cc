@@ -20,7 +20,7 @@ PROGRAMMERS:
                       (New implementation of PlanetaryDerivedState for Antares)))
  ******************************************************************************/
 
-#include <cmath>  // atan2, sqrt
+#include <cmath>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 

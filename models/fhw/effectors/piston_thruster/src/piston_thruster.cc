@@ -18,7 +18,7 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (June 2017) (Antares) (IV&V code review clean up)))
 *******************************************************************************/
 
-#include <cmath>   // sin, cos
+#include <cmath>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"

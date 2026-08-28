@@ -5,7 +5,7 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (October 2023) (Antares) (enhancement)))
 **********************************************************************/
 
-#include <algorithm> // any_of
+#include <algorithm>
 #include <list>
 #include "../include/watch_values_base_core.hh"
 #include "../include/watch_values_set.hh"

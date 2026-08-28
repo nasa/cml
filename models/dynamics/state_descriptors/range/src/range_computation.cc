@@ -16,7 +16,7 @@ Programmers:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh" // RefFrameTrans
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include <cmath>

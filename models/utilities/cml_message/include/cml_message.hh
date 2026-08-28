@@ -16,8 +16,7 @@ Programmers:
 #ifndef CML_CML_MESSAGE_HH
 #define CML_CML_MESSAGE_HH
 
-// System includes
-#include <cstdio> // snprintf
+#include <cstdio>
 #include <string>
 #include <sstream>
 #include <iomanip>

@@ -11,7 +11,7 @@ PROGRAMMERS:
 #ifndef CML_RCS_TEST_MULTIGROUP_HH
 #define CML_RCS_TEST_MULTIGROUP_HH
 
-#include "trick/units_conv.h" /* for unit conversion */
+#include "trick/units_conv.h"
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_generic.hh"
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_prop_pod.hh"
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_group.hh"

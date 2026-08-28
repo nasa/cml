@@ -14,7 +14,7 @@ PROGRAMMERS:
 
 #include <list>
 #include <string>
-#include "trick/MemoryManager.hh" // REF2, trick_MM
+#include "trick/MemoryManager.hh"
 #include "fault.hh"
 #include "fault_bias.hh"
 #include "fault_scale.hh"
@@ -26,7 +26,7 @@ PROGRAMMERS:
 #include "trigger.hh"
 #include "rand_number.hh"
 
-#include "cml/models/utilities/xml_helper/include/xml_helper.hh" //XmlHelper
+#include "cml/models/utilities/xml_helper/include/xml_helper.hh"
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 

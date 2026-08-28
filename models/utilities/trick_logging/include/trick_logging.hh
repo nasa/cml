@@ -13,7 +13,7 @@ PROGRAMMERS:
 #include<list>
 
 #include "trick/DataRecordGroup.hh"
-#include "trick/exec_proto.h" // exec_get_sim_time
+#include "trick/exec_proto.h"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class TrickLogging {

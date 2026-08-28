@@ -18,15 +18,14 @@
 #define CML_MATH_UTILS_HH
 
 #include <array>
-#include <vector>  // mainly for std::vector use
-#include <string>  // mainly for std::string use
+#include <vector>
+#include <string>
 #include <list>
-#include <cstring> // memset
+#include <cstring>
 
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
-// Function template definitions
 #include "cml/models/utilities/math_utils/include/math_utils_private.hh"
 
 

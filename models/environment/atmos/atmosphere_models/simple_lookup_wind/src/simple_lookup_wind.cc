@@ -8,7 +8,7 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2018) (Antares) (initial))
    ((Brian Birmingham) (OSR) (July 2022) (Antares) (wind angle)))  
 **********************************************************************/
-#include <cmath>           // M_PI, sin, cos, atan2
+#include <cmath>
 #include <cstddef>
 #include <vector>
 

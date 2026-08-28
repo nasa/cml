@@ -16,7 +16,7 @@ PROGRAMMERS:
 #include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 #include "compound_event.hh"
 #include "event_trigger.hh"
-#include "trick/memorymanager_c_intf.h" //used for ref_attributes()
+#include "trick/memorymanager_c_intf.h"
 #include <utility>
 
 class CompoundEventsManager : public VehicleEventsManager

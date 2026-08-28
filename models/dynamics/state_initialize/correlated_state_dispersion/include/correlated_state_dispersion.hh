@@ -41,7 +41,7 @@ PROGRAMMERS:
 #include <random>
 #include <string>
 
-#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameters.hh" // TargetRelative_StateParameter
+#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameters.hh"
 
 namespace jeod {
 class RefFrameState;

@@ -24,9 +24,9 @@ Programmers:
 #ifndef CML_MASS_BODY_DISTRIBUTE_COMP_TO_CORE_HH
 #define CML_MASS_BODY_DISTRIBUTE_COMP_TO_CORE_HH
 
-#include "jeod/models/dynamics/mass/include/mass.hh" // jeod::MassBody
-#include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
-#include "jeod/models/dynamics/mass/include/mass_point_state.hh" // MassPointState
+#include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
+#include "jeod/models/dynamics/mass/include/mass_point_state.hh"
 
 
 

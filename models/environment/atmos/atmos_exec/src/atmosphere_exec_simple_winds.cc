@@ -8,7 +8,7 @@ PROGRAMMERS:
        (New implementation))
    )
 ********************************************************************************/
-#include <cmath>           // M_PI, fmod
+#include <cmath>
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
 #include "jeod/models/utils/math/include/vector3.hh"

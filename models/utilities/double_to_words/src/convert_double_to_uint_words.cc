@@ -13,7 +13,6 @@ PROGRAMMERS:
    ((Bingquan Wang) (OSR) (Jan 2018) (ANTARES) (migrated to gcc 4.8))
    ((Tony Varesic) (OSR) (May 2021) (ANTARES) (added bit_size check)))
 *******************************************************************************/
-//Local Headers
 #include "../include/convert_double_to_words.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <cstdint>

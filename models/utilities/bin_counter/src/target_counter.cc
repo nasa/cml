@@ -13,7 +13,7 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#include <algorithm> // any_of, find_if
+#include <algorithm>
 #include <cstddef>
 #include <vector>
 #include "../include/target_counter.hh"

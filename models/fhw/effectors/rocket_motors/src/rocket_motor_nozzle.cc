@@ -10,7 +10,7 @@ PROGRAMMERS:
             true parameters, simplified methods)))
 
 ******************************************************************************/
-#include <cmath>  // M_PI, sin, cos
+#include <cmath>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
