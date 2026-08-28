@@ -67,14 +67,9 @@ class VentSet : public SubscriptionBase {
           jeod::DynBody & dyn_body_,
           const double & time,
           DynamicMassBody & tank);
-#ifndef SWIG
-  // Hide this one from SWIG because SWIG cannot distinguish between
-  // "DynamicMassBody &" and "DynamicMassBody *"
-  VentSet(size_t num_vents,
-          jeod::DynBody & dyn_body_,
+  VentSet(jeod::DynBody & dyn_body_,
           const double & time,
-          DynamicMassBody * tank_array);
-#endif
+          std::vector<DynamicMassBody *>& tank_array);
   // TODO Turner 2020/01
   //  - implement a Vent type running off a DynamicMassString rather than a
   //    single tank.
