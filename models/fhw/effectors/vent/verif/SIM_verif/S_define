@@ -26,6 +26,8 @@ PURPOSE:
 ##include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
 ##include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+##include <vector>
+
 class VentSimObject : public Trick::SimObject {
  protected:
   jeod::DynManager& dyn_manager;
@@ -33,6 +35,7 @@ class VentSimObject : public Trick::SimObject {
 
  public:
   DynamicMassBody tank[2];
+  std::vector<DynamicMassBody*> tank_pointers;
   jeod::DynBody root_body;
   jeod::DynBody vent_body;
   jeod::MassBodyInit vent_massinit;
@@ -83,12 +86,13 @@ class VentSimObject : public Trick::SimObject {
     dyn_manager(dyn_mgr),
     dyn_time(dyn_time_),
 
+    tank_pointers{&tank[0], &tank[1]},
     extra_vent(dyn_time, tank[0]),
     extra_simple_vent(dyn_time),
     uninitialized_vent(dyn_time),
     set_simple(2, vent_body, dyn_time),
     set_1_tank(2, vent_body, dyn_time, tank[0]),
-    set_2_tanks(2, vent_body, dyn_time, tank)
+    set_2_tanks(vent_body, dyn_time, tank_pointers)
   {
     P_ENV ("initialization") root_body.initialize_model(dyn_manager);
     P_ENV ("initialization") vent_body.initialize_model(dyn_manager);
@@ -105,7 +109,8 @@ class VentSimObject : public Trick::SimObject {
   //***************************************************************************
   void tank_null_check()
   {
-    VentSet(2, vent_body, dyn_time, NULL);
+    std::vector<DynamicMassBody*> null_vector {nullptr};
+    VentSet(vent_body, dyn_time, null_vector);
   }
 
   //***************************************************************************
