@@ -44,8 +44,13 @@ PROGRAMMERS:
 #include "atmosphere_exec_std.hh"
 
 namespace jeod {
-    class TimeStandard;
+class DynBody;
+class TimeStandard;
 }
+class ExtendedPlanetaryDerivedState;
+class LookupAtmosWinds;
+class STD1976;
+class SimpleLookupWind;
 
 /*****************************************************************************
 AtmosphereExec

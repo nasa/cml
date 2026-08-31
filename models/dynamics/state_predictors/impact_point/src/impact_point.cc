@@ -2,6 +2,9 @@
 PURPOSE:
    (Parameter definition for ballistic impact predictor function.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCES:
     ((JEOD Orbital Elements model)
      ((Vallado, D.) (Fundamentals of Astrodynamics and Applications)))
@@ -13,8 +16,11 @@ PROGRAMMERS:
    )
 *******************************************************************************/
 
-#include <cmath>   // sin, cos
+#include <cmath>
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 

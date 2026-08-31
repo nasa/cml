@@ -3,6 +3,9 @@ PURPOSE: (Provides an extension that computes the relative position
           between one or more points fixed to the ground and one or more points
           fixed to a vehicle.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS / LIMITATIONS:
   ((Each instance of PointToPointManager deals with 1 planetary body and 1
     jeod::DynBody.  It can handle multiple points on each body, but cannot handle
@@ -20,8 +23,14 @@ PROGRAMMERS:
 #include "../include/point_to_point.hh"
 
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
+#include <list>
+#include <string>
 #include <utility>
 
 /*****************************************************************************

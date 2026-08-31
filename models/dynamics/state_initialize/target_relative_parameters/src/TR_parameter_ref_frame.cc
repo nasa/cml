@@ -3,6 +3,9 @@ PURPOSE:
    (Provide the coordinate axes of a reference frame defined by 2 vectors and
    used in multiple places in the TargetRelative_StateParameter class)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))
@@ -12,8 +15,10 @@ PROGRAMMERS:
 *******************************************************************************/
 #include "../include/TR_parameter_ref_frame.hh"
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include <cmath>
+#include <string>
 #include <utility>
 
 /*****************************************************************************

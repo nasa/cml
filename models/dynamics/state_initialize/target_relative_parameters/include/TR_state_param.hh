@@ -19,7 +19,6 @@ PROGRAMMERS:
 #ifndef CML_TR_STATE_PARAM_HH
 #define CML_TR_STATE_PARAM_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "TR_parameter_ref_frame.hh"
 #include "TR_state_parameter_set.hh"

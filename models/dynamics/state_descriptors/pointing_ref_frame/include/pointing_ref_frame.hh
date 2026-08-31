@@ -16,9 +16,8 @@ Programmers:
 #ifndef CML_POINTING_REF_FRAME_HH
 #define CML_POINTING_REF_FRAME_HH
 
-#include "jeod/models/utils/ref_frames/include/ref_frame.hh" // RefFrame
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh" // jeod::RefFrameState
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
                                                            // SubscriptionBase
 

@@ -27,6 +27,7 @@ Vehicle sim object
 ##include "jeod/models/dynamics/body_action/include/dyn_body_init_lvlh_rot_state.hh"
 
 ##include "cml/models/environment/gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh"
+##include "cml/models/utilities/cml_message/include/cml_message.hh" // For use in input files
 ##include "../../include/state_initialize.hh"
 
 class VehicleSimObject : public Trick::SimObject {

@@ -10,8 +10,11 @@ PROGRAMMERS:
 #ifndef CML_WATCH_VALUES_SET_HH
 #define CML_WATCH_VALUES_SET_HH
 
+#include <string>
+#include <list>
+#include <cstddef>
 #include <vector>
-#include "watch_values_base.hh"
+#include "watch_values_base_core.hh"
 
 
 /*****************************************************************************

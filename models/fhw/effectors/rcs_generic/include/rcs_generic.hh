@@ -26,10 +26,9 @@ PROGRAMMERS:
 #ifndef CML_RCS_GENERIC_HH
 #define CML_RCS_GENERIC_HH
 
+#include <cstddef>
 #include <vector>
 #include <random>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 // Forward declaration

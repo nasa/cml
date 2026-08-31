@@ -41,8 +41,10 @@ PROGRAMMERS:
 #ifndef CML_PISTON_THRUSTER_GROUP_HH
 #define CML_PISTON_THRUSTER_GROUP_HH
 
-#include <list> // For std::list
+#include <list>
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
+#include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
 #include "piston_thruster.hh"

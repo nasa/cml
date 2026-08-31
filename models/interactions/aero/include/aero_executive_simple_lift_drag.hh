@@ -14,6 +14,8 @@ PROGRAMMERS:
 
 #include "aero_executive_base.hh"
 
+class AeroInterfaceOutput;
+
 /*******************************************************************************
 AeroExecutiveSimpleLiftDrag
 Purpose:(Provides a simple aerodynamic executive to use with the AeroExec.)

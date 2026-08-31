@@ -3,6 +3,9 @@ PURPOSE:
   (Provide the functionality for the  Aero capabilities when the
    lookup table option is used.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCE:
   (The CML aero models, written by Jeremy Rea, Jon Berndt, Sara McNamara,
    Sara Blatz, et, al.)
@@ -12,13 +15,17 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
 *******************************************************************************/
 
-#include <cmath>   // sin, cos
-#include <cstring> // NULL
+#include <cmath>
+#include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+#include "../include/aero_environment.hh"
+#include "../include/aero_executive_base.hh"
 #include "../include/aero_executive_table.hh"
+#include "../include/aero_interface_output.hh"
+#include "../include/aero_table_set_base.hh"
 
 /*******************************************************************************
 Constructors

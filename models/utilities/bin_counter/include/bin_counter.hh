@@ -18,8 +18,9 @@ PROGRAMMERS:
 #ifndef CML_BIN_COUNTER_HH
 #define CML_BIN_COUNTER_HH
 
+#include <cstddef>
+#include <string>
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************

@@ -40,11 +40,10 @@ PROGRAMMERS:
 #ifndef CML_CONTACT_STATE_OVERRIDE_HH
 #define CML_CONTACT_STATE_OVERRIDE_HH
 
+#include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class ContactStateOverride : public SubscriptionBase
 {

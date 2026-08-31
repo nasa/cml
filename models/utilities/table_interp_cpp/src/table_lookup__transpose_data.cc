@@ -16,17 +16,26 @@ PURPOSE: (Provides a table-lookup-set when the data is presented in a
           This class supports data presented in the latter format.  The data
           may be subdivided into as many tables as necessary or desired.
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Nov 2017) (Antares) (initial)))
 **********************************************************************/
-#include <fstream> // ifstream
-#include <sstream> // istringstream
-#include <iterator>// istream_iterator
-#include <cstring> // strcmp
-#include <algorithm> // max_element
+#include <fstream>
+#include <sstream>
+#include <iterator>
+#include <cstring>
+#include <algorithm>
+#include <string>
+#include <vector>
 
 
+#include "../include/abstract_table_lookup.hh"
+#include "../include/table_independent_variable.hh"
 #include "../include/table_lookup__transpose_data.hh"
+#include "../include/table_type_defs.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 constructors

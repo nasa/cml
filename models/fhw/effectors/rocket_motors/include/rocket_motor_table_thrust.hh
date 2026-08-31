@@ -15,7 +15,12 @@ PROGRAMMERS:
 #ifndef CML_ROCKET_MOTOR_TABLE_THRUST_HH
 #define CML_ROCKET_MOTOR_TABLE_THRUST_HH
 
+#include <cstddef>
 #include <vector>
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 #include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"

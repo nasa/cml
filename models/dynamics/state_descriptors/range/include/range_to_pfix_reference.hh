@@ -19,7 +19,9 @@ Programmers:
 
 #include "range_computation.hh"
 
+namespace jeod {
 class PlanetFixedPosition;
+}
 
 class RangeToPfixReference : public RangeComputation
 {

@@ -4,7 +4,7 @@ Purpose:
   in JEOD.)
 
 Library Dependency:
- ((../src/cml_message.cc))
+ ((cml/models/utilities/cml_message/src/cml_message.cc))
 
 PYTHON_MODULE: (CMLMessage)
 
@@ -16,15 +16,12 @@ Programmers:
 #ifndef CML_CML_MESSAGE_HH
 #define CML_CML_MESSAGE_HH
 
-// System includes
-#include <cstdio> // snprintf
+#include <cstdio>
 #include <string>
-#include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <utility>
 
-#include "jeod/models/utils/named_item/include/named_item.hh"
 #include "cml/models/utilities/color_string/include/color_string.hh"
 
 namespace CMLMessage {

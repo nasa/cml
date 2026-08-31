@@ -12,7 +12,10 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
+#include "../include/atmosphere_exec_atmos_base.hh"
 #include "../include/atmosphere_exec_std.hh"
+#include "../include/atmosphere_exec_out.hh"
+#include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
 
 
 /*****************************************************************************

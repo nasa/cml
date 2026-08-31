@@ -2,6 +2,9 @@
 PURPOSE:
   (Table lookup model)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2014) (New implementation for C++ models))
    ((Bingquan Wang) (OSR) (Nov 2016) (Fixed the mismatch of new[] and delete))
@@ -12,9 +15,14 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <vector>
 
+#include "../include/abstract_table_lookup.hh"
 #include "../include/simple_table_lookup.hh"
+#include "../include/table_independent_variable.hh"
+#include "../include/table_type_defs.hh"
 
 
 /********************************************************************************

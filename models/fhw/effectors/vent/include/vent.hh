@@ -11,9 +11,7 @@ PROGRAMMERS:
 #ifndef CML_VENT_HH
 #define CML_VENT_HH
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "simple_vent.hh"
 

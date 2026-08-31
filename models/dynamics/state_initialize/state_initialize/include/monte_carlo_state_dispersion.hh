@@ -18,8 +18,6 @@ PROGRAMMERS:
 #define CML_MONTE_CARLO_STATE_DISPERSION_HH
 
 #include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
 
 class MonteCarloStateDispersion {
  protected: // external reference

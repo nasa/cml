@@ -14,7 +14,7 @@ PROGRAMMERS:
 #ifndef CML_XML_HELPER_HH
 #define CML_XML_HELPER_HH
 
-#include <libxml/parser.h> // xmlNodePtr
+#include <libxml/parser.h>
 
 class XmlHelper {
  public:

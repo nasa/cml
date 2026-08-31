@@ -3,6 +3,9 @@ PURPOSE:
   (Define structure and function prototypes for counting the number of
   times some integer variable has specific values.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (
     ((Matthew Elmer, Gary Turner) (OSR) (Jun 2023)
@@ -10,8 +13,11 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#include <algorithm> // any_of, find_if
+#include <algorithm>
+#include <cstddef>
+#include <vector>
 #include "../include/target_counter.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 Constructor

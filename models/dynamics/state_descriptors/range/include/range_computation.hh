@@ -24,6 +24,7 @@ Programmers:
 namespace jeod {
 class RefFrameTrans;
 class Planet;
+class PlanetFixedPosition;
 }
 
 /*****************************************************************************

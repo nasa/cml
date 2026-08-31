@@ -17,9 +17,10 @@ PROGRAMMERS:
 #ifndef CML_ATMOSPHERE_EXEC_GRAM_HH
 #define CML_ATMOSPHERE_EXEC_GRAM_HH
 
-#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
-
 #include "atmosphere_exec_atmos_base.hh"
+
+class AtmosExecOutput;
+class ExtendedPlanetaryDerivedState;
 
 /* START Stubbed classes / structures for CML usage */
 struct GramOut

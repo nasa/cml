@@ -2,14 +2,21 @@
 PURPOSE: (Provides a set of EventTriggers, analagous to how a
           WatchValuesSet provides a set of WatchValues.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2023) (ANTARES)
     (Merging concepts found in former grok-events and CML-events))
   )
 ***********************************************************************/
 
-#include <algorithm> // find_if
+#include <algorithm>
+#include <string>
+#include "../include/event_trigger.hh"
 #include "../include/event_trigger_set.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 
 
 /*****************************************************************************

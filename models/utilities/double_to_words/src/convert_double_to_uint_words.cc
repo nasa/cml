@@ -6,6 +6,9 @@ PURPOSE:
    - bit-size of each word (e.g. 8-bit, 32-bit)
    - number of words available to represent the double.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2016) (ANTARES) (Initial version, uint only))
    ((Brent Caughron) (OSR) (June 2017) (ANTARES)
@@ -13,8 +16,10 @@ PROGRAMMERS:
    ((Bingquan Wang) (OSR) (Jan 2018) (ANTARES) (migrated to gcc 4.8))
    ((Tony Varesic) (OSR) (May 2021) (ANTARES) (added bit_size check)))
 *******************************************************************************/
-//Local Headers
 #include "../include/convert_double_to_words.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstdint>
+#include <vector>
 
 /*******************************************************************************
 Purpose:(Run the class function that calls the variables and creates the

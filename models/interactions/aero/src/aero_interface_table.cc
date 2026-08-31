@@ -3,6 +3,9 @@ PURPOSE:
   (Provide the functionality for the  Aero capabilities when the
    lookup table option is used.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCE:
   (The CML aero models, written by Jeremy Rea, Jon Berndt, Sara McNamara,
    Sara Blatz, et, al.)
@@ -13,8 +16,10 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
 *******************************************************************************/
 
-#include <iostream>
+#include "../include/aero_interface_base_extended.hh"
 #include "../include/aero_interface_table.hh"
+#include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*******************************************************************************
 Constructors

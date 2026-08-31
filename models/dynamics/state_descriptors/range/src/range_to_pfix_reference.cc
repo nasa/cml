@@ -8,9 +8,11 @@ Programmers:
 
 *******************************************************************************/
 
+#include "cml/models/dynamics/state_descriptors/range/include/range_computation.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
+#include <cmath>
 
 #include "../include/range_to_pfix_reference.hh"
 

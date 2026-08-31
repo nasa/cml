@@ -37,15 +37,15 @@ PROGRAMMERS:
 #ifndef CML_CORRELATED_STATE_DISPERSION_HH
 #define CML_CORRELATED_STATE_DISPERSION_HH
 
-#include <random> // default_random_engine,
-                  // uniform_real_distribution,
-                  // normal_distribution
+#include <cstddef>
+#include <random>
+#include <string>
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/orientation/include/orientation.hh" // Orientation::*
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
+#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameters.hh"
 
-#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameters.hh" // TargetRelative_StateParameter
+namespace jeod {
+class RefFrameState;
+}
 
 
 class CorrelatedStateDispersion {

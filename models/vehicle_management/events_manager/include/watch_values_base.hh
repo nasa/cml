@@ -13,7 +13,7 @@ PROGRAMMERS:
 #ifndef CML_WATCH_VALUES_BASE_HH
 #define CML_WATCH_VALUES_BASE_HH
 
-#include <cmath> // abs
+#include <cmath>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "watch_values_base_core.hh"

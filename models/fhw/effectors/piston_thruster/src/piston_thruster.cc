@@ -3,6 +3,9 @@ PURPOSE:
    (To model the force and moments imparted on opposing sides of adjacent
     vehicles that were previosly connected and separated by the thrusters.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
   ((See piston_thruster_group.hh))
 
@@ -18,8 +21,9 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (June 2017) (Antares) (IV&V code review clean up)))
 *******************************************************************************/
 
-#include <cmath>   // sin, cos
+#include <cmath>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 

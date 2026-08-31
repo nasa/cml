@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "aero_interface_base.hh"
 #include "aero_executive_simple.hh"
 
+class AtmosRelativeState;
+
 /*******************************************************************************
 AeroInterfaceSimple
 Purpose:(Provides a simple aerodynamic interface to access the simple

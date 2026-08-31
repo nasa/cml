@@ -17,6 +17,7 @@ Purpose:(The sim)
 
 // Include headers for classes that this class contains:
 ##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+##include "cml/models/utilities/cml_message/include/cml_message.hh" // For use in input files
 ##include "../../include/lookup_winds.hh"
 
 

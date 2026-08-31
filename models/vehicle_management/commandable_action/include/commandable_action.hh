@@ -38,7 +38,6 @@ PROGRAMMERS:
 
 #include <string>
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "commandable_action_set.hh"
 

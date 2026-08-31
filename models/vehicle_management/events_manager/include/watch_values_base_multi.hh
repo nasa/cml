@@ -9,6 +9,8 @@ PROGRAMMERS:
 #define CML_WATCH_VALUES_BASE_MULTI_HH
 
 #include "watch_values_base.hh"
+#include "watch_values_base_core.hh"
+#include <list>
 
 template <typename A, typename B>
 class WatchValuesBase2 : public WatchValuesBaseCore

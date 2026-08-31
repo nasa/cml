@@ -45,11 +45,10 @@ PROGRAMMERS:
 #define CML_TWIST_SWAY_HH
 
 #include <list>
-#include <random> // std::mt19937
+#include <random>
 #include "jeod/models/utils/quaternion/include/quat.hh"
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************

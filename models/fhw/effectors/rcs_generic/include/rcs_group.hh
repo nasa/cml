@@ -18,8 +18,6 @@ PROGRAMMERS:
 #define CML_RCS_GROUP_HH
 
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 /*****************************************************************************
 RcsGenericModel

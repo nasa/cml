@@ -12,14 +12,14 @@ PROGRAMMERS:
 #ifndef CML_VENT_SET_HH
 #define CML_VENT_SET_HH
 
-#include <vector> // vector
+#include <cstddef>
+#include <vector>
 #include <list>
-#include "jeod/models/utils/math/include/vector3.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_body/include/class_declarations.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "simple_vent.hh"
-#include "vent.hh"
 
 class VentSet : public SubscriptionBase {
  protected: // external references

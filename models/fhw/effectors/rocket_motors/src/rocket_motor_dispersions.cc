@@ -5,7 +5,7 @@ PURPOSE:
     This typically represents errors introduced in machining.)
 
 LIBRARY DEPENDENCIES:
-   ()
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
 
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
@@ -13,6 +13,7 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cmath>
 
 #include "../include/rocket_motor_dispersions.hh"
 

@@ -3,6 +3,9 @@
 PURPOSE:
    (Define method to check events for all Compound-event instances)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May       2018) (Initial implementation of event manager))
@@ -16,8 +19,13 @@ PROGRAMMERS:
 *******************************************************************************/
 
 
-/* Model Includes */
+#include "../include/compound_event.hh"
 #include "../include/compound_event_manager.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/vehicle_management/events_manager/include/vehicle_events_manager.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
+#include <algorithm>
+#include <string>
 
 
 /*****************************************************************************

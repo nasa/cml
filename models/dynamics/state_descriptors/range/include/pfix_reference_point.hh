@@ -15,7 +15,6 @@ Programmers:
 #define CML_PFIX_REFERENCE_POINT_HH
 
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class PfixReferencePoint : public jeod::PlanetFixedPosition
 {
