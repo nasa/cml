@@ -57,6 +57,9 @@ class SubscriptionBase {
 
   virtual ~SubscriptionBase() = default;
 
+  SubscriptionBase (const SubscriptionBase&) = delete;
+  SubscriptionBase& operator = (const SubscriptionBase&) = delete;
+
   virtual void subscribe();
   virtual void unsubscribe();
   virtual void initialize();
@@ -73,9 +76,5 @@ class SubscriptionBase {
   virtual void activate(){ active = true;}
   // Note - remember to unsubscribe any subscriptions made during activate().
   virtual void deactivate(){active = false;}
-
- private: // and undefined:
-  SubscriptionBase (const SubscriptionBase&);
-  SubscriptionBase& operator = (const SubscriptionBase&);
 };
 #endif

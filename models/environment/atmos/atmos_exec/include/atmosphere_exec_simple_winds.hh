@@ -58,6 +58,8 @@ class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
                          ExtendedPlanetaryDerivedState & planet_state,
                          AtmosExecOutput               & master_output);
     ~AtmosphereExec_SimpleLookupWind() override = default;
+    AtmosphereExec_SimpleLookupWind (const AtmosphereExec_SimpleLookupWind&) = delete;
+    AtmosphereExec_SimpleLookupWind & operator = (const AtmosphereExec_SimpleLookupWind&) = delete;
 
     void activate() override;
     void deactivate() override;
@@ -66,9 +68,5 @@ class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
     void update_winds() override;
 
     void set_altitude_type(TopoType altitude_);
-
-  private:
-    AtmosphereExec_SimpleLookupWind (const AtmosphereExec_SimpleLookupWind&);
-    AtmosphereExec_SimpleLookupWind & operator = (const AtmosphereExec_SimpleLookupWind&);
 };
 #endif

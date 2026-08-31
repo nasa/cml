@@ -161,6 +161,8 @@ class RcsPropPod{
               unsigned int num_components_,
               const double & time_step);
   virtual ~RcsPropPod() = default;
+  RcsPropPod (const RcsPropPod& rhs) = delete;
+  RcsPropPod & operator = (const RcsPropPod& rhs) = delete;
 
   void set_dyn_mass_interface( unsigned int component_ix,
                 DynamicMassBodyPropertiesInterface & dyn_mass_interface);
@@ -175,11 +177,6 @@ class RcsPropPod{
   unsigned int get_max_num_jets_on();
   void set_thrust_factor(unsigned int index, double value);
   bool is_healthy(){ return (health != HealthFail);}
-
- private:
-   // Not implemented:
-   RcsPropPod (const RcsPropPod& rhs);
-   RcsPropPod & operator = (const RcsPropPod& rhs);
 
 };
 #endif

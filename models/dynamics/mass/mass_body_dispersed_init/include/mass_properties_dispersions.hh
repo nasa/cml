@@ -80,6 +80,8 @@ public:
 
   MassPropertiesDispersions();
   virtual ~MassPropertiesDispersions() = default;
+  MassPropertiesDispersions (const MassPropertiesDispersions& rhs) = delete;
+  MassPropertiesDispersions& operator = (const MassPropertiesDispersions& rhs) = delete;
 
   void disp_mag_random_number_generator();
   void generate_inertia_tensor( bool poi_are_negative_integrals);
@@ -93,10 +95,6 @@ public:
   void scale_poi( double nominal_xy,
                   double nominal_xz,
                   double nominal_yz);
-
-private: // and undefined:
-  MassPropertiesDispersions (const MassPropertiesDispersions& rhs);
-  MassPropertiesDispersions& operator = (const MassPropertiesDispersions& rhs);
 };
 
 /*******************************************************************************
@@ -132,9 +130,8 @@ public:
 
   MassPropertiesDispersionsFlags();
   virtual ~MassPropertiesDispersionsFlags() = default;
-private:
-  MassPropertiesDispersionsFlags (const MassPropertiesDispersionsFlags& rhs);
+  MassPropertiesDispersionsFlags (const MassPropertiesDispersionsFlags& rhs) = delete;
   MassPropertiesDispersionsFlags & operator = (
-                                  const MassPropertiesDispersionsFlags& rhs);
+                                  const MassPropertiesDispersionsFlags& rhs) = delete;
 };
 #endif

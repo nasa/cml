@@ -59,6 +59,8 @@ class AtmosphereExecInterface : public SubscriptionBase
                             ExtendedPlanetaryDerivedState & planet_state,
                             const jeod::DynBody  & body);
     ~AtmosphereExecInterface() override = default;
+    AtmosphereExecInterface (const AtmosphereExecInterface&) = delete;
+    AtmosphereExecInterface & operator = (const AtmosphereExecInterface&) = delete;
 
     void initialize() override;
 
@@ -76,10 +78,6 @@ class AtmosphereExecInterface : public SubscriptionBase
   protected:
     void activate() override;
     void deactivate() override;
-
-  private:
-    AtmosphereExecInterface (const AtmosphereExecInterface&);
-    AtmosphereExecInterface & operator = (const AtmosphereExecInterface&);
 };
 
 #endif

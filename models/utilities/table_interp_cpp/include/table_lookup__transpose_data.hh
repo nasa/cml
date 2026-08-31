@@ -153,6 +153,8 @@ class TableLookupTransposeDataSet : public TableLookupSet
  public:
   TableLookupTransposeDataSet();
   ~TableLookupTransposeDataSet() override = default;
+  TableLookupTransposeDataSet ( const TableLookupTransposeDataSet&) = delete;
+  TableLookupTransposeDataSet& operator = ( const TableLookupTransposeDataSet&) = delete;
 
   bool process_data( const std::string & filename,
                      size_t terminate_on_line = 100000);
@@ -167,8 +169,5 @@ class TableLookupTransposeDataSet : public TableLookupSet
   bool remove_config( TableLookupTransposeDataSet_TableConfig & config);
  private:
   void check_independent();
-  // Disable the copy/assignment operators
-  TableLookupTransposeDataSet ( const TableLookupTransposeDataSet&);
-  TableLookupTransposeDataSet& operator = ( const TableLookupTransposeDataSet&);
 };
 #endif

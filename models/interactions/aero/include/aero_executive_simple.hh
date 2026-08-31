@@ -72,16 +72,12 @@ public:
                        const double (&T_inrtl_struc_in)[3][3],
                        const double & mass_in);
   ~AeroExecutiveSimple() override = default;
+  AeroExecutiveSimple (const AeroExecutiveSimple &) = delete;
+  AeroExecutiveSimple & operator = (const AeroExecutiveSimple &) = delete;
 
   void set_drag_type(DragType drag_type);
 
   void initialize() override;
   void update() override;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroExecutiveSimple (const AeroExecutiveSimple &);
-  AeroExecutiveSimple & operator = (const AeroExecutiveSimple &);
 };
 #endif

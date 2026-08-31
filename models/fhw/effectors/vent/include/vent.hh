@@ -34,6 +34,8 @@ class Vent : public SimpleVent {
   Vent(const double& dyn_time_in,
        DynamicMassBody& tank_in);
   ~Vent() override = default;
+  Vent(const Vent&) = delete;
+  Vent& operator= (const Vent&) = delete;
 
   void use_impulse_mode(bool mode = true) override;
   void set_force_magnitude(double force_, bool hold_impulse = false) override;
@@ -64,9 +66,5 @@ class Vent : public SimpleVent {
   void set_exhaust_flowrate_from_force(bool hold_exhaust = true);
   void update_mass_demand() override;
   void stop_venting() override;
-
- private:
-  Vent(const Vent&);
-  Vent& operator= (const Vent&);
 };
 #endif

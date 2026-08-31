@@ -83,6 +83,8 @@ class PointingRefFrame : public SubscriptionBase {
   // Constructor:
   PointingRefFrame();
   ~PointingRefFrame() override = default;
+  PointingRefFrame (const PointingRefFrame&) = delete;
+  PointingRefFrame & operator = (const PointingRefFrame&) = delete;
 
   void set_originating_frame (jeod::RefFrame * originating_frame);
   void set_target_frame (jeod::RefFrame * target_frame);
@@ -93,11 +95,5 @@ class PointingRefFrame : public SubscriptionBase {
   bool setup_frames();
   void activate() override;
   void deactivate() override;
-
- // The copy constructor and assignment operator for this class are
- // declared private and are not implemented.
- private:
-  PointingRefFrame (const PointingRefFrame&);
-  PointingRefFrame & operator = (const PointingRefFrame&);
 };
 #endif

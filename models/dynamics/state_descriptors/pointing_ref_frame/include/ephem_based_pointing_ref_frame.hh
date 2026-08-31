@@ -47,7 +47,8 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
     ephem_manager(mgr)
   {}
   ~EphemBasedPointingRefFrame() override = default;
-
+  EphemBasedPointingRefFrame (const EphemBasedPointingRefFrame&) = delete;
+  EphemBasedPointingRefFrame & operator = (const EphemBasedPointingRefFrame&) = delete;
 
   void initialize() override
   {
@@ -56,11 +57,5 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
     ephem_manager.add_ref_frame( pointing_frame);
     SubscriptionBase::initialize();
   }
-
- // The copy constructor and assignment operator for this class are
- // declared private and are not implemented.
- private:
-  EphemBasedPointingRefFrame (const EphemBasedPointingRefFrame&);
-  EphemBasedPointingRefFrame & operator = (const EphemBasedPointingRefFrame&);
 };
 #endif

@@ -296,6 +296,8 @@ class StateInitialize : public jeod::DynBodyInit
  public:
   StateInitialize();
   ~StateInitialize() override = default;
+  StateInitialize (const StateInitialize &) = delete;
+  StateInitialize & operator = (const StateInitialize &) = delete;
 
   void initialize(  jeod::DynManager & dyn_manager ) override;
   void apply(  jeod::DynManager & dyn_manager ) override;
@@ -324,10 +326,5 @@ class StateInitialize : public jeod::DynBodyInit
   void generate_trans_init_values();
   void generate_rot_init_values(jeod::DynManager & dyn_manager);
   void apply_internal(jeod::DynManager & dyn_manager);
-
- private:
-  // private and unimplemented makes this non-copyable
-  StateInitialize (const StateInitialize &);
-  StateInitialize & operator = (const StateInitialize &);
 };
 #endif

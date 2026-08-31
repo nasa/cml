@@ -76,6 +76,8 @@ class WatchValuesFlipFlop : public WatchValuesBaseCore
 
   explicit WatchValuesFlipFlop( WatchValuesBaseCore & associated_watch);
   ~WatchValuesFlipFlop() override;
+  WatchValuesFlipFlop( const WatchValuesFlipFlop&) = delete;
+  WatchValuesFlipFlop& operator=( const WatchValuesFlipFlop&) = delete;
 
   void initialize(std::list<WatchValuesBaseCore *> * active_watches_in) override;
   bool test_crossing() override;
@@ -98,9 +100,6 @@ class WatchValuesFlipFlop : public WatchValuesBaseCore
  protected:
   void activate() override;
   void deactivate() override;
- private:
-  WatchValuesFlipFlop( const WatchValuesFlipFlop&) = delete;
-  WatchValuesFlipFlop& operator=( const WatchValuesFlipFlop&) = delete;
 };
 
 /*****************************************************************************
@@ -141,12 +140,11 @@ class WatchValuesFlipFlopDelayed : public WatchValuesFlipFlop
     the transition should be applied.*/
   WatchValuesFlipFlopDelayed( WatchValuesBaseCore & associated_watch,
                               const double & delay_variable);
-  bool test_crossing() override;
- protected:
-  bool evaluate_delay();
- private:
   WatchValuesFlipFlopDelayed( const WatchValuesFlipFlopDelayed&) = delete;
   WatchValuesFlipFlopDelayed& operator=(
                               const WatchValuesFlipFlopDelayed&) = delete;
+  bool test_crossing() override;
+ protected:
+  bool evaluate_delay();
 };
 #endif

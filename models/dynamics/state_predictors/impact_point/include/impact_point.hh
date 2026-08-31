@@ -87,6 +87,8 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
               const jeod::Planet & planet,
               const double & grav_mu);
   ~ImpactPoint() override = default;
+  ImpactPoint(const ImpactPoint&) = delete;
+  ImpactPoint & operator = (const ImpactPoint&) = delete;
   
   void initialize() override;
   void initialize( double ref_pos[3]);
@@ -97,12 +99,6 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
   void update_non_equatorial();
   void update_time();
   void activate() override;
-
- private:
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  ImpactPoint(const ImpactPoint&);
-  ImpactPoint & operator = (const ImpactPoint&);
 };
  
 #endif

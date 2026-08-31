@@ -57,6 +57,8 @@ class ApsidesPredictor : public SubscriptionBase {
                    const jeod::Planet & planet,
                    const double & grav_mu);
   ~ApsidesPredictor() override = default;
+  ApsidesPredictor(const ApsidesPredictor&) = delete;
+  ApsidesPredictor & operator = (const ApsidesPredictor&) = delete;
 
   void initialize() override;
   void update();
@@ -66,9 +68,6 @@ class ApsidesPredictor : public SubscriptionBase {
 
  private:
   void compute_next_apsis();
-
-  ApsidesPredictor(const ApsidesPredictor&);
-  ApsidesPredictor & operator = (const ApsidesPredictor&);
 };
  
 #endif

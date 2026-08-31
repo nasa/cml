@@ -74,6 +74,8 @@ class WakeEffectsBase : public SubscriptionBase
   WakeEffectsBase( const WakeGeneratingBody & objectA_in,
                    const WakeFollowingBody & objectB_in,
                    const WakeParamsSub & params_in);
+  WakeEffectsBase (const WakeEffectsBase& rhs) = delete;
+  WakeEffectsBase& operator = (const WakeEffectsBase& rhs) = delete;
 
   virtual void update() = 0;
   bool get_in_region(){return in_region;}
@@ -84,10 +86,6 @@ class WakeEffectsBase : public SubscriptionBase
     SubscriptionBase::deactivate();
   }
   void generate_trail_and_radial_dist();
-
- private: // and undefined:
-  WakeEffectsBase (const WakeEffectsBase& rhs);
-  void operator = (const WakeEffectsBase& rhs);
 };
 
 
@@ -111,16 +109,14 @@ class WakeReverseFlow : public WakeEffectsBase
   WakeReverseFlow (const WakeGeneratingBody & objectA_in,
                    const WakeFollowingBody & objectB_in,
                    const WakeParamsSub & params_in);
+  WakeReverseFlow (const WakeReverseFlow& rhs) = delete;
+  WakeReverseFlow& operator = (const WakeReverseFlow& rhs) = delete;
 
   void initialize() override;
   void update() override;
 
  protected:
   void deactivate() override;
-
- private: // and undefined:
-  WakeReverseFlow (const WakeReverseFlow& rhs);
-  void operator = (const WakeReverseFlow& rhs);
 };
 
 
@@ -178,16 +174,14 @@ class WakePrfModel : public WakeEffectsBase
   WakePrfModel (const WakeGeneratingBody & objectA_in,
                 const WakeFollowingBody & objectB_in,
                 const WakeParams & params_in);
+  WakePrfModel (const WakePrfModel& rhs) = delete;
+  WakePrfModel& operator = (const WakePrfModel& rhs) = delete;
 
   void initialize() override;
   void update() override;
 
  protected:
   void deactivate() override;
-
- private: // and undefined:
-  WakePrfModel (const WakePrfModel& rhs);
-  void operator = (const WakePrfModel& rhs);
 };
 
 

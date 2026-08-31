@@ -72,7 +72,8 @@ public:
   This requires that SimpleTableLookup keep its default constructor form. */
   SimpleTableLookup();
   ~SimpleTableLookup() override = default;
-
+  SimpleTableLookup (const SimpleTableLookup&) = delete;
+  SimpleTableLookup& operator = (const SimpleTableLookup&) = delete;
 
   bool load_dependent_data(
            double         & dependent_var,
@@ -124,10 +125,5 @@ public:
 
   void initialize() override;
   GenericMultiInputTable * get_table();
-
-private:
-  // to disable the copy/assignment operators
-  SimpleTableLookup (const SimpleTableLookup&);
-  SimpleTableLookup& operator = (const SimpleTableLookup&);
 };
 #endif

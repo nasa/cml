@@ -32,6 +32,9 @@ friend class FaultManager;
 
     virtual ~Fault() = default;
 
+    Fault(const Fault&) = delete;
+    Fault& operator = (const Fault&) = delete;
+
     ////    Operations    ////
 
     virtual void initialize();
@@ -72,10 +75,6 @@ friend class FaultManager;
       the fault should be reset. */
     unsigned long fire_count; /* (--)
       The number of times a fire-limited trigger has been triggered. */
-
-  private:
-    Fault(const Fault&);
-    Fault& operator = (const Fault&);
 };
 
 #endif

@@ -75,6 +75,8 @@ public:
 
   AbstractTableLookup();
   ~AbstractTableLookup() override;
+  AbstractTableLookup (const AbstractTableLookup&) = delete;
+  AbstractTableLookup& operator = (const AbstractTableLookup&) = delete;
 
   void initialize() override;
   virtual bool update();
@@ -106,10 +108,5 @@ protected:
   void verify_independent_name(const std::string &name_in);
   virtual TableIndependentVariable* lookup_independent(
                                                  const std::string &var_name);
-
-private:
-  // Prevent accidental copy and assignment:
-  AbstractTableLookup (const AbstractTableLookup&);
-  AbstractTableLookup& operator = (const AbstractTableLookup&);
 };
 #endif

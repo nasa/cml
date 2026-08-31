@@ -107,6 +107,8 @@ class CompoundEvent : public WatchValuesDelay<bool>
  public:
   explicit CompoundEvent( const double & time);
   ~CompoundEvent() override = default;
+  CompoundEvent( const CompoundEvent&) = delete;
+  CompoundEvent& operator=( const CompoundEvent&) = delete;
 
   void initialize( std::list<WatchValuesBaseCore *> * active_watches_in) override;
   bool test_crossing() override;
@@ -120,9 +122,5 @@ class CompoundEvent : public WatchValuesDelay<bool>
  protected:
   void activate() override;
 //  void check_arming_trigger();
-
- private: // not implemented / deleted
-  CompoundEvent( const CompoundEvent&);
-  CompoundEvent& operator=( const CompoundEvent&);
 };
 #endif

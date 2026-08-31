@@ -81,6 +81,8 @@ class VentSet : public SubscriptionBase {
   //  - investigate use of varargs or variadic templates to support a set
   //    of vents each running off its own specified DynMassBody.
   ~VentSet() override;
+  VentSet(const VentSet&) = delete;
+  VentSet& operator = (const VentSet&) = delete;
 
   void initialize() override;
   virtual void update();
@@ -101,9 +103,5 @@ class VentSet : public SubscriptionBase {
 
  private:
   void start_vent_internal( SimpleVent * vent);
-
- private:
-  VentSet(const VentSet&);
-  VentSet& operator = (const VentSet&);
 };
 #endif

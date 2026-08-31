@@ -60,9 +60,7 @@ class RcsScaleFactorInterface
   {}
 
   virtual ~RcsScaleFactorInterface() = default;
-
- private:
-  RcsScaleFactorInterface(const RcsScaleFactorInterface&);
-  RcsScaleFactorInterface & operator= (const RcsScaleFactorInterface&);
+  RcsScaleFactorInterface(const RcsScaleFactorInterface&) = delete;
+  RcsScaleFactorInterface & operator= (const RcsScaleFactorInterface&) = delete;
 };
 #endif

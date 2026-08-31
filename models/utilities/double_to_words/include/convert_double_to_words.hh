@@ -64,14 +64,12 @@ public:
                             unsigned int word_count,
                             unsigned int bit_size);
   virtual ~ConvertDoubleToUintWords() = default;
+  ConvertDoubleToUintWords (const ConvertDoubleToUintWords& rhs) = delete;
+  ConvertDoubleToUintWords & operator = (const ConvertDoubleToUintWords& rhs) = delete;
 
   void update();
   void compute_significance();
   bool check_values();
-
-private:
-  ConvertDoubleToUintWords (const ConvertDoubleToUintWords& rhs);
-  ConvertDoubleToUintWords & operator = (const ConvertDoubleToUintWords& rhs);
 };
 
 #endif

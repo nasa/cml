@@ -78,6 +78,9 @@ class StateInitializeWithPropagation : public StateInitialize
 
   explicit StateInitializeWithPropagation( jeod::GravityManager & gravity_manager);
   ~StateInitializeWithPropagation() override = default;
+  StateInitializeWithPropagation (const StateInitializeWithPropagation&) = delete;
+  StateInitializeWithPropagation & operator =
+                                 (const StateInitializeWithPropagation&) = delete;
 
   void initialize(  jeod::DynManager & dyn_manager ) override;
   void apply(  jeod::DynManager & dyn_manager ) override;
@@ -86,10 +89,5 @@ class StateInitializeWithPropagation : public StateInitialize
   void propagate_state();
   void rk4_integration();
   void compute_planet_orientation (double time);
-
- private:
-  StateInitializeWithPropagation (const StateInitializeWithPropagation&);
-  StateInitializeWithPropagation & operator =
-                                 (const StateInitializeWithPropagation&);
 };
 #endif

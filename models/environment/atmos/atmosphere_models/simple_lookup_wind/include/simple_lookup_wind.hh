@@ -92,6 +92,8 @@ class SimpleLookupWind : public SubscriptionBase
 
   SimpleLookupWind();
   ~SimpleLookupWind() override = default;
+  SimpleLookupWind (const SimpleLookupWind&) = delete;
+  SimpleLookupWind & operator = (const SimpleLookupWind&) = delete;
 
   void initialize() override;
   void update(double altitude);
@@ -105,10 +107,5 @@ class SimpleLookupWind : public SubscriptionBase
                             size_t         num_elem_per_variable);
   void assign_dir_mag_vert_data( const double * data_array,
                                  size_t         num_elem_per_variable);
-
- private:
-  // private and unimplemented; cannot be used.
-  SimpleLookupWind (const SimpleLookupWind&);
-  SimpleLookupWind & operator = (const SimpleLookupWind&);
 };
 #endif

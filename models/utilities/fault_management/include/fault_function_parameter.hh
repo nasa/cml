@@ -25,6 +25,8 @@ class FaultFunctionParameter {
   public:
     FaultFunctionParameter();
     virtual ~FaultFunctionParameter() = default;
+    FaultFunctionParameter(const FaultFunctionParameter&) = delete;
+    FaultFunctionParameter& operator = (const FaultFunctionParameter&) = delete;
 
     double get_value();
     void reset_nominal_with_new_rate(double new_rate);
@@ -37,9 +39,5 @@ class FaultFunctionParameter {
       The value of the parameter when the independent variable is 0. If the
       independent variable is relative, this is the initial value of the
       parameter. */
-
-  private:
-    FaultFunctionParameter(const FaultFunctionParameter&);
-    FaultFunctionParameter& operator = (const FaultFunctionParameter&);
 };
 #endif

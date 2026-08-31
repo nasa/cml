@@ -94,14 +94,12 @@ protected:
 public:
   PistonThrusterVehicleSide();
   virtual ~PistonThrusterVehicleSide() = default;
+  PistonThrusterVehicleSide(const PistonThrusterVehicleSide& rhs) = delete;
+  PistonThrusterVehicleSide & operator = (const PistonThrusterVehicleSide& rhs) = delete;
 
   void loadCoM( const double * pos_CoM);
   void initialize();
   void update( double force_mag);
-
-private:
-  PistonThrusterVehicleSide(const PistonThrusterVehicleSide& rhs);
-  PistonThrusterVehicleSide & operator = (const PistonThrusterVehicleSide& rhs);
 };
 
 
@@ -120,6 +118,8 @@ public:
   PistonThruster( const double *,
                   const double *);
   ~PistonThruster() override = default;
+  PistonThruster(const PistonThruster& rhs) = delete;
+  PistonThruster & operator = (const PistonThruster& rhs) = delete;
 
   void loadCoM( const double * pos_CoM_A,
                 const double * pos_CoM_B);
@@ -130,9 +130,5 @@ protected:
   bool construction_complete; /* (--) Flag specifying whether the sides' CoM
                                       positions have been loaded. */
   void deactivate() override;
-
-private:
-  PistonThruster(const PistonThruster& rhs);
-  PistonThruster & operator = (const PistonThruster& rhs);
 };
 #endif

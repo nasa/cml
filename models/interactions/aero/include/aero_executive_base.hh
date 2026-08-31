@@ -65,17 +65,14 @@ public:
     subscribe_name = "AeroExecutiveBase:";
   }
 
+  AeroExecutiveBase (const AeroExecutiveBase &) = delete;
+  AeroExecutiveBase & operator= (const AeroExecutiveBase &) = delete;
+
   void deactivate() override {
     output.zero_everything();
     SubscriptionBase::deactivate();
   }
 
   virtual void update() = 0;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies
-  AeroExecutiveBase (const AeroExecutiveBase &);
-  AeroExecutiveBase & operator= (const AeroExecutiveBase &);
 };
 #endif

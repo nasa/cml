@@ -66,10 +66,8 @@ protected:
                                  independent variable for table lookup. */
   ConsumptionType consumption_type; /* (--)   Consumption-type enumeration */
   double prop_mass_init;            /* (kg)   Initial consumable mass. */
-  #ifndef SWIG
   static constexpr double grav_sea_level = 9.80665; /* (m/s2)
                                  Gravity at sea-level for Isp calc. */
-  #endif
 
   // The public constructors all call this protected constructor, which
   // eliminates the need to have four nearly-identical initialization lists.
@@ -99,6 +97,8 @@ public:
                            const double      & time,
                            const double      * veh_cm_in);
   ~RocketMotor_TableThrust() override = default;
+  RocketMotor_TableThrust (const RocketMotor_TableThrust&) = delete;
+  RocketMotor_TableThrust & operator = (const RocketMotor_TableThrust&) = delete;
 
   void load_thrust_data(double * data,
                         size_t   num_elements);
@@ -125,9 +125,5 @@ protected:
   void start_motor() override;
   void update_table();
   void compute_flow_rate_and_isp();
-private:
-  // Not implemented:
-  RocketMotor_TableThrust (const RocketMotor_TableThrust&);
-  RocketMotor_TableThrust & operator = (const RocketMotor_TableThrust&);
 };
 #endif

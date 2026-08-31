@@ -54,15 +54,12 @@ class QuaternionSphericalInterpolator
  public:
   QuaternionSphericalInterpolator();
   virtual ~QuaternionSphericalInterpolator() = default;
+  QuaternionSphericalInterpolator (const QuaternionSphericalInterpolator&) = delete;
+  QuaternionSphericalInterpolator& operator = (
+                                    const QuaternionSphericalInterpolator&) = delete;
 
   void update();
   void set_epsilon_interp( double new_epsilon);
   void set_epsilon_delta( double new_epsilon);
-
- private:
-  // Class not copyable:
-  QuaternionSphericalInterpolator (const QuaternionSphericalInterpolator&);
-  QuaternionSphericalInterpolator& operator = (
-                                    const QuaternionSphericalInterpolator&);
 };
 #endif

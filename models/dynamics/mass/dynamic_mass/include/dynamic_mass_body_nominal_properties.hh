@@ -61,12 +61,9 @@ protected:
 // NOTE - source code found in dynamic_mass_body_properties.cc
 public:
    DynamicMassBodyNominalProperties();
+   DynamicMassBodyNominalProperties (const DynamicMassBodyNominalProperties&) = delete;
+   DynamicMassBodyNominalProperties& operator = (const DynamicMassBodyNominalProperties&) = delete;
    void set_data( jeod::MassProperties & properties_in);
-
-private:
-   // To prevent the copy/assignment operations
-   DynamicMassBodyNominalProperties (const DynamicMassBodyNominalProperties&);
-   DynamicMassBodyNominalProperties& operator = (const DynamicMassBodyNominalProperties&);
 };
 
 

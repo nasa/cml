@@ -126,6 +126,8 @@ class RcsGeneric : public SubscriptionBase {
 
   explicit RcsGeneric (const unsigned int num_propellant_components_);
   ~RcsGeneric() override = default;
+  RcsGeneric (const RcsGeneric& rhs) = delete;
+  RcsGeneric & operator = (const RcsGeneric& rhs) = delete;
 
   virtual void initialize( double   time_step,
                            const double * center_of_mass);
@@ -148,10 +150,5 @@ class RcsGeneric : public SubscriptionBase {
   bool update_part_I(const void *);
   void update_part_II();
   void check_mult_jet_flag_init();
-
- private:
-   // Not implemented:
-   RcsGeneric (const RcsGeneric& rhs);
-   RcsGeneric & operator = (const RcsGeneric& rhs);
 };
 #endif

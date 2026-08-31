@@ -172,6 +172,8 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
 
    ExtendedPlanetaryDerivedState();
    ~ExtendedPlanetaryDerivedState() override = default;
+   ExtendedPlanetaryDerivedState (const ExtendedPlanetaryDerivedState & rhs) = delete;
+   ExtendedPlanetaryDerivedState & operator = (const ExtendedPlanetaryDerivedState & rhs) = delete;
 
    void initialize(jeod::DynBody & subject_body, jeod::DynManager & dyn_manager) override;
 
@@ -236,11 +238,6 @@ protected:
    void calculate_relative_accel();
    void hang_roll();
    void analyze_range_safety();
-
-private:
-   ExtendedPlanetaryDerivedState (const ExtendedPlanetaryDerivedState & rhs);
-   ExtendedPlanetaryDerivedState & operator = (const ExtendedPlanetaryDerivedState & rhs);
-
 };
 
 

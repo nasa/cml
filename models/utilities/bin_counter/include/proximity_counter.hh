@@ -58,6 +58,8 @@ class CML_ProximityCounter {
     Name of group (for debugging purposes)*/
   CML_ProximityCounter();
   explicit CML_ProximityCounter(const std::vector<double> & targets_);
+  CML_ProximityCounter(const CML_ProximityCounter&) = delete;
+  CML_ProximityCounter& operator=(const CML_ProximityCounter&) = delete;
   void insert(double);
   void set_data( const std::vector<double> & targets);
   template <size_t n_targets>
@@ -66,9 +68,5 @@ class CML_ProximityCounter {
     std::vector<double> targets_v( new_targets, new_targets+n_targets);
     set_data( targets_v);
   }
-
- private: // not implemented
-  CML_ProximityCounter(const CML_ProximityCounter&);
-  CML_ProximityCounter& operator=(const CML_ProximityCounter&);
 };
 #endif

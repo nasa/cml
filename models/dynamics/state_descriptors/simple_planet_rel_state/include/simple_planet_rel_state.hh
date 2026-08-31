@@ -36,12 +36,11 @@ class SimplePlanetRelState : public SubscriptionBase,
 
   SimplePlanetRelState(const std::string & body_frame_name_,
                        const std::string & planet_frame_name);
+  SimplePlanetRelState (const SimplePlanetRelState&) = delete;
+  SimplePlanetRelState & operator = (const SimplePlanetRelState&) = delete;
 
   void initialize(jeod::DynBody & subject_body,
                           jeod::DynManager & dyn_manager) override;
   void update() override;
- private:
-  SimplePlanetRelState (const SimplePlanetRelState&);
-  SimplePlanetRelState & operator = (const SimplePlanetRelState&);
 };
 #endif

@@ -53,6 +53,8 @@ class EclipseCalculator : public SubscriptionBase
                     jeod::DynManager & dyn_manager,
                     jeod::RefFrame & vehicle_frame);
   ~EclipseCalculator() override = default;
+  EclipseCalculator (const EclipseCalculator& rhs) = delete;
+  void operator = (const EclipseCalculator& rhs) = delete;
 
   void initialize() override;
   void update();
@@ -66,9 +68,5 @@ class EclipseCalculator : public SubscriptionBase
  protected:
   void activate() override;
   void deactivate() override;
-
- private: // and undefined:
-  EclipseCalculator (const EclipseCalculator& rhs);
-  void operator = (const EclipseCalculator& rhs);
 };
 #endif

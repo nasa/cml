@@ -37,11 +37,9 @@ public:
   MassPropertiesDispersions disperse; /* (--) The dispersed values. */
   MassBodyDispersedInit();
   ~MassBodyDispersedInit() override = default;
+  MassBodyDispersedInit (const MassBodyDispersedInit& rhs) = delete;
+  MassBodyDispersedInit& operator = (const MassBodyDispersedInit& rhs) = delete;
 
   void apply( jeod::DynManager & dyn_manager) override;
-
-private: // and undefined:
-  MassBodyDispersedInit (const MassBodyDispersedInit& rhs);
-  MassBodyDispersedInit& operator = (const MassBodyDispersedInit& rhs);
 };
 #endif

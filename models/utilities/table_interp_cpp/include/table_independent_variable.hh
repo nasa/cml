@@ -176,6 +176,8 @@ public:
                             const Continuity continuity,
                             double frac_eps_in=1.0e-9);
   virtual ~TableIndependentVariable() = default;
+  TableIndependentVariable (const TableIndependentVariable&) = delete;
+  TableIndependentVariable& operator = (const TableIndependentVariable&) = delete;
 
   virtual bool load_data( const double* const data_in,
                           size_t size_in);
@@ -223,10 +225,6 @@ private:
   void tag_as_off_table_front();
   void generate_fraction();
   bool check_monotonicity( const std::vector<double> & data_in);
-
-  // Disable the copy and assigment operations
-  TableIndependentVariable (const TableIndependentVariable&);
-  TableIndependentVariable& operator = (const TableIndependentVariable&);
 };
 
 

@@ -37,6 +37,14 @@ constructor
     }
 
 /*****************************************************************************
+copy constructor and copy assignment operator
+*****************************************************************************/
+    RestartableVector3FirstOrderODEIntegrator (
+      const RestartableVector3FirstOrderODEIntegrator &) = delete;
+    RestartableVector3FirstOrderODEIntegrator & operator= (
+      const RestartableVector3FirstOrderODEIntegrator &) = delete;
+
+/*****************************************************************************
 destructor
 *****************************************************************************/
     ~RestartableVector3FirstOrderODEIntegrator () override = default;
@@ -131,12 +139,5 @@ Purpose:(Restore the integrator on restart.)
     Object that creates and manages the integrator object.
     */
     jeod::RestartableFirstOrderODEIntegrator<3> integrator_manager; //!< trick_io(**)
-
-
-    // Unimplemented member functions.  Copy constructor, operator =
-    RestartableVector3FirstOrderODEIntegrator (
-      const RestartableVector3FirstOrderODEIntegrator &);
-    RestartableVector3FirstOrderODEIntegrator & operator= (
-      const RestartableVector3FirstOrderODEIntegrator &);
 };
 #endif

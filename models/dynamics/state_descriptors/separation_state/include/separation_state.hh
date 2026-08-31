@@ -67,6 +67,8 @@ class SeparationState : public SubscriptionBase
    SeparationState (void);
    explicit SeparationState (const std::string & name);
    ~SeparationState() override = default;
+   SeparationState (const SeparationState&) = delete;
+   SeparationState& operator = (const SeparationState&) = delete;
 
    void initialize( jeod::DynManager & dyn_manager_in,
                     jeod::DynBody & source_body,
@@ -105,11 +107,6 @@ class SeparationState : public SubscriptionBase
                                                 const std::string &);
    void activate() override;
    void deactivate() override;
-
- private:
-   // Not implemented:
-   SeparationState (const SeparationState&);
-   SeparationState& operator = (const SeparationState&);
 
 };
 #endif

@@ -52,12 +52,9 @@ class MonteCarloStateDispersion {
  public:
   explicit MonteCarloStateDispersion(jeod::DynBodyInitTransState & trans_init);
   virtual ~MonteCarloStateDispersion() = default;
+  MonteCarloStateDispersion (const MonteCarloStateDispersion&) = delete;
+  MonteCarloStateDispersion & operator = (const MonteCarloStateDispersion&) = delete;
 
   void disperse_trans_state();
-
- private:
-  // Copy constructor, operator= not implemented.
-  MonteCarloStateDispersion (const MonteCarloStateDispersion&);
-  MonteCarloStateDispersion & operator = (const MonteCarloStateDispersion&);
 };
 #endif

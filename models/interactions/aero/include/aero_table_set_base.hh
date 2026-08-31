@@ -133,8 +133,9 @@ public:
   AeroTableSetBase( const std::string & name_in,
                     AeroCoefficientsTable & coefficients_out,
                     AeroCoefficientsDisp  & uncertainties_out);
-
   ~AeroTableSetBase() override = default;
+  AeroTableSetBase (const AeroTableSetBase &) = delete;
+  AeroTableSetBase & operator = (const AeroTableSetBase &) = delete;
 
   void initialize() override;
   void configure_table();
@@ -152,11 +153,5 @@ protected:
   void query_on_diag_aero_damping();
   void query_off_diag_aero_damping();
   AeroDampingType verify_aero_damping(const std::string & type);
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroTableSetBase (const AeroTableSetBase &);
-  AeroTableSetBase & operator = (const AeroTableSetBase &);
 };
 #endif

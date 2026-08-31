@@ -31,6 +31,7 @@ Checks: >
     clang-*,
         -clang-analyzer-optin.performance.Padding,
     misc-inclue-cleaner,
+    modernize-use-equals-delete,
     performance-*,
         -performance-enum-size
 

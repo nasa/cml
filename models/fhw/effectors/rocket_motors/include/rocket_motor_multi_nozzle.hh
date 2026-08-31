@@ -110,6 +110,8 @@ public:
                            const double      & atm_press_in,
                            const double      * veh_cm_in);
   ~RocketMotor_MultiNozzle() override = default;
+  RocketMotor_MultiNozzle (const RocketMotor_MultiNozzle& rhs) = delete;
+  RocketMotor_MultiNozzle & operator = (const RocketMotor_MultiNozzle& rhs) = delete;
 
   void add_nozzle( RocketMotorNozzle &);
   virtual void initialize(size_t num_flex_elements_in = 0,
@@ -130,10 +132,5 @@ public:
   void set_flex_threshold(double new_threshold);
 
   size_t get_num_noz() { return num_noz; }
-
-private:
-  // Not implemented:
-  RocketMotor_MultiNozzle (const RocketMotor_MultiNozzle& rhs);
-  RocketMotor_MultiNozzle & operator = (const RocketMotor_MultiNozzle& rhs);
 };
 #endif

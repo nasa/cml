@@ -85,6 +85,8 @@ protected:
   // Methods:
 public:
   SimpleSpringGroup();
+  SimpleSpringGroup(const SimpleSpringGroup& rhs) = delete;
+  SimpleSpringGroup & operator= (const SimpleSpringGroup&) = delete;
   void initialize( const jeod::DynBody  & action_body,
                    const jeod::DynBody  & reaction_body,
                    SeparationState  & sep_state_in);
@@ -95,11 +97,6 @@ public:
   void activate();
   void deactivate();
   void update();
-
-private:
-  // operator= and copy constructor declared private and not implemented
-  SimpleSpringGroup(const SimpleSpringGroup& rhs);
-  SimpleSpringGroup & operator= (const SimpleSpringGroup&);
 };
 
 #endif

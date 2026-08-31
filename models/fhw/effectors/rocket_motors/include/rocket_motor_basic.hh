@@ -162,6 +162,8 @@ public:
                     const double      & time_in,
                     const double      * veh_cm_in);
   ~RocketMotor_Basic() override = default;
+  RocketMotor_Basic (const RocketMotor_Basic&) = delete;
+  RocketMotor_Basic & operator = (const RocketMotor_Basic&) = delete;
 
   void initialize() override;
   virtual void update();
@@ -176,12 +178,6 @@ protected:
   virtual bool update_status();
   void update_mass_consumption();
   virtual void start_motor();
-  #ifndef SWIG
   void activate() override;
-  #endif
-private:
-  // Not implemented:
-  RocketMotor_Basic (const RocketMotor_Basic&);
-  RocketMotor_Basic & operator = (const RocketMotor_Basic&);
 };
 #endif

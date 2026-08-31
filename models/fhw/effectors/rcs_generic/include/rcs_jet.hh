@@ -211,6 +211,8 @@ class RcsJet {
   RcsJet( RcsGeneric & rcs_system_,
           RcsPropPod & prop_pod_,
           RcsJetGroup & group_);
+  RcsJet (const RcsJet& rhs) = delete;
+  RcsJet & operator = (const RcsJet& rhs) = delete;
   void initialize();
   void update (bool command_);
   void compute_jet_forces();
@@ -234,10 +236,5 @@ class RcsJet {
   void apply_direction_error();
   void apply_direction_dispersion();
   void switch_status( RcsJetStatus new_status);
-
- private:
-   // Not implemented:
-   RcsJet (const RcsJet& rhs);
-   RcsJet & operator = (const RcsJet& rhs);
 };
 #endif
