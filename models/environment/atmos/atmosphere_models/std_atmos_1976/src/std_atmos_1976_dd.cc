@@ -3,6 +3,9 @@ PURPOSE:
   (To define the constants and coefficients used in the compution of U.S. Standard 
    Atmosphere 1976 model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCES:
   ((U.S. STANDARD ATMOSPHERE 1976, N77-16482,
     https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539.pdf))

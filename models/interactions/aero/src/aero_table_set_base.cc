@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
 PURPOSE: (Provides the methods for the AeroTableSet class)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (Antares) (initial version))
    ((Gary Turner) (OSR) (June 2016) (Antares) (Refactor))

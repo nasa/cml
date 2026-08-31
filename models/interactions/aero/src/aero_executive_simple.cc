@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
 PURPOSE: (Provides a simple non-rotating aerodynamic drag model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (March 2015) (Antares) (initial version))
    ((Gary Turner) (OSR) (June 2016) (Antares)

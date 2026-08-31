@@ -2,6 +2,9 @@
 PURPOSE:
    (Interface for the GRAM atmosphere.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (May 2016) (ANTARES) 

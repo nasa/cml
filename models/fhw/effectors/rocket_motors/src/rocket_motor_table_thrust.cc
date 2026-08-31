@@ -2,6 +2,9 @@
 PURPOSE:
    (Provide a motor model including an interpolated thrust table.)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS:
    ((If using the PropConsumptionMburn consumption type, assumes nothing else
      is drawing mass from the same body or string.))

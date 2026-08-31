@@ -3,6 +3,9 @@
 PURPOSE:
    (Define method to check events for all Compound-event instances)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May       2018) (Initial implementation of event manager))

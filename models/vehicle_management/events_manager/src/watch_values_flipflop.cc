@@ -9,6 +9,10 @@ PURPOSE: (
   - one is applied when the boolean state switches from false to true
   - the other is applies when the state switches from true to false.
  )
+
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2026/02) (ANTARES) (initial implementation)))
 *******************************************************************************/

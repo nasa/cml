@@ -3,6 +3,9 @@ PURPOSE:
   (Provide the functionality for the  Aero capabilities when the
    lookup table option is used.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCE:
   (The CML aero models, written by Jeremy Rea, Jon Berndt, Sara McNamara,
    Sara Blatz, et, al.)

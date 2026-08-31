@@ -5,7 +5,7 @@ PURPOSE:
     This typically represents errors introduced in machining.)
 
 LIBRARY DEPENDENCIES:
-   ()
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
 
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))

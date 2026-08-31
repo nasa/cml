@@ -2,6 +2,9 @@
 PURPOSE:
   (Simulates the effects of RCS thruster build-up and trail-off.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Michael McCarthy) (OSR) (Jul 2019) (ANTARES) (CM RCS Refactor, removed C
                              interfacing, split scale factors model into

@@ -2,6 +2,9 @@
 PURPOSE: (Interface to the newer FaultManagement model to support backward
 compatibility with models using the legacy fault_arch sensor-faults.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Mar 2022) (Antares) (Initial)))
 *******************************************************************************/

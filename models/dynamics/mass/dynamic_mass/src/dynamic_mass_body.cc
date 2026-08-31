@@ -2,6 +2,9 @@
    PURPOSE:
    (Provides a generic dynamic mass capability.)
 
+   LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
    ASSUMPTIONS AND LIMITATIONS:
    ((Limitation 1: dyn_mass_init_complete must be called after other
      initialization jobs that modify a DynMass's initial mass properties.)

@@ -6,6 +6,9 @@ PURPOSE:
    - bit-size of each word (e.g. 8-bit, 32-bit)
    - number of words available to represent the double.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2016) (ANTARES) (Initial version, uint only))
    ((Brent Caughron) (OSR) (June 2017) (ANTARES)

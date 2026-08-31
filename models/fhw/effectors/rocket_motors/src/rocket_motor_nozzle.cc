@@ -3,6 +3,9 @@ PURPOSE:
   (Provide class representing rocket nozzles to accompany
    RocketMotorMultiNozzle - a rocket motor with nozzles)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares)
        (initial, adapted from SolidRocketMotor2 and from las_prop_init.c))

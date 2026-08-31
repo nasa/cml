@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
 PURPOSE: ()
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2016) (Antares) (New/refactor))
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))

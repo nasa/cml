@@ -4,6 +4,9 @@ Purpose:
    from a fixed reference location and where range is computed to a fixed
    reference location.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Reference:
   (See docs directory for equation derivations and identifying numbers)
 

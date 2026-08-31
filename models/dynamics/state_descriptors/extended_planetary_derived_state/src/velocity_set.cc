@@ -5,6 +5,9 @@ PURPOSE:
     The two intended velocities are inertially- and ECEF- referenced.
     The altitude rates between these two are very close, but not identical.
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS
    ((The velocity is intended to be expressed in the inertial reference frame.)
     (The model expects a reference to a transformation matrix from inertial to

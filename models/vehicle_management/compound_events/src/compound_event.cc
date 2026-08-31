@@ -3,6 +3,9 @@
 PURPOSE:
    (Define checking process for each event managed by event manager)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May       2018) (Initial implementation of event manager))

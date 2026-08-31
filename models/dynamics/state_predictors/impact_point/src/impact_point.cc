@@ -2,6 +2,9 @@
 PURPOSE:
    (Parameter definition for ballistic impact predictor function.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCES:
     ((JEOD Orbital Elements model)
      ((Vallado, D.) (Fundamentals of Astrodynamics and Applications)))

@@ -3,6 +3,9 @@ PURPOSE:
   (Provide the capability to transform between position/velocity
    vectors and a set of target relative parameters.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (
    ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))

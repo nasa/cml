@@ -2,6 +2,9 @@
 PURPOSE: (Provides a set of EventTriggers, analagous to how a
           WatchValuesSet provides a set of WatchValues.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2023) (ANTARES)
     (Merging concepts found in former grok-events and CML-events))

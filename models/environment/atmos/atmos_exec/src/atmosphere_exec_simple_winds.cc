@@ -2,6 +2,9 @@
 PURPOSE:
    (Interface for the Simple Winds basic table-driven model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (July 2018) (ANTARES)

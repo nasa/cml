@@ -4,7 +4,8 @@ PURPOSE: (Disperses the state directly.  Allows the application of dispersions
           in another.)
 
 LIBRARY DEPENDENCIES:
-  ((cml/models/utilities/cml_message/src/cml_message.cc))
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/utilities/math_utils/src/math_utils.cc))
 
 PROGRAMMERS:
     (((Gary Turner) (OSR) (Jan 2019) (Antares) (initial)))

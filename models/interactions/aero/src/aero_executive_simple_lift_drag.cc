@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
 PURPOSE: (Provides a simple non-rotating aerodynamic lift/drag model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Jeremy Rea) (NASA) (March 2025) (Antares) (initial version, based on AeroExecutiveSimple)))
 *******************************************************************************/

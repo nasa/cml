@@ -8,7 +8,8 @@ PURPOSE:
    State_Init_Exec_T structures and the state_init_exec method.)
 
 LIBRARY DEPENDENCIES:
-  ((cml/models/utilities/cml_message/src/cml_message.cc))
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/utilities/math_utils/src/math_utils.cc))
 
 REFERENCE:
   (This is a reworking of the following models from old CML:

@@ -3,6 +3,9 @@ PURPOSE:
     (Atmosphere executive to provide the option to select between various
      atmosphere and wind models.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
     (
      ((Brian Hoelscher) (NASA-EG4) (06/06) (ARES) (initial version))

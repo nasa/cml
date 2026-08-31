@@ -2,6 +2,9 @@
 PURPOSE:
    (Input/output interface for the atmosphere executive.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (May 2016) (ANTARES)

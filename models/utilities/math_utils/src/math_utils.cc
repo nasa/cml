@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
  PURPOSE: (To provide a common location for additional math utilities)
 
+ LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (Sep 2015) (initial version))
     ((Bingquan Wang) (OSR) (Apr 2017) (Fixed the compilation warnig of

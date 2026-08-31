@@ -3,6 +3,9 @@ PURPOSE:
    (To model the force and moments imparted on opposing sides of adjacent
     vehicles that were previosly connected and separated by the thrusters.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
   ((See piston_thruster_group.hh))
 

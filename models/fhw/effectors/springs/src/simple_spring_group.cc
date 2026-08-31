@@ -2,6 +2,9 @@
 PURPOSE:
   (Calculate the forces and torques resulting from a group of parallel springs.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
   (Springs are aligned)
 

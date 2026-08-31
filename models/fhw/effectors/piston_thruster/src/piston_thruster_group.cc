@@ -3,6 +3,9 @@ PURPOSE:
   (To model the force and moments imparted on both parts of a vehicle
    during its separation when a piston thruster or a group of them fires.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
   (See header file)
 

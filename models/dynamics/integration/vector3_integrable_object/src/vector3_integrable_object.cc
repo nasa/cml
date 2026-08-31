@@ -2,6 +2,9 @@
 PURPOSE:
 (Define the methods for adding a 3-vector to a jeod::DynBody and integrating it alongside the jeod::DynBody)
 
+LIBRARY DEPENDENCIES:
+((cml/models/utilities/cml_message/src/cml_message.cc))
+
 LIMITATIONS:
 (Requires JEOD v 3.2, or modifications to earlier versions of JEOD to provide
  the jeod::DynBody with additional capabilities not available in 3.1 and earlier:

@@ -13,6 +13,9 @@ PURPOSE:
            a BodyRefFrame; this class is for relative state between two
            non-body-frames)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (July 2015) (Antares) (initial version)))
 

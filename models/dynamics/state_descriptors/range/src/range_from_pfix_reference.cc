@@ -3,6 +3,9 @@ Purpose:
    (Completes the calculation of range for the specific case of range from a
    fixed reference location.))
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
    (((Gary Turner) (OSR) (Sept 2014 (Initial version)))
 *******************************************************************************/
