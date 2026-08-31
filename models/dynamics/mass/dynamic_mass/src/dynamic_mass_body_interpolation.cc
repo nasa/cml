@@ -42,6 +42,9 @@ DynamicMassBodyInterpolation::DynamicMassBodyInterpolation(const double &mass_in
   tab_poi_flag(false),
   interp_position_master(true),
   interp_inertia_master(true),
+  interp_position{},
+  interp_moi{},
+  interp_poi{},
   inertia_is_structural_cg(false),
   initialized(false)
 {

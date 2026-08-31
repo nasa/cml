@@ -53,6 +53,7 @@ PistonThrusterVehicleSide::PistonThrusterVehicleSide()
   param(),
   out(),
   T_local_to_struc(),
+  position_local_frame_in_struc_frame{},
   trig_variable(),
   direction(),
   moment_arm(),
@@ -60,7 +61,6 @@ PistonThrusterVehicleSide::PistonThrusterVehicleSide()
   position_CoM(nullptr)
 {
   jeod::Matrix3x3::identity( T_local_to_struc);
-  jeod::Vector3::initialize( position_local_frame_in_struc_frame);
 }
 
 /*******************************************************************************

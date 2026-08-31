@@ -31,6 +31,9 @@ DynamicMassBodyProperties::DynamicMassBodyProperties(const double &mass_in)
   :
   DynamicMassBodyPropertiesInterface(),
   mass_bias(0.0),
+  cg_bias{},
+  moi_bias{},
+  poi_bias{},
   mass_dispersion_flag(false),
   interpolation(mass_in)
 {
@@ -42,7 +45,9 @@ DynamicMassBodyProperties::DynamicMassBodyProperties(const double &mass_in)
 //*******************************************************************************
 DynamicMassBodyNominalProperties::DynamicMassBodyNominalProperties()
 :
+  position{},
   core_mass(0.0),
+  inertia{},
   data_assigned(false)
 {
   jeod::Vector3::initialize(position);

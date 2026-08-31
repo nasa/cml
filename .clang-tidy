@@ -33,6 +33,15 @@
 # categories, we only include selected warnings from categories like google-*
 # and cppcoreguidelines-*.
 Checks: >
+    cppcoreguidelines-*coroutines*,
+    cppcoreguidelines-avoid-goto,
+    cppcoreguidelines-interfaces-global-init,
+    cppcoreguidelines-macro-usage,
+    cppcoreguidelines-misleading-capture-default-by-value,
+    cppcoreguidelines-no-malloc,
+    cppcoreguidelines-pro-type-member-init,
+    cppcoreguidelines-pro-type-static-cast-downcast,
+    cppcoreguidelines-rvalue-reference-param-not-moved,
     clang-*,
         -clang-analyzer-optin.performance.Padding,
     google-build-using-namespace,
