@@ -20,6 +20,8 @@ template<typename T> class FaultWhiteNoise : public Fault {
   public :
     explicit FaultWhiteNoise(T& variable);
     ~FaultWhiteNoise() override = default;
+    FaultWhiteNoise(const FaultWhiteNoise&) = delete;
+    FaultWhiteNoise& operator = (const FaultWhiteNoise&) = delete;
 
     void overwrite_value() override;
 
@@ -29,9 +31,6 @@ template<typename T> class FaultWhiteNoise : public Fault {
 
   private:
     T& variable; /* (--) The variable to fault. */
-
-    FaultWhiteNoise(const FaultWhiteNoise&);
-    FaultWhiteNoise& operator = (const FaultWhiteNoise&);
 };
 
 

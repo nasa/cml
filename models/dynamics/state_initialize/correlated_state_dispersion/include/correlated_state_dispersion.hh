@@ -298,6 +298,8 @@ class CorrelatedStateDispersion {
  public:
   CorrelatedStateDispersion();
   ~CorrelatedStateDispersion() = default;
+  CorrelatedStateDispersion (const CorrelatedStateDispersion&) = delete;
+  CorrelatedStateDispersion & operator = (const CorrelatedStateDispersion&) = delete;
 
   void disperse_state( const jeod::RefFrameState & trans_base_wrt_cov_base,
                        const double (&rot_base_wrt_cov_base)[3][3],
@@ -330,9 +332,5 @@ class CorrelatedStateDispersion {
                             const double velocity[3]);
   void transform_TR_param(  const double position[3],
                             const double velocity[3]);
-
- private:
-  CorrelatedStateDispersion (const CorrelatedStateDispersion&);
-  CorrelatedStateDispersion & operator = (const CorrelatedStateDispersion&);
 };
 #endif

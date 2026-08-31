@@ -41,6 +41,9 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
   explicit SingleInputTableForQuaternions(
                                     const DoublePtrVec & dependent_variables);
   ~SingleInputTableForQuaternions() override = default;
+  SingleInputTableForQuaternions (const SingleInputTableForQuaternions&) = delete;
+  SingleInputTableForQuaternions& operator = (
+                                  const SingleInputTableForQuaternions&) = delete;
 
   bool initialize() override;
 
@@ -56,10 +59,5 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
 
  protected:
   bool generate_output() override;
- private:
-  // Disable the copy/assignment operators
-  SingleInputTableForQuaternions (const SingleInputTableForQuaternions&);
-  SingleInputTableForQuaternions& operator = (
-                                  const SingleInputTableForQuaternions&);
 };
 #endif

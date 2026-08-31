@@ -114,12 +114,8 @@ class OrbElemSubset{
                 const jeod::Planet & planet_in,
                 const double & planet_mu);
   ~OrbElemSubset() = default;
-
- private:
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  OrbElemSubset(const OrbElemSubset& rhs);
-  OrbElemSubset & operator = (const OrbElemSubset&);
+  OrbElemSubset(const OrbElemSubset& rhs) = delete;
+  OrbElemSubset & operator = (const OrbElemSubset&) = delete;
 };
 
 #endif

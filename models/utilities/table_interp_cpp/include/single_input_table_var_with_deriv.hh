@@ -65,13 +65,11 @@ class SingleInputTableVarDeriv : public GenericSingleInputTable
                             double & dependent_var_deriv);
   SingleInputTableVarDeriv( const DoublePtrVec & dependent_variables,
                             const DoublePtrVec & dependent_variables_deriv);
+  SingleInputTableVarDeriv (const SingleInputTableVarDeriv&) = delete;
+  SingleInputTableVarDeriv& operator = (const SingleInputTableVarDeriv&) = delete;
 
   bool initialize() override;
   protected:
   bool generate_output() override;
- private:
-  // Disable the copy/assignment operators
-  SingleInputTableVarDeriv (const SingleInputTableVarDeriv&);
-  SingleInputTableVarDeriv& operator = (const SingleInputTableVarDeriv&);
 };
 #endif

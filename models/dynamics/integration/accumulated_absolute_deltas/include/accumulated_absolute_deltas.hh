@@ -50,15 +50,13 @@ class AccumulatedAbsoluteDeltas : public SubscriptionBase
   AccumulatedAbsoluteDeltas(  const double * variable_,
                               const unsigned int size_);
   ~AccumulatedAbsoluteDeltas() override;
+  AccumulatedAbsoluteDeltas ( const AccumulatedAbsoluteDeltas &) = delete;
+  AccumulatedAbsoluteDeltas & operator= ( const AccumulatedAbsoluteDeltas &) = delete;
 
   void initialize() override;
   void reset();
   void update();
  protected:
   void activate() override;
- private:
-  // Not implemented
-  AccumulatedAbsoluteDeltas ( const AccumulatedAbsoluteDeltas &);
-  AccumulatedAbsoluteDeltas & operator= ( const AccumulatedAbsoluteDeltas &);
 };
 #endif

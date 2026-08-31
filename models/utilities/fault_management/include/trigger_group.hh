@@ -25,6 +25,8 @@ class TriggerGroup {
 
     TriggerGroup() : enabled(true) {}
     virtual ~TriggerGroup() = default;
+    TriggerGroup(const TriggerGroup&) = delete;
+    TriggerGroup& operator = (const TriggerGroup&) = delete;
 
     ////    Operations    ////
 
@@ -41,11 +43,6 @@ class TriggerGroup {
  protected:
    std::list<std::pair<bool, TriggerBase*> > triggers; /* (--)
      List of triggers and whether they are enabled for this group. */
-
- private:
-   // Class is non-copyable
-   TriggerGroup(const TriggerGroup&);
-   TriggerGroup& operator = (const TriggerGroup&);
 };
 
 #endif

@@ -68,6 +68,9 @@ class IndirectCommandableActionSet : public CommandableActionSet
 
   ~IndirectCommandableActionSet() override = default;
 
+  IndirectCommandableActionSet(const IndirectCommandableActionSet&) = delete;
+  IndirectCommandableActionSet& operator=(const IndirectCommandableActionSet&) = delete;
+
   void generate_fsw_command() override
   {
     if      (current_commandable == &act1) command_type = ACT1;
@@ -109,6 +112,9 @@ class DirectCommandableActionSet : public CommandableActionSet
   { }
 
   ~DirectCommandableActionSet() override = default;
+
+  DirectCommandableActionSet(const DirectCommandableActionSet&) = delete;
+  DirectCommandableActionSet& operator=(const DirectCommandableActionSet&) = delete;
 
   void generate_fsw_command() override
   {

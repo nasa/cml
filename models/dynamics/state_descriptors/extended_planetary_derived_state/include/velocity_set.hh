@@ -48,11 +48,9 @@ class VelocitySet{
 
  public:
   explicit VelocitySet(const double (&T_inrtl_topo_in)[3][3]);
+  VelocitySet (const VelocitySet & rhs) = delete;
+  VelocitySet & operator = (const VelocitySet & rhs) = delete;
   void initialize(const double * vel_in);
   void update();
-
- private:
-   VelocitySet (const VelocitySet & rhs);
-   void operator = (const VelocitySet & rhs);
 };
 #endif

@@ -67,6 +67,8 @@ private:
       THE GROUP will also be added to the group.*/
 public:
    DynamicMassString();
+   DynamicMassString (const DynamicMassString&) = delete;
+   DynamicMassString& operator = (const DynamicMassString&) = delete;
    void initialize();
    void distribute_mass_consumption();
    void reenable_bodies();
@@ -77,10 +79,5 @@ public:
    size_t get_body_collection_size() { return body_collection.size(); }
 
    void set_string_in_group() {string_in_group = true;}
-
-private:
-   // To prevent the copy/assignment operations
-   DynamicMassString (const DynamicMassString&);
-   DynamicMassString& operator = (const DynamicMassString&);
 };
 #endif

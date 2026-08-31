@@ -58,14 +58,12 @@ class GustModel
 
   explicit GustModel(const double & time_in);
   virtual ~GustModel() = default;
+  GustModel (const GustModel&) = delete;
+  GustModel & operator = (const GustModel&) = delete;
 
   void   activate();
   void   update();
   void   deactivate();
   bool   is_active(){return active;}
-
- private:
-  GustModel (const GustModel&) = delete;
-  GustModel & operator = (const GustModel&) = delete;
 };
 #endif

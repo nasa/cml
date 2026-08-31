@@ -20,9 +20,9 @@ class TrickLogging {
   public:
     std::list<Trick::DataRecordGroup *> group_list;
 
-    TrickLogging()
-      :
-      group_list(0){}
+    TrickLogging() = default;
+    TrickLogging (const TrickLogging&) = delete;
+    TrickLogging & operator = (const TrickLogging&) = delete;
 
     /***************************************************************************/
     // Add a data record group to the group list
@@ -227,9 +227,5 @@ class TrickLogging {
         "Returning nullptr.\n");
       return nullptr;
     }
-
-  private:
-    TrickLogging (const TrickLogging&);
-    TrickLogging & operator = (const TrickLogging&);
 };
 #endif

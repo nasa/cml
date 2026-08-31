@@ -52,6 +52,8 @@ class WatchValuesBase : public WatchValuesBaseCore {
      variable_at_activation(),
      use_threshold_crossing_trigger(false) {}
   ~WatchValuesBase() override = default;
+  WatchValuesBase (const WatchValuesBase& rhs) = delete;
+  WatchValuesBase& operator = (const WatchValuesBase& rhs) = delete;
 
 /*****************************************************************************
 set_watch
@@ -382,9 +384,5 @@ Purpose:(Generates the new reference value.)
     reference += variable_at_activation;
     return;
   }
-
- private:
-  WatchValuesBase (const WatchValuesBase& rhs);
-  WatchValuesBase& operator = (const WatchValuesBase& rhs);
 };
 #endif

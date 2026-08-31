@@ -54,6 +54,11 @@ class TargetRelative_StateParameter_Alt : public TargetRelative_StateParam
   /* Destructor */
   ~TargetRelative_StateParameter_Alt() override = default;
 
+  /* Deleted copy constructor and copy assignment operator */
+  TargetRelative_StateParameter_Alt (const TargetRelative_StateParameter_Alt&) = delete;
+  TargetRelative_StateParameter_Alt & operator = (
+                                 const TargetRelative_StateParameter_Alt&) = delete;
+
   /* Public Methods */
   void initialize( const double R_Ref[3] ) override;
 
@@ -69,12 +74,6 @@ class TargetRelative_StateParameter_Alt : public TargetRelative_StateParam
                                      double        theta_Rot_or_Cross,
                                      InputPosAngle input_theta_type,
                                      double        (&R)[3]);
-
- private:
-  // copy-constructor and operator= made empty to prevent misuse.
-  TargetRelative_StateParameter_Alt (const TargetRelative_StateParameter_Alt&);
-  TargetRelative_StateParameter_Alt & operator = (
-                                 const TargetRelative_StateParameter_Alt&);
 };
 
 #endif

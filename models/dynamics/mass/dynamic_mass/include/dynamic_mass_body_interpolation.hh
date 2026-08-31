@@ -136,6 +136,8 @@ public:
 
    explicit DynamicMassBodyInterpolation(const double &mass_in);
    virtual ~DynamicMassBodyInterpolation() = default;
+   DynamicMassBodyInterpolation (const DynamicMassBodyInterpolation&) = delete;
+   DynamicMassBodyInterpolation& operator = (const DynamicMassBodyInterpolation&) = delete;
 
    bool initialize();
    bool interpolate();
@@ -155,10 +157,6 @@ protected:
    void warn_no_data(const char* const table_name);
 
 private:
-   // to disable the copy/assignment operations
-   DynamicMassBodyInterpolation (const DynamicMassBodyInterpolation&);
-   DynamicMassBodyInterpolation& operator = (const DynamicMassBodyInterpolation&);
-
    bool interp_position_master; /* (--)
         controls access to all position interpolation/lookup options.*/
    bool interp_inertia_master; /* (--)

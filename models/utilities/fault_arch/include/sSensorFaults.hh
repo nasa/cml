@@ -41,6 +41,8 @@ class sSensorFaults : public FaultManager
   public:
     sSensorFaults() = default;
     virtual ~sSensorFaults() = default;
+    sSensorFaults(const sSensorFaults&) = delete;
+    sSensorFaults& operator = (const sSensorFaults&) = delete;
 
     void Injection( sSFault loc);
 
@@ -62,10 +64,5 @@ class sSensorFaults : public FaultManager
                                xmlNodePtr               ind_var_node,
                                const char*              fault_name,
                                bool                     nom_required) override;
-
-  private:
-    // Make the class non-copyable
-    sSensorFaults(const sSensorFaults&);
-    sSensorFaults& operator = (const sSensorFaults&);
 };
 #endif

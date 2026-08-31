@@ -35,6 +35,8 @@ class RangeToPfixReference : public RangeComputation
   RangeToPfixReference( const jeod::PlanetFixedPosition & state_in,
                         const double (&direction)[3]);
   ~RangeToPfixReference() override = default;
+  RangeToPfixReference(const RangeToPfixReference& rhs) = delete;
+  RangeToPfixReference & operator = (const RangeToPfixReference&) = delete;
 
   void set_reference_data() override;
   void update ();
@@ -43,13 +45,6 @@ class RangeToPfixReference : public RangeComputation
   void update_using_cartesian() override;
   void update_using_polar() override;
   void is_abstract() override {} // Makes this class instantiable
-
- private:
-
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  RangeToPfixReference(const RangeToPfixReference& rhs);
-  RangeToPfixReference & operator = (const RangeToPfixReference&);
 
 };
 
