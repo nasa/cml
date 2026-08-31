@@ -28,9 +28,15 @@
 #
 # readability:
 #     To be added in a future pull request
+#
+# Note that rather than ignoring a large number of warnings from other
+# categories, we only include selected warnings from categories like google-*
+# and cppcoreguidelines-*.
 Checks: >
     clang-*,
         -clang-analyzer-optin.performance.Padding,
+    google-build-using-namespace,
+    google-global-names-in-headers,
     modernize-use-equals-delete,
     portability-*,
         -portability-template-virtual-member-function,
