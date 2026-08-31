@@ -4,6 +4,8 @@
 - Name of originating group or simulation team:
 - NASA NPR 7150.2 classification of the model:
 - Point of contact for NASA-STD-7009 compliance:
+- Primary model point of contact:
+- Backup model point of contact:
 
 ## Model Maturity
 
