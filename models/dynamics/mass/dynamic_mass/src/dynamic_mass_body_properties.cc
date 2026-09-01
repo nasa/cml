@@ -40,9 +40,6 @@ DynamicMassBodyProperties::DynamicMassBodyProperties(const double &mass_in)
   interpolation(mass_in)
 {
   consumable_mass = -1.0;
-  jeod::Vector3::initialize(cg_bias);
-  jeod::Vector3::initialize(moi_bias);
-  jeod::Vector3::initialize(poi_bias);
 }
 //*******************************************************************************
 DynamicMassBodyNominalProperties::DynamicMassBodyNominalProperties()
@@ -52,8 +49,6 @@ DynamicMassBodyNominalProperties::DynamicMassBodyNominalProperties()
   inertia{},
   data_assigned(false)
 {
-  jeod::Vector3::initialize(position);
-  jeod::Matrix3x3::initialize(inertia);
 }
 
 /*****************************************************************************

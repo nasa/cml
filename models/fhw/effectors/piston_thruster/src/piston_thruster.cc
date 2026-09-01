@@ -25,7 +25,6 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
 
 #include "../include/piston_thruster.hh"
 
@@ -56,7 +55,7 @@ PistonThrusterVehicleSide::PistonThrusterVehicleSide()
   :
   param(),
   out(),
-  T_local_to_struc(),
+  T_local_to_struc{{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
   position_local_frame_in_struc_frame{},
   trig_variable(),
   direction(),
@@ -64,7 +63,6 @@ PistonThrusterVehicleSide::PistonThrusterVehicleSide()
   position_struc(),
   position_CoM(nullptr)
 {
-  jeod::Matrix3x3::identity( T_local_to_struc);
 }
 
 /*******************************************************************************
