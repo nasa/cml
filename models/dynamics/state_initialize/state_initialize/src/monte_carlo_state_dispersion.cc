@@ -27,12 +27,12 @@ MonteCarloStateDispersion::MonteCarloStateDispersion(
   :
   trans_init(trans_init_in),
   frame(Inertial),
-  disperse_pv(false)
+  disperse_pv(false),
+  position_dispersion{},
+  velocity_dispersion{},
+  position_dispersion_inertial{},
+  velocity_dispersion_inertial{}
 {
-  jeod::Vector3::initialize(position_dispersion);
-  jeod::Vector3::initialize(velocity_dispersion);
-  jeod::Vector3::initialize(position_dispersion_inertial);
-  jeod::Vector3::initialize(velocity_dispersion_inertial);
 }
 
 /*****************************************************************************

@@ -34,17 +34,10 @@ Purpose:(Initialization of Piston Thruster outputs)
 class PistonThrusterOutputs
 {
 public:
-  double force[3];  /* (N)   Piston Thruster Force in struc frame. */
-  double moment[3]; /* (N*m) Piston Thruster Moment in struc frame. */
+  double force[3] {};  /* (N)   Piston Thruster Force in struc frame. */
+  double moment[3] {}; /* (N*m) Piston Thruster Moment in struc frame. */
 
-  PistonThrusterOutputs(){
-    force[0] = 0.0;
-    force[1] = 0.0;
-    force[2] = 0.0;
-    moment[0] = 0.0;
-    moment[1] = 0.0;
-    moment[2] = 0.0;
-  }
+  PistonThrusterOutputs() = default;
 };
 
 

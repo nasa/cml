@@ -27,12 +27,12 @@ class Vector3IntegrableObject : public SubscriptionBase,
                                 public er7_utils::IntegrableObject
 {
   public:
-    double variable[3]; /* (--) Arbitrary vector, but typically pos or vel. */
-    double deriv[3];    /* (--) values of the derivatives (optional). */
+    double variable[3] {}; /* (--) Arbitrary vector, but typically pos or vel. */
+    double deriv[3] {};    /* (--) values of the derivatives (optional). */
 
   protected:
-    const double * deriv_ptr; /* (--) pointer to the derivative (optional) */
-    jeod::DynBody * dyn_body; /* (--)
+    const double * deriv_ptr {nullptr}; /* (--) pointer to the derivative (optional) */
+    jeod::DynBody * dyn_body {nullptr}; /* (--)
           ptr to the dyn-body that will integrate this variable. */
 
   public:

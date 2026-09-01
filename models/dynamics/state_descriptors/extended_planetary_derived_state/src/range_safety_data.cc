@@ -11,9 +11,6 @@ PROGRAMMERS:
                    (New implementation of PlanetaryDerivedState for Antares)))
 *******************************************************************************/
 
-#include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
-
 #include "../include/range_safety_data.hh"
 
 
@@ -25,16 +22,16 @@ RangeSafetyData::RangeSafetyData()
    :
    XVRT_Azi(0.0),
    YVRT_Azi(0.0),
+   T_pfix_pad{{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
+   T_pfix_pad_SEU{{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
    slant_range(0.0),
+   XPad{},
+   VPad{},
+   NPad{},
+   XVP{},
    pad_azimuth(0.0),
    XVRT(0.0),
    YVRT(0.0),
    ZVRT(0.0)
 {
-   jeod::Vector3::initialize(XPad);
-   jeod::Vector3::initialize(VPad);
-   jeod::Vector3::initialize(NPad);
-   jeod::Vector3::initialize(XVP);
-   jeod::Matrix3x3::identity(T_pfix_pad);
-   jeod::Matrix3x3::identity(T_pfix_pad_SEU);
 }

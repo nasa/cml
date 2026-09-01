@@ -84,7 +84,9 @@ ConvertDoubleToUintWords::ConvertDoubleToUintWords( const double & in_convert_va
   convert_value(in_convert_value),
   resolution(in_resolution),
   word_count(in_word_count),
-  bit_size(in_bit_size)
+  bit_size(in_bit_size),
+  max_uint(0.0),
+  max_uint_f(0.0)
 {
   compute_significance();
   words.assign(word_count,0);

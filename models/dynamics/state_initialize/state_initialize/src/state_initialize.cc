@@ -117,6 +117,7 @@ StateInitialize::StateInitialize()
   T_reference_body{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
   E_pfix_reference{0.0, 0.0, 0.0},
   E_reference_body{0.0, 0.0, 0.0},
+  ref_body_sequence{jeod::Orientation::NoSequence},
   random_value(0.0),
   random_unit_vector{0.0, 0.0, 0.0},
   force_match_trans(false),

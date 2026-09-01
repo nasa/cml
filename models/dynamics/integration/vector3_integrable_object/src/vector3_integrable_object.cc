@@ -41,9 +41,6 @@ Purpose: (Constructs the model with no inputs, here to prevent a user from
           calling a model this way.)
 *****************************************************************************/
 Vector3IntegrableObject::Vector3IntegrableObject () // DO NOT USE THIS
-  :
-  deriv_ptr(nullptr),
-  dyn_body(nullptr)
 {
   subscribe_name = "Vector3IntegrableObject:";
 

@@ -41,13 +41,13 @@ SphericalHarmonicsFastGravityControls::SphericalHarmonicsFastGravityControls()
    available(false),
    first_pass(true),
    count(0),
+   reference_pos_pfix{},
+   delta_pos{},
+   reference_accel_pfix{},
+   reference_gradient_pfix{},
+   reference_gradient_inrtl{},
    reference_potential(0.0)
 {
-   jeod::Vector3::initialize(reference_pos_pfix);
-   jeod::Vector3::initialize(delta_pos);
-   jeod::Vector3::initialize(reference_accel_pfix);
-   jeod::Matrix3x3::initialize(reference_gradient_pfix);
-   jeod::Matrix3x3::initialize(reference_gradient_inrtl);
 }
 
 

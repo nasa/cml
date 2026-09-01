@@ -40,11 +40,11 @@ class SingleInputTableVarDeriv : public GenericSingleInputTable
 #ifdef SWIG
 %mutable;
 #endif
-  bool omit_derivative_vals; /* (--)
+  bool omit_derivative_vals {false}; /* (--)
     Flag indicating whether this dual-data table is to be used to populate
     the first-derivative variables as well as the zeroth-derivative
     variables. Default: false (populate both)*/
-  bool use_linear_interpolation; /* (--)
+  bool use_linear_interpolation {false}; /* (--)
     Flag indicating that simple linear interpolation should be used for
     both the zeroth-derivative and first-derivative (if
     populate_derivative_vals) variables, independent of each other.

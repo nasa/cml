@@ -30,21 +30,18 @@ ContactStateOverride::ContactStateOverride(jeod::DynBody& reference_body_in,
   reference_body(reference_body_in),
   override_body(override_body_in),
   deactivation_threshold(0.0),
-  contact_normal(),
-  contact_pos_overridestruc_wrt_refstruc(),
-  contact_pos_overridenomcore_wrt_refnomcore(),
+  contact_normal{},
+  contact_pos_overridestruc_wrt_refstruc{},
+  contact_pos_overridenomcore_wrt_refnomcore{},
   contact_quat_refstruc_to_overridestruc(),
+  nominal_reference_core_position{},
+  nominal_override_core_position{},
   user_set_contact_normal(false),
   user_set_contact_position(false),
   user_set_contact_orientation(false),
   bodies_are_attached(false),
   self_disabled(false)
 {
-  jeod::Vector3::initialize(contact_normal);
-  jeod::Vector3::initialize(contact_pos_overridestruc_wrt_refstruc);
-  jeod::Vector3::initialize(contact_pos_overridenomcore_wrt_refnomcore);
-  jeod::Vector3::initialize(nominal_reference_core_position);
-  jeod::Vector3::initialize(nominal_override_core_position);
 }
 
 /*****************************************************************************
