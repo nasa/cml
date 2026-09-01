@@ -2,10 +2,10 @@
 #define CML_MATH_UTILS_PRIVATE_HH
 
 #include <cassert>
-#include <cmath>   // abs, isnan, isinf
-#include <algorithm> // std::max, min
-#include <fenv.h>  // fp exception
-#include <limits>  // std::numeric_limits::min, epsilon
+#include <cmath>
+#include <algorithm>
+#include <fenv.h>
+#include <limits>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 

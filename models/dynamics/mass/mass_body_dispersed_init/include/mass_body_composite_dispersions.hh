@@ -27,15 +27,12 @@ PROGRAMMERS:
 #ifndef CML_MASS_BODY_COMPOSITE_DISPERSIONS_HH
 #define CML_MASS_BODY_COMPOSITE_DISPERSIONS_HH
 
-// JEOD headers:
-#include "jeod/models/dynamics/mass/include/mass.hh" // jeod::MassBody
-#include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
-#include "jeod/models/dynamics/body_action/include/body_action.hh" // jeod::BodyAction
+#include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
+#include "jeod/models/dynamics/body_action/include/body_action.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
-// Local headers:
-#include "mass_properties_dispersions.hh" // MassPropertiesDispersions
+#include "mass_properties_dispersions.hh"
 
 // Forward declaration
 namespace jeod {

@@ -29,11 +29,15 @@ PROGRAMMERS:
 #include "cml/models/dynamics/state_descriptors/range/include/range_from_pfix_reference.hh"
 #include "cml/models/dynamics/state_descriptors/range/include/range_to_pfix_reference.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "range_safety_data.hh"
 #include "topo_container.hh"
 #include "point_to_point.hh"
+
+namespace jeod {
+class DynBody;
+class DynManager;
+}
 
 /*****************************************************************************
 ExtendedPlanetaryDerivedState

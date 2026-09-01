@@ -19,9 +19,9 @@ PROGRAMMERS:
 #ifndef CML_AERO_TABLE_SET_BASE_HH
 #define CML_AERO_TABLE_SET_BASE_HH
 #include <string>
-#include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh" //TableLookupSet
+#include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
-#include "aero_coefficients.hh" // AeroCoefficientsTable
+#include "aero_coefficients.hh"
 
 class AeroTableSetBase: public TableLookupSet
 {

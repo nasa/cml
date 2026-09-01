@@ -19,7 +19,6 @@ PROGRAMMERS:
 #define CML_RCS_PROP_POD_HH
 
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
 
 /*****************************************************************************

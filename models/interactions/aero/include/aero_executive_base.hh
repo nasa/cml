@@ -30,8 +30,6 @@ PROGRAMMERS:
 #ifndef CML_AERO_EXECUTIVE_BASE_HH
 #define CML_AERO_EXECUTIVE_BASE_HH
 
-#include <cstring>  // NULL
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "aero_interface_output.hh"

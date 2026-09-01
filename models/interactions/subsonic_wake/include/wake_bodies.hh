@@ -14,10 +14,6 @@ PROGRAMMERS:
 #ifndef CML_WAKE_BODIES_HH
 #define CML_WAKE_BODIES_HH
 
-#include "wake_params.hh"
-
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-
 /*****************************************************************************
 WakeGeneratingBody
 Purpose:(The body that is generating the wake)

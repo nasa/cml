@@ -16,7 +16,6 @@ PROGRAMMERS:
 #define CML_CONSTRAINT_TEST_HH
 
 #include "constraint_enum.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 ConstraintTest

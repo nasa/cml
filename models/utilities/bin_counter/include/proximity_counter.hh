@@ -19,8 +19,9 @@ PROGRAMMERS:
 #ifndef CML_PROXIMITY_COUNTER_HH
 #define CML_PROXIMITY_COUNTER_HH
 
+#include <cstddef>
+#include <string>
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 CML_ProximityCounterElement

@@ -33,6 +33,9 @@ PROGRAMMERS:
 
 #include <list>
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "cml/models/vehicle_management/events_manager/include/event_variable_assignment.hh"
+#include "cml/models/vehicle_management/events_manager/include/event_action_base.hh"
 #include "watch_values_base_core.hh"
 
 /*****************************************************************************

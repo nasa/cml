@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "aero_interface_base.hh"
 #include "aero_executive_simple_lift_drag.hh"
 
+class AtmosRelativeState;
+
 /*******************************************************************************
 AeroInterfaceSimpleLiftDrag
 Purpose:(Provides a simple aerodynamic interface to access the simple

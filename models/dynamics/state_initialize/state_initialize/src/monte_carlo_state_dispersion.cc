@@ -3,11 +3,18 @@ PURPOSE: (Disperses the state directly.  Allows the application of dispersions
           specified in one coordinate system with nominal state values specified
           in another.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/utilities/math_utils/src/math_utils.cc))
+
 PROGRAMMERS:
     (((Gary Turner) (OSR) (Jan 2019) (Antares) (initial)))
     )
 ******************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 #include "../include/monte_carlo_state_dispersion.hh"

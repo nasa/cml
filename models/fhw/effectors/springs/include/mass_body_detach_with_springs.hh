@@ -21,6 +21,13 @@ PROGRAMMERS:
 
 #include "simple_spring_group.hh"
 
+class SeparationState;
+
+namespace jeod {
+class DynBody;
+class DynManager;
+}
+
 /* spring specific info for each spring */
 class MassBodyDetachWithSprings : public jeod::BodyDetach
 {

@@ -25,8 +25,9 @@ PROGRAMMERS:
 #ifndef CML_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
 #define CML_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
 
-#include <cstdarg> // for variadic function arguments
+#include <cstddef>
 
+#include "cml/models/utilities/table_interp_cpp/include/table_type_defs.hh"
 #include "generic_single_input_table.hh"
 
 class SingleInputTableForAngles : public GenericSingleInputTable

@@ -11,7 +11,8 @@ REFERENCE:
      ((SORT - Aero Functions) (AROVAR.f) (AROATT.f)))
 
 LIBRARY DEPENDENCIES:
-    ((utils/orientation/src/eigen_rotation.cc)
+    ((cml/models/utilities/cml_message/src/cml_message.cc)
+     (utils/orientation/src/eigen_rotation.cc)
      (utils/orientation/src/euler_angles.cc)
      (utils/quaternion/src/quat_from_mat.cc)
      (utils/quaternion/src/quat_to_mat.cc)
@@ -40,15 +41,16 @@ PROGRAMMERS:
     )
 *******************************************************************************/
 
-#include <cmath>   // M_PI, isnan
-#include <cstring> // NULL
-#include "trick/constant.h" // conversions like RTD, LBFTON, MTF
-#include "jeod/models/utils/orientation/include/orientation.hh" // Orientation
-#include "jeod/models/utils/math/include/vector3.hh"    // Vector3
-#include "jeod/models/utils/math/include/matrix3x3.hh"  // Matrix3x3
+#include <cmath>
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_interface.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/atmos_relative_state.hh"
 

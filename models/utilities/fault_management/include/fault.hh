@@ -13,8 +13,8 @@ PROGRAMMERS:
 #define CML_FAULT_HH
 
 #include <list>
-#include <string> // std::string
-#include <cstring> // strcmp
+#include <string>
+#include <cstring>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 

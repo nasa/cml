@@ -24,6 +24,7 @@ PROGRAMMERS:
 
 #include "atmosphere_exec_out.hh"
 #include "atmosphere_exec_atmos_base.hh"
+#include <string>
 
 
 /*****************************************************************************

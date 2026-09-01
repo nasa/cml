@@ -46,6 +46,7 @@ Checks: >
         -clang-analyzer-optin.performance.Padding,
     google-build-using-namespace,
     google-global-names-in-headers,
+    misc-inclue-cleaner,
     modernize-use-equals-delete,
     portability-*,
         -portability-template-virtual-member-function,
@@ -55,4 +56,8 @@ Checks: >
 WarningsAsErrors: '*'
 
 HeaderFilterRegex: '(^|/)(models|utility)/.*'
+
+CheckOptions:
+    - key: misc-include-cleaner.IgnoreHeaders
+      value: 'math.h;cmath;' # Only for M_PI. Remove when we go to C++20.
 ...

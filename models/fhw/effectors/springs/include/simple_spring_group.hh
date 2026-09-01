@@ -19,7 +19,6 @@ PROGRAMMERS:
 
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "cml/models/dynamics/state_descriptors/separation_state/include/separation_state.hh"
 
 #include "simple_spring_individual.hh"

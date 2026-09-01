@@ -20,17 +20,15 @@ PROGRAMMERS:
 #ifndef CML_ABSTRACT_TABLE_LOOKUP_HH
 #define CML_ABSTRACT_TABLE_LOOKUP_HH
 
+#include "cml/models/utilities/table_interp_cpp/include/table_type_defs.hh"
 #include "generic_multi_input_table.hh"
 #include "table_independent_variable.hh"
 
 // These headers support dynamic allocation:
-#include "generic_single_input_table.hh"
-#include "single_input_table_for_angles.hh"
-#include "single_input_table_for_quaternions.hh"
-#include "single_input_table_var_with_deriv.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include <utility>
+#include <cstddef>
 #include <vector>
 #include <string>
 

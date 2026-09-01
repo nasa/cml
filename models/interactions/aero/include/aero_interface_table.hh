@@ -17,8 +17,9 @@ PROGRAMMERS:
 #define CML_AERO_INTERFACE_TABLE_HH
 
 #include "aero_interface_base_extended.hh"
-#include "aero_coefficients.hh"
 #include "aero_executive_table.hh"
+
+class AtmosRelativeState;
 
 /*******************************************************************************
 AeroInterfaceTable

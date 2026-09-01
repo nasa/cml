@@ -1,6 +1,6 @@
 #include <fstream>
 #include <iostream>
-#include <cstdint> // uint32_t
+#include <cstdint>
 
 
 void parse_binary( std::string bin_name,

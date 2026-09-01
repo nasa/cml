@@ -18,7 +18,11 @@ NOTES:
 **********************************************************************/
 
 #include "../include/subsonic_wake.hh"
+#include "../include/wake_bodies.hh"
+#include "../include/wake_effects.hh"
+#include "../include/wake_params.hh"
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 

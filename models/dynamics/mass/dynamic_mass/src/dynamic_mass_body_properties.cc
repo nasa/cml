@@ -11,11 +11,13 @@ PROGRAMMERS:
 
 *******************************************************************************/
 
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 
 #include "../include/dynamic_mass_body_properties.hh"
 #include "../include/dynamic_mass_body_nominal_properties.hh"
+#include <cstddef>
 
 
 /*****************************************************************************

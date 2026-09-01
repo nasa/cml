@@ -2,12 +2,16 @@
 Purpose:
   (Define methods for defining and updating the pointing frame.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   ( ((Michael McCarthy, Gary Turner) (OSR) (June 2019) (Antares) (initial))
   )
 
 *******************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"

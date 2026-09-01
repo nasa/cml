@@ -18,10 +18,12 @@ PROGRAMMERS:
 
 #include "jeod/models/interactions/radiation_pressure/include/radiation_source.hh"
 #include "jeod/models/interactions/radiation_pressure/include/radiation_third_body.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+
+namespace jeod {
+class DynManager;
+class RefFrame;
+}
 
 class EclipseCalculator : public SubscriptionBase
 {

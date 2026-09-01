@@ -3,14 +3,26 @@ PURPOSE: (Class for manipulating sets of vents and aggregating forces and
           moments)
 
 LIBRARY DEPENDENCY:
-  (../src/vent_set.cc)
+  ((../src/vent_set.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc))
 
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
  ************************************************************************/
 
-#include "jeod/models/utils/quaternion/include/quat.hh" // jeod::Quaternion
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
+#include <algorithm>
+#include <cstddef>
 
+#include "../include/simple_vent.hh"
+#include "../include/vent.hh"
 #include "../include/vent_set.hh"
 
 /*****************************************************************************

@@ -1,7 +1,9 @@
-#include "exec_proto_mock.hh"
-
-#include <exception>
 #include <gmock/gmock.h>
+#include <stdexcept>
+
+#include "trick/exec_proto.h"
+
+#include "exec_proto_mock.hh"
 
 namespace {
 

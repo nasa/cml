@@ -12,7 +12,7 @@ PROGRAMMERS:
 #ifndef CML_RAND_NUMBER_HH
 #define CML_RAND_NUMBER_HH
 
-#include <random> // std::mt19937, std::*_distribution
+#include <random>
 
 /*******************************************************************************
 FaultRandNumber

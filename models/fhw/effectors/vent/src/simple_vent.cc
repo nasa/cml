@@ -2,14 +2,18 @@
 PURPOSE: (Simple vent force model - calculates force and torque from a vent
           but does not model mass depletion)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
  ************************************************************************/
 
-#include "../include/vent.hh"
+#include "../include/simple_vent.hh"
 
-// JEOD header
-#include "utils/math/include/vector3.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 /*************************************************************************
 Constructor

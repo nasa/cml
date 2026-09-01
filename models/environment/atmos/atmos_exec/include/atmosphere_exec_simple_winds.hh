@@ -17,11 +17,11 @@ PROGRAMMERS:
 #ifndef CML_ATMOSPHERE_EXEC_SIMPLE_WINDS_HH
 #define CML_ATMOSPHERE_EXEC_SIMPLE_WINDS_HH
 
-#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "atmosphere_exec_atmos_base.hh"
 #include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
 
-#include "atmosphere_exec_atmos_base.hh"
-
+class AtmosExecOutput;
+class ExtendedPlanetaryDerivedState;
 
 class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
 {

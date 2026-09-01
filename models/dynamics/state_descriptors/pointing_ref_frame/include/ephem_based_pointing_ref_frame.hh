@@ -13,8 +13,8 @@ Programmers:
 #ifndef CML_EPHEM_BASED_POINTING_REF_FRAME_HH
 #define CML_EPHEM_BASED_POINTING_REF_FRAME_HH
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
-                                                        // EphemeridesManager
 #include "pointing_ref_frame.hh"
 
 /*****************************************************************************

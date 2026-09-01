@@ -9,10 +9,18 @@ PURPOSE: (
   - one is applied when the boolean state switches from false to true
   - the other is applies when the state switches from true to false.
  )
+
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2026/02) (ANTARES) (initial implementation)))
 *******************************************************************************/
+#include "../include/watch_values_base_core.hh"
 #include "../include/watch_values_flipflop.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstdlib>
+#include <list>
 
 /*****************************************************************************
 Constructor

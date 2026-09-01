@@ -4,6 +4,9 @@ PURPOSE:
   times some variable of type double has a value that falls closest to each
   of a set of target values.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS:
   (Target values are monotonically increasing)
 
@@ -15,6 +18,9 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "../include/proximity_counter.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <vector>
 
 /*****************************************************************************
 Constructors

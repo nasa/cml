@@ -2,11 +2,15 @@
 Purpose:
    (Sets the characteristics of the fixed reference location.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
    (((Gary Turner) (OSR) (Sept 2014 (Initial version)))
 
 *******************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 

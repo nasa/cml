@@ -2,6 +2,9 @@
 PURPOSE:
   (Interpolation method for Dynamic Mass)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (
    ((Gary Turner) (OSR) (March 2014) (New implementation of dynamic mass for JEOD 2.x))
@@ -12,6 +15,7 @@ PROGRAMMERS:
    )
 *******************************************************************************/
 
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

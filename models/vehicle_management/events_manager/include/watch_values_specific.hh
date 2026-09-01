@@ -11,7 +11,6 @@ PROGRAMMERS:
 
 #include <list>
 #include <string>
-#include "trick/exec_proto.h"
 #include "cml/models/utilities/trick_logging/include/trick_logging.hh"
 
 #include "watch_values_base.hh"

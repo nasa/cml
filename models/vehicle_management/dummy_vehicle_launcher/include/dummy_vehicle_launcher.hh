@@ -26,7 +26,6 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/mass/include/mass.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dynamics_integration_group.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class DummyVehicleLauncher
 {

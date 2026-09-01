@@ -18,7 +18,8 @@ Programmers:
 #ifndef CML_SPHERICAL_HARMONICS_FAST_GRAVITY_CONTROLS_HH
 #define CML_SPHERICAL_HARMONICS_FAST_GRAVITY_CONTROLS_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_manager/include/base_dyn_manager.hh"
+#include "jeod/models/environment/gravity/include/gravity_integ_frame.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 
 class SphericalHarmonicsFastGravityControls : public jeod::SphericalHarmonicsGravityControls {

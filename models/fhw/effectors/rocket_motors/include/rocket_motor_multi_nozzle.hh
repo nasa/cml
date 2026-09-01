@@ -15,10 +15,15 @@ PROGRAMMERS:
 #ifndef CML_ROCKET_MOTOR_MULTI_NOZZLE_HH
 #define CML_ROCKET_MOTOR_MULTI_NOZZLE_HH
 
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
 #include "rocket_motor_table_thrust.hh"
 #include "rocket_motor_nozzle.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <vector>
 
 class RocketMotor_MultiNozzle : public RocketMotor_TableThrust {
 protected:

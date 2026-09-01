@@ -16,6 +16,8 @@ PROGRAMMERS:
 #include <string>
 #include "jeod/models/dynamics/derived_state/include/relative_derived_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/dynamics/dyn_manager/include/class_declarations.hh"
 
 class SimplePlanetRelState : public SubscriptionBase,
                              public jeod::RelativeDerivedState

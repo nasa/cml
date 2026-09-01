@@ -32,7 +32,6 @@ PROGRAMMERS:
 #ifndef CML_ACCUMULATED_ABSOLUTE_DELTAS_HH
 #define CML_ACCUMULATED_ABSOLUTE_DELTAS_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 class AccumulatedAbsoluteDeltas : public SubscriptionBase

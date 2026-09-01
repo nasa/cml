@@ -13,8 +13,9 @@ PROGRAMMERS:
                       (New implementation of PlanetaryDerivedState for Antares)))
 *******************************************************************************/
 
-#include "jeod/models/utils/math/include/matrix3x3_inline.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/alt_lat_long_state.hh"
 
 #include "../include/topo_container.hh"
 

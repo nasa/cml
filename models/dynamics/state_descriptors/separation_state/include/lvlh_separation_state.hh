@@ -16,8 +16,16 @@ PROGRAMMERS:
 #define CML_LVLH_SEPARATION_STATE_HH
 
 #include "jeod/models/utils/lvlh_frame/include/lvlh_frame.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "separation_state.hh"
+#include <string>
+
+namespace jeod {
+class BasePlanet;
+class BodyRefFrame;
+class DynBody;
+class DynManager;
+class RefFrame;
+}
 
 class LvlhSeparationState : public SeparationState
 {

@@ -2,6 +2,9 @@
 PURPOSE:
    (U.S. Standard Atmosphere 1976 model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCES:
   (([1] Anonymous, U.S. Standard Atmosphere, 1976
     U.S. Government Printing Office, 003-017-00323-0,
@@ -32,6 +35,7 @@ PROGRAMMERS:
 
 #include <cmath>
 #include <algorithm>
+#include <cstddef>
 #include <iterator>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
