@@ -22,4 +22,3 @@ def log_std76_unit_rec ( log_cycle ) :
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
-  return

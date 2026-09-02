@@ -10,4 +10,5 @@
 #           [ 0.1, 3.0, 0.1]
 #           [ 0.1, 0.1, 4.0]
 from Modified_data.setup import setup_0_2
+
 setup_0_2(so, dynamics)

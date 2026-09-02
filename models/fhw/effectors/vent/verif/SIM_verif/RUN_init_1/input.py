@@ -12,31 +12,23 @@ ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print("\n"
 "***************************************************************************\n"
 "Pre-init settings:\n"
-"flowrate          : %lf kg/s\n"
-"exhaust_speed     : %lf m/s\n"
-"force magnitude   : %lf N\n"
-"force-mag-set     : %d\n"
-"***************************************************************************\n"
-%(ventset_obj.flowrate,
-  ventset_obj.exhaust_speed,
-  ventset_obj.force_magnitude,
-  ventset_obj.force_magnitude_set))
+f"flowrate          : {ventset_obj.flowrate:f} kg/s\n"
+f"exhaust_speed     : {ventset_obj.exhaust_speed:f} m/s\n"
+f"force magnitude   : {ventset_obj.force_magnitude:f} N\n"
+f"force-mag-set     : {ventset_obj.force_magnitude_set:d}\n"
+"***************************************************************************\n")
 
 
 trick.add_read(0.0, '''
 ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print("\\n"
-"***************************************************************************\\n"
-"Post-init settings:\\n"
-"flowrate          : %lf kg/s\\n"
-"exhaust_speed     : %lf m/s\\n"
-"force magnitude   : %lf N\\n"
-"force-mag-set     : %d\\n"
-"***************************************************************************\\n"
-%(ventset_obj.flowrate,
-  ventset_obj.exhaust_speed,
-  ventset_obj.force_magnitude,
-  ventset_obj.force_magnitude_set))
+"***************************************************************************\n"
+"Pre-init settings:\n"
+f"flowrate          : {ventset_obj.flowrate:f} kg/s\n"
+f"exhaust_speed     : {ventset_obj.exhaust_speed:f} m/s\n"
+f"force magnitude   : {ventset_obj.force_magnitude:f} N\n"
+f"force-mag-set     : {ventset_obj.force_magnitude_set:d}\n"
+"***************************************************************************\n")
 
 
 force = ventset_obj.force_magnitude

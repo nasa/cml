@@ -15,7 +15,6 @@ def log_group1_verif(log_cycle):
     trick.add_data_record_group(dr_group, trick.DR_Buffer)
     trick_logging_verif.dr_groups.add_to_list(dr_group)
 
-    return
 
 def log_group2_verif(log_cycle):
     recording_group_name = "group2_verif"
@@ -29,4 +28,3 @@ def log_group2_verif(log_cycle):
     trick.add_data_record_group(dr_group, trick.DR_Buffer)
     trick_logging_verif.dr_groups.add_to_list(dr_group)
 
-    return

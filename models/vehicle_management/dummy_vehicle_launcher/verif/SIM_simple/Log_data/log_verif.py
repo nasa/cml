@@ -8,11 +8,11 @@ def log_verif(log_cycle):
 
     def log_add_3vec(var):
         for i in range(3):
-            dr_group.add_variable(var + "[%d]" %i)
+            dr_group.add_variable(f"{var}[{i}]")
 
     def log_add_3x3mat(var):
         for i in range(3):
-           log_add_3vec(var + "[%d]" %i)
+           log_add_3vec(f"{var}[{i}]")
 
     launch_body = "dummy_veh_launcher_verif.launch_body"
     state_body = "dummy_veh_launcher_verif.state_body"

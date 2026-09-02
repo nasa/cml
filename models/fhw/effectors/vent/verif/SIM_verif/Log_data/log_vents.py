@@ -5,7 +5,7 @@ trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
 def log_add_3_vec(drg, var):
   for ii in range(3):
-    drg.add_variable(var + "[%d]" %ii)
+    drg.add_variable(f"{var}[{ii}]")
 
 dr_group.add_variable("ventset_obj.root_body.mass.composite_properties.mass")
 dr_group.add_variable("ventset_obj.tank[0].dynamic_properties.consumable_mass")

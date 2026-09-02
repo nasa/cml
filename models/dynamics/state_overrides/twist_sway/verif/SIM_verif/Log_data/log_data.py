@@ -9,7 +9,7 @@ dr_group.add_variable("ts_so.ts.twist_angle")
 
 def log_3vec( var):
   for ii in range(3) :
-    dr_group.add_variable(var + "[%d]"%ii )
+    dr_group.add_variable(f"{var}[{ii}]" )
 
 def log_add_mags():
   dr_group.add_variable("ts_so.ts.fast_mag.parallel")

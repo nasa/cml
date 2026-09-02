@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-import os, sys, inspect, argparse, textwrap, time, pathlib, math, glob
+import argparse
+import glob
+import inspect
+import os
+import sys
+
 thisFileDir = os.path.dirname(os.path.abspath(inspect.getsourcefile(lambda:0)))
 def _parse_args():
     descr = '''
@@ -82,8 +87,8 @@ args = _verify_args(_parse_args())
 
 # Import TrickWorkflow content provided by trick
 try:
-  from WorkflowCommon import *
   from TrickWorkflow import *
+  from WorkflowCommon import *
 except Exception as e:
   msg = (f"Unable to import TrickOps modules from {args.trick}. Make sure you are"
   " using a valid Trick directory and have activated the python3 virtual environment."
@@ -121,14 +126,14 @@ class CmlTestWorkflow(TrickWorkflow):
 
     def run( self):
       if 'libcml' in args.action:
-        libcml_status = self.execute_jobs(self._get_libcml_job(),
+        self.execute_jobs(self._get_libcml_job(),
           max_concurrent=self.simultaneous_builds, header='Building libcml.')
         if self.quiet:
           print('Finished libcml build stage.')
 
       if 'builds' in args.action:
         build_jobs = [ s.get_build_job() for s in self.sims_to_test ]
-        builds_status = self.execute_jobs(build_jobs,
+        self.execute_jobs(build_jobs,
           max_concurrent=self.simultaneous_builds, header='Executing all sim builds.')
         if self.quiet:
           print('Finished sim builds stage.')
@@ -142,13 +147,14 @@ class CmlTestWorkflow(TrickWorkflow):
         for job in run_jobs:
             if self.quiet and isinstance(job, SingleRun):
                 job.set_use_var_server(False)
-        runs_status = self.execute_jobs(run_jobs,
+        self.execute_jobs(run_jobs,
           max_concurrent=self.simultaneous_builds, header='Executing all sim runs.')
         if self.quiet:
           print('Finished sim runs stage.')
 
       if 'comparisons' in args.action:
-        compare_failure = any([s.compare() for s in self.sims_to_test])  # Run all comparisons
+        for s in self.sims_to_test:
+          s.compare()
         if self.quiet:
           print('Finished comparisons stage.')
 

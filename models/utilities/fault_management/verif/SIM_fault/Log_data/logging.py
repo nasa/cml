@@ -1,5 +1,6 @@
 import trick
 
+
 def log_default(log_cycle) :
   dr_group = trick.DRAscii("fault_variables")
   dr_group.thisown = 0

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
-import regex, re
+import re
 import sys
 import textwrap
 from enum import Enum
+
+import regex
 
 """
 assumptions:
@@ -73,12 +75,12 @@ def check_inline_open_parens(text):
     text : str
     	A line of text from a source file
     """
-    for key in regex_dict.keys():
+    for key in regex_dict:
         res = bool(re.search(regex_dict[key][0], text))
         # inline colon found for a trick header comment
-        if res == True:
-            return(True)
-    return(False)
+        if res:
+            return True
+    return False
 
 
 def read_file(in_file):
@@ -91,7 +93,7 @@ def read_file(in_file):
         Input file to be converted to a string.
     """
     with open(in_file, 'r') as orig: 
-        return(orig.read())
+        return orig.read()
 
 
 def check_trick_header_format(original_header_str):
@@ -108,7 +110,7 @@ def check_trick_header_format(original_header_str):
     for line in original_header_str.splitlines():
         if len(line) > args.character_limit:
             exit_code_list.append(in_file + ": " + Error.TOO_MANY_CHARACTERS_IN_LINE.name)
-            return(Error.TOO_MANY_CHARACTERS_IN_LINE.value)
+            return Error.TOO_MANY_CHARACTERS_IN_LINE.value
         if line.lstrip().startswith("/*") or\
            line.endswith("*/")            or\
            line.lstrip().startswith("\\") or\
@@ -121,15 +123,15 @@ def check_trick_header_format(original_header_str):
                leading_spaces != args.indent_width     and\
                leading_spaces != (args.indent_width+3):
                 exit_code_list.append(in_file + ": " + Error.INVALID_INDENTATION.name)
-                return(Error.INVALID_INDENTATION.value)
+                return Error.INVALID_INDENTATION.value
     if in_file.endswith((".h",".hh")) and check_python_module_str(original_header_str) == False:
         exit_code_list.append(in_file + ": " + WARNING.INVALID_PYTHON_MODULE.name)
         # uncomment the line below when we want to fail this script if anything other than (cml) or (cml.*) is present for a PYTHON_MODULE
         #return(Error.INVALID_PYTHON_MODULE.value)
-    if check_inline_open_parens(original_header_str) == True:
+    if check_inline_open_parens(original_header_str):
         exit_code_list.append(in_file + ": " + WARNING.INLINE_PARENTHESES.name)
-        return(WARNING.INLINE_PARENTHESES.value)
-    return(0)
+        return WARNING.INLINE_PARENTHESES.value
+    return 0
 
 
 def get_original_comment(in_file):
@@ -145,14 +147,13 @@ def get_original_comment(in_file):
     read_line_flag = False
     with open(in_file, 'r') as orig:
         for line in orig:
-            if line.lstrip().startswith("//") or line.lstrip().startswith("/*"):
+            if line.lstrip().startswith(("//", "/*")):
                 read_line_flag = True
-            elif line.endswith("*/\n") or line.endswith("//\n"):
+            elif line.endswith(("*/\n", "//\n")):
                 original_comment.append(line)
-                read_line_flag = False
-                return("".join(original_comment))
+                return "".join(original_comment)
 
-            if read_line_flag == True:
+            if read_line_flag:
                 original_comment.append(line)
 
 
@@ -180,7 +181,7 @@ def remove_asterisks_comment_style(text):
         elif line.lstrip().startswith("*"):
             line = line.replace("*", " ", 1)
         res_line.append(line)
-    return("".join(res_line))
+    return "".join(res_line)
 
 
 def strip_outer_parens(text):
@@ -279,7 +280,7 @@ def generate_common_trick_header(original_header_str):
         elif key == "PYTHON_MODULE" and in_file.endswith((".h",".hh")):
             exit_code_list.append(in_file + ": " + WARNING.NO_PYTHON_MODULE_FOUND.name)
 
-    return(formatted_comment_str)
+    return formatted_comment_str
 
 
 def check_python_module_str(text):
@@ -291,11 +292,6 @@ def check_python_module_str(text):
     text : str
         The original Trick header from a source file as a string.
     """
-    trick_pattern = regex.compile(regex_dict["PYTHON_MODULE"][1])
-    trick_match = trick_pattern.search(text)
-    if trick_match:
-        header_block = trick_match.group("block")
-
     # this function turns contents within nested parentheses into a list
     # i.e (abc(def)ghi(jkl)) -> ['(def)', '(jkl)', '(abc(def)ghi(jkl))']
     # then checks each item if it starts with "cml"
@@ -303,9 +299,9 @@ def check_python_module_str(text):
     res = pattern.findall(text)
     res_list = [m[1:-1] for m in res]
     for line in res_list:
-        if line.startswith("cml") == False:
-            return(False)
-    return(True)
+        if not line.startswith("cml"):
+            return False
+    return True
 
 
 def get_args():
@@ -333,7 +329,6 @@ def print_args(args):
     print("check_format    = ",args.check_format)
     print("file(s)         = ",args.files)
     print("verbose         = ",args.verbose)
-    return
 
 
 if __name__ == '__main__':
@@ -370,16 +365,15 @@ if __name__ == '__main__':
 
         formatted_file_str = original_file.replace(original_trick_header, common_formatted_header)
 
-        if args.check_format == False:
+        if not args.check_format:
             with open(in_file, "w") as file:
                 file.write(formatted_file_str)
 
     for file_name in exit_code_list:
         print(file_name)
     # If no Error Enums found in exit_code_list, success!
-    if any(item in target_string for item in Error.__members__.keys() for target_string in exit_code_list) == False:
+    if not any(item in target_string for item in Error.__members__ for target_string in exit_code_list):
         print("File(s) meet the common format standard")
         sys.exit(0)
     else:
         sys.exit(-1)
-

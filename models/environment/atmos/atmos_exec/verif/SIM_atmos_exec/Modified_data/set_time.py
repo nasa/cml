@@ -7,4 +7,4 @@ def set_time_utc(year, month, day, hour, minute, second):
   jeod_time.time_utc.calendar_hour = hour
   jeod_time.time_utc.calendar_minute = minute
   jeod_time.time_utc.calendar_second = second
-  return;
+  

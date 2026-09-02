@@ -12,9 +12,9 @@ for cf in ["CX", "CY", "CZ", "CA", "CN", "CD", "CS", "CL",
   drg1.add_variable("aero.interface.executive.coefficients." + cf)
 
 for ii in range(3):
-  drg1.add_variable("aero.interface.output.force[%d]" %ii)
+  drg1.add_variable(f"aero.interface.output.force[{ii}]")
 for ii in range(3):
-  drg1.add_variable("aero.interface.output.torque[%d]" %ii)
+  drg1.add_variable(f"aero.interface.output.torque[{ii}]")
 
 trick.add_data_record_group(drg1, trick.DR_Buffer)
 
@@ -35,10 +35,10 @@ def log_damping_effects():
   drg3.add_variable("aero.indep_generic")
   for id1 in ["l", "m", "n"]:
     for id2 in ["p", "q", "r"]:
-      drg3.add_variable("aero.interface.executive.coefficients.dC%s_d%s" %(id1,id2))
+      drg3.add_variable(f"aero.interface.executive.coefficients.dC{id1}_d{id2}")
   for id1 in ["l", "m", "n"]:
-    drg3.add_variable("aero.interface.executive.coefficients.C%s_cg" %id1)
+    drg3.add_variable(f"aero.interface.executive.coefficients.C{id1}_cg")
   for id1 in ["l", "m", "n"]:
-    drg3.add_variable("aero.interface.executive.coefficients.C%s_mrc" %id1)
+    drg3.add_variable(f"aero.interface.executive.coefficients.C{id1}_mrc")
   for ii in range(3):
-    drg3.add_variable("aero.interface.output.torque[%d]" %ii)
+    drg3.add_variable(f"aero.interface.output.torque[{ii}]")

@@ -4,7 +4,7 @@ def log_test_data_base ( log_cycle ) :
   dr_group.thisown = 0
   dr_group.set_cycle(log_cycle)
   dr_group.freq = trick.DR_Always
-  for ii in range(0,3) :
+  for ii in range(3) :
     dr_group.add_variable("veh_reaction.body.composite_body.state.trans.position[" + str(ii) + "]" )
     dr_group.add_variable("veh_reaction.body.composite_body.state.trans.velocity[" + str(ii) + "]" )
     dr_group.add_variable("veh_action.body.composite_body.state.trans.position[" + str(ii) + "]" )
@@ -24,7 +24,6 @@ def log_test_data_base ( log_cycle ) :
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
-  return
 
 
 def log_test_data ( log_cycle ) :
@@ -33,7 +32,7 @@ def log_test_data ( log_cycle ) :
   dr_group.thisown = 0
   dr_group.set_cycle(log_cycle)
   dr_group.freq = trick.DR_Always
-  for ii in range(0,3) :
+  for ii in range(3) :
     dr_group.add_variable("veh_reaction.body.composite_body.state.trans.position[" + str(ii) + "]" )
     dr_group.add_variable("veh_reaction.body.composite_body.state.trans.velocity[" + str(ii) + "]" )
     dr_group.add_variable("veh_action.body.composite_body.state.trans.position[" + str(ii) + "]" )
@@ -54,4 +53,3 @@ def log_test_data ( log_cycle ) :
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
-  return

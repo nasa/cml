@@ -6,7 +6,7 @@ def log_data ( log_cycle ) :
 
   def log_add_3vec(variable) :
     for ii in range(3) :
-      dr_group.add_variable(variable + "[%d]" %ii)
+      dr_group.add_variable(f"{variable}[{ii}]")
 
   log_add_3vec("oe_verif.body.composite_body.state.trans.position")
   log_add_3vec("oe_verif.body.composite_body.state.trans.velocity")
@@ -45,4 +45,3 @@ def log_data ( log_cycle ) :
   dr_group.add_variable("oe_verif.orb_elems.j2_delta" )
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return

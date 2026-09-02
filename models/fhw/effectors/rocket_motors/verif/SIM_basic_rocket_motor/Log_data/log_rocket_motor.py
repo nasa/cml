@@ -4,7 +4,7 @@ dr_group.freq = trick.sim_services.DR_Always
 
 def log_add_3vec(var):
   for ii in range(3):
-    dr_group.add_variable(var + "[%d]" %ii)
+    dr_group.add_variable(f"{var}[{ii}]")
 
 dr_group.add_variable("rocket_motor.motor_prop.dynamic_properties.consumable_mass")
 dr_group.add_variable("rocket_motor.basic_motor.mass_flow_rate")
@@ -15,6 +15,6 @@ log_add_3vec("rocket_motor.basic_motor.moment")
 log_add_3vec("rocket_motor.basic_motor.dispersions.motor_tolerance")
 for ii in range(3) :
   for jj in range(3) :
-    dr_group.add_variable("rocket_motor.basic_motor.T_struc_to_motor_frame[%d][%d]" %(ii, jj))
+    dr_group.add_variable(f"rocket_motor.basic_motor.T_struc_to_motor_frame[{ii}][{jj}]")
 
 trick.add_data_record_group(dr_group, trick.DR_Buffer)

@@ -46,15 +46,12 @@ def extractAngVel():
   print("angVel2      : "+str(angVel2)+" N*m*s")
 
 def angVel0Changed():
-  global angVel0, prevAngVel0
   return (angVel0 != prevAngVel0)
 
 def angVel1Changed():
-  global angVel1, prevAngVel1
   return (angVel1 != prevAngVel1)
 
 def angVel2Changed():
-  global angVel2, prevAngVel2
   return (angVel2 != prevAngVel2)
 
 
@@ -71,15 +68,12 @@ def extractForce():
   print("force2       : "+str(force2)+" N")
 
 def force0Changed():
-  global force0, prevForce0
   return (force0 != prevForce0)
 
 def force1Changed():
-  global force1, prevForce1
   return (force1 != prevForce1)
 
 def force2Changed():
-  global force2, prevForce2
   return (force2 != prevForce2)
 
 
@@ -93,11 +87,9 @@ def extractMass():
   print("tank[1] mass : "+str(tank1Mass)+" kg")
 
 def mass0Changed():
-  global tank0Mass, prevTank0Mass
   return (tank0Mass != prevTank0Mass)
 
 def mass1Changed():
-  global tank1Mass, prevTank1Mass
   return (tank1Mass != prevTank1Mass)
 
 
@@ -114,15 +106,12 @@ def extractTorque():
   print("torque2      : "+str(torque2)+" N*m")
 
 def torque0Changed():
-  global torque0, prevTorque0
   return (torque0 != prevTorque0)
 
 def torque1Changed():
-  global torque1, prevTorque1
   return (torque1 != prevTorque1)
 
 def torque2Changed():
-  global torque2, prevTorque2
   return (torque2 != prevTorque2)
 
 
@@ -139,24 +128,21 @@ def extractVelocity():
   print("vel2         : "+str(vel2)+" m/s")
 
 def vel0Changed():
-  global vel0, prevVel0
   return (vel0 != prevVel0)
 
 def vel1Changed():
-  global vel1, prevVel1
   return (vel1 != prevVel1)
 
 def vel2Changed():
-  global vel2, prevVel2
   return (vel2 != prevVel2)
 
 
 def computeExpectedMasses():
-  global initializedTank0Mass, initializedTank1Mass, vent0MassChange, vent1MassChange, vent2MassChange, vent3MassChange
+  global initializedTank0Mass, initializedTank1Mass, vent0MassChange, vent1MassChange, vent2MassChange
 
   initializedTank0Mass = float(ventset_obj.tank[0].dynamic_properties.consumable_mass)
   initializedTank1Mass = float(ventset_obj.tank[1].dynamic_properties.consumable_mass)
-  print('')
+  print()
   print("tank0Mass = "+str(initializedTank0Mass)+" kg")
   print("tank1Mass = "+str(initializedTank1Mass)+" kg")
   
@@ -169,19 +155,19 @@ def computeExpectedMasses():
   # vent[3] is a dynamic vent; 'simple_vent' class which does not change mass
   # no need to compute a new mass...
 
-  print('')
+  print()
   print("expected vent0MassChange = "+str(vent0MassChange)+" kg")
   print("expected vent1MassChange = "+str(vent1MassChange)+" kg")
   print("expected vent2MassChange = "+str(vent2MassChange)+" kg")
   print("expected vent3MassChange = "+str(vent3MassChange)+" kg")
-  print('')
+  print()
 
 
 def impulseIndefiniteDuration(startTime, endTime, ventNum):
   global vent0MassChange, vent2MassChange
   if (ventNum == 0):
     vent0MassChange = (endTime - startTime) * float(ventset_obj.set_2_tanks.get_vent(0).get_flowrate())
-    print("indefinite duration is on. new vent0MassChange = %lf kg"%vent0MassChange)
+    print(f"indefinite duration is on. new vent0MassChange = {vent0MassChange:f} kg")
   if (ventNum == 2):
     vent2MassChange = (endTime - startTime) * float(ventset_obj.extra_vent.get_flowrate())
-    print("indefinite duration is on. new vent2MassChange = %lf kg"%vent2MassChange)
+    print(f"indefinite duration is on. new vent2MassChange = {vent2MassChange:f} kg")

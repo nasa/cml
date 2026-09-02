@@ -4,6 +4,6 @@ dr_group.freq = trick.DR_Always
 dr_group.add_variable("test.independent")
 for ii in range(2):
   for jj in range(10):
-    dr_group.add_variable("test.dependent[%d][%d]" %(jj, ii))
+    dr_group.add_variable(f"test.dependent[{jj}][{ii}]")
 
 trick.add_data_record_group(dr_group, trick.DR_Buffer)

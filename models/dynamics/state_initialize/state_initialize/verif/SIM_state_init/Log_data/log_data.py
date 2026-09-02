@@ -5,11 +5,11 @@ trick.add_data_record_group(drg, trick.DR_Buffer)
 
 def log_3vec( drg_, var):
   for ii in range(3):
-    drg_.add_variable(var + "[%d]" %ii)
+    drg_.add_variable(f"{var}[{ii}]")
 
 def log_3x3( drg_, var):
   for ii in range(3):
-    log_3vec(drg_, var + "[%d]" %ii)
+    log_3vec(drg_, f"{var}[{ii}]")
 
 log_3vec( drg, "vehicle.body.composite_body.state.trans.position")
 log_3vec( drg, "vehicle.body.composite_body.state.trans.velocity")

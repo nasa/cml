@@ -5,4 +5,4 @@ trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
 dr_group.add_variable("convert_double_words.val" )
 for ii in range(4) :
-  dr_group.add_variable("convert_double_words.warray[%d]" %ii)
+  dr_group.add_variable(f"convert_double_words.warray[{ii}]")

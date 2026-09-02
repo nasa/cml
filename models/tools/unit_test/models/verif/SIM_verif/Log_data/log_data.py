@@ -8,6 +8,5 @@ def log_test_data ( log_cycle ) :
   dr_group.add_variable("test.var1")
   dr_group.add_variable("test.var2")
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 

@@ -1,5 +1,6 @@
 import trick
 
+
 def make_dr_group(log_cycle) :
    dr_group = trick.DRAscii("fault_variables")
    dr_group.thisown = 0
@@ -22,7 +23,6 @@ def add_replaced_variables(dr_group) :
    dr_group.add_variable("test_object.var_ullint")
    dr_group.add_variable("test_object.var_float")
    dr_group.add_variable("test_object.var_double")
-   return
 
 
 def log_default(log_cycle) :
@@ -31,7 +31,6 @@ def log_default(log_cycle) :
    add_replaced_variables(dr_group)
 
    trick.add_data_record_group(dr_group, trick.DR_Buffer)
-   return
 
 
 def log_bool(log_cycle) :
@@ -41,7 +40,6 @@ def log_bool(log_cycle) :
    dr_group.add_variable("test_object.var_bool")
 
    trick.add_data_record_group(dr_group, trick.DR_Buffer)
-   return
 
 
 def log_no_int(log_cycle) :
@@ -51,4 +49,3 @@ def log_no_int(log_cycle) :
    dr_group.add_variable("test_object.var_double")
 
    trick.add_data_record_group(dr_group, trick.DR_Buffer)
-   return

@@ -1,12 +1,12 @@
 #Log a vector
 def log_add_3vec( drg, var):
-  for ii in range (0,3):
-    drg.add_variable( var+ "[%d]"%ii)
+  for ii in range (3):
+    drg.add_variable(f"{var}[{ii}]")
 
 #Log a 3x3 matrix
 def log_add_3x3( drg, var):
-  for jj in range (0,3):
-    log_add_3vec( drg, var+ "[%d]"%jj)
+  for jj in range (3):
+    log_add_3vec( drg, "{var}[{jj}]")
 
 def new_group(name, cycle=5.0):
   dr_group = trick.DRAscii(name)
@@ -105,10 +105,10 @@ def log_topodetic_ref(with_rel_vec=False):
 def log_pt_to_pt():
   dr_group = new_group("pt_to_pt")
   for jj in range(3):
-    dr_group.add_variable("vehicle.planet_rel_state.state.cart_coords[%d]" %jj)
+    dr_group.add_variable(f"vehicle.planet_rel_state.state.cart_coords[{jj}]")
   for ii in range(6):
     for jj in range(3):
-      dr_group.add_variable("vehicle.pt_to_pt_position[%d][%d]" %(ii,jj))
+      dr_group.add_variable(f"vehicle.pt_to_pt_position[{ii}][{jj}]")
 
 #Log hang and roll angles
 def log_hang_roll_angles():

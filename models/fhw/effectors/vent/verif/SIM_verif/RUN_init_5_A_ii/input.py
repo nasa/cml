@@ -16,13 +16,10 @@ ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print("\n"
 "***************************************************************************\n"
 "Pre-init settings:\n"
-"force_magnitude   : %lf N\n"
-"impulse_magnitude : %lf Ns\n"
-"duration          : %lf s\n"
-"***************************************************************************\n"
-%(ventset_obj.force_magnitude,
-  ventset_obj.impulse_magnitude,
-  ventset_obj.duration))
+f"force_magnitude   : {ventset_obj.force_magnitude:f} N\n"
+f"impulse_magnitude : {ventset_obj.impulse_magnitude:f} Ns\n"
+f"duration          : {ventset_obj.duration:f} s\n"
+"***************************************************************************\n")
 
 trick.add_read(0.0, '''
 ventset_obj.copy_parameters(ventset_obj.extra_vent)

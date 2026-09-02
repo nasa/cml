@@ -1,12 +1,13 @@
 import trick
 
+
 def log_properties(drg, prop_set):
-  drg.add_variable( prop_set+".mass")
+  drg.add_variable( f"{prop_set}.mass")
   for ii in range(3):
-    drg.add_variable( prop_set+".position[%d]" %ii)
+    drg.add_variable(f"{prop_set}.position[{ii}]")
   for ii in range(3):
     for jj in range(3):
-      drg.add_variable( prop_set+".inertia[%d][%d]" %(ii,jj))
+      drg.add_variable( f"{prop_set}.inertia[{ii}][{jj}]")
 
 def log_body(drg, body):
   log_properties( drg, body+".composite_properties")
@@ -22,4 +23,4 @@ def log_default():
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
   for ib in range(3):
-    log_body( dr_group, "so.body[%d]" %ib)
+    log_body( dr_group, f"so.body[{ib}]")

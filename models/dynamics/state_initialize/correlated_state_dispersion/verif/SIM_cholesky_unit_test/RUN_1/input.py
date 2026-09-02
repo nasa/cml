@@ -7,6 +7,6 @@ trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
 for ii in range(9) :
   for jj in range(ii+1) :
-    dr_group.add_variable("simple_so.test.delta[%d][%d]" %(ii,jj) )
+    dr_group.add_variable(f"simple_so.test.delta[{ii}][{jj}]")
 
 trick.stop(0)

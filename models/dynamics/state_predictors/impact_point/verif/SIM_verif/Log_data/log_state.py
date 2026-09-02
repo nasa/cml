@@ -1,6 +1,6 @@
 def log_add_3vec( drg, var):
   for ii in range (3):
-    drg.add_variable( var + "[%d]" %ii)
+    drg.add_variable(f"{var}[%d]")
 
 dr_group = trick.DRAscii("verif")
 dr_group.set_cycle(5.0)

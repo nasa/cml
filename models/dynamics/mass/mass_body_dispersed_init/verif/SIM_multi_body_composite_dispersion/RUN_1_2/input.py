@@ -16,6 +16,7 @@
 # should match those from RUN_0_2.
 
 from Modified_data.setup import env_setup
+
 env_setup(so, dynamics)
 so.adjust_1.nominal.mass = 4
 so.adjust_1.nominal.position = [ 1.0,  0.5,  0.5]

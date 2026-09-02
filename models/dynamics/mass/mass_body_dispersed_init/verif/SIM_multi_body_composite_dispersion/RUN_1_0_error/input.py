@@ -4,6 +4,7 @@
 # affect composite-properties of body_1.  This should result in an error
 # message, abort of the process, and data that matches the nominal case.
 from Modified_data.setup import setup_0_0
+
 setup_0_0(so, dynamics)
 so.adjust_1.adjustable_body = so.body[0]
 dynamics.dyn_manager.add_body_action( so.adjust_1)

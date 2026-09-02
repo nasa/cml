@@ -3,16 +3,16 @@ dr_group.set_cycle(1.0)
 dr_group.freq = trick.DR_Always
 dr_group.add_variable("test.independent")
 for ii in range(4):
-  dr_group.add_variable("test.output_quaternion_simple[%d]" %ii)
+  dr_group.add_variable(f"test.output_quaternion_simple[{ii}]")
 for ii in range(4):
-  dr_group.add_variable("test.output_quaternion_default[%d]" %ii)
+  dr_group.add_variable(f"test.output_quaternion_default[{ii}]")
 for ii in range(4):
-  dr_group.add_variable("test.output_quaternion_array[%d]" %ii)
+  dr_group.add_variable(f"test.output_quaternion_array[{ii}]")
 for ii in range(4):
-  dr_group.add_variable("test.output_quaternion_linear[%d]" %ii)
+  dr_group.add_variable(f"test.output_quaternion_linear[{ii}]")
 
 dr_group.add_variable("test.output_quaternion_Quaternion.scalar")
 for ii in range(3):
-  dr_group.add_variable("test.output_quaternion_Quaternion.vector[%d]" %ii)
+  dr_group.add_variable(f"test.output_quaternion_Quaternion.vector[{ii}]")
 
 trick.add_data_record_group(dr_group, trick.DR_Buffer)

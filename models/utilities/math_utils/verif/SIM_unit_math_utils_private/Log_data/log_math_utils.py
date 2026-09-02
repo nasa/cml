@@ -4,11 +4,11 @@
 
 def log_add_nvec(drg, var, num):
   for ii in range(num):
-    drg.add_variable( var+"[%d]" %ii)
+    drg.add_variable( f"{var}[{ii}]")
 
 def log_add_nxm_mx( drg, var, n, m):
   for ii in range(n):
-    log_add_nvec( drg, var+"[%d]" %ii, m)
+    log_add_nvec( drg, f"{var}[{ii}]", m)
 
 def new_dr_group(name):
   drg = trick.DRAscii(name)

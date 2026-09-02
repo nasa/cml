@@ -18,4 +18,3 @@ def log_test_data ( log_cycle ) :
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
-  return

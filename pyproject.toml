@@ -9,6 +9,7 @@ dependencies = [
     "psutil",
     "pyyaml",
     "regex",
+    "ruff",
 ]
 
 [project.urls]
@@ -22,3 +23,17 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 bypass-selection = true
+
+[tool.ruff.lint]
+ignore = [
+    "S102",  # exec(), will fix in the future
+    "SIM115"  # Same as S102, will fix in the future
+]
+exclude = ["**/build/*"]
+per-file-ignores = {
+    "models/**" = [
+        "F821",  # Undefined name errors in input files.
+        "N999",  # Doesn't really matter for unit test code
+        "RUF012",  # Doesn't really matter for unit test code
+    ]
+}

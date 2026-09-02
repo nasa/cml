@@ -4,11 +4,11 @@ dr_group.freq = trick.DR_Always
 
 def log_3vec(variable) :
   for ii in range(3) :
-    dr_group.add_variable(variable + "[%d]" %ii)
+    dr_group.add_variable(f"{variable}[{ii}]")
 
 def log_sep_state(ix):
-  dr_group.add_variable("test_sep.sep_state_%d.active" %ii )
-  log_3vec("test_sep.sep_state_%d.rel_state.trans.position" %ii )
+  dr_group.add_variable(f"test_sep.sep_state_{ii}.active")
+  log_3vec(f"test_sep.sep_state_{ii}.rel_state.trans.position")
 
 for ii in [1,2] :
   log_sep_state(ii)

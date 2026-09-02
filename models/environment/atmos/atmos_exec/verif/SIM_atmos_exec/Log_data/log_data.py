@@ -40,6 +40,5 @@ trick.add_data_record_group(drg, trick.DR_Buffer)
 # Add the master veh to the data recording group test_data
 # Kept separate since most runs have veh_master disabled
 def log_append_veh (veh) :
-  dr_group = trick.get_data_record_group("test_data")
   log_add_veh_state( veh)
   log_add_veh_atmos( veh)

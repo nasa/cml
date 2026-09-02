@@ -1,5 +1,6 @@
 import csv
 
+
 ###############################################################################
 # Find the index of the tabulated value that matches within 1E-12 of the
 # current value, or return -1 if no match found
@@ -54,8 +55,7 @@ def nextix( val, domain, increasing=True):
     return ix
 
   ix = left_index( val, domain, increasing)+1
-  if ix > len(domain)-1:
-    ix = len(domain)-1
+  ix = min(ix, len(domain)-1)
   return ix
 
 ###############################################################################

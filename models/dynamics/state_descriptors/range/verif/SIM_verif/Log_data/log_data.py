@@ -3,21 +3,21 @@ dr_group.set_cycle(10.0)
 dr_group.freq = trick.DR_Always
 
 for ii in range(3) :
-    dr_group.add_variable("vehicle.body.composite_body.state.trans.position[%d]" %ii)
+    dr_group.add_variable(f"vehicle.body.composite_body.state.trans.position[{ii}]")
 for ii in range(3) :
-    dr_group.add_variable("vehicle.body.composite_body.state.trans.velocity[%d]" %ii)
+    dr_group.add_variable(f"vehicle.body.composite_body.state.trans.velocity[{ii}]")
 
 for ii in range(3) :
     for jj in range (3) :
-      dr_group.add_variable("vehicle.body.composite_body.state.rot.T_parent_this[%d][%d]" %(ii, jj))
+      dr_group.add_variable(f"vehicle.body.composite_body.state.rot.T_parent_this[{ii}][{jj}]")
 for ii in range(3) :
     for jj in range(3) :
-      dr_group.add_variable("earth.planet.pfix.state.rot.T_parent_this[%d][%d]" %(ii, jj))
+      dr_group.add_variable(f"earth.planet.pfix.state.rot.T_parent_this[{ii}][{jj}]")
 
 for ii in range(3) :
-    dr_group.add_variable("vehicle.body.composite_body.state.rot.ang_vel_this[%d]" %ii)
+    dr_group.add_variable(f"vehicle.body.composite_body.state.rot.ang_vel_this[{ii}]")
 for ii in range(3) :
-    dr_group.add_variable("vehicle.pfix_position.cart_coords[%d]" %ii)
+    dr_group.add_variable(f"vehicle.pfix_position.cart_coords[{ii}]")
 
 dr_group.add_variable("vehicle.pfix_position.sphere_coords.latitude" )
 dr_group.add_variable("vehicle.pfix_position.sphere_coords.longitude" )

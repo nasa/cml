@@ -3,15 +3,15 @@
 ####################################################################################
 def log_add_n_vec(drg, var, n):
   for ii in range(n):
-    drg.add_variable( var+"[%d]" %ii)
+    drg.add_variable( f"{var}[{ii}]")
 
 def log_add_nxm_mx( drg, var, n, m):
   for ii in range(n):
-    log_add_n_vec( drg, var+"[%d]" %ii, m)
+    log_add_n_vec( drg, f"{var}[{ii}]", m)
 
 def log_add_nxmxl_mx( drg, var, n, m, l):
   for ii in range(n):
-    log_add_nxm_mx( drg, var+"[%d]" %ii, m, l)
+    log_add_nxm_mx( drg, f"{var}[{ii}]", m, l)
 
 def log_add_3vec(drg, var):
   log_add_n_vec( drg, var, 3)
@@ -32,7 +32,6 @@ def log_inertial_to_lvlh():
   log_add_3x3mx( dr_group, "mutil_verif.T_inrtl_lvlh")
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 
 def log_inertial_to_uvw():
@@ -47,7 +46,6 @@ def log_inertial_to_uvw():
   log_add_3x3mx( dr_group, "mutil_verif.T_inrtl_uvw")
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 
 def log_inertial_to_reference():
@@ -62,7 +60,6 @@ def log_inertial_to_reference():
   log_add_3x3mx( dr_group, "mutil_verif.T_inrtl_reference")
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 def log_inertial_to_vnc():
   recording_group_name = "inertial_to_vnc"
@@ -76,7 +73,6 @@ def log_inertial_to_vnc():
   log_add_3x3mx( dr_group, "mutil_verif.T_inrtl_vnc")
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 def log_T_pfix_to_enu():
   recording_group_name = "T_pfix_to_enu"
@@ -89,7 +85,6 @@ def log_T_pfix_to_enu():
   log_add_3x3mx( dr_group, "mutil_verif.T_pfix_enu")
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 def log_Q_enu_to_pfix():
   recording_group_name = "Q_enu_to_pfix"
@@ -104,7 +99,6 @@ def log_Q_enu_to_pfix():
   log_add_3vec( dr_group, "mutil_verif.Q_enu_pfix.vector")
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 def log_unit_vec_deriv():
   recording_group_name = "unit_vec_deriv"
@@ -118,7 +112,6 @@ def log_unit_vec_deriv():
   log_add_3vec( dr_group, "mutil_verif.unit_vec_deriv")
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 def log_backward_difference():
   recording_group_name = "compute_backward_difference"
@@ -127,13 +120,12 @@ def log_backward_difference():
   dr_group.set_cycle(1.0)
   dr_group.freq = trick.DR_Always
 
-  for ii in range(0,5):
+  for ii in range(5):
     dr_group.add_variable("mutil_verif.back_diff_vals[" + str(ii) + "]")
   dr_group.add_variable("mutil_verif.backward_diff")
   dr_group.add_variable("mutil_verif.size")
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 def log_matrices():
   dr_group = trick.DRAscii("matrices")
@@ -151,7 +143,6 @@ def log_matrices():
   log_add_nxm_mx(   dr_group, "mutil_verif.arr24", 2, 4)
   log_add_nxm_mx(   dr_group, "mutil_verif.arr23", 2, 3)
   log_add_nxmxl_mx( dr_group, "mutil_verif.arr22", 3, 2, 2)
-  return
 
 def log_pv_covariance_matrix():
   dr_group = trick.DRAscii("pv_covariance_matrix")
@@ -162,7 +153,6 @@ def log_pv_covariance_matrix():
 
   log_add_nxmxl_mx( dr_group, "mutil_verif.arr33", 1, 3, 3)
   log_add_nxmxl_mx( dr_group, "mutil_verif.arr66", 2, 6, 6)
-  return
 
 def log_correlation_coefficients():
   dr_group = trick.DRAscii("correlation_coefficients")
@@ -172,4 +162,3 @@ def log_correlation_coefficients():
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
   log_add_nxmxl_mx( dr_group, "mutil_verif.arr33", 2, 3, 3)
-  return

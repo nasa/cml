@@ -12,10 +12,12 @@
 #    def cart_to_sphere (x, y, z):
 #    def cart_to_ellip(x, y, z):
 
-import pdb
-import sys, os, inspect
-import numpy as np
+import inspect
+import os
+import sys
 from argparse import ArgumentParser
+
+import numpy as np
 
 # Get the path to the verif sim dir, this script lives in it
 verif_sim_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -113,28 +115,26 @@ class RangeInput:
         Helper method for inspecting inputs and outputs
         '''
         print( 72*'-')
-        print( '%s Reporting:' % self.__class__.__name__  )
+        print( f'{self.__class__.__name__} Reporting:'  )
         print( 72*'-')
-        print( ' idx      : %d' % self.index  )
+        print( f' idx      : {self.index}'  )
         print( ' Reference Data:')
         for ref in self.reference:
             for item in self.reference[ref]:
-                print( '  (%-5s) %-20s : %f' % (ref, item, self.reference[ref][item] ) )
+                print(f'  ({ref:<5}) {item:<20} : {self.reference[ref][item]:f}')
         print( ' Vehicle Data:')
-        print( '  latitude : %-20f' % self.latitude  )
-        print( '  longitude: %-20f' % self.longitude )
-        print( '  altitude : %-20f' % self.altitude  )
-        print( '  radius :   %-20f' % self.radius  )
-        print( '  direction: %s' % str(self.direction ))
+        print( f'  latitude : {self.latitude:<20f}'  )
+        print( f'  longitude: {self.longitude:<20f}' )
+        print( f'  altitude : {self.altitude:<20f}'  )
+        print( f'  radius :   {self.radius:<20f}'  )
+        print( f'  direction: {self.direction!s}')
         print( ' Output Data:')
         for ref in self.outputs:
             for item in self.outputs[ref]:
-                print('  ({0:<4}) {1:<30} : {2:< 20.10}'.format(ref, item, self.outputs[ref][item]))
+                print(f'  ({ref:<4}) {item:<30} : {self.outputs[ref][item]:< 20.10}')
 
 
 def getArgs():
-    """
-    """
     parser = ArgumentParser(description='Provides independent verification of the Range model by reading Unit_test_data/* files and doing the mathematical computations to calculate the total range, cross range, and downrange angles and arclengths.  Outputs from this script can be compared directly to the outputs of SIM_unit_tests/RUN_unit_test/*.csv, which should provide the same result within numerical precision.')
     parser.add_argument( '-v', "--variables", default=os.path.join(verif_sim_dir,'Unit_test_data/variables.txt'), help="Path to input variables file." )
     parser.add_argument( '-d', "--data", default=os.path.join(verif_sim_dir,'Unit_test_data/data.txt'), help="Path to input data file." )
@@ -165,7 +165,7 @@ def read_data(vars_file, data_file):
             input = RangeInput()
             vals = line.strip().split()
             if len(vals) != num_vars:
-                print("ERROR: Mismatch in columns and rows in given files: \n  %s and \n  %s \nexiting." % (vars_file, data_file))
+                print(f"ERROR: Mismatch in columns and rows in given files: \n  {vars_file} and \n  {data_file} \nexiting.")
                 sys.exit(1)
             input.index = idx
             vidx=0
@@ -330,7 +330,6 @@ def cart_to_sphere (x, y, z):
 
 # Algorithm adopted from jeod's utils/planet_fixed/planet_fixed_posn/src/planet_fixed_posn.cc
 def cart_to_ellip(x, y, z):
-    r_eq = 1000 * (6378.137)  # Equatorial radius
     x_ellipse_sq = (x * x) + (y*y)
     x_ellipse = np.sqrt (x_ellipse_sq);
  
@@ -367,7 +366,7 @@ def get_elliptic_parameters(r, z):
       c=(a*a-b*b)/np.sqrt(ar*ar+bz*bz)
       d = 0.0
 
-      for i in range(0,10): 
+      for i in range(10): 
          d = 2.0*(np.cos(y0-w) - c*np.cos(2.0*y0));
          y = y0 - (2.0*np.sin(y0-w)-c*np.sin(2.0*y0))/d;
          if (np.fabs(y-y0) < 1.0e-12):
@@ -382,14 +381,12 @@ def get_elliptic_parameters(r, z):
    return (lat, alt)
 
 def main():
-    """
-    """
     myArgs = getArgs()
     inputs = read_data(myArgs.variables, myArgs.data)
     for input in inputs:
         # Convert the lat/long/alt from their input elliptical form to the equivalent
         # spherical lat/long/alt
-        (sphere_lat, sphere_long, sphere_alt) = ellip_to_sphere(input.latitude, input.longitude, input.altitude)
+        (sphere_lat, sphere_long, _) = ellip_to_sphere(input.latitude, input.longitude, input.altitude)
         # calc radius of vehicle point so we can compute arclengths later
         input.radius = np.linalg.norm(geo_to_ecef (input.latitude,
                                                    input.longitude,

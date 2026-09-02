@@ -4,13 +4,13 @@ dr_group.freq = trick.DR_Always
 
 for ib in range(3):
   for frame in ["composite_properties", "core_properties"]:
-    dr_group.add_variable("so.body[%d].%s.mass" %(ib, frame))
+    dr_group.add_variable(f"so.body[{ib}].{frame}.mass")
 
     for ii in range(3) :
-      dr_group.add_variable("so.body[%d].%s.position[%d]" %(ib, frame, ii))
+      dr_group.add_variable(f"so.body[{ib}].{frame}.position[{ii}]")
 
     for ii in range(3) :
       for jj in range (3) :
-        dr_group.add_variable("so.body[%d].%s.inertia[%d][%d]" %(ib, frame, ii, jj))
+        dr_group.add_variable(f"so.body[{ib}].{frame}.inertia[{ii}][{jj}]")
 
 trick.add_data_record_group(dr_group, trick.DR_Buffer)

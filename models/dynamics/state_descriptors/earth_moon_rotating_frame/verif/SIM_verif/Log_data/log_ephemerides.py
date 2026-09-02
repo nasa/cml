@@ -1,5 +1,5 @@
 def add_3vec( drg, var):
-  for ii in range(0,3) :
+  for ii in range(3) :
     drg.add_variable(var +"[" + str(ii) + "]" )
 
 

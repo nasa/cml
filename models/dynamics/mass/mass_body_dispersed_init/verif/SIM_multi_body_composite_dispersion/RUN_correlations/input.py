@@ -3,9 +3,11 @@
 # a multiple of the x-value of the vector;
 # the multiple is assigned by the variable *_sf
 from Modified_data.setup import env_setup_no_log
+
 env_setup_no_log(so, dynamics)
 
 from Log_data.log_data import log_properties
+
 dr_group = trick.DRAscii("test_data")
 dr_group.set_cycle(1.0)
 dr_group.freq = trick.DR_Always

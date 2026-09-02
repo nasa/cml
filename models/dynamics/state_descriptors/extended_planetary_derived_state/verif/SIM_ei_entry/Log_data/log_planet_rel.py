@@ -1,9 +1,9 @@
 def log_add_3vec( drg, var):
-  for ii in range (0,3):
+  for ii in range (3):
     drg.add_variable( var+ "[" + str(ii) + "]")
 
 def log_add_3x3( drg, var):
-  for jj in range (0,3):
+  for jj in range (3):
     log_add_3vec( drg, var+ "[" + str(jj) + "]")
 
 dr_group = trick.DRAscii("prs_verif")
@@ -16,7 +16,7 @@ dr_group.add_variable("prs_verif.earth_rel.state.sphere_coords.latitude",  "prs_
 dr_group.add_variable("prs_verif.earth_rel.state.ellip_coords.latitude",   "prs_verif.earth_rel.geodetic_latitude")
 dr_group.add_variable("prs_verif.earth_rel.topocentric_altitude",          "prs_verif.earth_rel.geocentric_altitude")
 dr_group.add_variable("prs_verif.earth_rel.state.ellip_coords.altitude",   "prs_verif.earth_rel.geodetic_altitude")
-for ii in range(0,3) :
+for ii in range(3) :
   dr_group.add_variable("prs_verif.earth_rel.state.cart_coords[" + str(ii) + "]", "prs_verif.earth_rel.relative_pos[" + str(ii) + "]" )
 
 #flags

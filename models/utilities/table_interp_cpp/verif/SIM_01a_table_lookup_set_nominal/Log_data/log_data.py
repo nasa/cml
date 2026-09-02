@@ -11,11 +11,11 @@ dr_group.add_variable("testing_model.test_so_defined.indep0.prox_override")
 dr_group.add_variable("testing_model.test_so_defined.indep0.index_prox")
 
 for i in range(1, 4) : # [1, 2, 3]
-   dr_group.add_variable("testing_model.independent_vars[%d]" %i)
-   dr_group.add_variable("testing_model.test_so_defined.indep%d_ix" %i)
-   dr_group.add_variable("testing_model.test_so_defined.indep%d.fraction" %i)
+   dr_group.add_variable(f"testing_model.independent_vars[{i}]")
+   dr_group.add_variable(f"testing_model.test_so_defined.indep{i}_ix")
+   dr_group.add_variable(f"testing_model.test_so_defined.indep{i}.fraction")
 
 for i in range(3) :
-   dr_group.add_variable("testing_model.test_so_defined.dependent_vars[%d]" %i)
+   dr_group.add_variable(f"testing_model.test_so_defined.dependent_vars[{i}]")
 for i in range(3) :
-   dr_group.add_variable("testing_model.test_on_the_fly.dependent_vars[%d]" %i)
+   dr_group.add_variable(f"testing_model.test_on_the_fly.dependent_vars[{i}]")

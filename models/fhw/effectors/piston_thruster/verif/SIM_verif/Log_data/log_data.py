@@ -7,7 +7,7 @@ def log_test_data ( log_cycle ) :
 
   def log_3vec( variable ) :
     for ii in range(3) :
-      dr_group.add_variable("%s[%d]" %(variable, ii))
+      dr_group.add_variable(f"{variable}[{ii}]")
 
   dr_group.add_variable("pistons_unit_test.time" )
   dr_group.add_variable("pistons_unit_test.pistons.param.mode" )
@@ -34,4 +34,3 @@ def log_test_data ( log_cycle ) :
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
-  return

@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Ellipsoid parameters
 a, b, c = 2, 3, 4

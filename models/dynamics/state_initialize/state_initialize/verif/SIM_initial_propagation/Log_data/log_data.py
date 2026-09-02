@@ -1,4 +1,6 @@
 import math
+
+
 def log_add_3_vec( drg, var):
   for ii in range(3):
     drg.add_variable( var + "[" + str(ii) + "]" )

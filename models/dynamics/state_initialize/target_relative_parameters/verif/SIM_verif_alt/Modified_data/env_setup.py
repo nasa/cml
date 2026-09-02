@@ -1,4 +1,3 @@
-import math
 
 test.K_theta = 0.9
 

@@ -5,7 +5,7 @@ trick.add_data_record_group(drg, trick.DR_Buffer)
 
 def log_3vec( drg, var):
   for ii in range(3):
-    drg.add_variable( var + "[%d]" %ii)
+    drg.add_variable( f"{var}[{ii}]")
 
 def log_params( drg, set_):
   drg.add_variable( set_ + ".altitude")

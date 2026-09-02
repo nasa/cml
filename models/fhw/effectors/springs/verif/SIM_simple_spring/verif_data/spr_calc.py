@@ -2,7 +2,8 @@
 
 import numpy as np
 
-class State():
+
+class State:
    '''
    Class to hold MassBody state data
    '''
@@ -11,7 +12,7 @@ class State():
       self.V = 0.0
       self.A = 0.0
 
-class LogMB():
+class LogMB:
    '''
    Dumb logging class.  No idea how to do this ,so I just made it up.
    '''
@@ -29,7 +30,7 @@ class LogMB():
       self.dt.append(dt)
       self.t = np.cumsum(self.dt) - np.array(self.dt)
 
-class MassBody():
+class MassBody:
    '''
    Class to describe a point mass
    '''
@@ -48,7 +49,7 @@ class MassBody():
       self.state.P = x
       self.state.V = v
 
-class Spring():
+class Spring:
    '''
    Dumb spring force computation
    '''
@@ -75,9 +76,9 @@ if __name__ == '__main__':
    def load_trk_csv(FILE):
       with open(FILE,'r') as f:
          header = f.readline().strip().split(',')
-         V,units = zip(*[var.split() for var in header])
+         V,_units = zip(*[var.split() for var in header])
          data   = np.loadtxt(f,delimiter=',')
-         D = dict( (dVar,R) for dVar,R in zip(V,data.T) ) 
+         D = { dVar: R for dVar,R in zip(V,data.T) } 
          # D = {dVar:R for dVar,R in zip(V,data.T)}
          return D
    

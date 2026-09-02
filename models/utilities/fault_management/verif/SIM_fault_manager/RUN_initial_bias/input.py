@@ -1,4 +1,5 @@
 from Log_data.logging import log_no_int
+
 log_no_int(1)
 
 test_object.faults.enabled = True

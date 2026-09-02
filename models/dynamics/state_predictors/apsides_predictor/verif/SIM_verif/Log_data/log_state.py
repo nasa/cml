@@ -5,9 +5,9 @@ def log_state( log_cycle ) :
   dr_group.freq = trick.DR_Always
 
   for ii in range(3) :
-    dr_group.add_variable("vehicle.dyn_body.structure.state.trans.position[%d]" %ii)
+    dr_group.add_variable(f"vehicle.dyn_body.structure.state.trans.position[{ii}]")
   for ii in range(3) :
-    dr_group.add_variable("vehicle.dyn_body.structure.state.trans.velocity[%d]" %ii)
+    dr_group.add_variable(f"vehicle.dyn_body.structure.state.trans.velocity[{ii}]")
   dr_group.add_variable("apsides_predictor.apsides.time_to_next_apsis" )
   dr_group.add_variable("apsides_predictor.apsides.next_apsis_type" )
   dr_group.add_variable("apsides_predictor.apsides.apoapsis_altitude" )

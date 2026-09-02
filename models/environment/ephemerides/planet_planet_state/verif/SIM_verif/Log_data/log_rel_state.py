@@ -15,7 +15,7 @@ dr_group.add_variable("planet_rel_state.velocity_mag_direct")
 
 def log_add_3vec(variable):
   for ii in range(3):
-    dr_group.add_variable(variable + "[%d]" %ii)
+    dr_group.add_variable(f"{variable}[{ii}]")
 
 log_add_3vec("planet_rel_state.relstate_name.state.trans.position")
 log_add_3vec("planet_rel_state.relstate_name.state.trans.velocity")

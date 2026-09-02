@@ -16,8 +16,8 @@ verif.corr_state.TR_param.target_point_latitude = 0.0
 verif.corr_state.TR_param.target_point_longitude = trick.attach_units("degree", 90.0)
 
 # Zero out covariance matrix
-for i in range(0,6):
-   for j in range(0,6):
+for i in range(6):
+   for j in range(6):
       verif.corr_state.covariance[i][j] = 0.0
 
 # All dispersed states will have same geodetic altitude

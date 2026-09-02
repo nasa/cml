@@ -36,6 +36,7 @@
 #      core properties.
 
 from Modified_data.setup import setup_0_2
+
 setup_0_2(so, dynamics)
 for ii in range(3):
   so.mass_init[ii].properties.inertia_spec = trick.MassPropertiesInit.StructCG

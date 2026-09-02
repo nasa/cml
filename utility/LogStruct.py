@@ -14,10 +14,12 @@
 # To use LogStruct's logfile generating functionality from the command line, 
 # see SIM_orion/Modified_data/common/LogStruct_ExternalGen.py.
 
-import sys, os, pdb
+import os
+import sys
 import xml.etree.ElementTree as ET
 
-class LogStruct():
+
+class LogStruct:
     """
         How to use this class in any file at the input level:
         exec(open("Modified_data/common/LogStruct.py").read())
@@ -166,17 +168,16 @@ class LogStruct():
 
         if output_textfile:
             print(f"LogStruct: Exporting variable list to text file for struct {var_struct} ...")
-            output_filename = '.'.join([output_textfile,'csv'])
+            output_filename = f'{output_textfile}.csv'
         else:
             print(f"LogStruct: Building python logging file for struct {var_struct} ...")
             output_filename = self.build_output_filename(log_path,parent_class_layer)
 
         self.output_file_name = os.path.join(log_path,output_filename)
 
-        if skip_gen:
-            # Check to see if the output file already exists
-            if not os.path.isfile(self.output_file_name):
-                skip_gen = False
+        # Check to see if the output file already exists
+        if skip_gen and not os.path.isfile(self.output_file_name):
+            skip_gen = False
 
         if not skip_gen:
 
@@ -187,7 +188,7 @@ class LogStruct():
             else:
                 # Right now there are only 2 supported output formats, so
                 # the only other option besides py is csv
-                # A csv file can't be exeucted, so make exec_logfile false
+                # A csv file can't be executed, so make exec_logfile false
                 self.make_text_file(desc_include)
                 exec_logfile = False
             print("Done\n")
@@ -195,7 +196,7 @@ class LogStruct():
         # Execute and call the log file
         if exec_logfile:
             print(f"LogStruct: Executing and calling struct {var_struct} ...\n")
-            print("In current working diretory {os.getcwd()}\n")
+            print("In current working directory {os.getcwd()}\n")
             exec(open(self.output_file_name).read())
             exec(f"log_{self.gp_p}({log_cycle})")
             print("Done\n")
@@ -204,7 +205,7 @@ class LogStruct():
         if len(self.str_prms) > 1:
             try:
                 gparent = self.str_prms[-parent_class_layer]
-            except:
+            except IndexError:
                 print("LogStruct: Struct name not long enough to name as requested. Reverting to default.\n")
                 gparent = self.str_prms[-2]
             self.gp_p = f"{gparent.lower()}_{self.parent.lower()}"
@@ -293,7 +294,7 @@ class LogStruct():
                         dim[i] = int(dim_list[i].text)
                     # If a dimension is present, but is only 0, change it to have a dimension of [1]
                     if dim == [0]:
-                        dim == [1]
+                        dim = [1]
                 elif num_dim > 3:
                     var = tmp.get('name')
                     print(f'The dimensions of the variable {var} are outside the limits of LogStruct \n')
@@ -321,13 +322,11 @@ class LogStruct():
                     for tmp_member in tmp_class.findall('member'):
                         prm = tmp_member.get('name')
                         type_name = tmp_member.get('type')
-                        units = tmp_member.get('units')
 
                         # Extract description
-                        if 'description' in tmp_member.keys():
+                        if 'description' in tmp_member:
                             desc = tmp_member.get('description')
-                            if desc.startswith('@n '):
-                                desc = desc[len('@n '):]
+                            desc = desc.removeprefix('@n ')
                         else:
                             desc = ''
 
@@ -475,7 +474,7 @@ class LogStruct():
             else:
                 log_type = 'array'
         elif len(dim) == 2:
-            if (dim[0] == 3 and dim[1] == 3):
+            if dim[0] == 3 and dim[1] == 3:
                 log_type = '3x3'
             else:
                 log_type = 'mxn'

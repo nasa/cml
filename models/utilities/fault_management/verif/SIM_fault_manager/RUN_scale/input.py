@@ -1,4 +1,5 @@
 from Log_data.logging import log_default
+
 log_default(0.1)
 
 test_object.faults.enabled = True

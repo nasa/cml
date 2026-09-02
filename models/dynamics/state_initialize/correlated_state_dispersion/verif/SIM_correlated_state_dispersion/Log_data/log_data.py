@@ -1,9 +1,9 @@
 def log_3vec( drg, var):
   for ii in range(3) :
-    drg.add_variable(var + "[%d]" %ii)
+    drg.add_variable(f"{var}[{ii}]")
 def log_3x3( drg, var):
   for ii in range(3) :
-    log_3vec( drg, var + "[%d]" %ii)
+    log_3vec( drg, f"{var}[{ii}]")
 
 dr_group = trick.DRAscii("test_data")
 dr_group.set_cycle(1.0)
@@ -22,4 +22,4 @@ def log_att():
 
 def log_prm():
   for ii in range(5) :
-    dr_group.add_variable("verif.corr_state.prm_error[%d]" %ii)
+    dr_group.add_variable(f"verif.corr_state.prm_error[{ii}]")

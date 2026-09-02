@@ -2,7 +2,7 @@
 # Also tests the blocking of the altitude warnings.
 exec(open( "input_common.py").read())
 for ii in range(3):
-  drg.add_variable("luwinds.lookup_table_winds.average_wind[{0}]".format(ii))
+  drg.add_variable(f"luwinds.lookup_table_winds.average_wind[{ii}]")
 #exec(open( "Log_data/log_average_wind.py").read())
 trick.CMLMessage.set_publish_level( trick.CMLMessage.Inform)
 luwinds.lookup_table_winds.subscribe()

@@ -3,26 +3,27 @@
 # runs in the state_initialize model's SIM_state_init unit sim
 # This was used as part of EM1 iV&V effort
 
-import inspect, sys, os, pdb
+import inspect
+import os
+import sys
+
 thisDir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 sys.path.append(os.path.abspath(os.path.join(thisDir,"../../../../state_descriptors/range/verif/")))
-from SIM_unit_tests import verif
-import numpy as np
 import math
 from argparse import ArgumentParser
 
+import numpy as np
+from SIM_unit_tests import verif
+
+
 def getArgs():
-    """
-    """
     parser = ArgumentParser(description='Provides independent verification of aspects of runs in the state_initialize model\'s SIM_state_init unit sim.  Not intended to be run with any arguments. Output is intended to be manually compared to the output of various runs in the verif sim.')
     myArgs = parser.parse_args()
 
     return myArgs
 
 def main():
-    """
-    """
-    myArgs = getArgs()
+    getArgs()
 
     print("RUN_pos_NED_Geod reference point to ECEF conversion:")
     ecef = verif.geo_to_ecef(math.pi/4, math.pi/2, 100000)  # Only position different from RUN_test

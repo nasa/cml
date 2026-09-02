@@ -9,10 +9,9 @@ def log_test_data ( log_cycle ) :
   dr_group.add_variable("double_words.resolution" )
   dr_group.add_variable("double_words.bit_size" )
 
-  for ii in range(0,4) :
-       dr_group.add_variable("double_words.words[%d]" %ii)
+  for ii in range(4) :
+       dr_group.add_variable(f"double_words.words[{ii}]")
   
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
 
-  return
 

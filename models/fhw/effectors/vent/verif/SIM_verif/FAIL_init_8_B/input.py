@@ -16,23 +16,15 @@ ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print("\n"
 "***************************************************************************\n"
 "Pre-init settings:\n"
-"force           : [%lf, %lf, %lf] Ns\n"
-"force-magnitude : %lf Ns\n"
-"flowrate        : %lf\n"
-"exhaust-speed   : %lf\n"
-"force-set       : %d\n"
-"force-mag-set   : %d\n"
-"flowrate-set    : %d\n"
-"exhaust-set     : %d\n"
-"***************************************************************************\n"
-%( ventset_obj.force[0], ventset_obj.force[1], ventset_obj.force[2],
-  ventset_obj.force_magnitude,
-  ventset_obj.flowrate,
-  ventset_obj.exhaust_speed,
-  ventset_obj.force_set,
-  ventset_obj.force_magnitude_set,
-  ventset_obj.flowrate_set,
-  ventset_obj.exhaust_speed_set))
+f"force           : [{ventset_obj.force[0]:f}, {ventset_obj.force[1]:f}, {ventset_obj.force[2]:f}] N\n"
+f"force-magnitude : {ventset_obj.force_magnitude:f}\n"
+f"flowrate        : {ventset_obj.flowrate:f}\n"
+f"exhaust-speed   : {ventset_obj.exhaust_speed:f}\n"
+f"force-set       : {ventset_obj.force_set:d}\n"
+f"force-mag-set   : {ventset_obj.force_magnitude_set:d}\n"
+f"flowrate-set    : {ventset_obj.flowrate_set:d}\n"
+f"exhaust-set     : {ventset_obj.exhaust_speed_set:d}\n"
+"***************************************************************************\n")
 
 print("\n"
 "****************************************************************************\n"

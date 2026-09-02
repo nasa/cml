@@ -4,9 +4,11 @@
 # DRWP binary file done by the DRWP model.  The 'model' doesn't really do
 # anything of significance other than load and interpolate data.
 
-import numpy as np
-import sys,os
+import os
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(HERE,'slsenv'))
@@ -19,7 +21,7 @@ with open(os.path.join(HERE,'../RUN_01_preload_5_nospec','log_lu_winds.csv'),'r'
    D = np.loadtxt(f,delimiter=',')
 #   print(V)
 #   print(D)
-   UT_data = dict((variable.split()[0],data) for variable,data in zip(V,D.T))
+   UT_data = {variable.split()[0]: data for variable,data in zip(V,D.T)}
    print(UT_data)
 
 # Set wind data.  'Winter' season and wind number 1771
@@ -33,7 +35,7 @@ w     = w_all[wind_number]
 
 # Interpolate via python
 interp_vars = ['u', 'v', 'temp', 'rho', 'press']
-interp_data = dict( (IV,np.interp(UT_data['luwinds.altitude'],w_alt,w[IV])) for IV in interp_vars )
+interp_data = { IV: np.interp(UT_data['luwinds.altitude'],w_alt,w[IV]) for IV in interp_vars }
 
 # Determine deltas
 du   = UT_data['luwinds.lookup_table_winds.u'] - interp_data['u']

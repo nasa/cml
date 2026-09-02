@@ -6,6 +6,6 @@ dr_group.add_variable("aero.interface.executive.bank_angle")
 dr_group.add_variable("aero.atmos_rel.dynamic_pressure")
 dr_group.add_variable("aero.interface.executive.lift_mag")
 dr_group.add_variable("aero.interface.executive.drag_mag")
-for ii in range(0, 3):
-    dr_group.add_variable("aero.interface.output.force[%d]" % ii)
+for ii in range(3):
+    dr_group.add_variable(f"aero.interface.output.force[{ii}]")
 trick.add_data_record_group(dr_group, trick.DR_Buffer)

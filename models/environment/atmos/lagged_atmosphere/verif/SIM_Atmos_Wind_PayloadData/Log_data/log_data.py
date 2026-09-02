@@ -1,6 +1,6 @@
 def log_3_vec(drg_, var):
   for ii in range(3) :
-    drg_.add_variable( var + "[%d]"  %ii)
+    drg_.add_variable(f"{var}[{ii}]")
 
 drg = trick.sim_services.DRAscii("test_data")
 drg.set_cycle(1.0)

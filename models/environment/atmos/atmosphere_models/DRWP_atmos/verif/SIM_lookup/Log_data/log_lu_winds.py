@@ -16,7 +16,7 @@ drg.add_variable("luwinds.lookup_table_winds.T")
 drg.add_variable("luwinds.lookup_table_winds.wind_number")
 drg.add_variable("luwinds.lookup_table_winds.SOS")
 for ii in range(3):
-    drg.add_variable("luwinds.lookup_table_winds.wind_velocity_tc[{0}]".format(ii))
+    drg.add_variable(f"luwinds.lookup_table_winds.wind_velocity_tc[{ii}]")
 drg.add_variable("luwinds.lookup_table_winds.wind_angle_blowing_from")
 drg.add_variable("luwinds.lookup_table_winds.wind_vmag")
 

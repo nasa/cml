@@ -14,7 +14,7 @@ mass_test.mass_init[0].set_subject_body( mass_test.tank_a )
 mass_test.mass_init[1].set_subject_body( mass_test.body )
 mass_test.mass_init[2].set_subject_body( mass_test.tank_b )
 mass_test.mass_init[3].set_subject_body( mass_test.tank_c )
-for ii in range (0,4):
+for ii in range (4):
   mass_test.mass_init[ii].properties.mass = 1000.0
   mass_test.mass_init[ii].properties.position = [ii-1, 0, 0]
   mass_test.mass_init[ii].properties.inertia =  [[1,0,0],[0,1,0],[0,0,1]]
@@ -26,7 +26,7 @@ for ii in range (0,4):
 mass_test.tank_attach[0].set_subject_body( mass_test.tank_a )
 mass_test.tank_attach[1].set_subject_body( mass_test.tank_b )
 mass_test.tank_attach[2].set_subject_body( mass_test.tank_c )
-for ii in range (0,3):
+for ii in range (3):
   mass_test.tank_attach[ii].set_parent_body( mass_test.body )
   mass_test.tank_attach[ii].offset_pstr_cstr_pstr = [0.0,0.0,0.0]
   mass_test.tank_attach[ii].pstr_cstr.data_source = trick.Orientation.InputMatrix;

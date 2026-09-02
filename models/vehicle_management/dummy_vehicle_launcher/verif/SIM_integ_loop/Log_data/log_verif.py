@@ -8,11 +8,11 @@ def log_verif(log_cycle):
 
     def log_add_3vec(var):
         for i in range(3):
-            dr_group.add_variable(var + "[%d]" %i)
+            dr_group.add_variable(var + "[{i}]")
 
     def log_add_3x3mat(var):
         for i in range(3):
-           log_add_3vec(var + "[%d]" %i)
+           log_add_3vec(var + "[{i}]")
 
     # Mass properties
     veh1_dynbody = "vehicle.dyn_body"
@@ -42,4 +42,3 @@ def log_verif(log_cycle):
     log_add_3vec(veh1_dynbody+".derivs.non_grav_accel")
     log_add_3vec(veh2_dynbody+".derivs.non_grav_accel")
 
-    return

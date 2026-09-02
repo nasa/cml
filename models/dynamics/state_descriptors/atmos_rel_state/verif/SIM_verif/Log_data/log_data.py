@@ -1,10 +1,10 @@
 def log_three_vector(dr_group, variable_name) :
-   for ii in range(0,3) :
+   for ii in range(3) :
       full_name = variable_name + "[" + str(ii) + "]"
       dr_group.add_variable(full_name)
 
 def log_three_matrix(dr_group, variable_name) :
-   for ii in range(0,3) :
+   for ii in range(3) :
       full_name = variable_name + "[" + str(ii) + "]"
       log_three_vector(dr_group, full_name)
 

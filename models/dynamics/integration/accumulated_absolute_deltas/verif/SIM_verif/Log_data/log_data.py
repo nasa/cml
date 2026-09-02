@@ -5,10 +5,9 @@ def log_test_data ( log_cycle ) :
   dr_group.set_cycle(log_cycle)
   dr_group.freq = trick.DR_Always
 
-  for ii in range(0,4) :
+  for ii in range(4) :
     dr_group.add_variable("test.accum_val.accumulated_deltas[" + str(ii) + "]" )
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 

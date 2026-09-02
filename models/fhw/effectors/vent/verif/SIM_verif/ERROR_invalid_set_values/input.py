@@ -4,16 +4,14 @@ ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print("\n"
 "***************************************************************************\n"
 "Unsetting duration by setting duration negative.\n"
-"duration before : %lf\n"
-"flag before     : %d\n"
-%(ventset_obj.duration, ventset_obj.duration_set))
+f"duration before : {ventset_obj.duration:f}\n"
+f"flag before     : {ventset_obj.duration_set:d}\n")
 ventset_obj.extra_vent.set_duration(-1.0)
 ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print(
-"duration after : %lf\n"
-"flag after     : %d\n"
-"***************************************************************************"
-%(ventset_obj.duration, ventset_obj.duration_set))
+f"duration after : {ventset_obj.duration:f}\n"
+f"flag after     : {ventset_obj.duration_set:d}\n"
+"***************************************************************************")
 # reset:
 ventset_obj.extra_vent.set_duration(1.0)
 
@@ -32,14 +30,12 @@ ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print("\\n\\n"
 "***************************************************************************\\n"
 "Setting duration by setting force vector:\\n"
-"duration before: %lf"
-%(ventset_obj.duration))
+f"duration before: {ventset_obj.duration:f}")
 
 ventset_obj.extra_vent.set_force_vector([0,1,0], True)
 ventset_obj.copy_parameters(ventset_obj.extra_vent)
-print("duration after : %lf\\n"
-"***************************************************************************"
-%(ventset_obj.duration))
+print(f"duration after : {ventset_obj.duration:f}\\n"
+"***************************************************************************")
 """)
 
 
@@ -63,17 +59,15 @@ ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print("\\n\\n"
 "***************************************************************************\\n"
 "Error: Setting exhaust-speed to invalid value:\\n"
-"       exhaust speed before: %lf\\n"
-"***************************************************************************"
-%(ventset_obj.exhaust_speed))
+f"       exhaust speed before: {ventset_obj.exhaust_speed:f}\\n"
+"***************************************************************************")
 
 ventset_obj.extra_vent.set_exhaust_speed(-1.0)
 ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print(
 "***************************************************************************\\n"
-"       exhaust speed after : %lf\\n"
-"***************************************************************************"
-%(ventset_obj.exhaust_speed))
+f"       exhaust speed after : {ventset_obj.exhaust_speed:f}\\n"
+"***************************************************************************")
 """)
 
 trick.add_read(0,"""
@@ -82,16 +76,14 @@ ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print("\\n\\n"
 "***************************************************************************\\n"
 "Error: Setting flowrate to invalid value:\\n"
-"       flowrate before: %lf\\n"
-"***************************************************************************"
-%(ventset_obj.flowrate))
+f"       flowrate before: {ventset_obj.flowrate:f}\\n"
+"***************************************************************************")
 
 ventset_obj.extra_vent.set_flowrate(-1.0)
 ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print(
 "***************************************************************************\\n"
-"       flowrate after : %lf\\n"
-"***************************************************************************"
-%(ventset_obj.flowrate))
+f"       flowrate after : {ventset_obj.flowrate:f}\\n"
+"***************************************************************************")
 """)
 trick.stop(0)

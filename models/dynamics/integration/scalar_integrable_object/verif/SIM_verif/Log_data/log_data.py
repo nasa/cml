@@ -9,6 +9,5 @@ def log_test_data ( log_cycle ) :
   dr_group.add_variable("scalar_integ.angle_rate" )
 
   trick.add_data_record_group(dr_group, trick.DR_Buffer)
-  return
 
 

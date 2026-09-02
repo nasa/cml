@@ -13,8 +13,7 @@ ventset_obj.copy_parameters(ventset_obj.extra_vent)
 print("\n"
 "***************************************************************************\n"
 "Pre-init settings:\n"
-"direction         : [%lf, %lf, %lf]\n"
-"***************************************************************************\n"
-%(ventset_obj.direction[0], ventset_obj.direction[1], ventset_obj.direction[2]))
+f"direction         : [{ventset_obj.direction[0]:f}, {ventset_obj.direction[1]:f}, {ventset_obj.direction[2]:f}]\n"
+"***************************************************************************\n")
 
 trick.stop(0)

@@ -5,7 +5,7 @@ trick.add_data_record_group(drg_params, trick.DR_Buffer)
 
 def log_add_3vec(drg, var):
   for ii in range(3):
-    drg.add_variable(var + "[%d]" %ii)
+    drg.add_variable(f"{var}[{ii}]")
 
 def log_simple_params( vent="ventset_obj.extra_vent"):
   drg_params.add_variable(vent+".force_mag")

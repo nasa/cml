@@ -40,8 +40,7 @@ vehicle.tanks[0].update_mass()
 # negative residual_mass to force an error.
 print("overriding vehicle.tanks[1].dynamic_properties.consumable_mass...")
 vehicle.tanks[1].dynamic_properties.consumable_mass = 15.0
-print("** new vehicle.tanks[1].dynamic_properties.consumable_mass=%lf"\
-%vehicle.tanks[1].dynamic_properties.consumable_mass)
+print(f"** new vehicle.tanks[1].dynamic_properties.consumable_mass={vehicle.tanks[1].dynamic_properties.consumable_mass:f}")
 # trigger initialization of dynamic mass body early to
 # pick up error at dynamic_mass_body.cc:184
 # also picks up these other errors first because this body has not

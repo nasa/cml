@@ -63,18 +63,15 @@ vehicle.planet_rel_state.pt_to_pt.remove_relative_position( "v_5",
 print(
 '****************************************************************************\n'
 'Checking make_all_pairings()')
-print( 'Starting with %d relative positions'
-       %vehicle.planet_rel_state.pt_to_pt.get_num_rel_pos_instances())
+print(f'Starting with {vehicle.planet_rel_state.pt_to_pt.get_num_rel_pos_instances()} relative positions')
 vehicle.planet_rel_state.pt_to_pt.make_all_pairings()
 print( 'Run make_all_pairings():\n'
        '    Should have all available relative positions:\n'
-       '    Have ** %d of 9 **'
-       %vehicle.planet_rel_state.pt_to_pt.get_num_rel_pos_instances())
+       f'    Have ** {vehicle.planet_rel_state.pt_to_pt.get_num_rel_pos_instances()} of 9 **')
 vehicle.planet_rel_state.pt_to_pt.make_all_pairings()
 print( 'Rerun make_all_pairings():\n'
        '    Should still have all available relative positions, no duplicates\n'
-       '    Have ** %d of 9 **'
-       %vehicle.planet_rel_state.pt_to_pt.get_num_rel_pos_instances())
+       f'    Have ** {vehicle.planet_rel_state.pt_to_pt.get_num_rel_pos_instances()} of 9 **')
 print( 'Should have passed over duplicates silently\n'
 '****************************************************************************\n')
 

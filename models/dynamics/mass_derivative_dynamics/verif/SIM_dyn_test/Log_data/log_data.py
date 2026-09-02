@@ -1,10 +1,10 @@
 def add_3array(drg, var):
   for ii in range (3):
-    drg.add_variable( var + "[%d]" %ii)
+    drg.add_variable(f"{var}[{ii}]")
 
 def add_3x3array(drg, var):
   for ii in range (3):
-    add_3array( drg, var + "[%d]" %ii)
+    add_3array( drg, f"{var}[{ii}]")
 
 ####################################################
 drg1 = trick.sim_services.DRAscii("basic_data")

@@ -7,4 +7,4 @@ dr_group.add_variable("convert_double_words.convert_value" )
 dr_group.add_variable("convert_double_words.resolution" )
 dr_group.add_variable("convert_double_words.bit_size" )
 for ii in range(4) :
-  dr_group.add_variable("convert_double_words.warray[%d]" %ii)
+  dr_group.add_variable(f"convert_double_words.warray[{ii}]")

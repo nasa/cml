@@ -1,6 +1,7 @@
 import trick
 from Log_data.log_data import log_default
 
+
 def env_setup(mass_body_disp, dynamics):
   log_default()
 
