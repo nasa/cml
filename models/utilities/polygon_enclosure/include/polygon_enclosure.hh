@@ -24,8 +24,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
-#include <cstring> // memcpy
-#include <algorithm> // min,max
+#include <cstring>
+#include <algorithm>
 
 template<size_t N>
 class PolygonEnclosure

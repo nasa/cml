@@ -12,10 +12,14 @@ PROGRAMMERS:
 #ifndef CML_GRAVITY_FIDELITY_MANAGER_HH
 #define CML_GRAVITY_FIDELITY_MANAGER_HH
 
-#include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "cml/models/utilities/table_interp_cpp/include/simple_table_lookup.hh"
 #include <vector>
+
+namespace jeod {
+class RefFrame;
+class SphericalHarmonicsGravityControls;
+}
 
 class GravityFidelityManager : public SubscriptionBase
 {
@@ -58,13 +62,10 @@ class GravityFidelityManager : public SubscriptionBase
                            const jeod::RefFrame                    & source_frame,
                            const jeod::RefFrame                    & target_frame);
   ~GravityFidelityManager() override = default;
+  GravityFidelityManager (const GravityFidelityManager&) = delete;
+  GravityFidelityManager & operator = (const GravityFidelityManager&) = delete;
 
   void initialize() override;
   void update();
-
- private:
-  // Unimplemented copy constructor and assignment operator
-  GravityFidelityManager (const GravityFidelityManager&);
-  GravityFidelityManager & operator = (const GravityFidelityManager&);
 };
 #endif

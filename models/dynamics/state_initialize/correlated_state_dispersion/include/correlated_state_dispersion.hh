@@ -37,15 +37,15 @@ PROGRAMMERS:
 #ifndef CML_CORRELATED_STATE_DISPERSION_HH
 #define CML_CORRELATED_STATE_DISPERSION_HH
 
-#include <random> // default_random_engine,
-                  // uniform_real_distribution,
-                  // normal_distribution
+#include <cstddef>
+#include <random>
+#include <string>
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/orientation/include/orientation.hh" // Orientation::*
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
+#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameters.hh"
 
-#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameters.hh" // TargetRelative_StateParameter
+namespace jeod {
+class RefFrameState;
+}
 
 
 class CorrelatedStateDispersion {
@@ -298,6 +298,8 @@ class CorrelatedStateDispersion {
  public:
   CorrelatedStateDispersion();
   ~CorrelatedStateDispersion() = default;
+  CorrelatedStateDispersion (const CorrelatedStateDispersion&) = delete;
+  CorrelatedStateDispersion & operator = (const CorrelatedStateDispersion&) = delete;
 
   void disperse_state( const jeod::RefFrameState & trans_base_wrt_cov_base,
                        const double (&rot_base_wrt_cov_base)[3][3],
@@ -330,9 +332,5 @@ class CorrelatedStateDispersion {
                             const double velocity[3]);
   void transform_TR_param(  const double position[3],
                             const double velocity[3]);
-
- private:
-  CorrelatedStateDispersion (const CorrelatedStateDispersion&);
-  CorrelatedStateDispersion & operator = (const CorrelatedStateDispersion&);
 };
 #endif

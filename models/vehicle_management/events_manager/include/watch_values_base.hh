@@ -13,7 +13,7 @@ PROGRAMMERS:
 #ifndef CML_WATCH_VALUES_BASE_HH
 #define CML_WATCH_VALUES_BASE_HH
 
-#include <cmath> // abs
+#include <cmath>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "watch_values_base_core.hh"
@@ -52,6 +52,8 @@ class WatchValuesBase : public WatchValuesBaseCore {
      variable_at_activation(),
      use_threshold_crossing_trigger(false) {}
   ~WatchValuesBase() override = default;
+  WatchValuesBase (const WatchValuesBase& rhs) = delete;
+  WatchValuesBase& operator = (const WatchValuesBase& rhs) = delete;
 
 /*****************************************************************************
 set_watch
@@ -382,9 +384,5 @@ Purpose:(Generates the new reference value.)
     reference += variable_at_activation;
     return;
   }
-
- private:
-  WatchValuesBase (const WatchValuesBase& rhs);
-  WatchValuesBase& operator = (const WatchValuesBase& rhs);
 };
 #endif

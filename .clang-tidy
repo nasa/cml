@@ -28,20 +28,44 @@
 #         not play well with SWIG.
 #
 # portability:
-#     To be added in a future pull request
+#     portability-template-virtual-member-function:
+#         Not a concern since we only support GCC.
 #
 # readability:
 #     To be added in a future pull request
+#
+# Note that rather than ignoring a large number of warnings from other
+# categories, we only include selected warnings from categories like google-*
+# and cppcoreguidelines-*.
 Checks: >
     bugprone-*,
         -bugprone-easily-swappable-parameters,
         -bugprone-reserved-identifier,
+    cppcoreguidelines-*coroutines*,
+    cppcoreguidelines-avoid-goto,
+    cppcoreguidelines-interfaces-global-init,
+    cppcoreguidelines-macro-usage,
+    cppcoreguidelines-misleading-capture-default-by-value,
+    cppcoreguidelines-no-malloc,
+    cppcoreguidelines-pro-type-member-init,
+    cppcoreguidelines-pro-type-static-cast-downcast,
+    cppcoreguidelines-rvalue-reference-param-not-moved,
     clang-*,
         -clang-analyzer-optin.performance.Padding,
+    google-build-using-namespace,
+    google-global-names-in-headers,
+    misc-inclue-cleaner,
+    modernize-use-equals-delete,
+    portability-*,
+        -portability-template-virtual-member-function,
     performance-*,
         -performance-enum-size
 
 WarningsAsErrors: '*'
 
 HeaderFilterRegex: '(^|/)(models|utility)/.*'
+
+CheckOptions:
+    - key: misc-include-cleaner.IgnoreHeaders
+      value: 'math.h;cmath;' # Only for M_PI. Remove when we go to C++20.
 ...

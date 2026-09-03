@@ -30,12 +30,10 @@ public:
 
   RocketMotorDispersions();
   virtual ~RocketMotorDispersions() = default;
+  RocketMotorDispersions (const RocketMotorDispersions&) = delete;
+  RocketMotorDispersions & operator = (const RocketMotorDispersions&) = delete;
 
   void apply_dispersions( double position[3],
                           double T_parent_to_motor[3][3]);
-private:
-  // Not implemented:
-  RocketMotorDispersions (const RocketMotorDispersions&);
-  RocketMotorDispersions & operator = (const RocketMotorDispersions&);
 };
 #endif

@@ -16,11 +16,11 @@ PROGRAMMERS:
 #define CML_ROCKET_MOTOR_BASIC_HH
 
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "rocket_motor_dispersions.hh"
 
@@ -162,6 +162,8 @@ public:
                     const double      & time_in,
                     const double      * veh_cm_in);
   ~RocketMotor_Basic() override = default;
+  RocketMotor_Basic (const RocketMotor_Basic&) = delete;
+  RocketMotor_Basic & operator = (const RocketMotor_Basic&) = delete;
 
   void initialize() override;
   virtual void update();
@@ -176,12 +178,6 @@ protected:
   virtual bool update_status();
   void update_mass_consumption();
   virtual void start_motor();
-  #ifndef SWIG
   void activate() override;
-  #endif
-private:
-  // Not implemented:
-  RocketMotor_Basic (const RocketMotor_Basic&);
-  RocketMotor_Basic & operator = (const RocketMotor_Basic&);
 };
 #endif

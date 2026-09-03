@@ -2,6 +2,9 @@
 PURPOSE:
   (Interpolation method for Dynamic Mass)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (
    ((Gary Turner) (OSR) (March 2014) (New implementation of dynamic mass for JEOD 2.x))
@@ -12,6 +15,7 @@ PROGRAMMERS:
    )
 *******************************************************************************/
 
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -23,8 +27,8 @@ Method: Constructor
 ********************************************************************************/
 DynamicMassBodyInterpolation::DynamicMassBodyInterpolation(const double &mass_in)
   :
-  position(),
-  inertia(),
+  position{},
+  inertia{},
   mass_indep(mass_in),
   pos_dep_x(position[0]),
   pos_dep_y(position[1]),
@@ -42,16 +46,12 @@ DynamicMassBodyInterpolation::DynamicMassBodyInterpolation(const double &mass_in
   tab_poi_flag(false),
   interp_position_master(true),
   interp_inertia_master(true),
+  interp_position{true, true, true},
+  interp_moi{true, true, true},
+  interp_poi{true, true, true},
   inertia_is_structural_cg(false),
   initialized(false)
 {
-  for (unsigned int ii = 0; ii< 3; ii++) {
-    interp_position[ii] = true;
-    interp_moi[ii] = true;
-    interp_poi[ii] = true;
-  }
-  jeod::Vector3::initialize(position);
-  jeod::Matrix3x3::initialize(inertia);
 }
 
 /********************************************************************************

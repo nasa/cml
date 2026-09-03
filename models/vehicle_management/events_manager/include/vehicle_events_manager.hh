@@ -25,9 +25,8 @@ PROGRAMMERS:
 #define CML_VEHICLE_EVENTS_MANAGER_HH
 
 #include<list>
-#include "cml/models/utilities/trick_logging/include/trick_logging.hh"
 
-#include "watch_values_base.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 
 /*****************************************************************************
 VehicleEventsManager
@@ -47,16 +46,14 @@ class VehicleEventsManager
  public:
   VehicleEventsManager();
   virtual ~VehicleEventsManager() = default;
+  VehicleEventsManager (const VehicleEventsManager& rhs) = delete;
+  VehicleEventsManager& operator = (const VehicleEventsManager& rhs) = delete;
 
   virtual void initialize(); // Second part of init sequence, called late.
   virtual void update();
   virtual void execution_follow_up() = 0;
 
   void register_watch(WatchValuesBaseCore & watch) {all_watches.push_back(&watch);}
-
- private:
-   VehicleEventsManager (const VehicleEventsManager& rhs);
-   VehicleEventsManager& operator = (const VehicleEventsManager& rhs);
 };
 
 #endif

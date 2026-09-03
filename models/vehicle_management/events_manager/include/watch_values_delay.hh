@@ -52,6 +52,8 @@ class WatchValuesDelay : public WatchValuesBase<watchType>
     reset_delay(false)
   {}
  ~WatchValuesDelay() override = default;
+  WatchValuesDelay (const WatchValuesDelay& rhs) = delete;
+  WatchValuesDelay& operator = (const WatchValuesDelay& rhs) = delete;
 /*****************************************************************************
 test_crossing
 Purpose: tests for the satisfaction of the trigger condition and the subsequent
@@ -107,9 +109,5 @@ Purpose: tests for the satisfaction of the trigger condition and the subsequent
   void set_delay_offset(double delay_offset_) override {
     delay_offset = delay_offset_;
   }
-
- private:
-  WatchValuesDelay (const WatchValuesDelay& rhs);
-  WatchValuesDelay& operator = (const WatchValuesDelay& rhs);
 };
 #endif

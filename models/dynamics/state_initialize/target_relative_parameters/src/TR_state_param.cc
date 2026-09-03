@@ -3,6 +3,9 @@ PURPOSE:
    (Provide the capability to transform between position/velocity
     vectors and a set of target relative parameters.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (Nov 2023)
@@ -12,11 +15,13 @@ PROGRAMMERS:
 
 *******************************************************************************/
 
-#include <cmath>  /* sin, cos, atan2, abs */
+#include <cmath>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/TR_state_param.hh"
+#include "../include/TR_state_parameter_set.hh"
 
 
 /*****************************************************************************

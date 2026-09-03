@@ -13,8 +13,8 @@ PROGRAMMERS:
 #define CML_FAULT_HH
 
 #include <list>
-#include <string> // std::string
-#include <cstring> // strcmp
+#include <string>
+#include <cstring>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -31,6 +31,9 @@ friend class FaultManager;
     Fault();
 
     virtual ~Fault() = default;
+
+    Fault(const Fault&) = delete;
+    Fault& operator = (const Fault&) = delete;
 
     ////    Operations    ////
 
@@ -72,10 +75,6 @@ friend class FaultManager;
       the fault should be reset. */
     unsigned long fire_count; /* (--)
       The number of times a fire-limited trigger has been triggered. */
-
-  private:
-    Fault(const Fault&);
-    Fault& operator = (const Fault&);
 };
 
 #endif

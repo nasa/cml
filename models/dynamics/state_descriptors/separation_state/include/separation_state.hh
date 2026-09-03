@@ -18,13 +18,14 @@ PROGRAMMERS:
 #ifndef CML_SEPARATION_STATE_HH
 #define CML_SEPARATION_STATE_HH
 
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "jeod/models/utils/orientation/include/orientation.hh"
 #include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 
 class SeparationState : public SubscriptionBase
@@ -66,6 +67,8 @@ class SeparationState : public SubscriptionBase
    SeparationState (void);
    explicit SeparationState (const std::string & name);
    ~SeparationState() override = default;
+   SeparationState (const SeparationState&) = delete;
+   SeparationState& operator = (const SeparationState&) = delete;
 
    void initialize( jeod::DynManager & dyn_manager_in,
                     jeod::DynBody & source_body,
@@ -104,11 +107,6 @@ class SeparationState : public SubscriptionBase
                                                 const std::string &);
    void activate() override;
    void deactivate() override;
-
- private:
-   // Not implemented:
-   SeparationState (const SeparationState&);
-   SeparationState& operator = (const SeparationState&);
 
 };
 #endif

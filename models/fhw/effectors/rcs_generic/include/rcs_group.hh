@@ -18,8 +18,6 @@ PROGRAMMERS:
 #define CML_RCS_GROUP_HH
 
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 /*****************************************************************************
 RcsGenericModel
@@ -95,15 +93,12 @@ class RcsJetGroup {
 
 
   explicit RcsJetGroup( const unsigned int & num_prop_components);
+  RcsJetGroup (const RcsJetGroup& rhs) = delete;
+  RcsJetGroup & operator = (const RcsJetGroup& rhs) = delete;
   void initialize (double time_step);
   void set_blow_down( bool blow_down_);
   bool get_blow_down() {return blow_down;}
   unsigned int get_num_prop_components() {return num_prop_components;}
-
- private:
-   // Not implemented:
-   RcsJetGroup (const RcsJetGroup& rhs);
-   RcsJetGroup & operator = (const RcsJetGroup& rhs);
 };
 
 #endif

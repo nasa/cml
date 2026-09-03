@@ -4,6 +4,9 @@ PURPOSE: (Allows the specification of a known state at a time other than the
           to the desired simulation-start-time and then used to initialize the
           simulation.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
    (( Initial propagation assumes that the primary gravity-body rotates on
       its z-axis, and that 3rd-bodies are static for the duration of the
@@ -39,9 +42,16 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#include <cmath>   // abs
+#include <cmath>
 
+#include "../include/state_initialize.hh"
 #include "../include/state_initialize_with_propagation.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
+#include "jeod/models/environment/gravity/include/gravity_manager.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 /*****************************************************************************
 constructor

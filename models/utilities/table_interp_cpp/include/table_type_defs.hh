@@ -9,6 +9,7 @@
 #ifndef CML_TABLE_TYPE_DEFS_HH
 #define CML_TABLE_TYPE_DEFS_HH
 
+#include <cstddef>
 #include<vector>
 
   typedef std::vector<size_t>    SizeVec;

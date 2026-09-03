@@ -11,7 +11,7 @@ PROGRAMMERS:
 #ifndef CML_TEST_MODEL_HH
 #define CML_TEST_MODEL_HH
 
-#include <algorithm> //std::swap()
+#include <algorithm>
 
 #include "../../../include/simple_angle_table_lookup.hh"
 

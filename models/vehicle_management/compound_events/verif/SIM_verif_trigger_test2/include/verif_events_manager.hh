@@ -35,5 +35,7 @@ class VerifCompoundEventsManager : public CompoundEventsManager
     event.action_triggers.add_trigger(trigger);
     add_event( event);
   }
+  VerifCompoundEventsManager(const VerifCompoundEventsManager&) = delete;
+  VerifCompoundEventsManager& operator=(const VerifCompoundEventsManager&) = delete;
 };
 #endif

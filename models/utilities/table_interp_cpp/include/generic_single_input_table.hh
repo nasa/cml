@@ -17,7 +17,6 @@
 #ifndef CML_GENERIC_SINGLE_INPUT_TABLE_HH
 #define CML_GENERIC_SINGLE_INPUT_TABLE_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "generic_multi_input_table.hh"
 
@@ -29,12 +28,10 @@ class GenericSingleInputTable : public GenericMultiInputTable
   // use the same constructors as the parent class.
   using GenericMultiInputTable::GenericMultiInputTable;
   GenericSingleInputTable() : GenericMultiInputTable(){}
+  GenericSingleInputTable (const GenericSingleInputTable&) = delete;
+  GenericSingleInputTable& operator = (const GenericSingleInputTable&) = delete;
  protected:
   void generate_base_values() override;
   bool generate_output() override;
- private:
-  // Disable the copy/assignment operators
-  GenericSingleInputTable (const GenericSingleInputTable&);
-  GenericSingleInputTable& operator = (const GenericSingleInputTable&);
 };
 #endif

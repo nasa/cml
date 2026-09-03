@@ -45,11 +45,10 @@ PROGRAMMERS:
 #define CML_TWIST_SWAY_HH
 
 #include <list>
-#include <random> // std::mt19937
+#include <random>
 #include "jeod/models/utils/quaternion/include/quat.hh"
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************
@@ -236,6 +235,8 @@ class TwistSway : public SubscriptionBase
 public:
   explicit TwistSway(const double & time_ref);
   ~TwistSway() override = default;
+  TwistSway (const TwistSway&) = delete;
+  TwistSway& operator = (const TwistSway&) = delete;
 
   void initialize(double end_time);
   bool update();
@@ -254,11 +255,6 @@ public:
   void check_for_active_perturbations();
   void accumulate_perturbations();
   void compute_twist_sway_enu();
-
- private:
-  // Prevent accidental copy and assignment:
-  TwistSway (const TwistSway&);
-  TwistSway& operator = (const TwistSway&);
 };
 
 #endif

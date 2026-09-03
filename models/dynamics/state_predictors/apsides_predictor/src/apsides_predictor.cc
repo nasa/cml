@@ -9,7 +9,8 @@ PROGRAMMERS:
     ((Gary Turner) (OSR) (Oct 2014) (Antares))
 *******************************************************************************/
 
-#include <cmath> // sqrt
+#include <cmath>
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 
 #include "../include/apsides_predictor.hh"

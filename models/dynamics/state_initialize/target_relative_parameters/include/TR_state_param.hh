@@ -19,7 +19,6 @@ PROGRAMMERS:
 #ifndef CML_TR_STATE_PARAM_HH
 #define CML_TR_STATE_PARAM_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "TR_parameter_ref_frame.hh"
 #include "TR_state_parameter_set.hh"
@@ -121,6 +120,10 @@ class TargetRelative_StateParam : public TR_ParameterSet
   /* Destructor */
   virtual ~TargetRelative_StateParam() = default;
 
+  /* Deleted copy constructor and copy assignment operator */
+  TargetRelative_StateParam ( const TargetRelative_StateParam&) = delete;
+  TargetRelative_StateParam & operator = ( const TargetRelative_StateParam&) = delete;
+
   /* Public Methods, establishing interfaces defined in the derived classes */
   virtual void initialize( const double R_Ref[3]) = 0;
 
@@ -153,11 +156,6 @@ class TargetRelative_StateParam : public TR_ParameterSet
                               InputPosAngle input_theta_type = INPUT_THETA_ROT);
 
   bool compute_biased_target();
-
- private:
-  // copy-constructor and operator= made empty to prevent misuse.
-  TargetRelative_StateParam ( const TargetRelative_StateParam&);
-  TargetRelative_StateParam & operator = ( const TargetRelative_StateParam&);
 };
 
 #endif

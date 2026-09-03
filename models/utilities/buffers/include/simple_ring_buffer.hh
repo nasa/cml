@@ -18,6 +18,7 @@ ASSUMPTIONS:
 #ifndef CML_SIMPLE_RING_BUFFER_HH
 #define CML_SIMPLE_RING_BUFFER_HH
 
+#include <cstddef>
 #include <vector>
 #include <string>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

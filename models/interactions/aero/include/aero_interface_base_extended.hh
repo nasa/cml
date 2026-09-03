@@ -10,8 +10,7 @@ PROGRAMMERS:
 #ifndef CML_AERO_INTERFACE_BASE_EXTENDED_HH
 #define CML_AERO_INTERFACE_BASE_EXTENDED_HH
 
-#include <cstring>  // NULL
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
 
 #include "aero_interface_base.hh"
 #include "aero_environment.hh"
@@ -47,10 +46,8 @@ public:
                  cg_position_in,
                  true_body_rates_in)
   { }
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroInterfaceBaseExtended (const AeroInterfaceBaseExtended &);
-  AeroInterfaceBaseExtended & operator = (const AeroInterfaceBaseExtended &);
+
+  AeroInterfaceBaseExtended (const AeroInterfaceBaseExtended &) = delete;
+  AeroInterfaceBaseExtended & operator = (const AeroInterfaceBaseExtended &) = delete;
 };
 #endif

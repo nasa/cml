@@ -3,6 +3,9 @@ PURPOSE:
   (To define the constants and coefficients used in the compution of U.S. Standard 
    Atmosphere 1976 model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCES:
   ((U.S. STANDARD ATMOSPHERE 1976, N77-16482,
     https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539.pdf))
@@ -19,9 +22,9 @@ PROGRAMMERS:
 ********************************************************************************/
 
 #include <cmath>
-#include <iterator> // std::size for C-style arrays
+#include <cstddef>
+#include <iterator>
 
-#include "trick/trick_math.h"  //for M_PI
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "../include/std_atmos_1976.hh"

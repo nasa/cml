@@ -24,6 +24,7 @@ Programmers:
 namespace jeod {
 class RefFrameTrans;
 class Planet;
+class PlanetFixedPosition;
 }
 
 /*****************************************************************************
@@ -57,11 +58,8 @@ class RangeValues
  public:
   RangeValues();
   virtual ~RangeValues() = default;
- private:
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  RangeValues(const RangeValues& rhs);
-  RangeValues & operator = (const RangeValues&);
+  RangeValues(const RangeValues& rhs) = delete;
+  RangeValues & operator = (const RangeValues&) = delete;
 };
 
 
@@ -133,6 +131,8 @@ class RangeComputation : public RangeValues,
  public:
   RangeComputation(const jeod::PlanetFixedPosition & state_in);
   ~RangeComputation() override = default;
+  RangeComputation(const RangeComputation& rhs) = delete;
+  RangeComputation & operator = (const RangeComputation&) = delete;
 
   virtual void initialize( const jeod::Planet & planet_in);
   void set_reference_data_query(); /*
@@ -150,12 +150,6 @@ class RangeComputation : public RangeValues,
   virtual void update_using_cartesian( void );
   virtual void update_using_polar( void);
   virtual void is_abstract() = 0; // Makes this class non-instantiable
-
- private:
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  RangeComputation(const RangeComputation& rhs);
-  RangeComputation & operator = (const RangeComputation&);
 };
 
 #endif

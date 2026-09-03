@@ -8,10 +8,10 @@ PROGRAMMERS:
 ############################################################################*/
 
 #include "../include/xml_helper.hh"
-#include <cstring> // strcmp
-#include <cctype> //toupper
+#include <cstring>
+#include <cctype>
 #include <string>
-#include <libxml/parser.h> // xmlNodePtr, xmlAttrPtr
+#include <libxml/parser.h>
 
 /*******************************************************************************
 xml_find

@@ -44,6 +44,8 @@ class AtmosExecOutput {
       atmos_new_time(0.0)
     {}
     virtual ~AtmosExecOutput() = default;
+    AtmosExecOutput (const AtmosExecOutput&) = delete;
+    AtmosExecOutput & operator = (const AtmosExecOutput&) = delete;
 
     void zero_outputs() { // Zeros everything except atmos_new_time
       temperature = pressure = density = speed_of_sound = dynamic_viscosity =
@@ -53,10 +55,6 @@ class AtmosExecOutput {
         wind_velocity_tc[i] = wind_velocity_td[i] = wind_velocity_eci[i] = 0.0;
       }
     }
-
-  private:
-    AtmosExecOutput (const AtmosExecOutput&);
-    AtmosExecOutput & operator = (const AtmosExecOutput&);
 };
 
 #endif

@@ -25,8 +25,9 @@ PROGRAMMERS:
 #ifndef CML_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
 #define CML_SINGLE_INPUT_TABLE_FOR_ANGLES_HH
 
-#include <cstdarg> // for variadic function arguments
+#include <cstddef>
 
+#include "cml/models/utilities/table_interp_cpp/include/table_type_defs.hh"
 #include "generic_single_input_table.hh"
 
 class SingleInputTableForAngles : public GenericSingleInputTable
@@ -49,14 +50,12 @@ class SingleInputTableForAngles : public GenericSingleInputTable
   explicit SingleInputTableForAngles( const DoublePtrVec & dependent_variables,
                                       bool output_in_radians = true);
   ~SingleInputTableForAngles() override = default;
+  SingleInputTableForAngles (const SingleInputTableForAngles&) = delete;
+  SingleInputTableForAngles& operator = (const SingleInputTableForAngles&) = delete;
 
   bool initialize() override;
  protected:
   bool generate_output() override;
   void bound_to_half_circle( double & angle);
- private:
-  // Disable the copy/assignment operators
-  SingleInputTableForAngles (const SingleInputTableForAngles&);
-  SingleInputTableForAngles& operator = (const SingleInputTableForAngles&);
 };
 #endif

@@ -2,14 +2,18 @@
 PURPOSE: (Simple vent force model - calculates force and torque from a vent
           but does not model mass depletion)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
  ************************************************************************/
 
-#include "../include/vent.hh"
+#include "../include/simple_vent.hh"
 
-// JEOD header
-#include "utils/math/include/vector3.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 /*************************************************************************
 Constructor
@@ -74,13 +78,13 @@ void SimpleVent::use_impulse_mode(bool mode)
         "Vent '", name, "': Cannot transition to impulsive mode because\n"
         "the impulse vector has not been set.\n");
     }
-    // Test 2: Check to see if the impulse value has changed since
-    // initialization; this could be the result of an external post-init
-    // setting.
     else {
       // Post-init and an impulse exists: transition is allowed.
       apply_as_impulse = true;
 
+      // Test 2: Check to see if the impulse value has changed since
+      // initialization; this could be the result of an external post-init
+      // setting.
       if ( MathUtils::has_changed_from( impulse_mag,
                                         user_set_impulse)) {
         CMLMessage::warn(__FILE__, __LINE__, "Impulse magnitude changed\n",

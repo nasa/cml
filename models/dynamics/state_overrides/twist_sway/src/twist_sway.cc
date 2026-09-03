@@ -2,6 +2,9 @@
 Purpose:
  (Produce wind generated twist and sway motion)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
  (
  ((Rob Gillis) (Emergent) (Dec 2011) (CEV) (Initial version for ground contact model))
@@ -12,12 +15,13 @@ Programmers:
  )
 
 *******************************************************************************/
-#include <cmath> // M_PI, exp, pow
-#include <random> // std::uniform_real_distribution
+#include <cmath>
+#include <list>
+#include <random>
 
-#include "jeod/models/utils/memory/include/jeod_alloc.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 

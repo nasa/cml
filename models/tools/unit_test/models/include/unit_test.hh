@@ -21,7 +21,6 @@ PROGRAMMERS:
 #include <vector>
 #include <string>
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 SweepSet
@@ -105,6 +104,8 @@ class UnitTestFramework {
 
   UnitTestFramework();
   virtual ~UnitTestFramework() = default;
+  UnitTestFramework (const UnitTestFramework&) = delete;
+  UnitTestFramework & operator = (const UnitTestFramework&) = delete;
 
   void add_sweep( double & variable,
                   double start,
@@ -124,8 +125,6 @@ class UnitTestFramework {
   void update_file();
  private:
   friend class UnitTestFrameworkTest;
-  UnitTestFramework (const UnitTestFramework&);
-  UnitTestFramework & operator = (const UnitTestFramework&);
   std::string expand_env_variables(const std::string& input);
 };
 

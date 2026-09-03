@@ -5,12 +5,19 @@
       This simplifies the form of the method generate_base_values() and
       generate_output.)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (May 2023) (Antares) (initial version))
    )
 *******************************************************************************/
 
+#include "../include/generic_multi_input_table.hh"
 #include "../include/generic_single_input_table.hh"
+#include "../include/table_independent_variable.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
 
 
 /*****************************************************************************

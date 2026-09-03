@@ -37,7 +37,6 @@ PROGRAMMERS:
 #include <string>
 #include <list>
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 // forward declaration
 class CommandableAction;
@@ -92,6 +91,8 @@ class CommandableActionSet
   CommandableActionSet();
   CommandableActionSet(std::string name);
   virtual ~CommandableActionSet() = default;
+  CommandableActionSet (const CommandableActionSet&) = delete;
+  CommandableActionSet & operator = ( const CommandableActionSet&) = delete;
 
   // main executable:
   void update();
@@ -113,11 +114,6 @@ class CommandableActionSet
   void generate_fsw_command_safety_net();
  protected:
   virtual void generate_fsw_command() = 0;
-
- private:
-  // Not implemented, not supported:
-  CommandableActionSet (const CommandableActionSet&);
-  CommandableActionSet & operator = ( const CommandableActionSet&);
 };
 #include"commandable_action.hh"
 #endif

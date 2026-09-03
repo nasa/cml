@@ -13,16 +13,16 @@ PROGRAMMERS:
 #include<list>
 
 #include "trick/DataRecordGroup.hh"
-#include "trick/exec_proto.h" // exec_get_sim_time
+#include "trick/exec_proto.h"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class TrickLogging {
   public:
     std::list<Trick::DataRecordGroup *> group_list;
 
-    TrickLogging()
-      :
-      group_list(0){}
+    TrickLogging() = default;
+    TrickLogging (const TrickLogging&) = delete;
+    TrickLogging & operator = (const TrickLogging&) = delete;
 
     /***************************************************************************/
     // Add a data record group to the group list
@@ -227,9 +227,5 @@ class TrickLogging {
         "Returning nullptr.\n");
       return nullptr;
     }
-
-  private:
-    TrickLogging (const TrickLogging&);
-    TrickLogging & operator = (const TrickLogging&);
 };
 #endif

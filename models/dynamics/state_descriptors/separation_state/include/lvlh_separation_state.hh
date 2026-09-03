@@ -16,8 +16,16 @@ PROGRAMMERS:
 #define CML_LVLH_SEPARATION_STATE_HH
 
 #include "jeod/models/utils/lvlh_frame/include/lvlh_frame.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "separation_state.hh"
+#include <string>
+
+namespace jeod {
+class BasePlanet;
+class BodyRefFrame;
+class DynBody;
+class DynManager;
+class RefFrame;
+}
 
 class LvlhSeparationState : public SeparationState
 {
@@ -50,6 +58,8 @@ class LvlhSeparationState : public SeparationState
   LvlhSeparationState();
   explicit LvlhSeparationState(jeod::LvlhFrame & lvlh);
   ~LvlhSeparationState() override;
+  LvlhSeparationState (const LvlhSeparationState&) = delete;
+  LvlhSeparationState& operator = (const LvlhSeparationState&) = delete;
 
   void initialize ( jeod::DynManager  & dyn_manager,
                     const std::string & planet_name,
@@ -71,11 +81,6 @@ class LvlhSeparationState : public SeparationState
  protected:
   void activate() override;
   void deactivate() override;
-
- private:
-   // Not implemented:
-   LvlhSeparationState (const LvlhSeparationState&);
-   LvlhSeparationState& operator = (const LvlhSeparationState&);
 };
 
 #endif

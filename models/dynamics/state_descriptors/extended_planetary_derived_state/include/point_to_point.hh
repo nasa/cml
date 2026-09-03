@@ -25,8 +25,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+#include <cstddef>
 #include <list>
 #include <string>
 
@@ -145,14 +145,13 @@ class PointToPointManager
 
   explicit PointToPointManager( const jeod::PlanetFixedPosition & B_wrt_P_in_P_);
   virtual ~PointToPointManager() = default;
+  PointToPointManager ( const PointToPointManager &) = delete;
+  PointToPointManager & operator = ( const PointToPointManager &) = delete;
+
  private:
   void add_point( const std::string & pt_name,
                   double      pt_pos[3],
                   std::list< PointToPointElement>  & element_list,
                   const std::string & list_type);
-
-  // copy-constructor, operator= both declared private and unimplemented.
-  PointToPointManager ( const PointToPointManager &);
-  PointToPointManager & operator = ( const PointToPointManager &);
 };
 #endif

@@ -14,9 +14,8 @@ PROGRAMMERS:
 #ifndef CML_SIMPLE_VENT_HH
 #define CML_SIMPLE_VENT_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
-#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include <string>
+#include "jeod/models/utils/math/include/vector3.hh"
 
 class SimpleVent {
   friend class VentSet;
@@ -107,6 +106,8 @@ class SimpleVent {
 
   explicit SimpleVent(const double& dyn_time_in);
   virtual ~SimpleVent() = default;
+  SimpleVent(const SimpleVent&) = delete;
+  SimpleVent& operator= (const SimpleVent&) = delete;
 
   virtual void use_impulse_mode(bool mode = true);
   void use_dynamic_mode(bool mode = true) { use_impulse_mode(!mode); }
@@ -179,9 +180,5 @@ class SimpleVent {
   void set_impulse_internal();
   void set_duration_internal();
   virtual void set_force_internal();
-
- private:
-  SimpleVent(const SimpleVent&);
-  SimpleVent& operator= (const SimpleVent&);
 };
 #endif

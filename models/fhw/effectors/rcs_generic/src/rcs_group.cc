@@ -5,6 +5,9 @@ PURPOSE: (The RcsJetGroup provides a convenient mechanism for grouping
   had several instances of RCS_MODEL that needed instantiating; this object
   represents a very similar concept to RCS_MODEL.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation))
@@ -12,8 +15,10 @@ PROGRAMMERS:
 **********************************************************************/
 
 #include <algorithm>
-#include <cmath>  // abs
+#include <vector>
 #include "../include/rcs_group.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 
 /*****************************************************************************

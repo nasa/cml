@@ -68,6 +68,8 @@ class SubsonicWake : public SubscriptionBase
                WakeFollowingBody  & objectB_in,
                WakeEffectsOut & effects_output_in);
   ~SubsonicWake() override = default;
+  SubsonicWake (const SubsonicWake& rhs) = delete;
+  SubsonicWake& operator = (const SubsonicWake& rhs) = delete;
 
   void initialize() override;
   void update();
@@ -76,10 +78,6 @@ class SubsonicWake : public SubscriptionBase
   void activate() override;
   void deactivate() override;
   virtual void query_objB()=0; // just to make it abstract
-
- private: // and undefined:
-  SubsonicWake (const SubsonicWake& rhs);
-  void operator = (const SubsonicWake& rhs);
 };
 
 /*****************************************************************************
@@ -98,13 +96,11 @@ class SubsonicWakeNoForce : public SubsonicWake
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
      WakeEffectsOut & effects_in);
+  SubsonicWakeNoForce (const SubsonicWakeNoForce& rhs) = delete;
+  SubsonicWakeNoForce& operator = (const SubsonicWakeNoForce& rhs) = delete;
 
  protected:
   void query_objB() override{} // just to make it instantiable
-
- private: // and undefined:
-  SubsonicWakeNoForce (const SubsonicWakeNoForce& rhs);
-  void operator = (const SubsonicWakeNoForce& rhs);
 };
 
 /*****************************************************************************
@@ -125,15 +121,13 @@ class SubsonicWakeWithForce : public SubsonicWake
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
      WakeEffectsOut & effects_in);
+  SubsonicWakeWithForce (const SubsonicWakeWithForce& rhs) = delete;
+  SubsonicWakeWithForce& operator = (const SubsonicWakeWithForce& rhs) = delete;
 
   void deactivate() override;
 
  protected:
   void query_objB() override{} // just to make it instantiable
-
- private: // and undefined:
-  SubsonicWakeWithForce (const SubsonicWakeWithForce& rhs);
-  void operator = (const SubsonicWakeWithForce& rhs);
 };
 
 #endif

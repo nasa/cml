@@ -14,7 +14,7 @@ PROGRAMMERS:
 
 #include <list>
 #include <string>
-#include "trick/MemoryManager.hh" // REF2, trick_MM
+#include "trick/MemoryManager.hh"
 #include "fault.hh"
 #include "fault_bias.hh"
 #include "fault_scale.hh"
@@ -26,7 +26,7 @@ PROGRAMMERS:
 #include "trigger.hh"
 #include "rand_number.hh"
 
-#include "cml/models/utilities/xml_helper/include/xml_helper.hh" //XmlHelper
+#include "cml/models/utilities/xml_helper/include/xml_helper.hh"
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -40,7 +40,6 @@ Purpose:(Constructs and manages a set of faults defined in an XML file.)
 class FaultManager {
 
   public :
-#ifndef SWIG // SWIG doesn't like enum classes
     // Note - this enumeration is cast to an unsigned char in update() and
     // used as an index. If it is edited:
     //   - Location_count must be updated.
@@ -57,17 +56,16 @@ class FaultManager {
     static const unsigned int Location_count = 5; /* (--)
       The number of possible Locations. INVALID doesn't count. */
     static Location translate_location(const std::string& str);
-#endif
 
     ////    Operations    ////
 
     FaultManager();
     virtual ~FaultManager();
+    FaultManager(const FaultManager&) = delete;
+    FaultManager& operator = (const FaultManager&) = delete;
     void initialize();
 
-#ifndef SWIG
     void update(const Location& location);
-#endif
 
     Fault* get_fault(const std::string& name);
     TriggerBase* get_trigger(const std::string& name);
@@ -209,10 +207,6 @@ class FaultManager {
 
     std::list<std::pair<std::string, double> > set_trigger_value_cache; /* (--)
       Cache for set_trigger_value commands sent before the XML file is parsed. */
-
-    // Make the class non-copyable
-    FaultManager(const FaultManager&);
-    FaultManager& operator = (const FaultManager&);
 };
 template<> bool FaultManager::generate_random_value<bool>();
 

@@ -101,12 +101,9 @@ public:
 
    // Methods:
    explicit DynamicMassBodyProperties (const double &mass_in);
+   DynamicMassBodyProperties (const DynamicMassBodyProperties&) = delete;
+   DynamicMassBodyProperties& operator = (const DynamicMassBodyProperties&) = delete;
    void disperse_mass_properties();
-
-private:
-   // To prevent the copy/assignment operations
-   DynamicMassBodyProperties (const DynamicMassBodyProperties&);
-   DynamicMassBodyProperties& operator = (const DynamicMassBodyProperties&);
 };
 
 #endif

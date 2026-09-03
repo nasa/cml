@@ -17,8 +17,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/table_interp_cpp/include/simple_table_lookup.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+#include <cstddef>
 #include <string>
 
 
@@ -188,6 +188,8 @@ public:
  public:
   LookupAtmosWinds();
   ~LookupAtmosWinds() override = default;
+  LookupAtmosWinds (const LookupAtmosWinds&) = delete;
+  LookupAtmosWinds & operator = (const LookupAtmosWinds&) = delete;
 
   void initialize() override;
   void update(double altitude_in);
@@ -217,9 +219,5 @@ protected:
   void calculate_speed_of_sound();
   void calculate_wind_mag_dir();
   void stream_error(int, const std::string&);
-private:
-  // private and unimplemented; cannot be used.
-  LookupAtmosWinds (const LookupAtmosWinds&);
-  LookupAtmosWinds & operator = (const LookupAtmosWinds&);
 };
 #endif

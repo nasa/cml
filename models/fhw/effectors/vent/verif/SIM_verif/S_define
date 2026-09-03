@@ -16,6 +16,7 @@ PURPOSE:
 // Vent Object
 //////////////////////////////////////////////////////////////
 
+##include "../../include/vent.hh"
 ##include "../../include/vent_set.hh"
 
 ##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
@@ -35,7 +36,6 @@ class VentSimObject : public Trick::SimObject {
 
  public:
   DynamicMassBody tank[2];
-  std::vector<DynamicMassBody*> tank_pointers;
   jeod::DynBody root_body;
   jeod::DynBody vent_body;
   jeod::MassBodyInit vent_massinit;
@@ -86,13 +86,12 @@ class VentSimObject : public Trick::SimObject {
     dyn_manager(dyn_mgr),
     dyn_time(dyn_time_),
 
-    tank_pointers{&tank[0], &tank[1]},
     extra_vent(dyn_time, tank[0]),
     extra_simple_vent(dyn_time),
     uninitialized_vent(dyn_time),
     set_simple(2, vent_body, dyn_time),
     set_1_tank(2, vent_body, dyn_time, tank[0]),
-    set_2_tanks(vent_body, dyn_time, tank_pointers)
+    set_2_tanks(vent_body, dyn_time, {&tank[0], &tank[1]})
   {
     P_ENV ("initialization") root_body.initialize_model(dyn_manager);
     P_ENV ("initialization") vent_body.initialize_model(dyn_manager);

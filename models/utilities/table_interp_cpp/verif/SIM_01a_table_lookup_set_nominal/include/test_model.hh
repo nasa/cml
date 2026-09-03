@@ -19,10 +19,10 @@ PROGRAMMERS:
 #ifndef CML_TEST_MODEL_HH
 #define CML_TEST_MODEL_HH
 
-#include <algorithm> //std::swap()
-#include <cstddef> // memcpy
-#include <cstring> // NULL
-#include <vector>  // vector
+#include <algorithm>
+#include <cstddef>
+#include <cstring>
+#include <vector>
 
 #include "../../../include/table_lookup_set.hh"
 #include "../../../include/table_independent_variable.hh"

@@ -2,6 +2,9 @@
 PURPOSE:
     (Doppler Radar Wind Pairs model using CML table interpolation routines)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
     (((Scott Schuh)  (NASA) (Jan 2015) (Initial model implementation and verif))
      ((Edgar Medina) (NASA) (Feb 2015) (Integration into SIM_em1))
@@ -11,14 +14,19 @@ PROGRAMMERS:
 
 **********************************************************************************/
 
-#include <cmath>           // M_PI, atan2, sqrt
+#include <cmath>
+#include <cstddef>
+#include <ios>
 #include <vector>
-#include <cstdint> // uint32_t
-#include <fstream> // ifstream
+#include <cstdint>
+#include <fstream>
 //#include <cstring> // strerror
 //#include <iostream>
 
 #include "../include/lookup_winds.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 /*****************************************************************************
 Constructors

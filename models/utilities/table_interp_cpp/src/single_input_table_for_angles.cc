@@ -19,8 +19,11 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#include<cmath>  // M_PI
+#include <cmath>
+#include <cstddef>
 
+#include "../include/generic_single_input_table.hh"
+#include "../include/table_type_defs.hh"
 #include "../include/single_input_table_for_angles.hh"
 
 

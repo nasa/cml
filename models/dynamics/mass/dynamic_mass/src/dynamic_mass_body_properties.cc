@@ -11,11 +11,13 @@ PROGRAMMERS:
 
 *******************************************************************************/
 
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 
 #include "../include/dynamic_mass_body_properties.hh"
 #include "../include/dynamic_mass_body_nominal_properties.hh"
+#include <cstddef>
 
 
 /*****************************************************************************
@@ -31,22 +33,22 @@ DynamicMassBodyProperties::DynamicMassBodyProperties(const double &mass_in)
   :
   DynamicMassBodyPropertiesInterface(),
   mass_bias(0.0),
+  cg_bias{},
+  moi_bias{},
+  poi_bias{},
   mass_dispersion_flag(false),
   interpolation(mass_in)
 {
   consumable_mass = -1.0;
-  jeod::Vector3::initialize(cg_bias);
-  jeod::Vector3::initialize(moi_bias);
-  jeod::Vector3::initialize(poi_bias);
 }
 //*******************************************************************************
 DynamicMassBodyNominalProperties::DynamicMassBodyNominalProperties()
 :
+  position{},
   core_mass(0.0),
+  inertia{},
   data_assigned(false)
 {
-  jeod::Vector3::initialize(position);
-  jeod::Matrix3x3::initialize(inertia);
 }
 
 /*****************************************************************************

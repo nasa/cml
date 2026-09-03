@@ -30,14 +30,12 @@ class FaultOverwrite : public Fault {
     variable(var)
   {}
   ~FaultOverwrite() override = default;
+  FaultOverwrite(const FaultOverwrite&) = delete;
+  FaultOverwrite& operator = (const FaultOverwrite&) = delete;
 
   void overwrite_value() override { variable = faulted_value; }
 
   bool set_param(const std::string& param_name, double val_, bool) override;
-
- private:
-  FaultOverwrite(const FaultOverwrite&) = delete;
-  FaultOverwrite& operator = (const FaultOverwrite&) = delete;
 };
 
 

@@ -4,6 +4,9 @@ Purpose:
    from a fixed reference location and where range is computed to a fixed
    reference location.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Reference:
   (See docs directory for equation derivations and identifying numbers)
 
@@ -14,9 +17,13 @@ Programmers:
 *******************************************************************************/
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh" // RefFrameTrans
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <cmath>
+#include <limits>
 
 #include "../include/range_computation.hh"
 

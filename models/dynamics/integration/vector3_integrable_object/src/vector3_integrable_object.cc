@@ -2,6 +2,9 @@
 PURPOSE:
 (Define the methods for adding a 3-vector to a jeod::DynBody and integrating it alongside the jeod::DynBody)
 
+LIBRARY DEPENDENCIES:
+((cml/models/utilities/cml_message/src/cml_message.cc))
+
 LIMITATIONS:
 (Requires JEOD v 3.2, or modifications to earlier versions of JEOD to provide
  the jeod::DynBody with additional capabilities not available in 3.1 and earlier:
@@ -18,9 +21,15 @@ PROGRAMMERS:
  ((Brent Caughron) (OSR) (Sept. 2017) (IV&V code review)))
 *******************************************************************************/
 
-#include <cstring> // NULL
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "er7_utils/integration/core/include/integration_controls.hh"
+#include "er7_utils/integration/core/include/integrator_constructor.hh"
+#include "er7_utils/integration/core/include/integrator_result.hh"
+#include "er7_utils/integration/core/include/time_interface.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dynamics_integration_group.hh"
+#include "jeod/models/utils/memory/include/jeod_alloc.hh"
+#include "jeod/models/utils/sim_interface/include/config.hh"
 
 #include "../include/vector3_integrable_object.hh"
 
@@ -32,9 +41,6 @@ Purpose: (Constructs the model with no inputs, here to prevent a user from
           calling a model this way.)
 *****************************************************************************/
 Vector3IntegrableObject::Vector3IntegrableObject () // DO NOT USE THIS
-  :
-  deriv_ptr(nullptr),
-  dyn_body(nullptr)
 {
   subscribe_name = "Vector3IntegrableObject:";
 

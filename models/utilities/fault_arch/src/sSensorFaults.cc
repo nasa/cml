@@ -2,11 +2,21 @@
 PURPOSE: (Interface to the newer FaultManagement model to support backward
 compatibility with models using the legacy fault_arch sensor-faults.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Mar 2022) (Antares) (Initial)))
 *******************************************************************************/
 #include "../include/sSensorFaults.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/fault_management/include/fault_function_parameter.hh"
+#include "cml/models/utilities/fault_management/include/fault_manager.hh"
+#include "cml/models/utilities/fault_management/include/rand_number.hh"
+#include "cml/models/utilities/xml_helper/include/xml_helper.hh"
 #include <cstdlib>
+#include <cstring>
+#include <libxml/parser.h>
 
 
 /*******************************************************************************

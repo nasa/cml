@@ -20,10 +20,14 @@ PROGRAMMERS:
 #ifndef CML_AERO_EXECUTIVE_TABLE_HH
 #define CML_AERO_EXECUTIVE_TABLE_HH
 
+#include "aero_coefficients.hh"
 #include "aero_executive_base.hh"
 #include "aero_table_set_base.hh"
-#include "aero_environment.hh"
-#include "aero_interface_output.hh"
+#include <vector>
+#include <string>
+
+class AeroInterfaceOutput;
+class AeroEnvironment;
 
 /*******************************************************************************
 AeroExecutiveTable

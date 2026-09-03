@@ -20,7 +20,6 @@ PROGRAMMERS:
 
 #include <list>
 #include <string>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "event_variable_assignment.hh"
@@ -112,7 +111,8 @@ class WatchValuesBaseCore : public SubscriptionBase {
  public:
   WatchValuesBaseCore();
   ~WatchValuesBaseCore() override;
-
+  WatchValuesBaseCore (const WatchValuesBaseCore& rhs) = delete;
+  WatchValuesBaseCore& operator = (const WatchValuesBaseCore& rhs) = delete;
 
   virtual void initialize( std::list<WatchValuesBaseCore *> * active_watch_in);
   void set_direction(int arg);
@@ -141,9 +141,5 @@ class WatchValuesBaseCore : public SubscriptionBase {
   virtual bool test_crossing() = 0;
   virtual bool specific_execution(){ return false;}
   virtual void apply_complementary_changes();
-
- private:
-  WatchValuesBaseCore (const WatchValuesBaseCore& rhs);
-  WatchValuesBaseCore& operator = (const WatchValuesBaseCore& rhs);
 };
 #endif

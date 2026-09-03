@@ -7,6 +7,10 @@ PURPOSE:
    ORB_INIT, and ICOPT models, and CEV's Corr_State_Init_T and
    State_Init_Exec_T structures and the state_init_exec method.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/utilities/math_utils/src/math_utils.cc))
+
 REFERENCE:
   (This is a reworking of the following models from old CML:
     cml/models/dynamics/state_init_exec/src/state_init_exec.cpp
@@ -20,18 +24,22 @@ PROGRAMMERS:
    (((Gary Turner) (OSR) (September 2014) (New))
  ******************************************************************************/
 
+#include <cmath>
+#include <random>
 
-#include <random> // default_random_engine,
-                  // uniform_real_distribution,
-                  // normal_distribution
-
-
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/dynamics/body_action/include/dyn_body_init.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
-#include "jeod/models/utils/memory/include/jeod_alloc.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "jeod/models/dynamics/body_action/include/body_action_messages.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_items.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "../include/state_initialize.hh"
 
@@ -109,6 +117,7 @@ StateInitialize::StateInitialize()
   T_reference_body{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
   E_pfix_reference{0.0, 0.0, 0.0},
   E_reference_body{0.0, 0.0, 0.0},
+  ref_body_sequence{jeod::Orientation::NoSequence},
   random_value(0.0),
   random_unit_vector{0.0, 0.0, 0.0},
   force_match_trans(false),

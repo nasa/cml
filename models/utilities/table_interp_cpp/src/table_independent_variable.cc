@@ -3,6 +3,9 @@ PURPOSE:
   (Table lookup model component representing the independent variable and its
    lookup)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (New implementation))
    ((Bingquan Wang) (OSR) (Apr 2017) (Fixed the compilation warning of float-point
@@ -12,7 +15,10 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <algorithm>
-#include <cmath> // floor
+#include <cmath>
+#include <cstddef>
+#include <vector>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/table_independent_variable.hh"

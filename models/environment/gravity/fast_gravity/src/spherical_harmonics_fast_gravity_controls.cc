@@ -2,6 +2,9 @@
 Purpose:
   (Define member functions for the SphericalHarmonicsFastGravityControls class.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
  (((Gary Turner) (OSR) (May 2014) (Antares) (Implementation of Blair Thompson's
                      algorithm originally written for earlier JEOD))
@@ -14,8 +17,11 @@ Programmers:
 
 #include <cmath>
 #include <limits>
+#include "jeod/models/dynamics/dyn_manager/include/base_dyn_manager.hh"
+#include "jeod/models/environment/ephemerides/ephem_interface/include/ephem_ref_frame.hh"
+#include "jeod/models/environment/gravity/include/gravity_integ_frame.hh"
+#include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
-#include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 
@@ -35,13 +41,13 @@ SphericalHarmonicsFastGravityControls::SphericalHarmonicsFastGravityControls()
    available(false),
    first_pass(true),
    count(0),
+   reference_pos_pfix{},
+   delta_pos{},
+   reference_accel_pfix{},
+   reference_gradient_pfix{},
+   reference_gradient_inrtl{},
    reference_potential(0.0)
 {
-   jeod::Vector3::initialize(reference_pos_pfix);
-   jeod::Vector3::initialize(delta_pos);
-   jeod::Vector3::initialize(reference_accel_pfix);
-   jeod::Matrix3x3::initialize(reference_gradient_pfix);
-   jeod::Matrix3x3::initialize(reference_gradient_inrtl);
 }
 
 

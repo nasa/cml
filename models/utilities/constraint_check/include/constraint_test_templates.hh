@@ -16,7 +16,7 @@ PROGRAMMERS:
 #define CML_CONSTRAINT_TEST_TEMPLATES_HH
 
 #include <list>
-#include <algorithm> // any_of
+#include <algorithm>
 
 #include "constraint_enum.hh"
 #include "constraint_test.hh"

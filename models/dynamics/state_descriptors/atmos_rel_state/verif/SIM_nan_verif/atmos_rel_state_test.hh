@@ -10,6 +10,8 @@ PROGRAMMERS:
 #define CML_ATMOS_REL_STATE_TEST_HH
 
 #include "../../include/atmos_relative_state.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 
 class AtmosRelStateTest : public AtmosRelativeState

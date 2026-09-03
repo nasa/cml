@@ -26,10 +26,9 @@ PROGRAMMERS:
 #ifndef CML_RCS_GENERIC_HH
 #define CML_RCS_GENERIC_HH
 
+#include <cstddef>
 #include <vector>
 #include <random>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 // Forward declaration
@@ -127,6 +126,8 @@ class RcsGeneric : public SubscriptionBase {
 
   explicit RcsGeneric (const unsigned int num_propellant_components_);
   ~RcsGeneric() override = default;
+  RcsGeneric (const RcsGeneric& rhs) = delete;
+  RcsGeneric & operator = (const RcsGeneric& rhs) = delete;
 
   virtual void initialize( double   time_step,
                            const double * center_of_mass);
@@ -149,10 +150,5 @@ class RcsGeneric : public SubscriptionBase {
   bool update_part_I(const void *);
   void update_part_II();
   void check_mult_jet_flag_init();
-
- private:
-   // Not implemented:
-   RcsGeneric (const RcsGeneric& rhs);
-   RcsGeneric & operator = (const RcsGeneric& rhs);
 };
 #endif

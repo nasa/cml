@@ -17,7 +17,7 @@ Author:
 #define CML_LAGGED_ATMOS_WIND_HH
 
 #include <list>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 #include "lagged_atmos_payload_data.hh"
 
@@ -35,6 +35,8 @@ class LaggedAtmosWind {
   LaggedAtmosWind();
   explicit LaggedAtmosWind( const std::string& name);
   virtual ~LaggedAtmosWind() = default;
+  LaggedAtmosWind(const LaggedAtmosWind &) = delete;
+  LaggedAtmosWind & operator=(const LaggedAtmosWind &) = delete;
 
 
   void compute( double input_altitude);
@@ -74,10 +76,6 @@ class LaggedAtmosWind {
      altitude.  The nodes list is monotonically ordered by
      decreasing altitude, so this reference point is to the "left" of the input
      altitude.*/
-
-  private:
-  LaggedAtmosWind(const LaggedAtmosWind &);
-  LaggedAtmosWind & operator=(const LaggedAtmosWind &);
 };
 
 #endif

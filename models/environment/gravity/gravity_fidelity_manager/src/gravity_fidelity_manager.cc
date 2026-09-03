@@ -7,7 +7,11 @@ PROGRAMMERS:
    ((Daniel Ghan) (OSR) (April 2020) (Antares) (Made the table internal)))
 **********************************************************************/
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
+#include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 #include "../include/gravity_fidelity_manager.hh"
 

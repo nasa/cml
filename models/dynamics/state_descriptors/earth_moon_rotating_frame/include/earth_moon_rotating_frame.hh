@@ -18,8 +18,8 @@ Programmers:
 #ifndef CML_EARTH_MOON_ROTATING_FRAME_HH
 #define CML_EARTH_MOON_ROTATING_FRAME_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/dynamics/state_descriptors/pointing_ref_frame/include/ephem_based_pointing_ref_frame.hh"
+#include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
 
 /*****************************************************************************
 EarthMoonRotatingFrame
@@ -49,15 +49,11 @@ class EarthMoonRotatingFrame : public EphemBasedPointingRefFrame {
   // Constructor and destructor
   explicit EarthMoonRotatingFrame (jeod::EphemeridesManager & ephem_manager);
   ~EarthMoonRotatingFrame() override = default;
+   EarthMoonRotatingFrame (const EarthMoonRotatingFrame&) = delete;
+   EarthMoonRotatingFrame & operator = (const EarthMoonRotatingFrame&) = delete;
 
   void initialize() override;
   void update() override;
   void set_orientation(FrameOrientation orientation);
-
- // The copy constructor and assignment operator for this class are
- // declared private and are not implemented.
- private:
-   EarthMoonRotatingFrame (const EarthMoonRotatingFrame&);
-   EarthMoonRotatingFrame & operator = (const EarthMoonRotatingFrame&);
 };
 #endif

@@ -18,10 +18,12 @@ PROGRAMMERS:
 
 #include "jeod/models/interactions/radiation_pressure/include/radiation_source.hh"
 #include "jeod/models/interactions/radiation_pressure/include/radiation_third_body.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+
+namespace jeod {
+class DynManager;
+class RefFrame;
+}
 
 class EclipseCalculator : public SubscriptionBase
 {
@@ -51,6 +53,8 @@ class EclipseCalculator : public SubscriptionBase
                     jeod::DynManager & dyn_manager,
                     jeod::RefFrame & vehicle_frame);
   ~EclipseCalculator() override = default;
+  EclipseCalculator (const EclipseCalculator& rhs) = delete;
+  void operator = (const EclipseCalculator& rhs) = delete;
 
   void initialize() override;
   void update();
@@ -64,9 +68,5 @@ class EclipseCalculator : public SubscriptionBase
  protected:
   void activate() override;
   void deactivate() override;
-
- private: // and undefined:
-  EclipseCalculator (const EclipseCalculator& rhs);
-  void operator = (const EclipseCalculator& rhs);
 };
 #endif

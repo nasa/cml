@@ -16,7 +16,7 @@ PROGRAMMERS:
 #include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 #include "compound_event.hh"
 #include "event_trigger.hh"
-#include "trick/memorymanager_c_intf.h" //used for ref_attributes()
+#include "trick/memorymanager_c_intf.h"
 #include <utility>
 
 class CompoundEventsManager : public VehicleEventsManager
@@ -53,6 +53,8 @@ class CompoundEventsManager : public VehicleEventsManager
 
   explicit CompoundEventsManager(const double & time);
   ~CompoundEventsManager() override;
+  CompoundEventsManager( const CompoundEventsManager&) = delete;
+  CompoundEventsManager& operator=( const CompoundEventsManager&) = delete;
 
   void initialize() override;
   void update() override;
@@ -228,9 +230,5 @@ class CompoundEventsManager : public VehicleEventsManager
 
     return reinterpret_cast<T*>(var_name_ref->address);
   }
-
-  // Copy-constructor and operator= not implemented / deleted
-  CompoundEventsManager( const CompoundEventsManager&);
-  CompoundEventsManager& operator=( const CompoundEventsManager&);
 };
 #endif

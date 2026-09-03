@@ -13,8 +13,8 @@ Programmers:
 #ifndef CML_EPHEM_BASED_POINTING_REF_FRAME_HH
 #define CML_EPHEM_BASED_POINTING_REF_FRAME_HH
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
-                                                        // EphemeridesManager
 #include "pointing_ref_frame.hh"
 
 /*****************************************************************************
@@ -47,7 +47,8 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
     ephem_manager(mgr)
   {}
   ~EphemBasedPointingRefFrame() override = default;
-
+  EphemBasedPointingRefFrame (const EphemBasedPointingRefFrame&) = delete;
+  EphemBasedPointingRefFrame & operator = (const EphemBasedPointingRefFrame&) = delete;
 
   void initialize() override
   {
@@ -56,11 +57,5 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
     ephem_manager.add_ref_frame( pointing_frame);
     SubscriptionBase::initialize();
   }
-
- // The copy constructor and assignment operator for this class are
- // declared private and are not implemented.
- private:
-  EphemBasedPointingRefFrame (const EphemBasedPointingRefFrame&);
-  EphemBasedPointingRefFrame & operator = (const EphemBasedPointingRefFrame&);
 };
 #endif
