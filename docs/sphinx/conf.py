@@ -47,7 +47,7 @@ def _get_dependency_minimum_versions():
 project = "The Common Model Library"
 copyright = "%Y, National Aeronautics and Space Administration"
 
-author = "National Aeronautics and Space Administration"
+author = ""
 release = _get_cml_release()
 version = ".".join(release.split(".")[:2])
 
@@ -91,6 +91,11 @@ html_theme_options = {
     "repository_url": "https://github.com/nasa/cml",
     "use_repository_button": True,
     "use_issues_button": True,
+    "announcement": (
+        "⚠️ The transition to GitHub Pages is in-progress. Some model documentation "
+        "will not be available via this webpage, but is present in the respective "
+        "model docs folder ⚠️"
+    )
 }
 html_context = {
     "default_mode": "light",  # Light mode looks better with equations.
