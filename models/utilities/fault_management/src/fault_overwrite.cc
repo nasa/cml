@@ -6,7 +6,9 @@ PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
 ############################################################################*/
+#include "../include/fault.hh"
 #include "../include/fault_overwrite.hh"
+#include <string>
 
 /*****************************************************************************
 Name: set_param
@@ -20,7 +22,7 @@ Purpose:
               cast to 0.0 and 1.0
 *****************************************************************************/
 template<>
-bool FaultOverwrite<bool>::set_param( std::string param_name,
+bool FaultOverwrite<bool>::set_param( const std::string& param_name,
                                       double val_,
                                       bool)
 {

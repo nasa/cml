@@ -16,6 +16,7 @@ PURPOSE:
 // Vent Object
 //////////////////////////////////////////////////////////////
 
+##include "../../include/vent.hh"
 ##include "../../include/vent_set.hh"
 
 ##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"

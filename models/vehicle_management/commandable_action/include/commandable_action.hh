@@ -38,7 +38,6 @@ PROGRAMMERS:
 
 #include <string>
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "commandable_action_set.hh"
 
@@ -92,6 +91,8 @@ class CommandableAction
   CommandableAction( std::string            name_,
                      CommandableActionSet & manager_);
   virtual ~CommandableAction() = default;
+  CommandableAction (const CommandableAction&) = delete;
+  CommandableAction & operator = (const CommandableAction&) = delete;
 
   void update();
   void force_command();
@@ -99,10 +100,5 @@ class CommandableAction
   void enable() {enabled = true; command_now = false;}
   void disable() {enabled = false;}
   std::string & get_name() {return name;}
-
- private:
-  // Not implemented, not supported:
-  CommandableAction (const CommandableAction&);
-  CommandableAction & operator = (const CommandableAction&);
 };
 #endif

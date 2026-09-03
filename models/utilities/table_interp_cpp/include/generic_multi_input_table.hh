@@ -16,9 +16,8 @@
 #ifndef CML_GENERIC_MULTI_INPUT_TABLE_HH
 #define CML_GENERIC_MULTI_INPUT_TABLE_HH
 
-#include <list>
-#include <string> // std::string
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <string>
 
 #include "table_independent_variable.hh"
 #include "table_type_defs.hh"
@@ -119,7 +118,7 @@ class GenericMultiInputTable
   virtual bool generate_output();
   bool precheck_output();
   void generate_trivial_output();
-  bool index_checks(size_t & idx1, size_t & idx2, std::string func);
+  bool index_checks(size_t & idx1, size_t & idx2, const std::string & func);
 
  private:
   bool load_data_internal_check( const SizeVec &dim_list );

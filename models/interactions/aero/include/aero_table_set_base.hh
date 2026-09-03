@@ -19,9 +19,9 @@ PROGRAMMERS:
 #ifndef CML_AERO_TABLE_SET_BASE_HH
 #define CML_AERO_TABLE_SET_BASE_HH
 #include <string>
-#include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh" //TableLookupSet
+#include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
-#include "aero_coefficients.hh" // AeroCoefficientsTable
+#include "aero_coefficients.hh"
 
 class AeroTableSetBase: public TableLookupSet
 {
@@ -133,8 +133,9 @@ public:
   AeroTableSetBase( const std::string & name_in,
                     AeroCoefficientsTable & coefficients_out,
                     AeroCoefficientsDisp  & uncertainties_out);
-
   ~AeroTableSetBase() override = default;
+  AeroTableSetBase (const AeroTableSetBase &) = delete;
+  AeroTableSetBase & operator = (const AeroTableSetBase &) = delete;
 
   void initialize() override;
   void configure_table();
@@ -151,12 +152,6 @@ protected:
   void query_aero_damping();
   void query_on_diag_aero_damping();
   void query_off_diag_aero_damping();
-  AeroDampingType verify_aero_damping(std::string type);
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroTableSetBase (const AeroTableSetBase &);
-  AeroTableSetBase & operator = (const AeroTableSetBase &);
+  AeroDampingType verify_aero_damping(const std::string & type);
 };
 #endif

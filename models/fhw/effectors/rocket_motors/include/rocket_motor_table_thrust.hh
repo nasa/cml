@@ -15,7 +15,12 @@ PROGRAMMERS:
 #ifndef CML_ROCKET_MOTOR_TABLE_THRUST_HH
 #define CML_ROCKET_MOTOR_TABLE_THRUST_HH
 
+#include <cstddef>
 #include <vector>
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 #include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
@@ -61,10 +66,8 @@ protected:
                                  independent variable for table lookup. */
   ConsumptionType consumption_type; /* (--)   Consumption-type enumeration */
   double prop_mass_init;            /* (kg)   Initial consumable mass. */
-  #ifndef SWIG
   static constexpr double grav_sea_level = 9.80665; /* (m/s2)
                                  Gravity at sea-level for Isp calc. */
-  #endif
 
   // The public constructors all call this protected constructor, which
   // eliminates the need to have four nearly-identical initialization lists.
@@ -94,6 +97,8 @@ public:
                            const double      & time,
                            const double      * veh_cm_in);
   ~RocketMotor_TableThrust() override = default;
+  RocketMotor_TableThrust (const RocketMotor_TableThrust&) = delete;
+  RocketMotor_TableThrust & operator = (const RocketMotor_TableThrust&) = delete;
 
   void load_thrust_data(double * data,
                         size_t   num_elements);
@@ -109,7 +114,7 @@ public:
   void load_mburn_data( std::vector<double> & data);
   void load_time_data(  double * data,
                         size_t   num_elements);
-  void load_time_data(  std::vector<double> & data);
+  void load_time_data(  const std::vector<double> & data);
 
   void initialize() override;
   void update() override;
@@ -120,9 +125,5 @@ protected:
   void start_motor() override;
   void update_table();
   void compute_flow_rate_and_isp();
-private:
-  // Not implemented:
-  RocketMotor_TableThrust (const RocketMotor_TableThrust&);
-  RocketMotor_TableThrust & operator = (const RocketMotor_TableThrust&);
 };
 #endif

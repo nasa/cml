@@ -16,7 +16,8 @@ PROGRAMMERS:
 #include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 #include "compound_event.hh"
 #include "event_trigger.hh"
-#include "trick/memorymanager_c_intf.h" //used for ref_attributes()
+#include "trick/memorymanager_c_intf.h"
+#include <utility>
 
 class CompoundEventsManager : public VehicleEventsManager
 {
@@ -52,6 +53,8 @@ class CompoundEventsManager : public VehicleEventsManager
 
   explicit CompoundEventsManager(const double & time);
   ~CompoundEventsManager() override;
+  CompoundEventsManager( const CompoundEventsManager&) = delete;
+  CompoundEventsManager& operator=( const CompoundEventsManager&) = delete;
 
   void initialize() override;
   void update() override;
@@ -60,15 +63,15 @@ class CompoundEventsManager : public VehicleEventsManager
   CompoundEvent& create_event();
   void add_trigger(WatchValuesBaseCore* new_trigger);
 
-  WatchValuesBaseCore * get_trigger(std::string name);
+  WatchValuesBaseCore * get_trigger(const std::string & name);
   void set_trigger_dbl_reference(WatchValuesBaseCore & trigger, double ref);
-  void set_trigger_dbl_reference(std::string name, double ref);
+  void set_trigger_dbl_reference(const std::string & name, double ref);
 
   // void set_trigger_comparison_logic(WatchValuesBaseCore * trigger, double ref);
   // void set_trigger_comparison_logic(std::string name, double ref);
 
   void set_trigger_delay_offset(WatchValuesBaseCore & trigger, double ref);
-  void set_trigger_delay_offset(std::string name, double ref);
+  void set_trigger_delay_offset(const std::string & name, double ref);
 
   template <typename T>
   EventTrigger<T>& create_trigger(const T & var,
@@ -81,7 +84,7 @@ class CompoundEventsManager : public VehicleEventsManager
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
     new_trigger->comparison_logic = comparison;
-    new_trigger->name = name;
+    new_trigger->name = std::move(name);
     new_trigger->SubscriptionBase::initialize();
     return *new_trigger;
   }
@@ -97,20 +100,20 @@ class CompoundEventsManager : public VehicleEventsManager
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
     new_trigger->comparison_logic = comparison;
-    new_trigger->name = name;
+    new_trigger->name = std::move(name);
     new_trigger->SubscriptionBase::initialize();
     return *new_trigger;
   }
 
   template <typename T>
-  EventTrigger<T>& create_trigger(const std::string var_name,
+  EventTrigger<T>& create_trigger(const std::string& var_name,
                                   T ref,
                                   EventTriggerBase::TriggerCondition comparison,
-                                  std::string name = "")
+                                  const std::string & name = "")
   {
     T* var = address_from_name(var_name, ref);
-    T& var_ref = *var;
     if (var != nullptr) {
+      T& var_ref = *var;
       return create_trigger(var_ref, ref, comparison, name);
     }
     else {
@@ -121,14 +124,14 @@ class CompoundEventsManager : public VehicleEventsManager
   }
 
   template <typename T>
-  EventTrigger<T>& create_trigger(const std::string var_name,
+  EventTrigger<T>& create_trigger(const std::string& var_name,
                                   T * ref,
                                   EventTriggerBase::TriggerCondition comparison,
-                                  std::string name = "")
+                                  const std::string & name = "")
    {
     T* var = address_from_name(var_name, *ref);
-    T& var_ref = *var;
     if (var != nullptr) {
+      T& var_ref = *var;
       return create_trigger(var_ref, ref, comparison, name);
     }
     else {
@@ -149,7 +152,7 @@ class CompoundEventsManager : public VehicleEventsManager
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
     new_trigger->set_direction( direction);
-    new_trigger->name = name;
+    new_trigger->name = std::move(name);
     new_trigger->SubscriptionBase::initialize();
     return *new_trigger;
   }
@@ -165,7 +168,7 @@ class CompoundEventsManager : public VehicleEventsManager
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
     new_trigger->set_direction( direction);
-    new_trigger->name = name;
+    new_trigger->name = std::move(name);
     new_trigger->SubscriptionBase::initialize();
     return *new_trigger;
   }
@@ -185,7 +188,7 @@ class CompoundEventsManager : public VehicleEventsManager
 
 
   template <typename T>
-  T* address_from_name(const std::string var_name, T ref)
+  T* address_from_name(const std::string & var_name, T ref)
   {
     // Used for create_trigger(const std::string...)
     // Returns a pointer to the variable specified by var_name, or nullptr if existence checks don't pass.
@@ -227,9 +230,5 @@ class CompoundEventsManager : public VehicleEventsManager
 
     return reinterpret_cast<T*>(var_name_ref->address);
   }
-
-  // Copy-constructor and operator= not implemented / deleted
-  CompoundEventsManager( const CompoundEventsManager&);
-  CompoundEventsManager& operator=( const CompoundEventsManager&);
 };
 #endif

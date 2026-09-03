@@ -14,10 +14,6 @@ PROGRAMMERS:
 #ifndef CML_WAKE_BODIES_HH
 #define CML_WAKE_BODIES_HH
 
-#include "wake_params.hh"
-
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-
 /*****************************************************************************
 WakeGeneratingBody
 Purpose:(The body that is generating the wake)
@@ -59,13 +55,11 @@ class WakeGeneratingBody
       const double & freestream_density,
       const double & total_alpha);
   virtual ~WakeGeneratingBody() = default;
+  WakeGeneratingBody (const WakeGeneratingBody& rhs) = delete;
+  WakeGeneratingBody& operator = (const WakeGeneratingBody& rhs) = delete;
 
   void compute_freestream_vel_mag();
   double get_total_alpha(){return total_alpha;}
-
- private: // and undefined:
-  WakeGeneratingBody (const WakeGeneratingBody& rhs);
-  void operator = (const WakeGeneratingBody& rhs);
 };
 
 /*****************************************************************************
@@ -112,6 +106,8 @@ class WakeFollowingBody
                     WakeGeneratingBody & objectA_in,
                     const double * grid_origin_in);
   virtual ~WakeFollowingBody() = default;
+  WakeFollowingBody (const WakeFollowingBody& rhs) = delete;
+  WakeFollowingBody& operator = (const WakeFollowingBody& rhs) = delete;
 
   double get_area() const {return area;}
   bool get_generate_force() const { return generate_force;}
@@ -121,10 +117,6 @@ class WakeFollowingBody
 
   virtual void compute_force(double force_mag){(void)force_mag;}
   virtual void set_generate_force(bool target) = 0;
-
- private: // and undefined:
-  WakeFollowingBody (const WakeFollowingBody& rhs);
-  void operator = (const WakeFollowingBody& rhs);
 };
 
 /*****************************************************************************
@@ -141,11 +133,9 @@ class WakeFollowingBodyNoForce : public WakeFollowingBody
                             WakeGeneratingBody & objectA_in,
                             const double * grid_origin_in);
   ~WakeFollowingBodyNoForce() override = default;
+  WakeFollowingBodyNoForce (const WakeFollowingBodyNoForce& rhs) = delete;
+  WakeFollowingBodyNoForce& operator = (const WakeFollowingBodyNoForce& rhs) = delete;
   void set_generate_force(bool target) override;
-
- private:
-  WakeFollowingBodyNoForce (const WakeFollowingBodyNoForce& rhs);
-  void operator = (const WakeFollowingBodyNoForce& rhs);
 };
 /*****************************************************************************
 WakeFollowingBodyWithForce
@@ -175,14 +165,12 @@ class WakeFollowingBodyWithForce : public WakeFollowingBody
                const double (& T_struc_to_body_in)[3][3],
                WakeGeneratingBody & objectA_in,
                const double * grid_origin_in);
+  WakeFollowingBodyWithForce (const WakeFollowingBodyWithForce& rhs) = delete;
+  WakeFollowingBodyWithForce& operator = (const WakeFollowingBodyWithForce& rhs) = delete;
 
   void set_generate_force(bool target) override;
   void compute_relative_state() override;
   void compute_force(double force_mag) override;
   double get_drag_area() const override {return Cd * area;}
-
- private:
-  WakeFollowingBodyWithForce (const WakeFollowingBodyWithForce& rhs);
-  void operator = (const WakeFollowingBodyWithForce& rhs);
 };
 #endif

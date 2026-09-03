@@ -12,7 +12,6 @@ PROGRAMMERS:
 #ifndef CML_GUST_HH
 #define CML_GUST_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 class GustModel
@@ -58,14 +57,12 @@ class GustModel
 
   explicit GustModel(const double & time_in);
   virtual ~GustModel() = default;
+  GustModel (const GustModel&) = delete;
+  GustModel & operator = (const GustModel&) = delete;
 
   void   activate();
   void   update();
   void   deactivate();
   bool   is_active(){return active;}
-
- private:
-  GustModel (const GustModel&) = delete;
-  GustModel & operator = (const GustModel&) = delete;
 };
 #endif

@@ -10,6 +10,7 @@ dependencies = [
     "numpy",
     "psutil",
     "pyyaml",
+    "regex",
     "sphinx",
     "sphinx-autobuild",
     "sphinx-rtd-theme",

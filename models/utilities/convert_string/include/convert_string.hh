@@ -9,10 +9,10 @@ PROGRAMMERS:
 #ifndef CML_CONVERT_STRING_HH
 #define CML_CONVERT_STRING_HH
 
-#include <cstdlib> // strtol, strtoul, strtof, strtod, strtoll, strtoull
-#include <cstring> // strcmp
+#include <cstdlib>
+#include <cstring>
 #include <string>
-#include <type_traits> // is_arithmetic
+#include <type_traits>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*******************************************************************************

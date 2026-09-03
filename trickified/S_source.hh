@@ -77,7 +77,6 @@ PROGRAMMERS:
 #include "cml/models/fhw/effectors/piston_thruster/include/piston_thruster_group.hh"
 #include "cml/models/fhw/effectors/piston_thruster/include/piston_thruster.hh"
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_build_trail.hh"
-#include "cml/models/fhw/effectors/rcs_generic/include/rcs_generic_classes.hh"
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_generic.hh"
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_group.hh"
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_jet.hh"

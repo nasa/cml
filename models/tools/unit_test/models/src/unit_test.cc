@@ -2,6 +2,9 @@
 PURPOSE:    (To provide a Trick-friendly unit-test framework)
 REFERENCES: (../models-C by Jason Arnold)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Jason Arnold) (Titan) (Jul 2005))
    ((Gary Turner) (OSR) (Oct 2016)
@@ -9,14 +12,18 @@ PROGRAMMERS:
     vectors, and lists))
   )
 ***************************************************************************/
-#include <cmath>      // fabs
-#include <cfloat>     // DBL_EPSILON
-#include <algorithm>  // std::max
-#include <iostream>   // std::cout
-#include <sstream>    // std::istringstream
-#include <fstream>    // std::ifstream
-#include <pthread.h>  // for pthreads - sending commands.
+#include <cmath>
+#include <cfloat>
+#include <algorithm>
+#include <cstddef>
+#include <cstdlib>
+#include <iostream>
+#include <list>
+#include <sstream>
+#include <fstream>
 #include <regex>
+#include <stdexcept>
+#include <string>
 
 #include "../include/unit_test.hh"
 
@@ -699,7 +706,7 @@ UnitTestFramework::update_file()
   // If the user has specified titles in the data file, print them out
   if ( !titles.empty()) {
     if (!titles.front().empty()) {
-      std::cout << titles.front() << std::endl;
+      std::cout << titles.front() << '\n';
     }
     if (cycle_data) {
       titles.push_back(titles.front());

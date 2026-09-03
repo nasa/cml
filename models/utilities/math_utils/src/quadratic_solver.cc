@@ -6,8 +6,8 @@ PROGRAMMERS:
 ***********************************************************************/
 
 #include "../include/quadratic_solver.hh"
-#include <cmath> // std::abs, std::isinf
-#include <cfloat> // DBL_MAX
+#include <cmath>
+#include <cfloat>
 
 /*****************************************************************************
 Constructor

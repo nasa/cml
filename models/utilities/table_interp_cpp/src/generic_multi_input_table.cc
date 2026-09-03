@@ -2,6 +2,9 @@
 PURPOSE:
   (definitions for the single-variable methods for the n-dimensional lookup tables)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (dec 2015) (Antares) (initial version))
    ((Bingquan Wang) (OSR) (aug 2017) (Antares) (IVV code cleanup and refactored))
@@ -11,6 +14,8 @@ PROGRAMMERS:
 #include <cstddef>
 
 #include "../include/generic_multi_input_table.hh"
+#include "../include/table_independent_variable.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 // NOTE - using [index] rather than .at(index) to index STL-vectors primarily
 //        because doing so is much faster.
@@ -1019,7 +1024,7 @@ bool
 GenericMultiInputTable::index_checks(
         size_t & ix_start,
         size_t & ix_stop,
-        std::string func)
+        const std::string & func)
 {
   // Note - data_loaded implies data.size() > 0.
   if (!data_loaded) {

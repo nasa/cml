@@ -17,8 +17,12 @@ NOTES:
      Body B - The object inside the wake
 **********************************************************************/
 
-#include <cmath> // sin, cos
+#include <cmath>
+#include "../include/wake_bodies.hh"
 #include "../include/wake_effects.hh"
+#include "../include/wake_params.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 /*****************************************************************************
 constructor
 *****************************************************************************/

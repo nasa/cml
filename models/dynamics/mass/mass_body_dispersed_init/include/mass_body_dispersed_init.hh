@@ -17,10 +17,8 @@ PROGRAMMERS:
 #ifndef CML_MASS_BODY_DISPERSED_INIT_HH
 #define CML_MASS_BODY_DISPERSED_INIT_HH
 
-// JEOD headers:
 #include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
 
-// Local headers:
 #include "mass_properties_dispersions.hh"
 
 // Forward Declarations:
@@ -39,11 +37,9 @@ public:
   MassPropertiesDispersions disperse; /* (--) The dispersed values. */
   MassBodyDispersedInit();
   ~MassBodyDispersedInit() override = default;
+  MassBodyDispersedInit (const MassBodyDispersedInit& rhs) = delete;
+  MassBodyDispersedInit& operator = (const MassBodyDispersedInit& rhs) = delete;
 
   void apply( jeod::DynManager & dyn_manager) override;
-
-private: // and undefined:
-  MassBodyDispersedInit (const MassBodyDispersedInit& rhs);
-  MassBodyDispersedInit& operator = (const MassBodyDispersedInit& rhs);
 };
 #endif

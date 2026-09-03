@@ -2,6 +2,9 @@
 PURPOSE:
    (Implements the methods in the SeparationState class)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (April 2014) (Antares) (Replaces SEPKIN))
     ((Gary Turner) (OSR) (December 2014) (Antares)
@@ -11,9 +14,13 @@ PROGRAMMERS:
 ********************************************************************************/
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 #include "../include/separation_state.hh"
 
@@ -38,7 +45,7 @@ SeparationState::SeparationState()
   jeod::Vector3::initialize(rel_orientation.euler_angles);
 }
 //*****************************************************************************
-SeparationState::SeparationState( std::string name_)
+SeparationState::SeparationState( const std::string & name_)
   :
   SeparationState()
 {
@@ -80,7 +87,7 @@ void
 SeparationState::initialize(
        jeod::DynBody & source_body,
        jeod::BodyRefFrame & subject_frame,
-       std::string source_name)
+       const std::string & source_name)
 {
   if (!enabled) {
     return;
@@ -100,7 +107,7 @@ void
 SeparationState::initialize(
        jeod::RefFrame & source_frame,
        jeod::DynBody  & subject_body,
-       std::string      subject_name)
+       const std::string & subject_name)
 {
   if (!enabled) {
     return;
@@ -115,8 +122,8 @@ void
 SeparationState::initialize(
        jeod::DynBody & source_body,
        jeod::DynBody & subject_body,
-       std::string source_name,
-       std::string subject_name)
+       const std::string & source_name,
+       const std::string & subject_name)
 {
   if (!enabled) {
     return;
@@ -129,8 +136,8 @@ SeparationState::initialize(
 jeod::BodyRefFrame *
 SeparationState::initialize_find_frame(
        jeod::DynBody    & body,
-       std::string  frame_name,
-       std::string  body_type)
+       const std::string & frame_name,
+       const std::string & body_type)
 {
   jeod::BodyRefFrame * frame = nullptr;
   if (frame_name.empty()) {

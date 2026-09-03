@@ -2,6 +2,9 @@
 PURPOSE:
    (Input/output interface for the atmosphere executive.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (May 2016) (ANTARES)
@@ -10,7 +13,11 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 #include "../include/atmosphere_exec_interface.hh"
 

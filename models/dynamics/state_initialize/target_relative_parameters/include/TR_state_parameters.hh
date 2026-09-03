@@ -23,6 +23,7 @@ NOTES:
 #ifndef CML_TR_STATE_PARAMETERS_HH
 #define CML_TR_STATE_PARAMETERS_HH
 
+#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameter_set.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 
@@ -66,6 +67,11 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
   /* Destructor */
   ~TargetRelative_StateParameter() override = default;
 
+  /* Deleted copy constructor and copy assignment operator */
+  TargetRelative_StateParameter (const TargetRelative_StateParameter&) = delete;
+  TargetRelative_StateParameter & operator = (
+                                 const TargetRelative_StateParameter&) = delete;
+
   /* Public Methods */
   void initialize( double ref_geodetic_altitude,
                    double ref_geodetic_latitude,
@@ -102,10 +108,5 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
   bool initialize_check_config();
   void initialize_internal(const double R_Ref_PCPF[3]);
   double compute_position_magnitude();
-
-  // copy-constructor and operator= made empty to prevent misuse.
-  TargetRelative_StateParameter (const TargetRelative_StateParameter&);
-  TargetRelative_StateParameter & operator = (
-                                 const TargetRelative_StateParameter&);
 };
 #endif

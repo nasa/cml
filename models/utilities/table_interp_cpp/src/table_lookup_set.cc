@@ -2,15 +2,23 @@
 PURPOSE:
   (Table lookup model master controller)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (New implementation))
    ((Bingquan Wang) (OSR) (Aug 2017) (IVV code cleanup and refactored))
   )
 *******************************************************************************/
 
-#include <cstdarg> // for variadic function arguments
+#include <cstddef>
+#include <vector>
 
+#include "../include/abstract_table_lookup.hh"
+#include "../include/generic_multi_input_table.hh"
+#include "../include/table_independent_variable.hh"
 #include "../include/table_lookup_set.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************

@@ -16,7 +16,7 @@ PROGRAMMERS:
 #define CML_CONSTRAINT_TEST_TIMED_TEMPLATES_HH
 
 #include <list>
-#include <algorithm> // any_of
+#include <algorithm>
 
 #include "constraint_enum.hh"
 #include "constraint_test.hh"
@@ -290,7 +290,7 @@ class ConstraintTest_ValSetTimed : public ConstraintTestTimed
      * any_of. If no match is found, in_set is set to false.*/
     bool in_set =
       std::any_of( values.begin(), values.end(),
-        [variable](T & val_) {return (variable == val_);});
+        [variable](const T & val_) {return (variable == val_);});
 
     if (use_timer) {
       numerical_violation =

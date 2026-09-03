@@ -32,7 +32,6 @@ PROGRAMMERS:
 #ifndef CML_ACCUMULATED_ABSOLUTE_DELTAS_HH
 #define CML_ACCUMULATED_ABSOLUTE_DELTAS_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 class AccumulatedAbsoluteDeltas : public SubscriptionBase
@@ -50,15 +49,13 @@ class AccumulatedAbsoluteDeltas : public SubscriptionBase
   AccumulatedAbsoluteDeltas(  const double * variable_,
                               const unsigned int size_);
   ~AccumulatedAbsoluteDeltas() override;
+  AccumulatedAbsoluteDeltas ( const AccumulatedAbsoluteDeltas &) = delete;
+  AccumulatedAbsoluteDeltas & operator= ( const AccumulatedAbsoluteDeltas &) = delete;
 
   void initialize() override;
   void reset();
   void update();
  protected:
   void activate() override;
- private:
-  // Not implemented
-  AccumulatedAbsoluteDeltas ( const AccumulatedAbsoluteDeltas &);
-  AccumulatedAbsoluteDeltas & operator= ( const AccumulatedAbsoluteDeltas &);
 };
 #endif

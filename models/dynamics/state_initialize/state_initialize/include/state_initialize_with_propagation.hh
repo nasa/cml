@@ -45,10 +45,6 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/environment/gravity/include/gravity_manager.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
-#include "jeod/models/utils/math/include/vector3.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "state_initialize.hh"
 
@@ -82,6 +78,9 @@ class StateInitializeWithPropagation : public StateInitialize
 
   explicit StateInitializeWithPropagation( jeod::GravityManager & gravity_manager);
   ~StateInitializeWithPropagation() override = default;
+  StateInitializeWithPropagation (const StateInitializeWithPropagation&) = delete;
+  StateInitializeWithPropagation & operator =
+                                 (const StateInitializeWithPropagation&) = delete;
 
   void initialize(  jeod::DynManager & dyn_manager ) override;
   void apply(  jeod::DynManager & dyn_manager ) override;
@@ -90,10 +89,5 @@ class StateInitializeWithPropagation : public StateInitialize
   void propagate_state();
   void rk4_integration();
   void compute_planet_orientation (double time);
-
- private:
-  StateInitializeWithPropagation (const StateInitializeWithPropagation&);
-  StateInitializeWithPropagation & operator =
-                                 (const StateInitializeWithPropagation&);
 };
 #endif

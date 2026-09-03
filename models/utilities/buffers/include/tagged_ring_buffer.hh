@@ -20,9 +20,13 @@ ASSUMPTIONS:
 #ifndef CML_TAGGED_RING_BUFFER_HH
 #define CML_TAGGED_RING_BUFFER_HH
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "simple_ring_buffer.hh"
 #include <cmath>
+#include <string>
+#include <cstddef>
+#include <vector>
 
 /*****************************************************************************
 CMLTaggedRingBufferMember

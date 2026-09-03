@@ -17,9 +17,10 @@ PROGRAMMERS:
 #ifndef CML_ATMOSPHERE_EXEC_GRAM_HH
 #define CML_ATMOSPHERE_EXEC_GRAM_HH
 
-#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
-
 #include "atmosphere_exec_atmos_base.hh"
+
+class AtmosExecOutput;
+class ExtendedPlanetaryDerivedState;
 
 /* START Stubbed classes / structures for CML usage */
 struct GramOut
@@ -207,6 +208,8 @@ class AtmosphereExec_Gram : public AtmosphereExec_AtmosWindsBase
                         const double & dyn_time_in,
                         AtmosExecOutput & master_output);
     ~AtmosphereExec_Gram() override = default;
+    AtmosphereExec_Gram (const AtmosphereExec_Gram&) = delete;
+    AtmosphereExec_Gram & operator = (const AtmosphereExec_Gram&) = delete;
 
     void activate() override;
     void deactivate() override;
@@ -229,9 +232,5 @@ class AtmosphereExec_Gram : public AtmosphereExec_AtmosWindsBase
     double last_update_time; /* (s) time at which GRAM update was last called.*/
 
     bool initialize();
-
-  private:
-    AtmosphereExec_Gram (const AtmosphereExec_Gram&);
-    AtmosphereExec_Gram & operator = (const AtmosphereExec_Gram&);
 };
 #endif

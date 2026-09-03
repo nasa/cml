@@ -10,7 +10,7 @@ PROGRAMMERS:
 #ifndef CML_AERO_ENVIRONMENT_HH
 #define CML_AERO_ENVIRONMENT_HH
 
-#include <cstring>  // NULL
+#include <cstring>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*******************************************************************************
@@ -68,6 +68,8 @@ public:
         "It is required.\n");
     }
   }
+  AeroEnvironment (const AeroEnvironment &) = delete;
+  AeroEnvironment & operator = (const AeroEnvironment &) = delete;
 
   double get_mach() {return Mach_number;}
   double get_dynamic_pressure() { return dynamic_pressure;}
@@ -78,11 +80,5 @@ public:
   double get_free_stream_vel_mag() { return free_stream_vel_mag;}
   const double * get_cg_position() { return cg_position;}
   const double * get_true_body_rates() { return true_body_rates;}
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroEnvironment (const AeroEnvironment &);
-  AeroEnvironment & operator = (const AeroEnvironment &);
 };
 #endif

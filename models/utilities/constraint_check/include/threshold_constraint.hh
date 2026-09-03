@@ -12,6 +12,7 @@ PROGRAMMERS:
 #define CML_THRESHOLD_CONSTRAINT_HH
 
 #include <cmath>
+#include <cstddef>
 
 #include "constraint.hh"
 #include "constraint_test_templates.hh"

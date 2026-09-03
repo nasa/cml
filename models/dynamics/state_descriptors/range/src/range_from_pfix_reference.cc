@@ -3,6 +3,9 @@ Purpose:
    (Completes the calculation of range for the specific case of range from a
    fixed reference location.))
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
    (((Gary Turner) (OSR) (Sept 2014 (Initial version)))
 *******************************************************************************/
@@ -10,7 +13,9 @@ Programmers:
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <cmath>
 
+#include "../include/range_computation.hh"
 #include "../include/range_from_pfix_reference.hh"
 
 /*****************************************************************************

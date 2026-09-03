@@ -13,6 +13,7 @@ Programmers:
 #ifndef CML_EPHEM_BASED_POINTING_REF_FRAME_HH
 #define CML_EPHEM_BASED_POINTING_REF_FRAME_HH
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
 #include "pointing_ref_frame.hh"
 
@@ -49,7 +50,7 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
    * @param mgr Reference to the JEOD Ephemeris Manager, which for most
    *            simulations will be the `jeod::DynManager` instance
    */
-  EphemBasedPointingRefFrame(jeod::EphemeridesManager & mgr)
+  explicit EphemBasedPointingRefFrame(jeod::EphemeridesManager & mgr)
     :
     ephem_manager(mgr)
   {}
@@ -70,6 +71,8 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
    */
   void initialize() override
   {
+    // Register the frame with the dynamics/ephem manager so that it can be
+    // used to represent the state of a vehicle
     ephem_manager.add_ref_frame( pointing_frame);
     SubscriptionBase::initialize();
   }

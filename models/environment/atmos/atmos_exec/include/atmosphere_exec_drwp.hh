@@ -17,10 +17,11 @@ PROGRAMMERS:
 #ifndef CML_ATMOSPHERE_EXEC_DRWP_HH
 #define CML_ATMOSPHERE_EXEC_DRWP_HH
 
-#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
-#include "cml/models/environment/atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh"
-
 #include "atmosphere_exec_atmos_base.hh"
+
+class AtmosExecOutput;
+class ExtendedPlanetaryDerivedState;
+class LookupAtmosWinds;
 
 class AtmosphereExec_Drwp : public AtmosphereExec_AtmosWindsBase
 {
@@ -37,6 +38,8 @@ class AtmosphereExec_Drwp : public AtmosphereExec_AtmosWindsBase
                          ExtendedPlanetaryDerivedState & planet_state_in,
                          AtmosExecOutput               & master_output);
     ~AtmosphereExec_Drwp() override = default;
+    AtmosphereExec_Drwp (const AtmosphereExec_Drwp&) = delete;
+    AtmosphereExec_Drwp & operator = (const AtmosphereExec_Drwp&) = delete;
 
     void activate() override;
     void deactivate() override;
@@ -47,9 +50,5 @@ class AtmosphereExec_Drwp : public AtmosphereExec_AtmosWindsBase
 
   protected:
     bool initialize();
-
-  private:
-    AtmosphereExec_Drwp (const AtmosphereExec_Drwp&);
-    AtmosphereExec_Drwp & operator = (const AtmosphereExec_Drwp&);
 };
 #endif

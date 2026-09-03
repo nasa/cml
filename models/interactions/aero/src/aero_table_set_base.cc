@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
 PURPOSE: (Provides the methods for the AeroTableSet class)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (Antares) (initial version))
    ((Gary Turner) (OSR) (June 2016) (Antares) (Refactor))
@@ -8,9 +11,10 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
+#include <string>
 
+#include "../include/aero_coefficients.hh"
 #include "../include/aero_table_set_base.hh"
 
 /*******************************************************************************
@@ -207,7 +211,7 @@ verify_aero_damping
 Purpose:()
 *******************************************************************************/
 AeroTableSetBase::AeroDampingType
-AeroTableSetBase::verify_aero_damping( std::string type)
+AeroTableSetBase::verify_aero_damping( const std::string & type)
 {
   if (coef_data_present) {
     if (!uncertainty_data_present) {

@@ -19,6 +19,9 @@ Purpose:(The sim)
 // Include headers for classes that this class contains:
 ##include "cml/models/tools/unit_test/models/include/unit_test.hh"
 ##include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
+##include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+##include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_interface.hh"
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 
 // This model:
 ##include "../../include/aero_interface_table.hh"

@@ -3,6 +3,9 @@
 PURPOSE:
    (Define checking process for each event managed by event manager)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May       2018) (Initial implementation of event manager))
@@ -16,8 +19,11 @@ PROGRAMMERS:
 *******************************************************************************/
 
 
-/* Model Includes */
 #include "../include/compound_event.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_delay.hh"
+#include <list>
 
 /*****************************************************************************
 Constructor
@@ -27,7 +33,6 @@ CompoundEvent::CompoundEvent(
   :
   WatchValuesDelay(time_),
   time(time_),
-  name(),
   arming_triggers(),
   disarming_triggers(),
   action_triggers(),

@@ -2,6 +2,9 @@
 PURPOSE:
   (Spherical interpolation algorithm for handling quaternion interpolation.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (November 2017) (New implementation))
   )
@@ -10,6 +13,7 @@ PROGRAMMERS:
 #include <cmath>
 #include "../include/quaternion_spherical_interpolator.hh"
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 

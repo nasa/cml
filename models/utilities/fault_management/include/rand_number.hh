@@ -12,7 +12,7 @@ PROGRAMMERS:
 #ifndef CML_RAND_NUMBER_HH
 #define CML_RAND_NUMBER_HH
 
-#include <random> // std::mt19937, std::*_distribution
+#include <random>
 
 /*******************************************************************************
 FaultRandNumber
@@ -28,6 +28,8 @@ class FaultRandNumber {
 
     FaultRandNumber();
     virtual ~FaultRandNumber() = default;
+    FaultRandNumber(const FaultRandNumber&) = delete;
+    FaultRandNumber& operator = (const FaultRandNumber&) = delete;
 
     void initialize();
 
@@ -54,9 +56,6 @@ class FaultRandNumber {
     bool seeded; /* (--)
       Whether the random number generator has been given a seed. */
     std::mt19937 rng; /* (--) Random number generator. */
-
-    FaultRandNumber(const FaultRandNumber&);
-    FaultRandNumber& operator = (const FaultRandNumber&);
 };
 
 #endif

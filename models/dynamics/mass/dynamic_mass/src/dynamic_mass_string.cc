@@ -3,6 +3,9 @@
    PURPOSE:
    (Provides capbility to deplete mass equally from bodies strung together.)
 
+   LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
    ASSUMPTIONS AND LIMITATIONS:
    ((Limitation 1: Relies on the DynBodyMass functionality to actually update
                    the body mass.  This just distributes mass changes across
@@ -18,6 +21,7 @@
                       (Refactor to utilize new CML capabilities))
    )
 *******************************************************************************/
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 

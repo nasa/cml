@@ -12,6 +12,9 @@ PURPOSE: (The front-end of the rcs-generic model, which provides a
     Robert Bailey/LinCom/87, Douglas Hamilton/RSOC/95 and partially based on
     rcs_generic by Willian Othon/LinCom/93)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCE:
     ((Trick code - rcs_orbiter.c by John Whynott/McDonnell Douglas/91,
       Robert Bailey/LinCom/87, Douglas Hamilton/RSOC/95)
@@ -67,12 +70,18 @@ PROGRAMMERS:
    ((Gary Turner) (OSR) (Apr 2017) (Antares) (Conversion to Object-oriented)))
 **********************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "../include/rcs_generic.hh"
 #include "../include/rcs_prop_pod.hh"
 #include "../include/rcs_group.hh"
 #include "../include/rcs_jet.hh"
+
+#include "jeod/models/utils/math/include/vector3.hh"
+
+#include <vector>
 
 /*****************************************************************************
 Constructor

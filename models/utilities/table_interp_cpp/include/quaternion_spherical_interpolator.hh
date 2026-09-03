@@ -13,7 +13,6 @@ PROGRAMMERS:
 #ifndef CML_QUATERNION_SPHERICAL_INTERPOLATOR_HH
 #define CML_QUATERNION_SPHERICAL_INTERPOLATOR_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
 
 // NOTE - this does not attempt to get any values or put any values anywhere.
@@ -55,15 +54,12 @@ class QuaternionSphericalInterpolator
  public:
   QuaternionSphericalInterpolator();
   virtual ~QuaternionSphericalInterpolator() = default;
+  QuaternionSphericalInterpolator (const QuaternionSphericalInterpolator&) = delete;
+  QuaternionSphericalInterpolator& operator = (
+                                    const QuaternionSphericalInterpolator&) = delete;
 
   void update();
   void set_epsilon_interp( double new_epsilon);
   void set_epsilon_delta( double new_epsilon);
-
- private:
-  // Class not copyable:
-  QuaternionSphericalInterpolator (const QuaternionSphericalInterpolator&);
-  QuaternionSphericalInterpolator& operator = (
-                                    const QuaternionSphericalInterpolator&);
 };
 #endif

@@ -9,26 +9,26 @@ PROGRAMMERS:
 #ifndef CML_TRICK_LOGGING_HH
 #define CML_TRICK_LOGGING_HH
 
+#include <algorithm>
 #include<list>
-#include<cstring> // NULL
 
 #include "trick/DataRecordGroup.hh"
-#include "trick/exec_proto.h" // exec_get_sim_time
+#include "trick/exec_proto.h"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class TrickLogging {
   public:
     std::list<Trick::DataRecordGroup *> group_list;
 
-    TrickLogging()
-      :
-      group_list(0){}
+    TrickLogging() = default;
+    TrickLogging (const TrickLogging&) = delete;
+    TrickLogging & operator = (const TrickLogging&) = delete;
 
     /***************************************************************************/
     // Add a data record group to the group list
     /***************************************************************************/
     void add_to_list(Trick::DataRecordGroup * add_me) {
-      if (add_me == NULL) {
+      if (add_me == nullptr) {
         CMLMessage::error (
           __FILE__, __LINE__, "TrickLogging::SetupError\n",
           "The intended data record group to add is NULL."
@@ -212,32 +212,20 @@ class TrickLogging {
           "\nPlease specify a valid data record group name.\n");
         return nullptr;
       }
-      for (Trick::DataRecordGroup * group:group_list) {
-        if (group->group_name.compare(name) == 0) {
-          return group;
-        }
-      }
-      CMLMessage::error( __FILE__,__LINE__,
-        "No DataRecordGroup found with name ",name,".\n"
-        "Returning nullptr.\n");
-      return nullptr;
+      return get_group(std::string(name));
     }
     /***************************************************************************/
     Trick::DataRecordGroup * get_group( const std::string & name)
     {
-      for (Trick::DataRecordGroup * group:group_list) {
-        if (group->group_name == name) {
-          return group;
-        }
+      auto name_matches = [&name] (const auto& group) {return group->group_name == name; };
+      auto group = std::find_if(group_list.begin(), group_list.end(), name_matches);
+      if (group != group_list.end()) {
+        return *group;
       }
       CMLMessage::error( __FILE__,__LINE__,
         "No DataRecordGroup found with name ",name,".\n"
         "Returning nullptr.\n");
       return nullptr;
     }
-
-  private:
-    TrickLogging (const TrickLogging&);
-    TrickLogging & operator = (const TrickLogging&);
 };
 #endif

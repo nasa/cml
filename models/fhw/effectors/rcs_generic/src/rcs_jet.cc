@@ -2,13 +2,24 @@
 PURPOSE:
   (Simple model of a single reaction control system jet.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/utilities/math_utils/src/math_utils.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (Initial object-oriented implementation)))
 **********************************************************************/
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include <cmath>
 
+#include "../include/rcs_generic.hh"
+#include "../include/rcs_group.hh"
+#include "../include/rcs_prop_pod.hh"
 #include "../include/rcs_jet.hh"
 
 /*****************************************************************************

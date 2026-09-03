@@ -20,18 +20,17 @@ template<typename T> class FaultWhiteNoise : public Fault {
   public :
     explicit FaultWhiteNoise(T& variable);
     ~FaultWhiteNoise() override = default;
+    FaultWhiteNoise(const FaultWhiteNoise&) = delete;
+    FaultWhiteNoise& operator = (const FaultWhiteNoise&) = delete;
 
     void overwrite_value() override;
 
-    bool set_param(std::string param_name, double value, bool b) override;
+    bool set_param(const std::string& param_name, double value, bool b) override;
 
     FaultRandNumber noise; /* (--) Random number generator. */
 
   private:
     T& variable; /* (--) The variable to fault. */
-
-    FaultWhiteNoise(const FaultWhiteNoise&);
-    FaultWhiteNoise& operator = (const FaultWhiteNoise&);
 };
 
 
@@ -55,16 +54,16 @@ Purpose:(Generic method for setting fault parameters. For this type of fault,
          can be used to set parameters of the random number generator.)
 *******************************************************************************/
 template<typename T>
-bool FaultWhiteNoise<T>::set_param(std::string param_name, double value, bool) {
-  if (param_name.compare("mean") == 0) {
+bool FaultWhiteNoise<T>::set_param(const std::string& param_name, double value, bool) {
+  if (param_name == "mean") {
     noise.mean = value;
-  } else if (param_name.compare("std_dev") == 0) {
+  } else if (param_name == "std_dev") {
     noise.std_dev = value;
-  } else if (param_name.compare("min") == 0) {
+  } else if (param_name == "min") {
     noise.lower_limit = value;
-  } else if (param_name.compare("max") == 0) {
+  } else if (param_name == "max") {
     noise.upper_limit = value;
-  } else if (param_name.compare("seed") == 0) {
+  } else if (param_name == "seed") {
     noise.seed = value;
   } else {
     return Fault::set_param(param_name, value);

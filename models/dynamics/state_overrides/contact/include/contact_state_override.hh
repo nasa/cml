@@ -40,11 +40,10 @@ PROGRAMMERS:
 #ifndef CML_CONTACT_STATE_OVERRIDE_HH
 #define CML_CONTACT_STATE_OVERRIDE_HH
 
+#include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class ContactStateOverride : public SubscriptionBase
 {
@@ -57,7 +56,7 @@ class ContactStateOverride : public SubscriptionBase
        location as long as the body's position is computed to be at a
        physically impossible location.*/
 
-  bool contact_detected; /* (--)
+  bool contact_detected {false}; /* (--)
     Flag set to indicate that the contact plane has been broken.*/
 
   double deactivation_threshold; /* (m)
@@ -109,6 +108,8 @@ class ContactStateOverride : public SubscriptionBase
 
   ContactStateOverride(jeod::DynBody& reference_body_in,
                        jeod::DynBody& override_body_in);
+  ContactStateOverride(const ContactStateOverride&) = delete;
+  ContactStateOverride& operator = (const ContactStateOverride&) = delete;
 
   void update();
   void set_contact_normal(double contact_normal_in[3]);
@@ -122,13 +123,6 @@ class ContactStateOverride : public SubscriptionBase
   void override_state_root( jeod::BodyRefFrame& integ_frame,
                             double pos_integ_frame_wrt_override_struc[3],
                             const jeod::Quaternion & override_struc_to_integ_frame);
-  #ifndef SWIG // SWIG does not like the override keyword.
   void activate() override;
-  #endif
-
- private:
-  // Make class non-copyable
-  ContactStateOverride(const ContactStateOverride&);
-  ContactStateOverride& operator = (const ContactStateOverride&);
 };
 #endif

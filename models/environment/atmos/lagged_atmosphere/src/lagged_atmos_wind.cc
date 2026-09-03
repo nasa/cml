@@ -2,6 +2,9 @@
 Purpose:
    (Define methods for the class LaggedAtmosWind.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Author:
  (((Gary Turner) (OSR) (Jan 2021) (Antares)
     (Based on LaggedAtmosphere and LaggedWinds by Jeff Semrau,
@@ -11,10 +14,12 @@ Author:
 
 #include "../include/lagged_atmos_wind.hh"
 
-#include "jeod/models/utils/math/include/vector3.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include <cstddef>
+#include <iterator>
 #include <string>
 /*****************************************************************************
 Constructors
@@ -111,8 +116,7 @@ LaggedAtmosWind::compute( double input_altitude)
   // Now push this iterator through the list until it points to an altitude
   // below input_altitude. Note that this could result in "below" pointing
   // to nodes.end(), which isn't an actual node.
-  while ( input_altitude < below->altitude &&
-          below != nodes.end() ) {
+  while ( below != nodes.end() && input_altitude < below->altitude ) {
     // Increment "below" moves it to the right in the list, to a lower altitude
     ++below;
   }

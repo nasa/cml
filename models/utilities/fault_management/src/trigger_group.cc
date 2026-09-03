@@ -8,6 +8,8 @@ PROGRAMMERS:
 ############################################################################*/
 
 #include "../include/trigger_group.hh"
+#include <string>
+#include <utility>
 
 /*******************************************************************************
 operate
@@ -47,13 +49,13 @@ set_trigger_enable
 Purpose:(Enables or disables a trigger in this group. If there are multiple
          triggers with the same name, they will be enabled/disabled together.)
 *******************************************************************************/
-bool TriggerGroup::set_trigger_enable( std::string trigger_name,
-                                       bool        enable_flag)
+bool TriggerGroup::set_trigger_enable( const std::string & trigger_name,
+                                       bool                enable_flag)
 {
   bool trigger_found = false;
-  for (auto& it : triggers) {
-    if (trigger_name.compare(it.second->name) == 0) {
-      it.first = enable_flag;
+  for (auto& [trigger_enabled, trigger] : triggers) {
+    if (trigger_name == trigger->name) {
+      trigger_enabled = enable_flag;
       trigger_found = true;
     }
   }

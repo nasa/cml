@@ -4,6 +4,9 @@ Purpose:
   (An updated message-handler system; largely based on defaults developed
   in JEOD.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   (((Gary Turner) (OSR) (March 2023) (ANTARES) (Initial version))
    ((Nino Tarantino) (CACI) (April 2026) (CML) (Refactor for unit testing and mocking))

@@ -12,14 +12,14 @@ PROGRAMMERS:
 #ifndef CML_VENT_SET_HH
 #define CML_VENT_SET_HH
 
-#include <vector> // vector
+#include <cstddef>
+#include <vector>
 #include <list>
-#include "jeod/models/utils/math/include/vector3.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_body/include/class_declarations.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "simple_vent.hh"
-#include "vent.hh"
 
 class VentSet : public SubscriptionBase {
  protected: // external references
@@ -81,6 +81,8 @@ class VentSet : public SubscriptionBase {
   //  - investigate use of varargs or variadic templates to support a set
   //    of vents each running off its own specified DynMassBody.
   ~VentSet() override;
+  VentSet(const VentSet&) = delete;
+  VentSet& operator = (const VentSet&) = delete;
 
   void initialize() override;
   virtual void update();
@@ -101,9 +103,5 @@ class VentSet : public SubscriptionBase {
 
  private:
   void start_vent_internal( SimpleVent * vent);
-
- private:
-  VentSet(const VentSet&);
-  VentSet& operator = (const VentSet&);
 };
 #endif

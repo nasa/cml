@@ -18,6 +18,8 @@ PROGRAMMERS:
 
 #include "cml/models/vehicle_management/events_manager/include/watch_values_delay.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
+#include <utility>
 
 // Provide SWIG with the necessary template so it can see through to the
 // layer above.
@@ -164,15 +166,15 @@ class EventTrigger : public WatchValuesDelay<T>,
     new variable, similar in intent, specifically for EventTrigger.*/
 
  public:
-  EventTrigger( const double & delay_ref,
-                std::string name_ = "")
+  explicit EventTrigger( const double & delay_ref,
+                         std::string name_ = "")
     :
     WatchValuesDelay<T> (delay_ref),
     relative_to_activation_ET(false)
   {
     /* name is inherited from WatchValuesDelay from WatchValuesBase from
     * WatchValuesBaseCore.*/
-    this->name = name_;
+    this->name = std::move(name_);
     /* In the event that type T is not float or similar, we need the
      * use_threshold_crossing_trigger flag to bring the execution back to this
      * class's test_crossing_dbl() method from high up in the WatchValues
@@ -180,6 +182,8 @@ class EventTrigger : public WatchValuesDelay<T>,
     WatchValuesBase<T>::use_threshold_crossing_trigger = true;
   }
   ~EventTrigger() override = default;
+  EventTrigger (const EventTrigger& rhs) = delete;
+  EventTrigger& operator = (const EventTrigger& rhs) = delete;
 
 
  protected:
@@ -521,9 +525,5 @@ Notes:
     // All actions complete, set the active flag and exit.
     this->active = true;
   }
-
- private:
-  EventTrigger (const EventTrigger& rhs);
-  EventTrigger& operator = (const EventTrigger& rhs);
 };
 #endif

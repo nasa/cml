@@ -15,7 +15,6 @@ Programmers:
 #define CML_PFIX_REFERENCE_POINT_HH
 
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class PfixReferencePoint : public jeod::PlanetFixedPosition
 {
@@ -60,15 +59,11 @@ class PfixReferencePoint : public jeod::PlanetFixedPosition
 
   PfixReferencePoint();
   ~PfixReferencePoint() override = default;
+  PfixReferencePoint(const PfixReferencePoint& rhs) = delete;
+  PfixReferencePoint & operator = (const PfixReferencePoint&) = delete;
 
   void set_point (double & ref_radius, bool & ref_point_set);
   void set_direction (bool & use_polar, bool & ref_point_set);
-
- private:
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  PfixReferencePoint(const PfixReferencePoint& rhs);
-  PfixReferencePoint & operator = (const PfixReferencePoint&);
 };
 
 #endif

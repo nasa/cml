@@ -21,6 +21,9 @@ Purpose:
   will flag the command as being sent.  Then the sim-to-fsw model will set the
   appropriate FSW flags and mark the command as having been received.
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   (
   ((Gary Turner) (OSR) (02/22) (Generic concept developed while
@@ -30,7 +33,8 @@ Programmers:
 *******************************************************************************/
 
 #include "../include/commandable_action_set.hh"
-
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <utility>
 
 /*****************************************************************************
 Constructors
@@ -46,7 +50,7 @@ CommandableActionSet::CommandableActionSet (std::string name_)
   :
   CommandableActionSet()
 {
-  name= name_;
+  name = std::move(name_);
 }
 
 /*****************************************************************************

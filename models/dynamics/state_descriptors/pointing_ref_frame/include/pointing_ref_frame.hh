@@ -18,7 +18,6 @@ Programmers:
 
 #include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 /**
@@ -117,6 +116,8 @@ class PointingRefFrame : public SubscriptionBase {
   /**
    * Add the Pointing Frame as a child of the Originating Frame and ensure that
    * the Originating Frame and Target Frame are valid and subscribed
+   *
+   * @return `true` if successful
    */
   bool setup_frames();
 

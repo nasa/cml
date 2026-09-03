@@ -9,7 +9,9 @@ PROGRAMMERS:
    (New, based on GNC_PAR grok_duration_check and grok-violation models))
  )
 *******************************************************************************/
+#include "../include/constraint.hh"
 #include "../include/constraint_set.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 
 /*****************************************************************************

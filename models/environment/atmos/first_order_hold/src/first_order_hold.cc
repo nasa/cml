@@ -11,9 +11,11 @@ PROGRAMMERS:
     ((Brent Caughron) (OSR) (July 2017) (Antares) (IV&V model code cleanup))    )
 
 **********************************************************************************/
-#include <cmath> //M_PI, atan2
-#include <limits> //numeric_limits
+#include <cmath>
+#include <limits>
 
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 #include "../include/first_order_hold.hh"

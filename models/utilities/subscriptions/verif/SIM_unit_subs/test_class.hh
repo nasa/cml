@@ -15,12 +15,12 @@ PROGRAMMERS:
 
 class SubscriptionTestClass : public SubscriptionBase
 {
-public:
-  SubscriptionTestClass() = default;
+  public:
+  using SubscriptionBase::SubscriptionBase;
   SubscriptionTestClass(const SubscriptionTestClass&) = delete;
   SubscriptionTestClass& operator=(const SubscriptionTestClass&) = delete;
 
-protected:
+  protected:
   void activate() override {
     std::cout << "******** ACTIVATION FAILS ********\n\n";
   }

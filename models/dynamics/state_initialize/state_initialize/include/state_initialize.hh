@@ -29,13 +29,11 @@ PROGRAMMERS:
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/planet_fixed/north_east_down/include/north_east_down.hh"
 #include "jeod/models/utils/orientation/include/orientation.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
 #include "cml/models/dynamics/state_initialize/correlated_state_dispersion/include/correlated_state_dispersion.hh"
 #include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameters.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/alt_lat_long_state.hh"
 #include "monte_carlo_state_dispersion.hh"
 
 class StateInitialize : public jeod::DynBodyInit
@@ -298,6 +296,8 @@ class StateInitialize : public jeod::DynBodyInit
  public:
   StateInitialize();
   ~StateInitialize() override = default;
+  StateInitialize (const StateInitialize &) = delete;
+  StateInitialize & operator = (const StateInitialize &) = delete;
 
   void initialize(  jeod::DynManager & dyn_manager ) override;
   void apply(  jeod::DynManager & dyn_manager ) override;
@@ -326,10 +326,5 @@ class StateInitialize : public jeod::DynBodyInit
   void generate_trans_init_values();
   void generate_rot_init_values(jeod::DynManager & dyn_manager);
   void apply_internal(jeod::DynManager & dyn_manager);
-
- private:
-  // private and unimplemented makes this non-copyable
-  StateInitialize (const StateInitialize &);
-  StateInitialize & operator = (const StateInitialize &);
 };
 #endif
