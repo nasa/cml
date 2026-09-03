@@ -134,7 +134,7 @@ In this formulation, the following notation is used:
 -  Subscripts are used to provide additional descriptions (e.g. :math:`\mathbf{R_{\mathit{rel}}}`
    describes a relative position vector)
 -  Superscripts are used to provide the reference frame in which the vector is expressed (e.g.
-   :math:`\mathbf{R_{\mathit{rel}}^{B}}` describes a relative position vector expressed in the B-frame).
+   :math:`\mathbf{R_{\mathit{rel}}^{\mathit{B}}}` describes a relative position vector expressed in the B-frame).
 -  Vectors provided in their vector form use subscripts to provide the reference frame in which they
    are expressed. For example: :math:`\begin{bmatrix}x \\y \\z \\\end{bmatrix}_{B}`
 -  Superscripts on derivative operators are used to provide the reference frame of observation (e.g.
@@ -154,17 +154,17 @@ Following this notation, the context for each expression is provided below:
    in the inertial frame.
 -  :math:`\mathbf{\hat{z}}` represents the third unit basis vector of the rotating frame, expressed
    in the inertial frame.
--  :math:`\mathbf{T_{\mathit{PRF}/I}}` represents the transformation matrix from the inertial frame
+-  :math:`\mathbf{T_{\mathit{PRF}/\mathit{I}}}` represents the transformation matrix from the inertial frame
    to the rotating frame.
--  :math:`\mathbf{\Omega_{\mathit{PRF}/I}^{\mathit{PRF}}}` represents the angular velocity vector from the inertial
+-  :math:`\mathbf{\Omega_{\mathit{PRF}/\mathit{I}}^{\mathit{PRF}}}` represents the angular velocity vector from the inertial
    frame to the rotating frame, expressed in the rotating frame.
--  :math:`\mathbf{R_{v}}` represents the inertial position vector of the vehicle.
+-  :math:`\mathbf{R_{\mathit{v}}}` represents the inertial position vector of the vehicle.
 -  :math:`\mathbf{R_{\mathit{PRF}}}` represents the inertial position vector of the rotating frame.
--  :math:`\mathbf{R_{v/\mathit{PRF}}}` represents the position vector of the vehicle relative to the
+-  :math:`\mathbf{R_{\mathit{v}/\mathit{PRF}}}` represents the position vector of the vehicle relative to the
    rotating frame.
--  :math:`\mathbf{V_{v}}` represents the inertial velocity vector of the vehicle.
+-  :math:`\mathbf{V_{\mathit{v}}}` represents the inertial velocity vector of the vehicle.
 -  :math:`\mathbf{V_{\mathit{PRF}}}` represents the inertial velocity vector of the rotating frame.
--  :math:`\mathbf{V_{v/\mathit{PRF}}}` represents the velocity vector of the vehicle relative to the
+-  :math:`\mathbf{V_{\mathit{v}/\mathit{PRF}}}` represents the velocity vector of the vehicle relative to the
    rotating frame, as seen from the rotating frame.
 
 .. _pointing-ref-frame:
@@ -200,7 +200,7 @@ represented by the transformation matrix:
    :nowrap:
 
    \begin{equation}
-      \mathbf{T_{\mathit{PRF}/I}} = \begin{bmatrix}
+      \mathbf{T_{\mathit{PRF}/\mathit{I}}} = \begin{bmatrix}
          \mathbf{{\hat{x}}^{T}} \\
          \mathbf{{\hat{y}}^{T}} \\
          \mathbf{{\hat{z}}^{T}} \\
@@ -215,7 +215,7 @@ velocity vector relative to the inertial frame is expressed in the Pointing Refe
    :nowrap:
 
    \begin{equation}
-      \mathbf{\Omega}^{PRF}_{PRF/\mathbf{I}} = \begin{bmatrix}
+      \mathbf{\Omega}^{\mathit{PRF}}_{\mathit{PRF}/\mathit{I}} = \begin{bmatrix}
          0 \\
          0 \\
          \omega_z
@@ -232,9 +232,7 @@ Where:
    \omega_z = \frac{\mathbf{V_{\mathit{rel}}} \cdot \mathbf{\hat{y}}} {\lvert \mathbf{R_{\mathit{rel}}} \rvert}
    \end{equation}
 
-.. math::
-
-Note that the calculation of :math:`\mathbf{\Omega_{\mathit{PRF}/I}^{\mathit{PRF}}}` is independent
+Note that the calculation of :math:`\mathbf{\Omega_{\mathit{PRF}/\mathit{I}}^{\mathit{PRF}}}` is independent
 of the reference frame used to express :math:`\mathbf{R_{\mathit{rel}}}`, :math:`\mathbf{V_{\mathit{rel}}}`,
 and :math:`\mathbf{\hat{y}}`. This is trivially shown by expressing the inner product with vector
 multiplication: :math:`{{\mathbf{V_{\mathit{rel}}} \cdot \mathbf{\hat{y}}} = \mathbf{{V_{\mathit{rel}}}^{T}}}\mathbf{\hat{y}}`.
@@ -325,35 +323,35 @@ origin and applying the transformation matrix from the inertial to the Pointing 
    :nowrap:
 
    \begin{equation}
-      \mathbf{R_{v/\mathit{PRF}}^{PRF}} = \mathbf{T_{\mathit{PRF}/I}} \left( \mathbf{R_{v}^{I}} - \mathbf{R_{\mathit{PRF}}^{I}} \right)
+      \mathbf{R_{\mathit{v}/\mathit{PRF}}^{\mathit{PRF}}} = \mathbf{T_{\mathit{PRF}/\mathit{I}}} \left( \mathbf{R_{\mathit{v}}^{\mathit{I}}} - \mathbf{R_{\mathit{PRF}}^{\mathit{I}}} \right)
    \end{equation}
 
-where :math:`\mathbf{R_{v}^{I}}` and :math:`\mathbf{R_{\mathit{PRF}}^{I}}` are the inertial position vectors for the
+where :math:`\mathbf{R_{\mathit{v}}^{\mathit{I}}}` and :math:`\mathbf{R_{\mathit{PRF}}^{\mathit{I}}}` are the inertial position vectors for the
 vehicle and the origin of the Pointing Reference Frame, respectively, expressed in the inertial frame. As a result,
-:math:`\mathbf{R_{v/\mathit{PRF}}^{\mathit{PRF}}}` is the relative position of the vehicle with respect to the origin
+:math:`\mathbf{R_{\mathit{v}/\mathit{PRF}}^{\mathit{PRF}}}` is the relative position of the vehicle with respect to the origin
 of the pointing reference frame, expressed in the Pointing Reference Frame.
 
 It is important to emphasize that relative velocity as seen from the Pointing Reference Frame, isn't
 simply:
 
-.. math:: \frac{{}^{\mathit{PRF}}d}{\mathit{dt}}{{(\mathbf{R_{v/\mathit{PRF}}})} \neq \mathbf{T_{\mathit{PRF}/I}}}\frac{{}^{I}d}{\mathit{dt}}{(\mathbf{R_{v/\mathit{PRF}}})}
+.. math:: \frac{{}^{\mathit{PRF}}d}{\mathit{dt}}{{(\mathbf{R_{\mathit{v}/\mathit{PRF}}})} \neq \mathbf{T_{\mathit{PRF}/\mathit{I}}}}\frac{{}^{I}d}{\mathit{dt}}{(\mathbf{R_{\mathit{v}/\mathit{PRF}}})}
 
 Instead, the velocity of the vehicle as seen from the Pointing Reference Frame is computed using the
 transport theorem to account for the rotation of the Pointing Reference Frame with respect to the
-inertial. Let :math:`\mathbf{V_{v}} = \frac{{}^{I}d}{\mathit{dt}}{(\mathbf{R_{v}})}` denote the inertial
+inertial. Let :math:`\mathbf{V_{\mathit{v}}} = \frac{{}^{I}d}{\mathit{dt}}{(\mathbf{R_{\mathit{v}}})}` denote the inertial
 velocity of the vehicle, :math:`\mathbf{V_{\mathit{PRF}}} = \frac{{}^{I}d}{\mathit{dt}}{(\mathbf{R_{\mathit{PRF}}})}`
 denote the inertial velocity of the origin of the Pointing Reference Frame, and
-:math:`\mathbf{V_{v/\mathit{PRF}}} = \frac{{}^{\mathit{PRF}}d}{\mathit{dt}}{(\mathbf{R_{v/\mathit{PRF}}})}`
+:math:`\mathbf{V_{\mathit{v}/\mathit{PRF}}} = \frac{{}^{\mathit{PRF}}d}{\mathit{dt}}{(\mathbf{R_{\mathit{v}/\mathit{PRF}}})}`
 denote the vehicle velocity with respect to the origin of the Pointing Reference Frame as seen
 from the Pointing Reference Frame. Applying transport theorem, this relative velocity of the vehicle
 can be expressed as:
 
-.. math:: \mathbf{V_{v/\mathit{PRF}}} = \frac{{}^{I}d}{\mathit{dt}}{{(\mathbf{R_{v/\mathit{PRF}}})} - {\mathbf{\Omega_{\mathit{PRF}/I}} \times \mathbf{R_{v/\mathit{PRF}}}}}
+.. math:: \mathbf{V_{\mathit{v}/\mathit{PRF}}} = \frac{{}^{I}d}{\mathit{dt}}{{(\mathbf{R_{\mathit{v}/\mathit{PRF}}})} - {\mathbf{\Omega_{\mathit{PRF}/\mathit{I}}} \times \mathbf{R_{\mathit{v}/\mathit{PRF}}}}}
 
 Substituting the inertial velocities of the vehicle and the Pointing Reference Frame origin, this
 becomes:
 
-.. math:: \mathbf{V_{v/\mathit{PRF}}} = {{({\mathbf{V_{v}} - \mathbf{V_{\mathit{PRF}}}})} - {\mathbf{\Omega_{\mathit{PRF}/I}} \times \mathbf{R_{v/\mathit{PRF}}}}}
+.. math:: \mathbf{V_{\mathit{v}/\mathit{PRF}}} = {{({\mathbf{V_{\mathit{v}}} - \mathbf{V_{\mathit{PRF}}}})} - {\mathbf{\Omega_{\mathit{PRF}/\mathit{I}}} \times \mathbf{R_{\mathit{v}/\mathit{PRF}}}}}
 
 Finally, expressing the terms in a common Pointing Reference Frame yields:
 
@@ -362,12 +360,12 @@ Finally, expressing the terms in a common Pointing Reference Frame yields:
    :nowrap:
 
    \begin{equation}
-      \mathbf{V_{v/\mathit{PRF}}^{PRF}} =
-         \mathbf{T_{\mathit{PRF}/I}} ({\mathbf{V_{v}^{I}} - \mathbf{V_{\mathit{PRF}}^{I}}}) -
-         \mathbf{\Omega_{\mathit{PRF}/I}^{PRF}} \times \mathbf{R_{v/\mathit{PRF}}^{PRF}}
+      \mathbf{V_{\mathit{v}/\mathit{PRF}}^{\mathit{PRF}}} =
+         \mathbf{T_{\mathit{PRF}/\mathit{I}}} ({\mathbf{V_{\mathit{v}}^{\mathit{I}}} - \mathbf{V_{\mathit{PRF}}^{\mathit{I}}}}) -
+         \mathbf{\Omega_{\mathit{PRF}/\mathit{I}}^{\mathit{PRF}}} \times \mathbf{R_{\mathit{v}/\mathit{PRF}}^{\mathit{PRF}}}
    \end{equation}
 
-where :math:`\mathbf{V_{v}^{I}}` and :math:`\mathbf{V_{\mathit{PRF}}^{I}}` are the inertial velocity
+where :math:`\mathbf{V_{\mathit{v}}^{\mathit{I}}}` and :math:`\mathbf{V_{\mathit{PRF}}^{\mathit{I}}}` are the inertial velocity
 vectors for the vehicle and the origin of the rotating frame, respectively.
 
 ________________________________________________________
@@ -531,9 +529,9 @@ Code Coverage
    ------------------------------------------------------------------------------
    File                                       Lines     Exec  Cover   Missing
    ------------------------------------------------------------------------------
-   models/dynamics/state_descriptors/pointing_ref_frame/include/ephem_based_pointing_ref_frame.hh
+   include/ephem_based_pointing_ref_frame.hh
                                                  14       14   100%
-   models/dynamics/state_descriptors/pointing_ref_frame/src/pointing_ref_frame.cc
+   src/pointing_ref_frame.cc
                                                  87       87   100%
    ------------------------------------------------------------------------------
    TOTAL                                        101      101   100%
@@ -571,12 +569,12 @@ correct.
 The default setup for these unit tests includes these states in the inertial axes (+X, +Y, +Z):
 
 -  Originating-Frame is at rest at the origin:
-   :math:`\mathbf{R_{O}^{I}} = \begin{bmatrix}0 & 0 & 0\end{bmatrix}`,
-   :math:`\mathbf{V_{O}^{I}} = \begin{bmatrix}0 & 0 & 0\end{bmatrix}`.
--  Target-Frame is located at :math:`\mathbf{R_{T}^{I}} = \begin{bmatrix}10 & 0 & 0\end{bmatrix}`
-   and moving in :math:`\mathbf{V_{T}^{I}} = \begin{bmatrix}0 & 5 & 0\end{bmatrix}`.
--  vehicle is located at :math:`\mathbf{R_{v}^{I}} = \begin{bmatrix}10 & 0 & 0\end{bmatrix}` and
-   moving in :math:`\mathbf{V_{v}^{I}} = \begin{bmatrix}0 & 0 & 0\end{bmatrix}`.
+   :math:`\mathbf{R_{\mathit{O}}^{\mathit{I}}} = \begin{bmatrix}0 & 0 & 0\end{bmatrix}`,
+   :math:`\mathbf{V_{\mathit{O}}^{\mathit{I}}} = \begin{bmatrix}0 & 0 & 0\end{bmatrix}`.
+-  Target-Frame is located at :math:`\mathbf{R_{\mathit{T}}^{\mathit{I}}} = \begin{bmatrix}10 & 0 & 0\end{bmatrix}`
+   and moving in :math:`\mathbf{V_{\mathit{T}}^{\mathit{I}}} = \begin{bmatrix}0 & 5 & 0\end{bmatrix}`.
+-  vehicle is located at :math:`\mathbf{R_{\mathit{v}}^{\mathit{I}}} = \begin{bmatrix}10 & 0 & 0\end{bmatrix}` and
+   moving in :math:`\mathbf{V_{\mathit{v}}^{\mathit{I}}} = \begin{bmatrix}0 & 0 & 0\end{bmatrix}`.
 
 All references to the vehicle relative position and velocity are with respect to the origin of the
 Pointing Reference Frame and are expressed in the Pointing Reference Frame axes. The relative
@@ -594,11 +592,11 @@ velocity opposes the *Target-Frame* motion.
 
 Results:
 
-+----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
-| Time (s) | :math:`\mathbf{R}_{v/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\mathbf{V}_{v/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\omega_{z}`    | :math:`\mathbf{\hat{x}}^{T}`     | :math:`\mathbf{\hat{y}}^{T}`     | :math:`\mathbf{\hat{z}}^{T}` |
-+==========+====================================================+====================================================+=======================+==================================+==================================+==============================+
-| 0        | [10,0,0]                                           | [0,-5,0]                                           | 0.5                   | [1,0,0]                          | [0,1,0]                          | [0,0,1]                      |
-+----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
++----------+-------------------------------------------------------------+-------------------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| Time (s) | :math:`\mathbf{R}_{\mathit{v}/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\mathbf{V}_{\mathit{v}/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\omega_{z}`    | :math:`\mathbf{\hat{x}^{T}}`     | :math:`\mathbf{\hat{y}^{T}}`     | :math:`\mathbf{\hat{z}^{T}}` |
++==========+=============================================================+=============================================================+=======================+==================================+==================================+==============================+
+| 0        | [10,0,0]                                                    | [0,-5,0]                                                    | 0.5                   | [1,0,0]                          | [0,1,0]                          | [0,0,1]                      |
++----------+-------------------------------------------------------------+-------------------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
 Offset Positions in 3D
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -746,7 +744,7 @@ pointing frame opposite z-axis with zero velocity.
 Results:
 
 +----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
-| 10       | [0,0,-10]                                          | [0,0,0]                                            | 0.5                   | [0,0,1]                          | [0,1,0]                          | **[-1,0,0]**                 |
+| 10       | [0,0,-10]                                          | [0,0,0]                                            | 0.5                   | [0,0,1]                          | [0,1,0]                          | [-1,0,0]                     |
 +----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
 Target Moving Diagonally in XY
@@ -895,13 +893,13 @@ velocity of zero.
 
 Results:
 
-+----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
-| Time (s) | :math:`\mathbf{R}_{v/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\mathbf{V}_{v/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\omega_{z}`    | :math:`\mathbf{\hat{x}}^{T}`     | :math:`\mathbf{\hat{y}}^{T}`     | :math:`\mathbf{\hat{z}}^{T}` |
-+==========+====================================================+====================================================+=======================+==================================+==================================+==============================+
-| 0        | [3,2,-1]                                           | [8,2,-4]                                           | 1                     | [0,0,1]                          | [0,1,0]                          | [-1,0,0]                     |
-+----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
-| 1        | [3,2,-1]                                           | [6,5,-4]                                           | 0                     | [0,0,1]                          | [0,1,0]                          | [-1,0,0]                     |
-+----------+----------------------------------------------------+----------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
++----------+-------------------------------------------------------------+-------------------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| Time (s) | :math:`\mathbf{R}_{\mathit{v}/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\mathbf{V}_{\mathit{v}/\mathit{PRF}}^{\mathit{PRF}}` | :math:`\omega_{z}`    | :math:`\mathbf{\hat{x}^{T}}`     | :math:`\mathbf{\hat{y}^{T}}`     | :math:`\mathbf{\hat{z}^{T}}` |
++==========+=============================================================+=============================================================+=======================+==================================+==================================+==============================+
+| 0        | [3,2,-1]                                                    | [8,2,-4]                                                    | 1                     | [0,0,1]                          | [0,1,0]                          | [-1,0,0]                     |
++----------+-------------------------------------------------------------+-------------------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
+| 1        | [3,2,-1]                                                    | [6,5,-4]                                                    | 0                     | [0,0,1]                          | [0,1,0]                          | [-1,0,0]                     |
++----------+-------------------------------------------------------------+-------------------------------------------------------------+-----------------------+----------------------------------+----------------------------------+------------------------------+
 
 Relative Position and Velocity Vectors are Aligned (Alternative 1)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

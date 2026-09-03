@@ -82,8 +82,15 @@ graphviz_output_format = "svg"
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_rtd_theme"
-html_theme_options = {"collapse_navigation": False}
+html_theme = "sphinx_book_theme"
+html_theme_options = {
+    "collapse_navigation": False,
+    "pygments_light_style": "tango",
+    "pygments_dark_style":  "monokai",
+}
+html_context = {
+    "default_mode": "light",  # Light mode looks better with equations.
+}
 html_static_path = ["_static"]
 html_js_files = ["trickunits.js"]
 html_css_files = ["trickunits.css", "cml_theme.css"]

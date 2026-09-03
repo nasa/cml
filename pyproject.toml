@@ -13,7 +13,7 @@ dependencies = [
     "regex",
     "sphinx",
     "sphinx-autobuild",
-    "sphinx-rtd-theme",
+    "sphinx-book-theme",
 ]
 
 [project.urls]
