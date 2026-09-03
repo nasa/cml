@@ -1,5 +1,6 @@
+########################
 Pointing Reference Frame
-++++++++++++++++++++++++
+########################
 
 .. list-table:: Revision History
    :widths: 15 30 30 50
@@ -20,7 +21,7 @@ Pointing Reference Frame
    * - 3
      - August 2026
      - Nino Tarantino
-     - Converted to reStructuredText and updated coverage 
+     - Converted to reStructuredText and updated coverage
 
 .. contents:: Table of Contents
    :local:
@@ -423,10 +424,13 @@ The method to schedule for initialization of the model:
 
    P_DYN ("initialization") ephem_rotating_frame.initialize();
 
-The initialization of the non-ephemerides Pointing Reference Frame can occur as early as the
-reference frame initialization in ``P_ENV`` or later. However, the ephemerides pointing reference
-frame should occur quite late in the initialization sequence as it should be after the Ephemeris
-initialization, so ``P_DYN`` or later.
+
+.. important::
+
+    The initialization of the non-ephemerides Pointing Reference Frame can occur as early as the
+    reference frame initialization in ``P_ENV`` or later. However, the ephemerides pointing reference
+    frame should occur quite late in the initialization sequence as it should be after the Ephemeris
+    initialization, so ``P_DYN`` or later.
 
 Routine Execution
 -----------------
@@ -435,9 +439,9 @@ The method to schedule for updates to the model:
 
 .. code-block:: cpp
 
-   P_ENV (DYNAMICS, "environment") non_ephem_rotating_frame.update();
+   (DYNAMICS, "environment") non_ephem_rotating_frame.update();
 
-   P_DYN (DYNAMICS, "environment") ephem_rotating_frame.update();
+   (DYNAMICS, "environment") ephem_rotating_frame.update();
 
 Configuration
 -------------
@@ -536,6 +540,8 @@ Code Coverage
    ------------------------------------------------------------------------------
    TOTAL                                        101      101   100%
    ------------------------------------------------------------------------------
+
+See detailed coverage information `here <https://coveralls.io/github/nasa/cml?branch=main>`_.
 
 Exceptions
 ----------

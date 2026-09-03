@@ -85,8 +85,12 @@ graphviz_output_format = "svg"
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "collapse_navigation": False,
+    "search_as_you_type": True,
     "pygments_light_style": "tango",
     "pygments_dark_style":  "monokai",
+    "repository_url": "https://github.com/nasa/cml",
+    "use_repository_button": True,
+    "use_issues_button": True,
 }
 html_context = {
     "default_mode": "light",  # Light mode looks better with equations.

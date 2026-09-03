@@ -408,9 +408,9 @@ Code Coverage
    ------------------------------------------------------------------------------
    File                                       Lines     Exec  Cover   Missing
    ------------------------------------------------------------------------------
-   models/utilities/subscriptions/include/subscriptions.hh
-                                                  7        4    57%   86,158,166
-   models/utilities/subscriptions/src/subscriptions.cc
+   include/subscriptions.hh
+                                                  7        4    57%   85,157,165
+   src/subscriptions.cc
                                                  56       56   100%
    ------------------------------------------------------------------------------
    TOTAL                                         63       60    95%
@@ -428,22 +428,22 @@ non-dynamically allocated case is tested.
 
 .. literalinclude:: /../../models/utilities/subscriptions/include/subscriptions.hh
    :language: cpp
-   :lines: 86
+   :lines: 85
    :linenos:
-   :lineno-start: 86
+   :lineno-start: 85
 
 The :cpp:func:`SubscriptionBase::activate` and :cpp:func:`SubscriptionBase::deactivate` functions
 are not tested.
 
 .. literalinclude:: /../../models/utilities/subscriptions/include/subscriptions.hh
    :language: cpp
-   :lines: 158
+   :lines: 157
    :linenos:
    :lineno-start: 158
 
 .. literalinclude:: /../../models/utilities/subscriptions/include/subscriptions.hh
    :language: cpp
-   :lines: 166
+   :lines: 165
    :linenos:
    :lineno-start: 166
 

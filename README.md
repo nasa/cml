@@ -14,24 +14,4 @@ models, user guides, and contributing guides can be found there.
 
 # Contact
 
-If after browsing the project documentation you still have questions, please contact:
-
-##### Nino Tarantino
-    CACI - CML Maintainer and primary POC
-    B16/105
-    antonio.tarantino@nasa.gov
-
-##### Daniel Jordan
-    NASA/EG2 - CML Task Lead, CI & Infrastructure
-    B16/1158
-    daniel.d.jordan@nasa.gov
-
-##### Gary Turner
-    Odyssey - Architect of Many CML Models
-    B16/139
-    gary.w.turner@nasa.gov
-
-##### Jason Arnold
-    NASA/EG2 - CML Task Lead
-    B16/1158
-    jason.s.arnold@nasa.gov
+If after browsing the project documentation you still have questions, please see our [contants list](https://nasa.github.io/cml/#contact).

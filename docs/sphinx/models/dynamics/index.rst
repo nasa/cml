@@ -5,9 +5,8 @@ Dynamics models relate to spacecraft dynamic motion, relative states of spacecra
 bodies, and various other extensions to JEOD's :cpp:expr:`DynBody` models.
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :caption: Models
     :name: dynamics-models
-    :titlesonly:
 
     pointing-ref-frame.rst
