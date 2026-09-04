@@ -334,7 +334,7 @@ RocketMotor_MultiNozzle::initialize_nozzles()
      "Zeroing the scale-factor on all nozzles.\n");
   }
   else {
-    sf_scale = MathUtils::divide_protected( num_noz,
+    sf_scale = MathUtils::divide_protected( static_cast<double>(num_noz),
                                             total_dispersed_scale_factor,
                                             0.0);
   }
@@ -402,7 +402,7 @@ RocketMotor_MultiNozzle::update()
   // checked and enforced to be equal to the number of nozzles.
   // NOTE - num_noz != 0 verified at initialization, resulting in termination if
   // it failed.
-  double thrust_per_sf = thrust_magnitude / num_noz;
+  double thrust_per_sf = thrust_magnitude / static_cast<double>(num_noz);
   // Start by initializing the system values to allow incremental accumulation
   jeod::Vector3::initialize(thrust);
   jeod::Vector3::initialize(thrust_vac);
@@ -428,10 +428,11 @@ RocketMotor_MultiNozzle::update()
 
     // Add the nozzle thrust and moment to the system totals
     if (using_flex) { // Adjust thrust and moment
+      const size_t noz_num = 3UL * ii;
       double new_position[3]; // For calculating moment
-      jeod::Vector3::sum(pos_wrt_cm, motor_lin_flex + 3*ii, new_position);
+      jeod::Vector3::sum(pos_wrt_cm, motor_lin_flex + noz_num, new_position);
 
-      double rotang = jeod::Vector3::vmag(motor_rot_flex + 3*ii);
+      double rotang = jeod::Vector3::vmag(motor_rot_flex + noz_num);
       if (rotang > flex_threshold) {
         // Euler rotation: angle = vmag(motor_rot_flex_ii)
         //           unit vector = motor_rot_flex_ii / vmag(motor_rot_flex_ii)
@@ -439,7 +440,7 @@ RocketMotor_MultiNozzle::update()
         // Perform the rotation using a quaternion
         jeod::Quaternion Q_flex;
         Q_flex.scalar = std::cos(rotang / 2);
-        jeod::Vector3::scale( motor_rot_flex + 3*ii,
+        jeod::Vector3::scale( motor_rot_flex + noz_num,
                         std::sin(rotang / 2) / rotang,
                         Q_flex.vector);
 
@@ -489,7 +490,7 @@ RocketMotor_MultiNozzle::shutdown_motor()
   for (unsigned int ii = 0; ii<num_noz; ii++)  {
     nozzles_ptr_vec[ii]->shutdown_nozzle();
   }
-  RocketMotor_Basic::shutdown_motor();
+  RocketMotor_TableThrust::shutdown_motor();
 }
 
 /*******************************************************************************

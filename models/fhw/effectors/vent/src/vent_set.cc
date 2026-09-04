@@ -79,24 +79,22 @@ VentSet::VentSet(
 }
 /************************************************************************
 (d) All vents off their own individual tank
-    Note -- this is dangerous because it assumes the array is the same size
-            as num_vents.
 ************************************************************************/
 VentSet::VentSet(
-        size_t  num_vents,
         jeod::DynBody& dyn_body_,
         const double & time,
-        DynamicMassBody * tank_array)
+        const std::vector<DynamicMassBody *>& tank_array)
   :
   VentSet(dyn_body_, time)
 {
-  if (tank_array == nullptr) {
-    CMLMessage::fail(
-    __FILE__,__LINE__,"Construction error.\n",
-    "Tank array has not been specified.\n");
-  }
-  for (size_t ii = 0; ii < num_vents; ++ii) {
-    Vent * new_vent = new Vent( time, tank_array[ii]);
+  for (auto* tank : tank_array) {
+    if (tank == nullptr) {
+      CMLMessage::fail(
+         __FILE__,__LINE__,"Construction error.\n",
+         "Tank pointer cannot be null.\n");
+      return;
+    }
+    Vent * new_vent = new Vent( time, *tank);
     new_vent->allocated_in_set = true;
     vents.push_back( new_vent);
   }

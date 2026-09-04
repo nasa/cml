@@ -78,19 +78,19 @@ void SimpleVent::use_impulse_mode(bool mode)
         "Vent '", name, "': Cannot transition to impulsive mode because\n"
         "the impulse vector has not been set.\n");
     }
-    // Test 2: Check to see if the impulse value has changed since
-    // initialization; this could be the result of an external post-init
-    // setting.
-    else if ( MathUtils::has_changed_from( impulse_mag,
-                                           user_set_impulse)) {
-      apply_as_impulse = true;
-      CMLMessage::warn(__FILE__, __LINE__, "Impulse magnitude changed\n",
-        "The impulse magnitude was overwritten while vent '", name, "' was in\n"
-        "dynamic mode.\nUser-set value: ", user_set_impulse, " N*s\nCurrent value: ", impulse_mag, " N*s\n");
-    }
-    // else: post-init, impulse exists and matches that from initialization.
     else {
+      // Post-init and an impulse exists: transition is allowed.
       apply_as_impulse = true;
+
+      // Test 2: Check to see if the impulse value has changed since
+      // initialization; this could be the result of an external post-init
+      // setting.
+      if ( MathUtils::has_changed_from( impulse_mag,
+                                        user_set_impulse)) {
+        CMLMessage::warn(__FILE__, __LINE__, "Impulse magnitude changed\n",
+          "The impulse magnitude was overwritten while vent '", name, "' was in\n"
+          "dynamic mode.\nUser-set value: ", user_set_impulse, " N*s\nCurrent value: ", impulse_mag, " N*s\n");
+      }
     }
   }
 
@@ -106,15 +106,15 @@ void SimpleVent::use_impulse_mode(bool mode)
         "Vent '", name, "': Cannot transition to dynamic (force) mode because\n"
         "the force vector has not been set.\n");
     }
-    else if (MathUtils::has_changed_from( duration,
-                                          user_set_duration)) {
-      apply_as_impulse = false;
-      CMLMessage::warn(__FILE__, __LINE__, "Duration changed\n",
-        "The duration was overwritten while vent '", name, "' was in impulse mode.\n"
-        "User-set value: ", user_set_duration, " s\nCurrent value: ", duration, " s\n");
-    }
     else {
       apply_as_impulse = false;
+
+      if (MathUtils::has_changed_from( duration,
+                                       user_set_duration)) {
+        CMLMessage::warn(__FILE__, __LINE__, "Duration changed\n",
+          "The duration was overwritten while vent '", name, "' was in impulse mode.\n"
+          "User-set value: ", user_set_duration, " s\nCurrent value: ", duration, " s\n");
+      }
     }
   }
 }

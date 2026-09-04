@@ -105,8 +105,12 @@ DynamicMassString::distribute_mass_consumption()
 
     // if flow_down, only use 1 body at a time, so put all the mass demand
     // onto that body:
-    double mass_per = (flow_down)? mass_to_distribute :
-                                   mass_to_distribute / available_bodies.size();
+    double mass_per;
+    if (flow_down) {
+      mass_per = mass_to_distribute;
+    } else {
+      mass_per = mass_to_distribute / static_cast<double>(available_bodies.size());
+    }
 
     // reset mass_to_distribute to 0 so that any shortfall can be incremented
     mass_to_distribute = 0.0;

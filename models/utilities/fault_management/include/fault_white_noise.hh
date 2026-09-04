@@ -64,7 +64,7 @@ bool FaultWhiteNoise<T>::set_param(const std::string& param_name, double value, 
   } else if (param_name == "max") {
     noise.upper_limit = value;
   } else if (param_name == "seed") {
-    noise.seed = value;
+    noise.seed = static_cast<unsigned long>(value);
   } else {
     return Fault::set_param(param_name, value);
   }
