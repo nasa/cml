@@ -828,7 +828,7 @@ GenericMultiInputTable::generate_base_values()
   // Increment current_dimension as independents are processed.
   size_t current_dimension = 1;
 
-  for (const IndepPair independent : independents) {
+  for (const IndepPair& independent : independents) {
     TableIndependentVariable & TIV = *independent.first;
     // Trivial case, the independent variable has 1 (or fewer, if that is
     // possible) data point.
