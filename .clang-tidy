@@ -1,4 +1,3 @@
----
 # Ignored warnings:
 #
 # bugprone:
@@ -17,7 +16,10 @@
 #         of padding.
 #
 # misc:
-#     To be added in a future pull request
+#     misc-no-recursion:
+#         Recursion is fine.
+#     misc-non-private-member-variables-in-classes:
+#         Not useful for Trick sims.
 #
 # modernize:
 #     To be added in a future pull request
@@ -54,7 +56,9 @@ Checks: >
         -clang-analyzer-optin.performance.Padding,
     google-build-using-namespace,
     google-global-names-in-headers,
-    misc-inclue-cleaner,
+    misc-*,
+        -misc-no-recursion,
+        -misc-non-private-member-variables-in-classes,
     modernize-use-equals-delete,
     portability-*,
         -portability-template-virtual-member-function,
@@ -66,6 +70,7 @@ WarningsAsErrors: '*'
 HeaderFilterRegex: '(^|/)(models|utility)/.*'
 
 CheckOptions:
+    - key: misc-const-correctness.AnalyzePointers
+      value: false  # False positives when returning non-const pointers from a function
     - key: misc-include-cleaner.IgnoreHeaders
       value: 'math.h;cmath;' # Only for M_PI. Remove when we go to C++20.
-...
