@@ -560,7 +560,7 @@ TwistSway::compute_twist_sway_enu()
       return;
     }
   }
-  const double u = std::sqrt(u2);
+  const double u =  std::sqrt(u2);
 
   // East and North
   dp_enu[0] = e;
@@ -596,8 +596,9 @@ TwistSway::compute_twist_sway_enu()
   }
 
   // apply the twist:
-  double q_vec[3] =  {0, 0, -std::sin(twist_angle/2)};
-  const jeod::Quaternion Q_sway_to_ts( std::cos(twist_angle/2),
+  const double half_twist_angle = 0.5 * twist_angle;
+  const double q_vec[3] =  {0, 0, -std::sin(half_twist_angle)};
+  const jeod::Quaternion Q_sway_to_ts( std::cos(half_twist_angle),
                            q_vec);
 
   Q_sway_to_ts.multiply( Q_enu_to_sway,

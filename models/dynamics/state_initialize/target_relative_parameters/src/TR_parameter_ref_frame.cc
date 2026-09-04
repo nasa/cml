@@ -59,7 +59,7 @@ bool TR_Parameter_RefFrame::compute_frame(
   jeod::Vector3::normalize( vec_B,
                       vec_B_hat);
 
-  const double cos_theta = std::fabs(jeod::Vector3::dot(u_hat, vec_B_hat));
+  const double cos_theta = std::fabs(jeod::Vector3::dot( u_hat, vec_B_hat));
   if (cos_theta > cos_0_01_deg) { // i.e. theta < 0.01 degrees
     CMLMessage::error( __FILE__,__LINE__,
       "Error in generating frame '",name,"'\n"

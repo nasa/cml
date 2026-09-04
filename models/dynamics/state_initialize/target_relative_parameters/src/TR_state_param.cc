@@ -372,7 +372,7 @@ TargetRelative_StateParam::compute_params_from_vectors()
   }
 
   // generate the unit vector to the initial position.
-  const double r_mag = jeod::Vector3::vmag(position);
+  const double r_mag = jeod::Vector3::vmag( position );
   if (MathUtils::is_near_equal( r_mag, 0)) {
     CMLMessage::error( __FILE__,__LINE__,
       "The input position has zero magnitude.\n"

@@ -238,7 +238,7 @@ PointToPointManager::add_point(
     }
   }
 
-  const PointToPointElement new_pt(pt_name, pt_pos);
+  const PointToPointElement new_pt( pt_name, pt_pos);
   if (!new_pt.name.empty()) {
     element_list.push_back(new_pt);
   }
