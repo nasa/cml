@@ -9,10 +9,18 @@ PURPOSE: (
   - one is applied when the boolean state switches from false to true
   - the other is applies when the state switches from true to false.
  )
+
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2026/02) (ANTARES) (initial implementation)))
 *******************************************************************************/
+#include "../include/watch_values_base_core.hh"
 #include "../include/watch_values_flipflop.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstdlib>
+#include <list>
 
 /*****************************************************************************
 Constructor
@@ -81,7 +89,7 @@ Notes:
 bool
 WatchValuesFlipFlop::test_crossing()
 {
-  bool new_state = associated_watch.test_crossing();
+  const bool new_state = associated_watch.test_crossing();
   event_triggered = (new_state != state);
   state = new_state;
   return event_triggered;
@@ -101,7 +109,7 @@ WatchValuesFlipFlopDelayed::test_crossing()
   }
   /* If not in a delay-pattern, test the crossing just as we would for any
    * other event, and if detected, start the delay process.*/
-  bool new_state = associated_watch.test_crossing();
+  const bool new_state = associated_watch.test_crossing();
   // If no change, nothing to do; event is untriggered:
   if (new_state == state) {
     event_triggered = false;

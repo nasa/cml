@@ -26,13 +26,14 @@ PROGRAMMERS:
 #define CML_IMPACT_POINT_HH
 
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
-#include "jeod/models/environment/planet/include/planet.hh"
 #include "cml/models/dynamics/state_descriptors/range/include/range_from_pfix_reference.hh"
 #include "cml/models/dynamics/state_descriptors/orb_elem_subset/include/orb_elem_subset.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
-// Forward declaration
+namespace jeod {
+class Planet;
 class RefFrameTrans;
+}
 
 class ImpactPoint : public jeod::PlanetFixedPosition, 
                     public SubscriptionBase 
@@ -86,6 +87,8 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
               const jeod::Planet & planet_in,
               const double & grav_mu_in);
   ~ImpactPoint() override = default;
+  ImpactPoint(const ImpactPoint&) = delete;
+  ImpactPoint & operator = (const ImpactPoint&) = delete;
   
   void initialize() override;
   void initialize( const double reference_position_pfix[3]);
@@ -96,12 +99,6 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
   void update_non_equatorial();
   void update_time();
   void activate() override;
-
- private:
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  ImpactPoint(const ImpactPoint&);
-  ImpactPoint & operator = (const ImpactPoint&);
 };
  
 #endif

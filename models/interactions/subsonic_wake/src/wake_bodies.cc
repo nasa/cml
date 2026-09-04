@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Definition of the bodies in the wake profile.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   ( ((Gary Turner) (OSR) (Mar 2016) (Antares)
                 (New adaptation to meet Antares coding standards))
@@ -8,9 +11,9 @@ PROGRAMMERS:
                   warning of float-point number equality comparison)))
 **********************************************************************/
 
-#include <cmath> // sqrt
-#include <cstring> // NULL
-#include <limits> // numeric_limits<double>::min
+#include <cmath>
+#include <limits>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "../include/wake_bodies.hh"

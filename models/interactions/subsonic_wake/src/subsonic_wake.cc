@@ -18,7 +18,11 @@ NOTES:
 **********************************************************************/
 
 #include "../include/subsonic_wake.hh"
+#include "../include/wake_bodies.hh"
+#include "../include/wake_effects.hh"
+#include "../include/wake_params.hh"
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 
@@ -125,7 +129,7 @@ SubsonicWake::update()
   // populate the standard outputs and leave.
   // Similarly, if there is no force to be computed, and the vehicle is too
   // slow, the same rule applies.
-  bool fast_enough = (objectA.freestream_mach >=  params.mach_off);
+  const bool fast_enough = (objectA.freestream_mach >=  params.mach_off);
   if (params.generate_distance_override ||
        ( fast_enough && (rev_flow.is_active() || prf_model.is_active()))) {
     objectB_ref.compute_relative_state();

@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "aero_interface_base.hh"
 #include "aero_executive_simple_lift_drag.hh"
 
+class AtmosRelativeState;
+
 /*******************************************************************************
 AeroInterfaceSimpleLiftDrag
 Purpose:(Provides a simple aerodynamic interface to access the simple
@@ -30,14 +32,10 @@ public:
                        const double (&T_inrtl_struc)[3][3],
                        const double & mass);
   ~AeroInterfaceSimpleLiftDrag() override = default;
+  AeroInterfaceSimpleLiftDrag (const AeroInterfaceSimpleLiftDrag &) = delete;
+  AeroInterfaceSimpleLiftDrag & operator = (const AeroInterfaceSimpleLiftDrag &) = delete;
 
   void initialize() override;
   void update() override;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroInterfaceSimpleLiftDrag (const AeroInterfaceSimpleLiftDrag &);
-  AeroInterfaceSimpleLiftDrag & operator = (const AeroInterfaceSimpleLiftDrag &);
 };
 #endif

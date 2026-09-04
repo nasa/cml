@@ -42,7 +42,7 @@ PROGRAMMERS:
 #ifndef CML_DYNAMIC_MASS_BODY_NOMINAL_PROPERTIES_HH
 #define CML_DYNAMIC_MASS_BODY_NOMINAL_PROPERTIES_HH
 
-#include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
 
 // NOTE - this class does not inherit from jeod::MassProperties because of the
 // extraneous capabilities that jeod::MassPoint (parent to jeod::MassProperties)
@@ -61,12 +61,9 @@ protected:
 // NOTE - source code found in dynamic_mass_body_properties.cc
 public:
    DynamicMassBodyNominalProperties();
+   DynamicMassBodyNominalProperties (const DynamicMassBodyNominalProperties&) = delete;
+   DynamicMassBodyNominalProperties& operator = (const DynamicMassBodyNominalProperties&) = delete;
    void set_data( jeod::MassProperties & properties_in);
-
-private:
-   // To prevent the copy/assignment operations
-   DynamicMassBodyNominalProperties (const DynamicMassBodyNominalProperties&);
-   DynamicMassBodyNominalProperties& operator = (const DynamicMassBodyNominalProperties&);
 };
 
 

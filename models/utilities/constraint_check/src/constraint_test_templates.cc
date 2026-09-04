@@ -9,7 +9,7 @@ PROGRAMMERS:
  )
 *******************************************************************************/
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "../include/constraint_test_templates.hh"
 
 /*****************************************************************************

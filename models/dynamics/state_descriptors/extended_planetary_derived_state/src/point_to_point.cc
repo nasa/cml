@@ -3,6 +3,9 @@ PURPOSE: (Provides an extension that computes the relative position
           between one or more points fixed to the ground and one or more points
           fixed to a vehicle.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS / LIMITATIONS:
   ((Each instance of PointToPointManager deals with 1 planetary body and 1
     jeod::DynBody.  It can handle multiple points on each body, but cannot handle
@@ -20,7 +23,15 @@ PROGRAMMERS:
 #include "../include/point_to_point.hh"
 
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
+
+#include <list>
+#include <string>
+#include <utility>
 
 namespace {
 
@@ -66,10 +77,7 @@ void add_point(
     }
   }
 
-  PointToPointElement new_pt( pt_name, pt_pos);
-  if (!new_pt.name.empty()) {
-    element_list.push_back(new_pt);
-  }
+  element_list.emplace_back(pt_name, pt_pos);
 }
 
 } // namespace
@@ -80,6 +88,8 @@ Constructor
 PointToPointElement::PointToPointElement(
     std::string name_,
     double      position_[3])
+  :
+  name(std::move(name_))
 {
   if (position_ == nullptr) {
     CMLMessage::error(
@@ -88,7 +98,6 @@ PointToPointElement::PointToPointElement(
       "Cannot construct a PointToPointElement with a NULL position.\n");
     return;
   }
-  name = name_;
   jeod::Vector3::copy( position_, position);
 }
 /****************************************************************************/
@@ -96,41 +105,36 @@ PointToPointPosition::PointToPointPosition(
     std::string v_name_,
     std::string p_name_)
   :
-  position{0,0,0},
-  v_pos{0,0,0},
-  p_pos{0,0,0},
-  v_name(v_name_),
-  p_name(p_name_)
+  v_name(std::move(v_name_)),
+  p_name(std::move(p_name_))
 {}
 /****************************************************************************/
 PointToPointManager::PointToPointManager(
     const jeod::PlanetFixedPosition & B_wrt_P_in_P_)
   :
-  B_wrt_P_in_P( B_wrt_P_in_P_),
-  dyn_body( nullptr),
-  pfix_frame_rot_state( nullptr)
+  B_wrt_P_in_P( B_wrt_P_in_P_)
 {}
 
 /*****************************************************************************
 Copy-constructors
 *****************************************************************************/
 PointToPointElement::PointToPointElement(
-    const PointToPointElement & orig)
+    const PointToPointElement & original)
   :
-  name(orig.name)
+  name(original.name)
 {
-  jeod::Vector3::copy( orig.position, position);
+  jeod::Vector3::copy( original.position, position);
 }
 /****************************************************************************/
 PointToPointPosition::PointToPointPosition(
-    const PointToPointPosition & orig)
+    const PointToPointPosition & original)
   :
-  v_name( orig.v_name),
-  p_name( orig.p_name)
+  v_name( original.v_name),
+  p_name( original.p_name)
 {
-  jeod::Vector3::copy( orig.position, position);
-  jeod::Vector3::copy( orig.v_pos, v_pos);
-  jeod::Vector3::copy( orig.p_pos, p_pos);
+  jeod::Vector3::copy( original.position, position);
+  jeod::Vector3::copy( original.v_pos, v_pos);
+  jeod::Vector3::copy( original.p_pos, p_pos);
 }
 
 /*****************************************************************************
@@ -141,8 +145,8 @@ Purpose:
 *****************************************************************************/
 bool
 PointToPointPosition::check_names(
-    std::string v_pt_name,
-    std::string p_pt_name)
+    const std::string & v_pt_name,
+    const std::string & p_pt_name)
 {
   return ((v_pt_name == v_name) && (p_pt_name == p_name));
 }
@@ -223,7 +227,7 @@ Purpose:
 *****************************************************************************/
 void
 PointToPointManager::add_vehicle_point(
-    std::string pt_name,
+    const std::string & pt_name,
     double pt_pos[3])
 {
   add_point( pt_name, pt_pos, vehicle_points, "vehicle");
@@ -236,7 +240,7 @@ Purpose:
 *****************************************************************************/
 void
 PointToPointManager::add_planet_point(
-    std::string pt_name,
+    const std::string & pt_name,
     double pt_pos[3])
 {
   add_point( pt_name, pt_pos, planet_points, "planet");
@@ -255,8 +259,8 @@ Purpose:
 *****************************************************************************/
 double *
 PointToPointManager::add_relative_position(
-    std::string v_pt_name,
-    std::string p_pt_name)
+    const std::string & v_pt_name,
+    const std::string & p_pt_name)
 {
   // Check for a pre-existing match
   for (auto it_r = relative_positions.begin();
@@ -304,8 +308,8 @@ PointToPointManager::add_relative_position(
 /****************************************************************************/
 void
 PointToPointManager::add_relative_position(
-    std::string v_pt_name,
-    std::string p_pt_name,
+    const std::string & v_pt_name,
+    const std::string & p_pt_name,
     double    *& target)
 {
   target = add_relative_position( v_pt_name, p_pt_name);
@@ -319,8 +323,8 @@ Purpose:
 *****************************************************************************/
 void
 PointToPointManager::remove_relative_position(
-    std::string v_pt_name,
-    std::string p_pt_name)
+    const std::string & v_pt_name,
+    const std::string & p_pt_name)
 {
   for (auto it_r = relative_positions.begin();
             it_r != relative_positions.end(); ++it_r) {
@@ -345,8 +349,8 @@ Purpose:
 *****************************************************************************/
 double *
 PointToPointManager::get_relative_position(
-  std::string v_pt_name,
-  std::string p_pt_name)
+  const std::string & v_pt_name,
+  const std::string & p_pt_name)
 {
   for (auto it_r = relative_positions.begin();
             it_r != relative_positions.end(); ++it_r) {
@@ -373,10 +377,10 @@ PointToPointManager::make_all_pairings()
 {
   for (auto it_v = vehicle_points.begin();
             it_v != vehicle_points.end(); ++it_v) {
-    std::string v_name = (*it_v).name;
+    const std::string v_name = (*it_v).name;
     for (auto it_p = planet_points.begin();
               it_p != planet_points.end(); ++it_p) {
-      std::string p_name = (*it_p).name;
+      const std::string p_name = (*it_p).name;
       bool match = false;
       for (auto it_r = relative_positions.begin();
                 it_r != relative_positions.end(); ++it_r) {

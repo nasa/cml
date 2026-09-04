@@ -30,8 +30,6 @@ PROGRAMMERS:
 #ifndef CML_AERO_EXECUTIVE_BASE_HH
 #define CML_AERO_EXECUTIVE_BASE_HH
 
-#include <cstring>  // NULL
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "aero_interface_output.hh"
@@ -67,17 +65,14 @@ public:
     subscribe_name = "AeroExecutiveBase:";
   }
 
+  AeroExecutiveBase (const AeroExecutiveBase &) = delete;
+  AeroExecutiveBase & operator= (const AeroExecutiveBase &) = delete;
+
   void deactivate() override {
     output.zero_everything();
     SubscriptionBase::deactivate();
   }
 
   virtual void update() = 0;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies
-  AeroExecutiveBase (const AeroExecutiveBase &);
-  AeroExecutiveBase & operator= (const AeroExecutiveBase &);
 };
 #endif

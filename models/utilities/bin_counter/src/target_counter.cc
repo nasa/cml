@@ -3,6 +3,9 @@ PURPOSE:
   (Define structure and function prototypes for counting the number of
   times some integer variable has specific values.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (
     ((Matthew Elmer, Gary Turner) (OSR) (Jun 2023)
@@ -10,8 +13,11 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#include <algorithm> // any_of, find_if
+#include <algorithm>
+#include <cstddef>
+#include <vector>
 #include "../include/target_counter.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 Constructor
@@ -56,7 +62,7 @@ CML_TargetCounter::set_data(const std::vector<int> & targets_)
   targets.clear();
   ntarget = 0;
 
-  size_t num_targets = targets_.size();
+  const size_t num_targets = targets_.size();
   // Sanity check for number of targets:
   if (num_targets == 0) {
     CMLMessage::error( __FILE__,__LINE__,
@@ -70,7 +76,7 @@ CML_TargetCounter::set_data(const std::vector<int> & targets_)
   targets.resize(num_targets);
   for (size_t i_src = 0; i_src < num_targets; ++i_src) {
     // Check for uniqueness:
-    int src = targets_[i_src];
+    const int src = targets_[i_src];
     if (!does_val_exist(src)) {
       targets[ntarget].value = src;
       ntarget++;
@@ -87,8 +93,8 @@ CML_TargetCounter::set_data( int limit_a,
   targets.clear();
   ntarget = 0;
 
-  int lower_limit = std::min( limit_a, limit_b);
-  int upper_limit = std::max( limit_a, limit_b);
+  const int lower_limit = std::min( limit_a, limit_b);
+  const int upper_limit = std::max( limit_a, limit_b);
 
   ntarget = static_cast<size_t>(upper_limit - lower_limit) + 1;
   targets.resize(ntarget);
@@ -114,7 +120,7 @@ CML_TargetCounter::insert(int value)
    *     - If a target was identified, increment its count.
    */
   auto it = std::find_if( targets.begin(), targets.end(),
-                          [value](CML_TargetCounterElement & target) {
+                          [value](const CML_TargetCounterElement & target) {
                             return (target.value == value);}
                         );
   if (it != targets.end()) { (it->count)++;}

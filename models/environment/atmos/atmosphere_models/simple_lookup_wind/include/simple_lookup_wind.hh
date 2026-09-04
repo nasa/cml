@@ -17,8 +17,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "cml/models/utilities/table_interp_cpp/include/simple_table_lookup.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/math/include/vector3.hh"
+#include <cstddef>
 
 // NOTES - the table-lookup capabilities assume that the driving independent
 //         variable is altitude;
@@ -93,6 +92,8 @@ class SimpleLookupWind : public SubscriptionBase
 
   SimpleLookupWind();
   ~SimpleLookupWind() override = default;
+  SimpleLookupWind (const SimpleLookupWind&) = delete;
+  SimpleLookupWind & operator = (const SimpleLookupWind&) = delete;
 
   void initialize() override;
   void update(double altitude);
@@ -106,10 +107,5 @@ class SimpleLookupWind : public SubscriptionBase
                             size_t         num_elem_per_variable);
   void assign_dir_mag_vert_data( const double * data_array,
                                  size_t         num_elem_per_variable);
-
- private:
-  // private and unimplemented; cannot be used.
-  SimpleLookupWind (const SimpleLookupWind&);
-  SimpleLookupWind & operator = (const SimpleLookupWind&);
 };
 #endif

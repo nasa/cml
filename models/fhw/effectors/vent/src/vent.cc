@@ -1,11 +1,17 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Generic vent model with mass depletion)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (initial version)))
 ************************************************************************/
 
-#include "jeod/models/utils/math/include/vector3.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/fhw/effectors/vent/include/simple_vent.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/vent.hh"
 
@@ -122,8 +128,8 @@ void Vent::update()
     - the available mass allows for stopping a vent when it has no more mass
       to vent.
   */
-  double available_mass = tank.dynamic_properties.consumable_mass -
-                          tank.dynamic_properties.mass_consumed_step;
+  const double available_mass = tank.dynamic_properties.consumable_mass -
+                                tank.dynamic_properties.mass_consumed_step;
   if ( active &&
        (indefinite_duration || dyn_time < stop_time) &&
        available_mass > 0.0) {
@@ -348,8 +354,8 @@ Purpose:(If there is not enough mass to generate the requested impulse, adjusts
 *****************************************************************************/
 void Vent::check_status()
 {
-  double available_mass = tank.dynamic_properties.consumable_mass -
-                          tank.dynamic_properties.mass_consumed_step;
+  const double available_mass = tank.dynamic_properties.consumable_mass -
+                                tank.dynamic_properties.mass_consumed_step;
   if (available_mass * exhaust_speed < impulse_mag) {
       // Scale the impulse magnitude and the mass consumption such that all the
       // mass is used.

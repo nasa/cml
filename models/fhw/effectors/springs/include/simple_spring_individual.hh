@@ -45,15 +45,13 @@ protected:
  // Methods:
 public:
   SimpleSpringIndividual(); 
+  SimpleSpringIndividual(const SimpleSpringIndividual& rhs) = delete;
+  SimpleSpringIndividual & operator= (const SimpleSpringIndividual&) = delete;
   void set_active( bool arg){active = arg;}
   bool get_active() const {return active;}
   void initialize();
   double calculate_force( double separation_distance,
                           double separation_speed);
-private:
-  // operator= and copy constructor declared private and not implemented
-  SimpleSpringIndividual(const SimpleSpringIndividual& rhs);
-  SimpleSpringIndividual & operator= (const SimpleSpringIndividual&);
 };
 
 #endif

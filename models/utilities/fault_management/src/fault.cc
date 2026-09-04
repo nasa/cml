@@ -2,13 +2,18 @@
 PURPOSE:
   (Base class for managing fault injection for a single variable.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
 ############################################################################*/
 
 #include "../include/fault.hh"
+#include "../include/trigger_group.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 /*****************************************************************************
 Constructor
@@ -69,7 +74,7 @@ set_param
 Purpose:(Generic method for setting fault parameters. This base method is
          called if the child class does not recognize the parameter name.)
 *******************************************************************************/
-bool Fault::set_param( std::string param_name,
+bool Fault::set_param( const std::string& param_name,
                        [[maybe_unused]] double value,
                        [[maybe_unused]] bool reset_nominal)
 {

@@ -2,15 +2,22 @@
 PURPOSE:
   (definitions for the single-variable methods for the n-dimensional lookup tables)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (dec 2015) (Antares) (initial version))
    ((Bingquan Wang) (OSR) (aug 2017) (Antares) (IVV code cleanup and refactored))
   )
 *******************************************************************************/
 
+#include <algorithm>
 #include <cstddef>
 
 #include "../include/generic_multi_input_table.hh"
+#include "../include/table_independent_variable.hh"
+#include "../include/table_type_defs.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 // NOTE - using [index] rather than .at(index) to index STL-vectors primarily
 //        because doing so is much faster.
@@ -317,7 +324,7 @@ GenericMultiInputTable::initialize()
   }
 
   // number of dimensions of data in the array:
-  size_t data_dimension = size_of_dimension.size();
+  const size_t data_dimension = size_of_dimension.size();
   // number of independent variables:
   size_t num_independents = independents.size();
 
@@ -652,7 +659,7 @@ GenericMultiInputTable::copy_data(
     return false;
   }
   // Configure internal data structure, abort on error
-  size_t total_data_elements = configure_internal_data_structure();
+  const size_t total_data_elements = configure_internal_data_structure();
   if (total_data_elements == 0) {
     CMLMessage::error(
       __FILE__,__LINE__,"Table data-load error\n",
@@ -676,7 +683,7 @@ GenericMultiInputTable::copy_data(
            const DoubleVec & data_in)
 {
   // Configure internal data structure, abort on error
-  size_t total_data_elements = configure_internal_data_structure();
+  const size_t total_data_elements = configure_internal_data_structure();
   if (total_data_elements == 0) {
     CMLMessage::error(
       __FILE__,__LINE__,"Table data-load error\n",
@@ -785,7 +792,7 @@ GenericMultiInputTable::generate_base_values()
   // First go through the list of the independents, computing how many
   // interpolation points are needed for this dependent variable.
   size_t num_independents_interp = 0;
-  for( IndepPair independent : independents) {
+  for( const IndepPair& independent : independents) {
     if (  independent.second == TableIndependentVariable::Interp &&
          !independent.first->is_off_table()) {
       ++num_independents_interp;
@@ -815,8 +822,8 @@ GenericMultiInputTable::generate_base_values()
   // Increment current_dimension as independents are processed.
   size_t current_dimension = 1;
 
-  for( IndepPair independent : independents) {
-    TableIndependentVariable & TIV = *independent.first;
+  for (const IndepPair& independent : independents) {
+    const TableIndependentVariable & TIV = *independent.first;
     // Trivial case, the independent variable has 1 (or fewer, if that is
     // possible) data point.
     // NOTE - this should not be possible; such an independent should have
@@ -884,9 +891,9 @@ GenericMultiInputTable::generate_base_values()
       //   rather than an "interpolation"), this index is not finalized for any
       //   data point until all independent variables have processed.
       //   The index value is incremented as each independent gets processed.
-      double weight_upper  = TIV.fraction;
-      double weight = 1-weight_upper;
-      size_t index_upper = index+1;
+      const double weight_upper  = TIV.fraction;
+      const double weight = 1-weight_upper;
+      const size_t index_upper = index+1;
       for (size_t jj=0; jj<num_data_points_interp; ) {
         // Apply the values from the lower index, applying the parameters to
         // "dwell" points before moving to the upper index.
@@ -1012,7 +1019,7 @@ bool
 GenericMultiInputTable::index_checks(
         size_t & idx_start,
         size_t & idx_stop,
-        std::string func)
+        const std::string & func)
 {
   // Note - data_loaded implies data.size() > 0.
   if (!data_loaded) {
@@ -1030,9 +1037,7 @@ GenericMultiInputTable::index_checks(
       idx_start,")\n"
       "higher than the stop index (",idx_stop,").  This could be an error.\n"
       "Will ",func," the data values between these indices.\n");
-    size_t idx_scratch = idx_start;
-    idx_start = idx_stop;
-    idx_stop = idx_scratch;
+    std::swap(idx_start, idx_stop);
   }
   if (idx_stop >= data.size()) {
     CMLMessage::warn(__FILE__, __LINE__, "Invalid index\n",

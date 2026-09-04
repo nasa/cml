@@ -15,8 +15,9 @@ PROGRAMMERS:
 #ifndef CML_TARGET_COUNTER_HH
 #define CML_TARGET_COUNTER_HH
 
+#include <cstddef>
+#include <string>
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 CML_TargetCounterElement
@@ -52,6 +53,8 @@ class CML_TargetCounter {
   explicit CML_TargetCounter( const std::vector<int> & targets_);
   CML_TargetCounter( int limit_a,
                      int limit_b);
+  CML_TargetCounter(const CML_TargetCounter&) = delete;
+  CML_TargetCounter& operator=(const CML_TargetCounter&) = delete;
 
   void insert(int value);
   bool does_val_exist(int val) const;
@@ -66,9 +69,5 @@ class CML_TargetCounter {
     std::vector<int> targets_v( targets_, targets_+n_targets);
     set_data( targets_v);
   }
-
- private: // not implemented
-  CML_TargetCounter(const CML_TargetCounter&);
-  CML_TargetCounter& operator=(const CML_TargetCounter&);
 };
 #endif

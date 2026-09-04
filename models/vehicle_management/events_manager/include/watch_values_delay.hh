@@ -42,7 +42,7 @@ class WatchValuesDelay : public WatchValuesBase<watchType>
   bool reset_delay; /* (--)
     Flag to reset the delay, set from another watch values delay typically.*/
 
-  WatchValuesDelay( const double & delay_ref_)
+  explicit WatchValuesDelay( const double & delay_ref_)
     :
     WatchValuesBase<watchType>(),
     delay_ref( delay_ref_),
@@ -52,6 +52,8 @@ class WatchValuesDelay : public WatchValuesBase<watchType>
     reset_delay(false)
   {}
  ~WatchValuesDelay() override = default;
+  WatchValuesDelay (const WatchValuesDelay& rhs) = delete;
+  WatchValuesDelay& operator = (const WatchValuesDelay& rhs) = delete;
 /*****************************************************************************
 test_crossing
 Purpose: tests for the satisfaction of the trigger condition and the subsequent
@@ -107,9 +109,5 @@ Purpose: tests for the satisfaction of the trigger condition and the subsequent
   void set_delay_offset(double delay_offset_) override {
     delay_offset = delay_offset_;
   }
-
- private:
-  WatchValuesDelay (const WatchValuesDelay& rhs);
-  WatchValuesDelay& operator = (const WatchValuesDelay& rhs);
 };
 #endif

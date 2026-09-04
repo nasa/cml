@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "aero_interface_base.hh"
 #include "aero_executive_simple.hh"
 
+class AtmosRelativeState;
+
 /*******************************************************************************
 AeroInterfaceSimple
 Purpose:(Provides a simple aerodynamic interface to access the simple
@@ -32,14 +34,10 @@ public:
                        const double (&T_inrtl_struc)[3][3],
                        const double & mass);
   ~AeroInterfaceSimple() override = default;
+  AeroInterfaceSimple (const AeroInterfaceSimple &) = delete;
+  AeroInterfaceSimple & operator = (const AeroInterfaceSimple &) = delete;
 
   void initialize() override;
   void update() override;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroInterfaceSimple (const AeroInterfaceSimple &);
-  AeroInterfaceSimple & operator = (const AeroInterfaceSimple &);
 };
 #endif

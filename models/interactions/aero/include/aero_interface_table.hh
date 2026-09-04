@@ -17,8 +17,9 @@ PROGRAMMERS:
 #define CML_AERO_INTERFACE_TABLE_HH
 
 #include "aero_interface_base_extended.hh"
-#include "aero_coefficients.hh"
 #include "aero_executive_table.hh"
+
+class AtmosRelativeState;
 
 /*******************************************************************************
 AeroInterfaceTable
@@ -39,17 +40,13 @@ public:
                       const double * const true_body_rates_in,
                       const double (&T_struc_to_body_in)[3][3]);
   ~AeroInterfaceTable() override = default;
+  AeroInterfaceTable (const AeroInterfaceTable &) = delete;
+  AeroInterfaceTable & operator= (const AeroInterfaceTable &) = delete;
 
   void initialize() override;
   void update() override;
 protected:
   void activate() override;
   void deactivate() override;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroInterfaceTable (const AeroInterfaceTable &);
-  AeroInterfaceTable & operator= (const AeroInterfaceTable &);
 };
 #endif

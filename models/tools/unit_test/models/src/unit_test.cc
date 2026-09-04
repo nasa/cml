@@ -2,6 +2,9 @@
 PURPOSE:    (To provide a Trick-friendly unit-test framework)
 REFERENCES: (../models-C by Jason Arnold)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Jason Arnold) (Titan) (Jul 2005))
    ((Gary Turner) (OSR) (Oct 2016)
@@ -9,14 +12,18 @@ PROGRAMMERS:
     vectors, and lists))
   )
 ***************************************************************************/
-#include <cmath>      // fabs
-#include <cfloat>     // DBL_EPSILON
-#include <algorithm>  // std::max
-#include <iostream>   // std::cout
-#include <sstream>    // std::istringstream
-#include <fstream>    // std::ifstream
-#include <pthread.h>  // for pthreads - sending commands.
+#include <cmath>
+#include <cfloat>
+#include <algorithm>
+#include <cstddef>
+#include <cstdlib>
+#include <iostream>
+#include <list>
+#include <sstream>
+#include <fstream>
 #include <regex>
+#include <stdexcept>
+#include <string>
 
 #include "../include/unit_test.hh"
 
@@ -152,7 +159,7 @@ bool SweepSet::increment_sweep()
   // the increment.  Note - not the absolute value of the "distance" to go,
   // this must be allowed to go negative if it overshoots, mainly for the
   // first pass after which point that should be protected.
-  double to_go = (increment > 0) ? (end - value) : (value - end);
+  const double to_go = (increment > 0) ? (end - value) : (value - end);
 
   // If within the allowable tolerance of the end-point, tag the sweep as
   // completing and reset the value.
@@ -304,8 +311,8 @@ std::string UnitTestFramework::expand_env_variables(const std::string& input) {
     static const std::regex pattern(R"(\$\{([A-Za-z_][A-Za-z0-9_]*)\})");
 
     std::string result;
-    std::sregex_iterator begin(input.begin(), input.end(), pattern);
-    std::sregex_iterator end;
+    const std::sregex_iterator begin(input.begin(), input.end(), pattern);
+    const std::sregex_iterator end;
 
     std::size_t last_pos = 0;
 
@@ -350,8 +357,7 @@ UnitTestFramework::configure_from_definition_file()
   }
 
   populate_variable_names();
-  unsigned int num_vars = variables.size();
-
+  const unsigned int num_vars = variables.size();
 
   // parse the data file
   std::ifstream data_file(data_file_name);
@@ -701,7 +707,7 @@ UnitTestFramework::update_file()
   // If the user has specified titles in the data file, print them out
   if ( !titles.empty()) {
     if (!titles.front().empty()) {
-      std::cout << titles.front() << std::endl;
+      std::cout << titles.front() << '\n';
     }
     if (cycle_data) {
       titles.push_back(titles.front());

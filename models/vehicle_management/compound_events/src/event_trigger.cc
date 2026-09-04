@@ -11,6 +11,8 @@ PROGRAMMERS:
   )
 **********************************************************************/
 #include "../include/event_trigger.hh"
+#include <cmath>
+#include <cstdlib>
 
 
 

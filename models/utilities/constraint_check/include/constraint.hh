@@ -16,8 +16,9 @@ PROGRAMMERS:
 #ifndef CML_CONSTRAINT_HH
 #define CML_CONSTRAINT_HH
 
+#include <string>
+#include <cstddef>
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "constraint_enum.hh"
 #include "constraint_test.hh"
@@ -75,6 +76,8 @@ class Constraint
  public:
   Constraint( size_t num_tests_ = 1);
   virtual ~Constraint() = default;
+  Constraint( const Constraint &) = delete;
+  Constraint & operator=( const Constraint &) = delete;
 
   virtual void initialize();
   virtual void update() = 0;
@@ -84,11 +87,5 @@ class Constraint
  protected:
   void count_violations();
   void post_update();
-
-
-
- private: // not implemented; not copyable
-  Constraint( const Constraint &);
-  Constraint & operator=( const Constraint &);
 };
 #endif

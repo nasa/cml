@@ -7,7 +7,7 @@
 #ifndef CML_TEST_HH
 #define CML_TEST_HH
 
-#include <libxml/parser.h> // xmlParseFile, xmlNodePtr
+#include <libxml/parser.h>
 #include <cstring>
 #include <string>
 #include <iostream>

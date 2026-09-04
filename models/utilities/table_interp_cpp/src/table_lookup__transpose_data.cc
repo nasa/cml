@@ -16,17 +16,26 @@ PURPOSE: (Provides a table-lookup-set when the data is presented in a
           This class supports data presented in the latter format.  The data
           may be subdivided into as many tables as necessary or desired.
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Nov 2017) (Antares) (initial)))
 **********************************************************************/
-#include <fstream> // ifstream
-#include <sstream> // istringstream
-#include <iterator>// istream_iterator
-#include <cstring> // strcmp
-#include <algorithm> // max_element
+#include <fstream>
+#include <sstream>
+#include <iterator>
+#include <cstring>
+#include <algorithm>
+#include <string>
+#include <vector>
 
 
+#include "../include/abstract_table_lookup.hh"
+#include "../include/table_independent_variable.hh"
 #include "../include/table_lookup__transpose_data.hh"
+#include "../include/table_type_defs.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 constructors
@@ -105,12 +114,12 @@ TableLookupTransposeDataSet_TableConfig::check_indices()
   }
   else {
     if (index_high < index_low) {
-      size_t index_scratch = index_high;
+      const size_t index_scratch = index_high;
       index_high = index_low;
       index_low = index_scratch;
     }
 
-    size_t size = index_high - index_low + 1;
+    const size_t size = index_high - index_low + 1;
     indices.resize(size);
     for (size_t ii = 0; ii < size; ++ii){
       indices[ii] = index_low + ii;
@@ -196,7 +205,7 @@ TableLookupTransposeDataSet::process_data(
 
 
   // Get a count of the number of lines and length of the shortest line
-  size_t data_lines_total_count = data_file.size();
+  const size_t data_lines_total_count = data_file.size();
   min_length = data_file.front().size();
   size_t line_num = 1;
   for (const DoubleVec & line_iter : data_file) {
@@ -432,7 +441,7 @@ Purpose:(Returns a pointer to one of the entries in table_config.
 TableLookupTransposeDataSet_TableConfig *
 TableLookupTransposeDataSet::get_config( const char * name_in)
 {
-  std::string search_name(name_in);
+  const std::string search_name(name_in);
   return get_config( search_name);
 }
 /****************************************************************************/
@@ -540,7 +549,7 @@ TableLookupTransposeDataSet::remove_config(
      one assigned for removal.
   */
   for (const auto & config : table_config) {
-    bool indices_match = (config.indices.empty())?
+    const bool indices_match = (config.indices.empty())?
                             ((config_remove.index_low == config.index_low) &&
                              (config_remove.index_high == config.index_high))
                             :

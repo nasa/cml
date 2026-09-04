@@ -19,7 +19,6 @@ PROGRAMMERS:
 
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "cml/models/dynamics/state_descriptors/separation_state/include/separation_state.hh"
 
 #include "simple_spring_individual.hh"
@@ -86,6 +85,8 @@ protected:
   // Methods:
 public:
   SimpleSpringGroup();
+  SimpleSpringGroup(const SimpleSpringGroup& rhs) = delete;
+  SimpleSpringGroup & operator= (const SimpleSpringGroup&) = delete;
   void initialize( const jeod::DynBody  & action_body_in,
                    const jeod::DynBody  & reaction_body_in,
                    SeparationState  & sep_state_in);
@@ -96,11 +97,6 @@ public:
   void activate();
   void deactivate();
   void update();
-
-private:
-  // operator= and copy constructor declared private and not implemented
-  SimpleSpringGroup(const SimpleSpringGroup& rhs);
-  SimpleSpringGroup & operator= (const SimpleSpringGroup&);
 };
 
 #endif

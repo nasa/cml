@@ -22,12 +22,9 @@ class RangeDefaultData
   public:
   RangeDefaultData() = default;
   virtual ~RangeDefaultData() = default;
+  RangeDefaultData (const RangeDefaultData& rhs) = delete;
+  RangeDefaultData& operator =  (const RangeDefaultData& rhs) = delete;
 
   void launch_pad_KSC_39B(RangeFromPfixReference & pad) const;
-
-private:
-   // Not implemented:
-   RangeDefaultData (const RangeDefaultData& rhs);
-   void operator =  (const RangeDefaultData& rhs);
 };
 #endif

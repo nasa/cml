@@ -3,6 +3,9 @@ PURPOSE:
   (Table lookup model component representing the independent variable and its
    lookup)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (New implementation))
    ((Bingquan Wang) (OSR) (Apr 2017) (Fixed the compilation warning of float-point
@@ -12,7 +15,11 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <algorithm>
-#include <cmath> // floor
+#include <cmath>
+#include <cstddef>
+#include <string>
+#include <vector>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/table_independent_variable.hh"
@@ -100,7 +107,7 @@ TableIndependentVariable::load_data(
     return false;
   }
 
-  if (size_in == 0u) {
+  if (size_in == 0U) {
     CMLMessage::error(
       __FILE__, __LINE__, "Data load error.\n",
       "The given size for data for independent variable ",name,
@@ -108,7 +115,7 @@ TableIndependentVariable::load_data(
     return false;
   }
 
-  DoubleVec scratch(data_in, data_in+size_in);
+  const DoubleVec scratch(data_in, data_in+size_in);
   return load_data(scratch);
 }
 /****************************************************************************/
@@ -270,15 +277,13 @@ TableIndependentVariable::bias_data(
       idx_start,")\n"
       "higher than the stop index (",idx_stop,").  This could be an error.\n"
       "Bias will be applied to the data values between these indices.\n");
-    size_t idx_scratch = idx_start;
-    idx_start = idx_stop;
-    idx_stop = idx_scratch;
+    std::swap(idx_start, idx_stop);
   }
 
   // Make a copy of the existing data, modify it and recheck it for validity
   // before changing the real data
   std::vector<double> data_copy (data);
-  bool tab_val_incr_copy = table_values_increasing;
+  const bool tab_val_incr_copy = table_values_increasing;
 
   // modify it:
   for (size_t ii = idx_start; ii <= idx_stop; ++ii) {
@@ -331,15 +336,13 @@ TableIndependentVariable::scale_data(
       idx_start,")\n"
       "higher than the stop index (",idx_stop,").  This could be an error.\n"
       "Scale will be applied to the data values between these indices.\n");
-    size_t idx_scratch = idx_start;
-    idx_start = idx_stop;
-    idx_stop = idx_scratch;
+    std::swap(idx_start, idx_stop);
   }
 
   // Make a copy of the existing data, modify it and recheck it for validity
   // before changing the real data
   std::vector<double> data_copy (data);
-  bool tab_val_incr_copy = table_values_increasing;
+  const bool tab_val_incr_copy = table_values_increasing;
 
   for (size_t ii = idx_start; ii <= idx_stop; ++ii) {
     data_copy[ii] *= scale;

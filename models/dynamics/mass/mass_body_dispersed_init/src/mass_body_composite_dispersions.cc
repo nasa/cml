@@ -5,7 +5,8 @@ PURPOSE:
    of a compound body.)
 
 LIBRARY DEPENDENCIES:
-  (cml/models/dynamics/mass/mass_body_distribute_comp_to_core/src/mass_body_distribute_comp_to_core.cc)
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/dynamics/mass/mass_body_distribute_comp_to_core/src/mass_body_distribute_comp_to_core.cc))
 
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2018) (Antares) (Initial version))
@@ -16,8 +17,15 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "../include/mass_body_composite_dispersions.hh"
+#include "../include/mass_properties_dispersions.hh"
 
 #include "cml/models/dynamics/mass/mass_body_distribute_comp_to_core/include/mass_body_distribute_comp_to_core.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/body_action/include/body_action.hh"
+#include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 /*******************************************************************************
 Constructor
@@ -116,16 +124,13 @@ MassBodyCompositeDispersions::update_internal()
   // If the specified properties are for the entire tree (below the
   // target-body), we only need to apply the composite-to-core modifier.
 
-  // If no detach-point has been specified, just apply the modifier:
-  if ( detach_sub_tree == nullptr) {
-    comp_to_core_updates();
-  }
+  // If no detach-point has been specified, just apply the modifier.
   // If the detach-point has been specified and is superior to the target-body
   // (so the sub-tree below the target-body would be unaffected by
   // detaching at the detach-point), or if the detach_sub_tree is set as a
   // different mass tree from the target-body then,
-  // similarly just apply the modifier:
-  else if (!detach_sub_tree->is_progeny_of( target_body)) {
+  // also just apply the modifier:
+  if (detach_sub_tree == nullptr || !detach_sub_tree->is_progeny_of( target_body)) {
     comp_to_core_updates();
   }
   // If the detach-point is defined, and is between the adjustable-body and

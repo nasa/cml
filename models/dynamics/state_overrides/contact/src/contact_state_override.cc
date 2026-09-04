@@ -6,13 +6,19 @@ PURPOSE:
    the bodies are assumed to be in contact and their relative state is
    overridden such that it is equal to the nominal separation.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
 
 ********************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "../include/contact_state_override.hh"
 
@@ -25,20 +31,17 @@ ContactStateOverride::ContactStateOverride(jeod::DynBody& reference_body_in,
   reference_body(reference_body_in),
   override_body(override_body_in),
   deactivation_threshold(0.0),
-  contact_normal(),
-  contact_pos_overridestruc_wrt_refstruc(),
-  contact_pos_overridenomcore_wrt_refnomcore(),
+  contact_normal{},
+  contact_pos_overridestruc_wrt_refstruc{},
+  contact_pos_overridenomcore_wrt_refnomcore{},
+  nominal_reference_core_position{},
+  nominal_override_core_position{},
   user_set_contact_normal(false),
   user_set_contact_position(false),
   user_set_contact_orientation(false),
   bodies_are_attached(false),
   self_disabled(false)
 {
-  jeod::Vector3::initialize(contact_normal);
-  jeod::Vector3::initialize(contact_pos_overridestruc_wrt_refstruc);
-  jeod::Vector3::initialize(contact_pos_overridenomcore_wrt_refnomcore);
-  jeod::Vector3::initialize(nominal_reference_core_position);
-  jeod::Vector3::initialize(nominal_override_core_position);
 }
 
 /*****************************************************************************
@@ -115,7 +118,7 @@ void ContactStateOverride::update()
   // Component of the delta parallel to contact normal vector, or the distance
   // between the two bodies that is in excess of their usual contact
   // separation.
-  double distance = jeod::Vector3::dot(scratch, contact_normal);
+  const double distance = jeod::Vector3::dot(scratch, contact_normal);
 
   // If <0, they are overlapping and the override-body must be placed at its
   // contact point.

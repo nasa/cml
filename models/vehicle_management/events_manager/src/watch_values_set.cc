@@ -1,12 +1,19 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Provides a multi-conditional event structure.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (October 2023) (Antares) (enhancement)))
 **********************************************************************/
 
-#include <algorithm> // any_of
+#include <algorithm>
+#include <list>
+#include "../include/watch_values_base_core.hh"
 #include "../include/watch_values_set.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 /*****************************************************************************
 Constructor

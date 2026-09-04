@@ -20,7 +20,6 @@ PROGRAMMERS:
 
 #include <cstdint>
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 void convert_double_to_uint_words( double convert_value,
                                    double resolution,
@@ -65,14 +64,12 @@ public:
                             unsigned int in_word_count,
                             unsigned int in_bit_size);
   virtual ~ConvertDoubleToUintWords() = default;
+  ConvertDoubleToUintWords (const ConvertDoubleToUintWords& rhs) = delete;
+  ConvertDoubleToUintWords & operator = (const ConvertDoubleToUintWords& rhs) = delete;
 
   void update();
   void compute_significance();
   bool check_values();
-
-private:
-  ConvertDoubleToUintWords (const ConvertDoubleToUintWords& rhs);
-  ConvertDoubleToUintWords & operator = (const ConvertDoubleToUintWords& rhs);
 };
 
 #endif

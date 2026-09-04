@@ -2,17 +2,21 @@
 PURPOSE:
     (Simple 1 - cosine gust model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
     (((Jon Berndt) (ESCG/Jacobs) (02/08) (ANTARES) (initial version))
      ((Gary Turner) (OSR) (2016) (Antares) (C++))
      ((Brent Caughron) (OSR) (Sept 2017) (Antares) (IV&V code review))
     )
 **********************************************************************************/
-#include <cmath> // std::cos, M_PI
+#include <cmath>
 
-#include "jeod/models/utils/math/include/vector3.hh" // Vector3
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/gust.hh"
 

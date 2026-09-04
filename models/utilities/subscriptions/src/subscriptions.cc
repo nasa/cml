@@ -1,11 +1,15 @@
 /*******************************TRICK HEADER******************************
  PURPOSE: ( Provide the subscription methods)
 
+ LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (3/2015) (Antares) (initial version)))
 ***********************************************************************/
 
 #include "../include/subscriptions.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 subscribe

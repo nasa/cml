@@ -29,11 +29,15 @@ PROGRAMMERS:
 #include "cml/models/dynamics/state_descriptors/range/include/range_from_pfix_reference.hh"
 #include "cml/models/dynamics/state_descriptors/range/include/range_to_pfix_reference.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "range_safety_data.hh"
 #include "topo_container.hh"
 #include "point_to_point.hh"
+
+namespace jeod {
+class DynBody;
+class DynManager;
+}
 
 /*****************************************************************************
 ExtendedPlanetaryDerivedState
@@ -168,6 +172,8 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
 
    ExtendedPlanetaryDerivedState();
    ~ExtendedPlanetaryDerivedState() override = default;
+   ExtendedPlanetaryDerivedState (const ExtendedPlanetaryDerivedState & rhs) = delete;
+   ExtendedPlanetaryDerivedState & operator = (const ExtendedPlanetaryDerivedState & rhs) = delete;
 
    void initialize(jeod::DynBody & subject_body, jeod::DynManager & dyn_manager) override;
 
@@ -232,11 +238,6 @@ protected:
    void calculate_relative_accel();
    void hang_roll();
    void analyze_range_safety();
-
-private:
-   ExtendedPlanetaryDerivedState (const ExtendedPlanetaryDerivedState & rhs);
-   ExtendedPlanetaryDerivedState & operator = (const ExtendedPlanetaryDerivedState & rhs);
-
 };
 
 

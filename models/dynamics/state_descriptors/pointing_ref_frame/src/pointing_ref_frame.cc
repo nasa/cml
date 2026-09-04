@@ -2,12 +2,16 @@
 Purpose:
   (Define methods for defining and updating the pointing frame.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   ( ((Michael McCarthy, Gary Turner) (OSR) (June 2019) (Antares) (initial))
   )
 
 *******************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
@@ -104,7 +108,7 @@ PointingRefFrame::update()
   double axis_scratch[3];
 
   // check distance between orig. and target
-  double pos_r = jeod::Vector3::vmag( target_wrt_originating_state.trans.position );
+  const double pos_r = jeod::Vector3::vmag( target_wrt_originating_state.trans.position );
   if (MathUtils::is_near_equal( pos_r, 0.0, 1.0)) {
     // if pos = 0, T = Tprev (= Identity for first update) and ang_vel_this = 0
     CMLMessage::warn(

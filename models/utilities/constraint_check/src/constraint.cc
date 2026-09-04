@@ -3,6 +3,9 @@
 PURPOSE:
    (Defines a single constraint for checking against a sim variable)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
  (((Gary Turner) (OSR) (Jun 2023) (ANTARES)
    (New, based on GNC_PAR grok_duration_check and grok-violation models))
@@ -10,6 +13,10 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "../include/constraint.hh"
+#include "../include/constraint_enum.hh"
+#include "../include/constraint_test.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
 
 
 /*****************************************************************************

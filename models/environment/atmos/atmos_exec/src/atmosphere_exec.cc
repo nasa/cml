@@ -3,6 +3,9 @@ PURPOSE:
     (Atmosphere executive to provide the option to select between various
      atmosphere and wind models.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
     (
      ((Brian Hoelscher) (NASA-EG4) (06/06) (ARES) (initial version))
@@ -37,12 +40,20 @@ PROGRAMMERS:
     )
 **********************************************************************************/
 
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh"
+#include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
+#include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/environment/time/include/time_standard.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <cmath>
 
 #include "../include/atmosphere_exec.hh"
+#include "../include/atmosphere_exec_gram.hh"
+#include "../include/atmosphere_exec_interface.hh"
 
 
 /*******************************************************************************

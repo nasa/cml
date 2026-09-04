@@ -1,14 +1,21 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Provide a simple table-lookup capability for winds)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2018) (Antares) (initial))
    ((Brian Birmingham) (OSR) (July 2022) (Antares) (wind angle)))  
 **********************************************************************/
-#include <cmath>           // M_PI, sin, cos, atan2
+#include <cmath>
+#include <cstddef>
 #include <vector>
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 #include "../include/simple_lookup_wind.hh"
 /*****************************************************************************
 Constructor

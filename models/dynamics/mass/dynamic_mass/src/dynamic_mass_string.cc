@@ -3,6 +3,9 @@
    PURPOSE:
    (Provides capbility to deplete mass equally from bodies strung together.)
 
+   LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
    ASSUMPTIONS AND LIMITATIONS:
    ((Limitation 1: Relies on the DynBodyMass functionality to actually update
                    the body mass.  This just distributes mass changes across
@@ -18,6 +21,7 @@
                       (Refactor to utilize new CML capabilities))
    )
 *******************************************************************************/
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
@@ -98,8 +102,12 @@ DynamicMassString::distribute_mass_consumption()
 
     // if flow_down, only use 1 body at a time, so put all the mass demand
     // onto that body:
-    double mass_per = (flow_down)? mass_to_distribute :
-                                   mass_to_distribute / available_bodies.size();
+    double mass_per;
+    if (flow_down) {
+      mass_per = mass_to_distribute;
+    } else {
+      mass_per = mass_to_distribute / static_cast<double>(available_bodies.size());
+    }
 
     // reset mass_to_distribute to 0 so that any shortfall can be incremented
     mass_to_distribute = 0.0;
@@ -107,7 +115,7 @@ DynamicMassString::distribute_mass_consumption()
     for (auto it = available_bodies.begin();
               it != available_bodies.end(); ++it) {
       DynamicMassBodyProperties & body_properties = (*it)->dynamic_properties;
-      double mass_available = body_properties.consumable_mass -
+      const double mass_available = body_properties.consumable_mass -
                               body_properties.mass_consumed_step;
       // Normally - there is enough mass in each body to supply its demands
       // Add the mass_per to the mass consumed by that body

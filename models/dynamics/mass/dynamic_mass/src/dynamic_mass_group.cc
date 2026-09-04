@@ -2,6 +2,9 @@
 PURPOSE:
    (Dynamic Mass Group methods)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (March 2014)
                        (New implementation of dynamic mass for JEOD 2.x))
@@ -10,9 +13,15 @@ PROGRAMMERS:
    )
 *******************************************************************************/
 #include <algorithm>
+#include <list>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_items.hh"
 
+#include "../include/dynamic_mass_body.hh"
 #include "../include/dynamic_mass_group.hh"
+#include "../include/dynamic_mass_string.hh"
 
 /*******************************************************************************
 Method: DynamicMassGroup
@@ -194,7 +203,7 @@ void DynamicMassGroup::update_group_mass()
     // using a temporary variable here to ensure that update_mass() gets
     // called without possibility of it being blocked by needs_tree_update if
     // put in as a direct component of the OR statement.
-    bool mass_change = (*it)->update_mass();
+    const bool mass_change = (*it)->update_mass();
     needs_tree_update = needs_tree_update || mass_change;
     total_mass += (*it)->core_properties.mass;
   }
@@ -298,10 +307,10 @@ DynamicMassGroup::series_flow(
 
   // Move mass from upstream tank to downstream tank, as long as there is mass
   // available in the upstream tank.
-  double upstream_available = 
+  const double upstream_available =
         dyn_masses[upstream_ix]->dynamic_properties.consumable_mass -
         dyn_masses[upstream_ix]->dynamic_properties.mass_consumed_step;
-  double downstream_demand = 
+  const double downstream_demand =
         dyn_masses[downstream_ix]->dynamic_properties.mass_consumed_step;
 
   if (upstream_available > downstream_demand) {
@@ -495,7 +504,7 @@ DynamicMassGroup::add_mass_to_group_internal(
       "Unsure how to proceed, terminating for safety.\n");
   }
   // check uniqueness to avoid inadvertent double-counting
-  unsigned int num_bodies = dyn_masses.size();
+  const unsigned int num_bodies = dyn_masses.size();
   for (unsigned int ii = 0; ii < num_bodies; ++ii) {
     if (mass == dyn_masses[ii]) {
       if (send_err_msg) {

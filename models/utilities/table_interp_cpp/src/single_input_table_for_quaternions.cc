@@ -4,6 +4,10 @@ PURPOSE:
   represent one quaternion sets.  This table has access to the
   spherical interpolation algorithm)
 
+LIBRARY DEPENDENCIES:
+  ((quaternion_spherical_interpolator.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS:
   (This table contains 4 dependent variables - a quaternion - and a single
   independent variable.)
@@ -16,7 +20,12 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
+#include "../include/generic_single_input_table.hh"
 #include "../include/single_input_table_for_quaternions.hh"
+#include "../include/table_type_defs.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
+#include <cstddef>
 
 /*****************************************************************************
 Constructors
@@ -98,7 +107,7 @@ SingleInputTableForQuaternions::generate_output()
   sph_interp.quat_1.scalar = data[ data_point_index[1]];
 
   for (size_t ii = 0; ii<3; ++ii) {
-    size_t var_base_ix = (ii+1) * num_data_elements_per_increment_of_index[0];
+    const size_t var_base_ix = (ii+1) * num_data_elements_per_increment_of_index[0];
     sph_interp.quat_0.vector[ii] = data[ var_base_ix + data_point_index[0]];
     sph_interp.quat_1.vector[ii] = data[ var_base_ix + data_point_index[1]];
   }

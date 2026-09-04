@@ -44,14 +44,11 @@ class EventTriggerSet : public WatchValuesSet
 
   EventTriggerSet();
   ~EventTriggerSet() override;
+  EventTriggerSet( const EventTriggerSet&) = delete;
+  EventTriggerSet& operator=( const EventTriggerSet&) = delete;
 
   void populate_conditional_reference_trigger_list();
   void update_conditional_trigger_references();
   WatchValuesBaseCore * find_trigger( const std::string& trigger_name_in);
-
-
- private: // not implemented / deleted
-  EventTriggerSet( const EventTriggerSet&);
-  EventTriggerSet& operator=( const EventTriggerSet&);
 };
 #endif

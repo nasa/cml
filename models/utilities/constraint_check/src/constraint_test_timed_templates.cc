@@ -9,7 +9,7 @@ PROGRAMMERS:
  )
 *******************************************************************************/
 #include "../include/constraint_test_timed_templates.hh"
-#include <cmath> //abs
+#include <cmath>
 
 /*****************************************************************************
 Template specializations

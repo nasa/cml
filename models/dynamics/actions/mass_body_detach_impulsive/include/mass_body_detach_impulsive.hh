@@ -19,16 +19,13 @@ Programmers:
 #ifndef CML_MASS_BODY_DETACH_IMPULSIVE_HH
 #define CML_MASS_BODY_DETACH_IMPULSIVE_HH
 
-#include "jeod/models/dynamics/mass/include/class_declarations.hh"
-
-// Model includes
-#include "jeod/models/dynamics/body_action/include/class_declarations.hh"
 #include "jeod/models/dynamics/body_action/include/body_action.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 namespace jeod {
 class DynBody;
+class DynManager;
 class MassPoint;
 }
 
@@ -63,6 +60,9 @@ class MassBodyDetachImpulsive : public jeod::BodyAction {
     // Destructor.
     ~MassBodyDetachImpulsive() override = default;
 
+    MassBodyDetachImpulsive( const MassBodyDetachImpulsive& rhs) = delete;
+    MassBodyDetachImpulsive & operator = ( const MassBodyDetachImpulsive&) = delete;
+
     // initialize: Initialize the initializer.
     void initialize (jeod::DynManager & dyn_manager) override;
 
@@ -70,13 +70,8 @@ class MassBodyDetachImpulsive : public jeod::BodyAction {
     void apply (jeod::DynManager & dyn_manager) override;
 
   protected:
-    virtual void apply_impulse( jeod::DynBody          & dyn_body,
-                                std::string  mass_point_name);
-
-  private:
-    // not implemented
-    MassBodyDetachImpulsive( const MassBodyDetachImpulsive& rhs);
-    MassBodyDetachImpulsive & operator = ( const MassBodyDetachImpulsive&);
+    virtual void apply_impulse( jeod::DynBody     & dyn_body,
+                                const std::string & mass_point_name);
 };
 
 #endif

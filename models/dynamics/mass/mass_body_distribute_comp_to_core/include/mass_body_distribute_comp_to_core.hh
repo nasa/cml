@@ -24,11 +24,10 @@ Programmers:
 #ifndef CML_MASS_BODY_DISTRIBUTE_COMP_TO_CORE_HH
 #define CML_MASS_BODY_DISTRIBUTE_COMP_TO_CORE_HH
 
-#include "jeod/models/dynamics/mass/include/mass.hh" // jeod::MassBody
-#include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
-#include "jeod/models/dynamics/mass/include/mass_point_state.hh" // MassPointState
+#include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
+#include "jeod/models/dynamics/mass/include/mass_point_state.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************
@@ -72,7 +71,7 @@ class MassBodyDistributeCompToCore
   bool check_configuration();
   void generate_new_position();
   void generate_new_inertia();
-  void check_for_valid_mass_properties();
+  void check_for_valid_mass_properties() const;
 
   MassBodyDistributeCompToCore(const MassBodyDistributeCompToCore&);
   MassBodyDistributeCompToCore & operator = (

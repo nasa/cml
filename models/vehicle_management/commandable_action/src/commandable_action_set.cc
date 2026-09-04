@@ -21,6 +21,9 @@ Purpose:
   will flag the command as being sent.  Then the sim-to-fsw model will set the
   appropriate FSW flags and mark the command as having been received.
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   (
   ((Gary Turner) (OSR) (02/22) (Generic concept developed while
@@ -29,8 +32,10 @@ Programmers:
  (
 *******************************************************************************/
 
+#include "../include/commandable_action.hh"
 #include "../include/commandable_action_set.hh"
-
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <utility>
 
 /*****************************************************************************
 Constructors
@@ -46,7 +51,7 @@ CommandableActionSet::CommandableActionSet (std::string name_)
   :
   CommandableActionSet()
 {
-  name= name_;
+  name = std::move(name_);
 }
 
 /*****************************************************************************
@@ -137,8 +142,8 @@ CommandableActionSet::generate_command (
       }
 
       // and back to the real code:
-      std::string & new_name = command.get_name();
-      std::string & old_name = current_commandable->get_name();
+      const std::string & new_name = command.get_name();
+      const std::string & old_name = current_commandable->get_name();
       CMLMessage::error(
         __FILE__,__LINE__,"Sequencing error\n",
         "[", new_name, "] command ready for issuing from [", name, "]\n"
@@ -158,7 +163,7 @@ CommandableActionSet::generate_command (
   current_commandable = &command;
   message_status = Send;
 
-  std::string & command_name = command.get_name();
+  const std::string & command_name = command.get_name();
   CMLMessage::inform(
     __FILE__,__LINE__,"Command Issued from\n",
     "[", name, "] issued command [", command_name, "].\n");

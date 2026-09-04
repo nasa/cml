@@ -8,10 +8,10 @@ PROGRAMMERS:
 ############################################################################*/
 
 #include "../include/xml_helper.hh"
-#include <cstring> // strcmp
-#include <cctype> //toupper
+#include <cstring>
+#include <cctype>
+#include <libxml/tree.h>
 #include <string>
-#include <libxml/parser.h> // xmlNodePtr, xmlAttrPtr
 
 /*******************************************************************************
 xml_find
@@ -103,8 +103,8 @@ const char* XmlHelper::xml_find_value(
         std::string left(xml_convert_ptr(val->name));
         std::string right(name);
         if (!left.empty() && !right.empty()) {
-          left[0]  = toupper( left[0]);
-          right[0] = toupper(right[0]);
+          left[0]  = static_cast<char>(std::toupper( left[0]));
+          right[0] = static_cast<char>(std::toupper(right[0]));
           if (left == right) {
             return xml_convert_ptr(val->children->content);
           }

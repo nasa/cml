@@ -31,13 +31,14 @@ PROGRAMMERS:
 #ifndef CML_ATMOS_RELATIVE_STATE_HH
 #define CML_ATMOS_RELATIVE_STATE_HH
 
-#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_interface.hh"
-#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
 
+namespace jeod {
+class DynBody;
+}
+class AtmosphereExecInterface;
+class AtmosExecOutput;
+class ExtendedPlanetaryDerivedState;
 
 class AtmosRelativeState : public SubscriptionBase
 {
@@ -152,6 +153,8 @@ class AtmosRelativeState : public SubscriptionBase
                       ExtendedPlanetaryDerivedState & planet_rel_state_ref,
                       AtmosphereExecInterface       & atmos_exec_ref);
   ~AtmosRelativeState() override = default;
+  AtmosRelativeState (const AtmosRelativeState &) = delete;
+  AtmosRelativeState & operator= (const AtmosRelativeState &) = delete;
 
  protected:
   void activate() override;
@@ -168,12 +171,6 @@ class AtmosRelativeState : public SubscriptionBase
   void check_euler_for_nan();
   // This method is virtual purely to allow testing of check_euler_for_nan()
   virtual void normalize_T_traj_body();
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies
-  AtmosRelativeState (const AtmosRelativeState &);
-  AtmosRelativeState & operator= (const AtmosRelativeState &);
 };
 
 

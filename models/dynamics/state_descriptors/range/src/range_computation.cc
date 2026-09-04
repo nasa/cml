@@ -4,6 +4,9 @@ Purpose:
    from a fixed reference location and where range is computed to a fixed
    reference location.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Reference:
   (See docs directory for equation derivations and identifying numbers)
 
@@ -14,9 +17,13 @@ Programmers:
 *******************************************************************************/
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh" // RefFrameTrans
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <cmath>
+#include <limits>
 
 #include "../include/range_computation.hh"
 
@@ -258,18 +265,18 @@ void
 RangeComputation::update_using_polar()
 {
   // longitude between "here" and reference point
-  double delta_longitude = target_longitude - origin_longitude;
-  double sin_del_long = std::sin(delta_longitude);
-  double cos_del_long = std::cos(delta_longitude);
+  const double delta_longitude = target_longitude - origin_longitude;
+  const double sin_del_long = std::sin(delta_longitude);
+  const double cos_del_long = std::cos(delta_longitude);
 
   // equation 12:
-  double cos_theta_sin_tau = target_sin_lat * origin_cos_lat -
+  const double cos_theta_sin_tau = target_sin_lat * origin_cos_lat -
                   target_cos_lat * origin_sin_lat * cos_del_long;
   // equation 13:
-  double sin_theta_sin_tau = target_cos_lat * sin_del_long;
+  const double sin_theta_sin_tau = target_cos_lat * sin_del_long;
 
   // total-range angle, equation 7:
-  double cos_totalrange_angle = origin_sin_lat * target_sin_lat +
+  const double cos_totalrange_angle = origin_sin_lat * target_sin_lat +
                                 origin_cos_lat * target_cos_lat * cos_del_long;
   totalrange_angle = MathUtils::acos_protected(cos_totalrange_angle);
 
@@ -298,8 +305,8 @@ RangeComputation::update_using_cartesian()
   // Compute total range, this is velocity independent.
 
   // equation 19:
-  double cos_totalrange_angle = jeod::Vector3::dot( origin_position_unit_pfix,
-                                                    target_position_unit_pfix);
+  const double cos_totalrange_angle = jeod::Vector3::dot( origin_position_unit_pfix,
+                                                          target_position_unit_pfix);
   totalrange_angle = MathUtils::acos_protected( cos_totalrange_angle);
 
   // Take the cross-product of the two positions to get a vector perpendicular
@@ -314,7 +321,7 @@ RangeComputation::update_using_cartesian()
                                  jeod::Vector3::dot( target_position_unit_pfix,
                                                dir_x_pos_unit_pfix));
 
-  double cos_crossrange_angle = std::cos(crossrange_angle);
+  const double cos_crossrange_angle = std::cos(crossrange_angle);
 
   const double tmp_val = MathUtils::divide_protected(cos_totalrange_angle,
                                                      cos_crossrange_angle,

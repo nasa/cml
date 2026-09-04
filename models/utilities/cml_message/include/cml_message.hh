@@ -4,7 +4,7 @@ Purpose:
   in JEOD.)
 
 Library Dependency:
- ((../src/cml_message.cc))
+ ((cml/models/utilities/cml_message/src/cml_message.cc))
 
 PYTHON_MODULE: (CMLMessage)
 
@@ -16,15 +16,12 @@ Programmers:
 #ifndef CML_CML_MESSAGE_HH
 #define CML_CML_MESSAGE_HH
 
-// System includes
-#include <cstdio> // snprintf
+#include <cstdio>
 #include <string>
-#include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <utility>
 
-#include "jeod/models/utils/named_item/include/named_item.hh"
 #include "cml/models/utilities/color_string/include/color_string.hh"
 
 namespace CMLMessage {
@@ -50,6 +47,7 @@ template <typename... Args>
 std::string collate_args(Args&&... args)
 {
   std::ostringstream text;
+  // NOLINTNEXTLINE(bugprone-unintended-char-ostream-output)
   (text << ... << std::forward<Args>(args));
   return text.str();
 }
@@ -133,7 +131,7 @@ std::string printf_fmt( const std::string & format, Args&&... args)
   /* Dry run using snprintf to make sure printf will produce a valid result
    * and measure its length before allocating the char[] buffer for the
    * real output. Note-- the +1 is for the null-termination character.*/
-  const int char_len = std::snprintf( nullptr, 0, format.c_str(), std::forward<Args>(args)...) + 1;
+  const int char_len = std::snprintf( nullptr, 0, format.c_str(), args...) + 1;
   if (char_len < 1) {
     return ColorString::red(" [**ERROR: invalid printf with format \""+format+
                             "\" **] ");
@@ -144,7 +142,7 @@ std::string printf_fmt( const std::string & format, Args&&... args)
    * return value this time.*/
   const size_t size_to_alloc = static_cast<size_t>(char_len);
   char* out_char = new char[size_to_alloc];
-  std::snprintf(out_char, size_to_alloc, format.c_str(), std::forward<Args>(args)...);
+  std::snprintf(out_char, size_to_alloc, format.c_str(), args...);
   // assign to a STL-string, and return it.
   std::string out_str = std::string(out_char);
   delete[] out_char;

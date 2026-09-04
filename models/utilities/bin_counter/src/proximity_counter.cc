@@ -4,6 +4,9 @@ PURPOSE:
   times some variable of type double has a value that falls closest to each
   of a set of target values.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS:
   (Target values are monotonically increasing)
 
@@ -15,6 +18,9 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "../include/proximity_counter.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <vector>
 
 /*****************************************************************************
 Constructors
@@ -53,7 +59,7 @@ CML_ProximityCounter::set_data(const std::vector<double> & targets_)
   targets.clear();
   targets_ready = false;
 
-  size_t n_targets_ = targets_.size();
+  const size_t n_targets_ = targets_.size();
   // Sanity check for number of targets:
   if (n_targets_ < 1) {
     CMLMessage::error( __FILE__,__LINE__,
@@ -118,8 +124,8 @@ CML_ProximityCounter::insert(double value)
     // ix_search is between 0 and ntarget-2
     // value lies between targets[ix_search] and targets[ix_search+1]
     // Find the difference between value and the two bounding target values.
-    double delta_low = value - targets[ix_search].value;
-    double delta_high = targets[ix_search+1].value - value;
+    const double delta_low = value - targets[ix_search].value;
+    const double delta_high = targets[ix_search+1].value - value;
     // increment the count for the closer target.
     if (delta_high > delta_low) {
       targets[ix_search].count++;

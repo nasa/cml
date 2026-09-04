@@ -19,8 +19,11 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#include<cmath>  // M_PI
+#include <cmath>
+#include <cstddef>
 
+#include "../include/generic_single_input_table.hh"
+#include "../include/table_type_defs.hh"
 #include "../include/single_input_table_for_angles.hh"
 
 
@@ -112,7 +115,7 @@ SingleInputTableForAngles::generate_output()
     // moving from the lower index to the upper index. So the upper index
     // should be weighted by fraction, and the lower index weighted by
     // (1-fraction)
-    double frac =  independents[0].first->fraction;
+    const double frac =  independents[0].first->fraction;
     for (double* out_ptr : output) {
       // Typically, the interpolated value would be:
       // data[ix] * (1-frac) + data[ix+1] * frac

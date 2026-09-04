@@ -50,13 +50,11 @@ class ConstraintSet : public SubscriptionBase
 
   ConstraintSet();
   ~ConstraintSet() override = default;
+  ConstraintSet( ConstraintSet &) = delete;
+  ConstraintSet &operator= ( ConstraintSet &) = delete;
   void initialize() override;
   void update();
   void activate() override;
   static bool constraint_disabled( const Constraint * c);
-
- private: // not implemented, not copyable.
-  ConstraintSet( ConstraintSet &);
-  ConstraintSet &operator= ( ConstraintSet &);
 };
 #endif

@@ -16,10 +16,11 @@ PROGRAMMERS:
 #define CML_SIMPLE_TABLE_LOOKUP_HH
 
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "abstract_table_lookup.hh"
+#include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "table_independent_variable.hh"
 #include "table_type_defs.hh"
+#include <cstddef>
 
 
 // This class provides the simple, most used lookup case where one independent
@@ -71,7 +72,8 @@ public:
   This requires that SimpleTableLookup keep its default constructor form. */
   SimpleTableLookup();
   ~SimpleTableLookup() override = default;
-
+  SimpleTableLookup (const SimpleTableLookup&) = delete;
+  SimpleTableLookup& operator = (const SimpleTableLookup&) = delete;
 
   bool load_dependent_data(
            double         & dependent_var,
@@ -123,10 +125,5 @@ public:
 
   void initialize() override;
   GenericMultiInputTable * get_table();
-
-private:
-  // to disable the copy/assignment operators
-  SimpleTableLookup (const SimpleTableLookup&);
-  SimpleTableLookup& operator = (const SimpleTableLookup&);
 };
 #endif

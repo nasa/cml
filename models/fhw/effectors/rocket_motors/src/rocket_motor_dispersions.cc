@@ -5,7 +5,7 @@ PURPOSE:
     This typically represents errors introduced in machining.)
 
 LIBRARY DEPENDENCIES:
-   ()
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
 
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
@@ -13,6 +13,7 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cmath>
 
 #include "../include/rocket_motor_dispersions.hh"
 
@@ -71,7 +72,7 @@ RocketMotorDispersions::apply_dispersions(
  
   // Add the attitude dispersion (more complex):
   // This is based on Rodrigues' formula
-  double tolerance_mag = jeod::Vector3::vmag( motor_tolerance);
+  const double tolerance_mag = jeod::Vector3::vmag( motor_tolerance);
 
   // If the dispersion is too small to be significant, don't do anything, return
   // leaving the transformation matrix unchanged.
@@ -107,8 +108,8 @@ RocketMotorDispersions::apply_dispersions(
   // the magnitude of the motor-tolerance vector.
 
   // Apply the trig functions to this magnitude once up-front
-  double cos_disp = std::cos(tolerance_mag);
-  double sin_disp = std::sin(tolerance_mag);
+  const double cos_disp = std::cos(tolerance_mag);
+  const double sin_disp = std::sin(tolerance_mag);
 
   // Now normalize the motor frame dispersion vector to get the unit vector that
   // will be used in Rodrigues' formula.

@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
  PURPOSE: (To provide a common location for additional math utilities)
 
+ LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (Sep 2015) (initial version))
     ((Bingquan Wang) (OSR) (Apr 2017) (Fixed the compilation warnig of
@@ -13,13 +16,19 @@
 *******************************************************************************/
 
 #include <algorithm>
+#include <array>
+#include <cassert>
 #include <cmath>
-#include <limits>  // min
-#include <fenv.h>  // fp exception
+#include <cstddef>
+#include <limits>
+#include <fenv.h>
+#include <list>
+#include <string>
 #include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
 
 #include "../include/math_utils.hh"
 
@@ -57,7 +66,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
     return;
   }
 
-  double pos_mag = jeod::Vector3::vmag(position);
+  const double pos_mag = jeod::Vector3::vmag(position);
 
   if ( pos_mag < std::numeric_limits<double>::min() ) {
     CMLMessage::error (
@@ -80,7 +89,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
   // Which would be defined as (-h/hmag), where h is angular momentum.
   jeod::Vector3::cross(velocity, position, y_unit);
 
-  double y_mag = jeod::Vector3::vmag(y_unit);
+  const double y_mag = jeod::Vector3::vmag(y_unit);
   if ( y_mag >=std::numeric_limits<double>::min() ) {
     jeod::Vector3::scale ( (1/y_mag), y_unit);
     jeod::Vector3::cross( y_unit, z_unit, x_unit );
@@ -170,7 +179,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
     return;
   }
 
-  double pos_mag = jeod::Vector3::vmag(position);
+  const double pos_mag = jeod::Vector3::vmag(position);
 
   if ( pos_mag < std::numeric_limits<double>::min() ) {
     CMLMessage::error (
@@ -188,7 +197,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
   jeod::Vector3::scale(position, (1/pos_mag), u_unit);
 
   jeod::Vector3::cross( position, velocity, w_unit);
-  double w_mag = jeod::Vector3::vmag(w_unit);
+  const double w_mag = jeod::Vector3::vmag(w_unit);
   if ( w_mag >= std::numeric_limits<double>::min() ) {
     jeod::Vector3::scale ( (1/w_mag), w_unit);
     jeod::Vector3::cross( w_unit, u_unit, v_unit );
@@ -289,7 +298,7 @@ MathUtils::generate_inrtl_to_reference( const double x_axis_inrtl[3],
     return;
   }
 
-  double x_mag = jeod::Vector3::vmag(x_axis_inrtl);
+  const double x_mag = jeod::Vector3::vmag(x_axis_inrtl);
   if (jeod::Vector3::vmag(position) < std::numeric_limits<double>::min() ||
       x_mag < std::numeric_limits<double>::min() ) {
     CMLMessage::error (
@@ -377,7 +386,7 @@ MathUtils::generate_inrtl_to_vnc( const double (&position)[3],
                                   const double (&velocity)[3],
                                   double (&T_inrtl_vnc)[3][3])
 {
-  double vel_mag =  jeod::Vector3::vmag(velocity);
+  const double vel_mag =  jeod::Vector3::vmag(velocity);
   if (jeod::Vector3::vmag(position) < std::numeric_limits<double>::min() ||
       vel_mag                 < std::numeric_limits<double>::min()) {
     CMLMessage::error ( __FILE__, __LINE__,
@@ -399,7 +408,7 @@ MathUtils::generate_inrtl_to_vnc( const double (&position)[3],
                   velocity,
                   y_unit); // not unit vec (yet)
 
-  double y_axis_mag = jeod::Vector3::vmag(y_unit);
+  const double y_axis_mag = jeod::Vector3::vmag(y_unit);
   if ( y_axis_mag  < std::numeric_limits<double>::min()) {
     CMLMessage::error ( __FILE__, __LINE__,
       "Illegal values, VNC ref-frame not definable:\n"
@@ -646,7 +655,7 @@ Purpose:( Effectively takes the square root of a matrix such that
             enough to hold the generated array.)
 *******************************************************************************/
 bool
-MathUtils::cholesky_decomposition ( std::string origin,
+MathUtils::cholesky_decomposition ( const std::string & caller_id,
                                     const double * in_array,
                                     double * out_array,
                                     size_t   dimension_in,
@@ -736,7 +745,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
                                       0.0)) {
         CMLMessage::error(
           __FILE__, __LINE__, "Non-symmetric matrix\n",
-          "Matrix input from ", origin, " is not a symmetric matrix.\n"
+          "Matrix input from ", caller_id, " is not a symmetric matrix.\n"
           "Decomposition will proceed as though it was, but will use only\n"
           "the values on and below the diagonal.\n"
           "Values above the diagonal will be ignored, assumed equal to those "
@@ -773,7 +782,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
     if (sum < 0.0){
       CMLMessage::error(
         __FILE__, __LINE__, "Invalid Covariance\n",
-        "Matrix input from ", origin, " is not positive semi-definite.\n"
+        "Matrix input from ", caller_id, " is not positive semi-definite.\n"
         "A negative eigen-value exists, detected in processing col ", ii, "\n"
         "Successful decomposition requires the matrix be positive "
         "semi-definite.\nDecomposition failed.\n");
@@ -804,7 +813,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
         if (!MathUtils::is_near_equal( sum, 0.0)) {
           CMLMessage::error(
             __FILE__, __LINE__, "Invalid Covariance\n",
-            "Matrix input from ", origin, " is not positive semi-definite.\n"
+            "Matrix input from ", caller_id, " is not positive semi-definite.\n"
             "A negative eigen-value exists\n"
             "Successful decomposition requires the matrix be positive "
             "semi-definite.\nDecomposition failed.\n");
@@ -817,7 +826,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
       // constructed with 0.0 everywhere) and move on to the next column.
       CMLMessage::warn(
         __FILE__,__LINE__, "Ambiguous Decomposition\n",
-        "Matrix input from ", origin, ":\n"
+        "Matrix input from ", caller_id, ":\n"
         "Consider the ", ii+1, "x", ii+1, " square sub-matrix taken from the upper left of "
         "the input matrix.\nThis sub-matrix has a determinant "
         "equal to zero (or very close to zero).\n"
@@ -900,7 +909,7 @@ MathUtils::compute_backward_difference( const std::list<double> & history)
       {  11.0/6,  -3.0,  1.5, -1.0/3, 0   },
       {  25.0/12, -4.0,  3.0, -4.0/3, 0.25}}};
   double derivative = 0.0;
-  size_t order = std::min(history.size() - 1, static_cast<size_t>(4));
+  const size_t order = std::min(history.size() - 1, static_cast<size_t>(4));
 
   size_t ii = 0;
   for (std::list<double>::const_iterator it = history.begin();
@@ -928,8 +937,8 @@ MathUtils::compute_unit_vector_derivative(
     const double vector_derivative[3],     // input
     double unit_vector_derivative[3])      // output
 {
-  double vdotv = jeod::Vector3::dot( vector,
-                               vector);
+  const double vdotv = jeod::Vector3::dot(vector,
+                                          vector);
   if (is_near_equal( vdotv, 0.0)) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid inputs to method.\n",
@@ -941,16 +950,16 @@ MathUtils::compute_unit_vector_derivative(
                         unit_vector_derivative);
     return;
   }
-  double vdotvd = jeod::Vector3::dot( vector,
-                                vector_derivative);
+  const double vdotvd = jeod::Vector3::dot(vector,
+                                           vector_derivative);
 
   // Not protected by previous test of vdotv != 0.0;
   // if vdotv is small and vdotvd large, large / small could still overflow.
   // So use divide-protected.
-  double vdotvd_over_vdotv = divide_protected( vdotvd,
-                                               vdotv,
-                                               0,
-                                               true);
+  const double vdotvd_over_vdotv = divide_protected( vdotvd,
+                                                     vdotv,
+                                                     0,
+                                                     true);
   double scratch[3];
   jeod::Vector3::scale(  vector,
                   -vdotvd_over_vdotv,
@@ -960,7 +969,7 @@ MathUtils::compute_unit_vector_derivative(
                  scratch);
 
   // Protected by previous verification that vdotv not close to 0.
-  double inv_sqrt_vdotv = 1 / std::sqrt( vdotv);
+  const double inv_sqrt_vdotv = 1 / std::sqrt( vdotv);
 
   // NOTE - not really protected, but failure here would require that scratch be
   //        very large and vdotv very small -- effectively the vector is very
@@ -998,7 +1007,7 @@ Purpose:
 template<>
 bool MathUtils::is_within_abs_tolerance<bool>( bool val1, bool val2, bool tol)
 {
-  bool ret = tol || (val1 == val2);
+  const bool ret = tol || (val1 == val2);
   CMLMessage::error( __FILE__, __LINE__,
     "Testing whether boolean ",val1, " is within boolean ",tol,", of boolean ",
     val2, " has an ambiguous interpretation.\n"

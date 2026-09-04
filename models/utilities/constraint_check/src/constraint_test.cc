@@ -4,13 +4,18 @@ PURPOSE:
    (Defines specific constraint tests for checking a sim variable value against
     a domain specification and duration constraint.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
  (((Gary Turner) (OSR) (Jun 2023) (ANTARES)
    (New, based on GNC_PAR grok_duration_check and grok-violation models))
  )
 *******************************************************************************/
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "../include/constraint_enum.hh"
 #include "../include/constraint_test.hh"
 
 /*****************************************************************************

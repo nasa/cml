@@ -24,6 +24,9 @@ class FaultFunctionIndependentVariable {
   public :
     FaultFunctionIndependentVariable();
     ~FaultFunctionIndependentVariable();
+    FaultFunctionIndependentVariable(const FaultFunctionIndependentVariable&) = delete;
+    FaultFunctionIndependentVariable& operator = (
+                                   const FaultFunctionIndependentVariable&) = delete;
 
     template<typename T> void initialize(T& var);
 
@@ -42,10 +45,6 @@ class FaultFunctionIndependentVariable {
       Whether the model has been successfully initialized. */
     UntypedVariableBase* variable; /* (--) The variable being evaluated. */
     double relative_value_init; /* (--) The reference value. */
-
-    FaultFunctionIndependentVariable(const FaultFunctionIndependentVariable&);
-    FaultFunctionIndependentVariable& operator = (
-                                   const FaultFunctionIndependentVariable&);
 };
 
 

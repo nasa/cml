@@ -18,9 +18,12 @@ NOTES:
      Body B - The object inside the wake
 **********************************************************************/
 
-#include <cmath> //sqrt
-#include <algorithm> //max
+#include <cmath>
+#include <cstddef>
+#include <vector>
+#include "../include/wake_bodies.hh"
 #include "../include/wake_effects.hh"
+#include "../include/wake_params.hh"
 
 /*****************************************************************************
 constructor

@@ -7,6 +7,9 @@ PURPOSE:
     Pad SEU and left-handed pad frames,
     Hang and Roll angles )
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (June 2014)
                       (New implementation of PlanetaryDerivedState for Antares))
@@ -26,7 +29,13 @@ PROGRAMMERS:
 //    position (already have) and rotational relative state (may not be
 //    needed), so it adds to the computation load.  - Gary Turner ~ 2015
 
-#include <cmath>  // acos
+#include <cmath>
+#include <limits>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/derived_state/include/planetary_derived_state.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/dynamics/dyn_manager/include/class_declarations.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
@@ -537,9 +546,9 @@ Purpose:(calculates the radial disstance between the current position and the
 void
 ExtendedPlanetaryDerivedState::calculate_topocentric_altitude()
 {
-  double pos_mag_sq = jeod::Vector3::vmagsq(state.cart_coords);
-  double pos_mag = std::sqrt(pos_mag_sq);
-  double eq_pos_sq = state.cart_coords[0] * state.cart_coords[0] +
+  const double pos_mag_sq = jeod::Vector3::vmagsq(state.cart_coords);
+  const double pos_mag = std::sqrt(pos_mag_sq);
+  const double eq_pos_sq = state.cart_coords[0] * state.cart_coords[0] +
                      state.cart_coords[1] * state.cart_coords[1];
   topocentric_altitude = pos_mag * (1 - planet->r_pol /
                           std::sqrt (pos_mag_sq - planet->e_ellip_sq *eq_pos_sq));
@@ -591,7 +600,7 @@ ExtendedPlanetaryDerivedState::hang_roll()
   jeod::Vector3::transform_transpose( topodetic.T_this_to_body,
                                 hang_angle_body_vec,
                                 hang_angle_body_vec_td);
-  double  mag_hang_angle_vec = jeod::Vector3::vmag(hang_angle_body_vec_td);
+  const double mag_hang_angle_vec = jeod::Vector3::vmag(hang_angle_body_vec_td);
 
   // The hang angle is the angle between the hang_angle_body_vector in the NED frame
   // and down, which is the 3rd index [2]
@@ -703,7 +712,7 @@ ExtendedPlanetaryDerivedState::analyze_range_safety()
       range_safety.pad_azimuth = 2.0*M_PI - range_safety.pad_azimuth;
   }
 
-  double inplane_mag = std::sqrt((range_safety.XVP[0] *
+  const double inplane_mag = std::sqrt((range_safety.XVP[0] *
                                   range_safety.XVP[0]) +
                                  (range_safety.XVP[1] *
                                   range_safety.XVP[1]));

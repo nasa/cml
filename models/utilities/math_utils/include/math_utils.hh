@@ -17,15 +17,15 @@
 #ifndef CML_MATH_UTILS_HH
 #define CML_MATH_UTILS_HH
 
-#include <vector>  // mainly for std::vector use
-#include <string>  // mainly for std::string use
+#include <array>
+#include <vector>
+#include <string>
 #include <list>
-#include <cstring> // memset
+#include <cstring>
 
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
-// Function template definitions
 #include "cml/models/utilities/math_utils/include/math_utils_private.hh"
 
 
@@ -94,7 +94,7 @@ public:
   // passed in, along with the size of 1 dimension of the array (e.g. 6x6 array
   // is sized "6").  An optional 5th argument allows processing a smaller
   // sub-matrix.
-  static bool cholesky_decomposition( std::string origin,
+  static bool cholesky_decomposition( const std::string & caller_id,
                                       const double * in_array,
                                       double * out_array,
                                       size_t dimension_in,

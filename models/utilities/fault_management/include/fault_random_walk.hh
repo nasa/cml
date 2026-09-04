@@ -20,10 +20,12 @@ template <typename T> class FaultRandomWalk : public Fault {
   public :
     explicit FaultRandomWalk(T& var);
     ~FaultRandomWalk() override = default;
+    FaultRandomWalk(const FaultRandomWalk&) = delete;
+    FaultRandomWalk& operator = (const FaultRandomWalk&) = delete;
 
     void overwrite_value() override;
 
-    bool set_param(std::string param_name, double value, bool reset_nominal) override;
+    bool set_param(const std::string& param_name, double value, bool reset_nominal) override;
 
     void reset() override { random_walk_value = 0.0;
                             Fault::reset();}
@@ -34,9 +36,6 @@ template <typename T> class FaultRandomWalk : public Fault {
     T& variable; /* (--) The variable to fault. */
     T random_walk_value; /* (--)
       The value that is added to the variable when it's faulted. */
-
-    FaultRandomWalk(const FaultRandomWalk&);
-    FaultRandomWalk& operator = (const FaultRandomWalk&);
 };
 
 
@@ -65,7 +64,7 @@ Purpose:(Generic method for setting fault parameters. For this type of fault,
          can be used to set parameters of the random number generator.)
 *******************************************************************************/
 template<typename T>
-bool FaultRandomWalk<T>::set_param(std::string param_name, double value, bool reset_nominal) {
+bool FaultRandomWalk<T>::set_param(const std::string& param_name, double value, bool reset_nominal) {
   (void)reset_nominal;
   if (param_name == "mean") {
     rand.mean = value;
@@ -76,7 +75,7 @@ bool FaultRandomWalk<T>::set_param(std::string param_name, double value, bool re
   } else if (param_name == "max") {
     rand.upper_limit = value;
   } else if (param_name == "seed") {
-    rand.seed = value;
+    rand.seed = static_cast<unsigned long>(value);
   } else {
     return Fault::set_param(param_name, value);
   }

@@ -2,6 +2,9 @@
 PURPOSE:
    (Input/output interface for the atmosphere executive.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (May 2016) (ANTARES)
@@ -10,7 +13,11 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 #include "../include/atmosphere_exec_interface.hh"
 
@@ -65,7 +72,7 @@ AtmosphereExecInterface::activate()
   //        to its subscription count.  Otherwise, it will activate it AND
   //        execute it.  Now, we need it to execute, so if it is already active
   //        force it to execute.
-  bool planet_state_already_active = planet_state.is_active();
+  const bool planet_state_already_active = planet_state.is_active();
   planet_state.subscribe();
   if (planet_state_already_active) {
     planet_state.update();

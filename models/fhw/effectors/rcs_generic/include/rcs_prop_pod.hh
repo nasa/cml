@@ -19,7 +19,6 @@ PROGRAMMERS:
 #define CML_RCS_PROP_POD_HH
 
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
 
 /*****************************************************************************
@@ -162,6 +161,8 @@ class RcsPropPod{
               unsigned int num_components_,
               const double & time_step_);
   virtual ~RcsPropPod() = default;
+  RcsPropPod (const RcsPropPod& rhs) = delete;
+  RcsPropPod & operator = (const RcsPropPod& rhs) = delete;
 
   void set_dyn_mass_interface( unsigned int component_index,
                 DynamicMassBodyPropertiesInterface & dyn_mass_interface);
@@ -176,11 +177,6 @@ class RcsPropPod{
   unsigned int get_max_num_jets_on() const {return max_num_jets_on;}
   void set_thrust_factor(unsigned int index, double value);
   bool is_healthy() const { return health != HealthFail;}
-
- private:
-   // Not implemented:
-   RcsPropPod (const RcsPropPod& rhs);
-   RcsPropPod & operator = (const RcsPropPod& rhs);
 
 };
 #endif

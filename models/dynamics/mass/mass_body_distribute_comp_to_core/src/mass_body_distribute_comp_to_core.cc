@@ -5,14 +5,22 @@ Purpose:
    of a compound body.
   )
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   (((Gary Turner) (OSR) (April 2018) (Antares) (Initial version))
    ((Daniel Ghan) (OSR) (August 2020) (Antares) (Added sanity checks)))
 *******************************************************************************/
 
-#include <sstream> // ostringstream
+#include <sstream>
 
 #include "../include/mass_body_distribute_comp_to_core.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 
 /*****************************************************************************
@@ -275,7 +283,7 @@ check_for_valid_mass_properties
 Purpose:(Sanity checks on the new mass properties)
 *****************************************************************************/
 void
-MassBodyDistributeCompToCore::check_for_valid_mass_properties()
+MassBodyDistributeCompToCore::check_for_valid_mass_properties() const
 {
   // In order for the new mass properties to be valid (physically possible):
   // 1. The mass must be positive.
@@ -302,7 +310,7 @@ MassBodyDistributeCompToCore::check_for_valid_mass_properties()
       // would satisfy the current checks but has two negative eigenvalues.
 
   // Create a short name for the inertia tensor to make this code more readable
-  double (&I)[3][3](adjustable_body.core_properties.inertia);
+  const double (&I)[3][3](adjustable_body.core_properties.inertia);
   // If any error message is generated, this will be the beginning of it
   std::ostringstream err_msg;
   err_msg << "It is physically impossible to achieve specified composite mass\n"

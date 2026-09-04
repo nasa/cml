@@ -2,12 +2,20 @@
 PURPOSE:
    (Methods for the basic solid-rocket motor)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
 ******************************************************************************/
 
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/rocket_motor_basic.hh"
@@ -183,7 +191,7 @@ RocketMotor_Basic::initialize()
   dispersions.apply_dispersions(position, T_struc_to_motor_frame);
 
   // Calculate thrust direction in structural frame
-  double unit_vec_mag_sq = jeod::Vector3::vmagsq( thrust_unit_motor);
+  const double unit_vec_mag_sq = jeod::Vector3::vmagsq(thrust_unit_motor);
   if (MathUtils::is_near_equal( unit_vec_mag_sq, 0.0)) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid unit vector specification\n",

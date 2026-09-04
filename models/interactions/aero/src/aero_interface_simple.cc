@@ -7,10 +7,9 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
 *******************************************************************************/
 
-#include <cstring>  // NULL
-#include "jeod/models/utils/math/include/vector3.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
 
+#include "../include/aero_interface_base.hh"
 #include "../include/aero_interface_simple.hh"
 
 /*******************************************************************************

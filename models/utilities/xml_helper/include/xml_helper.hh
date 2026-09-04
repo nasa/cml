@@ -14,7 +14,7 @@ PROGRAMMERS:
 #ifndef CML_XML_HELPER_HH
 #define CML_XML_HELPER_HH
 
-#include <libxml/parser.h> // xmlNodePtr
+#include <libxml/parser.h>
 
 class XmlHelper {
  public:
@@ -29,9 +29,6 @@ class XmlHelper {
   static const char * xml_convert_ptr (const void * in);
   static const char * xml_convert_ptr (const char * in);
   static const char * xml_convert_ptr (const unsigned char * in);
- private:
-  XmlHelper(const XmlHelper&);
-  XmlHelper& operator = (const XmlHelper&);
 };
 
 #endif

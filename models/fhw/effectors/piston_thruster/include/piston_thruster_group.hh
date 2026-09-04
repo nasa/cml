@@ -41,8 +41,10 @@ PROGRAMMERS:
 #ifndef CML_PISTON_THRUSTER_GROUP_HH
 #define CML_PISTON_THRUSTER_GROUP_HH
 
-#include <list> // For std::list
+#include <list>
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
+#include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
 #include "piston_thruster.hh"
@@ -71,9 +73,8 @@ public:
 
   PistonThrusterGroupInputs( const double & time_in,
                              double & thrust_in);
-private:
-  PistonThrusterGroupInputs(const PistonThrusterGroupInputs& rhs);
-  PistonThrusterGroupInputs & operator = (const PistonThrusterGroupInputs& rhs);
+  PistonThrusterGroupInputs(const PistonThrusterGroupInputs& rhs) = delete;
+  PistonThrusterGroupInputs & operator = (const PistonThrusterGroupInputs& rhs) = delete;
 };
 
 
@@ -131,6 +132,8 @@ protected:
 public:
   explicit PistonThrusterGroup( const double & time_in);
   ~PistonThrusterGroup() override = default;
+  PistonThrusterGroup(const PistonThrusterGroup& rhs) = delete;
+  PistonThrusterGroup & operator = (const PistonThrusterGroup& rhs) = delete;
 
   void initialize() override;
   virtual void update();
@@ -140,9 +143,5 @@ public:
 protected:
   void activate() override;
   void deactivate() override;
-
-private:
-  PistonThrusterGroup(const PistonThrusterGroup& rhs);
-  PistonThrusterGroup & operator = (const PistonThrusterGroup& rhs);
 };
 #endif

@@ -20,10 +20,14 @@ PROGRAMMERS:
 #ifndef CML_AERO_EXECUTIVE_TABLE_HH
 #define CML_AERO_EXECUTIVE_TABLE_HH
 
+#include "aero_coefficients.hh"
 #include "aero_executive_base.hh"
 #include "aero_table_set_base.hh"
-#include "aero_environment.hh"
-#include "aero_interface_output.hh"
+#include <vector>
+#include <string>
+
+class AeroInterfaceOutput;
+class AeroEnvironment;
 
 /*******************************************************************************
 AeroExecutiveTable
@@ -170,7 +174,7 @@ public:
   ~AeroExecutiveTable() override = default;
 
   void change_table(unsigned int new_ix);
-  void change_table(std::string new_name);
+  void change_table(const std::string & new_name);
   void change_table(AeroTableSetBase & new_table);
   void add_table(AeroTableSetBase * table);
 

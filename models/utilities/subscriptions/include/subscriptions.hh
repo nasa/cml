@@ -18,7 +18,6 @@
 #ifndef CML_SUBSCRIPTIONS_HH
 #define CML_SUBSCRIPTIONS_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <string>
 
 class SubscriptionBase {
@@ -58,6 +57,9 @@ class SubscriptionBase {
 
   virtual ~SubscriptionBase() = default;
 
+  SubscriptionBase (const SubscriptionBase&) = delete;
+  SubscriptionBase& operator = (const SubscriptionBase&) = delete;
+
   virtual void subscribe();
   virtual void unsubscribe();
   virtual void initialize();
@@ -74,9 +76,5 @@ class SubscriptionBase {
   virtual void activate(){ active = true;}
   // Note - remember to unsubscribe any subscriptions made during activate().
   virtual void deactivate(){active = false;}
-
- private: // and undefined:
-  SubscriptionBase (const SubscriptionBase&);
-  SubscriptionBase& operator = (const SubscriptionBase&);
 };
 #endif

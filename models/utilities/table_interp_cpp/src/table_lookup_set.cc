@@ -2,15 +2,24 @@
 PURPOSE:
   (Table lookup model master controller)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (New implementation))
    ((Bingquan Wang) (OSR) (Aug 2017) (IVV code cleanup and refactored))
   )
 *******************************************************************************/
 
-#include <cstdarg> // for variadic function arguments
+#include <cstddef>
+#include <string>
+#include <vector>
 
+#include "../include/abstract_table_lookup.hh"
+#include "../include/generic_multi_input_table.hh"
+#include "../include/table_independent_variable.hh"
 #include "../include/table_lookup_set.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************
@@ -45,7 +54,7 @@ TableLookupSet::add_table( GenericMultiInputTable &new_table)
     return;
   }
 
-  size_t num_vars = new_table.get_num_dep_vars();
+  const size_t num_vars = new_table.get_num_dep_vars();
   for (size_t ii = 0; ii < num_vars; ++ii) {
     double *var_ptr = new_table.get_dependent_variable_ptr(ii);
     verify_and_add_dependent_variable( var_ptr);

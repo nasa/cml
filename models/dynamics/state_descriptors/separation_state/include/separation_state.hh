@@ -18,13 +18,14 @@ PROGRAMMERS:
 #ifndef CML_SEPARATION_STATE_HH
 #define CML_SEPARATION_STATE_HH
 
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "jeod/models/utils/orientation/include/orientation.hh"
 #include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 
 class SeparationState : public SubscriptionBase
@@ -64,14 +65,16 @@ class SeparationState : public SubscriptionBase
 
  public:
    SeparationState (void);
-   explicit SeparationState (std::string name_);
+   explicit SeparationState (const std::string & name_);
    ~SeparationState() override = default;
+   SeparationState (const SeparationState&) = delete;
+   SeparationState& operator = (const SeparationState&) = delete;
 
    void initialize( jeod::DynManager & dyn_manager_in,
                     jeod::DynBody & source_body,
                     jeod::DynBody & subject_body,
-                    std::string source_name,
-                    std::string subject_name) // DEPRECATED
+                    const std::string & source_name,
+                    const std::string & subject_name) // DEPRECATED
    { (void)dyn_manager_in;
      initialize(source_body, subject_body, source_name, subject_name);}
 
@@ -86,29 +89,24 @@ class SeparationState : public SubscriptionBase
                     jeod::BodyRefFrame & subject_frame);
    void initialize( jeod::DynBody      & source_body,
                     jeod::BodyRefFrame & subject_frame,
-                    std::string    source_name = "");
+                    const std::string  & source_name = "");
    void initialize( jeod::RefFrame     & source_frame,
                     jeod::DynBody      & subject_body,
-                    std::string    subject_name = "");
+                    const std::string  & subject_name = "");
    void initialize( jeod::DynBody      & source_body,
                     jeod::DynBody      & subject_body,
-                    std::string    source_name = "",
-                    std::string    subject_name = "");
+                    const std::string  & source_name = "",
+                    const std::string  & subject_name = "");
    virtual void update( );
    jeod::RefFrame* get_source() {return source;}
    jeod::BodyRefFrame* get_subject() {return subject;}
 
  protected:
    jeod::BodyRefFrame *  initialize_find_frame (jeod::DynBody & body,
-                                                std::string frame_name,
-                                                std::string body_type);
+                                                const std::string & frame_name,
+                                                const std::string & body_type);
    void activate() override;
    void deactivate() override;
-
- private:
-   // Not implemented:
-   SeparationState (const SeparationState&);
-   SeparationState& operator = (const SeparationState&);
 
 };
 #endif

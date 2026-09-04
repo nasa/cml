@@ -10,8 +10,11 @@ PROGRAMMERS:
 #ifndef CML_WATCH_VALUES_SET_HH
 #define CML_WATCH_VALUES_SET_HH
 
+#include <string>
+#include <list>
+#include <cstddef>
 #include <vector>
-#include "watch_values_base.hh"
+#include "watch_values_base_core.hh"
 
 
 /*****************************************************************************
@@ -56,6 +59,8 @@ class WatchValuesSet : public WatchValuesBaseCore
 
   WatchValuesSet();
   ~WatchValuesSet() override = default;
+  WatchValuesSet (const WatchValuesSet&) = delete;
+  WatchValuesSet& operator = (const WatchValuesSet&) = delete;
 
   void add_trigger( WatchValuesBaseCore & new_trigger);
   void initialize( std::list<WatchValuesBaseCore *> * active_watch_in) override;
@@ -66,8 +71,5 @@ class WatchValuesSet : public WatchValuesBaseCore
  protected:
   void activate() override;
   void deactivate() override;
- private:
-  WatchValuesSet (const WatchValuesSet&);
-  WatchValuesSet& operator = (const WatchValuesSet&);
 };
 #endif

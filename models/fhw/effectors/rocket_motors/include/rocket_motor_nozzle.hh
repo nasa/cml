@@ -76,6 +76,8 @@ protected:
 public:
   RocketMotorNozzle();
   virtual ~RocketMotorNozzle() = default;
+  RocketMotorNozzle (const RocketMotorNozzle& rhs) = delete;
+  RocketMotorNozzle & operator = (const RocketMotorNozzle& rhs) = delete;
 
   void initialize( double position_struc_to_motor_frame[3],
                    double T_struc_to_motor_frame[3][3]);
@@ -86,10 +88,5 @@ protected:
   void compute_thrust_mag( double thrust_mag_per_sf);
   void modify_thrust_mag_atmos (double atm_pressure);
   void compute_thrust_vec();
-
-private:
-  // Not implemented:
-  RocketMotorNozzle (const RocketMotorNozzle& rhs);
-  RocketMotorNozzle & operator = (const RocketMotorNozzle& rhs);
 };
 #endif

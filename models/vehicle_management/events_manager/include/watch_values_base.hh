@@ -13,7 +13,7 @@ PROGRAMMERS:
 #ifndef CML_WATCH_VALUES_BASE_HH
 #define CML_WATCH_VALUES_BASE_HH
 
-#include <cmath> // abs
+#include <cmath>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "watch_values_base_core.hh"
@@ -52,6 +52,8 @@ class WatchValuesBase : public WatchValuesBaseCore {
      variable_at_activation(),
      use_threshold_crossing_trigger(false) {}
   ~WatchValuesBase() override = default;
+  WatchValuesBase (const WatchValuesBase& rhs) = delete;
+  WatchValuesBase& operator = (const WatchValuesBase& rhs) = delete;
 
 /*****************************************************************************
 set_watch
@@ -260,7 +262,7 @@ Purpose:(Split behavior based on whether the template class variable type
       event_triggered = (var_val > ref_val);
     }
     else if (direction == Both) { // Either direction
-      double this_delta =  var_val - ref_val;
+      const double this_delta =  var_val - ref_val;
       event_triggered = (this_delta * delta_record < 0);
 
       if (std::abs(this_delta) > 0.0) {
@@ -389,9 +391,5 @@ Purpose:(Generates the new reference value.)
     // Increment the current value with the intended offset.
     reference += variable_at_activation;
   }
-
- private:
-  WatchValuesBase (const WatchValuesBase& rhs);
-  WatchValuesBase& operator = (const WatchValuesBase& rhs);
 };
 #endif

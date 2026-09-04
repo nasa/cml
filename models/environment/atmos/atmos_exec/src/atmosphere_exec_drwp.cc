@@ -11,9 +11,13 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include "../include/atmosphere_exec_atmos_base.hh"
 #include "../include/atmosphere_exec_drwp.hh"
+#include "../include/atmosphere_exec_out.hh"
 
 
 /*****************************************************************************

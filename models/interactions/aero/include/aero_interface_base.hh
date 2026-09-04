@@ -59,16 +59,13 @@ public:
 
   ~AeroInterfaceBase() override = default;
 
+  AeroInterfaceBase (const AeroInterfaceBase &) = delete;
+  AeroInterfaceBase & operator = (const AeroInterfaceBase &) = delete;
+
   virtual void update() = 0;
 
 protected:
   void activate() override;
   void deactivate() override;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies
-  AeroInterfaceBase (const AeroInterfaceBase &);
-  AeroInterfaceBase & operator = (const AeroInterfaceBase &);
 };
 #endif

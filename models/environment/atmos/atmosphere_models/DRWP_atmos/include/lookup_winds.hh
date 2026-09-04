@@ -17,8 +17,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/table_interp_cpp/include/simple_table_lookup.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+#include <cstddef>
 #include <string>
 
 
@@ -188,14 +188,16 @@ public:
  public:
   LookupAtmosWinds();
   ~LookupAtmosWinds() override = default;
+  LookupAtmosWinds (const LookupAtmosWinds&) = delete;
+  LookupAtmosWinds & operator = (const LookupAtmosWinds&) = delete;
 
   void initialize() override;
   void update(double altitude_in);
   void change_datafile_index(size_t index);
   bool change_profile();
-  bool load_DRWP_file(std::string  drwpFileName_,
-                      bool         file_contains_vertical_wind_component,
-                      unsigned int wind_number_);
+  bool load_DRWP_file(const std::string& drwpFileName_,
+                      bool               file_contains_vertical_wind_component,
+                      unsigned int       wind_number_);
   void compute_average_wind();
   void compute_average_wind( size_t table_index);
   void compute_average_wind( double min_alt,
@@ -217,9 +219,5 @@ protected:
   void calculate_speed_of_sound();
   void calculate_wind_mag_dir();
   void stream_error(int line, const std::string& drwpFileName_);
-private:
-  // private and unimplemented; cannot be used.
-  LookupAtmosWinds (const LookupAtmosWinds&);
-  LookupAtmosWinds & operator = (const LookupAtmosWinds&);
 };
 #endif

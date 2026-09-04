@@ -18,7 +18,8 @@ Programmers:
 #ifndef CML_SPHERICAL_HARMONICS_FAST_GRAVITY_CONTROLS_HH
 #define CML_SPHERICAL_HARMONICS_FAST_GRAVITY_CONTROLS_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_manager/include/base_dyn_manager.hh"
+#include "jeod/models/environment/gravity/include/gravity_integ_frame.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 
 class SphericalHarmonicsFastGravityControls : public jeod::SphericalHarmonicsGravityControls {
@@ -75,6 +76,12 @@ class SphericalHarmonicsFastGravityControls : public jeod::SphericalHarmonicsGra
 
    ~SphericalHarmonicsFastGravityControls() override = default;
 
+   SphericalHarmonicsFastGravityControls (
+      const SphericalHarmonicsFastGravityControls &) = delete;
+
+   SphericalHarmonicsFastGravityControls & operator= (
+      const SphericalHarmonicsFastGravityControls &) = delete;
+
    void initialize_control ( jeod::GravityManager &grav_manager_in) override;
 
    void  calc_nonspherical ( const double integ_pos[3], // In: unused
@@ -89,24 +96,6 @@ class SphericalHarmonicsFastGravityControls : public jeod::SphericalHarmonicsGra
        count_limit = 1;
      }
    }
-
- // Make the copy constructor and assignment operator private
- // (and unimplemented) to avoid erroneous copies
- private:
-
-   /**
-    * Not implemented.
-    */
-   SphericalHarmonicsFastGravityControls (
-      const SphericalHarmonicsFastGravityControls &);
-
-   /**
-    * Not implemented.
-    */
-   SphericalHarmonicsFastGravityControls & operator= (
-      const SphericalHarmonicsFastGravityControls &);
-
-
 };
 
 #endif

@@ -19,7 +19,6 @@ PROGRAMMERS:
 #define CML_TR_PARAMETER_REF_FRAME_HH
 
 #include <string>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 TR_Parameter_RefFrame

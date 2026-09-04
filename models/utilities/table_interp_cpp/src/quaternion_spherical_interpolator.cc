@@ -2,6 +2,9 @@
 PURPOSE:
   (Spherical interpolation algorithm for handling quaternion interpolation.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (November 2017) (New implementation))
   )
@@ -10,6 +13,7 @@ PROGRAMMERS:
 #include <cmath>
 #include "../include/quaternion_spherical_interpolator.hh"
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 
@@ -122,8 +126,8 @@ QuaternionSphericalInterpolator::update()
       }
 
       // At this point, q_delta_s in range [0, 1-epsilon_delta)
-      double delta = std::acos(q_delta_s);
-      double sin_delta = std::sin(delta);
+      const double delta = std::acos(q_delta_s);
+      const double sin_delta = std::sin(delta);
       // (Note: if we only needed sin_delta, that could be obtained from
       // sqrt(1-q_delta_s^2).  But we also need delta.
 

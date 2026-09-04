@@ -3,6 +3,9 @@ PURPOSE:
   (To model the force and moments imparted on both parts of a vehicle
    during its separation when a piston thruster or a group of them fires.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
   (See header file)
 
@@ -18,9 +21,13 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (June 2017) (Antares) (IV&V code review clean up)))
 *******************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <list>
 
+#include "../include/piston_thruster.hh"
 #include "../include/piston_thruster_group.hh"
 
 /*******************************************************************************
@@ -161,7 +168,7 @@ PistonThrusterGroup::update()
   }
 
   // Compute the elapsed time since the PECs were fired
-  double elapsed_time = time - start_time;
+  const double elapsed_time = time - start_time;
 
   // End if been active too long
   if (elapsed_time > param.max_time){

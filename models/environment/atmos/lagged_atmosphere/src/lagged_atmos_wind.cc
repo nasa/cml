@@ -2,6 +2,9 @@
 Purpose:
    (Define methods for the class LaggedAtmosWind.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Author:
  (((Gary Turner) (OSR) (Jan 2021) (Antares)
     (Based on LaggedAtmosphere and LaggedWinds by Jeff Semrau,
@@ -11,10 +14,12 @@ Author:
 
 #include "../include/lagged_atmos_wind.hh"
 
-#include "jeod/models/utils/math/include/vector3.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include <cstddef>
+#include <iterator>
 #include <string>
 /*****************************************************************************
 Constructors
@@ -108,8 +113,7 @@ LaggedAtmosWind::compute( double input_altitude)
   // Now push this iterator through the list until it points to an altitude
   // below input_altitude. Note that this could result in "below" pointing
   // to nodes.end(), which isn't an actual node.
-  while ( input_altitude < below->altitude &&
-          below != nodes.end() ) {
+  while ( below != nodes.end() && input_altitude < below->altitude ) {
     // Increment "below" moves it to the right in the list, to a lower altitude
     ++below;
   }
@@ -158,7 +162,7 @@ LaggedAtmosWind::compute( double input_altitude)
   //         below and above are really close together
   //         The fail-safe setting, frac = 0, results in using the
   //         parameters from the "above" iterator.
-  double frac = MathUtils::divide_protected(
+  const double frac = MathUtils::divide_protected(
                                   (input_altitude - above->altitude),
                                   (below->altitude - above->altitude),
                                   0,
@@ -214,7 +218,7 @@ LaggedAtmosWind::update_history( const LaggedAtmosPayloadData &payload_data)
   // We don't want to keep the nodes forever.  So delete any nodes with
   // altitudes that are farther above the current altitude than the chute can
   // possibly be.  But don't invalidate the above iterator.
-  double max_alt = payload_data.altitude + max_delta_altitude;
+  const double max_alt = payload_data.altitude + max_delta_altitude;
   while (above != nodes.begin() &&
          nodes.front().altitude > max_alt) {
     nodes.pop_front();

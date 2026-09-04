@@ -18,8 +18,9 @@ PROGRAMMERS:
 #ifndef CML_BIN_COUNTER_HH
 #define CML_BIN_COUNTER_HH
 
+#include <cstddef>
+#include <string>
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************
@@ -63,6 +64,8 @@ class CML_BinCounter {
                   unsigned int num_bins,
                   bool closed_ends = true);
   virtual ~CML_BinCounter() = default;
+  CML_BinCounter(const CML_BinCounter&) = delete;
+  CML_BinCounter& operator=(const CML_BinCounter&) = delete;
 
   void insert(double value);
   void set_data( const std::vector<double> & edges,
@@ -78,9 +81,5 @@ class CML_BinCounter {
     std::vector<double> edges_v( edges, edges+n_edges);
     set_data( edges_v, closed_ends);
   }
-
- private: // not implemented
-  CML_BinCounter(const CML_BinCounter&);
-  CML_BinCounter& operator=(const CML_BinCounter&);
 };
 #endif

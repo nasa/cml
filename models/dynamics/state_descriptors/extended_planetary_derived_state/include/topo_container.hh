@@ -51,14 +51,13 @@ class TopoContainer {
   TopoContainer( const jeod::AltLatLongState & state_in,
                  const int & calc_rel_vel_in);
   ~TopoContainer() = default;
+  TopoContainer (const TopoContainer & rhs) = delete;
+  TopoContainer & operator = (const TopoContainer & rhs) = delete;
   void initialize( const jeod::RefFrameRot & planet_rot_state_in,
                    const jeod::RefFrameRot & vehicle_rot_state_in,
                    const double * inrtl_inrtl_vel_in,
                    const double * inrtl_rel_vel_in);
   void update();
- private:
-   TopoContainer (const TopoContainer & rhs);
-   void operator = (const TopoContainer & rhs);
 };
 
 #endif

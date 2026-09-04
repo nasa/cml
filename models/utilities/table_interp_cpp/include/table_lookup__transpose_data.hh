@@ -26,15 +26,17 @@ PROGRAMMERS:
 #ifndef CML_TABLE_LOOKUP__TRANSPOSE_DATA_HH
 #define CML_TABLE_LOOKUP__TRANSPOSE_DATA_HH
 
+#include <string>
+#include <cstddef>
 #include <vector>
 #include <list>
 
+#include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
 #include "generic_multi_input_table.hh"
 #include "table_lookup_set.hh"
 #include "abstract_table_lookup.hh"
 #include "table_type_defs.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 TableLookupTransposeDataSet_TableConfig
@@ -151,6 +153,8 @@ class TableLookupTransposeDataSet : public TableLookupSet
  public:
   TableLookupTransposeDataSet();
   ~TableLookupTransposeDataSet() override = default;
+  TableLookupTransposeDataSet ( const TableLookupTransposeDataSet&) = delete;
+  TableLookupTransposeDataSet& operator = ( const TableLookupTransposeDataSet&) = delete;
 
   bool process_data( const std::string & filename,
                      size_t terminate_on_line = 100000);
@@ -165,8 +169,5 @@ class TableLookupTransposeDataSet : public TableLookupSet
   bool remove_config( TableLookupTransposeDataSet_TableConfig & config_remove);
  private:
   void check_independent();
-  // Disable the copy/assignment operators
-  TableLookupTransposeDataSet ( const TableLookupTransposeDataSet&);
-  TableLookupTransposeDataSet& operator = ( const TableLookupTransposeDataSet&);
 };
 #endif

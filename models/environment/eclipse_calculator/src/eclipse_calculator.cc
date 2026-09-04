@@ -3,12 +3,18 @@ PURPOSE: (Uses JEOD radiation pressure model components to generate an
           illumination fraction without executing the whole radiation
           pressure model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2019) (Antares) (initial)))
 *****************************************************************************/
 
 #include "../include/eclipse_calculator.hh"
-#include "jeod/models/utils/math/include/vector3.hh" // vmag
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 /*****************************************************************************
 Constructor

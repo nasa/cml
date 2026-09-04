@@ -9,7 +9,8 @@ PROGRAMMERS:
     ((Gary Turner) (OSR) (Oct 2014) (Antares))
 *******************************************************************************/
 
-#include <cmath> // sqrt
+#include <cmath>
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 
 #include "../include/apsides_predictor.hh"
@@ -166,7 +167,7 @@ ApsidesPredictor::compute_next_apsis()
   } else if (cosNu < -1.0) {
     cosNu = -1.0;
   }
-  double sinNu = std::sqrt(1 - cosNu * cosNu) * sign_rdot;
+  const double sinNu = std::sqrt(1 - cosNu * cosNu) * sign_rdot;
 
   /* recompute correction factor to include true anomaly */
   // ALGEBRA NOTE: Simplifies to
@@ -180,7 +181,7 @@ ApsidesPredictor::compute_next_apsis()
   // argument of perigee
   // ALGEBRA NOTE: Simplifies to
   // double sin_2arg_peri = K * (sin^2 (incl)) * sin(2 * arg_periaps)
-  double sin_2arg_peri = 2.0 * orb_elem.j2_correction *
+  const double sin_2arg_peri = 2.0 * orb_elem.j2_correction *
             (sinNu * cosNu * (orb_elem.sinI_sinL * orb_elem.sinI_sinL -
                               orb_elem.sinI_cosL * orb_elem.sinI_cosL) -
              orb_elem.sinI_sinL * orb_elem.sinI_cosL * (sinNu * sinNu -

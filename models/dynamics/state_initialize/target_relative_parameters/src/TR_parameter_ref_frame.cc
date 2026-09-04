@@ -3,6 +3,9 @@ PURPOSE:
    (Provide the coordinate axes of a reference frame defined by 2 vectors and
    used in multiple places in the TargetRelative_StateParameter class)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))
@@ -12,8 +15,11 @@ PROGRAMMERS:
 *******************************************************************************/
 #include "../include/TR_parameter_ref_frame.hh"
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include <cmath>
+#include <string>
+#include <utility>
 
 /*****************************************************************************
 Constructor
@@ -24,7 +30,7 @@ TR_Parameter_RefFrame::TR_Parameter_RefFrame(
   u_hat(),
   n_hat(),
   p_hat(),
-  name(name_)
+  name(std::move(name_))
 {}
 
 
@@ -53,7 +59,7 @@ bool TR_Parameter_RefFrame::compute_frame(
   jeod::Vector3::normalize( vec_B,
                       vec_B_hat);
 
-  double cos_theta = std::fabs(jeod::Vector3::dot( u_hat, vec_B_hat));
+  const double cos_theta = std::fabs(jeod::Vector3::dot( u_hat, vec_B_hat));
   if (cos_theta > cos_0_01_deg) { // i.e. theta < 0.01 degrees
     CMLMessage::error( __FILE__,__LINE__,
       "Error in generating frame '",name,"'\n"

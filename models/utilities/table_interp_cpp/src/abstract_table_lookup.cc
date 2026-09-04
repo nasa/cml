@@ -3,14 +3,35 @@ PURPOSE:
   (Table lookup model master controller, AbstractTableLookup is the base class for the
    table manager classes AbstractTableLookup and SimpleTableLookup.)
 
+LIBRARY DEPENDENCIES:
+  ((generic_multi_input_table.cc)
+   (generic_single_input_table.cc)
+   (single_input_table_for_angles.cc)
+   (single_input_table_for_quaternions.cc)
+   (single_input_table_var_with_deriv.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc)
+  )
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Oct 2017) (New implementation))
   )
 *******************************************************************************/
 
-#include <algorithm> //std::find, find_if, any_of
+#include "../include/abstract_table_lookup.hh"
+#include "../include/generic_multi_input_table.hh"
+#include "../include/generic_single_input_table.hh"
+#include "../include/single_input_table_for_angles.hh"
+#include "../include/single_input_table_for_quaternions.hh"
+#include "../include/single_input_table_var_with_deriv.hh"
+#include "../include/table_independent_variable.hh"
 
-#include "../include/table_lookup_set.hh"
+#include <algorithm>
+#include <cstdarg>
+#include <cstddef>
+#include <vector>
+
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 /*****************************************************************************
 Constructor
@@ -206,7 +227,7 @@ AbstractTableLookup::create_table(
             double &dependent_variable,
             TableType type)
 {
-  DoublePtrVec scratch(1, &dependent_variable);
+  const DoublePtrVec scratch(1, &dependent_variable);
   return create_table(scratch, type);
 }
 
@@ -338,7 +359,7 @@ Purpose:(returns a bool indicating whether the specified dependent variable
 bool
 AbstractTableLookup::is_a_dependent_variable( double &variable)
 {
-  DoublePtrVec::iterator it = std::find(dependents.begin(),
+  const DoublePtrVec::iterator it = std::find(dependents.begin(),
                                                 dependents.end(),
                                                 &variable);
   return dependents.end()!=it;
@@ -357,6 +378,7 @@ AbstractTableLookup::verify_and_add_dependent_variable(double *variable_ptr)
       __FILE__, __LINE__, "Invalid table addition\n",
       "One of the output variables from the table lookup has no target to "
       "populate.\nAll output data must have a specified target.\n");
+    return;
   }
 
   if (is_a_dependent_variable(*variable_ptr)) {

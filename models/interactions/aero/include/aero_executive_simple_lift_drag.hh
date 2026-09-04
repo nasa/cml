@@ -14,6 +14,8 @@ PROGRAMMERS:
 
 #include "aero_executive_base.hh"
 
+class AeroInterfaceOutput;
+
 /*******************************************************************************
 AeroExecutiveSimpleLiftDrag
 Purpose:(Provides a simple aerodynamic executive to use with the AeroExec.)
@@ -68,16 +70,12 @@ public:
                        const double (&T_inrtl_struc_in)[3][3],
                        const double & mass_in);
   ~AeroExecutiveSimpleLiftDrag() override = default;
+  AeroExecutiveSimpleLiftDrag (const AeroExecutiveSimpleLiftDrag &) = delete;
+  AeroExecutiveSimpleLiftDrag & operator = (const AeroExecutiveSimpleLiftDrag &) = delete;
 
   void set_aero_type(AeroType aero_type_in);
 
   void initialize() override;
   void update() override;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroExecutiveSimpleLiftDrag (const AeroExecutiveSimpleLiftDrag &);
-  AeroExecutiveSimpleLiftDrag & operator = (const AeroExecutiveSimpleLiftDrag &);
 };
 #endif

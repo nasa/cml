@@ -11,7 +11,8 @@ REFERENCE:
      ((SORT - Aero Functions) (AROVAR.f) (AROATT.f)))
 
 LIBRARY DEPENDENCIES:
-    ((utils/orientation/src/eigen_rotation.cc)
+    ((cml/models/utilities/cml_message/src/cml_message.cc)
+     (utils/orientation/src/eigen_rotation.cc)
      (utils/orientation/src/euler_angles.cc)
      (utils/quaternion/src/quat_from_mat.cc)
      (utils/quaternion/src/quat_to_mat.cc)
@@ -40,15 +41,16 @@ PROGRAMMERS:
     )
 *******************************************************************************/
 
-#include <cmath>   // M_PI, isnan
-#include <cstring> // NULL
-#include "trick/constant.h" // conversions like RTD, LBFTON, MTF
-#include "jeod/models/utils/orientation/include/orientation.hh" // Orientation
-#include "jeod/models/utils/math/include/vector3.hh"    // Vector3
-#include "jeod/models/utils/math/include/matrix3x3.hh"  // Matrix3x3
+#include <cmath>
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_interface.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/atmos_relative_state.hh"
 
@@ -170,7 +172,7 @@ AtmosRelativeState::activate()
   // currently active, but not otherwise.  So we need to rerun
   // planet-rel if (and only if) atmos-exec is already active AND no other
   // model already subscribes to the relative-velocity computation.
-  bool rerun_planet_rel_state = atmos_exec.is_active() &&
+  const bool rerun_planet_rel_state = atmos_exec.is_active() &&
                                 !planet_rel_state.is_rel_vel_subscribed();
 
   // Add a subscription to the relative-velocity computation
@@ -424,7 +426,7 @@ AtmosRelativeState::compute_T_inrtl_traj()
   //     passing the "is-near-equal" test, and then failing the equivalent
   //     test at normalization ... which would result in a [0,0,0] vector for
   //     the y-axis.
-  double y_axis_mag = jeod::Vector3::vmag(y_axis);
+  const double y_axis_mag = jeod::Vector3::vmag(y_axis);
   if (MathUtils::is_near_equal( y_axis_mag, 0.0)) {
     if (std::isnan(y_axis[0])) { // check for NaN, vmag turns NaN into 0.
       CMLMessage::error(
@@ -492,7 +494,7 @@ AtmosRelativeState::compute_fpangle_azimuth()
                       free_stream_vel,
                       free_stream_td_vel);
 
-  double free_stream_td_vel_xy = std::sqrt(
+  const double free_stream_td_vel_xy = std::sqrt(
                             free_stream_td_vel[0] * free_stream_td_vel[0] +
                             free_stream_td_vel[1] * free_stream_td_vel[1] );
 
@@ -560,11 +562,11 @@ AtmosRelativeState::compute_alternate_angles()
                       free_stream_vel,
                       free_stream_body_vel);
 
-  double free_stream_body_vel_xz = std::sqrt( // for angle_of_sideslip_alt only
+  const double free_stream_body_vel_xz = std::sqrt( // for angle_of_sideslip_alt only
                             free_stream_body_vel[0] * free_stream_body_vel[0] +
                             free_stream_body_vel[2] * free_stream_body_vel[2]);
 
-  double free_stream_body_vel_yz = std::sqrt( // for tot_ang_attack only
+  const double free_stream_body_vel_yz = std::sqrt( // for tot_ang_attack only
                             free_stream_body_vel[1] * free_stream_body_vel[1] +
                             free_stream_body_vel[2] * free_stream_body_vel[2]);
 

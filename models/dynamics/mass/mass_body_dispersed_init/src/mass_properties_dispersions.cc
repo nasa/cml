@@ -10,11 +10,9 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Mar 2021) (Antares) (Secondary IV&V)))
 *******************************************************************************/
 
-// Local headers:
 #include "../include/mass_properties_dispersions.hh"
 
-// Library headers:
-#include <random> // For the random number generator
+#include <random>
 
 /*******************************************************************************
 Constructor

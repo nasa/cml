@@ -51,6 +51,10 @@ public:
     jeod::Vector3::initialize(moment_mrc);
   }
 
+
+  AeroInterfaceOutput (const AeroInterfaceOutput &) = delete;
+  AeroInterfaceOutput & operator = (const AeroInterfaceOutput &) = delete;
+
   void zero_dsl() {
     drag_force = lift_force = side_force = LoD = 0.0;
   }
@@ -65,11 +69,5 @@ public:
     zero_dsl();
     zero_torque();
   }
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroInterfaceOutput (const AeroInterfaceOutput &);
-  AeroInterfaceOutput & operator = (const AeroInterfaceOutput &);
 };
 #endif

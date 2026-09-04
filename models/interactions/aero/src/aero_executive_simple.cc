@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
 PURPOSE: (Provides a simple non-rotating aerodynamic drag model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (March 2015) (Antares) (initial version))
    ((Gary Turner) (OSR) (June 2016) (Antares)
@@ -10,12 +13,14 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
 *******************************************************************************/
 
-#include <cstring>  // NULL
+#include <cstdlib>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include "../include/aero_executive_base.hh"
 #include "../include/aero_executive_simple.hh"
+#include "../include/aero_interface_output.hh"
 
 /*******************************************************************************
 Constructor:

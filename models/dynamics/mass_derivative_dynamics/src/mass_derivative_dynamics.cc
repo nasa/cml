@@ -6,7 +6,8 @@ PURPOSE: (Models the effect of a rapidly changing mass and inertia tensor.
           will still be handled)
 
 LIBRARY DEPENDENCY:
-   ((cml/models/utilities/math_utils/src/math_utils.cc)
+   ((cml/models/utilities/cml_message/src/cml_message.cc)
+    (cml/models/utilities/math_utils/src/math_utils.cc)
    )
 
 PROGRAMMERS:
@@ -15,11 +16,13 @@ PROGRAMMERS:
 
 #include "../include/mass_derivative_dynamics.hh"
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <cstddef>
 
 
 /*****************************************************************************

@@ -5,6 +5,9 @@ PURPOSE: (The RcsPropPod provides a convenient mechanism for grouping
   had several instances of RCS_PPOD that needed instantiating; this object
   represents a very similar concept to RCS_PPOD.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation))
@@ -12,6 +15,11 @@ PROGRAMMERS:
 **********************************************************************/
 
 #include "../include/rcs_prop_pod.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <vector>
+
+#include <cmath>
 
 /*****************************************************************************
 Constructor
@@ -208,7 +216,7 @@ RcsPropPod::increment_mass_consumption(
   }
 
   for (unsigned int ii = 0; ii < components.size(); ++ii) {
-    double incr_consumption = jet_consumption.at(ii);
+    const double incr_consumption = jet_consumption.at(ii);
     components.at(ii).increment_mass_consumption( incr_consumption);
     sum_consumption += incr_consumption;
   }
@@ -238,8 +246,8 @@ RcsPropPod::compute_jets_on(
     // back out number of active jets: total momentum divided by momentum of
     // each jet.  NOTE: if one jet is on for less than half of time_step,
     // num_jets_on will round down to 0
-    num_jets_on = static_cast<unsigned int>( 0.5 + equiv_momentum /
-                                      (nominal_thrust * time_step));
+    num_jets_on = std::lround(equiv_momentum /
+                                     (nominal_thrust * time_step));
   }
   else {
     // In this case, multiple jets DO NOT degrade thrust performance, and

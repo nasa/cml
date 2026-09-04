@@ -16,9 +16,8 @@ Programmers:
 #ifndef CML_POINTING_REF_FRAME_HH
 #define CML_POINTING_REF_FRAME_HH
 
-#include "jeod/models/utils/ref_frames/include/ref_frame.hh" // RefFrame
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh" // jeod::RefFrameState
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
                                                            // SubscriptionBase
 
@@ -84,6 +83,8 @@ class PointingRefFrame : public SubscriptionBase {
   // Constructor:
   PointingRefFrame();
   ~PointingRefFrame() override = default;
+  PointingRefFrame (const PointingRefFrame&) = delete;
+  PointingRefFrame & operator = (const PointingRefFrame&) = delete;
 
   void set_originating_frame (jeod::RefFrame * originating_frame_in);
   void set_target_frame (jeod::RefFrame * target_frame_in);
@@ -94,11 +95,5 @@ class PointingRefFrame : public SubscriptionBase {
   bool setup_frames();
   void activate() override;
   void deactivate() override;
-
- // The copy constructor and assignment operator for this class are
- // declared private and are not implemented.
- private:
-  PointingRefFrame (const PointingRefFrame&);
-  PointingRefFrame & operator = (const PointingRefFrame&);
 };
 #endif
