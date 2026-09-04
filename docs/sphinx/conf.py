@@ -94,7 +94,7 @@ html_theme_options = {
     "announcement": (
         "⚠️ The transition to GitHub Pages is in-progress. Some model documentation "
         "will not be available via this webpage, but is present in the respective "
-        "model docs folder ⚠️"
+        "model docs folder. ⚠️"
     )
 }
 html_context = {

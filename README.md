@@ -12,6 +12,10 @@ The Common Model Library (CML) is designed to be a common location to store and 
 The CML documentation is hosted on GitHub Pages at https://nasa.github.io/cml. Information on CML
 models, user guides, and contributing guides can be found there.
 
+Note that the documentation for each model is in the process of being moved to GitHub Pages.
+For models whose documentation has not been moved yet, you can find the appropriate documentation
+in that model's local `docs/` folder.
+
 # Contact
 
-If after browsing the project documentation you still have questions, please see our [contants list](https://nasa.github.io/cml/#contact).
+If after browsing the project documentation you still have questions, please see our [contacts list](https://nasa.github.io/cml/#contact).
