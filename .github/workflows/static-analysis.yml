@@ -66,6 +66,40 @@ jobs:
             exit 1
           fi
 
+      # CML file extensions are .hh for header files and .cc for source files.
+      - name: File extensions are correct
+        run: |
+          wrong_extensions=(
+            c
+            h
+            cpp cxx cp "c++"
+            hpp hxx hp "h++"
+            tpp txx thh th
+          )
+          declare -A forbidden
+          for ext in "${wrong_extensions[@]}"; do
+            forbidden["$ext"]=1
+          done
+          
+          violating_files=()
+          while IFS= read -r basename; do
+            [[ "$basename" != *.* ]] && continue
+            ext="${basename##*.}"
+            ext="${ext,,}"
+            if [[ -n "${forbidden[$ext]:-}" ]]; then
+              violating_files+=("$basename")
+            fi
+          done < <(git ls-files | awk -F/ '{print $NF}')
+          
+          violations=${#violating_files[@]}
+          if [[ $violations -gt 0 ]]; then
+            echo "Incorrect extension found for $violations file(s)."
+            printf '\t%s\n' "${violating_files[@]}" | tee file-extension-issues.log
+            echo
+            echo "Headers must use .hh and source files must use .cc"
+          fi
+          exit "$violations"
+
       - name: Upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
