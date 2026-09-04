@@ -1,0 +1,25 @@
+/* Trick units: collapse the nested "Units" declaration list onto one line */
+.rst-content dl.trickunits-block {
+    margin: 0.25em 0 !important;
+}
+
+.rst-content dl.trickunits-block > dt.trickunits-label {
+    display: inline !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-weight: bold;
+    font-style: normal; /* RTD/cpp domain wraps this dt's text in <em> */
+}
+
+.rst-content dl.trickunits-block > dd {
+    display: inline !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.rst-content dl.trickunits-block > dd > p {
+    display: inline !important;
+    margin: 0 !important;
+}

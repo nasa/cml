@@ -1,0 +1,87 @@
+name: Docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake make git libxml2 libxml2-dev perl doxygen
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure environment
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> "$GITHUB_ENV"
+          echo "CML_HOME=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+          echo "TRICK_HOME=$GITHUB_WORKSPACE/externals/trick" >> "$GITHUB_ENV"
+          echo "JEOD_HOME=$GITHUB_WORKSPACE/externals/jeod" >> "$GITHUB_ENV"
+          echo "SSL_CERT_FILE=/etc/pki/tls/cert.pem" >> "$GITHUB_ENV"
+
+      - name: Set up Python virtual environment
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip3 install --upgrade pip
+          pip3 install .
+
+      - name: Clone Trick
+        uses: ./.github/actions/build-trick
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          clone-only: "true"
+
+      - name: Clone JEOD
+        uses: ./.github/actions/build-jeod
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          jeod-home: ${{ env.JEOD_HOME }}
+          clone-only: "true"
+
+      - name: Build documentation
+        run: |
+          source .venv/bin/activate
+          cmake --workflow --preset documentation
+
+      - name: Upload pages preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-docs
+          path: build/docs/sphinx
+          retention-days: 2
+
+      - name: Upload Pages artifact
+        #if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/docs/sphinx
+
+  deploy:
+    #if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

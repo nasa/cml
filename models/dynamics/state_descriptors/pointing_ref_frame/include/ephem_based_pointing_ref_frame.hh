@@ -3,7 +3,7 @@ Purpose:
   (Define the class EphemBasedPointingRefFrame.
    This is an almost trivial extension of PointingRefFrame, adding a
    reference to the Ephemerides Manager to ensure that the necessary
-   frames are updated before updating the pointing-frame.)
+   frames are updated before updating the Pointing Frame.)
 
 Programmers:
   ( ((Gary Turner) (OSR) (July 2019) (Antares) (initial))
@@ -17,20 +17,23 @@ Programmers:
 #include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
 #include "pointing_ref_frame.hh"
 
-/*****************************************************************************
-EphemBasedPointingFrame
-Purpose:(
-    Adds the Ephemerides Manager to the simplest implementation of a
-    PointingRefFrame.
-    This version should be used when the states of either the originating
-    frame or the target frame are known only by updates coming from the
-    Ephemeris Manager.)
-*****************************************************************************/
+/**
+ * Extension of the @ref PointingRefFrame for cases where the Originating Frame
+ * or Target Frame are ephemeris-based frames.
+ *
+ * This version should be used when the states of either the Originating Frame
+ * or the Target Frame are known only by updates coming from the Ephemeris
+ * Manager.
+ */
 class EphemBasedPointingRefFrame : public PointingRefFrame
 {
  protected:
   jeod::EphemeridesManager & ephem_manager; /* (--) Reference to the
                                                Ephemerides Manager*/
+  /**
+   * @ref PointingRefFrame::setup_frames "Sets up reference frames" and tells the
+   *      JEOD Ephemeris Manager to update the ephemerides
+   */
   void activate() override
   {
     if( setup_frames()) {
@@ -41,15 +44,31 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
   }
 
  public:
+  /**
+   * Constructor
+   *
+   * @param mgr Reference to the JEOD Ephemeris Manager, which for most
+   *            simulations will be the `jeod::DynManager` instance
+   */
   explicit EphemBasedPointingRefFrame(jeod::EphemeridesManager & mgr)
     :
-    PointingRefFrame(),
     ephem_manager(mgr)
   {}
-  ~EphemBasedPointingRefFrame() override = default;
+
+  /**
+   * Copy constructor deleted
+   */
   EphemBasedPointingRefFrame (const EphemBasedPointingRefFrame&) = delete;
+
+  /**
+   * Copy assignment operator deleted
+   */
   EphemBasedPointingRefFrame & operator = (const EphemBasedPointingRefFrame&) = delete;
 
+  /**
+   * Register the Pointing Frame with the dynamics/ephem manager so that it can
+   * be used to represent the state of a vehicle
+   */
   void initialize() override
   {
     // Register the frame with the dynamics/ephem manager so that it can be

@@ -1,5 +1,5 @@
 /*******************************TRICK HEADER******************************
- PURPOSE: ( Provide the subscription methods)
+ PURPOSE: (Provide the subscription methods)
 
  LIBRARY DEPENDENCIES:
    ((cml/models/utilities/cml_message/src/cml_message.cc))
@@ -11,15 +11,7 @@
 #include "../include/subscriptions.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
-/*****************************************************************************
-subscribe
-Purpose:(Public method.  Instructs this model to turn itself on if everything
-         is configured correctly.
-         Subscribe may be called before initialization, in which case it is
-         unlikely that everything is configured correctly.  In that case, the
-         sub_pending flag gets set so that when initialize gets called, the
-         subscription can be completed.)
-*****************************************************************************/
+// Instructs this model to turn itself on if everything is configured correctly
 void
 SubscriptionBase::subscribe()
 {
@@ -43,26 +35,19 @@ SubscriptionBase::subscribe()
   }
 }
 
-/*****************************************************************************
-unsubscribe
-Purpose:
-  Public method.  Tells this model that whoever had previously
-  subscribed to it no longer needs it.  If this model had only one
-  subscription, the last customer just left the building and this model
-  can turn itself off.
-Note:
-  It is acceptable to silently take no action while disabled because failing
-  to turn off a model that is already turned off does not have significant
-  executable consequence.
-  Taking no action while disabled prevents getting inadvertent warnings about
-  trying to unsubscribe from a non-subscribed model if subscriptions were
-  either circumvented or blocked as a result of being disabled.
-  Note that this really only applies to top-level instances -- i.e. those
-  whose activity are managed at the sim-level rather than by another model.
-  If some model is trying to unsubscribe one of its dependencies, and that
-  dependency has already been disabled, then something is likely already wrong
-  with the model.
-*****************************************************************************/
+// Tells this model that whoever had previously subscribed to it no longer needs it
+// Note:
+//   It is acceptable to silently take no action while disabled because failing
+//   to turn off a model that is already turned off does not have significant
+//   executable consequence.
+//   Taking no action while disabled prevents getting inadvertent warnings about
+//   trying to unsubscribe from a non-subscribed model if subscriptions were
+//   either circumvented or blocked as a result of being disabled.
+//   Note that this really only applies to top-level instances -- i.e. those
+//   whose activity are managed at the sim-level rather than by another model.
+//   If some model is trying to unsubscribe one of its dependencies, and that
+//   dependency has already been disabled, then something is likely already wrong
+//   with the model.
 void
 SubscriptionBase::unsubscribe()
 {
@@ -110,17 +95,9 @@ SubscriptionBase::unsubscribe()
   }
 }
 
-/*****************************************************************************
-initialize
-Purpose:(Public method, intended to be re-written for specific implementation
-         If this model is re-written, the last step in the derived class
-         should be to call this implementation.
-         NOTE - DO NOT CALL THIS BEFORE COMPLETION OF TESTING OF ALL
-                PARAMETERS IN THE TERMINAL (i.e. derived) CLASS.
-                THIS METHOD WILL SET THE initialized FLAG TO true.
-         If this is called after subscribe(), the subscribe_internal() method
-         will be called to complete the subscription process.)
-*****************************************************************************/
+// Configure pending subscriptions
+// If this is called after subscribe(), the subscribe_internal() method will be
+// called to complete the subscription process.
 void
 SubscriptionBase::initialize()
 {
@@ -172,12 +149,7 @@ SubscriptionBase::initialize()
   }
 }
 
-/*****************************************************************************
-disable
-Purpose:(Completely disables the model.  To re-enable requires setting the
-         enabled flag and re-subscribing.
-         Intention is that this is a virtual method.)
-*****************************************************************************/
+// Completely disables the model
 void
 SubscriptionBase::disable()
 {
@@ -185,11 +157,7 @@ SubscriptionBase::disable()
   enabled = false;
 }
 
-/*****************************************************************************
-subscribe_internal
-Purpose:(Protected method, called from subscribe or initialize, whichever is
-         called second)
-*****************************************************************************/
+// Internal subscription logic
 void
 SubscriptionBase::subscribe_internal()
 {

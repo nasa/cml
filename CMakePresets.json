@@ -89,6 +89,12 @@
             "targets": ["trickify", "install"]
         },
         {
+            "name": "documentation",
+            "description": "Only build documentation",
+            "configurePreset": "user-release",
+            "targets": ["documentation"]
+        },
+        {
             "name": "dev",
             "description": "CML developer build. If you're not directly working on CML, this isn't for you.",
             "configurePreset": "dev",
@@ -143,9 +149,24 @@
             ]
         },
         {
+            "name": "documentation",
+            "description": "Build the CML documentation",
+            "displayName": "Build the CML documentation and nothing else",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "user-release"
+                },
+                {
+                    "type": "build",
+                    "name": "documentation"
+                }
+            ]
+        },
+        {
             "name": "dev",
             "description": "CML developer build",
-            "displayName": "Build CML and all other extra targets, like tests and documentation",
+            "displayName": "Build CML and tests, and enable sanitizers",
             "steps": [
                 {
                     "type": "configure",
