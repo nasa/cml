@@ -53,14 +53,7 @@ StateInitialize::StateInitialize()
   velocity_input_data_type(Unspecified),
   attitude_input_data_type(Unspecified),
   att_rate_input_data_type(Unspecified),
-  orb_elem_init(),
-  trans_init(),
-  rot_init(),
-  ned_rot_init(),
-  correlation(),
   monte_carlo_dispersion(trans_init),
-  TR_param(),
-  planet_name(),
   ref_point_altitude(0.0),
   ref_point_latitude(0.0),
   ref_point_longitude(0.0),
@@ -639,8 +632,7 @@ StateInitialize::select_attitude_initializer()
     //      using a passthrough option and may not have been set at all if
     //      using an orbital-elements specification.
     if( use_trans_init_passthrough &&
-           (!reference_ref_frame_name_inertial.compare(
-                                 trans_init.reference_ref_frame_name))) {
+           (reference_ref_frame_name_inertial == trans_init.reference_ref_frame_name)) {
       CMLMessage::fail (
         __FILE__, __LINE__, "StateInitialization::invalid_configuration\n",
         "Rot init is being configured using the sun-vehicle vector.\n"
@@ -1597,7 +1589,7 @@ void
 StateInitialize::generate_random(int seed)
 {
   std::default_random_engine generator;
-  generator.seed(static_cast<typename decltype(generator)::result_type>(seed));
+  generator.seed(static_cast<decltype(generator)::result_type>(seed));
   std::normal_distribution<double> rand_norm(0.0, 1.0);
 
   for (unsigned int ii = 0; ii < 3; ii++) {
@@ -1668,7 +1660,7 @@ Purpose:( Some options must be consistent across pos-vel and across
           att-att-rate.  This ensures that consistency)
 *****************************************************************************/
 void
-StateInitialize::verify_compatibility()
+StateInitialize::verify_compatibility() const
 {
   if ((force_match_trans &&
        (position_input_data_type != velocity_input_data_type))) {

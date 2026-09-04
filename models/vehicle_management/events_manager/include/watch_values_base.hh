@@ -65,7 +65,6 @@ Purpose:(Sets the variable and the reference against which it will be compared)
     variable = &var;
     reference = ref;
     reference_is_variable = false;
-    return;
   }
   /***************************************************************************/
   //  reference is a variable-value
@@ -80,7 +79,6 @@ Purpose:(Sets the variable and the reference against which it will be compared)
     variable = &var;
     reference_ptr = ref;
     reference_is_variable = true;
-    return;
   }
   /***************************************************************************/
   //     These methods are here for use with primitives only
@@ -163,7 +161,6 @@ Purpose:(Sets the reference value.  Used for changing default or previously
 *****************************************************************************/
   void set_reference(watchType ref) {
     reference = ref;
-    return;
   }
 
  void set_dbl_reference(double ref) override {
@@ -221,8 +218,10 @@ Purpose:(Split behavior based on whether the template class variable type
   //         Define discrete-variable behavior
   /***************************************************************************/
   template<typename varType>
-  void test_crossing( const varType*)
+  void test_crossing( const varType* var)
   {
+    (void)var;
+
     // Check for treating discrete variable as a continuous variable:
     if (use_threshold_crossing_trigger) {
       test_crossing_dbl( static_cast<double>(*variable),
@@ -236,13 +235,15 @@ Purpose:(Split behavior based on whether the template class variable type
   /***************************************************************************/
   //         Define continuous-variable behavior
   /***************************************************************************/
-  void test_crossing( const float *)
+  void test_crossing( const float * var)
   {
+    (void)var;
     test_crossing_dbl( *variable, reference);
   }
   /***************************************************************************/
-   void test_crossing(const double *)
+   void test_crossing(const double * var)
   {
+    (void)var;
     test_crossing_dbl( *variable, reference);
   }
   //***************************************************************************
@@ -279,7 +280,6 @@ Purpose:(Split behavior based on whether the template class variable type
       "larger or smaller than the reference.\n  Deactivating the watch.\n");
       deactivate();
     }
-    return;
   }
 
 
@@ -305,7 +305,7 @@ Assumption: (Both activate() and initialize() must have been called)
     }
     active = true;
     if (add_self_to_manager_active_list) {
-      if (!active_watches) {
+      if (active_watches == nullptr) {
         CMLMessage::error( __FILE__,__LINE__,
           "Activating watch with internal instruction to add itself to\n"
           "the active-watch list, but has no access to that list.\n"
@@ -314,7 +314,6 @@ Assumption: (Both activate() and initialize() must have been called)
         active_watches->push_back(this);
       }
     }
-    return;
   }
 
 /*****************************************************************************
@@ -325,8 +324,9 @@ Purpose:(Internal activation sub-method for case where reference is relative\
 *****************************************************************************/
   // ** bool type **
   // *************************************************************************
-  void set_reference_relative_to_activation(const bool*)
+  void set_reference_relative_to_activation(const bool* var)
   {
+    (void)var;
     if (reference == variable_at_activation) {
         CMLMessage::warn(
           __FILE__,__LINE__,"Possible unintended behavior with bool event\n",
@@ -337,29 +337,38 @@ Purpose:(Internal activation sub-method for case where reference is relative\
           "flips value relative to its value at activation.\n");
     }
     reference = !variable_at_activation;
-    return;
   }
   /***************************************************************************/
   // int
   /***************************************************************************/
-  void set_reference_relative_to_activation(const int*)
-  { increment_reference();}
+  void set_reference_relative_to_activation(const int* var)
+  {
+    (void)var;
+    increment_reference();
+  }
   /***************************************************************************/
   // double, same behavior as int
   /***************************************************************************/
-  void set_reference_relative_to_activation(const double*)
-  { increment_reference();}
+  void set_reference_relative_to_activation(const double* var)
+  {
+    (void)var;
+    increment_reference();
+  }
   /***************************************************************************/
   // float, same behavior as int
   /***************************************************************************/
-  void set_reference_relative_to_activation(const float*)
-  { increment_reference();}
+  void set_reference_relative_to_activation(const float* var)
+  {
+    (void)var;
+    increment_reference();
+  }
   /***************************************************************************/
   // all other data types
   /***************************************************************************/
   template<typename varType>
-  void set_reference_relative_to_activation(varType*)
+  void set_reference_relative_to_activation(varType* var)
   {
+    (void)var;
     CMLMessage::error (
       __FILE__, __LINE__, "Invalid Event/Watch activation: undefined behavior:\n",
       "A watch was activated with the flag to watch for a value to be\n"
@@ -367,7 +376,6 @@ Purpose:(Internal activation sub-method for case where reference is relative\
       "No method has been provided to modify the current value.\n"
       "Using the originally specified reference value instead.\n");
       relative_to_activation = false;
-    return;
   }
 
 /*****************************************************************************
@@ -382,7 +390,6 @@ Purpose:(Generates the new reference value.)
     }
     // Increment the current value with the intended offset.
     reference += variable_at_activation;
-    return;
   }
 };
 #endif

@@ -16,6 +16,7 @@ PROGRAMMERS:
 
 #include "../../include/range_from_pfix_reference.hh"
 
+// TODO Nino Tarantino: this needs to be a single free function, not a class.
 class RangeDefaultData
 {
   public:
@@ -24,6 +25,6 @@ class RangeDefaultData
   RangeDefaultData (const RangeDefaultData& rhs) = delete;
   RangeDefaultData& operator =  (const RangeDefaultData& rhs) = delete;
 
-  void launch_pad_KSC_39B(RangeFromPfixReference & launch);
+  void launch_pad_KSC_39B(RangeFromPfixReference & pad) const;
 };
 #endif

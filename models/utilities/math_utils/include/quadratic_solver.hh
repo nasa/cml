@@ -21,9 +21,9 @@ class QuadraticSolver {
   bool   roots_exist; /* (--) Flag indicating that real roots of f(x) exist.*/
 
   QuadraticSolver();
-  QuadraticSolver( double a,
-                   double b,
-                   double c,
+  QuadraticSolver( double a_,
+                   double b_,
+                   double c_,
                    bool compute_roots = true);
 
   bool solve( bool compute_roots = true);

@@ -387,7 +387,9 @@ void
 AtmosphereExec::add_gust()
 {
   gust.update(); /* Call the 1 minus cosine gust model to update gust values */
-  if (!gust.is_active()) return;
+  if (!gust.is_active()) {
+    return;
+  }
 
   switch(gust.gust_frame) {
   case GustModel::TD_FRAME:

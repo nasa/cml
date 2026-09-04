@@ -62,9 +62,7 @@ class WakeParams
     generate_distance_override(false),
     grid_origin(),
     mach_off(0.0),
-    main_body_diameter(0.0),
-    rev_flow(),
-    prf()
+    main_body_diameter(0.0)
   {}
 };
 #endif

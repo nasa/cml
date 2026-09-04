@@ -55,7 +55,6 @@ class RangeValues
   double total_range_ref_rad;   /* (m) Total range arc-length using
                                        reference radius */
 
- public:
   RangeValues();
   virtual ~RangeValues() = default;
   RangeValues(const RangeValues& rhs) = delete;
@@ -139,11 +138,11 @@ class RangeComputation : public RangeValues,
       external call to determine whether there is sufficient data to
       proceed with setting the reference data.*/
   virtual void set_reference_data();
-  void set_reference_data_from_inrtl_state( const jeod::RefFrameTrans & trans_state);
-  void set_reference_data_from_inrtl_state( const double position[3],
-                                            const double direction[3]);
-  void set_reference_data_from_state( const double position[3],
-                                      const double direction[3]);
+  void set_reference_data_from_inrtl_state( const jeod::RefFrameTrans & trans);
+  void set_reference_data_from_inrtl_state( const double position_in[3],
+                                            const double direction_in[3]);
+  void set_reference_data_from_state( const double position_in[3],
+                                      const double direction_in[3]);
   void update();
 
  protected:

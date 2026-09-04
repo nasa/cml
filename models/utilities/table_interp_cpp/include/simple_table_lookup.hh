@@ -111,14 +111,14 @@ public:
            const double  & independent_variable,
            const double  * data,
            const size_t    num_elements,
-           const TableIndependentVariable::LookupMethod lookup_method =
+           const TableIndependentVariable::LookupMethod lookup_method_in =
                                             TableIndependentVariable::Interp,
            const TableIndependentVariable::Continuity   continuity =
                                             TableIndependentVariable::Linear);
   bool load_independent_data(
            const double    & independent_variable,
            const DoubleVec & data,
-           const TableIndependentVariable::LookupMethod lookup_method =
+           const TableIndependentVariable::LookupMethod lookup_method_in =
                                             TableIndependentVariable::Interp,
            const TableIndependentVariable::Continuity   continuity =
                                             TableIndependentVariable::Linear);

@@ -33,6 +33,55 @@ PROGRAMMERS:
 #include <string>
 #include <utility>
 
+namespace {
+
+/*****************************************************************************
+add_point
+Purpose:
+  Common method for adding a point to a point list.
+*****************************************************************************/
+void add_point(
+    const std::string& pt_name,
+    double pt_pos[3],
+    std::list<PointToPointElement>& element_list,
+    const std::string& list_type)
+{
+  // pt_pos is checked for NULL on the passthrough when creating the new
+  // element.
+  if (pt_name.empty()) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Invalid name specified.\n",
+      "Specified name is empty.\n"
+      "Cannot have an un-named point.\n",
+      pt_name);
+    return;
+  }
+
+  // Note -- here and throughout:
+  // I'm using an iterator rather than "auto it: vehicle_points" to avoid
+  // unnecessary use of the copy constructor.  It's not a big deal either
+  // way here (copy constructor is cheap) but becomes a problem where the
+  // logic needs to assign into the list element which absolutely requires
+  // the use of an iterator rather than a copy.
+  // For consistency, I'm using the same pattern throughout.
+  //
+  // TODO Nino Tarantino 8/16/26: this neesd to be fixed
+  for (auto it = element_list.begin();
+            it != element_list.end(); ++it) {
+    if (it->name == pt_name) {
+      CMLMessage::error(
+        __FILE__,__LINE__,"Invalid name specified.\n",
+        "Specified name (", pt_name, ") is already registered as a ", list_type, "-point.\n"
+        "Cannot duplicate point names.\n");
+      return;
+    }
+  }
+
+  element_list.emplace_back(pt_name, pt_pos);
+}
+
+} // namespace
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -65,28 +114,6 @@ PointToPointManager::PointToPointManager(
   :
   B_wrt_P_in_P( B_wrt_P_in_P_)
 {}
-
-/*****************************************************************************
-Copy-constructors
-*****************************************************************************/
-PointToPointElement::PointToPointElement(
-    const PointToPointElement & orig)
-  :
-  name(orig.name)
-{
-  jeod::Vector3::copy( orig.position, position);
-}
-/****************************************************************************/
-PointToPointPosition::PointToPointPosition(
-    const PointToPointPosition & orig)
-  :
-  v_name( orig.v_name),
-  p_name( orig.p_name)
-{
-  jeod::Vector3::copy( orig.position, position);
-  jeod::Vector3::copy( orig.v_pos, v_pos);
-  jeod::Vector3::copy( orig.p_pos, p_pos);
-}
 
 /*****************************************************************************
 check_names
@@ -195,53 +222,6 @@ PointToPointManager::add_planet_point(
     double pt_pos[3])
 {
   add_point( pt_name, pt_pos, planet_points, "planet");
-}
-/*****************************************************************************
-add_point
-Purpose:
-  Private method implementing the common logic for add_planet_point and
-  add_vehicle_point.
-*****************************************************************************/
-void
-PointToPointManager::add_point(
-  const std::string & pt_name,
-  double pt_pos[3],
-  std::list<PointToPointElement> & element_list,
-  const std::string & list_type)
-{
-  // pt_pos is checked for NULL on the passthrough when creating the new
-  // element.
-  if (pt_name.empty()) {
-    CMLMessage::error(
-      __FILE__,__LINE__,"Invalid name specified.\n",
-      "Specified name is empty.\n"
-      "Cannot have an un-named point.\n",
-      pt_name);
-    return;
-  }
-
-  // Note -- here and throughout:
-  // I'm using an iterator rather than "auto it: vehicle_points" to avoid
-  // unnecessary use of the copy constructor.  It's not a big deal either
-  // way here (copy constructor is cheap) but becomes a problem where the
-  // logic needs to assign into the list element which absolutely requires
-  // the use of an iterator rather than a copy.
-  // For consistency, I'm using the same pattern throughout.
-  for (auto it = element_list.begin();
-            it != element_list.end(); ++it) {
-    if ((*it).name == pt_name) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid name specified.\n",
-        "Specified name (", pt_name, ") is already registered as a ", list_type, "-point.\n"
-        "Cannot duplicate point names.\n");
-      return;
-    }
-  }
-
-  const PointToPointElement new_pt( pt_name, pt_pos);
-  if (!new_pt.name.empty()) {
-    element_list.push_back(new_pt);
-  }
 }
 
 /*****************************************************************************

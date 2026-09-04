@@ -87,12 +87,12 @@ public:
   SimpleSpringGroup();
   SimpleSpringGroup(const SimpleSpringGroup& rhs) = delete;
   SimpleSpringGroup & operator= (const SimpleSpringGroup&) = delete;
-  void initialize( const jeod::DynBody  & action_body,
-                   const jeod::DynBody  & reaction_body,
+  void initialize( const jeod::DynBody  & action_body_in,
+                   const jeod::DynBody  & reaction_body_in,
                    SeparationState  & sep_state_in);
   void set_sep_state( SeparationState  & sep_state_in);
-  void set_bodies( const jeod::DynBody  & action_body,
-                   const jeod::DynBody  & reaction_body);
+  void set_bodies( const jeod::DynBody  & action_body_in,
+                   const jeod::DynBody  & reaction_body_in);
 
   void activate();
   void deactivate();

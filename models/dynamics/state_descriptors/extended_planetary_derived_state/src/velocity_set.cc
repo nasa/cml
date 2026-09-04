@@ -66,7 +66,6 @@ VelocitySet::initialize(
   // Else (not already set and target is valid.
   inrtl_velocity = vel_in;
   initialized = true;
-  return;
 }
 
 /*****************************************************************************
@@ -94,5 +93,4 @@ VelocitySet::update()
   flight_path = std::atan2( -velocity[2],
                              vel_xy );
   altitude_rate = -velocity[2];
-  return;
 }

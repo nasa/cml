@@ -25,7 +25,6 @@ Constructor
 Constraint::Constraint( size_t num_tests_)
   :
   violation_condition( ConstraintEnum::Undefined),
-  name(),
   violated(false),
   violation_count(0),
   violate_on_any_test(true),
@@ -34,7 +33,6 @@ Constraint::Constraint( size_t num_tests_)
   initialized(false),
   prev_violated(false),
   num_tests(num_tests_),
-  test_list(),
   test_violated_index(0),
   test_violated_time_limit(0.0)
 {}
@@ -124,7 +122,7 @@ void
 Constraint::count_violations()
 {
   if (violated != prev_violated) {
-    violation_count += violated;
+    violation_count += static_cast<unsigned int>(violated);
     prev_violated = violated;
   }
 }
@@ -137,7 +135,7 @@ void
 Constraint::activate()
 {
   if (!enabled || !initialized) {return;}
-  for (auto test: test_list) {
+  for (auto* test: test_list) {
     test->activate();
   }
   active = true;

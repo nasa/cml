@@ -51,7 +51,9 @@ void
 GustModel::activate()
 {
   // Protection against accidentally restarting the start_time
-  if (active) return;
+  if (active) {
+    return;
+  }
   if (period < 0.0 ) {
     if (!period_message_sent) {
       CMLMessage::error ( __FILE__,__LINE__,
@@ -90,9 +92,13 @@ GustModel::update()
 {
 
   if (!active){
-    if (!start) return;
+    if (!start) {
+      return;
+    }
     activate();
-    if (!active) return;
+    if (!active) {
+      return;
+    }
   }
 
   elapsed_time = time - start_time;

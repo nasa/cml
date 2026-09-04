@@ -29,9 +29,6 @@ EclipseCalculator::EclipseCalculator(
   vehicle_frame(vehicle_frame_),
   earth_name{"Earth"},
   moon_name{"Moon"},
-  sun(),
-  earth(),
-  moon(),
   illum_factor(1.0)
 {
   earth.primary_source_ptr = &sun;

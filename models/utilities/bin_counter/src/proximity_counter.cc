@@ -27,11 +27,9 @@ Constructors
 *****************************************************************************/
 CML_ProximityCounter::CML_ProximityCounter()
   :
-  targets(),
   targets_ready(false),
   ntarget(),
-  target_data(nullptr),
-  name()
+  target_data(nullptr)
 {}
 /****************************************************************************/
 CML_ProximityCounter::CML_ProximityCounter(

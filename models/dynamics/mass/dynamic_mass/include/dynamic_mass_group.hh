@@ -118,16 +118,16 @@ class DynamicMassGroup : public SubscriptionBase {
   DynamicMassGroup (const DynamicMassGroup&) = delete;
   DynamicMassGroup& operator = (const DynamicMassGroup&) = delete;
   void add_mass_to_group( DynamicMassBody *mass);
-  void add_string_to_group( DynamicMassString *string);
+  void add_string_to_group( DynamicMassString *new_mass_string);
   void initialize() override;
   void update_group_mass();
-  void series_flow(unsigned int index1,
-                   unsigned int index2);
+  void series_flow(unsigned int upstream_ix,
+                   unsigned int downstream_ix);
   void initiate_dry_mass_config();
   void revert_dry_mass_config();
 
-  bool is_body_in_group( DynamicMassBody * body);
-  bool is_string_in_group( DynamicMassString * body);
+  bool is_body_in_group( DynamicMassBody * mass_body_query) const;
+  bool is_string_in_group( DynamicMassString * mass_string_query) const;
  protected:
   void test_root_body();
   void add_mass_to_group_internal( DynamicMassBody *mass,

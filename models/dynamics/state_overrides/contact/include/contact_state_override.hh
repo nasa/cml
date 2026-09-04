@@ -113,7 +113,7 @@ class ContactStateOverride : public SubscriptionBase
 
   void update();
   void set_contact_normal(double contact_normal_in[3]);
-  void set_contact_position(double contact_position_in[3]);
+  void set_contact_position(double contact_position[3]);
   void set_contact_orientation(double contact_orientation[3][3]);
   void set_contact_orientation_Q(const jeod::Quaternion & contact_orientation);
   void set_deactivation_threshold(double threshold);
@@ -122,7 +122,7 @@ class ContactStateOverride : public SubscriptionBase
   void override_state();
   void override_state_root( jeod::BodyRefFrame& integ_frame,
                             double pos_integ_frame_wrt_override_struc[3],
-                            const jeod::Quaternion & override_struc_to_integ_frame);
+                            const jeod::Quaternion & Q_override_struc_to_integ_frame);
   void activate() override;
 };
 #endif

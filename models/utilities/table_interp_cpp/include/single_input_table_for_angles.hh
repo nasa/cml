@@ -41,14 +41,14 @@ class SingleInputTableForAngles : public GenericSingleInputTable
       Value of a half-circle in either radians or degrees, depending oni
       the setting output_in_radians. */
  public:
-  SingleInputTableForAngles( bool output_in_radians = true);
+  SingleInputTableForAngles( bool output_in_radians_ = true);
   SingleInputTableForAngles( double *dependent_variables,
                              size_t num_vars,
-                             bool output_in_radians = true);
+                             bool output_in_radians_ = true);
   explicit SingleInputTableForAngles( double & dependent_var,
-                                      bool output_in_radians = true);
+                                      bool output_in_radians_ = true);
   explicit SingleInputTableForAngles( const DoublePtrVec & dependent_variables,
-                                      bool output_in_radians = true);
+                                      bool output_in_radians_ = true);
   ~SingleInputTableForAngles() override = default;
   SingleInputTableForAngles (const SingleInputTableForAngles&) = delete;
   SingleInputTableForAngles& operator = (const SingleInputTableForAngles&) = delete;
@@ -56,6 +56,6 @@ class SingleInputTableForAngles : public GenericSingleInputTable
   bool initialize() override;
  protected:
   bool generate_output() override;
-  void bound_to_half_circle( double & angle);
+  void bound_to_half_circle( double & angle) const;
 };
 #endif

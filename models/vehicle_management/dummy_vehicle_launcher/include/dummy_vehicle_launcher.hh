@@ -58,10 +58,10 @@ class DummyVehicleLauncher
 
  public:
   DummyVehicleLauncher( jeod::DynBody & this_body,
-                        const jeod::MassBody & mass,
-                        const jeod::DynBody & state);
+                        const jeod::MassBody & real_mass_body_in,
+                        const jeod::DynBody & real_state_body_in);
   DummyVehicleLauncher( jeod::DynBody & this_body,
-                        const jeod::DynBody & real_body);
+                        const jeod::DynBody & real_body_in);
   virtual ~DummyVehicleLauncher() = default;
   DummyVehicleLauncher (const DummyVehicleLauncher& rhs) = delete;
   DummyVehicleLauncher& operator = (const DummyVehicleLauncher& rhs) = delete;
@@ -72,7 +72,7 @@ class DummyVehicleLauncher
   void set_intended_integ_body(jeod::DynBody * tgt);
   void set_intended_integ_body_state_body();
 
-  bool get_active() {return active;}
+  bool get_active() const {return active;}
 
  protected:
   void add_to_integ_group();

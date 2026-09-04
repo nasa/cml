@@ -244,7 +244,8 @@ void
 RocketMotor_MultiNozzle::initialize_nozzles()
 {
   // Initialize the nozzles and sum the nominal and dispersed scale factors
-  double total_scale_factor = 0.0, total_dispersed_scale_factor = 0.0;
+  double total_scale_factor = 0.0;
+  double total_dispersed_scale_factor = 0.0;
   for (unsigned int ii = 0; ii < num_noz; ii++) {
     nozzles_ptr_vec[ii]->initialize( position,
                                      T_struc_to_motor_frame);
@@ -273,7 +274,8 @@ RocketMotor_MultiNozzle::initialize_nozzles()
         // The values specified in the nozzle are the nominal values, so execute
         // the computation of the scaled thrust for each nozzle.
 
-        double sf_thrust_dir[3], accum_sf_thrust_dir[3] = {0.0, 0.0, 0.0};
+        double sf_thrust_dir[3];
+        double accum_sf_thrust_dir[3] = {0.0, 0.0, 0.0};
         // Accumulate the vector-sum and the scalar-sum
         for (unsigned int ii = 0; ii < num_noz; ii++) {
           jeod::Vector3::scale( nozzles_ptr_vec[ii]->nominal_thrust_dir,
@@ -505,7 +507,7 @@ RocketMotor_MultiNozzle::enable_flex()
   // If not initialized, set using_flex = true; these will then be checked at
   // initialization.
   if ( !initialized ||
-       (motor_lin_flex && motor_rot_flex && (num_flex_elements==3* num_noz))) {
+       ((motor_lin_flex != nullptr) && (motor_rot_flex != nullptr) && (num_flex_elements==3* num_noz))) {
     using_flex = true;
   }
   else {

@@ -137,20 +137,20 @@ class AtmosRelativeState : public SubscriptionBase
 
 
  public:
-  void set_reference_length( double * ref_length_ptr);
+  void set_reference_length( const double * ref_length_in);
   void update();
 
   void subscribe_complete_calculation();
   void unsubscribe_complete_calculation();
   void subscribe_angles_calculation();
   void unsubscribe_angles_calculation();
-  unsigned int get_angles_subscription_count() {
+  unsigned int get_angles_subscription_count() const {
     return compute_angles_subscriptions;
   }
   void compute_T_inrtl_traj();
 
   AtmosRelativeState( const jeod::DynBody       & body_ref,
-                      ExtendedPlanetaryDerivedState & prs_ref,
+                      ExtendedPlanetaryDerivedState & planet_rel_state_ref,
                       AtmosphereExecInterface       & atmos_exec_ref);
   ~AtmosRelativeState() override = default;
   AtmosRelativeState (const AtmosRelativeState &) = delete;

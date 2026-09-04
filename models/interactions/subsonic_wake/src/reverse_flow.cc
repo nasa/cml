@@ -35,8 +35,7 @@ WakeReverseFlow::WakeReverseFlow(
    WakeEffectsBase( objectA_in,
                     objectB_in,
                     params_in),
-   Qrev(0.0),
-   Qrev_lookup() // uses offset_trail_dist, sets Qrev
+   Qrev(0.0)
 {}
 
 /*****************************************************************************

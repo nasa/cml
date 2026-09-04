@@ -75,8 +75,8 @@ Purpose:(Generic method for setting fault parameters. This base method is
          called if the child class does not recognize the parameter name.)
 *******************************************************************************/
 bool Fault::set_param( const std::string& param_name,
-                       double,
-                       bool)
+                       [[maybe_unused]] double value,
+                       [[maybe_unused]] bool reset_nominal)
 {
   CMLMessage::error(__FILE__, __LINE__,
     "Fault Management Error\n",
@@ -91,7 +91,7 @@ Purpose:(Determines whether any trigger group is triggered.)
 *******************************************************************************/
 bool Fault::is_triggered() {
   bool is_triggered = false;
-  for (auto tg : trigger_groups) {
+  for (auto* tg : trigger_groups) {
     is_triggered = tg->operate() || is_triggered;
     // Operate on all trigger groups (even if it has already been determined
     // that one of them is triggered) because periodic triggers should be

@@ -82,7 +82,7 @@ public:
   virtual bool update();
 
   virtual GenericMultiInputTable * create_table(
-                                     double &output_variable,
+                                     double &dependent_variable,
                                      TableType type = Generic);
   virtual GenericMultiInputTable * create_table(
                                      size_t num_vars,

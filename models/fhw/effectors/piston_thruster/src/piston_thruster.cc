@@ -33,8 +33,6 @@ Constructors
 *******************************************************************************/
 PistonThruster::PistonThruster()
   :
-  sideA(),
-  sideB(),
   construction_complete(false)
 {
   subscribe_name = "PistonThruster:";
@@ -43,8 +41,6 @@ PistonThruster::PistonThruster()
 PistonThruster::PistonThruster( const double * pos_CoM_A,
                                 const double * pos_CoM_B)
   :
-  sideA(),
-  sideB(),
   construction_complete(false)
 {
   subscribe_name = "PistonThruster:";
@@ -54,7 +50,6 @@ PistonThruster::PistonThruster( const double * pos_CoM_A,
 PistonThrusterVehicleSide::PistonThrusterVehicleSide()
   :
   param(),
-  out(),
   T_local_to_struc{{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
   position_local_frame_in_struc_frame{},
   trig_variable(),

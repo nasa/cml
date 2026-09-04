@@ -79,8 +79,8 @@ public:
   RocketMotorNozzle (const RocketMotorNozzle& rhs) = delete;
   RocketMotorNozzle & operator = (const RocketMotorNozzle& rhs) = delete;
 
-  void initialize( double pos[3],
-                   double T_struc_to_mf[3][3]);
+  void initialize( double position_struc_to_motor_frame[3],
+                   double T_struc_to_motor_frame[3][3]);
   void shutdown_nozzle();
 
 protected:

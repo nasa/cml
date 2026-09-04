@@ -74,7 +74,7 @@ public:
    void initialize();
    void distribute_mass_consumption();
    void reenable_bodies();
-   void add_mass_to_string(DynamicMassBody * mass);
+   void add_mass_to_string(DynamicMassBody * new_mass_body);
    void update();
 
    std::list<DynamicMassBody*> & get_body_collection() {return body_collection;}

@@ -21,7 +21,6 @@ NOTES:
 #include "../include/wake_bodies.hh"
 #include "../include/wake_effects.hh"
 #include "../include/wake_params.hh"
-#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 /*****************************************************************************
 constructor
@@ -31,7 +30,6 @@ WakeEffectsBase::WakeEffectsBase(
      const WakeFollowingBody & objectB_in,
      const WakeParamsSub & params_in)
    :
-   SubscriptionBase(),
    objectA(objectA_in),
    objectB(objectB_in),
    params(params_in),

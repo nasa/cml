@@ -45,21 +45,21 @@ class WakeGeneratingBody
   double unitvec_freestream[3]; /* (--) unit vector aligned with freestream */
 
   WakeGeneratingBody(
-      const double * inertial_pos,
-      const double * inertial_vel,
-      const double * CoM_wrt_struc,
-      const double (& T_inrtl_to_body)[3][3],
-      const double (& T_struc_to_body)[3][3],
-      const double * freestream_vel,
-      const double & freestream_mach,
-      const double & freestream_density,
-      const double & total_alpha);
+      const double * inertial_pos_in,
+      const double * inertial_vel_in,
+      const double * CoM_wrt_struc_in,
+      const double (& T_inrtl_to_body_in)[3][3],
+      const double (& T_struc_to_body_in)[3][3],
+      const double * freestream_vel_in,
+      const double & freestream_mach_in,
+      const double & freestream_density_in,
+      const double & total_alpha_in);
   virtual ~WakeGeneratingBody() = default;
   WakeGeneratingBody (const WakeGeneratingBody& rhs) = delete;
   WakeGeneratingBody& operator = (const WakeGeneratingBody& rhs) = delete;
 
   void compute_freestream_vel_mag();
-  double get_total_alpha(){return total_alpha;}
+  double get_total_alpha() const {return total_alpha;}
 };
 
 /*****************************************************************************
@@ -101,8 +101,8 @@ class WakeFollowingBody
 
  public:
   WakeFollowingBody(const double & area_in,
-                    const double * inertial_pos,
-                    const double * inertial_vel,
+                    const double * inertial_pos_in,
+                    const double * inertial_vel_in,
                     WakeGeneratingBody & objectA_in,
                     const double * grid_origin_in);
   virtual ~WakeFollowingBody() = default;
@@ -128,8 +128,8 @@ class WakeFollowingBodyNoForce : public WakeFollowingBody
 {
  public:
   WakeFollowingBodyNoForce( const double & area_in,
-                            const double * inertial_pos,
-                            const double * inertial_vel,
+                            const double * inertial_pos_in,
+                            const double * inertial_vel_in,
                             WakeGeneratingBody & objectA_in,
                             const double * grid_origin_in);
   ~WakeFollowingBodyNoForce() override = default;
@@ -156,11 +156,10 @@ class WakeFollowingBodyWithForce : public WakeFollowingBody
   // Model output
   double force[3];  /* (N) output force in struc frame.*/
 
- public:
   WakeFollowingBodyWithForce(
                const double & area_in,
-               const double * inertial_pos,
-               const double * inertial_vel,
+               const double * inertial_pos_in,
+               const double * inertial_vel_in,
                const double (& T_inrtl_to_body_in)[3][3],
                const double (& T_struc_to_body_in)[3][3],
                WakeGeneratingBody & objectA_in,

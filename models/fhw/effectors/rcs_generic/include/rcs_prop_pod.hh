@@ -65,9 +65,9 @@ class RcsPodComponent{
   void incr_mass_consumed_step(double incr) {*mass_consumed_step += incr;}
 
  protected:
-  void set_dyn_mass_interface( DynamicMassBodyPropertiesInterface & interface);
+  void set_dyn_mass_interface( DynamicMassBodyPropertiesInterface & dyn_mass_interface);
   bool mass_available();
-  void increment_mass_consumption( double consumption);
+  void increment_mass_consumption( double jet_consumption);
 
  private:
    // Don't declare copy constructor and operator to allow
@@ -157,14 +157,14 @@ class RcsPropPod{
        jets from each pod are on times the thrust for each jet */
   unsigned int num_jets_on;   /* (--) Number of jets firing from a prop pod */
 
-  RcsPropPod( unsigned int max_num_jets_on,
+  RcsPropPod( unsigned int max_num_jets_on_,
               unsigned int num_components_,
-              const double & time_step);
+              const double & time_step_);
   virtual ~RcsPropPod() = default;
   RcsPropPod (const RcsPropPod& rhs) = delete;
   RcsPropPod & operator = (const RcsPropPod& rhs) = delete;
 
-  void set_dyn_mass_interface( unsigned int component_ix,
+  void set_dyn_mass_interface( unsigned int component_index,
                 DynamicMassBodyPropertiesInterface & dyn_mass_interface);
   void activate_dyn_mass();
   void deactivate_dyn_mass();
@@ -172,11 +172,11 @@ class RcsPropPod{
   bool mass_available();
   void increment_mass_consumption( std::vector<double> & jet_consumption);
   void compute_jets_on( bool mult_jet_flag );
-  double get_flow_rate_scale_factor( const unsigned int component_index);
-  double get_thrust_factor();
-  unsigned int get_max_num_jets_on();
+  double get_flow_rate_scale_factor( const unsigned int component_index) const;
+  double get_thrust_factor() const;
+  unsigned int get_max_num_jets_on() const {return max_num_jets_on;}
   void set_thrust_factor(unsigned int index, double value);
-  bool is_healthy(){ return (health != HealthFail);}
+  bool is_healthy() const { return health != HealthFail;}
 
 };
 #endif

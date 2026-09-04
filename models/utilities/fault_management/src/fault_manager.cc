@@ -53,14 +53,14 @@ Destructor
 *****************************************************************************/
 FaultManager::~FaultManager() {
   for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto fault : faults[ii]) {
+    for (auto* fault : faults[ii]) {
       delete fault;
     }
   }
-  for (auto trigger : triggers) {
+  for (auto* trigger : triggers) {
     delete trigger;
   }
-  for (auto trigger_group : trigger_groups) {
+  for (auto* trigger_group : trigger_groups) {
     delete trigger_group;
   }
 }
@@ -98,7 +98,7 @@ void FaultManager::initialize() {
   }
   parse();
   for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto fault : faults[ii]) {
+    for (auto* fault : faults[ii]) {
       fault->initialize(); // Initialize fault
     }
   }
@@ -124,7 +124,7 @@ void FaultManager::update( const Location& location) {
         "Fault Management Error\n",
         "Invalid location passed to FaultManager::update.\n");
     } else {
-      for (auto fault : faults[location_index]) {
+      for (auto* fault : faults[location_index]) {
         fault->update();
       }
     }
@@ -139,8 +139,8 @@ Purpose:(Looks up a fault by name. If no fault with that name is found, returns
 *******************************************************************************/
 Fault* FaultManager::get_fault( const std::string& name) {
   for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto fault : faults[ii]) {
-      if (name.compare(fault->name) == 0) {
+    for (auto* fault : faults[ii]) {
+      if (name == fault->name) {
         return fault;
       }
     }
@@ -156,8 +156,8 @@ Purpose:(Looks up a trigger by name. If no trigger with that name is found,
          returns nullptr.)
 *******************************************************************************/
 TriggerBase* FaultManager::get_trigger( const std::string& name) {
-  for (auto trigger : triggers) {
-    if (name.compare(trigger->name) == 0) {
+  for (auto* trigger : triggers) {
+    if (name == trigger->name) {
       return trigger;
     }
   }
@@ -220,7 +220,7 @@ bool FaultManager::set_fault_trigger_enabled(
       return false;
     } else {
       bool trigger_found = false;
-      for (auto tg : fault->trigger_groups) {
+      for (auto* tg : fault->trigger_groups) {
         trigger_found = tg->set_trigger_enable(trigger_name, enable_flag) ||
           trigger_found;
       }
@@ -322,14 +322,14 @@ void FaultManager::parse() {
 
   xmlDocPtr doc = xmlParseFile(fault_file.c_str());
 
-  if (!doc) {
+  if (doc == nullptr) {
     CMLMessage::fail(__FILE__, __LINE__,
       "Fault Management Error\n",
       "\nThe following fault file could not be opened.\n", fault_file, "");
     // Terminated
   }
   xmlNodePtr root = doc->children;
-  if (!root) {
+  if (root == nullptr) {
     // Unreachable code, manually tested.
     CMLMessage::fail(__FILE__, __LINE__,
       "Fault Management Error\n",
@@ -798,7 +798,7 @@ template<typename T> Fault* FaultManager::make_fault_overwrite(
 
   FaultOverwrite<T>* new_fault = new FaultOverwrite<T>(variable);
 
-  new_fault->faulted_value = (random_value) ?
+  new_fault->faulted_value = random_value ?
                              generate_random_value<T>() :
                              ConvertString::convert<T>(overwrite_string);
 

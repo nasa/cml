@@ -28,13 +28,13 @@ class FaultFunctionIndependentVariable {
     FaultFunctionIndependentVariable& operator = (
                                    const FaultFunctionIndependentVariable&) = delete;
 
-    template<typename T> void initialize(T& variable);
+    template<typename T> void initialize(T& var);
 
     void reset();
 
     double get_value();
 
-    bool is_initialized() { return initialized; }
+    bool is_initialized() const { return initialized; }
 
     bool relative_value; /* (--)
       If true (default), reports the value of the variable minus its reference

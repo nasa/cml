@@ -35,7 +35,7 @@ class SimplePlanetRelState : public SubscriptionBase,
                                   reference-height. */
 
   SimplePlanetRelState(const std::string & body_frame_name_,
-                       const std::string & planet_frame_name);
+                       const std::string & planet_frame_name_);
   SimplePlanetRelState (const SimplePlanetRelState&) = delete;
   SimplePlanetRelState & operator = (const SimplePlanetRelState&) = delete;
 

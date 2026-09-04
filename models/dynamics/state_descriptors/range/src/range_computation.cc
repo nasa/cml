@@ -49,7 +49,6 @@ Constructor
 *****************************************************************************/
 RangeComputation::RangeComputation( const jeod::PlanetFixedPosition & state_in )
   :
-  reference_data(),
   reference_radius(0.0),
   current_radius(0.0),
   average_radius(0.0),

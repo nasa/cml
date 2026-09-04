@@ -113,14 +113,14 @@ class ConstraintTest_Threshold : public ConstraintTest
   *       confused.
   ****************************************************************************/
  private:
-  bool query_equals( T variable)
+  bool query_equals( T variable) const
   {
-    return (variable == threshold);
+    return variable == threshold;
   }
 };
 // Forward declaration of template specializations:
-template<> bool ConstraintTest_Threshold<double>::query_equals(double);
-template<> bool ConstraintTest_Threshold<float>::query_equals(float);
+template<> bool ConstraintTest_Threshold<double>::query_equals(double variable) const;
+template<> bool ConstraintTest_Threshold<float>::query_equals(float variable) const;
 
 
 /*****************************************************************************

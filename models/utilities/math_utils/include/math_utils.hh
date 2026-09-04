@@ -69,7 +69,7 @@ public:
                                      double (&T_inrtl_vnc)[3][3]);
 
 
-  static void generate_T_pfix_to_enu( const double position_ecef[3],
+  static void generate_T_pfix_to_enu( const double position_pfix[3],
                                       double T_pfix_to_enu[3][3]);
   static void generate_Q_enu_to_pfix( double longitude,
                                       double latitude,
@@ -97,9 +97,9 @@ public:
   static bool cholesky_decomposition( const std::string & caller_id,
                                       const double * in_array,
                                       double * out_array,
-                                      size_t size_in,
-                                      size_t size_out = 0); // optional for
-                                                            // sub-matrices
+                                      size_t dimension_in,
+                                      size_t sub_mx_size = 0); // optional for
+                                                               // sub-matrices
 
 
   // Compute the backward difference of a variable given its history specified
@@ -1000,7 +1000,7 @@ template<> bool MathUtils::is_equal<float>( float val1, float val2);
 template<> bool MathUtils::is_equal<double>( double val1, double val2);
 
 // TODO: these don't make sense to support. Remove them in the future.
-template<> bool MathUtils::is_within_abs_tolerance<bool>( bool, bool, bool);
-template<> bool MathUtils::is_within_rel_tolerance<bool>( bool, bool, double);
+template<> bool MathUtils::is_within_abs_tolerance<bool>( bool val1, bool val2, bool tol);
+template<> bool MathUtils::is_within_rel_tolerance<bool>( bool value, bool expected, double tol);
 
 #endif

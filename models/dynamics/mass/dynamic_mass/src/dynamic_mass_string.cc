@@ -33,11 +33,8 @@ Purpose: Constructor
 *******************************************************************************/
 DynamicMassString::DynamicMassString()
   :
-  DynamicMassBodyPropertiesInterface(),
   flow_down(false),
   mass_consumed(0.0),
-  body_collection(),
-  available_bodies(),
   string_in_group(false)
 { }
 

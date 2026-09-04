@@ -202,7 +202,7 @@ class AtmosphereExec_Gram : public AtmosphereExec_AtmosWindsBase
     bool activate_gram_from_master; /* (--)
              Copy data from external GRAM model at model activation.*/
 
-    AtmosphereExec_Gram(GramInterface & gram_E10_in,
+    AtmosphereExec_Gram(GramInterface & gram_in,
                         const GramInterface * master_gram_10_in,
                         ExtendedPlanetaryDerivedState & planet_state_in,
                         const double & dyn_time_in,

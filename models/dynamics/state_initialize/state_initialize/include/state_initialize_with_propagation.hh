@@ -76,7 +76,7 @@ class StateInitializeWithPropagation : public StateInitialize
      Flag to indicate that state dispersions are to be applied prior to
      propagation.  Default true.*/
 
-  explicit StateInitializeWithPropagation( jeod::GravityManager & gravity_manager);
+  explicit StateInitializeWithPropagation( jeod::GravityManager & gravity_manager_in);
   ~StateInitializeWithPropagation() override = default;
   StateInitializeWithPropagation (const StateInitializeWithPropagation&) = delete;
   StateInitializeWithPropagation & operator =

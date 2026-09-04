@@ -63,6 +63,6 @@ class GustModel
   void   activate();
   void   update();
   void   deactivate();
-  bool   is_active(){return active;}
+  bool   is_active() const {return active;}
 };
 #endif

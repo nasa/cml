@@ -23,12 +23,12 @@ Purpose:(Construct the class)
 *****************************************************************************/
 AtmosphereExec_STD::AtmosphereExec_STD(
        STD1976 & std_76_in,
-       const double    & topod_alt,
+       const double    & topodetic_alt,
        AtmosExecOutput & master_output)
   :
   AtmosphereExec_AtmosBase(master_output),
   std76(std_76_in),
-  topodetic_altitude(topod_alt),
+  topodetic_altitude(topodetic_alt),
   hmsl(0.0)
 {
   name = "STD1976";

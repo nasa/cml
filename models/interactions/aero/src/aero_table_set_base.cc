@@ -25,7 +25,6 @@ AeroTableSetBase::AeroTableSetBase(
      AeroCoefficientsTable & coefficients_out,
      AeroCoefficientsDisp  & uncertainties_out)
    :
-   TableLookupSet(),
 
    coefficients( coefficients_out),
    uncertainty_ref( uncertainties_out),
@@ -36,7 +35,6 @@ AeroTableSetBase::AeroTableSetBase(
    T_struc_to_aero_frame{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
    mrc_position{0.0, 0.0, 0.0},
    uncertainties_expressed_as_percent(false),
-   uncertainty(),
    aero_damping_in_table(false),
    data_table_type( Unspecified),
    aero_damping_on_diag_in_table( NotInTable),
@@ -155,9 +153,8 @@ AeroTableSetBase::query_aero_damping()
 {
   query_on_diag_aero_damping();
   query_off_diag_aero_damping();
-  aero_damping_in_table = aero_damping_on_diag_in_table ||
-                          aero_damping_off_diag_in_table;
-  return;
+  aero_damping_in_table = (aero_damping_on_diag_in_table != 0) ||
+                          (aero_damping_off_diag_in_table != 0);
 }
 
 /*******************************************************************************
@@ -211,7 +208,7 @@ verify_aero_damping
 Purpose:()
 *******************************************************************************/
 AeroTableSetBase::AeroDampingType
-AeroTableSetBase::verify_aero_damping( const std::string & type)
+AeroTableSetBase::verify_aero_damping( const std::string & type) const
 {
   if (coef_data_present) {
     if (!uncertainty_data_present) {

@@ -28,9 +28,6 @@ GravityFidelityManager::GravityFidelityManager(
   grav_controls(grav_controls_),
   source_frame(source_frame_),
   target_frame(target_frame_),
-  distance_data(),
-  deg_ord_data(),
-  table(),
   distance(0.0),
   degree_order(0.0)
 {

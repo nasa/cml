@@ -25,21 +25,21 @@ PROGRAMMERS:
 GramInterface::GramInterface()
 :
   out(),
-  input(),
   cache()
 {
 }
+
 void GramInterface::initialize( // Return: -- Void
- double ,
- double ,
- double ,
- double ,
- int    ,
- int    ,
- int    ,
- int    ,
- int    ,
- double )
+  [[maybe_unused]] double TSIM,
+  [[maybe_unused]] double HGRAM,
+  [[maybe_unused]] double THGRAM,
+  [[maybe_unused]] double PHGRAM,
+  [[maybe_unused]] int    GR_YEAR,
+  [[maybe_unused]] int    GR_MONTH,
+  [[maybe_unused]] int    GR_DAY,
+  [[maybe_unused]] int    GR_HOUR,
+  [[maybe_unused]] int    GR_MIN,
+  [[maybe_unused]] double GR_SEC)
 {
   CMLMessage::fail( __FILE__,__LINE__,
     "Missing derived GramInterface\n",
@@ -47,14 +47,13 @@ void GramInterface::initialize( // Return: -- Void
     "does not exist for this AtmosphereExec_Gram instance. This base class method\n"
     "is used only as a non-functional stub to support the Atmosphere Exec architecture\n"
     "when GRAM is not available.\n");
-    return;
 }
 
 void GramInterface::update(
-   double ,
-   double ,
-   double ,
-   double )
+  [[maybe_unused]] double TSIM,
+  [[maybe_unused]] double H_GC,
+  [[maybe_unused]] double ALONG,
+  [[maybe_unused]] double GCLAT)
 {
   CMLMessage::fail( __FILE__,__LINE__,
     "Missing derived GramInterface\n",
@@ -62,7 +61,6 @@ void GramInterface::update(
     "does not exist for this AtmosphereExec_Gram instance. This base class method\n"
     "is used only as a non-functional stub to support the Atmosphere Exec architecture\n"
     "when GRAM is not available.\n");
-    return;
 }
 
 /*****************************************************************************
@@ -102,7 +100,9 @@ Purpose:(Activates the model, creates necessary subscriptions)
 void
 AtmosphereExec_Gram::activate()
 {
-  if (active) return;
+  if (active) {
+    return;
+  }
 
   // GRAM operation utilizes Fortran common blocks, which are assumed
   // populated with values appropriate to the current vehicle config.  It may

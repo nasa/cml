@@ -16,20 +16,12 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/vector3.hh"
 
 /*******************************************************************************
-Constructor
-*******************************************************************************/
-MassBodyDispersedInit::MassBodyDispersedInit()
-  :
-  disperse()
-{}
-
-/*******************************************************************************
 apply
 PURPOSE:(Applies the body-action after first adding the dispersions to the
          nominal values. Nominal values are inherited.)
 *******************************************************************************/
 void
-MassBodyDispersedInit::apply(jeod::DynManager & dyn_mgr_passthrough)
+MassBodyDispersedInit::apply(jeod::DynManager & dyn_manager)
 {
   // Create random numbers from *_disp_mag variables to be used in the
   // associated dispersed properties
@@ -71,5 +63,5 @@ MassBodyDispersedInit::apply(jeod::DynManager & dyn_mgr_passthrough)
 
   // Now call the base MassBodyInit method to apply the new properties.
   // variables to the Mass Body.
-  MassBodyInit::apply( dyn_mgr_passthrough);
+  MassBodyInit::apply( dyn_manager);
 }

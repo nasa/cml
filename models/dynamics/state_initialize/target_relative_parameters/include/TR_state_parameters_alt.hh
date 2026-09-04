@@ -71,8 +71,8 @@ class TargetRelative_StateParameter_Alt : public TargetRelative_StateParam
 
   void compute_position_from_params( InputPosAngle input_theta_type);
   void compute_position_from_params( double        relative_altitude,
-                                     double        theta_Rng,
-                                     double        theta_Rot_or_Cross,
+                                     double        theta_Rng_,
+                                     double        theta_Rot_OR_phi,
                                      InputPosAngle input_theta_type,
                                      double        (&R)[3]);
 };

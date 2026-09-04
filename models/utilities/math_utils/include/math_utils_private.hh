@@ -171,7 +171,7 @@ class MathUtilsPrivate {
     assert(-1 != fe_prev); // If -1, there was a failure
 
     T res;
-    res = (base10)? std::log10(val) : std::log(val);
+    res = base10? std::log10(val) : std::log(val);
 
     if (std::isnan(res) || std::isinf(res)) {
       if (failed_flag) {

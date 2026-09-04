@@ -31,14 +31,12 @@ SimpleLookupWind::SimpleLookupWind()
   wind_magnitude_horizontal(0.0),
   wind_magnitude(0.0),
   wind_vertical_up(0.0),
-  dir_mag_table_set(),
   altitude_table(altitude_placeholder),
   wind_blowing_from_table(wind_blowing_from),
   wind_magnitude_table(wind_magnitude_horizontal),
   wind_vertical_up_table(wind_vertical_up),
   
   wind_component{0.0, 0.0, 0.0},
-  component_table_set(),
   wind_blowing_from_warning(false)
 {}
 
@@ -49,7 +47,9 @@ Purpose:(Initializes the model)
 void
 SimpleLookupWind::initialize()
 {
-  if (initialized) return;
+  if (initialized) {
+    return;
+  }
 
   // Split based on which set of tables to use.
   if (wind_components_specified) {
@@ -90,13 +90,15 @@ Purpose:(Main executive.  Executes the table-lookup and converts to desired
            specified data tables to multiple independent altitudes)
 *****************************************************************************/
 void
-SimpleLookupWind::update(double altitude_in)
+SimpleLookupWind::update(double altitude)
 {
-  if (!active) return;
+  if (!active) {
+    return;
+  }
 
   // Make a copy of the argument; this is the variable that the table-lookups
   // will use as an input.
-  altitude_placeholder = altitude_in;
+  altitude_placeholder = altitude;
 
   if (wind_components_specified) {
     // generate the 2 horizontal components of the wind and
@@ -145,12 +147,12 @@ Purpose:(A helper function to be called from the input file to help with
 *****************************************************************************/
 void
 SimpleLookupWind::assign_component_data(
-    const double * data,
+    const double * data_array,
     size_t         num_components,
     size_t         num_elem_per_component)
 {
   component_table_set.load_independent_data( altitude_placeholder,
-                                             data,
+                                             data_array,
                                              num_elem_per_component);
   if (num_components > 2) {
     if (num_components > 3) {
@@ -167,7 +169,7 @@ SimpleLookupWind::assign_component_data(
 
   component_table_set.load_dependent_data( wind_component,
                                            num_components,
-                                           data+num_elem_per_component,
+                                           data_array+num_elem_per_component,
                                            num_elem_per_component);
   wind_components_specified = true;
 }
@@ -181,20 +183,18 @@ Purpose:(A helper function to be called from the input file to help with
 *****************************************************************************/
 void
 SimpleLookupWind::assign_dir_mag_data(
-    const double * data,
-    size_t         num_elem)
+    const double * data_array,
+    size_t         num_elem_per_variable)
 {
   altitude_table.load_data(
-                data,
-                num_elem);
-  std::vector<size_t> dim_list;
-  dim_list.push_back(1);
-  dim_list.push_back(num_elem);
+                data_array,
+                num_elem_per_variable);
+  const std::vector<size_t> dim_list {1, num_elem_per_variable};
   wind_blowing_from_table.load_data(
-                data+num_elem,
+                data_array+num_elem_per_variable,
                 dim_list);
   wind_magnitude_table.load_data(
-                data+2*num_elem,
+                data_array+2*num_elem_per_variable,
                 dim_list);
   wind_components_specified = false;
 }
@@ -208,16 +208,14 @@ Purpose:(A helper function to be called from the input file to help with
 *****************************************************************************/
 void
 SimpleLookupWind::assign_dir_mag_vert_data(
-    const double * data,
-    size_t         num_elem)
+    const double * data_array,
+    size_t         num_elem_per_variable)
 {
-  assign_dir_mag_data(data, num_elem);
+  assign_dir_mag_data(data_array, num_elem_per_variable);
 
   include_vertical_component = true;
-  std::vector<size_t> dim_list;
-  dim_list.push_back(1);
-  dim_list.push_back(num_elem);
+  const std::vector<size_t> dim_list {1, num_elem_per_variable};
   wind_vertical_up_table.load_data(
-              data+3*num_elem,
+              data_array+3*num_elem_per_variable,
               dim_list);
 }

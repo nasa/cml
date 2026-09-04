@@ -87,33 +87,33 @@ protected:
                     DynamicMassString                  * mass_string,
                     DynamicMassBodyPropertiesInterface & mass_properties,
                     const double                       & time,
-                    const double                       * veh_cm_,
+                    const double                       * veh_cm_in,
                     bool                                 use_mass_string_in,
                     const double                       & atm_press);
 public:
   RocketMotor_MultiNozzle( DynamicMassBody & mass,
                            const double    & time,
-                           const double    & atm_press_in,
+                           const double    & atm_press,
                            const double    * veh_cm_in);
   RocketMotor_MultiNozzle( DynamicMassGroup & mass_group_in,
                            DynamicMassBody  & mass,
                            const double     & time,
-                           const double     & atm_press_in,
+                           const double     & atm_press,
                            const double     * veh_cm_in);
   RocketMotor_MultiNozzle( DynamicMassString & string,
                            const double      & time,
-                           const double      & atm_press_in,
+                           const double      & atm_press,
                            const double      * veh_cm_in);
   RocketMotor_MultiNozzle( DynamicMassGroup  & mass_group_in,
                            DynamicMassString & string,
                            const double      & time,
-                           const double      & atm_press_in,
+                           const double      & atm_press,
                            const double      * veh_cm_in);
   ~RocketMotor_MultiNozzle() override = default;
   RocketMotor_MultiNozzle (const RocketMotor_MultiNozzle& rhs) = delete;
   RocketMotor_MultiNozzle & operator = (const RocketMotor_MultiNozzle& rhs) = delete;
 
-  void add_nozzle( RocketMotorNozzle &);
+  void add_nozzle( RocketMotorNozzle & nozzle);
   virtual void initialize(size_t num_flex_elements_in = 0,
                           const double * motor_lin_flex_in = nullptr,
                           const double * motor_rot_flex_in = nullptr);
@@ -131,6 +131,6 @@ public:
   void disable_flex() { using_flex = false; }
   void set_flex_threshold(double new_threshold);
 
-  size_t get_num_noz() { return num_noz; }
+  size_t get_num_noz() const { return num_noz; }
 };
 #endif

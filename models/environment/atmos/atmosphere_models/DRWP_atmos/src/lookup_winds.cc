@@ -33,7 +33,6 @@ Constructors
 *****************************************************************************/
 DRWPTableLookup::DRWPTableLookup()
   :
-  drwpFileName(""),
   profile_number(2),
   initialized_with_vertical_component(false),
   verified(false)
@@ -42,7 +41,6 @@ DRWPTableLookup::DRWPTableLookup()
 /****************************************************************************/
 LookupAtmosWinds::LookupAtmosWinds()
   :
-  drwpFileName(""),
   wind_number(2),
   include_vertical_component(false),
   block_warnings(false),
@@ -107,7 +105,9 @@ DRWPTableLookup::verify( bool leave_active)
       "\ndid not activate.");
   }
   // and then deactivate it again
-  if (!leave_active) unsubscribe();
+  if (!leave_active) {
+    unsubscribe();
+  }
 
   // mark it as verified:
   verified = true;
@@ -123,7 +123,9 @@ LookupAtmosWinds::initialize()
   // If model has already been initialized, skip it.
   // Initialization of the model includes initialization of all the data
   // tables loaded into the model.
-  if (initialized || !enabled) return;
+  if (initialized || !enabled) {
+    return;
+  }
 
 
   // Make sure that all loaded tables are fully formed and ready to use.
@@ -187,7 +189,9 @@ Purpose:  (Performs the table interpolation)
 void
 LookupAtmosWinds::update(double altitude_in)
 {
-  if (!active) return;
+  if (!active) {
+    return;
+  }
 
   // Apply any required bias to offset the altitude floor-datum as used in
   // the data tables from the altitude floor-datum as provided by the simulation
@@ -333,10 +337,12 @@ Note:
 *****************************************************************************/
 bool
 LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
-                                  bool               contains_vertical_component_,
+                                  bool               file_contains_vertical_wind_component,
                                   unsigned int       wind_number_)
 {
-  if (!enabled) return false;
+  if (!enabled) {
+    return false;
+  }
 
   if (initialized && !block_warnings) {
     CMLMessage::inform( __FILE__,__LINE__,
@@ -465,9 +471,9 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   }
 
   // dependent variables are u, v, T, P, rho.
-  // w is included if contains_vertical_component_ is True
+  // w is included if file_contains_vertical_wind_component is True
   const unsigned int number_of_dependent_variables_ =
-                                            contains_vertical_component_ ? 6 : 5;
+                                            file_contains_vertical_wind_component ? 6 : 5;
 
   /********************   Loading independent variable data  ******************/
   // Define vector of floats to receive data from binary file
@@ -573,9 +579,9 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   // Grab a record of the current position, wind the file to the end and grab
   // a record of the position there. These should match. If they don't, the
   // parsing went awry.
-  auto file_pos_ = BinFile.tellg();
+  const auto file_pos_ = BinFile.tellg();
   BinFile.seekg (0, std::ios::end);
-  auto file_end_ = BinFile.tellg();
+  const auto file_end_ = BinFile.tellg();
   if (file_pos_ != file_end_) {
     CMLMessage::fail(__FILE__, __LINE__,
       "DRWP binary file size does not match size of all data read");
@@ -626,7 +632,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   dep_vec_.push_back( &v );
   // If including vertical wind-speed, include w in the dependent variables,
   // and record that in the table.
-  if (contains_vertical_component_) {
+  if (file_contains_vertical_wind_component) {
     dep_vec_.push_back( &w );
     table_.initialized_with_vertical_component = true;
   }
@@ -784,7 +790,9 @@ void LookupAtmosWinds::calculate_speed_of_sound()
                         (SOS_fair_hi_alt - SOS_fair_lo_alt) *
                         (SOS_hi_alt_const - SOS_no_fair);
   }
-  else SOS = SOS_hi_alt_const;
+  else {
+    SOS = SOS_hi_alt_const;
+  }
 }
 
 /*************************************************************************
@@ -848,7 +856,7 @@ Note:
    be in calculate_wind_mag_dir; at the start, set w to 0.0 if its population
    should be blocked
 *****************************************************************************/
-void LookupAtmosWinds::set_include_vertical_component(bool)
+void LookupAtmosWinds::set_include_vertical_component([[maybe_unused]] bool deprecated)
 {
   CMLMessage::error(
     __FILE__,__LINE__,"Call made to "

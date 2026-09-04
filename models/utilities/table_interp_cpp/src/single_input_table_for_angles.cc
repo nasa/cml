@@ -33,7 +33,6 @@ Constructors
 SingleInputTableForAngles::SingleInputTableForAngles(
      bool output_in_radians_) // optional, default to true
   :
-  GenericSingleInputTable(),
   output_in_radians(output_in_radians_),
   half_circle(M_PI)
 {}
@@ -156,7 +155,7 @@ Purpose:(sets the value to be in the range (-pi, pi])
 *****************************************************************************/
 void
 SingleInputTableForAngles::bound_to_half_circle(
-   double & angle)
+   double & angle) const
 {
   while (angle > half_circle) {
     angle -= 2 * half_circle;

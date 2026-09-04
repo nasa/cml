@@ -22,7 +22,7 @@ Purpose:
   threshold if they are within equality_threshold of each other.
 *****************************************************************************/
 template<>
-bool ConstraintTest_Threshold<double>::query_equals( double variable)
+bool ConstraintTest_Threshold<double>::query_equals( double variable) const
 {
   return (MathUtils::is_within_range( variable,
                                       threshold,
@@ -30,7 +30,7 @@ bool ConstraintTest_Threshold<double>::query_equals( double variable)
 }
 
 template<>
-bool ConstraintTest_Threshold<float>::query_equals( float variable)
+bool ConstraintTest_Threshold<float>::query_equals( float variable) const
 {
   return (MathUtils::is_within_range( static_cast<double>(variable),
                                       static_cast<double>(threshold),

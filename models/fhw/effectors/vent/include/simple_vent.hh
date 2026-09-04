@@ -112,31 +112,31 @@ class SimpleVent {
   virtual void use_impulse_mode(bool mode = true);
   void use_dynamic_mode(bool mode = true) { use_impulse_mode(!mode); }
 
-  void set_direction(double direction[3]);
-  void set_duration(double duration, bool hold_force = true);
+  void set_direction(double direction_in[3]);
+  void set_duration(double duration_, bool hold_force = true);
   virtual void set_force_magnitude(double force_, bool hold_impulse = false);
   virtual void set_force_vector(double force_[3], bool hold_impulse = false);
-  virtual void set_impulse_magnitude(double impulse, bool hold_force = true);
-  virtual void set_impulse_vector( double impulse[3],
+  virtual void set_impulse_magnitude(double impulse_, bool hold_force = true);
+  virtual void set_impulse_vector( double impulse_[3],
                                    bool hold_force_mag = true);
 
-  double get_force_magnitude() { return force_mag; }
-  double get_impulse_magnitude() { return impulse_mag; }
-  double get_duration() { return duration; }
-  double get_start_time() { return start_time; }
-  double get_stop_time() { return stop_time; }
+  double get_force_magnitude() const { return force_mag; }
+  double get_impulse_magnitude() const { return impulse_mag; }
+  double get_duration() const { return duration; }
+  double get_start_time() const { return start_time; }
+  double get_stop_time() const { return stop_time; }
   void get_direction(double direction_[3])
           { jeod::Vector3::copy(direction, direction_); }
   void get_force(double force_[3]) { jeod::Vector3::copy(force, force_); }
   void get_impulse(double impulse_[3]) { jeod::Vector3::copy(impulse, impulse_); }
-  bool direction_is_set() { return direction_set; }
-  bool force_is_set() { return force_set; }
-  bool force_magnitude_is_set() { return force_mag_set; }
-  bool impulse_is_set() { return impulse_set; }
-  bool impulse_magnitude_is_set() { return impulse_mag_set; }
-  bool duration_is_set() { return duration_set; }
-  bool is_venting() { return venting; }
-  bool is_impulse_mode() { return apply_as_impulse; }
+  bool direction_is_set() const { return direction_set; }
+  bool force_is_set() const { return force_set; }
+  bool force_magnitude_is_set() const { return force_mag_set; }
+  bool impulse_is_set() const { return impulse_set; }
+  bool impulse_magnitude_is_set() const { return impulse_mag_set; }
+  bool duration_is_set() const { return duration_set; }
+  bool is_venting() const { return venting; }
+  bool is_impulse_mode() const { return apply_as_impulse; }
 
   void unset_direction() {direction_set = false;
                           force_set = false;
@@ -153,12 +153,12 @@ class SimpleVent {
                          indefinite_duration = true;}
 
   // Allow access to Vent methods through SimpleVent pointers
-  virtual void set_flowrate( double, bool = true);
-  virtual void set_exhaust_speed( double, bool = true);
-  virtual double get_flowrate();
-  virtual double get_exhaust_speed();
-  virtual bool flowrate_is_set() { return false; }
-  virtual bool exhaust_speed_is_set() { return false; }
+  virtual void set_flowrate( double val, bool hold_exhaust_speed = true);
+  virtual void set_exhaust_speed( double val, bool hold_flowrate = true);
+  virtual double get_flowrate() const;
+  virtual double get_exhaust_speed() const;
+  virtual bool flowrate_is_set() const { return false; }
+  virtual bool exhaust_speed_is_set() const { return false; }
 
  protected:
   // Methods restricted so as to limit access to VentSet only

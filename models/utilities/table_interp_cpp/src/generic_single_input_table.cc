@@ -69,7 +69,7 @@ Notes:
 void
 GenericSingleInputTable::generate_base_values()
 {
-  TableIndependentVariable & TIV = *independents[0].first;
+  const TableIndependentVariable & TIV = *independents[0].first;
   size_t index =   TIV.get_index();
 
   switch(independents[0].second) {

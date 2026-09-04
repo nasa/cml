@@ -165,15 +165,15 @@ private:
 public:
   explicit TableIndependentVariable( const double &variable_in,
                                      double frac_eps_in=1.0e-9);
-  TableIndependentVariable( const std::string &name,
+  TableIndependentVariable( const std::string &name_in,
                             const double &variable_in,
                             double frac_eps_in=1.0e-9);
   TableIndependentVariable( const double &variable_in,
-                            const Continuity continuity,
+                            const Continuity continuity_in,
                             double frac_eps_in=1.0e-9);
-  TableIndependentVariable( const std::string &name,
+  TableIndependentVariable( const std::string &name_in,
                             const double &variable_in,
-                            const Continuity continuity,
+                            const Continuity continuity_in,
                             double frac_eps_in=1.0e-9);
   virtual ~TableIndependentVariable() = default;
   TableIndependentVariable (const TableIndependentVariable&) = delete;
@@ -187,11 +187,11 @@ public:
 
   virtual bool update();
 
-  void bias_data(double bias, size_t idx1, size_t idx2);
+  void bias_data(double bias, size_t idx_start, size_t idx_stop);
   void bias_data(double bias, size_t idx) { bias_data( bias, idx, idx);}
   void bias_data(double bias) {bias_data( bias, 0, data.size()-1);}
 
-  void scale_data(double scale, size_t idx1, size_t idx2);
+  void scale_data(double scale, size_t idx_start, size_t idx_stop);
   void scale_data(double scale, size_t idx) { scale_data( scale, idx, idx);}
   void scale_data(double scale) {scale_data( scale, 0, data.size()-1);}
 
@@ -210,9 +210,9 @@ public:
 
   bool is_table_increasing() const { return table_values_increasing;}
   bool is_data_loaded() const { return data_loaded;}
-  bool is_off_table() {return off_table_back || off_table_front;}
-  bool is_off_table_back() {return off_table_back;}
-  bool is_off_table_front() {return off_table_front;}
+  bool is_off_table() const {return off_table_back || off_table_front;}
+  bool is_off_table_back() const {return off_table_back;}
+  bool is_off_table_front() const {return off_table_front;}
   bool in_back_of(  const double val1, const double val2) const;
   bool in_front_of( const double val1, const double val2) const;
 

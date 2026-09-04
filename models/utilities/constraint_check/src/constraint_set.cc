@@ -19,8 +19,7 @@ Constructor
 *****************************************************************************/
 ConstraintSet::ConstraintSet()
   :
-  num_violations(0),
-  constraints()
+  num_violations(0)
 {}
 
 /*****************************************************************************
@@ -64,7 +63,7 @@ ConstraintSet::update()
   num_violations = 0;
   for (Constraint * constraint : constraints) {
     constraint->update();
-    num_violations += constraint->violated;
+    num_violations += static_cast<unsigned int>(constraint->violated);
   }
 }
 
