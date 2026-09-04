@@ -16,6 +16,7 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <cmath>
+#include <string>
 #include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"

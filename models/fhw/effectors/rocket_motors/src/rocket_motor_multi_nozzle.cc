@@ -26,7 +26,6 @@ PROGRAMMERS:
 #include <cmath>
 #include <cstddef>
 
-#include "../include/rocket_motor_basic.hh"
 #include "../include/rocket_motor_multi_nozzle.hh"
 #include "../include/rocket_motor_nozzle.hh"
 #include "../include/rocket_motor_table_thrust.hh"

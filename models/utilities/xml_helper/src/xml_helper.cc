@@ -10,8 +10,8 @@ PROGRAMMERS:
 #include "../include/xml_helper.hh"
 #include <cstring>
 #include <cctype>
+#include <libxml/tree.h>
 #include <string>
-#include <libxml/parser.h>
 
 /*******************************************************************************
 xml_find

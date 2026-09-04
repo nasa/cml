@@ -12,6 +12,7 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <cstddef>
+#include <string>
 #include <vector>
 
 #include "../include/abstract_table_lookup.hh"

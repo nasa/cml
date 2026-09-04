@@ -20,6 +20,7 @@ PROGRAMMERS:
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include <algorithm>
 #include <cstddef>
+#include <vector>
 
 #include "../include/simple_vent.hh"
 #include "../include/vent.hh"

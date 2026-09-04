@@ -25,6 +25,7 @@ PROGRAMMERS:
 #include <cstring>
 #include <cmath>
 #include <libxml/parser.h>
+#include <libxml/tree.h>
 #include <string>
 #include <unordered_map>
 #include <utility>

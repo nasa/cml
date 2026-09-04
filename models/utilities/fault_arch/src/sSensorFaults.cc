@@ -16,7 +16,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/xml_helper/include/xml_helper.hh"
 #include <cstdlib>
 #include <cstring>
-#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <string>
 
 
 /*******************************************************************************
