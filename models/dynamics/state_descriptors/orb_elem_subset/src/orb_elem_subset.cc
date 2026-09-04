@@ -237,8 +237,8 @@ OrbElemSubset::generate_cartesian_inertial()
   double sinO = node_line[1];
 
   // I - angle of inclination.
-  double sinI = std::sqrt(sin_sq_I);
-  double cosI = std::sqrt(1.0 - sin_sq_I);
+  double sinI = std::sqrt(sin_sq_I); // NOLINT(misc-confusable-identifiers)
+  double cosI = std::sqrt(1.0 - sin_sq_I); // NOLINT(misc-confusable-identifiers)
 
   // W - omega, argument of periapsis
   double cosW = std::cos(arg_periapsis);
