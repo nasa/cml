@@ -16,7 +16,7 @@ add_cml_library(
         atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh
         atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh
         atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh
-        atmos/atmosphere_models/std_atmos_1976/src/std_atmos_formula.h
+        atmos/atmosphere_models/std_atmos_1976/src/std_atmos_formula.hh
         atmos/first_order_hold/include/first_order_hold.hh
         atmos/gust/include/gust.hh
         atmos/lagged_atmosphere/include/lagged_atmos_payload_data.hh

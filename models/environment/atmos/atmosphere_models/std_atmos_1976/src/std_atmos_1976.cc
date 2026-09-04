@@ -41,7 +41,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "../include/std_atmos_1976.hh"
-#include "std_atmos_formula.h"
+#include "std_atmos_formula.hh"
 
 
 STD1976::STD1976()

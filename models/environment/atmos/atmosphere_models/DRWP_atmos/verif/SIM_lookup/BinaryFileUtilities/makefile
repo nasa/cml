@@ -1,13 +1,13 @@
 all : ReadBinFile WriteBinFile ReadEntireBinFile
 
-ReadBinFile : ReadBinFile.cpp
-		g++ -g -std=c++17 -Wall -Wextra -Werror -o ReadBinFile ReadBinFile.cpp -I.
+ReadBinFile : read_bin_file.cc
+		g++ -g -std=c++17 -Wall -Wextra -Werror -o ReadBinFile read_bin_file.cc -I.
 
-ReadEntireBinFile : ReadEntireBinFile.cpp
-		g++ -g -std=c++17 -Wall -Wextra -Werror -o ReadEntireBinFile ReadEntireBinFile.cpp -I.
+ReadEntireBinFile : read_entire_bin_file.cc
+		g++ -g -std=c++17 -Wall -Wextra -Werror -o ReadEntireBinFile read_entire_bin_file.cc -I.
 
-WriteBinFile : WriteBinFile.cpp
-		g++ -g -std=c++17 -Wall -Wextra -Werror -o WriteBinFile WriteBinFile.cpp -I.
+WriteBinFile : write_bin_file.cc
+		g++ -g -std=c++17 -Wall -Wextra -Werror -o WriteBinFile write_bin_file.cc -I.
 
 zap :
 		rm ReadBinFile ReadEntireBinFile WriteBinFile *.o

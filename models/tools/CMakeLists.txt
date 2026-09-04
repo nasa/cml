@@ -16,5 +16,5 @@ add_cml_tests(
         tools
 
     SOURCES
-        unit_test/models/tests/test_unit_framework.cc
+        unit_test/models/test/test_unit_framework.cc
 )

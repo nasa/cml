@@ -28,7 +28,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "../include/std_atmos_1976.hh"
-#include "std_atmos_formula.h"
+#include "std_atmos_formula.hh"
 
 
 const double STD1976::min_valid_alt = -5000.0;

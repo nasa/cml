@@ -106,5 +106,5 @@ add_cml_tests(
         dynamics
 
     SOURCES
-        mass_derivative_dynamics/tests/test_mass_derivative_dynamics.cpp
+        mass_derivative_dynamics/test/test_mass_derivative_dynamics.cc
 )
