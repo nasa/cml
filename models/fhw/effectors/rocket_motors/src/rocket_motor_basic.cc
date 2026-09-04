@@ -193,7 +193,7 @@ RocketMotor_Basic::initialize()
   dispersions.apply_dispersions(position, T_struc_to_motor_frame);
 
   // Calculate thrust direction in structural frame
-  double unit_vec_mag_sq = jeod::Vector3::vmagsq( thrust_unit_motor);
+  const double unit_vec_mag_sq = jeod::Vector3::vmagsq(thrust_unit_motor);
   if (MathUtils::is_near_equal( unit_vec_mag_sq, 0.0)) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid unit vector specification\n",

@@ -172,7 +172,7 @@ PistonThrusterGroup::update()
   }
 
   // Compute the elapsed time since the PECs were fired
-  double elapsed_time = time - start_time;
+  const double elapsed_time = time - start_time;
 
   // End if been active too long
   if (elapsed_time > param.max_time){

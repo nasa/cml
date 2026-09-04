@@ -118,7 +118,7 @@ SingleInputTableForQuaternions::generate_output()
   sph_interp.quat_1.scalar = data[ data_point_index[1]];
 
   for (size_t ii = 0; ii<3; ++ii) {
-    size_t var_base_ix = (ii+1) * num_data_elements_per_increment_of_index[0];
+    const size_t var_base_ix = (ii+1) * num_data_elements_per_increment_of_index[0];
     sph_interp.quat_0.vector[ii] = data[ var_base_ix + data_point_index[0]];
     sph_interp.quat_1.vector[ii] = data[ var_base_ix + data_point_index[1]];
   }

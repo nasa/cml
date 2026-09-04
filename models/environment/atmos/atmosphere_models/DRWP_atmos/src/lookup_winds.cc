@@ -466,7 +466,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
 
   // dependent variables are u, v, T, P, rho.
   // w is included if contains_vertical_component_ is True
-  unsigned int number_of_dependent_variables_ =
+  const unsigned int number_of_dependent_variables_ =
                                             contains_vertical_component_ ? 6 : 5;
 
   /********************   Loading independent variable data  ******************/
@@ -486,7 +486,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   // The table interpolation routines require the data to be of type double
   // cast from float to double is automatic, but cannot pass the float array
   // to load_independent_data, we need to convert it first.
-  std::vector<double> altitude_data_( altitude_float_array_.begin(), altitude_float_array_.end());
+  const std::vector<double> altitude_data_( altitude_float_array_.begin(), altitude_float_array_.end());
 
   // Now try loading the independent data onto the table.
   if (!table_.load_independent_data( altitude,
@@ -538,9 +538,9 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   // representing the 5 (or 6) dependent variables for each calibrated altitude
   // There are (number of dependent variables) * (number of altitudes) data
   // points, each of which occupies float_bytes_to_read bytes,
-  unsigned int pointsPerBlock_ =
+  const unsigned int pointsPerBlock_ =
                          number_of_altitudes_ * number_of_dependent_variables_;
-  unsigned int bytesPerBlock_  = float_bytes_to_read * pointsPerBlock_;
+  const unsigned int bytesPerBlock_  = float_bytes_to_read * pointsPerBlock_;
 
   // For each profile, make sure that the first entry matches with the profile
   // number read in earlier (to wind_profiles_). This is a sanity check that we
@@ -591,18 +591,18 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   //      representing the altitude data
   //  - an array of <number_of_profiles_> integers representing the wind numbers.
   // This adds up to this much space:
-  data_int bytesAtBeginning_ = LookupAtmosWinds::size_of_source_integer * (2 + number_of_profiles_) +
-                               LookupAtmosWinds::size_of_source_float   * number_of_altitudes_;
+  const data_int bytesAtBeginning_ = LookupAtmosWinds::size_of_source_integer * (2 + number_of_profiles_) +
+                                     LookupAtmosWinds::size_of_source_float   * number_of_altitudes_;
 
   // Then each profile occupies memory for:
   // - an integer to confirm the profile number
   // - bytesperBlock for the actual data.
-  data_int bytesPerProfile_ = bytesPerBlock_ + LookupAtmosWinds::size_of_source_integer;
+  const data_int bytesPerProfile_ = bytesPerBlock_ + LookupAtmosWinds::size_of_source_integer;
 
   // then we also bypass the integer at the front of the profile we actually
   // want; we have already checked that this integer has value = wind_number_
-  data_int bypass_ = bytesAtBeginning_ + (profile_ix_ * bytesPerProfile_) +
-                LookupAtmosWinds::size_of_source_integer;
+  const data_int bypass_ = bytesAtBeginning_ + (profile_ix_ * bytesPerProfile_) +
+                           LookupAtmosWinds::size_of_source_integer;
 
   //  advance from the front of the file this many bytes; this puts us at the
   //  front of the desired profile.
@@ -620,7 +620,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   }
 
   // As before, to load the data we must convert it to double.
-  std::vector<double> dependent_variables_( input_data_.begin(), input_data_.end());
+  const std::vector<double> dependent_variables_( input_data_.begin(), input_data_.end());
   std::vector<double *> dep_vec_;
   dep_vec_.push_back( &u );
   dep_vec_.push_back( &v );
@@ -661,7 +661,7 @@ Note: Average in this sense is the mean value of the calibrated values that
 void
 LookupAtmosWinds::compute_average_wind()
 {
-  size_t target_index = (active)? current_index : 0;
+  const size_t target_index = (active)? current_index : 0;
   compute_average_wind( target_index, true);
 }
 /****************************************************************************/
@@ -677,7 +677,7 @@ LookupAtmosWinds::compute_average_wind(
     double min_alt,
     double max_alt)
 {
-  size_t target_index = (active)? current_index : 0;
+  const size_t target_index = (active)? current_index : 0;
   compute_average_wind( target_index, false, min_alt, max_alt);
 }
 /****************************************************************************/
@@ -705,7 +705,7 @@ LookupAtmosWinds::compute_average_wind(
     return;
   }
 
-  double original_altitude = altitude;
+  const double original_altitude = altitude;
   jeod::Vector3::initialize(average_wind);
   DRWPTableLookup & table_ = TableLookup_array[table_index];
   size_t num_alts = 0;
@@ -776,7 +776,7 @@ void LookupAtmosWinds::calculate_speed_of_sound()
     // fractionala ltitude between the two altitude bounds. This function
     // gradually diverges from the theoretical profile to hit the
     // high-altitude value at the top of the interval.
-    double SOS_no_fair = std::sqrt( gamma * P / rho );
+    const double SOS_no_fair = std::sqrt( gamma * P / rho );
     // Note -- div-0 protected because SOS_fair_hi_alt must be greater than
     //         SOS_fair_lo_alt by structure of if-statements in getting to
     //         this point.

@@ -128,8 +128,8 @@ void Vent::update()
     - the available mass allows for stopping a vent when it has no more mass
       to vent.
   */
-  double available_mass = tank.dynamic_properties.consumable_mass -
-                          tank.dynamic_properties.mass_consumed_step;
+  const double available_mass = tank.dynamic_properties.consumable_mass -
+                                tank.dynamic_properties.mass_consumed_step;
   if ( active &&
        (indefinite_duration || dyn_time < stop_time) &&
        available_mass > 0.0) {
@@ -354,8 +354,8 @@ Purpose:(If there is not enough mass to generate the requested impulse, adjusts
 *****************************************************************************/
 void Vent::check_status()
 {
-  double available_mass = tank.dynamic_properties.consumable_mass -
-                          tank.dynamic_properties.mass_consumed_step;
+  const double available_mass = tank.dynamic_properties.consumable_mass -
+                                tank.dynamic_properties.mass_consumed_step;
   if (available_mass * exhaust_speed < impulse_mag) {
       // Scale the impulse magnitude and the mass consumption such that all the
       // mass is used.

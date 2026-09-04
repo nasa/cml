@@ -23,6 +23,7 @@
 #include <limits>
 #include <fenv.h>
 #include <list>
+#include <string>
 #include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
@@ -65,7 +66,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
     return;
   }
 
-  double pos_mag = jeod::Vector3::vmag(position);
+  const double pos_mag = jeod::Vector3::vmag(position);
 
   if ( pos_mag < std::numeric_limits<double>::min() ) {
     CMLMessage::error (
@@ -88,7 +89,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
   // Which would be defined as (-h/hmag), where h is angular momentum.
   jeod::Vector3::cross(velocity, position, y_unit);
 
-  double y_mag = jeod::Vector3::vmag(y_unit);
+  const double y_mag = jeod::Vector3::vmag(y_unit);
   if ( y_mag >=std::numeric_limits<double>::min() ) {
     jeod::Vector3::scale ( (1/y_mag), y_unit);
     jeod::Vector3::cross( y_unit, z_unit, x_unit );
@@ -178,7 +179,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
     return;
   }
 
-  double pos_mag = jeod::Vector3::vmag(position);
+  const double pos_mag = jeod::Vector3::vmag(position);
 
   if ( pos_mag < std::numeric_limits<double>::min() ) {
     CMLMessage::error (
@@ -196,7 +197,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
   jeod::Vector3::scale(position, (1/pos_mag), u_unit);
 
   jeod::Vector3::cross( position, velocity, w_unit);
-  double w_mag = jeod::Vector3::vmag(w_unit);
+  const double w_mag = jeod::Vector3::vmag(w_unit);
   if ( w_mag >= std::numeric_limits<double>::min() ) {
     jeod::Vector3::scale ( (1/w_mag), w_unit);
     jeod::Vector3::cross( w_unit, u_unit, v_unit );
@@ -297,7 +298,7 @@ MathUtils::generate_inrtl_to_reference( const double x_axis_inrtl[3],
     return;
   }
 
-  double x_mag = jeod::Vector3::vmag(x_axis_inrtl);
+  const double x_mag = jeod::Vector3::vmag(x_axis_inrtl);
   if (jeod::Vector3::vmag(position) < std::numeric_limits<double>::min() ||
       x_mag < std::numeric_limits<double>::min() ) {
     CMLMessage::error (
@@ -385,7 +386,7 @@ MathUtils::generate_inrtl_to_vnc( const double (&position)[3],
                                   const double (&velocity)[3],
                                   double (&T_inrtl_vnc)[3][3])
 {
-  double vel_mag =  jeod::Vector3::vmag(velocity);
+  const double vel_mag =  jeod::Vector3::vmag(velocity);
   if (jeod::Vector3::vmag(position) < std::numeric_limits<double>::min() ||
       vel_mag                 < std::numeric_limits<double>::min()) {
     CMLMessage::error ( __FILE__, __LINE__,
@@ -407,7 +408,7 @@ MathUtils::generate_inrtl_to_vnc( const double (&position)[3],
                   velocity,
                   y_unit); // not unit vec (yet)
 
-  double y_axis_mag = jeod::Vector3::vmag(y_unit);
+  const double y_axis_mag = jeod::Vector3::vmag(y_unit);
   if ( y_axis_mag  < std::numeric_limits<double>::min()) {
     CMLMessage::error ( __FILE__, __LINE__,
       "Illegal values, VNC ref-frame not definable:\n"
@@ -906,7 +907,7 @@ MathUtils::compute_backward_difference( const std::list<double> & history)
       {  11.0/6,  -3.0,  1.5, -1.0/3, 0   },
       {  25.0/12, -4.0,  3.0, -4.0/3, 0.25}}};
   double derivative = 0.0;
-  size_t order = std::min(history.size() - 1, static_cast<size_t>(4));
+  const size_t order = std::min(history.size() - 1, static_cast<size_t>(4));
 
   size_t ii = 0;
   for (std::list<double>::const_iterator it = history.begin();
@@ -934,8 +935,8 @@ MathUtils::compute_unit_vector_derivative(
     const double vector_derivative[3],     // input
     double unit_vector_derivative[3])      // output
 {
-  double vdotv = jeod::Vector3::dot( vector,
-                               vector);
+  const double vdotv = jeod::Vector3::dot(vector,
+                                          vector);
   if (is_near_equal( vdotv, 0.0)) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid inputs to method.\n",
@@ -947,16 +948,16 @@ MathUtils::compute_unit_vector_derivative(
                         unit_vector_derivative);
     return;
   }
-  double vdotvd = jeod::Vector3::dot( vector,
-                                vector_derivative);
+  const double vdotvd = jeod::Vector3::dot(vector,
+                                           vector_derivative);
 
   // Not protected by previous test of vdotv != 0.0;
   // if vdotv is small and vdotvd large, large / small could still overflow.
   // So use divide-protected.
-  double vdotvd_over_vdotv = divide_protected( vdotvd,
-                                               vdotv,
-                                               0,
-                                               true);
+  const double vdotvd_over_vdotv = divide_protected( vdotvd,
+                                                     vdotv,
+                                                     0,
+                                                     true);
   double scratch[3];
   jeod::Vector3::scale(  vector,
                   -vdotvd_over_vdotv,
@@ -966,7 +967,7 @@ MathUtils::compute_unit_vector_derivative(
                  scratch);
 
   // Protected by previous verification that vdotv not close to 0.
-  double inv_sqrt_vdotv = 1 / std::sqrt( vdotv);
+  const double inv_sqrt_vdotv = 1 / std::sqrt( vdotv);
 
   // NOTE - not really protected, but failure here would require that scratch be
   //        very large and vdotv very small -- effectively the vector is very
@@ -1004,7 +1005,7 @@ Purpose:
 template<>
 bool MathUtils::is_within_abs_tolerance<bool>( bool v1, bool v2, bool tol)
 {
-  bool ret = tol || (v1 == v2);
+  const bool ret = tol || (v1 == v2);
   CMLMessage::error( __FILE__, __LINE__,
     "Testing whether boolean ",v1, " is within boolean ",tol,", of boolean ",
     v2, " has an ambiguous interpretation.\n"

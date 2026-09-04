@@ -249,7 +249,7 @@ DynamicMassBody::update_mass_internal()
     // scale the original inertia tensor by the ratio
     // between the current and original masses.
     if (nominal_properties.core_mass > 0.0) {
-      double mass_ratio = core_properties.mass / nominal_properties.core_mass;
+      const double mass_ratio = core_properties.mass / nominal_properties.core_mass;
       jeod::Matrix3x3::scale(nominal_properties.inertia,
                        mass_ratio,
                        core_properties.inertia);

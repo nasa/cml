@@ -80,7 +80,7 @@ WakeEffectsBase::generate_trail_and_radial_dist()
 
   // Now we can obtain the offset_trail_distance and offset radial_distance
   // without resorting to trig functions:
-  double offset_sep_dist = jeod::Vector3::vmag( pos_wrt_offset_grid_in_bodyA);
+  const double offset_sep_dist = jeod::Vector3::vmag( pos_wrt_offset_grid_in_bodyA);
   offset_trail_dist = -jeod::Vector3::dot(  pos_wrt_offset_grid_in_bodyA,
                                       objectA.unitvec_freestream);
   offset_radial_dist = std::sqrt( (offset_sep_dist * offset_sep_dist) -

@@ -110,7 +110,7 @@ PointingRefFrame::update()
   double axis_scratch[3];
 
   // check distance between orig. and target
-  double pos_r = jeod::Vector3::vmag( target_wrt_originating_state.trans.position );
+  const double pos_r = jeod::Vector3::vmag( target_wrt_originating_state.trans.position );
   if (MathUtils::is_near_equal( pos_r, 0.0, 1.0)) {
     // if pos = 0, T = Tprev (= Identity for first update) and ang_vel_this = 0
     CMLMessage::warn(

@@ -238,7 +238,7 @@ PointToPointManager::add_point(
     }
   }
 
-  PointToPointElement new_pt( pt_name, pt_pos);
+  const PointToPointElement new_pt( pt_name, pt_pos);
   if (!new_pt.name.empty()) {
     element_list.push_back(new_pt);
   }
@@ -375,10 +375,10 @@ PointToPointManager::make_all_pairings()
 {
   for (auto it_v = vehicle_points.begin();
             it_v != vehicle_points.end(); ++it_v) {
-    std::string v_name = (*it_v).name;
+    const std::string v_name = (*it_v).name;
     for (auto it_p = planet_points.begin();
               it_p != planet_points.end(); ++it_p) {
-      std::string p_name = (*it_p).name;
+      const std::string p_name = (*it_p).name;
       bool match = false;
       for (auto it_r = relative_positions.begin();
                 it_r != relative_positions.end(); ++it_r) {

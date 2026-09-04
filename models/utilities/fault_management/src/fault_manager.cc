@@ -25,6 +25,7 @@ PROGRAMMERS:
 #include <cstring>
 #include <cmath>
 #include <libxml/parser.h>
+#include <libxml/tree.h>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -117,7 +118,7 @@ Purpose:(Injects faults.)
 *******************************************************************************/
 void FaultManager::update( const Location& location) {
   if (enabled && global_enabled) {
-    unsigned char location_index = static_cast<unsigned char>(location);
+    const unsigned char location_index = static_cast<unsigned char>(location);
     if (location_index >= Location_count) {
       CMLMessage::fail(__FILE__, __LINE__,
         "Fault Management Error\n",
@@ -404,7 +405,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
       "This Fault will be ignored.\n");
     return;
   }
-  Location location = translate_location(loc_string);
+  const Location location = translate_location(loc_string);
   if (location == Location::INVALID) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
@@ -1394,7 +1395,7 @@ TriggerBase* FaultManager::parse_trigger(
       "Trigger has not been added to the set of triggers.\n");
     return nullptr;
   }
-  TriggerBase::Operator_enm comp = TriggerBase::translate_operator(comp_str);
+  const TriggerBase::Operator_enm comp = TriggerBase::translate_operator(comp_str);
   if (comp == TriggerBase::Invalid) {
     CMLMessage::error(__FILE__, __LINE__,
       "XML input error parsing trigger comparator\n",
@@ -1718,7 +1719,7 @@ bool FaultManager::parse_rand_number(
       if (min_str != nullptr &&
           max_str != nullptr &&
           temp_str != nullptr ) {
-        double mean_val = std::strtod(temp_str, nullptr);
+        const double mean_val = std::strtod(temp_str, nullptr);
         rng.lower_limit = mean_val - std::abs(std::strtod(min_str, nullptr));
         rng.upper_limit = mean_val + std::strtod(max_str, nullptr);
       }

@@ -61,7 +61,7 @@ CML_ProximityCounter::set_data(const std::vector<double> & targets_)
   targets.clear();
   targets_ready = false;
 
-  size_t n_targets_ = targets_.size();
+  const size_t n_targets_ = targets_.size();
   // Sanity check for number of targets:
   if (n_targets_ < 1) {
     CMLMessage::error( __FILE__,__LINE__,
@@ -126,8 +126,8 @@ CML_ProximityCounter::insert(double value)
     // ix_search is between 0 and ntarget-2
     // value lies between targets[ix_search] and targets[ix_search+1]
     // Find the difference between value and the two bounding target values.
-    double delta_low = value - targets[ix_search].value;
-    double delta_high = targets[ix_search+1].value - value;
+    const double delta_low = value - targets[ix_search].value;
+    const double delta_high = targets[ix_search+1].value - value;
     // increment the count for the closer target.
     if (delta_high > delta_low) {
       targets[ix_search].count++;

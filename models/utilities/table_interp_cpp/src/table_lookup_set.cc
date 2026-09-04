@@ -12,6 +12,7 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <cstddef>
+#include <string>
 #include <vector>
 
 #include "../include/abstract_table_lookup.hh"
@@ -53,7 +54,7 @@ TableLookupSet::add_table( GenericMultiInputTable &new_table)
     return;
   }
 
-  size_t num_vars = new_table.get_num_dep_vars();
+  const size_t num_vars = new_table.get_num_dep_vars();
   for (size_t ii = 0; ii < num_vars; ++ii) {
     double *var_ptr = new_table.get_dependent_variable_ptr(ii);
     verify_and_add_dependent_variable( var_ptr);

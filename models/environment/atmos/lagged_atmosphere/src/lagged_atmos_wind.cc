@@ -165,7 +165,7 @@ LaggedAtmosWind::compute( double input_altitude)
   //         below and above are really close together
   //         The fail-safe setting, frac = 0, results in using the
   //         parameters from the "above" iterator.
-  double frac = MathUtils::divide_protected(
+  const double frac = MathUtils::divide_protected(
                                   (input_altitude - above->altitude),
                                   (below->altitude - above->altitude),
                                   0,
@@ -221,7 +221,7 @@ LaggedAtmosWind::update_history( const LaggedAtmosPayloadData &payload_data)
   // We don't want to keep the nodes forever.  So delete any nodes with
   // altitudes that are farther above the current altitude than the chute can
   // possibly be.  But don't invalidate the above iterator.
-  double max_alt = payload_data.altitude + max_delta_altitude;
+  const double max_alt = payload_data.altitude + max_delta_altitude;
   while (above != nodes.begin() &&
          nodes.front().altitude > max_alt) {
     nodes.pop_front();

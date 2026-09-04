@@ -215,8 +215,8 @@ RcsJet::compute_component_flow_rates()
     "Specific Impulse = ", isp, " s\nwith g included, velocity = ", isp_g, " m/s\n");
   }
 
-  unsigned int num_prop_components = group.get_num_prop_components();
-  double flow_rate = force_cl / isp_g;
+  const unsigned int num_prop_components = group.get_num_prop_components();
+  const double flow_rate = force_cl / isp_g;
 
   if (num_prop_components == 1) {
     // compute simple fuel flow, all flow on one channel
@@ -1075,7 +1075,7 @@ RcsJet::apply_direction_error()
     // direction towards the y-axis after the y-z plane has been rotated by
     // azimuth-angle.
     double force_case[3];
-    double sin_cone = std::sin(cone_angle_err);
+    const double sin_cone = std::sin(cone_angle_err);
     force_case[0] = std::cos(cone_angle_err);
     force_case[1] = sin_cone * std::cos(azimuth_angle_err);
     force_case[2] = sin_cone * std::sin(azimuth_angle_err);
@@ -1103,7 +1103,7 @@ RcsJet::apply_direction_dispersion()
   // direction towards the y-axis after the y-z plane has been rotated by
   // azimuth-angle.
   double force_case[3];
-  double sin_cone = std::sin(cone_angle_disp);
+  const double sin_cone = std::sin(cone_angle_disp);
   force_case[0] = std::cos(cone_angle_disp);
   force_case[1] = sin_cone * std::cos(azimuth_angle_disp);
   force_case[2] = sin_cone * std::sin(azimuth_angle_disp);

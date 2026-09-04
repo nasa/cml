@@ -118,7 +118,7 @@ void ContactStateOverride::update()
   // Component of the delta parallel to contact normal vector, or the distance
   // between the two bodies that is in excess of their usual contact
   // separation.
-  double distance = jeod::Vector3::dot(scratch, contact_normal);
+  const double distance = jeod::Vector3::dot(scratch, contact_normal);
 
   // If <0, they are overlapping and the override-body must be placed at its
   // contact point.

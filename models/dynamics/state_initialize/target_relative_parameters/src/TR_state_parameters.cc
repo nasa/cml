@@ -365,7 +365,7 @@ TargetRelative_StateParameter::compute_position_magnitude()
     pfix_position.update_from_cart(pfix_position.cart_coords);
 
     /* Check for convergence */
-    double deltaR = altitude - pfix_position.ellip_coords.altitude;
+    const double deltaR = altitude - pfix_position.ellip_coords.altitude;
     if ( std::abs(deltaR) < tolerance ) {
       break;
     } else {
