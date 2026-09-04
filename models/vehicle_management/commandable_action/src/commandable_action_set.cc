@@ -32,6 +32,7 @@ Programmers:
  (
 *******************************************************************************/
 
+#include "../include/commandable_action.hh"
 #include "../include/commandable_action_set.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <utility>

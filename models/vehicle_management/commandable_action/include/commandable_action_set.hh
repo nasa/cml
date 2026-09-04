@@ -115,5 +115,4 @@ class CommandableActionSet
  protected:
   virtual void generate_fsw_command() = 0;
 };
-#include"commandable_action.hh"
 #endif
