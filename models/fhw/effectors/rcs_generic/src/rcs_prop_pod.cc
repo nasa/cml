@@ -222,7 +222,7 @@ RcsPropPod::increment_mass_consumption(
   }
 
   for (unsigned int ii = 0; ii < components.size(); ++ii) {
-    double incr_consumption = jet_consumption.at(ii);
+    const double incr_consumption = jet_consumption.at(ii);
     components.at(ii).increment_mass_consumption( incr_consumption);
     sum_consumption += incr_consumption;
   }

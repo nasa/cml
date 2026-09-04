@@ -64,7 +64,7 @@ CML_TargetCounter::set_data(const std::vector<int> & targets_)
   targets.clear();
   ntarget = 0;
 
-  size_t num_targets = targets_.size();
+  const size_t num_targets = targets_.size();
   // Sanity check for number of targets:
   if (num_targets == 0) {
     CMLMessage::error( __FILE__,__LINE__,
@@ -78,7 +78,7 @@ CML_TargetCounter::set_data(const std::vector<int> & targets_)
   targets.resize(num_targets);
   for (size_t i_src = 0; i_src < num_targets; ++i_src) {
     // Check for uniqueness:
-    int src = targets_[i_src];
+    const int src = targets_[i_src];
     if (!does_val_exist(src)) {
       targets[ntarget].value = src;
       ntarget++;
@@ -95,8 +95,8 @@ CML_TargetCounter::set_data( int limit_a,
   targets.clear();
   ntarget = 0;
 
-  int lower_limit = std::min( limit_a, limit_b);
-  int upper_limit = std::max( limit_a, limit_b);
+  const int lower_limit = std::min( limit_a, limit_b);
+  const int upper_limit = std::max( limit_a, limit_b);
 
   ntarget = static_cast<size_t>(upper_limit - lower_limit) + 1;
   targets.resize(ntarget);

@@ -119,12 +119,12 @@ TableLookupTransposeDataSet_TableConfig::check_indices()
   }
   else {
     if (index_high < index_low) {
-      size_t index_scratch = index_high;
+      const size_t index_scratch = index_high;
       index_high = index_low;
       index_low = index_scratch;
     }
 
-    size_t size = index_high - index_low + 1;
+    const size_t size = index_high - index_low + 1;
     indices.resize(size);
     for (size_t ii = 0; ii < size; ++ii){
       indices[ii] = index_low + ii;
@@ -210,7 +210,7 @@ TableLookupTransposeDataSet::process_data(
 
 
   // Get a count of the number of lines and length of the shortest line
-  size_t data_lines_total_count = data_file.size();
+  const size_t data_lines_total_count = data_file.size();
   min_length = data_file.front().size();
   size_t line_num = 1;
   for (const DoubleVec & line_iter : data_file) {
@@ -446,7 +446,7 @@ Purpose:(Returns a pointer to one of the entries in table_config.
 TableLookupTransposeDataSet_TableConfig *
 TableLookupTransposeDataSet::get_config( const char * name_in)
 {
-  std::string search_name(name_in);
+  const std::string search_name(name_in);
   return get_config( search_name);
 }
 /****************************************************************************/
@@ -554,7 +554,7 @@ TableLookupTransposeDataSet::remove_config(
      one assigned for removal.
   */
   for (const auto & config : table_config) {
-    bool indices_match = (config.indices.empty())?
+    const bool indices_match = (config.indices.empty())?
                             ((config_remove.index_low == config.index_low) &&
                              (config_remove.index_high == config.index_high))
                             :

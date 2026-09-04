@@ -92,7 +92,7 @@ Notes:
 bool
 WatchValuesFlipFlop::test_crossing()
 {
-  bool new_state = associated_watch.test_crossing();
+  const bool new_state = associated_watch.test_crossing();
   event_triggered = (new_state != state);
   state = new_state;
   return event_triggered;
@@ -112,7 +112,7 @@ WatchValuesFlipFlopDelayed::test_crossing()
   }
   /* If not in a delay-pattern, test the crossing just as we would for any
    * other event, and if detected, start the delay process.*/
-  bool new_state = associated_watch.test_crossing();
+  const bool new_state = associated_watch.test_crossing();
   // If no change, nothing to do; event is untriggered:
   if (new_state == state) {
     event_triggered = false;

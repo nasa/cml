@@ -231,7 +231,7 @@ AbstractTableLookup::create_table(
             double &dependent_variable,
             TableType type)
 {
-  DoublePtrVec scratch(1, &dependent_variable);
+  const DoublePtrVec scratch(1, &dependent_variable);
   return create_table(scratch, type);
 }
 
@@ -362,7 +362,7 @@ Purpose:(returns a bool indicating whether the specified dependent variable
 bool
 AbstractTableLookup::is_a_dependent_variable( double &variable)
 {
-  DoublePtrVec::iterator it = std::find(dependents.begin(),
+  const DoublePtrVec::iterator it = std::find(dependents.begin(),
                                                 dependents.end(),
                                                 &variable);
   return dependents.end()!=it;

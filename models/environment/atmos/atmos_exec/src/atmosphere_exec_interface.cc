@@ -73,7 +73,7 @@ AtmosphereExecInterface::activate()
   //        to its subscription count.  Otherwise, it will activate it AND
   //        execute it.  Now, we need it to execute, so if it is already active
   //        force it to execute.
-  bool planet_state_already_active = planet_state.is_active();
+  const bool planet_state_already_active = planet_state.is_active();
   planet_state.subscribe();
   if (planet_state_already_active) {
     planet_state.update();

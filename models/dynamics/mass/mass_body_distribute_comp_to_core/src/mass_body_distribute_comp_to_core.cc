@@ -311,7 +311,7 @@ MassBodyDistributeCompToCore::check_for_valid_mass_properties()
       // would satisfy the current checks but has two negative eigenvalues.
 
   // Create a short name for the inertia tensor to make this code more readable
-  double (&I)[3][3](adjustable_body.core_properties.inertia);
+  const double (&I)[3][3](adjustable_body.core_properties.inertia);
   // If any error message is generated, this will be the beginning of it
   std::ostringstream err_msg;
   err_msg << "It is physically impossible to achieve specified composite mass\n"

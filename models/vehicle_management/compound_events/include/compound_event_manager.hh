@@ -206,7 +206,7 @@ class CompoundEventsManager : public VehicleEventsManager
     }
 
     std::string type = var_name_ref->attr->type_name;
-    TRICK_TYPE trick_type = var_name_ref->attr->type;
+    TRICK_TYPE const trick_type = var_name_ref->attr->type;
     if (trick_type == TRICK_ENUMERATED) {
       type = "int";
     }

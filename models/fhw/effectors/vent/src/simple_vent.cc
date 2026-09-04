@@ -604,7 +604,7 @@ bool SimpleVent::check_configuration()
                                     // a potential conflict.
         }
         else {
-          double impulse_mag_ = force_mag * duration;
+          const double impulse_mag_ = force_mag * duration;
           CMLMessage::warn(
             __FILE__,__LINE__,"Overconstrained configuration\n",
             "Vent '", name, "' has force-magnitude, impulse-magnitude, and\n"

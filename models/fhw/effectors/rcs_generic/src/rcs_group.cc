@@ -64,9 +64,9 @@ RcsJetGroup::initialize(
   /* Set up command buffers and initialize delays */
   /************************************************/
   /* total on delay is sum of signal delay and valve reaction time (dead_time) */
-  double total_on_delay = std::max(0.0, signal_delay_time + on_dead_time);
+  const double total_on_delay = std::max(0.0, signal_delay_time + on_dead_time);
   /* total off delay is sum of signal delay and valve reaction time (dead_time) */
-  double total_off_delay = std::max(0.0, signal_delay_time + off_dead_time);
+  const double total_off_delay = std::max(0.0, signal_delay_time + off_dead_time);
 
   // Check to see if a buffer is needed:
   // if on or off delays are equal or greater than one time_step, then

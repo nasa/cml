@@ -157,7 +157,7 @@ bool SweepSet::increment_sweep()
   // the increment.  Note - not the absolute value of the "distance" to go,
   // this must be allowed to go negative if it overshoots, mainly for the
   // first pass after which point that should be protected.
-  double to_go = (increment > 0) ? (end - value) : (value - end);
+  const double to_go = (increment > 0) ? (end - value) : (value - end);
 
   // If within the allowable tolerance of the end-point, tag the sweep as
   // completing and reset the value.
@@ -311,8 +311,8 @@ std::string UnitTestFramework::expand_env_variables(const std::string& input) {
     static const std::regex pattern(R"(\$\{([A-Za-z_][A-Za-z0-9_]*)\})");
 
     std::string result;
-    std::sregex_iterator begin(input.begin(), input.end(), pattern);
-    std::sregex_iterator end;
+    const std::sregex_iterator begin(input.begin(), input.end(), pattern);
+    const std::sregex_iterator end;
 
     std::size_t last_pos = 0;
 
@@ -357,8 +357,7 @@ UnitTestFramework::configure_from_definition_file()
   }
 
   populate_variable_names();
-  unsigned int num_vars = variables.size();
-
+  const unsigned int num_vars = variables.size();
 
   // parse the data file
   std::ifstream data_file(data_file_name);

@@ -161,7 +161,7 @@ ImpactPoint::update()
   double sin_sq_latitude = orb_elem.position_unit[2];
   sin_sq_latitude *= sin_sq_latitude; // square of sin(latitude)
 
-  double planet_surface_radius = equatorial_radius /
+  const double planet_surface_radius = equatorial_radius /
                     std::sqrt ( 1.0 + planet_ecc_factor * sin_sq_latitude );
 
   if (orb_elem.position_mag < planet_surface_radius) {
@@ -219,7 +219,7 @@ ImpactPoint::update_equatorial()
   // Transform into geodetic and geocentric coordinates
   update_from_cart(cart_coords);
   // Store off the true-anomaly for the current position
-  double this_nu = orb_elem.true_anomaly;
+  const double this_nu = orb_elem.true_anomaly;
 
   // Solve true-anomaly at equatorial radius
   orb_elem.position_mag = equatorial_radius;
@@ -274,13 +274,13 @@ ImpactPoint::update_non_equatorial()
 
     // Compute the square of the sine of the latitude.  Sign is not important,
     // symmetry about equator.  Similarly, sign of node-angle not important.
-    double sin_sq_latitude = sin_sq_node_angle * orb_elem.sin_sq_I;
+    const double sin_sq_latitude = sin_sq_node_angle * orb_elem.sin_sq_I;
 
     // Compute the surface radius
     planet_surface_radius  = equatorial_radius /
                       std::sqrt ( 1.0 + planet_ecc_factor * sin_sq_latitude );
 
-    double position_error = std::abs(orb_elem.position_mag - planet_surface_radius);
+    const double position_error = std::abs(orb_elem.position_mag - planet_surface_radius);
     if (position_error < iteration_threshold) {
       convergence = true;
     }
@@ -322,13 +322,13 @@ ImpactPoint::update_time()
   // Now the time:  Need the eccentric anomaly
   //  NOTE - DO NOT use compute_eccentricities().  That requires velocity,
   //  which we do not have and do not need.
-  double e_cosE_impact =
+  const double e_cosE_impact =
                 (1.0 - orb_elem.position_mag / orb_elem.semi_major_axis);
-  double cosE_impact = e_cosE_impact / orb_elem.ecc_mag;
+  const double cosE_impact = e_cosE_impact / orb_elem.ecc_mag;
   // sinE should be negative (return side of orbit)
-  double e_sinE_impact = -orb_elem.ecc_mag *
+  const double e_sinE_impact = -orb_elem.ecc_mag *
                                   std::sqrt( 1.0 - cosE_impact * cosE_impact);
-  double E_impact = std::atan2( e_sinE_impact, e_cosE_impact);
+  const double E_impact = std::atan2( e_sinE_impact, e_cosE_impact);
 
   time_to_impact = orb_elem.semi_major_axis * std::sqrt(orb_elem.semi_major_axis /
                                                         grav_mu) *

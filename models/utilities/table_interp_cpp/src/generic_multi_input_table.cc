@@ -11,6 +11,7 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
+#include <algorithm>
 #include <cstddef>
 
 #include "../include/generic_multi_input_table.hh"
@@ -329,7 +330,7 @@ GenericMultiInputTable::initialize()
   }
 
   // number of dimensions of data in the array:
-  size_t data_dimension = size_of_dimension.size();
+  const size_t data_dimension = size_of_dimension.size();
   // number of independent variables:
   size_t num_independents = independents.size();
 
@@ -664,7 +665,7 @@ GenericMultiInputTable::copy_data(
     return false;
   }
   // Configure internal data structure, abort on error
-  size_t total_data_elements = configure_internal_data_structure();
+  const size_t total_data_elements = configure_internal_data_structure();
   if (total_data_elements == 0) {
     CMLMessage::error(
       __FILE__,__LINE__,"Table data-load error\n",
@@ -688,7 +689,7 @@ GenericMultiInputTable::copy_data(
            const DoubleVec & data_in)
 {
   // Configure internal data structure, abort on error
-  size_t total_data_elements = configure_internal_data_structure();
+  const size_t total_data_elements = configure_internal_data_structure();
   if (total_data_elements == 0) {
     CMLMessage::error(
       __FILE__,__LINE__,"Table data-load error\n",
@@ -827,7 +828,7 @@ GenericMultiInputTable::generate_base_values()
   // Increment current_dimension as independents are processed.
   size_t current_dimension = 1;
 
-  for( IndepPair independent : independents) {
+  for (const IndepPair independent : independents) {
     TableIndependentVariable & TIV = *independent.first;
     // Trivial case, the independent variable has 1 (or fewer, if that is
     // possible) data point.
@@ -896,9 +897,9 @@ GenericMultiInputTable::generate_base_values()
       //   rather than an "interpolation"), this index is not finalized for any
       //   data point until all independent variables have processed.
       //   The index value is incremented as each independent gets processed.
-      double weight_upper  = TIV.fraction;
-      double weight = 1-weight_upper;
-      size_t index_upper = index+1;
+      const double weight_upper  = TIV.fraction;
+      const double weight = 1-weight_upper;
+      const size_t index_upper = index+1;
       for (size_t jj=0; jj<num_data_points_interp; ) {
         // Apply the values from the lower index, applying the parameters to
         // "dwell" points before moving to the upper index.
@@ -1042,9 +1043,7 @@ GenericMultiInputTable::index_checks(
       ix_start,")\n"
       "higher than the stop index (",ix_stop,").  This could be an error.\n"
       "Will ",func," the data values between these indices.\n");
-    size_t ix_scratch = ix_start;
-    ix_start = ix_stop;
-    ix_stop = ix_scratch;
+    std::swap(ix_start, ix_stop);
   }
   if (ix_stop >= data.size()) {
     CMLMessage::warn(__FILE__, __LINE__, "Invalid index\n",

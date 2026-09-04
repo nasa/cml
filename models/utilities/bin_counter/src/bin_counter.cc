@@ -74,7 +74,7 @@ CML_BinCounter::set_data(const std::vector<double> & edges,
   bins.clear();
   bins_ready = false;
 
-  size_t n_edges = edges.size();
+  const size_t n_edges = edges.size();
   // Sanity check for number of bins:
   if (n_edges <= 1 && closed_ends) {
     CMLMessage::error( __FILE__,__LINE__,

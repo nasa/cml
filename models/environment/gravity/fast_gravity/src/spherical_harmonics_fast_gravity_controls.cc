@@ -251,9 +251,9 @@ SphericalHarmonicsFastGravityControls::calc_nonspherical(// Return: --   Void
   // threshold that this set of fast gravity computations iproduced
 
   // accel_scratch is now the delta-accel: (fast-grav accel - full-grav accel)
-  double ratio_compare = (jeod::Vector3::vmag(accel_scratch) /
-                          jeod::Vector3::vmag(reference_accel_pfix)) /
-                          threshold_ratio_delta_acc;
+  const double ratio_compare = (jeod::Vector3::vmag(accel_scratch) /
+                                jeod::Vector3::vmag(reference_accel_pfix)) /
+                                threshold_ratio_delta_acc;
 
 
   // Adjust the count_limit to maximize the step size without exceeding

@@ -115,7 +115,7 @@ TableIndependentVariable::load_data(
     return false;
   }
 
-  DoubleVec scratch(data_in, data_in+size_in);
+  const DoubleVec scratch(data_in, data_in+size_in);
   return load_data(scratch);
 }
 /****************************************************************************/
@@ -277,7 +277,7 @@ TableIndependentVariable::bias_data(
       ix_start,")\n"
       "higher than the stop index (",ix_stop,").  This could be an error.\n"
       "Bias will be applied to the data values between these indices.\n");
-    size_t ix_scratch = ix_start;
+    const size_t ix_scratch = ix_start;
     ix_start = ix_stop;
     ix_stop = ix_scratch;
   }
@@ -285,7 +285,7 @@ TableIndependentVariable::bias_data(
   // Make a copy of the existing data, modify it and recheck it for validity
   // before changing the real data
   std::vector<double> data_copy (data);
-  bool tab_val_incr_copy = table_values_increasing;
+  const bool tab_val_incr_copy = table_values_increasing;
 
   // modify it:
   for (size_t ii = ix_start; ii <= ix_stop; ++ii) {
@@ -338,7 +338,7 @@ TableIndependentVariable::scale_data(
       ix_start,")\n"
       "higher than the stop index (",ix_stop,").  This could be an error.\n"
       "Scale will be applied to the data values between these indices.\n");
-    size_t ix_scratch = ix_start;
+    const size_t ix_scratch = ix_start;
     ix_start = ix_stop;
     ix_stop = ix_scratch;
   }
@@ -346,7 +346,7 @@ TableIndependentVariable::scale_data(
   // Make a copy of the existing data, modify it and recheck it for validity
   // before changing the real data
   std::vector<double> data_copy (data);
-  bool tab_val_incr_copy = table_values_increasing;
+  const bool tab_val_incr_copy = table_values_increasing;
 
   for (size_t ii = ix_start; ii <= ix_stop; ++ii) {
     data_copy[ii] *= scale;

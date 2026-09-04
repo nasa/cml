@@ -117,7 +117,7 @@ void
 AtmosphereExec_SimpleLookupWind::set_altitude_type(
     TopoType type)
 {
-  bool tc_before = altitude_type == Topocentric;
+  const bool tc_before = altitude_type == Topocentric;
 
   switch( type) {
   case Topodetic:
@@ -137,7 +137,7 @@ AtmosphereExec_SimpleLookupWind::set_altitude_type(
   }
   altitude_type = type;
 
-  bool tc_after = altitude_type == Topocentric;
+  const bool tc_after = altitude_type == Topocentric;
   if (active) {
     if (tc_before && !tc_after) {
       planet_state.unsubscribe_topocentric_altitude();

@@ -172,7 +172,7 @@ AtmosRelativeState::activate()
   // currently active, but not otherwise.  So we need to rerun
   // planet-rel if (and only if) atmos-exec is already active AND no other
   // model already subscribes to the relative-velocity computation.
-  bool rerun_planet_rel_state = atmos_exec.is_active() &&
+  const bool rerun_planet_rel_state = atmos_exec.is_active() &&
                                 !planet_rel_state.is_rel_vel_subscribed();
 
   // Add a subscription to the relative-velocity computation
@@ -426,7 +426,7 @@ AtmosRelativeState::compute_T_inrtl_traj()
   //     passing the "is-near-equal" test, and then failing the equivalent
   //     test at normalization ... which would result in a [0,0,0] vector for
   //     the y-axis.
-  double y_axis_mag = jeod::Vector3::vmag(y_axis);
+  const double y_axis_mag = jeod::Vector3::vmag(y_axis);
   if (MathUtils::is_near_equal( y_axis_mag, 0.0)) {
     if (std::isnan(y_axis[0])) { // check for NaN, vmag turns NaN into 0.
       CMLMessage::error(
@@ -494,7 +494,7 @@ AtmosRelativeState::compute_fpangle_azimuth()
                       free_stream_vel,
                       free_stream_td_vel);
 
-  double free_stream_td_vel_xy = std::sqrt(
+  const double free_stream_td_vel_xy = std::sqrt(
                             free_stream_td_vel[0] * free_stream_td_vel[0] +
                             free_stream_td_vel[1] * free_stream_td_vel[1] );
 
@@ -562,11 +562,11 @@ AtmosRelativeState::compute_alternate_angles()
                       free_stream_vel,
                       free_stream_body_vel);
 
-  double free_stream_body_vel_xz = std::sqrt( // for angle_of_sideslip_alt only
+  const double free_stream_body_vel_xz = std::sqrt( // for angle_of_sideslip_alt only
                             free_stream_body_vel[0] * free_stream_body_vel[0] +
                             free_stream_body_vel[2] * free_stream_body_vel[2]);
 
-  double free_stream_body_vel_yz = std::sqrt( // for tot_ang_attack only
+  const double free_stream_body_vel_yz = std::sqrt( // for tot_ang_attack only
                             free_stream_body_vel[1] * free_stream_body_vel[1] +
                             free_stream_body_vel[2] * free_stream_body_vel[2]);
 

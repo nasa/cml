@@ -171,7 +171,7 @@ GenericSingleInputTable::generate_output()
     // moving from the lower index to the upper index. So the upper index
     // should be weighted by fraction, and the lower index weighted by
     // (1-fraction)
-    double frac =  independents[0].first->fraction;
+    const double frac =  independents[0].first->fraction;
     for (double* out_ptr : output) {
       *out_ptr = data[data_ix]   * (1-frac) +
                  data[data_ix+1] * frac;

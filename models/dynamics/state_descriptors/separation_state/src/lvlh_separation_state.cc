@@ -286,7 +286,7 @@ LvlhSeparationState::update()
   if (!active) {
     return;
   }
-  double timestamp = lvlh_ref.frame.timestamp();
+  const double timestamp = lvlh_ref.frame.timestamp();
   if ( MathUtils::has_changed_from( lvlh_origin_frame->timestamp(),
                                     timestamp)
        ||

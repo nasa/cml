@@ -120,12 +120,12 @@ sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
   // the last argument rather than nom_required. If FaultManager is not able
   // to configure the parameter, then sSensorFaults will try, at which point
   // the concept of nom_required returns to its passed meaning.
-  bool new_syntax_valid = FaultManager::parse_periodic_param( param,
-                                                              function_node,
-                                                              param_name,
-                                                              ind_var_node,
-                                                              fault_name,
-                                                              false);
+  const bool new_syntax_valid = FaultManager::parse_periodic_param( param,
+                                                                    function_node,
+                                                                    param_name,
+                                                                    ind_var_node,
+                                                                    fault_name,
+                                                                    false);
   if (new_syntax_valid) {
     // All done, the XML file is consistent with FaultManager.
     return true;
@@ -343,7 +343,7 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
       if (min_str  != nullptr &&
           max_str  != nullptr &&
           temp_str != nullptr ) {
-        double mean_val = strtod(temp_str, nullptr);
+        const double mean_val = strtod(temp_str, nullptr);
         rng.lower_limit = mean_val - std::abs(strtod(min_str, nullptr));
         rng.upper_limit = mean_val + std::strtod(max_str, nullptr);
       }

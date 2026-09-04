@@ -224,7 +224,7 @@ void
 StateInitializeWithPropagation::rk4_integration()
 {
   // Adjust the specified step size so that it hits the target perfectly
-  unsigned int num_steps(std::lround(std::abs( propagation_time / time_step)));
+  const unsigned int num_steps(std::lround(std::abs( propagation_time / time_step)));
   time_step = propagation_time / num_steps;
 
 
@@ -238,7 +238,7 @@ StateInitializeWithPropagation::rk4_integration()
   jeod::Vector3::copy( trans_init.velocity, integ_vel);
 
   for (unsigned int ii_step = 0; ii_step < num_steps; ii_step++) {
-    double time_from_env_config = ii_step * time_step - propagation_time;
+    const double time_from_env_config = ii_step * time_step - propagation_time;
     compute_planet_orientation( time_from_env_config);
 
     // initialize the interim velocities
@@ -314,8 +314,8 @@ void
 StateInitializeWithPropagation::compute_planet_orientation(
        double time )
 {
-  double cos_wt = std::cos( omega * time);
-  double sin_wt = std::sin( omega * time);
+  const double cos_wt = std::cos(omega * time);
+  const double sin_wt = std::sin(omega * time);
 
   T_initial_to_current[0][0] = cos_wt;
   T_initial_to_current[0][1] = sin_wt;

@@ -401,7 +401,7 @@ RocketMotor_MultiNozzle::update()
   // checked and enforced to be equal to the number of nozzles.
   // NOTE - num_noz != 0 verified at initialization, resulting in termination if
   // it failed.
-  double thrust_per_sf = thrust_magnitude / static_cast<double>(num_noz);
+  const double thrust_per_sf = thrust_magnitude / static_cast<double>(num_noz);
   // Start by initializing the system values to allow incremental accumulation
   jeod::Vector3::initialize(thrust);
   jeod::Vector3::initialize(thrust_vac);
@@ -431,7 +431,7 @@ RocketMotor_MultiNozzle::update()
       double new_position[3]; // For calculating moment
       jeod::Vector3::sum(pos_wrt_cm, motor_lin_flex + noz_num, new_position);
 
-      double rotang = jeod::Vector3::vmag(motor_rot_flex + noz_num);
+      const double rotang = jeod::Vector3::vmag(motor_rot_flex + noz_num);
       if (rotang > flex_threshold) {
         // Euler rotation: angle = vmag(motor_rot_flex_ii)
         //           unit vector = motor_rot_flex_ii / vmag(motor_rot_flex_ii)

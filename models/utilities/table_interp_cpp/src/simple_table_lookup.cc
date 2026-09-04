@@ -62,7 +62,7 @@ SimpleTableLookup::load_independent_data(
     return false;
   }
 
-  DoubleVec scratch(data_in, data_in+num_elements);
+  const DoubleVec scratch(data_in, data_in+num_elements);
   return load_independent_data( independent_variable,
                                 scratch,
                                 lookup,
@@ -219,8 +219,8 @@ SimpleTableLookup::load_dependent_data(
 
   // create a vector containing a single point being the address of the
   // dependent variable.
-  std::vector<double *> scratch_var(1, &dependent_var);
-  DoubleVec scratch_data(data, data+num_data_points);
+  const std::vector<double *> scratch_var(1, &dependent_var);
+  const DoubleVec scratch_data(data, data+num_data_points);
   return load_dependent_data( scratch_var,
                               scratch_data,
                               num_data_points,
@@ -235,7 +235,7 @@ SimpleTableLookup::load_dependent_data(
 {
   // create a vector containing a single point being the address of the
   // dependent variable.
-  std::vector<double *> scratch_var(1, &dependent_var);
+  const std::vector<double *> scratch_var(1, &dependent_var);
   return load_dependent_data( scratch_var,
                               data,
                               data.size(),
@@ -268,8 +268,8 @@ SimpleTableLookup::load_dependent_data(
   for (unsigned int ii = 0; ii < num_vars; ++ii) {
     scratch_vars[ii] = dependent_vars + ii;
   }
-  size_t num_data_points = num_data_points_per_variable * num_vars;
-  DoubleVec scratch_data(data, data+num_data_points);
+  const size_t num_data_points = num_data_points_per_variable * num_vars;
+  const DoubleVec scratch_data(data, data+num_data_points);
   return load_dependent_data( scratch_vars,
                               scratch_data,
                               num_data_points_per_variable,
@@ -315,8 +315,8 @@ SimpleTableLookup::load_dependent_data(
       "Data load failed.\n");
     return false;
   }
-  size_t num_data_points = num_data_points_per_variable * dependent_vars.size();
-  DoubleVec scratch_data(data, data+num_data_points);
+  const size_t num_data_points = num_data_points_per_variable * dependent_vars.size();
+  const DoubleVec scratch_data(data, data+num_data_points);
   return load_dependent_data( dependent_vars,
                               scratch_data,
                               num_data_points_per_variable,
@@ -333,7 +333,7 @@ SimpleTableLookup::load_dependent_data(
   // NOTE - ultimately all other options come through this version of
   // load_dependent_data.  The others just massage the inputs until they look
   // like these inputs and then come here anyway.
-  size_t num_deps = dependent_vars.size();
+  const size_t num_deps = dependent_vars.size();
   if (num_deps < 1 || num_data_points_per_variable < 1) {
     CMLMessage::error(
       __FILE__,__LINE__,"Data error:\n",
@@ -344,7 +344,7 @@ SimpleTableLookup::load_dependent_data(
   }
 
   // Check size of data:
-  size_t target_size =  num_deps * num_data_points_per_variable;
+  const size_t target_size =  num_deps * num_data_points_per_variable;
   if (data.size() < target_size) {
     CMLMessage::error(
       __FILE__,__LINE__,"Data error:\n",

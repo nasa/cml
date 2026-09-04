@@ -246,7 +246,7 @@ Purpose:(Returns a pointer to the vent at specified index)
 *****************************************************************************/
 SimpleVent * VentSet::get_vent(size_t ii)
 {
-  size_t vents_size = vents.size();
+  const size_t vents_size = vents.size();
   if (ii < vents_size) {
     return vents[ii];
   }
@@ -399,7 +399,7 @@ void VentSet::apply_impulse_to_body(jeod::DynBody & root_body)
   Q_this_parent.left_quat_transform(lin_impulse, lin_impulse_inertial);
                                                    // now in inertial frame
 
-  double inverse_mass =
+  const double inverse_mass =
               MathUtils::divide_protected(1,
                                           root_body.mass.composite_properties.mass,
                                           0.0,

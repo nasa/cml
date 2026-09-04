@@ -261,7 +261,7 @@ Purpose:(Split behavior based on whether the template class variable type
       event_triggered = (var_val > ref_val);
     }
     else if (direction == Both) { // Either direction
-      double this_delta =  var_val - ref_val;
+      const double this_delta =  var_val - ref_val;
       event_triggered = (this_delta * delta_record < 0);
 
       if (std::abs(this_delta) > 0.0) {

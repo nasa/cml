@@ -118,7 +118,7 @@ DynamicMassString::distribute_mass_consumption()
     for (auto it = available_bodies.begin();
               it != available_bodies.end(); ++it) {
       DynamicMassBodyProperties & body_properties = (*it)->dynamic_properties;
-      double mass_available = body_properties.consumable_mass -
+      const double mass_available = body_properties.consumable_mass -
                               body_properties.mass_consumed_step;
       // Normally - there is enough mass in each body to supply its demands
       // Add the mass_per to the mass consumed by that body

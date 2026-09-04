@@ -532,7 +532,7 @@ AeroExecutiveTable::aero_forces_moments()
   //*****************************************************************
   //   Compute the aerodynamic forces along the body axes
   //*****************************************************************
-  double pA =  environment.get_dynamic_pressure() * Aref;
+  const double pA =  environment.get_dynamic_pressure() * Aref;
   output.force[0] =  coefficients.CX * pA;
   output.force[1] =  coefficients.CY * pA;
   output.force[2] =  coefficients.CZ * pA;
@@ -563,7 +563,7 @@ AeroExecutiveTable::aero_forces_moments()
 
   // Include the effects of rotational aerodynamic damping
   if ( aero_damping_in_table  && !disable_aero_damping) {
-    double fsv_mag = environment.get_free_stream_vel_mag();
+    const double fsv_mag = environment.get_free_stream_vel_mag();
     if (fsv_mag > threshold_min_free_stream_vel_mag) {
       //   If fsv_mag is small, L_over_V is large, the coefficients get large
       //   and thus the torque gets large. Dimensionally, this is correct, and
@@ -573,7 +573,7 @@ AeroExecutiveTable::aero_forces_moments()
       //   Added a safety threshold, set at construction time to prevent this
       //   from blowing up when unexpected winds produce small momentary
       //   free-stream velocities.
-      double L_over_V = Lref / (static_cast<double>(l_over_v_scale) * fsv_mag);
+      const  double L_over_V = Lref / (static_cast<double>(l_over_v_scale) * fsv_mag);
       double body_rate_aero_frm[3];
       jeod::Vector3::transform( T_body_to_aero_frame,
                           environment.get_true_body_rates(),
@@ -593,7 +593,7 @@ AeroExecutiveTable::aero_forces_moments()
                               L_over_V;
     }
   }
-  double pAL = pA *  Lref;
+  const double pAL = pA * Lref;
   /* About the CG */
   output.torque[0] =  coefficients.Cl_cg * pAL;
   output.torque[1] =  coefficients.Cm_cg * pAL;

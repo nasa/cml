@@ -377,7 +377,7 @@ RcsGeneric::compute_force_and_fuel()
 
     (**jet_it).compute_prop_consumption();
     for (unsigned int ii = 0; ii < num_propellant_components; ++ii) {
-      double jet_component_step_consump =
+      const double jet_component_step_consump =
                            (**jet_it).get_component_consumption(ii);
       sum_component_consumptions[ii] += jet_component_step_consump;
       sum_consumption += jet_component_step_consump;
