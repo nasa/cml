@@ -138,15 +138,15 @@ Purpose:(
    Passes char* straight back,
    Rejects everything else.
 *****************************************************************************/
-const char * XmlHelper::xml_convert_ptr( [[maybe_unused]] const void* in)
+const char * XmlHelper::xml_convert_ptr( [[maybe_unused]] const void* ptr)
 {
   return nullptr;
 }
-const char * XmlHelper::xml_convert_ptr( const char* in)
+const char * XmlHelper::xml_convert_ptr( const char* ptr)
 {
-  return in;
+  return ptr;
 }
-const char * XmlHelper::xml_convert_ptr( const unsigned char* in)
+const char * XmlHelper::xml_convert_ptr( const unsigned char* ptr)
 {
-  return reinterpret_cast<const char *>(in);
+  return reinterpret_cast<const char *>(ptr);
 }

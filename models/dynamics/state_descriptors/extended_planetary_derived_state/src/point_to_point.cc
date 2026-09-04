@@ -116,28 +116,6 @@ PointToPointManager::PointToPointManager(
 {}
 
 /*****************************************************************************
-Copy-constructors
-*****************************************************************************/
-PointToPointElement::PointToPointElement(
-    const PointToPointElement & original)
-  :
-  name(original.name)
-{
-  jeod::Vector3::copy( original.position, position);
-}
-/****************************************************************************/
-PointToPointPosition::PointToPointPosition(
-    const PointToPointPosition & original)
-  :
-  v_name( original.v_name),
-  p_name( original.p_name)
-{
-  jeod::Vector3::copy( original.position, position);
-  jeod::Vector3::copy( original.v_pos, v_pos);
-  jeod::Vector3::copy( original.p_pos, p_pos);
-}
-
-/*****************************************************************************
 check_names
 Purpose:
   Verify whether this instance has the 2 specified names.  Used to find the

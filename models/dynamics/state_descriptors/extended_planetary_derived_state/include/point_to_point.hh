@@ -49,7 +49,8 @@ class PointToPointElement
   std::string name; /* (--) the name of the point. */
   PointToPointElement( std::string name_,
                        double      position_[3]);
-  PointToPointElement( const PointToPointElement & original);
+  PointToPointElement( const PointToPointElement &) = default;
+  PointToPointElement& operator=(const PointToPointElement &) = default;
   virtual ~PointToPointElement() = default;
   // Accept default operator=; it isn't used in the implementation.
 };
@@ -85,7 +86,8 @@ class PointToPointPosition
  public:
   PointToPointPosition( std::string v_name_,
                         std::string p_name_);
-  explicit PointToPointPosition( const PointToPointPosition & original);
+  PointToPointPosition( const PointToPointPosition &) = default;
+  PointToPointPosition& operator=(const PointToPointPosition &) = default;
   virtual ~PointToPointPosition() = default;
   // Accept default operator=; it isn't used in the implementation.
 
