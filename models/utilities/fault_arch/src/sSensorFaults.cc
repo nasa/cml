@@ -67,7 +67,7 @@ Purpose:
 bool
 sSensorFaults::parse_non_periodic_param( FaultFunctionParameter& params,
                                          xmlNodePtr              function_node,
-                                         const char*             fault_name)
+                                         const std::string&      fault_name)
 {
   xmlNodePtr params_node =
       XmlHelper::xml_find_child(function_node, "Parameters");
@@ -80,8 +80,8 @@ sSensorFaults::parse_non_periodic_param( FaultFunctionParameter& params,
       "This fault will be ignored.\n");
     return false;
   }
-  const char* temp_string = XmlHelper::xml_find_value(params_node, "a");
-  if (temp_string == nullptr) {
+  std::string temp_string = XmlHelper::xml_find_value(params_node, "a");
+  if (temp_string.empty()) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> was defined as a Linear FUNCTION type but the\n"
@@ -91,13 +91,13 @@ sSensorFaults::parse_non_periodic_param( FaultFunctionParameter& params,
       "This fault will be ignored.\n");
     return false;
   }
-  params.rate = strtod(temp_string, nullptr);
+  params.rate = strtod(temp_string.c_str(), nullptr);
   // If "b" is not specified, it defaults to 0 without comment.
   temp_string = XmlHelper::xml_find_value(params_node, "b");
-  if (temp_string == nullptr) {
+  if (temp_string.empty()) {
     params.nominal = 0;
   } else {
-    params.nominal = strtod(temp_string, nullptr);
+    params.nominal = strtod(temp_string.c_str(), nullptr);
   }
   return true;
 }
@@ -110,9 +110,9 @@ Purpose:(Parses a Frequency, Amplitude, or PhaseOffset node.)
 bool
 sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
                                      xmlNodePtr               function_node,
-                                     const char*              param_name,
+                                     const std::string&       param_name,
                                      xmlNodePtr               ind_var_node,
-                                     const char*              fault_name,
+                                     const std::string&       fault_name,
                                      bool                     nom_required)
 {
   // First check for a syntax compatible with FaultManager
@@ -137,8 +137,8 @@ sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
   // has been changed to "PhaseOffset". So look for "phase" instead of
   // "PhaseOffset" in the old syntax.
   char phase[] = "Phase"; // old style
-  const char * param_name_ = param_name;
-  if (strcmp (param_name, "PhaseOffset") == 0) {
+  std::string param_name_ = param_name;
+  if (param_name == "PhaseOffset") {
     param_name_ = phase;
   }
 
@@ -162,10 +162,10 @@ sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
 
 
   // Allow lower-case and upper-case on first character to be equivalent
-  const char* value_string = XmlHelper::xml_find_value( param_node,
+  std::string value_string = XmlHelper::xml_find_value( param_node,
                                                         param_name_,
                                                         true);
-  if (value_string == nullptr) {
+  if (value_string.empty()) {
     if (nom_required) {
       CMLMessage::error(__FILE__,__LINE__,
         "XML input error parsing fault configuration\n",
@@ -178,7 +178,7 @@ sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
   }
 
   // else
-  param.nominal = strtod(value_string, nullptr);
+  param.nominal = strtod(value_string.c_str(), nullptr);
 
   // Optional: make the parameter a linear function of some independent
   // variable.
@@ -194,7 +194,7 @@ sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
 
   value_string = XmlHelper::xml_find_value(var_node, "scalar");
 
-  if (value_string == nullptr) {
+  if (value_string.empty()) {
     // No rate specified, no point in going on to look for an independent
     // variable.
     CMLMessage::error(__FILE__,__LINE__,
@@ -207,7 +207,7 @@ sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
       "This may not be intended behavior, proceed with caution.\n");
     return true;
   }
-  param.rate = strtod(value_string, nullptr);
+  param.rate = strtod(value_string.c_str(), nullptr);
 
   // Now look for the independent variable.
   xmlNodePtr variable_node = XmlHelper::xml_find_child( var_node,
@@ -273,11 +273,11 @@ Purpose:
   distribution is not specified, it defaults to GAUSSIAN as it did in
   FaultArch.
 *******************************************************************************/
-bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
-                                       xmlNodePtr        rand_node,
-                                       const char*       fault_name)
+bool sSensorFaults::parse_rand_number( FaultRandNumber&   rng,
+                                       xmlNodePtr         rand_node,
+                                       const std::string& fault_name)
 {
-  const char* temp_str = XmlHelper::xml_find_value(rand_node, "distribution");
+  std::string temp_str = XmlHelper::xml_find_value(rand_node, "distribution");
   // Assume GAUSSIAN
   // Note -- the FaultArch mechanism supported specification of random
   // parameters through a Params node for a random-walk Fault.
@@ -288,8 +288,8 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
   // "distribution" field.
   // Thus we cannot use FaultManager::parse_random_number(...).
   rng.distribution_type = FaultRandNumber::GAUSSIAN;
-  if (temp_str != nullptr &&
-      strcmp(temp_str, "FLAT") == 0) {
+  if (!temp_str.c_str() &&
+      strcmp(temp_str.c_str(), "FLAT") == 0) {
     rng.distribution_type = FaultRandNumber::FLAT;
   }
 
@@ -297,8 +297,8 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
   // specified; mean is optional, it defaults to 0.0 if not specified.
   if ( rng.distribution_type == FaultRandNumber::GAUSSIAN) {
     temp_str = XmlHelper::xml_find_value(rand_node, "std_dev");
-    if (temp_str != nullptr) {
-      rng.std_dev = strtod(temp_str, nullptr);
+    if (!temp_str.empty()) {
+      rng.std_dev = strtod(temp_str.c_str(), nullptr);
     } else {
       CMLMessage::error( __FILE__, __LINE__,
         "XML input error parsing randomized configuration.\n",
@@ -310,8 +310,8 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
     }
 
     temp_str = XmlHelper::xml_find_value(rand_node, "mean");
-    if ( temp_str != nullptr) {
-      rng.mean = strtod(temp_str, nullptr);
+    if ( !temp_str.empty()) {
+      rng.mean = strtod(temp_str.c_str(), nullptr);
     } else {
       CMLMessage::warn(__FILE__, __LINE__,
         "XML input missing while parsing randomized "
@@ -326,13 +326,13 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
   // For FLAT distribution, can have either (min,max), or
   // (rel_min, mean, rel_max).
   else if ( rng.distribution_type == FaultRandNumber::FLAT) {
-    const char* min_str = XmlHelper::xml_find_value(rand_node, "min");
-    const char* max_str = XmlHelper::xml_find_value(rand_node, "max");
+    std::string min_str = XmlHelper::xml_find_value(rand_node, "min");
+    std::string max_str = XmlHelper::xml_find_value(rand_node, "max");
     // if min and max found, use them:
-    if (min_str != nullptr &&
-        max_str != nullptr) {
-      rng.lower_limit = strtod(min_str, nullptr);
-      rng.upper_limit = strtod(max_str, nullptr);
+    if (!min_str.empty() &&
+        !max_str.empty()) {
+      rng.lower_limit = strtod(min_str.c_str(), nullptr);
+      rng.upper_limit = strtod(max_str.c_str(), nullptr);
     }
 
     // else, look for a the (rel_min, mean, rel_max) option:
@@ -340,12 +340,12 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
       min_str  = XmlHelper::xml_find_value(rand_node, "rel_min");
       max_str  = XmlHelper::xml_find_value(rand_node, "rel_max");
       temp_str = XmlHelper::xml_find_value(rand_node, "mean");
-      if (min_str  != nullptr &&
-          max_str  != nullptr &&
-          temp_str != nullptr ) {
-        const double mean_val = strtod(temp_str, nullptr);
-        rng.lower_limit = mean_val - std::abs(strtod(min_str, nullptr));
-        rng.upper_limit = mean_val + std::strtod(max_str, nullptr);
+      if (!min_str.empty() &&
+          !max_str.empty() &&
+          !temp_str.empty() ) {
+        const double mean_val = strtod(temp_str.c_str(), nullptr);
+        rng.lower_limit = mean_val - std::abs(strtod(min_str.c_str(), nullptr));
+        rng.upper_limit = mean_val + std::strtod(max_str.c_str(), nullptr);
       }
       else {
         CMLMessage::error(__FILE__, __LINE__,
@@ -371,8 +371,8 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
   //   value and use a flag to indicate whether the seed has been set, rather
   //   than testing whether (seed==0).
   temp_str = XmlHelper::xml_find_value(rand_node, "seed");
-  if (temp_str != nullptr) {
-    rng.seed = std::strtoul(temp_str, nullptr, 10);
+  if (!temp_str.empty()) {
+    rng.seed = std::strtoul(temp_str.c_str(), nullptr, 10);
   }
 
   return true;

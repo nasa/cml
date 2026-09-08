@@ -203,7 +203,7 @@ public:
   void set_name( const std::string &new_name);
 
   size_t get_size() const {return size;}
-  const char * get_name_char() const {return name.c_str();}
+  const std::string& get_name_char() const {return name.c_str();}
   const std::string& get_name() const { return name;}
   bool get_initialized() const { return initialized;}
   size_t get_index() const { return index;}

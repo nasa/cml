@@ -155,8 +155,8 @@ public:
    void set_inertia_structural_cg_flag(bool flag);
 
 protected:
-   void warn_no_interp(const char* const table_name);
-   void warn_no_data(const char* const table_name);
+   void warn_no_interp(const std::string& table_name);
+   void warn_no_data(const std::string& table_name);
 
 private:
    bool interp_position_master; /* (--)

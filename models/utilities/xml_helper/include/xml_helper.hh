@@ -14,21 +14,20 @@ PROGRAMMERS:
 #ifndef CML_XML_HELPER_HH
 #define CML_XML_HELPER_HH
 
+#include <string>
 #include <libxml/parser.h>
 
 class XmlHelper {
  public:
-  static xmlNodePtr xml_find(        xmlNodePtr node, const char* name);
-  static xmlNodePtr xml_find_child(  xmlNodePtr node, const char* name);
-  static xmlNodePtr xml_find_progeny(xmlNodePtr node, const char* name);
-  static const char* xml_find_value( xmlNodePtr node,
-                                     const char* name,
+  static xmlNodePtr xml_find(        xmlNodePtr node, const std::string& name);
+  static xmlNodePtr xml_find_child(  xmlNodePtr node, const std::string& name);
+  static xmlNodePtr xml_find_progeny(xmlNodePtr node, const std::string& name);
+  static std::string xml_find_value( xmlNodePtr node,
+                                     const std::string& name,
                                      bool allow_case = false);
-  static bool xml_name_match(        xmlNodePtr node, const char* name);
+  static bool xml_name_match(        xmlNodePtr node, const std::string& name);
 
-  static const char * xml_convert_ptr (const void *);
-  static const char * xml_convert_ptr (const char *);
-  static const char * xml_convert_ptr (const unsigned char *);
+  static const std::string xml_convert_ptr (const void *);
 };
 
 #endif

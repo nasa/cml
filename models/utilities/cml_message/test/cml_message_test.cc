@@ -41,7 +41,7 @@ TEST(CMLMessage, InterfaceMethods) {
 
     const int ii = 4;
     const std::string part2 = "is a collection of ";
-    const char* part3 = " arguments";
+    const std::string part3 = " arguments";
     const std::string expected = "This is a collection of 4 arguments";
 
     CMLMessage::set_publish_level(CMLMessage::Debug);

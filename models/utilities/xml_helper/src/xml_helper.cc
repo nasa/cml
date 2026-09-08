@@ -12,17 +12,18 @@ PROGRAMMERS:
 #include <cctype>
 #include <libxml/tree.h>
 #include <string>
+#include <sstream>
 
 /*******************************************************************************
 xml_find
 Purpose:(Finds an XML node with the given name at the same level as the
 specified node.)
 *******************************************************************************/
-xmlNodePtr XmlHelper::xml_find(xmlNodePtr node, const char* name) {
-  if (!node || !name) return nullptr;
+xmlNodePtr XmlHelper::xml_find(xmlNodePtr node, const std::string& name) {
+  if (!node || !name.empty()) return nullptr;
 
   for(; node; node=node->next) {
-    if(xml_name_match(node, name)) {
+    if(xml_name_match(node, name.c_str())) {
       return node;
     }
   }
@@ -34,8 +35,8 @@ xmlNodePtr XmlHelper::xml_find(xmlNodePtr node, const char* name) {
 xml_find_child
 Purpose:(Finds a child XML node with the given name.)
 *******************************************************************************/
-xmlNodePtr XmlHelper::xml_find_child(xmlNodePtr node, const char* name) {
-  if (!node || !name) return nullptr;
+xmlNodePtr XmlHelper::xml_find_child(xmlNodePtr node, const std::string& name) {
+  if (!node || !name.empty()) return nullptr;
 
   return xml_find(node->children, name);
 }
@@ -49,8 +50,8 @@ Purpose:
    generation below the specified node; this method will search through the
    entire subtree through all generations.)
 *****************************************************************************/
-xmlNodePtr XmlHelper::xml_find_progeny(xmlNodePtr node, const char* name) {
-  if (!node || !name) return nullptr;
+xmlNodePtr XmlHelper::xml_find_progeny(xmlNodePtr node, const std::string& name) {
+  if (!node || !name.empty()) return nullptr;
 
   xmlNodePtr found_node = nullptr;
   xmlNodePtr search_node = node->children;
@@ -70,12 +71,12 @@ xmlNodePtr XmlHelper::xml_find_progeny(xmlNodePtr node, const char* name) {
 xml_find_value
 Purpose:(Finds the value of a property of an XML node.)
 *******************************************************************************/
-const char* XmlHelper::xml_find_value(
+std::string XmlHelper::xml_find_value(
   xmlNodePtr node,
-  const char* name,
+  const std::string& name,
   bool allow_case)
 {
-  if (!node || !name) return nullptr;
+  if (!node || !name.empty()) return nullptr;
 
   for(xmlAttrPtr val = node->properties; val; val = val->next) {
     // XML uses unsigned chars to represent strings, but it is much more
@@ -85,7 +86,7 @@ const char* XmlHelper::xml_find_value(
     // directly, and reinterpret cast on unsigned char*, and disallowing all
     // else, just in case.
     if (val->name && val->children) {
-      if(strcmp(xml_convert_ptr(val->name), name) == 0) {
+      if(xml_convert_ptr(val->name) == name) {
         return xml_convert_ptr(val->children->content);
       }
       // If that failed, try changing the case on the first character if
@@ -112,11 +113,11 @@ const char* XmlHelper::xml_find_value(
 xml_name_match
 Purpose:(Checks if an XML node has the given name.)
 *******************************************************************************/
-bool XmlHelper::xml_name_match(xmlNodePtr node, const char* name) {
-  if (!node || !name) return false;
+bool XmlHelper::xml_name_match(xmlNodePtr node, const std::string& name) {
+  if (!node || !name.empty()) return false;
 
   // See the comment in xml_find_value
-  return strcmp(xml_convert_ptr(node->name), name) == 0;
+  return (xml_convert_ptr(node->name)) == name;
 }
 
 
@@ -128,15 +129,14 @@ Purpose:(
    Passes char* straight back,
    Rejects everything else.
 *****************************************************************************/
-const char * XmlHelper::xml_convert_ptr( const void* )
+const std::string XmlHelper::xml_convert_ptr( const void* ptr)
 {
-  return nullptr;
-}
-const char * XmlHelper::xml_convert_ptr( const char* in)
-{
-  return in;
-}
-const char * XmlHelper::xml_convert_ptr( const unsigned char* in)
-{
-  return reinterpret_cast<const char *>(in);
+  if (ptr == nullptr) 
+  {
+    return nullptr;
+  }
+
+  std::ostringstream ss;
+  ss << ptr;
+  return ss.str();
 }

@@ -64,13 +64,13 @@ class TriggerBase {
       Invalid
     };
 
-    static Operator_enm translate_operator(const char* str) {
-      if     (strcmp(str, "LT") == 0) {return LT;}
-      else if (strcmp(str, "LE") == 0) {return LE;}
-      else if (strcmp(str, "EQ") == 0) {return EQ;}
-      else if (strcmp(str, "GE") == 0) {return GE;}
-      else if (strcmp(str, "GT") == 0) {return GT;}
-      else if (strcmp(str, "NE") == 0) {return NE;}
+    static Operator_enm translate_operator(const std::string& str) {
+      if     (strcmp(str.c_str(), "LT") == 0) {return LT;}
+      else if (strcmp(str.c_str(), "LE") == 0) {return LE;}
+      else if (strcmp(str.c_str(), "EQ") == 0) {return EQ;}
+      else if (strcmp(str.c_str(), "GE") == 0) {return GE;}
+      else if (strcmp(str.c_str(), "GT") == 0) {return GT;}
+      else if (strcmp(str.c_str(), "NE") == 0) {return NE;}
       else {return Invalid;}
     }
 

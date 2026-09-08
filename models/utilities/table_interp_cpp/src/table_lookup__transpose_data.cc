@@ -444,13 +444,6 @@ Purpose:(Returns a pointer to one of the entries in table_config.
          Used for accessing elements by name to edit pre-set values.)
 *****************************************************************************/
 TableLookupTransposeDataSet_TableConfig *
-TableLookupTransposeDataSet::get_config( const char * name_in)
-{
-  const std::string search_name(name_in);
-  return get_config( search_name);
-}
-/****************************************************************************/
-TableLookupTransposeDataSet_TableConfig *
 TableLookupTransposeDataSet::get_config( const std::string & name_in)
 {
 

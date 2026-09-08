@@ -56,7 +56,7 @@ struct XmlHelperTester {
          branch_node != nullptr;
          branch_node = branch_node->next) {
       // Note - the first child might be a dummy text-node with no purpose.
-      const char* purpose = XmlHelper::xml_find_value( branch_node, "purpose",true);
+      const std::string purpose = XmlHelper::xml_find_value( branch_node, "purpose",true);
       if (purpose) {
         node_count++;
         std::cout << "Purpose of node "<< node_count <<" is: "<<
@@ -68,7 +68,7 @@ struct XmlHelperTester {
       error_report();
     }
     xmlNodePtr node2 = root_node->children->next->next->next;
-    const char* purpose = XmlHelper::xml_find_value( node2, "purpose",true);
+    const std::string purpose = XmlHelper::xml_find_value( node2, "purpose",true);
     std::cout << "Verifying node2: " << purpose << "\n";
 
     xmlNodePtr node3 = node2->next->next;
@@ -221,7 +221,7 @@ struct XmlHelperTester {
   void code_coverage() {
     double x = 1.0;
     char c[2] = "a";
-    const char * ptr = XmlHelper::xml_convert_ptr( &x);
+    const std::string ptr = XmlHelper::xml_convert_ptr( &x);
     if (ptr != nullptr) error_report();
     ptr = XmlHelper::xml_convert_ptr( c);
     if (strcmp(ptr,c) !=0)  error_report();

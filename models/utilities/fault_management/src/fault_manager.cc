@@ -378,8 +378,8 @@ Purpose:(Parses a fault node.)
 *******************************************************************************/
 void FaultManager::parse_fault( xmlNodePtr fault_node) {
   // Parse out the fault name
-  const char* fault_name = XmlHelper::xml_find_value(fault_node, "ID");
-  if (fault_name == nullptr) {
+  const std::string fault_name = XmlHelper::xml_find_value(fault_node, "ID");
+  if (fault_name.empty()) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "A fault does not have an ID name. All faults must have a unique ID "
@@ -396,8 +396,8 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
   }
 
   // Check for valid location string
-  const char* loc_string = XmlHelper::xml_find_value(fault_node, "loc");
-  if (loc_string == nullptr) {
+  const std::string loc_string = XmlHelper::xml_find_value(fault_node, "loc");
+  if (loc_string.empty()) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault named <", fault_name, "> does not have an injection location.\n"
@@ -425,8 +425,8 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
       "This Fault will be ignored.\n");
     return;
   }
-  const char* sim_var_name = XmlHelper::xml_find_value(sim_var, "name");
-  if (sim_var_name == nullptr) {
+  const std::string sim_var_name = XmlHelper::xml_find_value(sim_var, "name");
+  if (sim_var_name.empty()) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> is missing the \"name\" field in \"SimVar\".\n"
@@ -502,10 +502,10 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
       // Checking on type is provided in make_fault, but make_fault is bypassed
       // for boolean types because they have additional restrictions.
       // So have to check type separately.
-      const char* fault_type = XmlHelper::xml_find_value( fault_node,
-                                                          "type",
-                                                          true);
-      if (fault_type == nullptr) {
+      const std::string fault_type = XmlHelper::xml_find_value( fault_node,
+                                                                "type",
+                                                                true);
+      if (fault_type.empty()) {
         CMLMessage::error(__FILE__,__LINE__,
           "XML input error parsing fault configuration\n",
           "The fault <", fault_name, "> does not have a specified fault-type.\n"
@@ -514,11 +514,11 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
         return;
       }
       bool& boolvar = *static_cast<bool*>(Symbol->address);
-      if (strcmp(fault_type, "OVERWRITE") == 0) {
+      if (fault_type == "OVERWRITE") {
         new_fault = make_fault_overwrite<bool>( fault_node,
                                                 boolvar,
                                                 fault_name);
-      } else if (strcmp(fault_type, "STALE") == 0) {
+      } else if (fault_type == "STALE") {
         new_fault = new FaultStale<bool>(boolvar);
       } else {
         CMLMessage::error(__FILE__,__LINE__,
@@ -543,17 +543,17 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
 
   // Optional parameters
   new_fault->name.assign(fault_name);
-  const char* enabled_str = XmlHelper::xml_find_value(fault_node, "enabled");
+  const std::string enabled_str = XmlHelper::xml_find_value(fault_node, "enabled");
   // If enabled option is not present, default to enabled.
-  new_fault->enabled = enabled_str == nullptr ||
+  new_fault->enabled = enabled_str.empty() ||
     ConvertString::convert<bool>(enabled_str);
 
   // Limit on number of frames the fault can be triggered
-  const char* fire_limit_string =
+  const std::string fire_limit_string =
     XmlHelper::xml_find_value(fault_node, "fire_limit");
-  if (fire_limit_string != nullptr) {
+  if (!fire_limit_string.c_str()) {
     new_fault->is_fire_limited = true;
-    new_fault->fire_limit = std::strtoul(fire_limit_string, nullptr, 10);
+    new_fault->fire_limit = std::strtoul(fire_limit_string.c_str(), nullptr, 10);
   }
 
   for (xmlNodePtr trigger_group_node = fault_node->children;
@@ -578,8 +578,8 @@ get_trick_variable
 Purpose:(Gets a Trick Reference from a variable name and checks that the
          variable is not a pointer.)
 *******************************************************************************/
-REF2* FaultManager::get_trick_variable( const char* variable_name) {
-  REF2* Symbol = trick_MM->ref_attributes(variable_name);
+REF2* FaultManager::get_trick_variable( const std::string& variable_name) {
+  REF2* Symbol = trick_MM->ref_attributes(variable_name.c_str());
   if (Symbol == nullptr) {
     CMLMessage::error(
       __FILE__, __LINE__,"Trick lookup error parsing variable name\n",
@@ -609,12 +609,12 @@ Purpose:(Determines the type of a fault.)
 template<typename T> Fault* FaultManager::make_fault(
   xmlNodePtr  fault_node,
   T&          variable,
-  const char* fault_name)
+  const std::string& fault_name)
 {
-  const char* fault_type = XmlHelper::xml_find_value( fault_node,
-                                                      "type",
-                                                      true);
-  if (fault_type == nullptr) {
+  const std::string fault_type = XmlHelper::xml_find_value( fault_node,
+                                                            "type",
+                                                            true);
+  if (fault_type.empty()) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> does not have a specified fault-type.\n"
@@ -624,15 +624,15 @@ template<typename T> Fault* FaultManager::make_fault(
   }
 
   Fault* new_fault = nullptr;
-  if (strcmp(fault_type, "BIAS") == 0) {
+  if (fault_type == "BIAS") {
     new_fault = make_fault_bias<T>(fault_node, variable, fault_name);
-  } else if (strcmp(fault_type, "SCALE") == 0) {
+  } else if (fault_type == "SCALE") {
     new_fault = make_fault_scale<T>(fault_node, variable, fault_name);
-  } else if (strcmp(fault_type, "OVERWRITE") == 0) {
+  } else if (fault_type == "OVERWRITE") {
     new_fault = make_fault_overwrite<T>(fault_node, variable, fault_name);
-  } else if (strcmp(fault_type, "STALE") == 0) {
+  } else if (fault_type == "STALE") {
     new_fault = new FaultStale<T>(variable);
-  } else if (strcmp(fault_type, "FUNCTION") == 0) {
+  } else if (fault_type == "FUNCTION") {
     FaultFunctionBase* function_fault = new FaultFunction<T>(variable);
     if (populate_fault_function(function_fault, fault_node, fault_name)) {
       new_fault = function_fault;
@@ -640,9 +640,9 @@ template<typename T> Fault* FaultManager::make_fault(
       delete function_fault;
       new_fault = nullptr;
     }
-  } else if (strcmp(fault_type, "WHITENOISE") == 0) {
+  } else if (fault_type == "WHITENOISE") {
     new_fault = make_fault_white_noise<T>(fault_node, variable, fault_name);
-  } else if (strcmp(fault_type, "RANDOMWALK") == 0) {
+  } else if (fault_type == "RANDOMWALK") {
     new_fault = make_fault_random_walk<T>(fault_node, variable, fault_name);
   } else {
     CMLMessage::error(__FILE__,__LINE__,
@@ -662,10 +662,10 @@ Purpose:(Constructs a bias fault.)
 template<typename T> Fault* FaultManager::make_fault_bias(
   xmlNodePtr  fault_node,
   T&          variable,
-  const char* fault_name)
+  const std::string& fault_name)
 {
   // Get the Bias value.
-  const char* bias_string = nullptr;
+  std::string bias_string;
   xmlNodePtr bias_node = XmlHelper::xml_find_child(fault_node, "Bias");
   if (bias_node == nullptr) {
     CMLMessage::error(__FILE__,__LINE__,
@@ -677,7 +677,7 @@ template<typename T> Fault* FaultManager::make_fault_bias(
   }
 
   bias_string = XmlHelper::xml_find_value(bias_node, "value");
-  if (bias_string == nullptr) {
+  if (bias_string.empty()) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> has no value specified in its Bias child node.\n"
@@ -698,9 +698,9 @@ make_fault_scale
 Purpose:(Constructs a scale fault.)
 *******************************************************************************/
 template<typename T> Fault* FaultManager::make_fault_scale(
-  xmlNodePtr  fault_node,
-  T&          variable,
-  const char* fault_name)
+  xmlNodePtr         fault_node,
+  T&                 variable,
+  const std::string& fault_name)
 {
   // Get the Scale value.
   xmlNodePtr scale_node = XmlHelper::xml_find_child(fault_node, "Scale");
@@ -713,9 +713,9 @@ template<typename T> Fault* FaultManager::make_fault_scale(
     return nullptr;
   }
 
-  const char* scale_string = nullptr;
+  std::string scale_string;
   scale_string = XmlHelper::xml_find_value(scale_node, "value");
-  if (scale_string == nullptr) {
+  if (scale_string.empty()) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> has no value specified in its Scale child node.\n"
@@ -736,9 +736,9 @@ make_fault_overwrite
 Purpose:(Constructs an overwrite fault.)
 *******************************************************************************/
 template<typename T> Fault* FaultManager::make_fault_overwrite(
-  xmlNodePtr  fault_node,
-  T&          variable,
-  const char* fault_name)
+  xmlNodePtr         fault_node,
+  T&                 variable,
+  const std::string& fault_name)
 {
   bool random_value = false;
   bool overwrite_value = false;
@@ -750,12 +750,12 @@ template<typename T> Fault* FaultManager::make_fault_overwrite(
   xmlNodePtr overwrite_node = XmlHelper::xml_find_child(fault_node, "Overwrite");
 
   // If found the Overwrite-node, extract the Overwrite-value from it.
-  const char* overwrite_string = nullptr;
+  std::string overwrite_string;
   if (overwrite_node != nullptr) {
     overwrite_string = XmlHelper::xml_find_value(overwrite_node, "value");
   }
   // Identify whether we got a configured Overwrite-value
-  overwrite_value = (overwrite_string!=nullptr);
+  overwrite_value = (!overwrite_string.empty());
 
   // Now check for the RandValue node.
   xmlNodePtr rand_node = XmlHelper::xml_find_child(fault_node, "RandValue");
@@ -832,7 +832,7 @@ Purpose:(Populates a function fault. Called from make_fault, from parse_fault.)
 bool FaultManager::populate_fault_function(
   FaultFunctionBase* new_fault,
   xmlNodePtr         fault_node,
-  const char*        fault_name)
+  const std::string& fault_name)
 {
   // Check for existence of the Function node.
   xmlNodePtr function_node = XmlHelper::xml_find_child(fault_node, "Function");
@@ -848,10 +848,10 @@ bool FaultManager::populate_fault_function(
 
   // Check for population of the Function node
   // Test 1: is type specified and valid
-  const char* function_type_string = XmlHelper::xml_find_value( function_node,
-                                                                "type",
-                                                                true);
-  if (function_type_string == nullptr) {
+  const std::string function_type_string = XmlHelper::xml_find_value( function_node,
+                                                                      "type",
+                                                                      true);
+  if (function_type_string.empty()) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> is declared as type FUNCTION but the configuration\n"
@@ -864,17 +864,17 @@ bool FaultManager::populate_fault_function(
   // Use the is_periodic_function flag to separate LINEAR from
   // SINE/SQUARE/TRIANGLE in later processing.
   bool is_periodic_function = true;
-  if (strcmp(function_type_string, "LINEAR") == 0) {
+  if (function_type_string == "LINEAR") {
     is_periodic_function = false;
     new_fault->type = FaultFunctionBase::Linear;
   }
-  else if (strcmp(function_type_string, "SINEWAVE") == 0) {
+  else if (function_type_string, "SINEWAVE") {
     new_fault->type = FaultFunctionBase::Sinewave;
   }
-  else if (strcmp(function_type_string, "SQUAREWAVE") == 0) {
+  else if (function_type_string, "SQUAREWAVE") {
     new_fault->type = FaultFunctionBase::Squarewave;
   }
-  else if (strcmp(function_type_string, "TRIANGLEWAVE") == 0) {
+  else if (function_type_string, "TRIANGLEWAVE") {
     new_fault->type = FaultFunctionBase::Trianglewave;
   }
   else {
@@ -957,10 +957,10 @@ Purpose:(Parses an independent-variable node.)
 bool FaultManager::parse_ind_variable(
   FaultFunctionIndependentVariable& ind_variable,
   xmlNodePtr                        variable_node,
-  const char*                       fault_name)
+  const std::string&                fault_name)
 {
-  const char* variable_name = XmlHelper::xml_find_value(variable_node, "name");
-  if (variable_name == nullptr) {
+  const std::string variable_name = XmlHelper::xml_find_value(variable_node, "name");
+  if (variable_name.empty()) {
     CMLMessage::error(__FILE__, __LINE__,
       "XML input error parsing fault configuration\n",
       "In fault <", fault_name, ">, the IndVariable node is missing the specification\n"
@@ -1036,9 +1036,9 @@ bool FaultManager::parse_ind_variable(
 
   // Optional: specify whether independent variable is relative to its initial
   // value or absolute.
-  const char* relative_string =
+  const std::string relative_string =
     XmlHelper::xml_find_value(variable_node, "relative");
-  if (relative_string != nullptr) {
+  if (!relative_string.empty()) {
     ind_variable.relative_value = ConvertString::convert<bool>(relative_string);
   }
 
@@ -1053,9 +1053,9 @@ Purpose:(Parses a Frequency, Amplitude, or PhaseOffset node.)
 bool FaultManager::parse_periodic_param(
   FaultFunctionParameter & param,
   xmlNodePtr               function_node,
-  const char *             param_name,
+  const std::string&       param_name,
   xmlNodePtr               ind_var_node,
-  const char *             fault_name,
+  const std::string&       fault_name,
   bool                     nom_required)
 {
   xmlNodePtr param_node = XmlHelper::xml_find_child( function_node,
@@ -1072,8 +1072,8 @@ bool FaultManager::parse_periodic_param(
     return false;
   }
 
-  const char* value_string = XmlHelper::xml_find_value(param_node, "nominal");
-  if (value_string == nullptr) {
+  std::string value_string = XmlHelper::xml_find_value(param_node, "nominal");
+  if (value_string.empty()) {
     if (nom_required) { // did not find it, and need it,
       CMLMessage::error(__FILE__,__LINE__,
         "XML input error parsing fault configuration\n",
@@ -1086,14 +1086,14 @@ bool FaultManager::parse_periodic_param(
     return false;
   }
   // else translate value_string to param.nominal
-  param.nominal = std::strtod(value_string, nullptr);
+  param.nominal = std::strtod(value_string.c_str(), nullptr);
 
   // Optional: make the parameter a linear function of some independent
   // variable.
   value_string = XmlHelper::xml_find_value(param_node, "rate");
   xmlNodePtr variable_node =
     XmlHelper::xml_find_child(param_node, "IndVariable");
-  if (value_string == nullptr) {
+  if (value_string.empty()) {
     // No rate specified.
     if (variable_node != nullptr) {
       // But there is an Independent Variable specified, which is indicative of
@@ -1110,7 +1110,7 @@ bool FaultManager::parse_periodic_param(
     // intended to be constant.
   }
   else { // rate is specified
-    param.rate = std::strtod(value_string, nullptr);
+    param.rate = std::strtod(value_string.c_str(), nullptr);
     // Default to using the same independent variable as the fault's main
     // function if no IndVariable specified.
     if (variable_node == nullptr) {
@@ -1143,7 +1143,7 @@ Purpose:(Extract the rate and nominal values from the Parameters node)
 bool FaultManager::parse_non_periodic_param(
   FaultFunctionParameter & params,
   xmlNodePtr               function_node,
-  const char *             fault_name)
+  const std::string&       fault_name)
 {
   xmlNodePtr params_node =
       XmlHelper::xml_find_child(function_node, "Parameters");
@@ -1156,8 +1156,8 @@ bool FaultManager::parse_non_periodic_param(
       "This fault will be ignored.\n");
     return false;
   }
-  const char* temp_string = XmlHelper::xml_find_value(params_node, "rate");
-  if (temp_string == nullptr) {
+  std::string temp_string = XmlHelper::xml_find_value(params_node, "rate");
+  if (temp_string.empty()) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> was defined as a Linear FUNCTION type but the\n"
@@ -1167,18 +1167,18 @@ bool FaultManager::parse_non_periodic_param(
       "This fault will be ignored.\n");
     return false;
   }
-  params.rate = std::strtod(temp_string, nullptr);
+  params.rate = std::strtod(temp_string.c_str(), nullptr);
   // "initial" and "nominal" are synonymous
   // If both are specified, "nominal" takes precedence.
   // If neither is specified, it defaults to 0 without comment.
   temp_string = XmlHelper::xml_find_value(params_node, "nominal");
-  if (temp_string == nullptr) {
+  if (temp_string.empty()) {
     temp_string = XmlHelper::xml_find_value(params_node, "initial");
   }
-  if (temp_string == nullptr) {
+  if (temp_string.empty()) {
     params.nominal = 0;
   } else {
-    params.nominal = std::strtod(temp_string, nullptr);
+    params.nominal = std::strtod(temp_string.c_str(), nullptr);
   }
   return true;
 }
@@ -1188,9 +1188,9 @@ make_fault_white_noise
 Purpose:(Constructs a white-noise fault.)
 *******************************************************************************/
 template<typename T> Fault* FaultManager::make_fault_white_noise(
-  xmlNodePtr  fault_node,
-  T&          variable,
-  const char* fault_name)
+  xmlNodePtr         fault_node,
+  T&                 variable,
+  const std::string& fault_name)
 {
   xmlNodePtr rand_node = XmlHelper::xml_find_child(fault_node, "RandValue");
   if (rand_node == nullptr) {
@@ -1237,7 +1237,7 @@ Purpose:(Constructs a random-walk fault.)
 template<typename T> Fault* FaultManager::make_fault_random_walk(
   xmlNodePtr  fault_node,
   T&          variable,
-  const char* fault_name)
+  const std::string& fault_name)
 {
   xmlNodePtr rand_node = XmlHelper::xml_find_child(fault_node, "RandValue");
   if (rand_node == nullptr) {
@@ -1283,8 +1283,8 @@ parse_trigger_group
 Purpose:(Parses a trigger-group node.)
 *******************************************************************************/
 TriggerGroup* FaultManager::parse_trigger_group(
-  xmlNodePtr  trigger_group_node,
-  const char* fault_name)
+  xmlNodePtr         trigger_group_node,
+  const std::string& fault_name)
 {
   TriggerGroup* new_trigger_group = new TriggerGroup;
 
@@ -1295,9 +1295,9 @@ TriggerGroup* FaultManager::parse_trigger_group(
   {
     if (XmlHelper::xml_name_match(trigger_node, "Trigger")) {
       // If the Trigger has a reuse_name pull it from the trigger library
-      const char* reuse_name =
+      const std::string reuse_name =
         XmlHelper::xml_find_value(trigger_node, "reuse_name");
-      if (reuse_name != nullptr) {
+      if (!reuse_name.empty()) {
         TriggerBase* temp_ptr = get_trigger(reuse_name);
         if (temp_ptr == nullptr) {
           CMLMessage::error(__FILE__, __LINE__,
@@ -1334,11 +1334,11 @@ parse_trigger
 Purpose:(Parses a trigger node.)
 *******************************************************************************/
 TriggerBase* FaultManager::parse_trigger(
-  xmlNodePtr  trigger_node,
-  const char* fault_name)
+  xmlNodePtr         trigger_node,
+  const std::string& fault_name)
 {
-  const char* name_string = XmlHelper::xml_find_value(trigger_node, "name");
-  if (name_string == nullptr) {
+  const std::string name_string = XmlHelper::xml_find_value(trigger_node, "name");
+  if (name_string.empty()) {
     CMLMessage::error(__FILE__, __LINE__,
       "XML input error parsing trigger name\n",
       "A trigger for fault <", fault_name, "> was defined without a name.\n"
@@ -1362,8 +1362,8 @@ TriggerBase* FaultManager::parse_trigger(
   }
 
   // Pull the variable name from the trigger node
-  const char* var_name = XmlHelper::xml_find_value(trigger_node, "variable");
-  if (var_name == nullptr) {
+  const std::string var_name = XmlHelper::xml_find_value(trigger_node, "variable");
+  if (var_name.empty()) {
     CMLMessage::error(__FILE__, __LINE__,
       "XML input error parsing trigger variable name\n",
       "A trigger with the name <", name_string, "> (under fault <", fault_name, ">)\n"
@@ -1385,8 +1385,8 @@ TriggerBase* FaultManager::parse_trigger(
   }
 
   // Pull the comparison type
-  const char* comp_str = XmlHelper::xml_find_value(trigger_node, "compare");
-  if (comp_str == nullptr) {
+  const std::string comp_str = XmlHelper::xml_find_value(trigger_node, "compare");
+  if (comp_str.empty()) {
     CMLMessage::error(__FILE__, __LINE__,
       "XML input error parsing trigger comparator\n",
       "A trigger with the name <", name_string, "> (under fault <", fault_name, ">)\n"
@@ -1415,9 +1415,9 @@ TriggerBase* FaultManager::parse_trigger(
 
   // Pull the comparison value. We may not have one.
   // If we don't, check for a random value set.
-  const char* value = XmlHelper::xml_find_value(trigger_node, "value");
-  xmlNodePtr rand_node = nullptr;
-  if (value == nullptr) {
+  const std::string value = XmlHelper::xml_find_value(trigger_node, "value");
+  xmlNodePtr rand_node;
+  if (!value.empty()) {
     rand_node = XmlHelper::xml_find_child(trigger_node, "RandValue");
     // If there is also no RandValue XML child-node, the trigger is incomplete.
     if (rand_node == nullptr) {
@@ -1462,7 +1462,7 @@ TriggerBase* FaultManager::parse_trigger(
       // make_trigger.
       Trigger<std::string>* string_trigger =
         new Trigger<std::string>(*static_cast<std::string*>(Symbol->address));
-      if (value != nullptr) {
+      if (!value.empty()) {
         string_trigger->set_value(value);
       }
       new_trigger = string_trigger;
@@ -1551,10 +1551,10 @@ TriggerBase* FaultManager::parse_trigger(
 
   // Check for the presence of "fire_limit" as a field in the definition of
   // the Trigger; this limits the number of times a trigger can be triggered.
-  const char* fire_limit_str = XmlHelper::xml_find_value( trigger_node,
-                                                          "fire_limit");
-  if (fire_limit_str != nullptr) {
-    new_trigger->set_trigger_count( std::strtoul( fire_limit_str, nullptr, 10));
+  const std::string fire_limit_str = XmlHelper::xml_find_value( trigger_node,
+                                                                "fire_limit");
+  if (!fire_limit_str.empty()) {
+    new_trigger->set_trigger_count( std::strtoul( fire_limit_str.c_str(), nullptr, 10));
   }
 
 
@@ -1574,16 +1574,16 @@ it is easier to do it this way than to recover T from the TriggerBase
 base-class pointer that is returned to parse_trigger(...)
 *******************************************************************************/
 template<typename T> TriggerBase* FaultManager::make_trigger(
-  T&          variable,
-  xmlNodePtr  trigger_node,
-  const char* value)
+  T&                 variable,
+  xmlNodePtr         trigger_node,
+  const std::string& value)
 {
 
   //*****************************************************
   //Make the new trigger                                *
   //*****************************************************
   Trigger<T>* new_trigger = new Trigger<T>(variable);
-  if (value != nullptr) {
+  if (!value.empty()) {
     new_trigger->value = ConvertString::convert<T>(value);
   }
 
@@ -1592,12 +1592,12 @@ template<typename T> TriggerBase* FaultManager::make_trigger(
   //*****************************************************
 
   // Parameters for periodic triggers
-  const char* trigger_period_string =
+  const std::string trigger_period_string =
     XmlHelper::xml_find_value(trigger_node, "trigger_period");
-  const char* trigger_length_string =
+  const std::string trigger_length_string =
     XmlHelper::xml_find_value(trigger_node, "trigger_length");
   // If both are specified, let's try assigning them
-  if (trigger_period_string != nullptr && trigger_length_string != nullptr) {
+  if (!trigger_period_string.empty() && !trigger_length_string.empty()) {
     T trigger_length = ConvertString::convert<T>(trigger_length_string);
     T trigger_period = ConvertString::convert<T>(trigger_period_string);
     new_trigger->set_periodic(trigger_length, trigger_period);
@@ -1618,8 +1618,8 @@ template<typename T> TriggerBase* FaultManager::make_trigger(
     }
   }
   // If only 1 setting was made, the configuration is incomplete.
-  else if (trigger_period_string != nullptr ||
-           trigger_length_string != nullptr ) {
+  else if (!trigger_period_string.empty() ||
+           !trigger_length_string.empty() ) {
     CMLMessage::error(__FILE__, __LINE__,
       "XML input error parsing trigger periodicity.\n",
       "A trigger with the name <", XmlHelper::xml_find_value(trigger_node, "name"), ">\n"
@@ -1640,12 +1640,12 @@ parse_rand_number
 Purpose:(Parses a random-variable node.)
 *******************************************************************************/
 bool FaultManager::parse_rand_number(
-  FaultRandNumber & rng,
-  xmlNodePtr        rand_node,
-  const char*       fault_name)
+  FaultRandNumber &  rng,
+  xmlNodePtr         rand_node,
+  const std::string& fault_name)
 {
-  const char* temp_str = XmlHelper::xml_find_value(rand_node, "distribution");
-  if (temp_str == nullptr) {
+  std::string temp_str = XmlHelper::xml_find_value(rand_node, "distribution");
+  if (!temp_str.empty()) {
     CMLMessage::error(__FILE__, __LINE__,
       "XML input error parsing randomized configuration.\n",
       "A random variable in Fault <", fault_name, "> was specified\n"
@@ -1654,9 +1654,9 @@ bool FaultManager::parse_rand_number(
       "Configuration of random value failed.\n");
     return false;
   }
-  if (strcmp(temp_str, "GAUSSIAN") == 0) {
+  if (temp_str == "GAUSSIAN") {
     rng.distribution_type = FaultRandNumber::GAUSSIAN;
-  } else if (strcmp(temp_str, "FLAT") == 0) {
+  } else if (temp_str == "FLAT") {
     rng.distribution_type = FaultRandNumber::FLAT;
   } else {
     CMLMessage::error(__FILE__, __LINE__,
@@ -1673,8 +1673,8 @@ bool FaultManager::parse_rand_number(
   // specified; mean is optional, it defaults to 0.0 if not specified.
   if ( rng.distribution_type == FaultRandNumber::GAUSSIAN) {
     temp_str = XmlHelper::xml_find_value(rand_node, "std_dev");
-    if (temp_str != nullptr) {
-      rng.std_dev = std::strtod(temp_str, nullptr);
+    if (!temp_str.empty()) {
+      rng.std_dev = std::strtod(temp_str.c_str(), nullptr);
     } else {
       CMLMessage::error( __FILE__, __LINE__,
         "XML input error parsing randomized configuration.\n",
@@ -1686,8 +1686,8 @@ bool FaultManager::parse_rand_number(
     }
 
     temp_str = XmlHelper::xml_find_value(rand_node, "mean");
-    if ( temp_str != nullptr) {
-      rng.mean = std::strtod(temp_str, nullptr);
+    if ( !temp_str.empty()) {
+      rng.mean = std::strtod(temp_str.c_str(), nullptr);
     } else {
       CMLMessage::warn(__FILE__, __LINE__,
         "XML input missing while parsing randomized "
@@ -1702,13 +1702,13 @@ bool FaultManager::parse_rand_number(
   // For FLAT distribution, can have either (min,max), or
   // (rel_min, mean, rel_max).
   else if ( rng.distribution_type == FaultRandNumber::FLAT) {
-    const char* min_str = XmlHelper::xml_find_value(rand_node, "min");
-    const char* max_str = XmlHelper::xml_find_value(rand_node, "max");
+    std::string min_str = XmlHelper::xml_find_value(rand_node, "min");
+    std::string max_str = XmlHelper::xml_find_value(rand_node, "max");
     // if min and max found, use them:
-    if (min_str != nullptr &&
-        max_str != nullptr) {
-      rng.lower_limit = std::strtod(min_str, nullptr);
-      rng.upper_limit = std::strtod(max_str, nullptr);
+    if (!min_str.empty() &&
+        !max_str.empty()) {
+      rng.lower_limit = std::strtod(min_str.c_str(), nullptr);
+      rng.upper_limit = std::strtod(max_str.c_str(), nullptr);
     }
 
     // else, look for the (rel_min, mean, rel_max) option:
@@ -1716,12 +1716,12 @@ bool FaultManager::parse_rand_number(
       min_str = XmlHelper::xml_find_value(rand_node, "rel_min");
       max_str = XmlHelper::xml_find_value(rand_node, "rel_max");
       temp_str = XmlHelper::xml_find_value(rand_node, "mean");
-      if (min_str != nullptr &&
-          max_str != nullptr &&
-          temp_str != nullptr ) {
-        const double mean_val = std::strtod(temp_str, nullptr);
-        rng.lower_limit = mean_val - std::abs(std::strtod(min_str, nullptr));
-        rng.upper_limit = mean_val + std::strtod(max_str, nullptr);
+      if (!min_str.empty() &&
+          !max_str.empty() &&
+          !temp_str.empty()) {
+        const double mean_val = std::strtod(temp_str.c_str(), nullptr);
+        rng.lower_limit = mean_val - std::abs(std::strtod(min_str.c_str(), nullptr));
+        rng.upper_limit = mean_val + std::strtod(max_str.c_str(), nullptr);
       }
       else {
         CMLMessage::error(__FILE__, __LINE__,
@@ -1747,8 +1747,8 @@ bool FaultManager::parse_rand_number(
   //    value and use a flag to indicate whether the seed has been set, rather
   //    than testing whether (seed==0).
   temp_str = XmlHelper::xml_find_value(rand_node, "seed");
-  if (temp_str != nullptr) {
-    rng.seed = std::strtoul(temp_str, nullptr, 10);
+  if (temp_str.empty()) {
+    rng.seed = std::strtoul(temp_str.c_str(), nullptr, 10);
   }
 
   return true;

@@ -51,18 +51,18 @@ class sSensorFaults : public FaultManager
   protected:
     bool parse_non_periodic_param( FaultFunctionParameter&  params,
                                    xmlNodePtr               function_node,
-                                   const char*              fault_name) override;
+                                   const std::string&       fault_name) override;
     xmlNodePtr check_rand_in_params(xmlNodePtr  fault_node) override;
 
-    bool parse_rand_number( FaultRandNumber&  rng,
-                            xmlNodePtr        rand_node,
-                            const char*       fault_name) override;
+    bool parse_rand_number( FaultRandNumber&   rng,
+                            xmlNodePtr         rand_node,
+                            const std::string& fault_name) override;
 
     bool parse_periodic_param( FaultFunctionParameter&  var_param,
                                xmlNodePtr               function_node,
-                               const char*              param_name,
+                               const std::string&       param_name,
                                xmlNodePtr               ind_var_node,
-                               const char*              fault_name,
+                               const std::string&       fault_name,
                                bool                     nom_required) override;
 };
 #endif

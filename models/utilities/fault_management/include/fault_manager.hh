@@ -87,31 +87,31 @@ class FaultManager {
     void parse();
     void parse_fault(xmlNodePtr fault_node);
 
-    REF2* get_trick_variable( const char* variable_name);
+    REF2* get_trick_variable( const std::string& variable_name);
 
     template<typename T> Fault* make_fault( xmlNodePtr fault_node,
                                             T& variable,
-                                            const char* fault_name);
+                                            const std::string& fault_name);
 
     template<typename T> Fault* make_fault_bias( xmlNodePtr fault_node,
                                                  T& variable,
-                                                 const char* fault_name);
+                                                 const std::string& fault_name);
 
     template<typename T> Fault* make_fault_scale( xmlNodePtr fault_node,
                                                   T& variable,
-                                                  const char* fault_name);
+                                                  const std::string& fault_name);
 
     template<typename T> Fault* make_fault_overwrite( xmlNodePtr fault_node,
                                                       T& variable,
-                                                      const char* fault_name);
+                                                      const std::string& fault_name);
 
     bool populate_fault_function( FaultFunctionBase* new_fault,
                                   xmlNodePtr fault_node,
-                                  const char* fault_name);
+                                  const std::string& fault_name);
 
     bool parse_ind_variable( FaultFunctionIndependentVariable& ind_variable,
                              xmlNodePtr variable_node,
-                             const char* fault_name);
+                             const std::string& fault_name);
 
 
     // the next few functions are virtual to support inserting an interface to
@@ -121,36 +121,36 @@ class FaultManager {
 
     virtual bool parse_non_periodic_param( FaultFunctionParameter& var_param,
                                            xmlNodePtr function_node,
-                                           const char* fault_name);
+                                           const std::string& fault_name);
 
     virtual bool parse_periodic_param( FaultFunctionParameter& var_param,
                                        xmlNodePtr function_node,
-                                       const char* param_name,
+                                       const std::string& param_name,
                                        xmlNodePtr ind_var_node,
-                                       const char* fault_name,
+                                       const std::string& fault_name,
                                        bool nom_required);
 
     virtual bool parse_rand_number( FaultRandNumber& rng,
                                     xmlNodePtr rand_node,
-                                    const char* fault_name);
+                                    const std::string& fault_name);
 
     template<typename T> Fault* make_fault_white_noise( xmlNodePtr fault_node,
                                                         T& variable,
-                                                        const char* fault_name);
+                                                        const std::string& fault_name);
 
     template<typename T> Fault* make_fault_random_walk( xmlNodePtr fault_node,
                                                         T& variable,
-                                                        const char* fault_name);
+                                                        const std::string& fault_name);
 
     TriggerGroup* parse_trigger_group( xmlNodePtr trigger_group_node,
-                                       const char* fault_name);
+                                       const std::string& fault_name);
 
     TriggerBase* parse_trigger( xmlNodePtr trigger_node,
-                                const char* fault_name);
+                                const std::string& fault_name);
 
     template<typename T>  TriggerBase* make_trigger( T& variable,
                                                      xmlNodePtr trigger_node,
-                                                     const char* value);
+                                                     const std::string& value);
     template<typename T> T generate_random_value()
     {
       return rand.get_random_number();

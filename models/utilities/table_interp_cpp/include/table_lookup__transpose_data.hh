@@ -162,7 +162,6 @@ class TableLookupTransposeDataSet : public TableLookupSet
   bool convert_txt_to_list_vec( const std::string & filename,
                                 DoubleVecList & data_list,
                                 size_t terminate_on_line = 100000);
-  TableLookupTransposeDataSet_TableConfig * get_config( const char * name);
   TableLookupTransposeDataSet_TableConfig * get_config( const std::string & name);
   void add_config( TableLookupTransposeDataSet_TableConfig & new_config)
     {  table_config.push_back(new_config);}

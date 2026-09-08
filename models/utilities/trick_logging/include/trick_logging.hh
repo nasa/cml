@@ -54,13 +54,6 @@ class TrickLogging {
       }
     }
     /***************************************************************************/
-    void set_cycle( double cycle, const char * name) {
-      Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
-        group->set_cycle( cycle);
-      }
-    }
-    /***************************************************************************/
     void set_cycle( double cycle, const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
       if (group) {
@@ -86,13 +79,6 @@ class TrickLogging {
     /***************************************************************************/
     void log_now() {
       for (Trick::DataRecordGroup * group:group_list) {
-        log_now( *group);
-      }
-    }
-    /***************************************************************************/
-    void log_now( const char * name) {
-      Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
         log_now( *group);
       }
     }
@@ -156,13 +142,6 @@ class TrickLogging {
       }
     }
     /***************************************************************************/
-    void disable( const char * name) {
-      Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
-        disable(*group);
-      }
-    }
-    /***************************************************************************/
     void disable( const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
       if (group) {
@@ -186,14 +165,6 @@ class TrickLogging {
 
     /***************************************************************************/
     // Enable specified data record group
-    /***************************************************************************/
-    void enable( const char * name) {
-      Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
-        group->enable();
-      }
-    }
-    /***************************************************************************/
     void enable( const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
       if (group) {
@@ -203,17 +174,6 @@ class TrickLogging {
 
     /***************************************************************************/
     // Returns a pointer to a Trick::DataRecordGroup specified by name
-    /***************************************************************************/
-    Trick::DataRecordGroup * get_group( const char * name)
-    {
-      if (name == nullptr) {
-        CMLMessage::error ( __FILE__, __LINE__,
-          "No name specified for the intended data record group."
-          "\nPlease specify a valid data record group name.\n");
-        return nullptr;
-      }
-      return get_group(std::string(name));
-    }
     /***************************************************************************/
     Trick::DataRecordGroup * get_group( const std::string & name)
     {

@@ -399,7 +399,7 @@ Purpose: (Helper method to show the warning message for empty data table with
           interpolation flag enabled.)
 ********************************************************************************/
 void
-DynamicMassBodyInterpolation::warn_no_data(const char* const table_name)
+DynamicMassBodyInterpolation::warn_no_data(const std::string& table_name)
 {
    CMLMessage::error(
      __FILE__,__LINE__,"No interpolation data.\n",
@@ -415,7 +415,7 @@ Purpose: (Helper method to show the warning message for non-empty data table wit
           interpolation flag disabled.)
 ********************************************************************************/
 void
-DynamicMassBodyInterpolation::warn_no_interp(const char* const table_name)
+DynamicMassBodyInterpolation::warn_no_interp(const std::string& table_name)
 {
    CMLMessage::warn(
      __FILE__,__LINE__,"Interpolation flag disabled  warning.\n",
