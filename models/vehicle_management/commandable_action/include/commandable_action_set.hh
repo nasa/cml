@@ -89,7 +89,7 @@ class CommandableActionSet
 
  public:
   CommandableActionSet();
-  CommandableActionSet(std::string name);
+  CommandableActionSet(std::string name_);
   virtual ~CommandableActionSet() = default;
   CommandableActionSet (const CommandableActionSet&) = delete;
   CommandableActionSet & operator = ( const CommandableActionSet&) = delete;

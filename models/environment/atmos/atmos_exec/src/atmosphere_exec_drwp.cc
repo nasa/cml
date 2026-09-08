@@ -43,7 +43,9 @@ Purpose:(Activates the model, creates necessary subscriptions)
 void
 AtmosphereExec_Drwp::activate()
 {
-  if (active) return;
+  if (active) {
+    return;
+  }
 
   subscribe_to_topocentric_altitude();
   AtmosphereExec_AtmosBase::activate();

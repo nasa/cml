@@ -43,23 +43,18 @@ constructors
 TableLookupTransposeDataSet_TableConfig::
                                      TableLookupTransposeDataSet_TableConfig()
   :
-  name(),
   block_independent_addition(false),
   index_low(0),
   index_high(0),
-  indices(),
   table_ptr(nullptr),
-  dependent_variables(),
   table_type(AbstractTableLookup::Generic),
   lookup_method( TableIndependentVariable::Interp),
-  data_scratch(),
   num_variables(0),
   total_num_lines(0)
 {}
 /****************************************************************************/
 TableLookupTransposeDataSet::TableLookupTransposeDataSet()
   :
-  table_config(),
   independent_var(nullptr),
   indep_continuity(TableIndependentVariable::Linear),
   populate_independent_from_file(false),
@@ -138,12 +133,12 @@ Purpose:(Parses a line of data, extracting the appropriate pieces.)
 *****************************************************************************/
 void
 TableLookupTransposeDataSet_TableConfig::parse_line(
-    size_t line_index, // first line is numbered 0
+    size_t line_num, // first line is numbered 0
     const DoubleVec & data_line)
 {
   // take the data off this line and put it in the scratch storage space.
   for (size_t ix = 0; ix < num_variables; ++ix) {
-    data_scratch[ ix*total_num_lines + line_index] = data_line[indices[ix]];
+    data_scratch[ ix*total_num_lines + line_num] = data_line[indices[ix]];
   }
 }
 
@@ -271,7 +266,7 @@ TableLookupTransposeDataSet::process_data(
   // PART B: Check and process dependent data.
   //***************************************************************************
   // Verify that no tables have already been assigned to this manager:
-  if (tables.size() != 0) {
+  if (!tables.empty()) {
     CMLMessage::warn(
       __FILE__,__LINE__,"Unexpected configuration.\n",
       "Found data tables already added to this manager.\n"
@@ -460,7 +455,7 @@ TableLookupTransposeDataSet::get_config( const std::string & name_in)
   TableLookupTransposeDataSet_TableConfig * ret_val = nullptr;
 
   for (; table_it != table_config.end(); ++table_it) {
-    if (name_in.compare((*table_it).name) == 0) {
+    if (name_in == table_it->name) {
       num_matches++;
       if (ret_val == nullptr) {
         ret_val = &(*table_it);
@@ -503,7 +498,7 @@ TableLookupTransposeDataSet::check_independent()
 
   // If none have been added, or an invalid instance has been added,
   // create a new TableIndependentVariable.
-  if (independents.size() == 0 || independents.at(0) == nullptr) {
+  if (independents.empty() || independents.at(0) == nullptr) {
     // Must have knowledge of the independent variable
     if (independent_var == nullptr) {
       CMLMessage::fail(

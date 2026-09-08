@@ -45,7 +45,6 @@ WakePrfModel::WakePrfModel(
    unc_factor(0),
    trail_diameters(0.0),
    effective_diam(0.0),
-   table_set(),
    indep_mach( "mach", objectA.freestream_mach),
    indep_alpha( "alpha", objectA.total_alpha),
    indep_trail_diam( "trail diam", trail_diameters),

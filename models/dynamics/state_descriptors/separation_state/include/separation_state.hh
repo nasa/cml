@@ -65,7 +65,7 @@ class SeparationState : public SubscriptionBase
 
  public:
    SeparationState (void);
-   explicit SeparationState (const std::string & name);
+   explicit SeparationState (const std::string & name_);
    ~SeparationState() override = default;
    SeparationState (const SeparationState&) = delete;
    SeparationState& operator = (const SeparationState&) = delete;
@@ -102,9 +102,9 @@ class SeparationState : public SubscriptionBase
    jeod::BodyRefFrame* get_subject() {return subject;}
 
  protected:
-   jeod::BodyRefFrame *  initialize_find_frame (jeod::DynBody &,
-                                                const std::string &,
-                                                const std::string &);
+   jeod::BodyRefFrame *  initialize_find_frame (jeod::DynBody & body,
+                                                const std::string & frame_name,
+                                                const std::string & body_type);
    void activate() override;
    void deactivate() override;
 

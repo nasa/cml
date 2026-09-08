@@ -41,12 +41,12 @@ extern Trick::IPPython* the_pip;
 Constructor
 *****************************************************************************/
 SweepSet::SweepSet(
-            double & variable_in,
+            double & variable_out,
             double start_in,
             double end_in,
             double incr_in)
   :
-  variable(variable_in),
+  variable(variable_out),
   start( start_in),
   end( end_in),
   increment( incr_in),
@@ -120,7 +120,9 @@ Assignment Operator
 *****************************************************************************/
 SweepSet& SweepSet::operator = (const SweepSet &other)
 {
-  if (this == &other) return *this;
+  if (this == &other) {
+    return *this;
+  }
   variable = other.variable;
   start = other.start;
   end = other.end;
@@ -222,7 +224,6 @@ UnitTestFramework::initialize()
     configure_from_definition_file();
   }
   initialized = true;
-  return;
 }
 
 /*****************************************************************************
@@ -246,7 +247,6 @@ UnitTestFramework::update()
   else {
     update_file();
   }
-  return;
 }
 
 /*****************************************************************************
@@ -323,7 +323,7 @@ std::string UnitTestFramework::expand_env_variables(const std::string& input) {
 
         const std::string var_name = match[1].str();
         const char* env_val = std::getenv(var_name.c_str());
-        if (env_val) 
+        if (env_val != nullptr) 
         {
             result.append(env_val);
         } else 
@@ -672,7 +672,9 @@ UnitTestFramework::update_sweeps()
     // increment_sweep returns true if the sweep of that variable is complete
     sweep_complete_ = it->increment_sweep();
     // if this variable is still sweeping, don't need to go on to the next one.
-    if (!sweep_complete_) break;
+    if (!sweep_complete_) {
+      break;
+    }
   }
   // if sweep_complete_ is true at this point, that means that all sweep sets
   // finished on this cycle.  In that case, the whole unit-test is complete,
@@ -721,5 +723,4 @@ UnitTestFramework::update_file()
     commands.push_back(commands.front());
   }
   commands.pop_front();
-  return;
 }

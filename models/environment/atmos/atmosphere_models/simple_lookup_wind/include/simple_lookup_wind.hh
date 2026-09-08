@@ -102,7 +102,7 @@ class SimpleLookupWind : public SubscriptionBase
   // input file helper functions
   void assign_component_data( const double * data_array,
                               size_t         num_components,
-                              size_t         num_elem_per_variable);
+                              size_t         num_elem_per_component);
   void assign_dir_mag_data( const double * data_array,
                             size_t         num_elem_per_variable);
   void assign_dir_mag_vert_data( const double * data_array,

@@ -25,7 +25,6 @@ EGM2008_WGS84::EGM2008_WGS84( const double & wgs_84_lat,
                               const double & wgs_84_lon)
   :
   delta_altitude(0),
-  table_set(),
   egm_table(delta_altitude),
   tiv_lat(wgs_84_lat),
   tiv_lon(wgs_84_lon, TableIndependentVariable::WrapAround)
@@ -39,7 +38,9 @@ Purpose:
 void
 EGM2008_WGS84::initialize()
 {
-  if (!enabled) return;
+  if (!enabled) {
+    return;
+  }
 
   load_data();
   table_set.subscribe();
@@ -65,7 +66,9 @@ Purpose:
 void
 EGM2008_WGS84::update()
 {
-  if (!active) return;
+  if (!active) {
+    return;
+  }
 
   table_set.update();
 }

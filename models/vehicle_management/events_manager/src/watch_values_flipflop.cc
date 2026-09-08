@@ -29,10 +29,7 @@ WatchValuesFlipFlop::WatchValuesFlipFlop(
   WatchValuesBaseCore & associated_watch_)
   :
   associated_watch( associated_watch_),
-  state(false),
-  down_disable_models(),
-  down_assignments(),
-  down_actions()
+  state(false)
 {
   multi_shot = true;
   associated_watch.multi_shot = true;
@@ -122,7 +119,7 @@ WatchValuesFlipFlopDelayed::test_crossing()
      in an active delay process).*/
   else {
     baseline_delay_value = delay_variable;
-    delay_value = (new_state)? up_delay : down_delay;
+    delay_value = new_state? up_delay : down_delay;
     /* evaluate the delay; it could be configured to 0.0 in which case the
        delay will be ignored  and the event will trigger just as though it was
        a WatchValuesFlipFlop instance.*/
@@ -231,7 +228,7 @@ WatchValuesFlipFlop::activate()
   state = associated_watch.test_crossing();
 
   if (add_self_to_manager_active_list) {
-    if (!active_watches) {
+    if (active_watches == nullptr) {
       CMLMessage::error( __FILE__,__LINE__,
         "Activating watch with internal instruction to add itself to\n"
         "the active-watch list, but has no access to that list.\n"
@@ -263,7 +260,7 @@ Purpose:
   Returns true if the delay conditions have been satisfied.
 *****************************************************************************/
 bool
-WatchValuesFlipFlopDelayed::evaluate_delay()
+WatchValuesFlipFlopDelayed::evaluate_delay() const
 {
   return (std::abs( delay_variable - baseline_delay_value) >= delay_value);
 }

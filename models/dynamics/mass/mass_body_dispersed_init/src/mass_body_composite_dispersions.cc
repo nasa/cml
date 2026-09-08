@@ -23,6 +23,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/dynamics/body_action/include/body_action.hh"
 #include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
@@ -32,12 +33,8 @@ Constructor
 MassBodyCompositeDispersions::MassBodyCompositeDispersions (
     jeod::MassBody & target_body_in)
   :
-  MassPropertiesDispersionsFlags(),
-  BodyAction(),
   target_body( target_body_in),
   fail_if_mass_invalid(false),
-  nominal(),
-  disperse(),
   adjustable_body(nullptr),
   detach_sub_tree(nullptr)
 {

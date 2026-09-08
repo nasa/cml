@@ -56,14 +56,14 @@ class TrickLogging {
     /***************************************************************************/
     void set_cycle( double cycle, const char * name) {
       Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
+      if (group != nullptr) {
         group->set_cycle( cycle);
       }
     }
     /***************************************************************************/
     void set_cycle( double cycle, const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
+      if (group != nullptr) {
         group->set_cycle( cycle);
       }
     }
@@ -92,14 +92,14 @@ class TrickLogging {
     /***************************************************************************/
     void log_now( const char * name) {
       Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
+      if (group != nullptr) {
         log_now( *group);
       }
     }
     /***************************************************************************/
     void log_now( const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
+      if (group != nullptr) {
         log_now( *group);
       }
     }
@@ -158,14 +158,14 @@ class TrickLogging {
     /***************************************************************************/
     void disable( const char * name) {
       Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
+      if (group != nullptr) {
         disable(*group);
       }
     }
     /***************************************************************************/
     void disable( const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
+      if (group != nullptr) {
         disable(*group);
       }
     }
@@ -189,14 +189,14 @@ class TrickLogging {
     /***************************************************************************/
     void enable( const char * name) {
       Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
+      if (group != nullptr) {
         group->enable();
       }
     }
     /***************************************************************************/
     void enable( const std::string & name) {
       Trick::DataRecordGroup * group = get_group(name);
-      if (group) {
+      if (group != nullptr) {
         group->enable();
       }
     }

@@ -23,10 +23,7 @@ Constructor
 QuaternionSphericalInterpolator::QuaternionSphericalInterpolator()
   :
   use_spherical_interp(true),
-  quat_0(),
-  quat_1(),
   frac(0.0),
-  quat_out(),
   epsilon_interp(1.0E-15),
   epsilon_delta(1.0E-15)
 {}

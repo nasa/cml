@@ -59,7 +59,6 @@ constructor
 StateInitializeWithPropagation::StateInitializeWithPropagation(
     jeod::GravityManager           &  gravity_manager_in)
   :
-  StateInitialize(),
   gravity_manager( gravity_manager_in),
   body(nullptr),
   T_initial_to_current{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},

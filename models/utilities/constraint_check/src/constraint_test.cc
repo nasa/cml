@@ -35,7 +35,6 @@ ConstraintTest::ConstraintTest()
 // ***************************************************************************
 ConstraintTestTimed::ConstraintTestTimed()
   :
-  ConstraintTest(),
   use_timer(true),
   time_limit (0.0),
   gap_time_limit (0.0),
@@ -73,7 +72,7 @@ void
 ConstraintTest::count_violations()
 {
   if (violation != prev_violation) {
-    violation_count += violation;
+    violation_count += static_cast<unsigned int>(violation);
     prev_violation = violation;
   }
 }

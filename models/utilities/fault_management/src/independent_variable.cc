@@ -24,9 +24,7 @@ FaultFunctionIndependentVariable::FaultFunctionIndependentVariable() :
 Destructor
 *****************************************************************************/
 FaultFunctionIndependentVariable::~FaultFunctionIndependentVariable() {
-  if (variable != nullptr) {
     delete variable;
-  }
 }
 
 /*****************************************************************************

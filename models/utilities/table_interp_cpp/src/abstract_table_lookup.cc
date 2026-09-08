@@ -37,10 +37,6 @@ PROGRAMMERS:
 Constructor
 *****************************************************************************/
 AbstractTableLookup::AbstractTableLookup()
-  :
-  independents(),
-  dependents(),
-  tables_to_destroy()
 {
   subscribe_name = "AbstractTableLookup:";
 }
@@ -247,8 +243,9 @@ AbstractTableLookup::create_table(
   DoublePtrVec variables(num_vars);
   va_list variables_in;
   va_start(variables_in, variable_0);
-  if (0 < num_vars)
+  if (0 < num_vars) {
     variables[0] = variable_0;
+  }
   for (size_t ii = 1; ii < num_vars; ++ii) {
     variables[ii] = va_arg(variables_in, double*);
   }
@@ -409,7 +406,7 @@ AbstractTableLookup::lookup_independent(
   auto it = std::find_if(
                  independents.begin(), independents.end(),
                  [var_name] (TableIndependentVariable * var_) {
-                   return (var_name.compare(var_->get_name()) == 0);
+                   return (var_name == var_->get_name());
                  });
   if (it == independents.end()) { return nullptr; }
   return *it;
@@ -423,7 +420,9 @@ bool
 AbstractTableLookup::is_table_interp_enabled(
     const GenericMultiInputTable *tbl) const
 {
-  if (!tbl || tables.empty()) {return false;}
+  if ((tbl == nullptr) || tables.empty()) {
+    return false;
+  }
   auto it = std::find_if( tables.begin(), tables.end(),
                           [tbl] (const TableItem_t & table_) {
                             return (table_.first == tbl);
@@ -441,7 +440,9 @@ void
 AbstractTableLookup::enable_table_interp(
     const GenericMultiInputTable *tbl, bool flag)
 {
-  if (!tbl || tables.empty()) return;
+  if ((tbl == nullptr) || tables.empty()) {
+    return;
+  }
 
   auto it = std::find_if( tables.begin(), tables.end(),
                           [tbl] (const TableItem_t & table_) {

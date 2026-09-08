@@ -105,7 +105,7 @@ class CompoundEvent : public WatchValuesDelay<bool>
 
   // Methods
  public:
-  explicit CompoundEvent( const double & time);
+  explicit CompoundEvent( const double & time_);
   ~CompoundEvent() override = default;
   CompoundEvent( const CompoundEvent&) = delete;
   CompoundEvent& operator=( const CompoundEvent&) = delete;

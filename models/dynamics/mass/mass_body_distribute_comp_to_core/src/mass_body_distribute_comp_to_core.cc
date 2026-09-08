@@ -18,6 +18,7 @@ Programmers:
 #include "../include/mass_body_distribute_comp_to_core.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
@@ -32,8 +33,6 @@ MassBodyDistributeCompToCore::MassBodyDistributeCompToCore (
   target_body( target_body_in),
   adjustable_body( adjustable_body_in),
   fail_if_mass_invalid(true),
-  adjustable_struc_wrt_target_struc(),
-  target_properties(),
   old_mass(0.0)
 {}
 
@@ -284,7 +283,7 @@ check_for_valid_mass_properties
 Purpose:(Sanity checks on the new mass properties)
 *****************************************************************************/
 void
-MassBodyDistributeCompToCore::check_for_valid_mass_properties()
+MassBodyDistributeCompToCore::check_for_valid_mass_properties() const
 {
   // In order for the new mass properties to be valid (physically possible):
   // 1. The mass must be positive.

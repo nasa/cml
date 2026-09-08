@@ -58,9 +58,9 @@ class GravityFidelityManager : public SubscriptionBase
       assignment to the gravity model after the table-lookup has populated it.*/
 
  public:
-  GravityFidelityManager(  jeod::SphericalHarmonicsGravityControls & grav_controls,
-                           const jeod::RefFrame                    & source_frame,
-                           const jeod::RefFrame                    & target_frame);
+  GravityFidelityManager(  jeod::SphericalHarmonicsGravityControls & grav_controls_,
+                           const jeod::RefFrame                    & source_frame_,
+                           const jeod::RefFrame                    & target_frame_);
   ~GravityFidelityManager() override = default;
   GravityFidelityManager (const GravityFidelityManager&) = delete;
   GravityFidelityManager & operator = (const GravityFidelityManager&) = delete;

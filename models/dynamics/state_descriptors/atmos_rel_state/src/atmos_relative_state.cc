@@ -244,7 +244,7 @@ Purpose: Sets the reference length pointer
 *******************************************************************************/
 void
 AtmosRelativeState::set_reference_length(
-   double * ref_length_in)
+   const double * ref_length_in)
 {
   reference_length = ref_length_in;
   initialize();

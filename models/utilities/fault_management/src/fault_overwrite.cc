@@ -24,7 +24,7 @@ Purpose:
 template<>
 bool FaultOverwrite<bool>::set_param( const std::string& param_name,
                                       double val_,
-                                      bool)
+                                      [[maybe_unused]] bool reset_nominal)
 {
   if (param_name == "value") {
     faulted_value = (val_ > 0);

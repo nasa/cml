@@ -31,7 +31,6 @@ Purpose: (Constructor)
 ********************************************************************************/
 SimpleTableLookup::SimpleTableLookup()
   :
-  AbstractTableLookup(),
   lookup_method(TableIndependentVariable::Interp),
   indep_data_loaded(false),
   dependent_data_loaded(false),
@@ -49,12 +48,12 @@ Return:(Always returns the value of the independent_data_loaded variable)
 bool
 SimpleTableLookup::load_independent_data(
     const double                               & independent_variable,
-    const double                               * data_in,
+    const double                               * data,
     const size_t                                 num_elements,
-    const TableIndependentVariable::LookupMethod lookup,     //optional
-    const TableIndependentVariable::Continuity   continuity) //optional
+    const TableIndependentVariable::LookupMethod lookup_method_in, //optional
+    const TableIndependentVariable::Continuity   continuity)       //optional
 {
-  if (data_in == nullptr) {
+  if (data == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the data source array.\n"
@@ -62,10 +61,10 @@ SimpleTableLookup::load_independent_data(
     return false;
   }
 
-  const DoubleVec scratch(data_in, data_in+num_elements);
+  const DoubleVec scratch(data, data+num_elements);
   return load_independent_data( independent_variable,
                                 scratch,
-                                lookup,
+                                lookup_method_in,
                                 continuity);
 }
 /****************************************************************************/
@@ -73,11 +72,11 @@ bool
 SimpleTableLookup::load_independent_data(
     const double                               & independent_variable,
     const DoubleVec                            & data,
-    const TableIndependentVariable::LookupMethod lookup,      //optional
-    const TableIndependentVariable::Continuity   continuity)  //optional
+    const TableIndependentVariable::LookupMethod lookup_method_in, //optional
+    const TableIndependentVariable::Continuity   continuity)       //optional
 {
   // Store its interpretation for application at initialization.
-  lookup_method = lookup;
+  lookup_method = lookup_method_in;
 
   if (!independents.empty()) {
     CMLMessage::warn(
@@ -206,7 +205,7 @@ bool
 SimpleTableLookup::load_dependent_data(
          double       & dependent_var,
          const double * data,
-         const size_t   num_data_points,
+         const size_t   num_data_points_per_variable,
          TableType      type) //optional
 {
   if (data == nullptr) {
@@ -220,10 +219,10 @@ SimpleTableLookup::load_dependent_data(
   // create a vector containing a single point being the address of the
   // dependent variable.
   const std::vector<double *> scratch_var(1, &dependent_var);
-  const DoubleVec scratch_data(data, data+num_data_points);
+  const DoubleVec scratch_data(data, data+num_data_points_per_variable);
   return load_dependent_data( scratch_var,
                               scratch_data,
-                              num_data_points,
+                              num_data_points_per_variable,
                               type);
 }
 /****************************************************************************/

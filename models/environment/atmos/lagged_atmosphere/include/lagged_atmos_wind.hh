@@ -33,7 +33,7 @@ class LaggedAtmosWind {
     Set of data interpolated from the history at the specified altitude.*/
 
   LaggedAtmosWind();
-  explicit LaggedAtmosWind( const std::string& name);
+  explicit LaggedAtmosWind( const std::string& name_);
   virtual ~LaggedAtmosWind() = default;
   LaggedAtmosWind(const LaggedAtmosWind &) = delete;
   LaggedAtmosWind & operator=(const LaggedAtmosWind &) = delete;
@@ -43,8 +43,8 @@ class LaggedAtmosWind {
   void compute_with_query( double input_altitude);
 
   void update_history( const LaggedAtmosPayloadData & payload_data);
-  void set_min_delta_altitude( double min_delta_altitude);
-  void set_max_delta_altitude( double max_delta_altitude);
+  void set_min_delta_altitude( double min_new);
+  void set_max_delta_altitude( double max_new);
 
   protected:
   std::string model_name; /* (--)

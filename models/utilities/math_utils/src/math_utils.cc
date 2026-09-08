@@ -655,7 +655,7 @@ Purpose:( Effectively takes the square root of a matrix such that
             enough to hold the generated array.)
 *******************************************************************************/
 bool
-MathUtils::cholesky_decomposition ( const std::string & origin,
+MathUtils::cholesky_decomposition ( const std::string & caller_id,
                                     const double * in_array,
                                     double * out_array,
                                     size_t   dimension_in,
@@ -745,7 +745,7 @@ MathUtils::cholesky_decomposition ( const std::string & origin,
                                       0.0)) {
         CMLMessage::error(
           __FILE__, __LINE__, "Non-symmetric matrix\n",
-          "Matrix input from ", origin, " is not a symmetric matrix.\n"
+          "Matrix input from ", caller_id, " is not a symmetric matrix.\n"
           "Decomposition will proceed as though it was, but will use only\n"
           "the values on and below the diagonal.\n"
           "Values above the diagonal will be ignored, assumed equal to those "
@@ -754,7 +754,9 @@ MathUtils::cholesky_decomposition ( const std::string & origin,
         break;
       }
     }
-    if (!is_symmetric) break;
+    if (!is_symmetric) {
+      break;
+    }
   }
 
   // sqrt_mx will be sized to match in_array; its contents will be the
@@ -780,7 +782,7 @@ MathUtils::cholesky_decomposition ( const std::string & origin,
     if (sum < 0.0){
       CMLMessage::error(
         __FILE__, __LINE__, "Invalid Covariance\n",
-        "Matrix input from ", origin, " is not positive semi-definite.\n"
+        "Matrix input from ", caller_id, " is not positive semi-definite.\n"
         "A negative eigen-value exists, detected in processing col ", ii, "\n"
         "Successful decomposition requires the matrix be positive "
         "semi-definite.\nDecomposition failed.\n");
@@ -811,7 +813,7 @@ MathUtils::cholesky_decomposition ( const std::string & origin,
         if (!MathUtils::is_near_equal( sum, 0.0)) {
           CMLMessage::error(
             __FILE__, __LINE__, "Invalid Covariance\n",
-            "Matrix input from ", origin, " is not positive semi-definite.\n"
+            "Matrix input from ", caller_id, " is not positive semi-definite.\n"
             "A negative eigen-value exists\n"
             "Successful decomposition requires the matrix be positive "
             "semi-definite.\nDecomposition failed.\n");
@@ -824,7 +826,7 @@ MathUtils::cholesky_decomposition ( const std::string & origin,
       // constructed with 0.0 everywhere) and move on to the next column.
       CMLMessage::warn(
         __FILE__,__LINE__, "Ambiguous Decomposition\n",
-        "Matrix input from ", origin, ":\n"
+        "Matrix input from ", caller_id, ":\n"
         "Consider the ", ii+1, "x", ii+1, " square sub-matrix taken from the upper left of "
         "the input matrix.\nThis sub-matrix has a determinant "
         "equal to zero (or very close to zero).\n"
@@ -1003,12 +1005,12 @@ Purpose:
     Template specialization for bool type
 *****************************************************************************/
 template<>
-bool MathUtils::is_within_abs_tolerance<bool>( bool v1, bool v2, bool tol)
+bool MathUtils::is_within_abs_tolerance<bool>( bool val1, bool val2, bool tol)
 {
-  const bool ret = tol || (v1 == v2);
+  const bool ret = tol || (val1 == val2);
   CMLMessage::error( __FILE__, __LINE__,
-    "Testing whether boolean ",v1, " is within boolean ",tol,", of boolean ",
-    v2, " has an ambiguous interpretation.\n"
+    "Testing whether boolean ",val1, " is within boolean ",tol,", of boolean ",
+    val2, " has an ambiguous interpretation.\n"
     "Evaluated to ",ret,"\n");
   return ret;
 }

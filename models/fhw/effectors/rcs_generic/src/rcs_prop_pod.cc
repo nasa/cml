@@ -27,7 +27,6 @@ Constructor
 RcsPodComponent::RcsPodComponent(
    unsigned int max_num_jets_on)
    :
-   fake_interface(),
    mass_consumed_step( &fake_interface.mass_consumed_step),
    consumable_mass(    &fake_interface.consumable_mass),
    using_dyn_mass(false),
@@ -80,17 +79,17 @@ Purpose:(pushes the dynamic-mass-interface through to the specified component)
 *****************************************************************************/
 void
 RcsPropPod::set_dyn_mass_interface(
-      unsigned int component_ix,
+      unsigned int component_index,
       DynamicMassBodyPropertiesInterface & dyn_mass_interface)
 {
-  if (component_ix >= components.size()) {
+  if (component_index >= components.size()) {
     CMLMessage::error(
     __FILE__,__LINE__,"Assignment error\n",
-    "Cannot assign a dyn-mass interface to component index ", component_ix, " because\n"
+    "Cannot assign a dyn-mass interface to component index ", component_index, " because\n"
     "there are only ", components.size(), " components (so max index is ", components.size()-1, ").\n");
   }
   else {
-    components.at(component_ix).set_dyn_mass_interface( dyn_mass_interface);
+    components.at(component_index).set_dyn_mass_interface( dyn_mass_interface);
     using_dyn_mass = true;
   }
 }
@@ -99,12 +98,7 @@ void
 RcsPodComponent::set_dyn_mass_interface(
      DynamicMassBodyPropertiesInterface & dyn_mass_interface)
 {
-  if (&dyn_mass_interface != &fake_interface) {
-    using_dyn_mass = true;
-  }
-  else {
-    using_dyn_mass = false;
-  }
+  using_dyn_mass = &dyn_mass_interface != &fake_interface;
   mass_consumed_step = &dyn_mass_interface.mass_consumed_step;
   consumable_mass = &dyn_mass_interface.consumable_mass;
 }
@@ -291,20 +285,20 @@ Purpose:(returns the scale-factor for the specified component in the pod
 *****************************************************************************/
 double
 RcsPropPod::get_flow_rate_scale_factor(
-   const unsigned int component_ix)
+   const unsigned int component_index) const
 {
   if (num_jets_on == 0) {
     return 1.0;
   }
-  if (component_ix >= components.size()) {
+  if (component_index >= components.size()) {
     CMLMessage::error(
     __FILE__,__LINE__,"Assignment error\n",
-    "Cannot extract the flow-rate scale-factor from component index ", component_ix, "\n"
+    "Cannot extract the flow-rate scale-factor from component index ", component_index, "\n"
     "because there are only ", components.size(), " components (so max index is ", components.size()-1, ").\n");
     return 0.0;
   }
 
-  return components.at(component_ix).flow_rate_sf[num_jets_on-1];
+  return components.at(component_index).flow_rate_sf[num_jets_on-1];
 }
 
 
@@ -313,7 +307,7 @@ get_thrust_factor
 Purpose:(Returns the currently used value from the thrust_factor vector)
 *****************************************************************************/
 double
-RcsPropPod::get_thrust_factor()
+RcsPropPod::get_thrust_factor() const
 {
   if (num_jets_on == 0) {
     return 1.0;
@@ -321,16 +315,6 @@ RcsPropPod::get_thrust_factor()
   else {
     return thrust_factor.at(num_jets_on-1);
   }
-}
-
-/*****************************************************************************
-get_max_num_jets_on
-Purpose:(Returns the protected max_num_jets_on value)
-*****************************************************************************/
-unsigned int
-RcsPropPod::get_max_num_jets_on()
-{
-  return max_num_jets_on;
 }
 
 /*****************************************************************************

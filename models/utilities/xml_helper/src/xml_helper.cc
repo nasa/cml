@@ -19,9 +19,11 @@ Purpose:(Finds an XML node with the given name at the same level as the
 specified node.)
 *******************************************************************************/
 xmlNodePtr XmlHelper::xml_find(xmlNodePtr node, const char* name) {
-  if (!node || !name) return nullptr;
+  if ((node == nullptr) || (name == nullptr)) {
+    return nullptr;
+  }
 
-  for(; node; node=node->next) {
+  for(; node != nullptr; node=node->next) {
     if(xml_name_match(node, name)) {
       return node;
     }
@@ -35,7 +37,9 @@ xml_find_child
 Purpose:(Finds a child XML node with the given name.)
 *******************************************************************************/
 xmlNodePtr XmlHelper::xml_find_child(xmlNodePtr node, const char* name) {
-  if (!node || !name) return nullptr;
+  if ((node == nullptr) || (name == nullptr)) {
+    return nullptr;
+  }
 
   return xml_find(node->children, name);
 }
@@ -50,11 +54,13 @@ Purpose:
    entire subtree through all generations.)
 *****************************************************************************/
 xmlNodePtr XmlHelper::xml_find_progeny(xmlNodePtr node, const char* name) {
-  if (!node || !name) return nullptr;
+  if ((node == nullptr) || (name == nullptr)) {
+    return nullptr;
+  }
 
   xmlNodePtr found_node = nullptr;
   xmlNodePtr search_node = node->children;
-  while (search_node && !found_node) {
+  while ((search_node != nullptr) && (found_node == nullptr)) {
     if (xml_name_match( search_node, name)) {
       found_node = search_node;
     }
@@ -75,16 +81,18 @@ const char* XmlHelper::xml_find_value(
   const char* name,
   bool allow_case)
 {
-  if (!node || !name) return nullptr;
+  if ((node == nullptr) || (name == nullptr)) {
+    return nullptr;
+  }
 
-  for(xmlAttrPtr val = node->properties; val; val = val->next) {
+  for(xmlAttrPtr val = node->properties; val != nullptr; val = val->next) {
     // XML uses unsigned chars to represent strings, but it is much more
     // common to use chars for this purpose. For ASCII strings, it is safe
     // to convert from unsigned char* to char* using reinterpret_cast.
     // Before using reinterpret-cast, check the data type, allowing char*
     // directly, and reinterpret cast on unsigned char*, and disallowing all
     // else, just in case.
-    if (val->name && val->children) {
+    if ((val->name != nullptr) && (val->children != nullptr)) {
       if(strcmp(xml_convert_ptr(val->name), name) == 0) {
         return xml_convert_ptr(val->children->content);
       }
@@ -94,7 +102,7 @@ const char* XmlHelper::xml_find_value(
       if (allow_case) {
         std::string left(xml_convert_ptr(val->name));
         std::string right(name);
-        if (left.length() > 0 && right.length() > 0) {
+        if (!left.empty() && !right.empty()) {
           left[0]  = static_cast<char>(std::toupper( left[0]));
           right[0] = static_cast<char>(std::toupper(right[0]));
           if (left == right) {
@@ -113,7 +121,9 @@ xml_name_match
 Purpose:(Checks if an XML node has the given name.)
 *******************************************************************************/
 bool XmlHelper::xml_name_match(xmlNodePtr node, const char* name) {
-  if (!node || !name) return false;
+  if ((node == nullptr) || (name == nullptr)) {
+    return false;
+  }
 
   // See the comment in xml_find_value
   return strcmp(xml_convert_ptr(node->name), name) == 0;
@@ -128,15 +138,15 @@ Purpose:(
    Passes char* straight back,
    Rejects everything else.
 *****************************************************************************/
-const char * XmlHelper::xml_convert_ptr( const void* )
+const char * XmlHelper::xml_convert_ptr( [[maybe_unused]] const void* ptr)
 {
   return nullptr;
 }
-const char * XmlHelper::xml_convert_ptr( const char* in)
+const char * XmlHelper::xml_convert_ptr( const char* ptr)
 {
-  return in;
+  return ptr;
 }
-const char * XmlHelper::xml_convert_ptr( const unsigned char* in)
+const char * XmlHelper::xml_convert_ptr( const unsigned char* ptr)
 {
-  return reinterpret_cast<const char *>(in);
+  return reinterpret_cast<const char *>(ptr);
 }

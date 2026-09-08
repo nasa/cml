@@ -60,8 +60,8 @@ class MassBodyDistributeCompToCore
   double old_mass; /* (kg) the original mass of the adjustable_body. */
 
  public:
-  MassBodyDistributeCompToCore( jeod::MassBody & adjustable_body,
-                                jeod::MassBody & target_body);
+  MassBodyDistributeCompToCore( jeod::MassBody & adjustable_body_in,
+                                jeod::MassBody & target_body_in);
   virtual ~MassBodyDistributeCompToCore() = default;
 
 
@@ -71,7 +71,7 @@ class MassBodyDistributeCompToCore
   bool check_configuration();
   void generate_new_position();
   void generate_new_inertia();
-  void check_for_valid_mass_properties();
+  void check_for_valid_mass_properties() const;
 
   MassBodyDistributeCompToCore(const MassBodyDistributeCompToCore&);
   MassBodyDistributeCompToCore & operator = (

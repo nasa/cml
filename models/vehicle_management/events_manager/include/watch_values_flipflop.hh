@@ -74,7 +74,7 @@ class WatchValuesFlipFlop : public WatchValuesBaseCore
     list of encapsulated actions to be executed when the associated_watch
     event_triggered value switches from true to false. */
 
-  explicit WatchValuesFlipFlop( WatchValuesBaseCore & associated_watch);
+  explicit WatchValuesFlipFlop( WatchValuesBaseCore & associated_watch_);
   ~WatchValuesFlipFlop() override;
   WatchValuesFlipFlop( const WatchValuesFlipFlop&) = delete;
   WatchValuesFlipFlop& operator=( const WatchValuesFlipFlop&) = delete;
@@ -138,13 +138,13 @@ class WatchValuesFlipFlopDelayed : public WatchValuesFlipFlop
     This is the difference between the value of delay_variable at the time the
     transition conditions are satisfied and the value of delay_variable when
     the transition should be applied.*/
-  WatchValuesFlipFlopDelayed( WatchValuesBaseCore & associated_watch,
-                              const double & delay_variable);
+  WatchValuesFlipFlopDelayed( WatchValuesBaseCore & associated_watch_,
+                              const double & delay_variable_);
   WatchValuesFlipFlopDelayed( const WatchValuesFlipFlopDelayed&) = delete;
   WatchValuesFlipFlopDelayed& operator=(
                               const WatchValuesFlipFlopDelayed&) = delete;
   bool test_crossing() override;
  protected:
-  bool evaluate_delay();
+  bool evaluate_delay() const;
 };
 #endif

@@ -33,10 +33,10 @@ SubsonicWake::SubsonicWake(
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
      WakeFollowingBody  & objectB_in,
-     WakeEffectsOut & effects_in)
+     WakeEffectsOut & effects_output)
   :
   params(params_in),
-  effects(effects_in),
+  effects(effects_output),
   objectA(objectA_in),
   objectB_ref(objectB_in),
   prf_model( objectA_in,
@@ -59,12 +59,12 @@ SubsonicWakeNoForce::SubsonicWakeNoForce(
      const double * bodyB_inertial_vel_in,
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
-     WakeEffectsOut   & effects_in)
+     WakeEffectsOut   & effects_output)
   :
   SubsonicWake(params_in,
                objectA_in,
                objectB,
-               effects_in),
+               effects_output),
   objectB( bodyB_area_in,
            bodyB_inertial_pos_in,
            bodyB_inertial_vel_in,
@@ -80,12 +80,12 @@ SubsonicWakeWithForce::SubsonicWakeWithForce(
      const double (& bodyB_T_struc_to_body_in)[3][3],
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
-     WakeEffectsOut & effects_in)
+     WakeEffectsOut & effects_output)
   :
   SubsonicWake(params_in,
                objectA_in,
                objectB,
-               effects_in),
+               effects_output),
   objectB( bodyB_area_in,
            bodyB_inertial_pos_in,
            bodyB_inertial_vel_in,

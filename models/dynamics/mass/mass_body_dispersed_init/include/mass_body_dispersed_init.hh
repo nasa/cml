@@ -35,7 +35,7 @@ class MassBodyDispersedInit : public jeod::MassBodyInit,
                               public MassPropertiesDispersionsFlags {
 public:
   MassPropertiesDispersions disperse; /* (--) The dispersed values. */
-  MassBodyDispersedInit();
+  MassBodyDispersedInit() = default;
   ~MassBodyDispersedInit() override = default;
   MassBodyDispersedInit (const MassBodyDispersedInit& rhs) = delete;
   MassBodyDispersedInit& operator = (const MassBodyDispersedInit& rhs) = delete;

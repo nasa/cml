@@ -39,7 +39,6 @@ DynamicMassBodyInterpolation::DynamicMassBodyInterpolation(const double &mass_in
   poi_dep_xy(inertia[0][1]),
   poi_dep_xz(inertia[0][2]),
   poi_dep_yz(inertia[1][2]),
-  table_lookup_set(),
   tab_mass_flag(false),
   tab_cg_flag(false),
   tab_moi_flag(false),
@@ -218,8 +217,9 @@ DynamicMassBodyInterpolation::interpolate()
       "Check your configuration.\n");
   }
 
-  if (!table_lookup_set.update())
+  if (!table_lookup_set.update()) {
     return false;
+  }
 
   // The table-interpolation mdoel is configured to assign product-of-inertia
   // values into the lower-diagonal of the inertia matrix.  Copy those values

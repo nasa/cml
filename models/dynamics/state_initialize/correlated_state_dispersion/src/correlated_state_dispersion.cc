@@ -40,7 +40,6 @@ CorrelatedStateDispersion::CorrelatedStateDispersion()
   seed(12345),
   user_specified_distribution{0.0},
   covariance{{0.0}},
-  corr_base_frame_name(""),
   TR_geodetic_altitude_disp(0.0),
   pos_error{0.0, 0.0, 0.0},
   vel_error{0.0, 0.0, 0.0},

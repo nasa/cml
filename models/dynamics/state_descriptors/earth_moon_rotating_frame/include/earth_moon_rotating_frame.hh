@@ -47,13 +47,13 @@ class EarthMoonRotatingFrame : public EphemBasedPointingRefFrame {
 
  public:
   // Constructor and destructor
-  explicit EarthMoonRotatingFrame (jeod::EphemeridesManager & ephem_manager);
+  explicit EarthMoonRotatingFrame (jeod::EphemeridesManager & ephem_manager_in);
   ~EarthMoonRotatingFrame() override = default;
    EarthMoonRotatingFrame (const EarthMoonRotatingFrame&) = delete;
    EarthMoonRotatingFrame & operator = (const EarthMoonRotatingFrame&) = delete;
 
   void initialize() override;
   void update() override;
-  void set_orientation(FrameOrientation orientation);
+  void set_orientation(FrameOrientation new_orientation);
 };
 #endif

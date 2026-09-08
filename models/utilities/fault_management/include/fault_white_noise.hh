@@ -18,14 +18,14 @@ Purpose:(Manages injection of a white-noise fault.)
 *******************************************************************************/
 template<typename T> class FaultWhiteNoise : public Fault {
   public :
-    explicit FaultWhiteNoise(T& variable);
+    explicit FaultWhiteNoise(T& var);
     ~FaultWhiteNoise() override = default;
     FaultWhiteNoise(const FaultWhiteNoise&) = delete;
     FaultWhiteNoise& operator = (const FaultWhiteNoise&) = delete;
 
     void overwrite_value() override;
 
-    bool set_param(const std::string& param_name, double value, bool b) override;
+    bool set_param(const std::string& param_name, double value, bool reset_nominal) override;
 
     FaultRandNumber noise; /* (--) Random number generator. */
 
@@ -54,7 +54,8 @@ Purpose:(Generic method for setting fault parameters. For this type of fault,
          can be used to set parameters of the random number generator.)
 *******************************************************************************/
 template<typename T>
-bool FaultWhiteNoise<T>::set_param(const std::string& param_name, double value, bool) {
+bool FaultWhiteNoise<T>::set_param(const std::string& param_name, double value, bool reset_nominal) {
+  (void)reset_nominal;
   if (param_name == "mean") {
     noise.mean = value;
   } else if (param_name == "std_dev") {

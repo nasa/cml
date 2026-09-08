@@ -27,7 +27,6 @@ class GenericSingleInputTable : public GenericMultiInputTable
   bool initialize() override;
   // use the same constructors as the parent class.
   using GenericMultiInputTable::GenericMultiInputTable;
-  GenericSingleInputTable() : GenericMultiInputTable(){}
   GenericSingleInputTable (const GenericSingleInputTable&) = delete;
   GenericSingleInputTable& operator = (const GenericSingleInputTable&) = delete;
  protected:

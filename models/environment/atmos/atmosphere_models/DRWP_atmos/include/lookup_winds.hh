@@ -195,29 +195,29 @@ public:
   void update(double altitude_in);
   void change_datafile_index(size_t index);
   bool change_profile();
-  bool load_DRWP_file(const std::string&  drwpFileName,
-                      bool                file_contains_vertical_wind_component,
-                      unsigned int        wind_number);
+  bool load_DRWP_file(const std::string& drwpFileName_,
+                      bool               file_contains_vertical_wind_component,
+                      unsigned int       wind_number_);
   void compute_average_wind();
   void compute_average_wind( size_t table_index);
-  void compute_average_wind( double min_altitude,
-                             double max_altitude);
+  void compute_average_wind( double min_alt,
+                             double max_alt);
   void compute_average_wind( size_t table_index,
-                             double min_altitude,
-                             double max_altitude);
+                             double min_alt,
+                             double max_alt);
 
   // Legacy capability, deprecated.
   void test_for_reinitialize();
-  void set_include_vertical_component(bool);
+  void set_include_vertical_component(bool deprecated);
 
 protected:
   void activate() override;
   void compute_average_wind( size_t table_index,
                              bool   full_domain,
-                             double min_altitude=0,
-                             double max_altitude=0);
+                             double min_alt=0,
+                             double max_alt=0);
   void calculate_speed_of_sound();
   void calculate_wind_mag_dir();
-  void stream_error(int, const std::string&);
+  void stream_error(int line, const std::string& drwpFileName_);
 };
 #endif

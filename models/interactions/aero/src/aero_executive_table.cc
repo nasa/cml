@@ -67,13 +67,9 @@ AeroExecutiveTable::AeroExecutiveTable(AeroInterfaceOutput & output_ref,
   threshold_min_free_stream_vel_mag(1.0), // Arbitrary threshold.
 
   dispersion_active(false),
-  bias(),
-  uncertainty(),
-  random(),
   load_all_tables_at_init(false),
   l_over_v_scale( Lref_over_Vmag),
-  mrc_position(),
-  coefficients()
+  mrc_position()
 {}
 
 
@@ -110,7 +106,6 @@ AeroExecutiveTable::change_table( unsigned int new_ix)
       "Request to switch to table at index ", new_ix, ", but there are only ", data_tables_vector.size(), " tables "
       "available.\nRequest failed. Continuing with existing table (", current_table->name, ").\n");
   }
-  return;
 }
 /******************************************************************************/
 void
@@ -118,7 +113,7 @@ AeroExecutiveTable::change_table( const std::string & new_name)
 {
   // Check trivial case - change commanded to current table.
   if (current_table != nullptr) {
-    if (current_table->name.compare(new_name) == 0) {
+    if (current_table->name == new_name) {
       CMLMessage::inform(
         __FILE__,__LINE__,"Redundant request\n",
         "Request to change table to ", new_name, ", but already using that table.\n"
@@ -129,7 +124,7 @@ AeroExecutiveTable::change_table( const std::string & new_name)
   for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
                                                  it != data_tables_vector.end();
                                                  ++it) {
-    if ( (*it)->name.compare(new_name) == 0) {
+    if ( (*it)->name == new_name) {
       configure_new_table(*it);
       return;
     }
@@ -192,7 +187,7 @@ AeroExecutiveTable::add_table( AeroTableSetBase * table)
         "Check configuration for possibility of duplicate additions.\n"
         "Continuing with the addition of this table.\n");
     }
-    else if ((*it)->name.compare( table->name) == 0) {
+    else if ((*it)->name == table->name) {
       CMLMessage::warn(
         __FILE__,__LINE__,"Duplication of Aero table.\n",
         "An AeroTableSetBase with this name (", (*it)->name, ") has previously been added.\n"

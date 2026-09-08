@@ -20,6 +20,7 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "jeod/models/environment/planet/include/base_planet.hh"
+#include "jeod/models/utils/lvlh_frame/include/lvlh_frame.hh"
 #include <string>
 
 /*****************************************************************************
@@ -27,21 +28,17 @@ Constructor
 *****************************************************************************/
 LvlhSeparationState::LvlhSeparationState()
   :
-  SeparationState(),
-  lvlh(),
   planet_centered_inertial(nullptr),
   lvlh_origin_frame(nullptr),
   lvlh_ref(lvlh),
   using_external_lvlh(false)
 {}
 /****************************************************************************/
-LvlhSeparationState::LvlhSeparationState( jeod::LvlhFrame & lvlh_)
+LvlhSeparationState::LvlhSeparationState( jeod::LvlhFrame & lvlh_frame)
   :
-  SeparationState(),
-  lvlh(),
   planet_centered_inertial(nullptr),
   lvlh_origin_frame(nullptr),
-  lvlh_ref(lvlh_),
+  lvlh_ref(lvlh_frame),
   using_external_lvlh(true)
 {}
 
@@ -56,10 +53,10 @@ LvlhSeparationState::~LvlhSeparationState()
     // that this model has taken over management of.  So if we have
     // unsubscribed everything, we need to give the subscription back to
     // allow LvlhFrame to unsubscribe.
-    if ( planet_centered_inertial) {
+    if ( planet_centered_inertial != nullptr) {
       planet_centered_inertial->subscribe();
     }
-    if (lvlh_origin_frame) {
+    if (lvlh_origin_frame != nullptr) {
       lvlh_origin_frame->subscribe();
     }
   }
