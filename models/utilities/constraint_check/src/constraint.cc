@@ -16,6 +16,7 @@ PROGRAMMERS:
 #include "../include/constraint_enum.hh"
 #include "../include/constraint_test.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <algorithm>
 #include <cstddef>
 
 
@@ -98,15 +99,8 @@ Constraint::post_update()
   // If configured with "All", require all test violations to trip the
   // constraint violation:
   else {
-    bool violated_ = true;
-    // Don't need to record which test violated, so don't need indices.
-    for (ConstraintTest * test : test_list) {
-      if (!test->get_violation()) {
-        violated_ = false;
-        break;
-      }
-    }
-    violated = violated_;
+    violated = std::all_of(test_list.begin(), test_list.end(),
+      [](const auto& test) {return test->get_violation();});
     if (violated) {
       count_violations();
     }

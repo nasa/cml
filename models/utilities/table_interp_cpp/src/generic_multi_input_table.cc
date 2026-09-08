@@ -791,13 +791,11 @@ GenericMultiInputTable::generate_base_values()
 {
   // First go through the list of the independents, computing how many
   // interpolation points are needed for this dependent variable.
-  size_t num_independents_interp = 0;
-  for( const IndepPair& independent : independents) {
-    if (  independent.second == TableIndependentVariable::Interp &&
-         !independent.first->is_off_table()) {
-      ++num_independents_interp;
-    }
-  }
+  const size_t num_independents_interp = std::count_if(independents.begin(), independents.end(),
+    [](const IndepPair& independent) {
+      return independent.second == TableIndependentVariable::Interp &&
+             !independent.first->is_off_table();
+    });
   // Note - carry on even if there is nothing to interpolate.  It is still
   //        necessary to generate the index of the single data point used
   //        for a simple lookup.

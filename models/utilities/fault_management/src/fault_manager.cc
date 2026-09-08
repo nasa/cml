@@ -21,6 +21,7 @@ PROGRAMMERS:
 #include "../include/fault_white_noise.hh"
 #include "../include/independent_variable.hh"
 #include "../include/trigger.hh"
+#include <algorithm>
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
@@ -139,10 +140,10 @@ Purpose:(Looks up a fault by name. If no fault with that name is found, returns
 *******************************************************************************/
 Fault* FaultManager::get_fault( const std::string& name) {
   for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto* fault : faults[ii]) {
-      if (name == fault->name) {
-        return fault;
-      }
+    const auto fault = std::find_if(faults[ii].begin(), faults[ii].end(),
+      [&name](const Fault* fault_) {return name == fault_->name;});
+    if (fault != faults[ii].end()) {
+      return *fault;
     }
   }
 
@@ -156,10 +157,10 @@ Purpose:(Looks up a trigger by name. If no trigger with that name is found,
          returns nullptr.)
 *******************************************************************************/
 TriggerBase* FaultManager::get_trigger( const std::string& name) {
-  for (auto* trigger : triggers) {
-    if (name == trigger->name) {
-      return trigger;
-    }
+  const auto trigger = std::find_if(triggers.begin(), triggers.end(),
+    [&name](const TriggerBase* trigger_) {return name == trigger_->name;});
+  if (trigger != triggers.end()) {
+    return *trigger;
   }
 
   return nullptr;

@@ -426,7 +426,7 @@ DynamicMassGroup::is_body_in_group(
    DynamicMassBody * mass_body_query) const
 {
   return std::any_of(dyn_masses.begin(), dyn_masses.end(),
-    [mass_body_query](auto& element) {return element == mass_body_query;});
+    [mass_body_query](const auto& element) {return element == mass_body_query;});
 }
   
 /*****************************************************************************
@@ -438,7 +438,7 @@ DynamicMassGroup::is_string_in_group(
    DynamicMassString * mass_string_query) const
 {
   return std::any_of(mass_strings.begin(), mass_strings.end(),
-    [mass_string_query](auto& element) {return element == mass_string_query;});
+    [mass_string_query](const auto& element) {return element == mass_string_query;});
 }
 
 /*******************************************************************************
