@@ -1,5 +1,5 @@
-#ifndef CML_ENV_UTILS_H
-#define CML_ENV_UTILS_H
+#ifndef CML_ENV_UTILS_HH
+#define CML_ENV_UTILS_HH
 
 #include <cstdlib>
 #include <iostream>

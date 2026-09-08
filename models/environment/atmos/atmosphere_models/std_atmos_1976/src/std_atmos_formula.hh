@@ -12,8 +12,8 @@ PROGRAMMERS:
 
 ********************************************************************************/
 
-#ifndef CML_STD_ATMOS_FORMULA_H
-#define CML_STD_ATMOS_FORMULA_H
+#ifndef CML_STD_ATMOS_FORMULA_HH
+#define CML_STD_ATMOS_FORMULA_HH
 
 #include <cassert>
 #include <cmath>

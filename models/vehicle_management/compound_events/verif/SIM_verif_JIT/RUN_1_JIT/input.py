@@ -6,7 +6,7 @@ this time, we do not have a solution for extracting code-coverage metrics
 when using JIT input files.
 
 Consequently, we have implemented the test run as a JIT-input files in
-input.cpp ***AS A DEVELOPMENT TEMPLATE ONLY *** to provide
+input.cc ***AS A DEVELOPMENT TEMPLATE ONLY *** to provide
 a guide as to how to implement the features of this model in an integrated
 simulation. However, the automated test runs ***DOES NOT USE*** this JIT-compiled
 implementations because we need to get code-coverage metrics from the
@@ -27,7 +27,7 @@ verif.framework.vars_file_name = "Unit_test_data/vars.txt"
 verif.framework.data_file_name = "Unit_test_data/data.txt"
 
 
-'Here is the call that replaces input.cpp'
+'Here is the call that replaces input.cc'
 verif.jit_input_replacement()
 
 verif.manager.enabled = True

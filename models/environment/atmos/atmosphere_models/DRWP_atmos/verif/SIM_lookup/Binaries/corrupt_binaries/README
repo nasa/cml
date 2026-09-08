@@ -1,2 +1,2 @@
-The source code WriteBinFile.cpp will generate the *.bin files if they ever
+The source code write_bin_file.cc will generate the *.bin files if they ever
 need to be modified.

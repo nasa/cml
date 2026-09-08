@@ -9,7 +9,6 @@ int main() {
   std::cout.precision(std::numeric_limits<double>::digits10);
 
   filename = "DRWP_6dependentvariables.bin";
-  int num_variables = 6;
   int nProfiles = 3;
   int nAltitudes = 5;
 

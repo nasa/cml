@@ -22,7 +22,7 @@ add_cml_library(
         constraint_check/include/valset_constraint.hh
         convert_string/include/convert_string.hh
         double_to_words/include/convert_double_to_words.hh
-        env_utils/include/env_utils.h
+        env_utils/include/env_utils.hh
         fault_arch/include/sSensorFaults.hh
         fault_management/include/fault.hh
         fault_management/include/fault_bias.hh
