@@ -22,17 +22,6 @@ PROGRAMMERS:
 #include "../include/TR_state_param.hh"
 #include "../include/TR_state_parameter_set.hh"
 
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-TargetRelative_StateParameter_Alt::TargetRelative_StateParameter_Alt()
-  :
-  target_point{0.0, 0.0, 0.0},
-  omega_planet{0.0, 0.0, 0.0},
-  target_r_mag(0.0)
-{}
-
 /*****************************************************************************
 initialize
 Purpose:(Initialize uhat_Ref given a position reference vector.

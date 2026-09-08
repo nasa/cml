@@ -39,9 +39,9 @@ class EarthMoonRotatingFrame : public EphemBasedPointingRefFrame {
     Moon__Earth_to_Moon  = 6  // x-axis is from Earth to Moon, origin at Moon.
   };
  protected:
-  FrameOrientation orientation; /* (--)
+  FrameOrientation orientation{EMB_Moon}; /* (--)
        Sets the orientation and origin of the frame.*/
-  bool reverse_xy; /* (--)
+  bool reverse_xy{false}; /* (--)
        Flag indicates the necessity to reverse the x and y-axes to
        support Earth__Moon_to_Earth and Moon__Earth_to_Moon.*/
 

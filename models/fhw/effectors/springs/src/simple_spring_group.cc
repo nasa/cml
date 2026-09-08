@@ -24,36 +24,6 @@ PROGRAMMERS:
 #include "../include/simple_spring_group.hh"
 
 /*******************************************************************************
-Constructor
-*******************************************************************************/
-SimpleSpringGroup::SimpleSpringGroup()
-  :
-  enabled(true),
-  num_springs(0),
-  spring_array(nullptr),
-  action_body_is_child(true),
-  separation_complete(false),
-  total_force_struc_reaction{0,0,0},
-  total_force_struc_action{0,0,0},
-  total_torque_struc_reaction{0,0,0},
-  total_torque_struc_action{0,0,0},
-  active(false),
-  initialized(false),
-  initialized_bodies(false),
-  separation_speed(0.0),
-  force_axial{0,0,0},
-  force_struc_action{0,0,0},
-  force_struc_reaction{0,0,0},
-  T_spring_structure{{1,0,0},{0,1,0},{0,0,1}},
-  T_action_reaction{{1,0,0},{0,1,0},{0,0,1}},
-  moment_arm{0,0,0},
-  spring_frame(nullptr),
-  separation_state(nullptr),
-  action_body(nullptr),
-  reaction_body(nullptr)
-{}
-
-/*******************************************************************************
 initialize
 Purpose:(Sets the pointers.)
 *******************************************************************************/

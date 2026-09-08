@@ -29,9 +29,7 @@ AtmosphereExec_Drwp::AtmosphereExec_Drwp(
            AtmosExecOutput               & master_output)
   :
   AtmosphereExec_AtmosWindsBase(master_output, planet_state_in),
-  DRWP_atmos(DRWP_atmos_in),
-  initialized(false),
-  altitude_at_prev_update(0.0)
+  DRWP_atmos(DRWP_atmos_in)
 {
   name = "DRWP";
 }

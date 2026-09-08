@@ -26,15 +26,12 @@ EclipseCalculator::EclipseCalculator(
   :
   time(time_),
   dyn_manager(dyn_manager_),
-  vehicle_frame(vehicle_frame_),
-  earth_name{"Earth"},
-  moon_name{"Moon"},
-  illum_factor(1.0)
+  vehicle_frame(vehicle_frame_)
 {
   earth.primary_source_ptr = &sun;
   moon.primary_source_ptr = &sun;
-  earth.name = earth_name;
-  moon.name = moon_name;
+  earth.name = "Earth";
+  moon.name = "Moon";
   earth.active = false;
   moon.active = false;
 }

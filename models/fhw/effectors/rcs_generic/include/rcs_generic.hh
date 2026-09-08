@@ -42,7 +42,7 @@ Purpose:( The manager-level object for the overall RcsGeneric model)
 *****************************************************************************/
 class RcsGeneric : public SubscriptionBase {
  protected:
-  const double * cm; /* (--)
+  const double * cm{nullptr}; /* (--)
        pointer to the 3-array representing the position of center of mass
        of the vehicle in the structural frame. */
   const unsigned int num_propellant_components; /* (--)
@@ -67,23 +67,23 @@ class RcsGeneric : public SubscriptionBase {
   std::vector<RcsJetGroup *> groups;     /* (--) RCS jet groups */
 
   /****** Inputs ******/
-  bool  mult_jet_flag;   /* (--)
+  bool  mult_jet_flag{false}; /* (--)
        Flag if multiple jet effects on thrust and flow rates are to be enabled.
        SET AT INITIALIZATION ONLY. */
-  bool  calc_flow_rate; /* (--)
+  bool  calc_flow_rate{false}; /* (--)
        Flag indicating whether flow rate should be calculated based on thrust,
        specific impulse and mixture ratio.  Can only be used with mono or
        bi-propellants.  Will result in an override of any default settings
        for jet component-flow-rates.  INITIALIZATION ONLY. */
  public:
   /****** Inputs ******/
-  bool  self_impingement; /* (--) Flag indicating whether impingement is on.*/
+  bool  self_impingement{false}; /* (--) Flag indicating whether impingement is on.*/
 
-  bool  apply_thrust_factor_per_jet;  /* (--)
+  bool  apply_thrust_factor_per_jet{false}; /* (--)
        On = per jet thrust factor is provided by external model or data.
        System level setting passed through to all jets.*/
 
-  double imp_ref_center[3];/* (m)
+  double imp_ref_center[3]{}; /* (m)
        Point in Vehicle Structural frame about which the impingement torques
        are referenced.
        Used at runtime and only if self_impingement set. */
@@ -92,15 +92,15 @@ class RcsGeneric : public SubscriptionBase {
     mag_and_uvec       = 1,  // force magnitude and unit vector
     vector             = 2   // force vector
   };
-  InputForce input_force;   /* (--)
+  InputForce input_force{input_force_error}; /* (--)
        Flag indicating method of user input for jet force */
 
-  double time_step;    /* (s)
+  double time_step{0.0}; /* (s)
        The cycle rate of the rcs_gen module.
        Set here at initialization and subsequently accessed by RcsGroup,
        RcsJet and RcsPropPod.*/
 
-  unsigned int seed; /* (--) Seed for random number generator */
+  unsigned int seed{0}; /* (--) Seed for random number generator */
   std::mt19937 generator; /* (--)
       Random number generator; using mt19937 rather than the default generator
       to avoid the problem of correlation with low seeds on uniform
@@ -111,18 +111,18 @@ class RcsGeneric : public SubscriptionBase {
   #endif
 
   /****** Outputs ******/
-  double force[3];       /* (N)  sum of the jet forces */
-  double torque[3];      /* (N*m) sum of the jet torques */
-  double total_imp_force[3]; /* (N)  sum of the jet self impingement forces */
-  double total_imp_torque[3];/* (N*m) sum of the self impingement jet torques */
+  double force[3]{};  /* (N)  sum of the jet forces */
+  double torque[3]{}; /* (N*m) sum of the jet torques */
+  double total_imp_force[3]{};  /* (N)  sum of the jet self impingement forces */
+  double total_imp_torque[3]{}; /* (N*m) sum of the self impingement jet torques */
   std::vector<double> sum_component_consumptions;  /* (kg)
         sum of the propellant component consumptions.
         NOTE - this is public for the purposes of data-logging only.
         It is considered read-only.  In particular, the size of this vector
         must not be changed.*/
-  double sum_consumption; /* (kg)  sum of the propellant consumptions */
-  double sum_time;        /* (s)  sum of the jet on times */
-  size_t num_jets;  /* (count) number of jets at initialization (output only).*/
+  double sum_consumption{0.0}; /* (kg)  sum of the propellant consumptions */
+  double sum_time{0.0};        /* (s)  sum of the jet on times */
+  size_t num_jets{0};  /* (count) number of jets at initialization (output only).*/
 
   explicit RcsGeneric (const unsigned int num_propellant_components_);
   ~RcsGeneric() override = default;

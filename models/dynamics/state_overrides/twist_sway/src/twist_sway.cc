@@ -30,73 +30,10 @@ Programmers:
 /*****************************************************************************
 Constructors
 *****************************************************************************/
-TwistSwayParams::TwistSwayParams()
-  :
-  RocketHeight(0.0),
-  wind_direction(0.0),
-  tau(0.0),
-  taul(0.0),
-  limit_ln_epsilon(-37.0),
-  Parallel_Motion_Fast(0.0),
-  Normal_Motion_Fast(0.0),
-  Parallel_Motion_Slow(0.0),
-  Normal_Motion_Slow(0.0),
-  Twist_Mag(0.0),
-  delta_T1_max(0.0),
-  delta_T1_min(0.0),
-  delta_T2_max(0.0),
-  delta_T2_min(0.0),
-  mode_freq_high(0.0),
-  mode_freq_low(0.0),
-  decay_const(0.0),
-  seed(0)
-{}
-
-/*****************************************************************************/
-TwistSwayMagnitudes::TwistSwayMagnitudes()
-  :
-  parallel(0.0),
-  normal(0.0),
-  twist(0.0)
-{}
-
-/*****************************************************************************/
 TwistSway::TwistSway(
       const double & external_clock_)
   :
-  perturb_algorithm(GrowHoldDecay),
-  dp_enu{0.0, 0.0, 0.0},
-  dv_enu{0.0, 0.0, 0.0},
-  w_ts_wrt_enu_in_enu{0.0, 0.0, 0.0},
-  dp_ecef{0.0, 0.0, 0.0},
-  dv_ecef{0.0, 0.0, 0.0},
-  w_ts_wrt_enu_in_ecef{0.0, 0.0, 0.0},
-
-  external_clock(external_clock_),
-  previous_external_clock(0.0),
-  start_time(0.0),
-  elapsed_time(0.0),
-  end_time(0.0),
-  dt(0.0),
-  T_fast(0.0),
-  T_slow(0.0),
-  Freqw(0.0),
-  decay_mult(0.0),
-  p_factor_fast(0.0),
-  p_factor_slow(0.0),
-  ix_fast_next(0),
-  ix_slow_next(0),
-  sway_parallel(0.0),
-  sway_normal(0.0),
-  twist_angle(0.0),
-  prev_sway_parallel(0.0),
-  prev_sway_normal(0.0),
-  prev_dp_up(0.0),
-  prev_twist_sway_angle(),
-  copy_wind_direction(0.0),
-  sin_wind(0.0),
-  cos_wind(1.0),
-  small_angle_warning_sent(false)
+  external_clock(external_clock_)
 {}
 
 /*****************************************************************************

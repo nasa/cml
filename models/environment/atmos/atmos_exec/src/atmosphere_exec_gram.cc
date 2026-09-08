@@ -76,16 +76,7 @@ AtmosphereExec_Gram::AtmosphereExec_Gram(
   AtmosphereExec_AtmosWindsBase(master_output, planet_state_in),
   gram_i( gram_in),
   master_gram( master_gram_10_in),
-  dyn_time( dyn_time_in),
-  activate_gram_from_master(true),
-  initialized(false),
-  year_init(0),
-  month_init(0),
-  day_init(0),
-  hour_init(0),
-  min_init(0),
-  sec_init(0.0),
-  last_update_time(-1.0e30) // A very large negative number
+  dyn_time( dyn_time_in)
 {
   name = "GRAM";
   if (master_gram == nullptr || master_gram == &gram_i) {

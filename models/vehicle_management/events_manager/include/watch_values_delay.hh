@@ -29,27 +29,23 @@ class WatchValuesDelay : public WatchValuesBase<watchType>
   const double & delay_ref; /* (--)
     Reference to the variable whose value will be monitored for evolution
     AFTER the trigger condition is satisfied. */
-  double delay_ref_at_trigger; /* (--)
+  double delay_ref_at_trigger{0.0}; /* (--)
     Value of delay_ref at the instant the trigger condition was satisfied.*/
-  bool event_triggered_pending_delay; /* (--)
+  bool event_triggered_pending_delay{false}; /* (--)
     Flag indicating that the conditions have been satisfied and the delay
     is in progress leading to the triggering of the event.*/
  public:
-  double delay_offset; /* (--)
+  double delay_offset{0.0}; /* (--)
     Extent of delay: this is the delta-value that delay_ref must change by
     after the trigger condition is satisfied before the consequences are
     applied.*/
-  bool reset_delay; /* (--)
+  bool reset_delay{false}; /* (--)
     Flag to reset the delay, set from another watch values delay typically.*/
 
   explicit WatchValuesDelay( const double & delay_ref_)
     :
     WatchValuesBase<watchType>(),
-    delay_ref( delay_ref_),
-    delay_ref_at_trigger(0.0),
-    event_triggered_pending_delay(false),
-    delay_offset(0.0),
-    reset_delay(false)
+    delay_ref( delay_ref_)
   {}
  ~WatchValuesDelay() override = default;
   WatchValuesDelay (const WatchValuesDelay& rhs) = delete;

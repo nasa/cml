@@ -10,17 +10,6 @@ PROGRAMMERS:
 #include "../include/independent_variable.hh"
 
 /*****************************************************************************
-Constructor
-*****************************************************************************/
-FaultFunctionIndependentVariable::FaultFunctionIndependentVariable() :
-  relative_value(true),
-  initialized(false),
-  variable(nullptr),
-  relative_value_init(0.0)
-{}
-
-
-/*****************************************************************************
 Destructor
 *****************************************************************************/
 FaultFunctionIndependentVariable::~FaultFunctionIndependentVariable() {

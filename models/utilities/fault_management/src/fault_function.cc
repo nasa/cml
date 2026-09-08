@@ -15,18 +15,6 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <string>
 
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-FaultFunctionBase::FaultFunctionBase() :
-  type(Linear),
-  freq_int(0.0),
-  ind_prev(0.0),
-  freq_prev(0.0)
-{}
-
-
 /*******************************************************************************
 initialize
 Purpose:(Initializes the fault.)

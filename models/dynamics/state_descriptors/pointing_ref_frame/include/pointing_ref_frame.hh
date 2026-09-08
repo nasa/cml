@@ -63,11 +63,11 @@ Design Considerations:
 *****************************************************************************/
 class PointingRefFrame : public SubscriptionBase {
  protected:
-  jeod::RefFrame * originating_frame; /* (--)
+  jeod::RefFrame * originating_frame{nullptr}; /* (--)
       pointer to the originating frame.  Note this cannot be const due to
       subscribe/unsubscribe operations, but the PointingRefFrame class should
       not influence any other aspect of this RefFrame instance.*/
-  jeod::RefFrame * target_frame; /* (--)
+  jeod::RefFrame * target_frame{nullptr}; /* (--)
       pointer to the target frame.  Note this cannot be const due to
       subscribe/unsubscribe operations, but the PointingRefFrame class should
       not influence any other aspect of this RefFrame instance.*/

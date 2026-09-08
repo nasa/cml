@@ -37,20 +37,20 @@ class TargetRelative_StateParameter_Alt : public TargetRelative_StateParam
 {
  public:
   /* Input parameters */
-  double target_point[3]; /* (m)
+  double target_point[3]{0.0, 0.0, 0.0}; /* (m)
     Location of the target point, expressed in the desired frame. */
-  double omega_planet[3]; /* (rad/s)
+  double omega_planet[3]{0.0, 0.0, 0.0}; /* (rad/s)
     Planetary rotation rate in the desired frame, expressed in the same
     desired frame. */
 
  protected:
   /* Internal variables                                          */
-  double target_r_mag; /* (m)
+  double target_r_mag{0.0}; /* (m)
     Magnitude of the target position vector.*/
 
  public:
   /* Constructor */
-  TargetRelative_StateParameter_Alt();
+  TargetRelative_StateParameter_Alt() = default;
 
   /* Destructor */
   ~TargetRelative_StateParameter_Alt() override = default;

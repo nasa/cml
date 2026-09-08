@@ -45,13 +45,13 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
  friend class CorrelatedStateDispersion;
  public:
   /* Input parameters */
-  double  target_point_altitude;   /* (m)   Target geodetic altitude      */
-  double  target_point_latitude;   /* (rad)   Target geodetic latitude      */
-  double  target_point_longitude;  /* (rad)   Target longitude              */
+  double  target_point_altitude{0.0};   /* (m)   Target geodetic altitude      */
+  double  target_point_latitude{0.0};   /* (rad)   Target geodetic latitude      */
+  double  target_point_longitude{0.0};  /* (rad)   Target longitude              */
 
-  double  tolerance;  /* (m)
+  double  tolerance{1e-08};  /* (m)
     Convergence tolerance for geodetic altitude iteration */
-  int     iter_limit; /* (--)
+  int     iter_limit{1000}; /* (--)
     Maximum iteration limit for geodetic altitude iteration */
 
  protected:
@@ -62,7 +62,7 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
 
  public:
   /* Constructor */
-  TargetRelative_StateParameter();
+  TargetRelative_StateParameter() = default;
 
   /* Destructor */
   ~TargetRelative_StateParameter() override = default;

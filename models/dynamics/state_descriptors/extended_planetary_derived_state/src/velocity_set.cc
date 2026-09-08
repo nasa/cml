@@ -36,14 +36,7 @@ Purpose:(Constructor)
 VelocitySet::VelocitySet(
         const double (&T_inrtl_this_in)[3][3])
    :
-   velocity(),
-   vel_xy(0.0),
-   flight_path(0.0),
-   azimuth(0.0),
-   altitude_rate(0.0),
-   initialized(false),
-   T_inrtl_to_this(T_inrtl_this_in),
-   inrtl_velocity(nullptr)
+   T_inrtl_to_this(T_inrtl_this_in)
 {}
 
 

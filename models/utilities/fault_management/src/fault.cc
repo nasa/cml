@@ -15,19 +15,6 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <string>
 
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-Fault::Fault() :
-  enabled(false),
-  is_fire_limited(false),
-  fire_limit(1),
-  initialized(false),
-  was_triggered_last_pass(false),
-  fire_count(0)
-{}
-
-
 /*******************************************************************************
 initialize
 Purpose:(Initializes the fault. This method only sets the initialized flag, but

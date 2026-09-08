@@ -33,9 +33,6 @@ AtmosphereExec_SimpleLookupWind::AtmosphereExec_SimpleLookupWind(
   :
   AtmosphereExec_AtmosWindsBase(master_output, planet_state_in),
   wind_table(wind_table_in),
-  wind_components_type(Topodetic),
-  altitude_type(Topodetic),
-  altitude_at_prev_update(0.0),
   altitude_ptr(&planet_state.state.ellip_coords.altitude)
 {
   name = "SimpleLookup";

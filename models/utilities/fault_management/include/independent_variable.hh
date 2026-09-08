@@ -22,7 +22,7 @@ Purpose:(An independent variable for a function. Can be absolute or relative to
 *******************************************************************************/
 class FaultFunctionIndependentVariable {
   public :
-    FaultFunctionIndependentVariable();
+    FaultFunctionIndependentVariable() = default;
     ~FaultFunctionIndependentVariable();
     FaultFunctionIndependentVariable(const FaultFunctionIndependentVariable&) = delete;
     FaultFunctionIndependentVariable& operator = (
@@ -36,15 +36,15 @@ class FaultFunctionIndependentVariable {
 
     bool is_initialized() const { return initialized; }
 
-    bool relative_value; /* (--)
+    bool relative_value{true}; /* (--)
       If true (default), reports the value of the variable minus its reference
       value. If false, reports the value of the variable. */
 
   private :
-    bool initialized; /* (--)
+    bool initialized{false}; /* (--)
       Whether the model has been successfully initialized. */
-    UntypedVariableBase* variable; /* (--) The variable being evaluated. */
-    double relative_value_init; /* (--) The reference value. */
+    UntypedVariableBase* variable{nullptr}; /* (--) The variable being evaluated. */
+    double relative_value_init{0.0}; /* (--) The reference value. */
 };
 
 

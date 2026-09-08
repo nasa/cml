@@ -25,17 +25,7 @@ Constructor
 *****************************************************************************/
 Constraint::Constraint( size_t num_tests_)
   :
-  violation_condition( ConstraintEnum::Undefined),
-  violated(false),
-  violation_count(0),
-  violate_on_any_test(true),
-  enabled(true),
-  active(false),
-  initialized(false),
-  prev_violated(false),
-  num_tests(num_tests_),
-  test_violated_index(0),
-  test_violated_time_limit(0.0)
+  num_tests(num_tests_)
 {}
 
 /*****************************************************************************

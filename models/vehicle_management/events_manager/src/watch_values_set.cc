@@ -16,15 +16,6 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 /*****************************************************************************
-Constructor
-*****************************************************************************/
-WatchValuesSet::WatchValuesSet()
-  :
-  require_all(false),
-  record_trigger_name(false)
-{}
-
-/*****************************************************************************
 add_trigger
 Purpose:
   Adds a trigger to the set. This is the only way in which the triggers

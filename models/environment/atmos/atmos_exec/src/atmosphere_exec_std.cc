@@ -28,8 +28,7 @@ AtmosphereExec_STD::AtmosphereExec_STD(
   :
   AtmosphereExec_AtmosBase(master_output),
   std76(std_76_in),
-  topodetic_altitude(topodetic_alt),
-  hmsl(0.0)
+  topodetic_altitude(topodetic_alt)
 {
   name = "STD1976";
 }

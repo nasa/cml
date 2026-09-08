@@ -31,7 +31,7 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
       Trianglewave
     };
 
-    FaultFunctionBase();
+    FaultFunctionBase() = default;
     ~FaultFunctionBase() override = default;
     FaultFunctionBase(const FaultFunctionBase&) = delete;
     FaultFunctionBase& operator = (const FaultFunctionBase&) = delete;
@@ -43,7 +43,7 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
                    double value,
                    bool modify_nominal_with_rate = false) override;
 
-    FunctionType type; /* (--)
+    FunctionType type{Linear}; /* (--)
       The type of function to add to the fault variable. */
 
 // SWIG doesn't respect deleted copy constructors or assignment operators if you
@@ -71,12 +71,12 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
 #endif
 
   protected:
-    double freq_int; /* (--)
+    double freq_int{0.0}; /* (--)
       Double the integral of the frequency with respect to the independent
       variable. Used internally as part of the independent variable of periodic
       functions. */
-    double ind_prev; /* (--) The previous value of the independent variable. */
-    double freq_prev; /* (--) The previous value of the frequency. */
+    double ind_prev{0.0}; /* (--) The previous value of the independent variable. */
+    double freq_prev{0.0}; /* (--) The previous value of the frequency. */
 };
 
 

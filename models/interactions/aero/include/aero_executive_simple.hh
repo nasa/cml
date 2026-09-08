@@ -51,13 +51,13 @@ protected:
   /***************************************************************************/
   // internal values
   /***************************************************************************/
-  DragType drag_type;  /* (--) Specifies which model to use. */
+  DragType drag_type{constant_vec};  /* (--) Specifies which model to use. */
 
 public:
-  double BC;           /* (kg/m2) Ballistic Coefficient. */
-  double CD;           /* (--)    Coefficient of drag. */
-  double drag_mag;     /* (N)     Magnitude of drag force. */
-  double bc_epsilon;   /* (1/m2)
+  double BC{1.0};          /* (kg/m2) Ballistic Coefficient. */
+  double CD{0.0};          /* (--)    Coefficient of drag. */
+  double drag_mag{0.0};    /* (N)     Magnitude of drag force. */
+  double bc_epsilon{1E-6}; /* (1/m2)
           A test-value for the validity of BC, ensuring that
           (dyn-pressure / BC) < (1/bc_epsilon).
           It is effectively 1/(the largest acceleration for which the

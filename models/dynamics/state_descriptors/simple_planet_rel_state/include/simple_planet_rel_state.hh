@@ -30,8 +30,8 @@ class SimplePlanetRelState : public SubscriptionBase,
          name of the planet reference frame, including the name of the planet
          E.g. Earth.inertial, Moon.pfix. */
  public:
-  double reference_radius; /* (m) Reference-radius for computing the altitude*/
-  double altitude;         /* (m) height of the frame-of-interest above the
+  double reference_radius{0.0}; /* (m) Reference-radius for computing the altitude*/
+  double altitude{0.0};         /* (m) height of the frame-of-interest above the
                                   reference-height. */
 
   SimplePlanetRelState(const std::string & body_frame_name_,

@@ -32,9 +32,9 @@ All vectors are expressed in the planet-centered-planet-fixed (PCPF) frame.
 *****************************************************************************/
 class TR_Parameter_RefFrame {
   public:
-    double u_hat[3]; /* (--) unit-vector defining frame axis.*/
-    double n_hat[3]; /* (--) unit-vector defining frame axis.*/
-    double p_hat[3]; /* (--) unit-vector defining frame axis.*/
+    double u_hat[3]{}; /* (--) unit-vector defining frame axis.*/
+    double n_hat[3]{}; /* (--) unit-vector defining frame axis.*/
+    double p_hat[3]{}; /* (--) unit-vector defining frame axis.*/
 
   protected:
     std::string name; /* (--)

@@ -41,7 +41,7 @@ class RcsPodComponent{
       Mass consumed in this time-step. For monitoring only.*/
   double * consumable_mass; /* (kg)
       Consumable mass remaining. For consistency only.*/
-  bool using_dyn_mass; /* (--)
+  bool using_dyn_mass{false}; /* (--)
       Indicates whether there is a true Dyn-Mass interface or whether
       the model is using the fake one provided here.
       Defaults to false (using fake) until one is provided. */
@@ -56,7 +56,7 @@ class RcsPodComponent{
        flow_rate_sf.at(2) is the scale factor when 3 jets are firing.
        Use if RcsJetGroup::propc_use_isp = false and
               RcsGeneric::mult_jet_flag = true */
-  double sum_consumption; /* (kg)
+  double sum_consumption{0.0}; /* (kg)
         Sum of all propellant consumed in this component.*/
 
   explicit RcsPodComponent( unsigned int max_num_jets_on);
@@ -86,25 +86,25 @@ Purpose:(Propulsion Pod feeding some number of RCS jets.
 *****************************************************************************/
 class RcsPropPod{
  protected:
-  double mass_epsilon; /* (kg) mass at which mass=0.0 is reasonable approx.*/
-  double momentum_epsilon; /* (N*s)
+  double mass_epsilon{1.0e-12}; /* (kg) mass at which mass=0.0 is reasonable approx.*/
+  double momentum_epsilon{1.0e-12}; /* (N*s)
          minimum equivalent momentum to register having a jet needed.*/
   const double  & time_step; /* (s) reference to the time-step in RcsGeneric. */
   const unsigned int max_num_jets_on; /* (--)
        The maximum number of jets that may be on at a time.  This should be the
        size of the thrust_factor vector.*/
-  bool using_dyn_mass; /* (--)
+  bool using_dyn_mass{false}; /* (--)
        Defaults to false; is set to true if any of the dynamic-mass
        interfaces are assigned to real dynamic-masses. */
  public:
   /****** Controls ****/
-  bool continue_thrust_after_depletion; /* (--)
+  bool continue_thrust_after_depletion{false}; /* (--)
        Flag used when the model is used to deplete mass, but it is not
        desirable for mass-depletion to end the thrust profile.
        Used only when "using_dyn_mass".
        Default: false, i.e. thrusters stop when they run out of propellant.)*/
 
-  bool fail_on_depleted_mass; /* (--)
+  bool fail_on_depleted_mass{false}; /* (--)
       Flag used to cause an automatic health-status transition to HealthFail if
       the string exhausts all of any component of its propellant (e.g. all of
       its fuel).  This flag has no effect if "continue_thrust_after_depletion"
@@ -117,10 +117,10 @@ class RcsPropPod{
     HealthSuspect = 2,
     HealthFail = 3
   };
-  PodHealth health; /* (--) Used for marking the health-status of a pod.*/
+  PodHealth health{HealthUndefined}; /* (--) Used for marking the health-status of a pod.*/
 
   /****** Inputs ******/
-  double nominal_thrust ; /* (N)
+  double nominal_thrust{0.0} ; /* (N)
        Thrust level used to determine the thrust factor array,
        Thrust_factor array is indexed according to equivalent number of
        nominal_thrust jets being fired.
@@ -129,7 +129,7 @@ class RcsPropPod{
             the thrust-factor array index.
        Note that this is likely to be the same as c[0] for the blow-down model.
        Needed only if RcsGeneric::mult_jet_flag set */
-  double pressure;    /* (N/m2)
+  double pressure{0.0};    /* (N/m2)
        pressure used for blowdown model (from ext source) */
 
   std::vector<double> thrust_factor;/* (--)
@@ -147,15 +147,15 @@ class RcsPropPod{
 
 
   //  ********** Outputs  **********
-  double sum_consumption; /* (kg)
+  double sum_consumption{0.0}; /* (kg)
         Sum of all propellant consumed for all components. */
 
 
   /****** Work space + Pointers + Structures ******/
-  double equiv_momentum; /* (N*s)
+  double equiv_momentum{0.0}; /* (N*s)
        Working space to determine how many jets are on.  Equal to the time
        jets from each pod are on times the thrust for each jet */
-  unsigned int num_jets_on;   /* (--) Number of jets firing from a prop pod */
+  unsigned int num_jets_on{0};   /* (--) Number of jets firing from a prop pod */
 
   RcsPropPod( unsigned int max_num_jets_on_,
               unsigned int num_components_,

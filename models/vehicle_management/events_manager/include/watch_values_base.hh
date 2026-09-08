@@ -30,14 +30,14 @@ template <typename watchType>
 class WatchValuesBase : public WatchValuesBaseCore {
 
  protected:
-  bool reference_is_variable; /* (--) Reference is a variable, not fixed value.*/
+  bool reference_is_variable{false}; /* (--) Reference is a variable, not fixed value.*/
   const watchType * variable;       /* (--) variable being watched*/
   watchType   reference;      /* (--) fixed value to test against*/
   const watchType * reference_ptr;  /* (--) variable value to test against.*/
   watchType   variable_at_activation; /* (--) *variable at event activation*/
 
  public:
-  bool use_threshold_crossing_trigger; /* (--)
+  bool use_threshold_crossing_trigger{false}; /* (--)
     Flag to indicate whether to treat a variable with a discrete data type
     (e.g. int and related integer types, enumerations, bools) as a
     continuous variable for the purpose of detecting threshold crossings.
@@ -45,12 +45,11 @@ class WatchValuesBase : public WatchValuesBaseCore {
     variables and the event trigger on reaching the target value).*/
   WatchValuesBase()
      :
-     reference_is_variable(false),
      variable(nullptr),
      reference(), // no value; this is of watchType.
      reference_ptr(nullptr),
-     variable_at_activation(),
-     use_threshold_crossing_trigger(false) {}
+     variable_at_activation()
+     {}
   ~WatchValuesBase() override = default;
   WatchValuesBase (const WatchValuesBase& rhs) = delete;
   WatchValuesBase& operator = (const WatchValuesBase& rhs) = delete;

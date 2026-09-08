@@ -77,23 +77,15 @@ struct GramOut
 class GramIn
 {
  public:
-  bool   gram_active; /* (--)  GRAM model activation flag */
-  bool   inflt_gram_init_enable;
+  bool   gram_active{true}; /* (--)  GRAM model activation flag */
+  bool   inflt_gram_init_enable{true};
                       /* (--)  Enable GRAM initialization in flight */
-  double latitude;    /* (rad) latitude of desired GRAM t-lookup */
-  double longitude;   /* (rad) longitude of desired GRAM t-lookup */
-  double alt;         /* (m)   geocentric altitude of desired GRAM t-lookup */
-  double alt_offset;  /* (m)   MSL - geodetic altitude offset */
+  double latitude{0.0};    /* (rad) latitude of desired GRAM t-lookup */
+  double longitude{0.0};   /* (rad) longitude of desired GRAM t-lookup */
+  double alt{0.0};         /* (m)   geocentric altitude of desired GRAM t-lookup */
+  double alt_offset{0.0};  /* (m)   MSL - geodetic altitude offset */
 
-  GramIn()
-  :
-    gram_active(true),
-    inflt_gram_init_enable(true),
-    latitude(0.0),
-    longitude(0.0),
-    alt(0.0),
-    alt_offset(0.0)
-  {}
+  GramIn() = default;
 };
 
 // Structures defined to overlay the GRAM Fortran common blocks
@@ -199,7 +191,7 @@ class AtmosphereExec_Gram : public AtmosphereExec_AtmosWindsBase
     const double & dyn_time; /* (--) Reference to JEOD's dynamic time*/
 
   public:
-    bool activate_gram_from_master; /* (--)
+    bool activate_gram_from_master{true}; /* (--)
              Copy data from external GRAM model at model activation.*/
 
     AtmosphereExec_Gram(GramInterface & gram_in,
@@ -221,15 +213,15 @@ class AtmosphereExec_Gram : public AtmosphereExec_AtmosWindsBase
     void update_winds() override;
 
   protected:
-    bool initialized; /* (--) Internal flag to indicate that initialize has run.*/
-    int     year_init;   /* (--)  Atmos initial year  input */
-    int     month_init;  /* (--)  Atmos initial month input */
-    int     day_init;    /* (--)  Atmos initial day   input */
-    int     hour_init;   /* (--)  Atmos initial hour  input */
-    int     min_init;    /* (--)  Atmos initial min   input */
-    double  sec_init;    /* (s)   Atmos initial sec   input */
+    bool initialized{false}; /* (--)  Internal flag to indicate that initialize has run.*/
+    int     year_init{0};    /* (--)  Atmos initial year  input */
+    int     month_init{0};   /* (--)  Atmos initial month input */
+    int     day_init{0};     /* (--)  Atmos initial day   input */
+    int     hour_init{0};    /* (--)  Atmos initial hour  input */
+    int     min_init{0};     /* (--)  Atmos initial min   input */
+    double  sec_init{0.0};   /* (s)   Atmos initial sec   input */
 
-    double last_update_time; /* (s) time at which GRAM update was last called.*/
+    double last_update_time{-1.0e30}; /* (s) time at which GRAM update was last called.*/
 
     bool initialize();
 };

@@ -28,19 +28,6 @@ Method: DynamicMassGroup
 Purpose: (Constructor)
 *******************************************************************************/
 DynamicMassGroup::DynamicMassGroup()
-:
-  delta_mass_is_redistributed(false),
-  name("unnamed"),
-  countdown_reset(100),
-  flow_warn_msg_shown(false),
-  needs_tree_update(true), // Forces the full update, including strings,
-                           // at initialization
-  total_mass(0.0),
-  total_initial_mass(0.0),
-  total_consumed_mass(0.0),
-  countdown_to_root_test(0),
-  num_dyn_masses(0),
-  root_body_ptr(nullptr)
 {
   subscribe_name = "DynamicMassGroup:";
 }

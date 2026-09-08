@@ -25,12 +25,6 @@ ApsidesPredictor::ApsidesPredictor(
      const jeod::Planet & planet,
      const double & grav_mu)
   :
-  small_tolerance(1.0e-13),
-  min_del_h(18520.0), // 10 Nautical miles, per requirements
-  time_to_next_apsis(0.0),
-  next_apsis_type(UNDEFINED),
-  apoapsis_altitude(0.0),
-  periapsis_altitude(0.0),
   orb_elem( inrtl_state,
             planet,
             grav_mu),

@@ -25,10 +25,7 @@ SimplePlanetRelState::SimplePlanetRelState(
      const std::string & planet_frame_name_)
   :
   body_frame_name(body_frame_name_),
-  planet_frame_name(planet_frame_name_),
-  reference_radius(0.0),
-  altitude(0.0)
-
+  planet_frame_name(planet_frame_name_)
 {
   subscribe_name = "SimplePlanetRelState:";
 

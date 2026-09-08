@@ -40,11 +40,11 @@ class AccumulatedAbsoluteDeltas : public SubscriptionBase
   const double * variable; /* (--) Time-dependent variable to accumulate
        changes over time */
   const unsigned int size; /* (--) Size of the variable */
-  double * old_variable; /* (--) Copy of the variable containing values
+  double * old_variable{nullptr}; /* (--) Copy of the variable containing values
        one frame behind the variable */
 
  public:
-  double * accumulated_deltas; /* (--) Difference between variable values
+  double * accumulated_deltas{nullptr}; /* (--) Difference between variable values
        and old_variable values */
   AccumulatedAbsoluteDeltas(  const double * variable_,
                               const unsigned int size_);

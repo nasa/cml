@@ -23,7 +23,7 @@ Purpose:(Returns a parameter that is a linear function of some arbitrary
 class FaultFunctionParameter {
 
   public:
-    FaultFunctionParameter();
+    FaultFunctionParameter() = default;
     virtual ~FaultFunctionParameter() = default;
     FaultFunctionParameter(const FaultFunctionParameter&) = delete;
     FaultFunctionParameter& operator = (const FaultFunctionParameter&) = delete;
@@ -34,8 +34,8 @@ class FaultFunctionParameter {
     FaultFunctionIndependentVariable ind_variable; /* (--)
       The parameter's independent variable. */
 
-    double rate; /* (--) The slope of the linear function. */
-    double nominal; /* (--)
+    double rate{0.0}; /* (--) The slope of the linear function. */
+    double nominal{0.0}; /* (--)
       The value of the parameter when the independent variable is 0. If the
       independent variable is relative, this is the initial value of the
       parameter. */

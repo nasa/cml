@@ -37,7 +37,7 @@ Notes:
 class ConstraintSet : public SubscriptionBase
 {
  protected:
-  unsigned int num_violations; /* (--)
+  unsigned int num_violations{0}; /* (--)
     Counts the number of constraints violated in each cycle.
     Do not confuse with ConstraintBase::violate_count, which counts the number
     of occurrences of a specific constraint violation. across all cycles.*/
@@ -48,7 +48,7 @@ class ConstraintSet : public SubscriptionBase
     class. Constraints should be instantiated independently and added to the
     set.*/
 
-  ConstraintSet();
+  ConstraintSet() = default;
   ~ConstraintSet() override = default;
   ConstraintSet( ConstraintSet &) = delete;
   ConstraintSet &operator= ( ConstraintSet &) = delete;

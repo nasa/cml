@@ -34,9 +34,9 @@ class RcsJet {
   // is given its own reference:
   const double & time_step; /* (s) reference to RcsGeneric time_step. */
 
-  double isp;   /* (s) Specific impulse. Set only if blow_down NOT set */
-  double isp_g; /* (m/s) isp * g at earth surface. */
-  const double g_at_earth_surface; /* (m/s2) g at earth surface. */
+  double isp{0.0};   /* (s) Specific impulse. Set only if blow_down NOT set */
+  double isp_g{0.0}; /* (m/s) isp * g at earth surface. */
+  const double g_at_earth_surface{9.80665}; /* (m/s2) g at earth surface. */
 
   std::vector<double> component_flow_rate; /* (kg/s)
        Propellant flow rates for each propellant component assuming only one
@@ -49,30 +49,30 @@ class RcsJet {
        Work space for prop consumption during delta_time_on maximum for each
        propellant component */
 
-  double force_hat[3]; /* (--)
+  double force_hat[3]{}; /* (--)
        Unit-vector force direction. */
-  double T_str_to_case[3][3]; /* (--)
+  double T_str_to_case[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--)
        transformation matrix from structural frame to a frame oriented such
        that the nominal force is oriented along the x-axis.
        y-axis and z-axis are ambiguous but not important.*/
-  bool force_hat_changed; /* (--)
+  bool force_hat_changed{true}; /* (--)
       set to true when force_hat is changed externally, used by
       generate_force_direction_matrix.*/
 
-  double force_cl_with_err;  /* (N)
+  double force_cl_with_err{0.0};  /* (N)
        force_cl + force_cl_err. */
-  double force_hat_with_err[3]; /* (--)
+  double force_hat_with_err[3]{}; /* (--)
        A direction unit-vector including the directional errors.*/
 
-  double cone_angle_err; /* (rad)
+  double cone_angle_err{0.0}; /* (rad)
        Angle of rotation of dispersed force_hat away from force_hat */
-  double azimuth_angle_err; /* (rad)
+  double azimuth_angle_err{0.0}; /* (rad)
        Angle of rotation of dispersed force_hat in plane perpendiculer to
        force_hat */
 
  public:
   /****** Inputs AND Outputs ******/
-  double force[3];     /* (N)
+  double force[3]{}; /* (N)
       Force applied during a time step. It is also an Input during
       initialization if input_force=2) */
 
@@ -83,20 +83,20 @@ class RcsJet {
     Calc_Fire,     // calculate errors when a jet begins a new fire
     Calc_Always    // calculate errors whenever the jet is on
   };
-  RCSJetError error;    /* (--) switch for random jet error implementation */
+  RCSJetError error{No_Errors}; /* (--) switch for random jet error implementation */
 
-  double location[3]; /* (m)  position vector of the jet in structural frame */
-  double force_cl;    /* (N)
+  double location[3]{}; /* (m)  position vector of the jet in structural frame */
+  double force_cl{0.0}; /* (N)
        Force along the center line of the jet
        Set his value as an input only if:
          ((RcsGeneric::input_force == RcsGeneric::mag_and_uvec) AND
           (RcsJetGroup::blow_down  == false)). */
 
-  double force_mag_std_dev; /* (--)
+  double force_mag_std_dev{0.0}; /* (--)
        Force magnitude error standard deviation as a fraction of the
        nominal center-line thrust.
        Used only if: (error != No_Errors)  */
-  double force_mag_bias_frac; /* (--)
+  double force_mag_bias_frac{0.0}; /* (--)
        Force magnitude error bias as a fraction of nominal center-line-thrust
        Total force error = force_cl *
                              (force_bias_frac + random * force_std_dev_frac)
@@ -106,50 +106,50 @@ class RcsJet {
     Vector = 0,
     Angle = 1
   };
-  RcsDirectionError direction_error; /* (--)
+  RcsDirectionError direction_error{Vector}; /* (--)
         switch for determining which method to use for dispersing directional
         aspect of force error. */
 
-  double force_cl_err; /* (N)
+  double force_cl_err{0.0}; /* (N)
        Error in force magnitude along the jet centerline.
        Input only in case of error = Input_Errors. */
 
-  double force_hat_err[3]; /* (--)
+  double force_hat_err[3]{}; /* (--)
        Error in force direction. Will be calculated if random noise added,
        will be an input otherwise.
        No need to be set if:
            (error != No_Errors) AND
            ((force_hat_std_dev != [0,0,0]) OR (force_axial_std_dev > 0) */
-  double force_hat_std_dev[3];/* (--)
+  double force_hat_std_dev[3]{}; /* (--)
        Force direction error standard deviation as a fraction of the unit
        direction vector
        Set only if: (error != No_Errors)  */
-  double force_hat_std_mean[3];/* (m)
+  double force_hat_std_mean[3]{}; /* (m)
        Force direction error standard mean
        Set only if: (error != No_Errors)  */
 
-  bool direction_dispersion;  /* (--)
+  bool direction_dispersion{false}; /* (--)
        Flag indicating whether the nominal force_hat vector should have a
        dispersion applied to it.  Defaults to false.*/
-  double cone_angle_disp; /* (rad)
+  double cone_angle_disp{0.0}; /* (rad)
        Angle of rotation of dispersed force_hat away from force_hat.
        Used to represent a relatively constant dispersion rather than
        a random error.  For errors, use cone_angle_std and cone_angle_bias.*/
-  double azimuth_angle_disp; /* (rad)
+  double azimuth_angle_disp{0.0}; /* (rad)
        Angle of rotation of dispersed force_hat in plane perpendicular to
        force_hat.  Used to represent a relatively constant dispersion rather
        than a random error.  For random errors, azimuth angle is automatically
        generated as a random value between 0 and pi.*/
 
-  double cone_angle_bias; /* (rad)
+  double cone_angle_bias{0.0}; /* (rad)
        Fixed component used in computing cone_angle_err. */
-  double cone_angle_std_dev; /* (rad)
+  double cone_angle_std_dev{0.0}; /* (rad)
        Standard deviation of random distribution used in computing
        cone_angle_err. */
-  double base_impingement_force[3];  /* (N)
+  double base_impingement_force[3]{};  /* (N)
        Basis for computation of self-impingement force, structural
        frame referenced.  Scaled to provide scaled_impingement_force. */
-  double base_impingement_torque[3];  /* (N*m)
+  double base_impingement_torque[3]{};  /* (N*m)
        Basis for computation of self-impingement torque, about impingement
        reference centeri, referenced to the structural frame.  Scaled to
        provide scaled_impingement_torque. */
@@ -158,8 +158,8 @@ class RcsJet {
     Failed_Off = 0,  // jet never fires
     Failed_On  = 1   // jet continuously fires
   };
-  RcsJetFailure failure; /* (--) Monitoring jet failures.*/
-  double thrust_factor;  /* (--)
+  RcsJetFailure failure{No_Failure}; /* (--) Monitoring jet failures.*/
+  double thrust_factor{0.0};  /* (--)
        Per jet thrust factor (used if bool apply_thrust_factor_per_jet is on) */
 
   /****** Work space + Pointers + Structures ******/
@@ -169,43 +169,43 @@ class RcsJet {
     Status_BuildUp  = 2,
     Status_TrailOff = 3
   };
-  RcsJetStatus status;  /* (--)  jet status */
-  double on_com_time;   /* (s)
+  RcsJetStatus status{Status_Off};  /* (--)  jet status */
+  double on_com_time{0.0};   /* (s)
        Time since on command input not including any buffered time,
        i.e. on_com_time = 0 during the first time step that an rcs jet force
        is applied and is incremented by time_step while in build up or on*/
-  double off_com_time;  /* (s)
+  double off_com_time{0.0};  /* (s)
        Time since off command input not including any buffered time,
        i.e. off_com_time = 0 during the first time step that an rcs jet force
        is not applied and is incremented by time_step while in trail off or off*/
-  double on_com_time1;   /* (s)
+  double on_com_time1{0.0};   /* (s)
        Time since on command input not including any buffered time,
        i.e. on_com_time = 0 during the first time step that an rcs jet force
        is applied and is incremented by time_step while in build up or on*/
-  double off_com_time1;  /* (s)
+  double off_com_time1{0.0};  /* (s)
        Time since off command input not including any buffered time,
        i.e. off_com_time = 0 during the first time step that an rcs jet force
        is not applied and is incremented by time_step while in trail off or off*/
 
-  double time_left_in_trailoff; /* (s)  Time left in trail off */
-  double delta_time_on;  /* (s)  Work space for time jet is on */
-  double scaled_force;   /* (N)
+  double time_left_in_trailoff{0.0}; /* (s)  Time left in trail off */
+  double delta_time_on{0.0};  /* (s)  Work space for time jet is on */
+  double scaled_force{0.0};   /* (N)
        Scaled Force due to thrust degradation when multiple jets are firing;
        is equal to force_cl * thrust_factor */
 
-  double total_delay_on;  /* (s)  Total delay before turning jets on   */
-  double total_delay_off; /* (s)  Total delay before turning jets off  */
+  double total_delay_on{0.0};  /* (s)  Total delay before turning jets on   */
+  double total_delay_off{0.0}; /* (s)  Total delay before turning jets off  */
 
   /****** Outputs ******/
   std::list<bool> commands; /* (--)
        Jet command buffer to accomodate delays that are > time_step*/
-  bool command;     /* (--) Current command-on status. */
-  int    nfired;    /* (--)  number of times this jet has fired */
-  double sum_time;  /* (s)  total time over which this jet is fired */
-  double torque[3]; /* (N*m)  Torque applied during a time step */
-  double scaled_impingement_force[3];  /* (N)
+  bool command{false};  /* (--) Current command-on status. */
+  int    nfired{0};     /* (--)  number of times this jet has fired */
+  double sum_time{0.0}; /* (s)  total time over which this jet is fired */
+  double torque[3]{};   /* (N*m)  Torque applied during a time step */
+  double scaled_impingement_force[3]{};  /* (N)
        Scaled value of base_impingement_force. */
-  double scaled_impingement_torque[3];  /* (N*m)
+  double scaled_impingement_torque[3]{};  /* (N*m)
        Scaled value of base_impingement_torque. */
 
   RcsJet( RcsGeneric & rcs_system_,

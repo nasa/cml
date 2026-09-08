@@ -29,46 +29,6 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/vector3.hh"
 
 /*****************************************************************************
-Constructors
-*****************************************************************************/
-DRWPTableLookup::DRWPTableLookup()
-  :
-  profile_number(2),
-  initialized_with_vertical_component(false),
-  verified(false)
-{}
-
-/****************************************************************************/
-LookupAtmosWinds::LookupAtmosWinds()
-  :
-  wind_number(2),
-  include_vertical_component(false),
-  block_warnings(false),
-  altitude(0.0),
-  alt_bias(0.0),
-  u(0.0),
-  v(0.0),
-  w(0.0),
-  wind_angle_blowing_to(0.0),
-  wind_angle_blowing_from(0.0),
-  wind_vmag(0.0),
-  wind_velocity_tc{0.0, 0.0, 0.0},
-  average_wind{0.0, 0.0, 0.0},
-  rho(0.0),
-  T(0.0),
-  P(0.0),
-  SOS(0.0),
-  SOS_fair_lo_alt(85344.0),
-  SOS_fair_hi_alt(91440.0),
-  SOS_hi_alt_const(274.61),
-  gamma(1.4),
-  warning_issued(false),
-  current_index(0),
-  number_of_datasets(0),
-  TableLookup_array()
-{}
-
-/*****************************************************************************
 verify
 Purpose:
   Verifies the contents of a DRWPTableLookup. Initializes and tests the

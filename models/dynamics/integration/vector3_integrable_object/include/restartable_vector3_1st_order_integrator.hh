@@ -29,7 +29,6 @@ constructor
 *****************************************************************************/
     RestartableVector3FirstOrderODEIntegrator ()
     :
-    integrator(nullptr),
     integrator_manager(integrator)
     {
       JEOD_REGISTER_CLASS (RestartableVector3FirstOrderODEIntegrator);
@@ -132,7 +131,7 @@ Purpose:(Restore the integrator on restart.)
     Pointer to the object that performs integration. The object is created
     managed by the integrator manager.
     */
-    er7_utils::FirstOrderODEIntegrator * integrator; //!< trick_units(--)
+    er7_utils::FirstOrderODEIntegrator * integrator{nullptr}; //!< trick_units(--)
 
     /*
     Object that creates and manages the integrator object.

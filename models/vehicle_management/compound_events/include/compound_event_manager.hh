@@ -43,7 +43,7 @@ class CompoundEventsManager : public VehicleEventsManager
     use in multiple events.  The other capabilities of an EventTriggerSet
     are not used by this instance.*/
  public:
-  bool enabled; /* (--)
+  bool enabled{true}; /* (--)
     Simple enabled flag. The VehicleEventsManager base class was originally
     conceived as being a singleton within a sim, managing all basic events.
     This extension could be utilized as one of several events-managers, with

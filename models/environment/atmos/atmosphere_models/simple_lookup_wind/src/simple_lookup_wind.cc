@@ -22,22 +22,10 @@ Constructor
 *****************************************************************************/
 SimpleLookupWind::SimpleLookupWind()
   :
-  altitude_placeholder(0.0),
-
-  wind_components_specified(false),
-  include_vertical_component(false),
-
-  wind_blowing_from(0.0),
-  wind_magnitude_horizontal(0.0),
-  wind_magnitude(0.0),
-  wind_vertical_up(0.0),
   altitude_table(altitude_placeholder),
   wind_blowing_from_table(wind_blowing_from),
   wind_magnitude_table(wind_magnitude_horizontal),
-  wind_vertical_up_table(wind_vertical_up),
-  
-  wind_component{0.0, 0.0, 0.0},
-  wind_blowing_from_warning(false)
+  wind_vertical_up_table(wind_vertical_up)
 {}
 
 /*****************************************************************************

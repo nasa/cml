@@ -17,34 +17,34 @@ PROGRAMMERS:
 class SimpleSpringIndividual{
 public:
   // Input values
-  double spring_constant;     /* (N/m) Spring or flange stiffness constant. */
-  double damping_constant;    /* (N*s/m) Damping constant F = -bv. */
-  double stroke;              /* (m) Allowable Spring compression displacement
-                                     (>= 0). */
-  double final_compression;   /* (m) Final displacement in compression. */
-  double position_action[3];  /* (m) The structural position at which the spring
-                                     is attached to the action-body. */
-  double position_reaction[3];/* (m) The structural position at which the spring
-                                     pushes against the reaction-body. */
+  double spring_constant{0.0};   /* (N/m) Spring or flange stiffness constant. */
+  double damping_constant{0.0};  /* (N*s/m) Damping constant F = -bv. */
+  double stroke{0.0};            /* (m) Allowable Spring compression displacement
+                                        (>= 0). */
+  double final_compression{0.0}; /* (m) Final displacement in compression. */
+  double position_action[3]{};   /* (m) The structural position at which the spring
+                                        is attached to the action-body. */
+  double position_reaction[3]{}; /* (m) The structural position at which the spring
+                                        pushes against the reaction-body. */
 
   
   // Output values
-  double compression;         /* (m) Distance between spring initial and current
-                                     position. */
-  double axial_force;         /* (N) Spring force. */
-  double damping_force;       /* (N) Force caused by spring damping. */
+  double compression{0.0};       /* (m) Distance between spring initial and current
+                                        position. */
+  double axial_force{0.0};       /* (N) Spring force. */
+  double damping_force{0.0};     /* (N) Force caused by spring damping. */
 
 protected:
   // Working values
-  bool   active;              /* (--)  Flag that determines whether the spring
-                                       is flexing. */
-  double initial_compression; /* (m)   Initial spring compression (>= 0). */
-  double extension_distance;  /* (m)   Current separation distance. */
-  double extension_speed;     /* (m/s) Current separation speed. */
+  bool   active{false};            /* (--)  Flag that determines whether the spring
+                                            is flexing. */
+  double initial_compression{0.0}; /* (m)   Initial spring compression (>= 0). */
+  double extension_distance{0.0};  /* (m)   Current separation distance. */
+  double extension_speed{0.0};     /* (m/s) Current separation speed. */
 
  // Methods:
 public:
-  SimpleSpringIndividual(); 
+  SimpleSpringIndividual() = default;
   SimpleSpringIndividual(const SimpleSpringIndividual& rhs) = delete;
   SimpleSpringIndividual & operator= (const SimpleSpringIndividual&) = delete;
   void set_active( bool arg){active = arg;}

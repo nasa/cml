@@ -23,40 +23,29 @@
 class SubscriptionBase {
 
  public:
-  std::string  subscribe_name; /* (--)
+  std::string  subscribe_name{"unnamed-instance"}; /* (--)
       Optional setting, useful for messages and debugging only.
       Not used for other purposes.*/
-  bool  initialize_on_failed_activation; /* (--)
+  bool  initialize_on_failed_activation{false}; /* (--)
       Configuration flag controls the response if the model fails to activate
       during an initialization operation with subscriptions already pending.
       Default: false (retain subscriptions, fail initialization).*/
-  bool quiet_unsubscribe_warning; /* (--)
+  bool quiet_unsubscribe_warning{false}; /* (--)
       Optional flag to quiet the unsubscribe warning.*/
-  bool quiet_disabled_warning; /* (--)
+  bool quiet_disabled_warning{false}; /* (--)
       Optional flag to quiet the error meesage that would be posted when
       subscribing to a disabled model.*/
 
  protected:
-  bool enabled; /* (--) master flag. Use as a gate on initialize() if desired. */
-  bool initialized; /* (--) model is ready to be activated */
-  bool active;      /* (--) model can be executed */
-  int  sub_pending; /* (--) Subscription call received before initialization */
-  int  num_subscriptions; /* (--) number of subscriptions. */
+  bool enabled{true};        /* (--) master flag. Use as a gate on initialize() if desired. */
+  bool initialized{false};   /* (--) model is ready to be activated */
+  bool active{false};        /* (--) model can be executed */
+  int  sub_pending{0};       /* (--) Subscription call received before initialization */
+  int  num_subscriptions{0}; /* (--) number of subscriptions. */
 
  public:
-  SubscriptionBase() :
-    subscribe_name("unnamed-instance"),
-    initialize_on_failed_activation(false),
-    quiet_unsubscribe_warning(false),
-    quiet_disabled_warning(false),
-    enabled(true),
-    initialized(false),
-    active(false),
-    sub_pending(0),
-    num_subscriptions(0){}
-
+  SubscriptionBase() = default;
   virtual ~SubscriptionBase() = default;
-
   SubscriptionBase (const SubscriptionBase&) = delete;
   SubscriptionBase& operator = (const SubscriptionBase&) = delete;
 

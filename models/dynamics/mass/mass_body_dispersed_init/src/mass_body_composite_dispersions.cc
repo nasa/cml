@@ -33,10 +33,7 @@ Constructor
 MassBodyCompositeDispersions::MassBodyCompositeDispersions (
     jeod::MassBody & target_body_in)
   :
-  target_body( target_body_in),
-  fail_if_mass_invalid(false),
-  adjustable_body(nullptr),
-  detach_sub_tree(nullptr)
+  target_body( target_body_in)
 {
   // Turn off the active flag by default.
   active = false;

@@ -56,7 +56,7 @@ protected:
     "nominal" and "disperse" properties. */
 
 public:
-  bool fail_if_mass_invalid;         /* (--)
+  bool fail_if_mass_invalid{false};         /* (--)
     Flag determining whether non-physical mass properties (such as
     negative mass) in the adjustable-body should result in sim-termination.
     Default: false (allow non-physical properties). */
@@ -67,14 +67,14 @@ public:
     are computed internally, or dispersion values if computed externally,
     and controls to support options such as equal-distributions on
     different axes.*/
-  jeod::MassBody * adjustable_body; /* (--)
+  jeod::MassBody * adjustable_body{nullptr}; /* (--)
     The body whose core-properties are being modified to meet the
     desired composite-properties of the target-body. This may be the
     target-body or a body subordinate to the target body in the mass-tree
     hierarchy.
     Note -- this is a pointer because it may be modified by the argument to
     the update(...) method. */
-  jeod::MassBody * detach_sub_tree; /* (--)
+  jeod::MassBody * detach_sub_tree{nullptr}; /* (--)
     When evaluating the composite-properties, it may be desirable to
     consider only the composite-properties of some subset of the total
     mass tree. If this pointer is set, the mass tree will be detached at

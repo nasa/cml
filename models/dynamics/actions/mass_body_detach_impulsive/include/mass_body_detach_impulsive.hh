@@ -33,29 +33,29 @@ class MassPoint;
 class MassBodyDetachImpulsive : public jeod::BodyAction {
   // Member data
   public:
-    double impulse_magnitude;       /* (N*s)
+    double impulse_magnitude{0.0}; /* (N*s)
       The impulse applied during the detach. */
 
     std::string subject_point_name; /* (--)
       The suffix of the name of the subject point. This must match the
       subject_point_name used in the JEOD BodyAttachAligned class. */
 
-    std::string parent_point_name;  /* (--)
+    std::string parent_point_name; /* (--)
       The suffix of the name of the point on the parent body.
       This must match the parent_point_name used in the
       JEOD BodyAttachAligned class. */
 
-    double separation_speed;        /* (m/s)
+    double separation_speed{0.0}; /* (m/s)
       The delta-V from the bodies detaching specified by the user instead
       of being calculated in the apply_impulse() method. */
 
-    bool sep_speed_spec_by_user;    /* (--)
+    bool sep_speed_spec_by_user{false}; /* (--)
       Flag used to determine if the delta-V is to be calculated (default), or
       is set by the user and the impulse should be calculated instead. */
 
   // Member functions
     // Default constructor.
-    MassBodyDetachImpulsive ();
+    MassBodyDetachImpulsive () = default;
 
     // Destructor.
     ~MassBodyDetachImpulsive() override = default;

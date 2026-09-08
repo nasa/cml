@@ -14,24 +14,6 @@ PROGRAMMERS:
 #include <cmath>
 #include <cstdlib>
 
-
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-EventTriggerBase::EventTriggerBase()
-    :
-    comparison_logic(Undefined),
-    function_modifier(NoModification),
-    direction_limit(NoDirectionLimit),
-    variable_dbl(0.0),
-    variable_dbl_prev(0.0),
-    variable_dbl_activation(0.0),
-    reference_dbl(0.0),
-    locked(false)
-{}
-
-
 /*****************************************************************************
 apply_function_modifier
 Purpose:
@@ -138,4 +120,3 @@ EventTriggerBase::set_new_reference()
     break;
   }
 }
-

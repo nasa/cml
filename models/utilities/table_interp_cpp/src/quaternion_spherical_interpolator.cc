@@ -16,18 +16,6 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-QuaternionSphericalInterpolator::QuaternionSphericalInterpolator()
-  :
-  use_spherical_interp(true),
-  frac(0.0),
-  epsilon_interp(1.0E-15),
-  epsilon_delta(1.0E-15)
-{}
-
 /*****************************************************************************
 update
 Purpose:(main method)

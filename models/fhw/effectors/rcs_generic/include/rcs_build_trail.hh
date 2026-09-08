@@ -16,6 +16,8 @@ PROGRAMMERS:
 #ifndef CML_RCS_BUILD_TRAIL_HH
 #define CML_RCS_BUILD_TRAIL_HH
 
+#include "rcs_scale_factor_interface.hh"
+
 /*****************************************************************************
 RcsBuildUpTrailOffJetData
 Purpose:(Jet-specific data for RcsBuildUpTrailOff)
@@ -23,23 +25,14 @@ Purpose:(Jet-specific data for RcsBuildUpTrailOff)
 class RcsBuildUpTrailOffJetData
 {
  public:
-  double rise_time; /* (s) Rise time */
-  double decay_time; /* (s) Decay time */
-  double decay_time_abort; /* (s) Decay time when post LAS abort */
-  double tf_build_up; /* (--) Thrust factor from the build-up model */
-  double tf_trail_off; /* (--) Thrust factor from the trail-off model */
+  double rise_time{0.0}; /* (s) Rise time */
+  double decay_time{0.0}; /* (s) Decay time */
+  double decay_time_abort{0.0}; /* (s) Decay time when post LAS abort */
+  double tf_build_up{1.0}; /* (--) Thrust factor from the build-up model */
+  double tf_trail_off{1.0}; /* (--) Thrust factor from the trail-off model */
 
-  RcsBuildUpTrailOffJetData()
-  :
-    rise_time(0.0),
-    decay_time(0.0),
-    decay_time_abort(0.0),
-    tf_build_up(1.0),
-    tf_trail_off(1.0)
-  {}
+  RcsBuildUpTrailOffJetData() = default;
 };
-
-#include "rcs_scale_factor_interface.hh"
 
 /*****************************************************************************
 RcsBuildUpTrailOff
@@ -55,7 +48,7 @@ class RcsBuildUpTrailOff
   const double & current_time; /* (s) Current time */
 
  public:
-  bool   active; /* (--) Flag to enable the build-up/trail-off model */
+  bool   active{false}; /* (--) Flag to enable the build-up/trail-off model */
 
   RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
                       RcsBuildUpTrailOffJetData * const jet_,

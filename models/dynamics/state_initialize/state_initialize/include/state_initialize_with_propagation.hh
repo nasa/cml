@@ -53,26 +53,26 @@ class StateInitializeWithPropagation : public StateInitialize
  protected:
   jeod::GravityManager & gravity_manager; /* (--)
        Reference to the gravity-model used during the propagation. */
-  jeod::DynBody * body; /* (--)
+  jeod::DynBody * body{nullptr}; /* (--)
        Internally-set pointer to the jeod::DynBody identified by the
        inherited variable "subject" (inherited from jeod::BodyAction). */
 
-  double T_initial_to_current[3][3];      /* (--)
+  double T_initial_to_current[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}};      /* (--)
        Direct transform from initial pfix to intermediate RK pfix frame. */
 
-  double T_inrtl_to_initial_pfix[3][3];   /* (--)
+  double T_inrtl_to_initial_pfix[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}};   /* (--)
        Copy of the initial (spec-time) inertial->pfix transformation matrix */
-  double omega;            /* (rad/s) Angular velocity of planet on z-axis */
+  double omega{0.0}; /* (rad/s) Angular velocity of planet on z-axis */
 
  public:
-  double propagation_time; /* (s)
+  double propagation_time{0.0}; /* (s)
       The time over which the state will be propagated between the initial
       spec. state and the start of the integration.*/
-  double time_step; /* (s)
+  double time_step{1.0}; /* (s)
      The approximate time-step used to complete the propagation.  This value
      may be adjusted internally such that propagation_time is an integer
      multiple of this value.*/
-  bool   apply_dispersions_before_propagation;/* (--)
+  bool   apply_dispersions_before_propagation{true};/* (--)
      Flag to indicate that state dispersions are to be applied prior to
      propagation.  Default true.*/
 

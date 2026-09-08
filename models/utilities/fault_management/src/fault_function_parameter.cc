@@ -9,16 +9,6 @@ PROGRAMMERS:
 
 #include "../include/fault_function_parameter.hh"
 
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-FaultFunctionParameter::FaultFunctionParameter() :
-  rate(0.0),
-  nominal(0.0)
-{}
-
-
 /*******************************************************************************
 get_value
 Purpose:(Gets the value of the parameter.)

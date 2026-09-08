@@ -30,14 +30,6 @@ FirstOrderHold::FirstOrderHold(
      const ExtendedPlanetaryDerivedState & planet_state_in,
      AtmosExecOutput & atmos_output_in)
   :
-  FO_hold(false),
-  FO_init(false),
-  reference_time(0.0),
-  previous_hold_time(0.0),
-  slope_valid_time(0.0),
-  reference_wind(),
-  slope_reference_wind(),
-  slope(),
   dyn_time(dyn_time_in),
   planet_state(planet_state_in),
   out(atmos_output_in)

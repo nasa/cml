@@ -132,22 +132,16 @@ template <typename T>
 class ConstraintTest_Interval : public ConstraintTest
 {
  public:
-  T lower_bound; /* (--)
+  T lower_bound {0}; /* (--)
     The threshold value that, if crossed, will trigger a domain violation.*/
-  T upper_bound; /* (--)
+  T upper_bound {0}; /* (--)
   */
-  ConstraintEnum::IntervalBounds interval_bounds;
+  ConstraintEnum::IntervalBounds interval_bounds{ConstraintEnum::ClosedClosed};
 
   /***************************************************************************
   * Constructor/Destructor
   ***************************************************************************/
-  ConstraintTest_Interval()
-    :
-    ConstraintTest(),
-    lower_bound(0),
-    upper_bound(0),
-    interval_bounds( ConstraintEnum::ClosedClosed)
-  {}
+  ConstraintTest_Interval() = default;
   ~ConstraintTest_Interval() override = default;
 
   /***************************************************************************

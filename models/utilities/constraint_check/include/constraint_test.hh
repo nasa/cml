@@ -28,32 +28,32 @@ Purpose:
 class ConstraintTest
 {
  public:
-  bool enabled; /* (--)
+  bool enabled{true}; /* (--)
     Flag indicating that the test is intended to be used by the associated
     constraint.*/
  protected:
-  bool initialized; /* (--)
+  bool initialized{false}; /* (--)
     Flag indicating that the test has been successfully initialized.*/
-  bool active; /* (--)
+  bool active{false}; /* (--)
     Flag indicating that this test is currently in use within its
     constraint.*/
-  ConstraintEnum::ViolationCondition violation_condition; /* (--)
+  ConstraintEnum::ViolationCondition violation_condition{ConstraintEnum::Undefined}; /* (--)
     The specific violation condition for this test.*/
-  bool violation; /* (--)
+  bool violation{false}; /* (--)
     Flag indicates that this test has failed. When used as part of
     TimedConstraint, this flag means that the value has been outside the
     allowable domain for more than the allowable duration.*/
-  bool prev_violation; /* (--)
+  bool prev_violation{false}; /* (--)
     Copy of previous value of violation. Used to identify whether a
     violation is "new".*/
-  unsigned int violation_count; /* (1)
+  unsigned int violation_count{0}; /* (1)
     Count of the number of unique violations of this test.*/
-  double equality_threshold; /* (--)
+  double equality_threshold{1e-6}; /* (--)
     Threshold for evaluating when two values are equal when their data-types
     are floating-point representations. */
 
  public:
-  ConstraintTest();
+  ConstraintTest() = default;
   virtual ~ConstraintTest() = default;
 
   virtual bool initialize() = 0;
@@ -93,39 +93,39 @@ Note:
 class ConstraintTestTimed : public ConstraintTest
 {
  public:
-  bool use_timer; /* (--)
+  bool use_timer{true}; /* (--)
     Allows a ConstrainTestTimed to be treated as a ConstraintTest,
     circumventing the timing aspect.*/
-  double time_limit; /* (--)
+  double time_limit{0.0}; /* (--)
     The duration for which a domain violation may exist before triggering a
     test violation. Not used in all cases.*/
-  double gap_time_limit; /* (s)
+  double gap_time_limit{0.0}; /* (s)
     Used if recover_quiet_violation; reset violation timer to 0 if
     gap_time > this value.*/
-  bool recover_quiet_violation; /* (--)
+  bool recover_quiet_violation{false}; /* (--)
     Flag that allows a tagged violation to reset its accumulated violation
     time after a period of non-violation. */
  protected:
-  bool numerical_violation; /* (--)
+  bool numerical_violation{false}; /* (--)
     An interim violation-flag. This identifies whether the numerical
     comparison test indicates a violation.
     The inherited violation flag is repurposed to represent a numerical
     violation with sufficient persistence.*/
-  bool existing_numerical_violation; /* (--)
+  bool existing_numerical_violation{false}; /* (--)
     Flag indicating that a numerical violation has been identified, but not
     necessarily for a timer-violation.*/
-  bool checking_gap_timer; /* (--)
+  bool checking_gap_timer{false}; /* (--)
     Flag indicating that there is currently no violation but the gap timer
     is being monitored before resetting the violation-timer.*/
-  double violation_timer; /* (s)
+  double violation_timer{0.0}; /* (s)
     Time interval that the numerical-test has been persistently in violation.*/
-  double gap_timer; /* (s)
+  double gap_timer{0.0}; /* (s)
     Time interval that the numerical-test has been persistently satisfied.*/
-  double accumulated_violation_timer; /* (s)
+  double accumulated_violation_timer{0.0}; /* (s)
     Accumulated durations for which the numerical-test has been in violation;
     this value does not reset if the numerical-test is satisfied.*/
 
-  ConstraintTestTimed();
+  ConstraintTestTimed() = default;
   ~ConstraintTestTimed() override = default;
 
   double get_time_limit() override {return time_limit;}

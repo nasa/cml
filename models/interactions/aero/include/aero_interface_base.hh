@@ -38,16 +38,16 @@ protected:
   /***************************************************************************/
   // Internal variables
   /***************************************************************************/
-  AeroExecutiveBase * executive_ptr; /* (--) 
+  AeroExecutiveBase * executive_ptr{nullptr}; /* (--) 
        A pointer to the currently-used executive.*/
 
 public:
   /***************************************************************************/
   // User-settable inputs
   /***************************************************************************/
-  bool disable_aero_moments; /* (--) self-explanatory */
-  bool disable_aero_damping; /* (--) self-explanatory */
-  double max_atmos_altitude; /* (m)  Only activate if at a sensible altitude. */
+  bool disable_aero_moments{false}; /* (--) self-explanatory */
+  bool disable_aero_damping{false}; /* (--) self-explanatory */
+  double max_atmos_altitude{3.5E6}; /* (m)  Only activate if at a sensible altitude. */
 
   /***************************************************************************/
   // Outputs

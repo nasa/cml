@@ -196,48 +196,48 @@ class CorrelatedStateDispersion {
 
 
   // Input
-  CovarianceFrame    pv_covar_frame;  /* (--)
+  CovarianceFrame    pv_covar_frame{PV_COVAR_INRTL};  /* (--)
       Frame type for pv covar.*/
-  CorrelationOption  corr_option;     /* (--)
+  CorrelationOption  corr_option{CORRELATED_PV};     /* (--)
       Correlated covariance type.*/
-  CorrelationFrameForAttitude corr_att_frame;/* (--)
+  CorrelationFrameForAttitude corr_att_frame{REFERENCE_FRM};/* (--)
       Attitude covariance frame.*/
-  AttitudeRotation   att_rot_defined; /* (--)
+  AttitudeRotation   att_rot_defined{PerturbedToTrue}; /* (--)
       Attitude rotation definition */
-  DispersionDistribution dispersion_distribution; /* (--)
+  DispersionDistribution dispersion_distribution{NoDispersion}; /* (--)
       Type of distribution. */
 
-  bool hold_previous_random_vec; /* (--)
+  bool hold_previous_random_vec{false}; /* (--)
       Flag that manages whether a new random vector should be generated.  For
       cases where a change to the covariance matrix drives a change to the
       state, it may be desirable to keep the same "direction" to the dispersion
       and just use the new standard deviations. Default: false*/
 
-  size_t max_iterations; /* (--)
+  size_t max_iterations{2000}; /* (--)
       Provides protection against infinite loops for the truncation of the
       Gaussian distribution.  Depending on the dimensionality of the problem
       and how tightly the distribution is to be truncated, it may take many
       iteration to identify a distribution that fits within the limits.
       Default - 2000. */
-  double sigma_limit; /* (--)
+  double sigma_limit{0.0}; /* (--)
       Limit for Uniform and Truncated-Gaussian distributions.
       The dispersion will be bounded by +- sigma-limit standard deviations
       for all variables.*/
-  unsigned int seed; /* (--) Seed for random number generator. */
-  double user_specified_distribution[max_dimension]; /* (--)
+  unsigned int seed{12345}; /* (--) Seed for random number generator. */
+  double user_specified_distribution[max_dimension]{}; /* (--)
       For distribution-option "UserInput", the values in this array specify the
       number of standard deviations to apply to each variable / dimension.
       Note that this does not specify the range in which the dispersion may
       fall, it specifies an exact multiple of standard deviations.
       E.g. dispersion position[0] by  0.123 sigma, and
                       position[1] by -0.234 sigma,*/
-  double covariance[max_dimension][max_dimension]; /* (--)
+  double covariance[max_dimension][max_dimension]{}; /* (--)
       Covariance Matrix.*/
   std::string corr_base_frame_name; /* (--)
       The name of the reference frame against which covariance is referenced. */
 
   // Input / Output
-  double TR_geodetic_altitude_disp;  /* (m)
+  double TR_geodetic_altitude_disp{};  /* (m)
       Geodetic altitude dispersion about nominal geodetic altitude at epoch
       for target relative dispersions */
   TargetRelative_StateParameter TR_param; /* (--)
@@ -247,44 +247,44 @@ class CorrelatedStateDispersion {
       class members.*/
 
   // Output
-  double pos_error[3];/* (m)
+  double pos_error[3]{};/* (m)
       position error produced from covariance in desired frame.
       This variable may also be used internally to represent the error in a
       (r-mag, declination,  right-ascension) format.
       In this case, the units are incorrect, but this usage is limited to internal
       application; before the code exits, these values will have been converted
       back to dimensions of length with units of meters.*/
-  double vel_error[3];/* (m/s)
+  double vel_error[3]{};/* (m/s)
       velocity error produced from covariance in desired frame.
       This variable may also be used internally to represent the error in a
       (v-mag, azimuth, flight-path angle) format.
       In this case, the units are incorrect, but this usage is limited to internal
       application; before the code exits, these values will have been converted
       back to dimensions with units of meters/second. */
-  double att_error[3];/* (rad)
+  double att_error[3]{};/* (rad)
       attitude error produced from covariance in desired frame.*/
-  double prm_error[5];/* (--)
+  double prm_error[5]{};/* (--)
       Target-relative state-parameter errors produced from covariance matrix. */
 
-  double r_mag;       /* (m)   radius vector magnitude             */
-  double declination; /* (rad) declination of pos wrt inrtl        */
-  double right_asc;   /* (rad) right ascension of pos wrt inrtl    */
-  double v_mag;       /* (m/s) velocity vector magnitude           */
-  double fp_angle;    /* (rad) flight-path-angle of vel wrt topocentric frame */
-  double azimuth;     /* (rad) azimuth angle wrt to topocentric    */
+  double r_mag{0.0};       /* (m)   radius vector magnitude             */
+  double declination{0.0}; /* (rad) declination of pos wrt inrtl        */
+  double right_asc{0.0};   /* (rad) right ascension of pos wrt inrtl    */
+  double v_mag{0.0};       /* (m/s) velocity vector magnitude           */
+  double fp_angle{0.0};    /* (rad) flight-path-angle of vel wrt topocentric frame */
+  double azimuth{0.0};     /* (rad) azimuth angle wrt to topocentric    */
 
  protected:
- bool generator_seeded; /* (--)
+ bool generator_seeded{false}; /* (--)
      Flag indicating whether the random number generator ahs been seeded.*/
-  unsigned int dimension;       /* (--)
+  unsigned int dimension{6};       /* (--)
      The number of values being dispersed.  Options are:
      5: Uses the target-relative state-parameter dispersion capabilities
      6: disperses the position and velocity values (PV-dispersion)
      9: disperses the position, velocity, and attitude values (PVA-dispersion)*/
-  double random_vec[max_dimension]; /* (--)
+  double random_vec[max_dimension]{}; /* (--)
       Random values used to generate dispersions. This can be a user input
       (if dispersion_distribution = UserInput) */
-  double sqrt_covariance[max_dimension][max_dimension]; /* (--)
+  double sqrt_covariance[max_dimension][max_dimension]{}; /* (--)
       decomposition of Covariance Matrix */
 
   std::default_random_engine generator; /* (--) Random number generator */

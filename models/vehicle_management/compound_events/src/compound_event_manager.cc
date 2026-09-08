@@ -34,8 +34,7 @@ Constructor / Destructor
 CompoundEventsManager::CompoundEventsManager(
   const double & time_)
   :
-  time(time_),
-  enabled(true)
+  time(time_)
 {}
 /****************************************************************************/
 CompoundEventsManager::~CompoundEventsManager()

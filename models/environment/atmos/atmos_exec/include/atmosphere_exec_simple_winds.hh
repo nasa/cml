@@ -38,14 +38,14 @@ class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
 
   // Internal working variables
  public:
-  TopoType  wind_components_type; /* (--)
+  TopoType  wind_components_type{Topodetic}; /* (--)
          specification of how to interpret the output data coming from the
          wind-table.  Default: Topodetic. */
  protected:
-  TopoType altitude_type; /* (--)
+  TopoType altitude_type{Topodetic}; /* (--)
          specification of how to interpret the altitude data in the
          wind-table.  Default: Topodetic. */
-  double altitude_at_prev_update; /* (m)
+  double altitude_at_prev_update{0.0}; /* (m)
          altitude at which table was last processed. */
   const double * altitude_ptr; /* (--)
          pointer to the appropriate altitude from planet_state, according to

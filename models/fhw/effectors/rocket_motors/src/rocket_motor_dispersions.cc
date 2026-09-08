@@ -18,17 +18,6 @@ PROGRAMMERS:
 #include "../include/rocket_motor_dispersions.hh"
 
 /*****************************************************************************
-Constructor
-*****************************************************************************/
-RocketMotorDispersions::RocketMotorDispersions()
-  :
-  position_dispersion{0.0, 0.0, 0.0},
-  motor_tolerance{0.0, 0.0, 0.0},
-  tolerance_mag_threshold(1.0E-12),
-  T_dispersion_to_nominal{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}
-{}
-
-/*****************************************************************************
 apply_dispersions
 Purpose:(Disperse the position and attitude of the motor frame. The nominal
          transformation matrix from the parent frame (often the structural

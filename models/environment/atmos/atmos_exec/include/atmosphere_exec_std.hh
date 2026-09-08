@@ -32,7 +32,7 @@ class AtmosphereExec_STD : public AtmosphereExec_AtmosBase
     const double & topodetic_altitude; /* (--) reference to topodetic altitude.*/
 
   public:
-    double hmsl; /* (m) height above mean sea level. */
+    double hmsl{0.0}; /* (m) height above mean sea level. */
 
     AtmosphereExec_STD( STD1976 & std_76_in,
                         const double    & topodetic_alt,

@@ -42,16 +42,16 @@ class DRWPTableLookup : public SimpleTableLookup
 public:
   std::string drwpFileName; /* (--)
     Name of the binary data file from which the table data was extracted.*/
-  unsigned int profile_number;   /* (--)
+  unsigned int profile_number{2}; /* (--)
     The profile number within the binary data file (drwpFileName) that was
     used to populate the data tables. */
-  bool initialized_with_vertical_component; /* (--)
+  bool initialized_with_vertical_component{false}; /* (--)
     The data table includes verrtical wind components.*/
-  bool verified; /* (--)
+  bool verified{false}; /* (--)
     Flag to indicate that the table has been loaded, initialized, and tested
     at initialization of LookupAtmosWinds, and is now ready to be activated.*/
 
-  DRWPTableLookup();
+  DRWPTableLookup() = default;
   ~DRWPTableLookup() override = default;
   void verify( bool leave_active = false);
 };
@@ -80,60 +80,60 @@ public:
     A new profile can be identified by setting this manually mid-run.
     A new profile can be loaded by setting this manually prior to
     initialization.*/
-  unsigned int wind_number; /* (--)
+  unsigned int wind_number{2}; /* (--)
     For the profile currently in use, this is the profile number in
     drwpFileName from which the data was extracted.
     This gets assigned automatically when changing to a new profile.
     A new profile can be identified by setting this manually mid-run.
     A new profile can be loaded by setting this manually prior to
     initialization.*/
-  bool include_vertical_component; /* (--)
+  bool include_vertical_component{false}; /* (--)
     This flag indicates whether the profile currently in use, has been
     configured to populate vertical winds data.
     This gets assigned automatically when changing to a new profile.
     This is also used as a user-settable flag prior to initialization when
     the profile is to be loaded during the initialization process; in this
     context it indicates that the profile includes vertical wind data.*/
-  bool block_warnings; /* (--)
+  bool block_warnings{false}; /* (--)
     Flag to restrict out-of-domain warnings for all data sets. Only accessed
     as the model switches to a new data profile.*/
 
 
   // Current state
-  double altitude; /* (m)
+  double altitude{0.0}; /* (m)
     The altitude used as the independent variable in the table interpolation
     algorithms. May be offset from the sim-provided input altitude to account
     for different zero-references. */
-  double alt_bias; /* (m)
+  double alt_bias{0.0}; /* (m)
     Geoidal Separation. Provides a conversion from the altitude_in accessed
     from the sim, and altitude_lookup, the value used as the independent
     variable in the table-lookups. Altitude_lookup = altitude_in + alt_bias.*/
 
 
   // Wind Values
-  double u; /* (m/s)
+  double u{0.0}; /* (m/s)
     Wind velocity, horizontal from West to East.*/
-  double v; /* (m/s)
+  double v{0.0}; /* (m/s)
     Wind velocity, horizontal from South to North. This is assumed to be a
     topocentric North. */
-  double w; /* (m/s)
+  double w{0.0}; /* (m/s)
     Wind velocity, vertical: Up positive. This is assumed to be
     topocentric Up, i.e. radially "out". */
-  double wind_angle_blowing_to; /* (rad)
+  double wind_angle_blowing_to{0.0}; /* (rad)
     The azimuth angle the wind is blowing towards.
     The azimuth angle is relative to North as measured in the
     topocentric horizontal plane, from North towards East.*/
-  double wind_angle_blowing_from; /* (rad)
+  double wind_angle_blowing_from{0.0}; /* (rad)
     The azimuth angle the wind is blowing from.
     The azimuth angle is relative to North as measured in the
     topocentric horizontal plane, from North towards East.
     wind_angle_blowing_from is Offset from wind_angle_blowing_to by pi. */
-  double wind_vmag;           /* (m/s)
+  double wind_vmag{0.0}; /* (m/s)
     Magnitude of the current wind vector.*/
-  double wind_velocity_tc[3]; /* (m/s)
+  double wind_velocity_tc[3]{}; /* (m/s)
     Wind velocity vector expressed in a topocentric NED frame.
     Note:  This is a NED vector populated from u,v,w as [v, u, -w] */
-  double average_wind[3];     /* (m/s)
+  double average_wind[3]{}; /* (m/s)
     Average wind velocity between two specified altitudes.
     Populated in the utility function compute_average_wind and typically
     accessed immediaately thereafter. The altitude bounds within which the wind
@@ -141,26 +141,26 @@ public:
     interpretation of this vector.*/
 
   // Atmosphere Values
-  double  rho;              /* (kg/m3) Atmospheric density */
-  double  T;                /* (K)     Atmospheric temperature */
-  double  P;                /* (N/m2)  Atmospheric pressure */
-  double  SOS;              /* (m/s)   Speed of sound */
-  double  SOS_fair_lo_alt;  /* (m)     Low altitude for SOS fairing */
-  double  SOS_fair_hi_alt;  /* (m)     High altitude for SOS fairing */
-  double  SOS_hi_alt_const; /* (m/s)   Constant SOS value for high altitudes */
-  double  gamma;            /* (--)    Ratio of specific heats Cp/Cv of air */
+  double  rho{0.0};                 /* (kg/m3) Atmospheric density */
+  double  T{0.0};                   /* (K)     Atmospheric temperature */
+  double  P{0.0};                   /* (N/m2)  Atmospheric pressure */
+  double  SOS{0.0};                 /* (m/s)   Speed of sound */
+  double  SOS_fair_lo_alt{85344.0}; /* (m)     Low altitude for SOS fairing */
+  double  SOS_fair_hi_alt{91440.0}; /* (m)     High altitude for SOS fairing */
+  double  SOS_hi_alt_const{274.61}; /* (m/s)   Constant SOS value for high altitudes */
+  double  gamma{1.4};               /* (--)    Ratio of specific heats Cp/Cv of air */
 
  private:
-  bool warning_issued; /* (--)
+  bool warning_issued{false}; /* (--)
     Used to block repetitive warnings about altitude being outside the domain
     of the lookup table.
     Defaults to false and is set to true when an out-of-domain warning is
     issued.  This prevents re-issuance.
     Resets to block_warnings when a new profile is loaded.*/
-  unsigned int current_index;    /* (--)
+  unsigned int current_index{0};    /* (--)
     The index (within the TableLookup_array) of the active data set.
     This can only be modified via the method change_datafile_index(size_t).*/
-  unsigned int number_of_datasets; /* (--)
+  unsigned int number_of_datasets{0}; /* (--)
     Total number of data-profiles stored. */
   static const size_t size_of_source_integer = 4; /* (--)
     This value specifies the number of bytes occupied by the integer values
@@ -186,7 +186,7 @@ public:
 
 
  public:
-  LookupAtmosWinds();
+  LookupAtmosWinds() = default;
   ~LookupAtmosWinds() override = default;
   LookupAtmosWinds (const LookupAtmosWinds&) = delete;
   LookupAtmosWinds & operator = (const LookupAtmosWinds&) = delete;

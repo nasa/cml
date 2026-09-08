@@ -25,25 +25,25 @@ class QuaternionSphericalInterpolator
 {
  public:
   // input
-  bool use_spherical_interp; /* (--)
+  bool use_spherical_interp{true}; /* (--)
        Flag indicating that the interpolation will be attempted using the
        spherical interpolation algorithm.  Default True.*/
   jeod::Quaternion quat_0; /* (--)
         quaternion at one end of interpolation domain.*/
   jeod::Quaternion quat_1; /* (--)
         quaternion at other end of interpolation domain.*/
-  double frac; /* (--) fraction of cell from quat_0 to quat_1.*/
+  double frac{0.0}; /* (--) fraction of cell from quat_0 to quat_1.*/
 
   // output
   jeod::Quaternion quat_out; /* (--) interpolated quaternion.*/
 
  protected:
-  double epsilon_interp; /* (--)
+  double epsilon_interp{1.0E-15}; /* (--)
           small value used to determine whether to perform the trig function
           aspects of the spherical-interpolation for the quaternion
           determination.  Avoids the computation if within this
           fraction of either end of the interpolation domain.*/
-  double epsilon_delta; /* (--)
+  double epsilon_delta{1.0E-15}; /* (--)
           small value used to determine whether to perform the trig function
           aspects of the spherical-interpolation for the quaternion
           determination.  Avoids the computation if the scalar component of
@@ -52,7 +52,7 @@ class QuaternionSphericalInterpolator
           identical. */
 
  public:
-  QuaternionSphericalInterpolator();
+  QuaternionSphericalInterpolator() = default;
   virtual ~QuaternionSphericalInterpolator() = default;
   QuaternionSphericalInterpolator (const QuaternionSphericalInterpolator&) = delete;
   QuaternionSphericalInterpolator& operator = (

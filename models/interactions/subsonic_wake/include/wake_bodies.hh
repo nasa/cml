@@ -41,8 +41,8 @@ class WakeGeneratingBody
   const double & total_alpha; /* (rad) total angle of attack. */
 
  public: // For use by effect models
-  double freestream_vel_mag; /* (m/s) magnitude of freestream velocity. */
-  double unitvec_freestream[3]; /* (--) unit vector aligned with freestream */
+  double freestream_vel_mag{0.0}; /* (m/s) magnitude of freestream velocity. */
+  double unitvec_freestream[3]{}; /* (--) unit vector aligned with freestream */
 
   WakeGeneratingBody(
       const double * inertial_pos_in,
@@ -71,7 +71,7 @@ class WakeFollowingBody
 {
  protected: // External references
   const double * grid_origin; /* (m) copied from parameters at initialization.*/
-  bool generate_force; /* (--) whether to calculate the wake force on body.*/
+  bool generate_force{false}; /* (--) whether to calculate the wake force on body.*/
   const double & area; /* (m2)
        Area of the object in the wake, perpendicular to the flow direction*/
   const double * inertial_pos;  /* (m) inertial position. 3-vector */
@@ -79,24 +79,24 @@ class WakeFollowingBody
   WakeGeneratingBody & objectA; /* (--) the wake-generating body*/
 
  public: // For WakeEffectsBase to access
-  double  separation_distance; /* (m)
+  double  separation_distance{0.0}; /* (m)
        Absolute separation distance of the object from the wake-producing body*/
-  double  trailing_distance;   /* (m)
+  double  trailing_distance{0.0};   /* (m)
        Trailing distance of the object along the wake axis of symmetry */
-  double  radial_distance;     /* (m)
+  double  radial_distance{0.0};     /* (m)
        Radial distance of the object from the wake axis of symmetry */
-  double  axial_sep_vel;       /* (m/s)
+  double  axial_sep_vel{0.0};       /* (m/s)
        Axial separation velocity of the object in the wake */
 
-  double pos_wrt_grid_in_bodyA[3]; /* (m)
+  double pos_wrt_grid_in_bodyA[3]{}; /* (m)
        Position of body wrt objectA's grid-point.  Left public so this can be
        accessed by the wake-effect when recomputing the radial distance
        following a grid-offset.*/
 
  protected: // Interim internal use only
-  double pos_wrt_objectA_bodyA[3];  /* (m)
+  double pos_wrt_objectA_bodyA[3]{};  /* (m)
        Relative position of the object in the bodyA reference frame*/
-  double pos_wrt_objectA_inrtl[3];  /* (m)
+  double pos_wrt_objectA_inrtl[3]{};  /* (m)
        Relative position of the object in the inertial reference frame*/
 
  public:
@@ -150,11 +150,11 @@ class WakeFollowingBodyWithForce : public WakeFollowingBody
 
  public:
   // Model input
-  double Cd;        /* (--)
+  double Cd{0.0};        /* (--)
        Coefficient of Drag for the object in the wake of the main body  */
 
   // Model output
-  double force[3];  /* (N) output force in struc frame.*/
+  double force[3]{};  /* (N) output force in struc frame.*/
 
   WakeFollowingBodyWithForce(
                const double & area_in,

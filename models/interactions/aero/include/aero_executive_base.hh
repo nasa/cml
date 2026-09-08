@@ -52,15 +52,13 @@ public:
   /***************************************************************************/
   // User-specified inputs
   /***************************************************************************/
-  double Aref;    /* (m2)   Current aerodymamic reference area */
-  double Lref;    /* (m)    Current aerodynamic reference length */
+  double Aref{0.0};    /* (m2)   Current aerodymamic reference area */
+  double Lref{0.0};    /* (m)    Current aerodynamic reference length */
 
   // Constructor
   AeroExecutiveBase( AeroInterfaceOutput & output_ref)
     :
-    output( output_ref),
-    Aref(0.0),
-    Lref(0.0)
+    output( output_ref)
   {
     subscribe_name = "AeroExecutiveBase:";
   }

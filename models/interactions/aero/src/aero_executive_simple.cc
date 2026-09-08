@@ -36,12 +36,7 @@ AeroExecutiveSimple::AeroExecutiveSimple(
   dynamic_pressure( dynamic_pressure_in),
   T_inrtl_struc( T_inrtl_struc_in),
   mass( mass_in),
-  free_stream_vel_unit( free_stream_vel_unit_in),
-  drag_type( constant_vec),
-  BC(1.0),
-  CD(0.0),
-  drag_mag(0.0),
-  bc_epsilon(1E-6)
+  free_stream_vel_unit( free_stream_vel_unit_in)
 {
   if (free_stream_vel_unit == nullptr) {
    CMLMessage::warn(

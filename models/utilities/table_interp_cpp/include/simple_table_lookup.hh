@@ -48,19 +48,19 @@ private:
   // The table resides in this base class; even if this gets extended, it still
   // resides here.  So these table-dependent values can be private to this
   // class.
-  TableIndependentVariable::LookupMethod lookup_method; /* (--)
+  TableIndependentVariable::LookupMethod lookup_method{TableIndependentVariable::Interp}; /* (--)
        Specifies the manner in which the independent variable data is to be
        handled.  Defaults to interpolation (Interp).*/
-  bool indep_data_loaded;     /* (--) independent-data-loaded flag */
-  bool dependent_data_loaded; /* (--) dependent-data-loaded flag.*/
-  bool data_reloading; /* (--) in the process of re-loading data post-init. */
+  bool indep_data_loaded{false};     /* (--) independent-data-loaded flag */
+  bool dependent_data_loaded{false}; /* (--) dependent-data-loaded flag.*/
+  bool data_reloading{false}; /* (--) in the process of re-loading data post-init. */
 
 public:
-  TableIndependentVariable * independent; /* (--)
+  TableIndependentVariable * independent{nullptr}; /* (--)
     pointer to the independent variable. Note that this is identical to
     independents[0]; this is the public-facing interface to the element in
     the protected independents vector.*/
-  bool comprehensive_data_reload; /* (--)
+  bool comprehensive_data_reload{false}; /* (--)
     A flag used only if re-loading data post-initialization. This flag
     indicates that both independent and dependent data are being reloaded.
     The re-initialization will be held until both sets have been populated.*/
@@ -70,7 +70,7 @@ public:
   SimpleTableLookup is problematic, and C-style arrays of SimpleTableLookup
   are used instead in models using this class.
   This requires that SimpleTableLookup keep its default constructor form. */
-  SimpleTableLookup();
+  SimpleTableLookup() = default;
   ~SimpleTableLookup() override = default;
   SimpleTableLookup (const SimpleTableLookup&) = delete;
   SimpleTableLookup& operator = (const SimpleTableLookup&) = delete;

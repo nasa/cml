@@ -35,8 +35,7 @@ AtmosphereExecInterface::AtmosphereExecInterface(
   body( body_in),
   current_atmos(&atmos_none),
   current_winds(&atmos_none),
-  atmos_none(out, planet_state),
-  subscribed_planet_state_topo_calcs(false)
+  atmos_none(out, planet_state)
 {
   subscribe_name = "AtmosphereExecInterface:";
 }

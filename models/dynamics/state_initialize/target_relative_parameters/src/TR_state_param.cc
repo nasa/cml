@@ -29,23 +29,9 @@ Constructor
 *****************************************************************************/
 TargetRelative_StateParam::TargetRelative_StateParam()
   :
-  target_is_behind_vehicle(false),
-  K_theta(0.0),
-  position(),
-  velocity(),
-  omega_mag(0.0),
-  uhat_R{1.0, 0.0, 0.0},
   Target_Reference_frame("Target-Reference frame"),
   Omega_Target_frame("Omega-Target frame"),
-  Position_BiasedTarget_frame("InitialPosition-BiasedTarget frame"),
-  biased_target_pos_hat(),
-  theta_RngBias(0.0),
-  sin_phi_omega(0.0),
-  cos_phi_omega(0.0),
-  flag_initialized(false),
-  omega_target_aligned(false),
-  k_theta_warning_sent(false),
-  target_is_behind_vehicle_check(false)
+  Position_BiasedTarget_frame("InitialPosition-BiasedTarget frame")
 {}
 
 /*****************************************************************************

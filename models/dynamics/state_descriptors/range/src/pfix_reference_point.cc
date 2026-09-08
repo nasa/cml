@@ -19,26 +19,6 @@ Programmers:
 #include "../include/pfix_reference_point.hh"
 
 /*****************************************************************************
-Constructor
-*****************************************************************************/
-PfixReferencePoint::PfixReferencePoint()
-  :
-  position_type(undefined),
-  direction_type(undefined),
-  latitude(0.0),
-  longitude(0.0),
-  altitude(0.0),
-  position{0.0, 0.0, 0.0},
-  azimuth(0.0),
-  direction{0.0, 0.0, 0.0}
-{}
-
-/*****************************************************************************
-initialize (inherit from PlanetFixedPosition)
-*****************************************************************************/
-
-
-/*****************************************************************************
 set_point
 Purpose:(sets the reference-point position based on the input values.)
 Arguments:

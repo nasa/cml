@@ -84,6 +84,7 @@ Checks: >
         -misc-no-recursion,
         -misc-non-private-member-variables-in-classes,
     modernize-use-equals-delete,
+    modernize-use-default-member-init,
     portability-*,
         -portability-template-virtual-member-function,
     performance-*,

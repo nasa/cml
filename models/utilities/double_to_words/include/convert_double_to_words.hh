@@ -51,9 +51,9 @@ protected:
                                            integral increment of the word at the
                                            same index. */
 
-  double max_uint;                 /* (--) Max value each word can be as
+  double max_uint{0.0};                 /* (--) Max value each word can be as
                                            determined by bit size. */
-  double max_uint_f;               /* (--) max_uint - 1 */
+  double max_uint_f{0.0};               /* (--) max_uint - 1 */
 public:
   std::vector<uint32_t> words; /* (--) Output values, the set of integers
                                            that represent convert_value. */

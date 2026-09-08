@@ -23,12 +23,7 @@ Vent::Vent(
      DynamicMassBody& tank_in)
   :
   SimpleVent( dyn_time_in),
-  tank(tank_in),
-  flowrate(0.0),
-  exhaust_speed(0.0),
-  prev_time(0.0),
-  flowrate_set(false),
-  exhaust_set(false)
+  tank(tank_in)
 {}
 
 /*****************************************************************************

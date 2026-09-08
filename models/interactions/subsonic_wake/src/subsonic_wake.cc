@@ -44,11 +44,7 @@ SubsonicWake::SubsonicWake(
              params_in),
   rev_flow(  objectA_in,
              objectB_in,
-             params_in.rev_flow),
-  use_prf_model(false),
-  use_rev_flow(false),
-  subd_prf(false),
-  subd_revflow(false)
+             params_in.rev_flow)
 {
   subscribe_name = "SubsonicWake:";
 }

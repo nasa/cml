@@ -37,16 +37,16 @@ class ApsidesPredictor : public SubscriptionBase {
     PARABOLA_NO_APSIS = 4
   };
   // INPUT
-  double small_tolerance; /* (--) small value check */
-  double min_del_h;       /* (m) 
+  double small_tolerance{1.0e-13}; /* (--) small value check */
+  double min_del_h{18520.0};       /* (m) 
     Difference b/w apoapsis and periapsis for orbit to be considered circular. */
  
   // OUTPUT
-  double time_to_next_apsis;     /* (s)  time still to go */
-  NextApsisType next_apsis_type; /* (--) Identifier of the apo/peri apsis */
+  double time_to_next_apsis{0.0};           /* (s)  time still to go */
+  NextApsisType next_apsis_type{UNDEFINED}; /* (--) Identifier of the apo/peri apsis */
 
-  double apoapsis_altitude;  /* (m) topocentric altitude at apoapsis */
-  double periapsis_altitude; /* (m) topocentric altitude at periapsis */
+  double apoapsis_altitude{0.0};  /* (m) topocentric altitude at apoapsis */
+  double periapsis_altitude{0.0}; /* (m) topocentric altitude at periapsis */
 
  private:
   OrbElemSubset orb_elem;   /* (--) Orbital elements used in the model */
