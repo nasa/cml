@@ -247,10 +247,8 @@ UnitTestFramework::configure_sweeps()
       "Incompatible methods.  Cannot distinguish which to use."
       "If both are needed, use 2 framework instances.\n");
   }
-  for( auto it = sweeps.begin();
-       it != sweeps.end();
-       ++it) {
-    it->initialize();
+  for(auto & sweep : sweeps) {
+    sweep.initialize();
   }
 }
 
@@ -499,14 +497,12 @@ UnitTestFramework::process_linked_variables()
 {
   commands.emplace_back("");// create 1 empty element
 
-  for( auto file_it = linked_variables.begin();
-       file_it != linked_variables.end();
-       ++file_it) {
-    std::ifstream data_file( file_it->filename);
+  for(auto & linked_variable : linked_variables) {
+    std::ifstream data_file( linked_variable.filename);
     if (!data_file) {
       CMLMessage::fail(
       __FILE__,__LINE__,"error opening file\n",
-      "Error encountered opening file ", file_it->filename, "\n");
+      "Error encountered opening file ", linked_variable.filename, "\n");
     }
 
     std::string first_command;
@@ -554,12 +550,12 @@ UnitTestFramework::process_linked_variables()
         if (word_count >= 1) {
           CMLMessage::fail(
           __FILE__,__LINE__,"Invalid data\n",
-          "Data file ", file_it->filename, " has multiple words on one line:\n", line, "\n");
+          "Data file ", linked_variable.filename, " has multiple words on one line:\n", line, "\n");
         }
 
         word_count++;
         // Use "word" to make a new command
-        std::string new_command( file_it->variable_name);
+        std::string new_command( linked_variable.variable_name);
         new_command.append( " = " + word + ";");
         if (first_command.empty()) {
           first_command = new_command;
@@ -646,12 +642,10 @@ UnitTestFramework::update_sweeps()
   }
 
   bool sweep_complete_ = true;
-  for( auto it = sweeps.begin();
-       it != sweeps.end();
-       ++it)
+  for(auto & sweep : sweeps)
   {
     // increment_sweep returns true if the sweep of that variable is complete
-    sweep_complete_ = it->increment_sweep();
+    sweep_complete_ = sweep.increment_sweep();
     // if this variable is still sweeping, don't need to go on to the next one.
     if (!sweep_complete_) {
       break;

@@ -44,8 +44,8 @@ bool FaultManager::global_enabled = true;
 Destructor
 *****************************************************************************/
 FaultManager::~FaultManager() {
-  for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto* fault : faults[ii]) {
+  for (auto & ii : faults) {
+    for (auto* fault : ii) {
       delete fault;
     }
   }
@@ -89,8 +89,8 @@ void FaultManager::initialize() {
     return;
   }
   parse();
-  for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto* fault : faults[ii]) {
+  for (auto & ii : faults) {
+    for (auto* fault : ii) {
       fault->initialize(); // Initialize fault
     }
   }
@@ -130,10 +130,10 @@ Purpose:(Looks up a fault by name. If no fault with that name is found, returns
          nullptr.)
 *******************************************************************************/
 Fault* FaultManager::get_fault( const std::string& name) {
-  for (unsigned int ii = 0; ii < Location_count; ii++) {
-    const auto fault = std::find_if(faults[ii].begin(), faults[ii].end(),
+  for (auto & ii : faults) {
+    const auto fault = std::find_if(ii.begin(), ii.end(),
       [&name](const Fault* fault_) {return name == fault_->name;});
-    if (fault != faults[ii].end()) {
+    if (fault != ii.end()) {
       return *fault;
     }
   }

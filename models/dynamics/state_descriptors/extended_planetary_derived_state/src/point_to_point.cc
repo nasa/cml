@@ -29,6 +29,7 @@ PROGRAMMERS:
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
+#include <algorithm>
 #include <list>
 #include <string>
 #include <utility>
@@ -57,24 +58,14 @@ void add_point(
     return;
   }
 
-  // Note -- here and throughout:
-  // I'm using an iterator rather than "auto it: vehicle_points" to avoid
-  // unnecessary use of the copy constructor.  It's not a big deal either
-  // way here (copy constructor is cheap) but becomes a problem where the
-  // logic needs to assign into the list element which absolutely requires
-  // the use of an iterator rather than a copy.
-  // For consistency, I'm using the same pattern throughout.
-  //
-  // TODO Nino Tarantino 8/16/26: this neesd to be fixed
-  for (auto it = element_list.begin();
-            it != element_list.end(); ++it) {
-    if (it->name == pt_name) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid name specified.\n",
-        "Specified name (", pt_name, ") is already registered as a ", list_type, "-point.\n"
-        "Cannot duplicate point names.\n");
-      return;
-    }
+  const auto existing_point = std::find_if(element_list.begin(), element_list.end(),
+    [&pt_name](const PointToPointElement& element) {return pt_name == element.name;});
+  if (existing_point != element_list.end()) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Invalid name specified.\n",
+      "Specified name (", pt_name, ") is already registered as a ", list_type, "-point.\n"
+      "Cannot duplicate point names.\n");
+    return;
   }
 
   element_list.emplace_back(pt_name, pt_pos);
@@ -122,9 +113,9 @@ Purpose:
   instance corresponding to the specified names.
 *****************************************************************************/
 bool
-PointToPointPosition::check_names(
+PointToPointPosition::check_names (
     const std::string & v_pt_name,
-    const std::string & p_pt_name)
+    const std::string & p_pt_name) const
 {
   return ((v_pt_name == v_name) && (p_pt_name == p_name));
 }
@@ -241,37 +232,25 @@ PointToPointManager::add_relative_position(
     const std::string & p_pt_name)
 {
   // Check for a pre-existing match
-  for (auto it_r = relative_positions.begin();
-            it_r != relative_positions.end(); ++it_r) {
-    if ((*it_r).check_names( v_pt_name, p_pt_name)) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid name specified.\n",
-        "Relative Position instance between ", v_pt_name, " and ", p_pt_name, " is already registered.\n"
-        "Will not add a second instance of the same.\n");
-      // Return the address to the pre-existing instance.
-      return get_relative_position( v_pt_name, p_pt_name);
-    }
+  const auto match = std::find_if(relative_positions.begin(), relative_positions.end(),
+    [&v_pt_name, &p_pt_name](const PointToPointPosition& position) {
+      return position.check_names(v_pt_name, p_pt_name);
+    });
+  if (match != relative_positions.end()) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Invalid name specified.\n",
+      "Relative Position instance between ", v_pt_name, " and ", p_pt_name, " is already registered.\n"
+      "Will not add a second instance of the same.\n");
+    // Return the address to the pre-existing instance.
+    return get_relative_position( v_pt_name, p_pt_name);
   }
 
-  PointToPointPosition new_rel_pos(v_pt_name, p_pt_name);
-  int match = 0;
-  for (auto it_v = vehicle_points.begin();
-            it_v != vehicle_points.end(); ++it_v) {
-    if ((*it_v).name == v_pt_name) {
-      jeod::Vector3::copy( (*it_v).position, new_rel_pos.v_pos);
-      match++;
-      break;
-    }
-  }
-  for (auto it_p = planet_points.begin();
-            it_p != planet_points.end(); ++it_p) {
-    if ((*it_p).name == p_pt_name) {
-      jeod::Vector3::copy( (*it_p).position, new_rel_pos.p_pos);
-      match++;
-      break;
-    }
-  }
-  if (match !=2) {
+  const auto vehicle_point = std::find_if(vehicle_points.begin(), vehicle_points.end(),
+    [&v_pt_name](const PointToPointElement& point) {return point.name == v_pt_name;});
+  const auto planet_point = std::find_if(planet_points.begin(), planet_points.end(),
+    [&p_pt_name](const PointToPointElement& point){return point.name == p_pt_name;});
+
+  if (vehicle_point == vehicle_points.end() || planet_point == planet_points.end()) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid name specified.\n",
       "Could not match the specified names (", v_pt_name, ", ", p_pt_name, ") with a registered\n"
@@ -280,8 +259,10 @@ PointToPointManager::add_relative_position(
     return nullptr;
   }
 
-  relative_positions.push_back( new_rel_pos);
-  return relative_positions.back().position;
+  auto& new_rel_pos = relative_positions.emplace_back(v_pt_name, p_pt_name);
+  jeod::Vector3::copy(vehicle_point->position, new_rel_pos.v_pos);
+  jeod::Vector3::copy(planet_point->position, new_rel_pos.p_pos);
+  return new_rel_pos.position;
 }
 /****************************************************************************/
 void
@@ -304,13 +285,15 @@ PointToPointManager::remove_relative_position(
     const std::string & v_pt_name,
     const std::string & p_pt_name)
 {
-  for (auto it_r = relative_positions.begin();
-            it_r != relative_positions.end(); ++it_r) {
-    if ((*it_r).check_names( v_pt_name, p_pt_name)) {
-      relative_positions.erase(it_r);
-      return;
-    }
+  const auto item = std::find_if(relative_positions.begin(), relative_positions.end(),
+    [&v_pt_name, &p_pt_name](const PointToPointPosition& point) {
+      return point.check_names(v_pt_name, p_pt_name);
+    });
+  if (item != relative_positions.end()) {
+    relative_positions.erase(item);
+    return;
   }
+
   CMLMessage::warn(
     __FILE__,__LINE__,"Invalid name specified.\n",
     "Could not match the specified names (", v_pt_name, ", ", p_pt_name, ") to a registered\n"
@@ -330,11 +313,12 @@ PointToPointManager::get_relative_position(
   const std::string & v_pt_name,
   const std::string & p_pt_name)
 {
-  for (auto it_r = relative_positions.begin();
-            it_r != relative_positions.end(); ++it_r) {
-    if ((*it_r).check_names( v_pt_name, p_pt_name)) {
-      return (*it_r).position;
-    }
+  const auto item = std::find_if(relative_positions.begin(), relative_positions.end(),
+    [&v_pt_name, &p_pt_name](const PointToPointPosition& point) {
+      return point.check_names(v_pt_name, p_pt_name);
+    });
+  if (item != relative_positions.end()) {
+    return item->position;
   }
   CMLMessage::error(
     __FILE__,__LINE__,"Invalid names specified.\n",
@@ -353,27 +337,24 @@ Purpose:
 void
 PointToPointManager::make_all_pairings()
 {
-  for (auto it_v = vehicle_points.begin();
-            it_v != vehicle_points.end(); ++it_v) {
-    const std::string v_name = (*it_v).name;
-    for (auto it_p = planet_points.begin();
-              it_p != planet_points.end(); ++it_p) {
-      const std::string p_name = (*it_p).name;
-      bool match = false;
-      for (auto it_r = relative_positions.begin();
-                it_r != relative_positions.end(); ++it_r) {
-        if ((*it_r).check_names( v_name, p_name)) {
-          match = true;
-          break;
-          // silently move on to the next pair.
-        }
-      }
-      if (!match) {
+  for (auto & vehicle_point : vehicle_points) {
+    const std::string& v_name = vehicle_point.name;
+    for (auto & planet_point : planet_points) {
+      const std::string& p_name = planet_point.name;
+
+      // See if the vehicle point and planet point pair exists yet. If not,
+      // create one.
+      const auto match = std::find_if(
+        relative_positions.begin(),
+        relative_positions.end(),
+        [&v_name, &p_name](const PointToPointPosition& position) {
+          return position.check_names(v_name, p_name);
+        });
+      if (match == relative_positions.end()) {
         // No matches in the relative_positions list.  Add this instance.
-        PointToPointPosition new_rel_pos (v_name, p_name);
-        jeod::Vector3::copy( (*it_v).position, new_rel_pos.v_pos);
-        jeod::Vector3::copy( (*it_p).position, new_rel_pos.p_pos);
-        relative_positions.push_back( new_rel_pos);
+        auto& new_rel_pos = relative_positions.emplace_back(v_name, p_name);
+        jeod::Vector3::copy(vehicle_point.position, new_rel_pos.v_pos);
+        jeod::Vector3::copy(planet_point.position, new_rel_pos.p_pos);
       }
     }
   }

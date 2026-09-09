@@ -141,24 +141,24 @@ RcsGeneric::initialize(
 
   generator.seed(seed);
 
-  for (unsigned int ii=0; ii< jets.size(); ii++) {
-    if (jets.at(ii) == nullptr) {
+  for (auto & jet : jets) {
+    if (jet == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "One of the jets pointers is NULL.\n"
         "This vector must be populated with valid pointers.\n");
     }
   }
-  for (unsigned int ii=0; ii< prop_pods.size(); ii++) {
-    if (prop_pods.at(ii) == nullptr) {
+  for (auto & prop_pod : prop_pods) {
+    if (prop_pod == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "One of the prop-pod pointers is NULL.\n"
         "This vector must be populated with valid pointers.\n");
     }
   }
-  for (unsigned int ii=0; ii< groups.size(); ii++) {
-    if (groups.at(ii) == nullptr) {
+  for (auto & group : groups) {
+    if (group == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "One of the group pointers is NULL.\n"
@@ -175,11 +175,11 @@ RcsGeneric::initialize(
   else {
     // no change in thrust due to number of jets active,
     // thrust factor[0] always 1.0
-    for (unsigned int ii=0; ii < prop_pods.size(); ii++) {
-      prop_pods[ii]->thrust_factor[0] =1.0;
+    for (auto & prop_pod : prop_pods) {
+      prop_pod->thrust_factor[0] =1.0;
       /* and flow rate scale factor[0] always 1.0 */
-      for (unsigned int jj=0; jj< prop_pods[ii]->components.size(); jj++) {
-         prop_pods[ii]->components[jj].flow_rate_sf[0] = 1.0;
+      for (auto & component : prop_pod->components) {
+         component.flow_rate_sf[0] = 1.0;
        }
     }
   }
@@ -198,8 +198,8 @@ RcsGeneric::initialize(
   //*****************************************************************************
   // initialize each of the groups
   //*****************************************************************************
-  for (unsigned int ii=0; ii< groups.size() ; ii++) {
-    groups.at(ii)->initialize(time_step);
+  for (auto & group : groups) {
+    group->initialize(time_step);
   }
 
   //*****************************************************************************
@@ -293,10 +293,8 @@ RcsGeneric::update_part_I(
     return false;
   }
   // Clear all pod data from last cycle
-  for (auto pod_it = prop_pods.begin();
-       pod_it != prop_pods.end();
-       ++pod_it) {
-    (**pod_it).reset_cycle();
+  for (auto & prop_pod : prop_pods) {
+    (*prop_pod).reset_cycle();
   }
   return true;
 }
@@ -305,10 +303,8 @@ void
 RcsGeneric::update_part_II()
 {
   // Determine how many jets are on for calculation of the thrust factor */
-  for (auto pod_it = prop_pods.begin();
-       pod_it != prop_pods.end();
-       ++pod_it) {
-    (**pod_it).compute_jets_on(mult_jet_flag);
+  for (auto & prop_pod : prop_pods) {
+    (*prop_pod).compute_jets_on(mult_jet_flag);
   }
 
   /*****************************************************/
@@ -348,18 +344,16 @@ RcsGeneric::compute_force_and_fuel()
   jeod::Vector3::initialize(force);
   jeod::Vector3::initialize(torque);
 
-  for (auto jet_it = jets.begin();
-       jet_it != jets.end();
-       ++jet_it) {
-    (**jet_it).compute_jet_forces();
+  for (auto & jet : jets) {
+    (*jet).compute_jet_forces();
 
-    jeod::Vector3::incr( (**jet_it).force, force);
-    jeod::Vector3::incr( (**jet_it).torque, torque);
+    jeod::Vector3::incr( (*jet).force, force);
+    jeod::Vector3::incr( (*jet).torque, torque);
 
-    (**jet_it).compute_prop_consumption();
+    (*jet).compute_prop_consumption();
     for (unsigned int ii = 0; ii < num_propellant_components; ++ii) {
       const double jet_component_step_consump =
-                           (**jet_it).get_component_consumption(ii);
+                           (*jet).get_component_consumption(ii);
       sum_component_consumptions[ii] += jet_component_step_consump;
       sum_consumption += jet_component_step_consump;
     }
@@ -396,12 +390,10 @@ ASSUMPTIONS AND LIMITATIONS:
 void
 RcsGeneric::apply_self_impingement()
 {
-  for (auto jet_it = jets.begin();
-       jet_it != jets.end();
-       ++jet_it) {
-    (**jet_it).scale_self_impingement();
-    jeod::Vector3::incr( (**jet_it).scaled_impingement_force,  total_imp_force);
-    jeod::Vector3::incr( (**jet_it).scaled_impingement_torque, total_imp_torque);
+  for (auto & jet : jets) {
+    (*jet).scale_self_impingement();
+    jeod::Vector3::incr( (*jet).scaled_impingement_force,  total_imp_force);
+    jeod::Vector3::incr( (*jet).scaled_impingement_torque, total_imp_torque);
   }
 
   /******************************************************************************/

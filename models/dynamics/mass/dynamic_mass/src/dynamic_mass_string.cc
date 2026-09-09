@@ -27,6 +27,9 @@
 
 #include "../include/dynamic_mass_string.hh"
 
+#include <algorithm>
+#include <numeric>
+
 /*****************************************************************************
 initialize
 Purpose:(Copies the body_collection to available_bodies)
@@ -179,15 +182,15 @@ void DynamicMassString::add_mass_to_string( // Return: -- void
   }
 
   // check uniqueness to avoid inadvertent double-counting
-  for (auto it = body_collection.begin(); it != body_collection.end(); ++it) {
-    if (new_mass_body == (*it)) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid object addition\n",
-        "Attempt to add a new DynamicMassBody (", new_mass_body->name.get_name(), ") that is already assigned\n"
-        "to this string. \n"
-        "Cannot duplicate a mass-body on a single string.\n");
-      return;
-    }
+  const auto duplicate_body = std::find_if(body_collection.begin(), body_collection.end(),
+    [new_mass_body](const DynamicMassBody* body) {return new_mass_body == body;});
+  if (duplicate_body != body_collection.end()) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Invalid object addition\n",
+      "Attempt to add a new DynamicMassBody (", new_mass_body->name.get_name(), ") that is already assigned\n"
+      "to this string. \n"
+      "Cannot duplicate a mass-body on a single string.\n");
+    return;
   }
   // body is unique in this string
   body_collection.push_back(new_mass_body);
@@ -209,10 +212,9 @@ Purpose: (Recomputes the available consumable mass so that it can be made
 void
 DynamicMassString::update()
 {
-  consumable_mass = 0.0;
-  for (auto it = available_bodies.begin();
-            it != available_bodies.end(); ++it) {
-    consumable_mass += (*it)->dynamic_properties.consumable_mass;
-  }
+  auto add_consumable_mass = [](const double mass, const DynamicMassBody* body) -> double {
+    return mass + body->dynamic_properties.consumable_mass;
+  };
+  consumable_mass = std::accumulate(available_bodies.begin(), available_bodies.end(), 0.0, add_consumable_mass);
   mass_consumed += mass_consumed_step;
 }

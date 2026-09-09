@@ -605,7 +605,7 @@ Purpose:( Evaluates a polynomial y= Sigma a_i x^i given a vector of
 *******************************************************************************/
 double
 MathUtils::polynomial( double x,
-                       std::vector<double> & coeffs,
+                       const std::vector<double> & coeffs,
                        const double failed_val,
                        const bool   failed_flag)
 {
@@ -616,10 +616,8 @@ MathUtils::polynomial( double x,
 
   double x_to_i = 1.0;
   double sum = 0.0;
-  for (auto it = coeffs.begin();
-       it != coeffs.end();
-       ++it) {
-    sum += ((*it) * x_to_i);
+  for (const double & coeff : coeffs) {
+    sum += (coeff * x_to_i);
     x_to_i *= x;
   }
 

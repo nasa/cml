@@ -1526,9 +1526,8 @@ StateInitialize::generate_random(int seed)
   generator.seed(static_cast<decltype(generator)::result_type>(seed));
   std::normal_distribution<double> rand_norm(0.0, 1.0);
 
-  for (unsigned int ii = 0; ii < 3; ii++) {
-    random_unit_vector[ii] = rand_norm(generator);
-  }
+  std::generate(std::begin(random_unit_vector), std::end(random_unit_vector),
+    [&generator, &rand_norm]{return rand_norm(generator);});
   jeod::Vector3::normalize(random_unit_vector);
 
   std::uniform_real_distribution<double> rand_uniform(0.0, 1.0);

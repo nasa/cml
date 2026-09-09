@@ -236,23 +236,21 @@ Purpose:(Adds a new perturbation to the high-frequency or low-frequency list)
 void
 TwistSway::new_fast_perturbation()
 {
-  TwistSwayMagnitudes new_perturb;
+  auto& new_perturb = fast_list.emplace_front();
   std::uniform_real_distribution<double> dist( 0,1);
   new_perturb.parallel = dist(random_generator) * params.Parallel_Motion_Fast;
   new_perturb.normal   = dist(random_generator) * params.Normal_Motion_Fast;
   new_perturb.twist    = dist(random_generator) * params.Twist_Mag;
-  fast_list.push_front( new_perturb);
 }
 /****************************************************************************/
 void
 TwistSway::new_slow_perturbation()
 {
-  TwistSwayMagnitudes new_perturb;
+  auto& new_perturb = slow_list.emplace_front();
   std::uniform_real_distribution<double> dist( 0,1);
   new_perturb.parallel = dist(random_generator) * params.Parallel_Motion_Slow;
   new_perturb.normal   = dist(random_generator) * params.Normal_Motion_Slow;
   new_perturb.twist    = 0.0;
-  slow_list.push_front( new_perturb);
 }
 
 /*****************************************************************************

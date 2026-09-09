@@ -53,8 +53,7 @@ class WatchValuesGravityAdjust : public WatchValuesBase<varT> {
                   unsigned int * deg_order)
   {
     for (size_t ii = 0; ii < size; ++ii) {
-      std::pair< varT, unsigned int > new_pair( thresholds[ii], deg_order[ii]);
-      grav_fidelity_list.push_back( new_pair);
+      grav_fidelity_list.emplace_back(thresholds[ii], deg_order[ii]);
     }
   }
  protected:

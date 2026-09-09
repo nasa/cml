@@ -47,15 +47,11 @@ Destructor
 *****************************************************************************/
 AbstractTableLookup::~AbstractTableLookup()
 {
-  auto it1 =
-                                              independents_to_destroy.begin();
-  for (; it1!=independents_to_destroy.end(); ++it1) {
-    delete (*it1);
+  for (auto* independent : independents_to_destroy) {
+    delete independent;
   }
-
-  auto it2 =  tables_to_destroy.begin();
-  for (; it2!=tables_to_destroy.end(); ++it2) {
-    delete (*it2);
+  for (auto* table : tables_to_destroy) {
+    delete table;
   }
 }
 
@@ -359,9 +355,7 @@ Purpose:(returns a bool indicating whether the specified dependent variable
 bool
 AbstractTableLookup::is_a_dependent_variable( double &variable)
 {
-  const auto it = std::find(dependents.begin(),
-                                                dependents.end(),
-                                                &variable);
+  const auto it = std::find(dependents.begin(), dependents.end(), &variable);
   return dependents.end()!=it;
 }
 
@@ -428,7 +422,7 @@ AbstractTableLookup::is_table_interp_enabled(
                             return (table_.first == tbl);
                           });
   if (it == tables.end()) {return false;}
-  return (*it).second;
+  return it->second;
 }
 
 /*****************************************************************************
@@ -449,6 +443,6 @@ AbstractTableLookup::enable_table_interp(
                             return (table_.first == tbl);
                           });
   if (it != tables.end()) {
-    (*it).second = flag;
+    it->second = flag;
   }
 }
