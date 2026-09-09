@@ -34,7 +34,7 @@ EGM2008_WGS84
 class EGM2008_WGS84 : public SubscriptionBase
 {
  public:
-  double   delta_altitude; /* (m)
+  double   delta_altitude{0}; /* (m)
       Altitude of EGM2008 Geoid wrt WGS-84 ellipsoid.*/
 
  protected:

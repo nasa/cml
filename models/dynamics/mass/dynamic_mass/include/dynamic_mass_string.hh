@@ -47,12 +47,12 @@ public:
  // double consumable_mass  (kg)
  //  The mass remaining to be potentially consumed.  >= 0.
 
-   bool flow_down; /* (--)
+   bool flow_down{false}; /* (--)
        True: deplete body[0] to exhaustion, then body[1] etc.
        False: deplete mass from all bodies equally (default).*/
 
 protected:
-   double mass_consumed;         /* (kg)
+   double mass_consumed{0.0};         /* (kg)
       The mass that has been consumed exclusively by demands on this string.*/
 
    std::list< DynamicMassBody *> body_collection; /* (--)
@@ -62,13 +62,13 @@ protected:
       processed.  This changes as bodies exhaust their consumable-mass.*/
 
 private:
-   bool string_in_group; /* (--)
+   bool string_in_group{false}; /* (--)
       Defaults to false and is switched to true when the string has been
       successfully added to a group.  Bya dding the string to the group,
       all of the masses in the string AT THE TIME THE STRING WAS ADDED TO
       THE GROUP will also be added to the group.*/
 public:
-   DynamicMassString();
+   DynamicMassString() = default;
    DynamicMassString (const DynamicMassString&) = delete;
    DynamicMassString& operator = (const DynamicMassString&) = delete;
    void initialize();

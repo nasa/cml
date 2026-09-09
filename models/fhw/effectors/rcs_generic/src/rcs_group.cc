@@ -27,25 +27,8 @@ Constructor
 RcsJetGroup::RcsJetGroup(
   const unsigned int & num_prop_components_)
   :
-  consumption_epsilon (1.0e-12),
   num_prop_components (num_prop_components_),
-  blow_down (false),
-  propc_use_isp(false),
-  signal_delay_time(0.0),
-  on_dead_time(0.0),
-  off_dead_time(0.0),
-  build_up_time(0.0),
-  trail_off_time(0.0),
-  min_on_time(0.0),
-  min_off_time(0.0),
-  mixture_ratio (0.0),
-  isp_prop_comp_ratio(num_prop_components, 0.0),
-  bd_pressure_limit(0.0),
-  buffer_flag(false),
-  buffer_on_size (0),
-  buffer_off_size(0),
-  delay_time_on(0.0),
-  delay_time_off(0.0)
+  isp_prop_comp_ratio(num_prop_components, 0.0)
 {}
 
 

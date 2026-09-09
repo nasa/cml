@@ -59,14 +59,7 @@ constructor
 StateInitializeWithPropagation::StateInitializeWithPropagation(
     jeod::GravityManager           &  gravity_manager_in)
   :
-  gravity_manager( gravity_manager_in),
-  body(nullptr),
-  T_initial_to_current{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  T_inrtl_to_initial_pfix{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  omega(0.0),
-  propagation_time(0.0),
-  time_step(1.0),
-  apply_dispersions_before_propagation(true)
+  gravity_manager( gravity_manager_in)
 {}
 
 /*****************************************************************************

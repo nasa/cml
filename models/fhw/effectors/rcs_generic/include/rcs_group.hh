@@ -25,38 +25,38 @@ Purpose:(Jet models)
 *****************************************************************************/
 class RcsJetGroup {
  protected:
-  double consumption_epsilon; /* (--)
+  double consumption_epsilon{1.0e-12}; /* (--)
        value for comparing consumption-ratio sum against the value 1.
        The components should sum to 1 +/- consumption_epsilon. */
   const unsigned int & num_prop_components; /* (--)
        reference to the number of propulsion components as defined in
        RcsGeneric.*/
 
-  bool  blow_down ;      /* (--)
+  bool  blow_down{false} ;      /* (--)
       Flag indicating if the thruster blow down model should be used for
       this module, Yes = use model */
  public:
   /****** Inputs ******/
   // Control flags:
-  bool  propc_use_isp;      /* (--)
+  bool  propc_use_isp{false};      /* (--)
       Determines whether to use Isp or mass-flow for propellant consumption
       calculations. */
 
   // General inputs
-  double signal_delay_time; /* (s)  Delay time from command to start of actuation */
-  double on_dead_time;    /* (s)
+  double signal_delay_time{0.0}; /* (s)  Delay time from command to start of actuation */
+  double on_dead_time{0.0};    /* (s)
       Time from when the jet's motor is activated until the thrust is seen.*/
-  double off_dead_time;    /* (s)
+  double off_dead_time{0.0};    /* (s)
       Time from when the jet's motor is activated until the thrust starts
       to be reduced. */
-  double build_up_time;    /* (s)  Time taken to build up to full thrust */
-  double trail_off_time;   /* (s)  Time taken to trail off from full thrust */
-  double min_on_time;     /* (s)  Min allowed time between command on and off */
-  double min_off_time;    /* (s)
+  double build_up_time{0.0};    /* (s)  Time taken to build up to full thrust */
+  double trail_off_time{0.0};   /* (s)  Time taken to trail off from full thrust */
+  double min_on_time{0.0};     /* (s)  Min allowed time between command on and off */
+  double min_off_time{0.0};    /* (s)
       Min allowed time between burn completion and new burn start */
 
   // Specialized inputs, not always needed:
-  double mixture_ratio ;   /* (--)
+  double mixture_ratio{0.0} ;   /* (--)
       (Ratio) of fuel to oxidizer: fuel/oxidizer.
       Used when RcsGeneric::num_prop_comp = 2 AND
                 RcsGeneric::calc_flow_rate = true AND
@@ -76,18 +76,18 @@ class RcsJetGroup {
   std::vector<double> bd_isp_coef;   /* (--)
       coefficients for blowdown isp calc.
       Used only when blow_down set */
-  double bd_pressure_limit; /* (N/m2)
+  double bd_pressure_limit{0.0}; /* (N/m2)
       limit below which blowdown jets stop functioning.
       Used only when blow_down set */
 
   /****** Work space ******/
-  bool   buffer_flag ;  /* (--)  Flag if buffering of commands is required */
-  unsigned int buffer_on_size ; /* (--)  buffer size for on commands */
-  unsigned int buffer_off_size; /* (--)  buffer size for off commands */
-  double delay_time_on;  /* (s)
+  bool   buffer_flag{false} ;  /* (--)  Flag if buffering of commands is required */
+  unsigned int buffer_on_size{0} ; /* (--)  buffer size for on commands */
+  unsigned int buffer_off_size{0}; /* (--)  buffer size for off commands */
+  double delay_time_on{0.0};  /* (s)
       The delay into an rcs cycle before a command is executed = Modulus of
       total_on_delay / cycle time, note this is NOT a user input */
-  double delay_time_off; /* (s)
+  double delay_time_off{0.0}; /* (s)
       The delay into an rcs cycle before a command off is executed = Modulus
       of total_off_delay / cycle time, note this is NOT a user input */
 

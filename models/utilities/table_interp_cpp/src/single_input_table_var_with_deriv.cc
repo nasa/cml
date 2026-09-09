@@ -32,12 +32,6 @@ Notes: - Class inherits constructors from GenericSingleInputTable
          constructor; these new constructors provide construction values
          to the derivs member.
 *****************************************************************************/
-SingleInputTableVarDeriv::SingleInputTableVarDeriv()
-  :
-  omit_derivative_vals(false),
-  use_linear_interpolation(false)
-{}
-/****************************************************************************/
 SingleInputTableVarDeriv::SingleInputTableVarDeriv(
     double *dependent_variables,
     double *dependent_variables_derivs,
@@ -46,10 +40,7 @@ SingleInputTableVarDeriv::SingleInputTableVarDeriv(
   GenericSingleInputTable( dependent_variables,
                            num_vars),
   derivs( dependent_variables_derivs,
-          num_vars),
-  omit_derivative_vals(false),
-  use_linear_interpolation(false)
-
+          num_vars)
 {}
 /****************************************************************************/
 SingleInputTableVarDeriv::SingleInputTableVarDeriv(
@@ -57,10 +48,7 @@ SingleInputTableVarDeriv::SingleInputTableVarDeriv(
     double & dependent_variable_derivs)
   :
   GenericSingleInputTable( dependent_variable),
-  derivs(dependent_variable_derivs),
-  omit_derivative_vals(false),
-  use_linear_interpolation(false)
-
+  derivs(dependent_variable_derivs)
 {}
 
 /****************************************************************************/
@@ -69,9 +57,7 @@ SingleInputTableVarDeriv::SingleInputTableVarDeriv(
     const DoublePtrVec & dependent_variables_deriv)
   :
   GenericSingleInputTable( dependent_variables),
-  derivs( dependent_variables_deriv),
-  omit_derivative_vals(false),
-  use_linear_interpolation(false)
+  derivs( dependent_variables_deriv)
 {}
 
 

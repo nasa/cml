@@ -30,47 +30,8 @@ Programmers:
 /*****************************************************************************
 Constructor
 *****************************************************************************/
-RangeValues::RangeValues()
-  :
-  totalrange_angle(0.0),
-  crossrange_angle(0.0),
-  downrange_angle(0.0),
-  cross_range_avg_rad(0.0),
-  down_range_avg_rad(0.0),
-  total_range_avg_rad(0.0),
-  cross_range_ref_rad(0.0),
-  down_range_ref_rad(0.0),
-  total_range_ref_rad(0.0)
-{}
-
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
 RangeComputation::RangeComputation( const jeod::PlanetFixedPosition & state_in )
   :
-  reference_radius(0.0),
-  current_radius(0.0),
-  average_radius(0.0),
-  ref_point_set(false),
-  use_polar_direction(false),
-  set_direction(false),
-  ref_sin_lat(0.0),
-  ref_cos_lat(0.0),
-  origin_sin_lat(0.0),
-  origin_cos_lat(0.0),
-  target_sin_lat(0.0),
-  target_cos_lat(0.0),
-  origin_sin_azimuth(0.0),
-  origin_cos_azimuth(0.0),
-  origin_longitude(0.0),
-  target_longitude(0.0),
-  reference_position_unit_pfix{0.0, 0.0, 0.0},
-  origin_position_unit_pfix{0.0, 0.0, 0.0},
-  target_position_unit_pfix{0.0, 0.0, 0.0},
-  origin_direction{0.0, 0.0, 0.0},
-  pos_x_pos_unit_pfix{0.0, 0.0, 0.0},
-  dir_x_pos_unit_pfix{0.0, 0.0, 0.0},
   state(state_in)
 {
   subscribe_name = "RangeComputation:";

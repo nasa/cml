@@ -57,7 +57,7 @@ class WatchValuesFlipFlop : public WatchValuesBaseCore
     The associated_watch does not need to be added to the Events-Manager,
     although it can be and should be if it has specific-actions itself.
     */
-  bool state; /* (--)
+  bool state{false}; /* (--)
     Flag indicating the current triggered-status of the associated_watch
     Used to identify transitions in that status.*/
 
@@ -118,22 +118,22 @@ class WatchValuesFlipFlopDelayed : public WatchValuesFlipFlop
   const double & delay_variable; /* (--)
     Reference to the variable used to delay the transition.
     This is typically to simulation dynamic-time.*/
-  bool in_delay; /* (--)
+  bool in_delay{false}; /* (--)
     Flag indicating that the conditions have been satisfied to flip the state
     and we are just waiting for the delay to process.*/
-  double baseline_delay_value; /* (--)
+  double baseline_delay_value{0.0}; /* (--)
     The value of delay_variable when the delay-process starts.*/
-  double delay_value; /* (--)
+  double delay_value{0.0}; /* (--)
     A copy of either up_delay or down_delay, depending on which transition
     is pending. Considered only while in_delay = true.*/
 
  public:
-  double up_delay; /* (--)
+  double up_delay{0.0}; /* (--)
     The "delay" in the value of delay_variable when triggering up.
     This is the difference between the value of delay_variable at the time the
     transition conditions are satisfied and the value of delay_variable when
     the transition should be applied.*/
-  double down_delay; /* (--)
+  double down_delay{0.0}; /* (--)
     The "delay" in the value of delay_variable when triggering up.
     This is the difference between the value of delay_variable at the time the
     transition conditions are satisfied and the value of delay_variable when

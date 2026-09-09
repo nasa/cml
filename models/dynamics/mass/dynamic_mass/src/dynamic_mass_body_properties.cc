@@ -23,31 +23,11 @@ PROGRAMMERS:
 /*****************************************************************************
 Constructors
 *****************************************************************************/
-DynamicMassBodyPropertiesInterface::DynamicMassBodyPropertiesInterface()
-  :
-  mass_consumed_step(0.0),
-  consumable_mass(0.0)
-{}
-//*******************************************************************************
 DynamicMassBodyProperties::DynamicMassBodyProperties(const double &mass_in)
   :
-  mass_bias(0.0),
-  cg_bias{},
-  moi_bias{},
-  poi_bias{},
-  mass_dispersion_flag(false),
   interpolation(mass_in)
 {
   consumable_mass = -1.0;
-}
-//*******************************************************************************
-DynamicMassBodyNominalProperties::DynamicMassBodyNominalProperties()
-:
-  position{},
-  core_mass(0.0),
-  inertia{},
-  data_assigned(false)
-{
 }
 
 /*****************************************************************************

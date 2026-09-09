@@ -24,21 +24,6 @@ PROGRAMMERS:
 #include "../include/table_independent_variable.hh"
 #include "../include/table_type_defs.hh"
 
-
-/********************************************************************************
-Method: SimpleTableLookup
-Purpose: (Constructor)
-********************************************************************************/
-SimpleTableLookup::SimpleTableLookup()
-  :
-  lookup_method(TableIndependentVariable::Interp),
-  indep_data_loaded(false),
-  dependent_data_loaded(false),
-  data_reloading(false),
-  independent(nullptr),
-  comprehensive_data_reload(false)
-{}
-
 /*****************************************************************************
 load_independent_data
 Purpose:(Create the table-variable and populate it with independent-variable

@@ -31,9 +31,7 @@ MassBodyDistributeCompToCore::MassBodyDistributeCompToCore (
     jeod::MassBody & target_body_in)
   :
   target_body( target_body_in),
-  adjustable_body( adjustable_body_in),
-  fail_if_mass_invalid(true),
-  old_mass(0.0)
+  adjustable_body( adjustable_body_in)
 {}
 
 /*****************************************************************************

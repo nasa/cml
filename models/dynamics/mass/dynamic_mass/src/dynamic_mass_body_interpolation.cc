@@ -27,8 +27,6 @@ Method: Constructor
 ********************************************************************************/
 DynamicMassBodyInterpolation::DynamicMassBodyInterpolation(const double &mass_in)
   :
-  position{},
-  inertia{},
   mass_indep(mass_in),
   pos_dep_x(position[0]),
   pos_dep_y(position[1]),
@@ -38,18 +36,7 @@ DynamicMassBodyInterpolation::DynamicMassBodyInterpolation(const double &mass_in
   moi_dep_zz(inertia[2][2]),
   poi_dep_xy(inertia[0][1]),
   poi_dep_xz(inertia[0][2]),
-  poi_dep_yz(inertia[1][2]),
-  tab_mass_flag(false),
-  tab_cg_flag(false),
-  tab_moi_flag(false),
-  tab_poi_flag(false),
-  interp_position_master(true),
-  interp_inertia_master(true),
-  interp_position{true, true, true},
-  interp_moi{true, true, true},
-  interp_poi{true, true, true},
-  inertia_is_structural_cg(false),
-  initialized(false)
+  poi_dep_yz(inertia[1][2])
 {
 }
 

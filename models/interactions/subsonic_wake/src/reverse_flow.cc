@@ -34,8 +34,7 @@ WakeReverseFlow::WakeReverseFlow(
    :
    WakeEffectsBase( objectA_in,
                     objectB_in,
-                    params_in),
-   Qrev(0.0)
+                    params_in)
 {}
 
 /*****************************************************************************

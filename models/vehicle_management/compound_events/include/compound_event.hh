@@ -69,39 +69,39 @@ class CompoundEvent : public WatchValuesDelay<bool>
   EventTriggerSet action_triggers; /* (--)
     Set of triggers for causing the event to trigger the event and cause
     it to issue its actions.*/
-  bool allow_immediate_actions; /* (--)
+  bool allow_immediate_actions{false}; /* (--)
     Flag to indicate whether to allow immediate disarming or immediate actions
     following the arming of an event.
     Default: false (follow-on triggers will not be tested until next cycle)*/
-  bool deactivate_at_disarm; /* (--)
+  bool deactivate_at_disarm{false}; /* (--)
     Flag to deactivate the event immediately after being disarmed.*/
-  double arm_trigger_check_period; /* (s)
+  double arm_trigger_check_period{0.0}; /* (s)
     Time between adjacent checks of the arming triggers. */
-  double disarm_trigger_check_period; /* (s)
+  double disarm_trigger_check_period{0.0}; /* (s)
     Time between adjacent checks of the disarming triggers. */
-  double action_trigger_check_period; /* (s)
+  double action_trigger_check_period{0.0}; /* (s)
     Time between adjacent checks of the action triggers. */
 
  protected:
-  bool event_has_action_triggers;/* (--)
+  bool event_has_action_triggers{false};/* (--)
     Flag indicating that the trigger-set action_triggers contains at least
     one trigger.
     Default: false.*/
-  double time_triggered; /* (s)
+  double time_triggered{0.0}; /* (s)
     Value of time at which the event was triggered --
     i.e. reached its action phase.*/
-  double next_arming_check; /* (s)
+  double next_arming_check{0.0}; /* (s)
     Time at which next arming check is to be conducted.*/
-  double next_disarming_check; /* (s)
+  double next_disarming_check{0.0}; /* (s)
     Time at which next disarming check is to be conducted.*/
-  double next_action_check; /* (s)
+  double next_action_check{0.0}; /* (s)
     Time at which next action check is to be conducted.*/
-  double discrete_time_elapsed; /* (s)
+  double discrete_time_elapsed{0.0}; /* (s)
     Elapsed time since the event triggered.*/
-  unsigned int number_of_times_armed; /* (1)
+  unsigned int number_of_times_armed{0}; /* (1)
     Count of the number of times the event has been armed.*/
 
-  CompoundEventStatus status;
+  CompoundEventStatus status{Unarmed};
 
   // Methods
  public:

@@ -20,17 +20,6 @@ Constructor
  ******************************************************************************/
 WatchValuesBaseCore::WatchValuesBaseCore()
   :
-  multi_shot(false),
-  relative_to_activation(false),
-  event_triggered(false),
-  int_event_triggered(0),
-  add_self_to_manager_active_list(true),
-  locked(false),
-  externally_managed(false),
-  direction(Undefined),
-  delta_record(0.0),
-  relative_to_activation_protected(false),
-  active_watches(nullptr),
   ext_bool_on(0),
   ext_bool_off(0),
   subscribe_models(0),

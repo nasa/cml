@@ -74,28 +74,22 @@ class TriggerBase {
       else {return Invalid;}
     }
 
-    Operator_enm Operator; /* (--)
+    Operator_enm Operator{Invalid}; /* (--)
       The comparison operator (less-than, equal-to, etc.) */
 
     std::string name; /* (--) The name of this trigger. */
 
   protected:
-    bool trigger_count_limited; /* (--)
+    bool trigger_count_limited{false}; /* (--)
       Flag indicating that the trigger-count is limited.*/
-    unsigned long trigger_count; /* (--)
+    unsigned long trigger_count{0}; /* (--)
       Count of the number of times this Trigger has been queried while
       triggered.*/
-    unsigned long trigger_limit; /* (--)
+    unsigned long trigger_limit{0}; /* (--)
       Maximum value of trigger_count before trigger becomes unavailable.*/
 
   public:
-    TriggerBase()
-      :
-      Operator(Invalid),
-      trigger_count_limited(false),
-      trigger_count(0),
-      trigger_limit(0)
-    {}
+    TriggerBase() = default;
     virtual ~TriggerBase() = default;
     TriggerBase(const TriggerBase&) = delete;
     TriggerBase& operator = (const TriggerBase&) = delete;
@@ -141,13 +135,7 @@ class Trigger : public TriggerBase {
     ////    Constructors and destructors    ////
 
     explicit Trigger(const T& var) :
-      value(),
-      variable(var),
-      is_periodic(false),
-      periodic_length(0.0),
-      periodic_period(0.0),
-      initial_periodic_value(0.0),
-      is_first_trigger(true)
+      variable(var)
     {}
     ~Trigger() override = default;
     Trigger(const Trigger&) = delete;
@@ -169,24 +157,24 @@ class Trigger : public TriggerBase {
 
     ////    Attributes    ////
 
-    T value; /* (--) The value to which the trigger variable is compared. */
+    T value {}; /* (--) The value to which the trigger variable is compared. */
 
   private:
     const T& variable; /* (--) The trigger variable. Its value determines when
       the trigger is triggered. */
 
-    bool is_periodic; /* (--)
+    bool is_periodic{false}; /* (--)
       If true, after the trigger is triggered for the first time, it will
       be triggered by periodic values of the trigger variable. This makes the
       most sense if the trigger variable is time. */
-    T periodic_length; /* (--)
+    T periodic_length {0}; /* (--)
       The length of each period during which a periodic trigger is
       triggered. */
-    T periodic_period; /* (--) The length of a periodic trigger's period. */
-    T initial_periodic_value; /* (--)
+    T periodic_period {0}; /* (--) The length of a periodic trigger's period. */
+    T initial_periodic_value {0}; /* (--)
       The value of the trigger variable when a periodic trigger was first
       triggered. */
-    bool is_first_trigger; /* (--)
+    bool is_first_trigger{true}; /* (--)
       True until the trigger has been triggered for the first time. */
 };
 

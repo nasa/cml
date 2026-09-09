@@ -29,30 +29,6 @@ Programmers:
 #include "../include/spherical_harmonics_fast_gravity_controls.hh"
 
 /*******************************************************************************
-  Function: SphericalHarmonicsFastGravityControls::
-                                          SphericalHarmonicsFastGravityControls
-  Purpose:  (Default constructor)
-*******************************************************************************/
-SphericalHarmonicsFastGravityControls::SphericalHarmonicsFastGravityControls()
- :
-   fast_enabled(true),
-   count_limit(10),
-   compute_count_limit(true),
-   threshold_ratio_delta_acc(1.0E-7),
-   available(false),
-   first_pass(true),
-   count(0),
-   reference_pos_pfix{},
-   delta_pos{},
-   reference_accel_pfix{},
-   reference_gradient_pfix{},
-   reference_gradient_inrtl{},
-   reference_potential(0.0)
-{
-}
-
-
-/*******************************************************************************
   Function: SphericalHarmonicsFastGravityControls::initialize
   Purpose:  (Sets the encessary parameters)
   Class:    (initialization)

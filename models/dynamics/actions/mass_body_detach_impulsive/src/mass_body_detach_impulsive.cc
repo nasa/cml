@@ -29,17 +29,6 @@ Programmers:
 #include <string>
 
 /*******************************************************************************
-Function: MassBodyDetachImpulsive::MassBodyDetachImpulsive
-Purpose: (Construct a MassBodyDetachImpulsive.)
-*******************************************************************************/
-MassBodyDetachImpulsive::MassBodyDetachImpulsive()
-  :
-  impulse_magnitude(0.0),
-  separation_speed(0.0),
-  sep_speed_spec_by_user(false)
-{}
-
-/*******************************************************************************
 Function: MassBodyDetachImpulsive::initialize
 Purpose: (Initialize a MassBodyDetach)
 *******************************************************************************/

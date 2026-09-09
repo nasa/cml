@@ -13,26 +13,6 @@ PROGRAMMERS:
 #include "../include/simple_spring_individual.hh"
 
 /*******************************************************************************
-Constructor
-*******************************************************************************/
-SimpleSpringIndividual::SimpleSpringIndividual()
-  :
-  spring_constant(0.0),
-  damping_constant(0.0),
-  stroke(0.0),
-  final_compression(0.0),
-  position_action(),
-  position_reaction(),
-  compression(0.0),
-  axial_force(0.0),
-  damping_force(0.0),
-  active(false),
-  initial_compression(0.0),
-  extension_distance(0.0),
-  extension_speed(0.0)
-{ }
-
-/*******************************************************************************
 initialize
 Purpose:(Used to set the initial compression of the springs.)
 *******************************************************************************/

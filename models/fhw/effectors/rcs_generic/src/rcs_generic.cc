@@ -90,28 +90,12 @@ Purpose:()
 RcsGeneric::RcsGeneric(
     const unsigned int num_propellant_components_)
   :
-  cm (nullptr),
   num_propellant_components(num_propellant_components_),
   prop_loss_on(num_propellant_components, 0.0),
   prop_loss_off(num_propellant_components, 0.0),
-  mult_jet_flag(false),
-  calc_flow_rate(false),
-  self_impingement(false),
-  apply_thrust_factor_per_jet(false),
-  imp_ref_center{0.0, 0.0, 0.0},
-  input_force( input_force_error),
-  time_step(0.0),
-  seed(0),
   normal(0.0, 1.0),
   uniform(-1.0, 1.0),
-  force{0.0, 0.0, 0.0},
-  torque{0.0, 0.0, 0.0},
-  total_imp_force{0.0, 0.0, 0.0},
-  total_imp_torque{0.0, 0.0, 0.0},
-  sum_component_consumptions(num_propellant_components, 0.0),
-  sum_consumption(0.0),
-  sum_time(0.0),
-  num_jets(0)
+  sum_component_consumptions(num_propellant_components, 0.0)
 {
   subscribe_name = "RcsGeneric:";
 }

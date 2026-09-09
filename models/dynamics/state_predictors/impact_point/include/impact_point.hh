@@ -60,22 +60,22 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
   };
 
   //INPUT
-  bool auto_off; /* (--) Turns off automatically when vehicle hits the ground */
-  double iteration_threshold; /* (m) 
+  bool auto_off{true}; /* (--) Turns off automatically when vehicle hits the ground */
+  double iteration_threshold{1.0}; /* (m) 
        The threshold distance between the orbital position and the planet
        surface at which the iteration is considered to have converged. */
-  unsigned int iteration_count_max; /* (--) max number of iterations */
+  unsigned int iteration_count_max{20}; /* (--) max number of iterations */
 
   // OUTPUT
-  double surface_range;  /* (m) Total range from the launch reference point */
-  double time_to_impact; /* (s) Time until impact */
-  double time_of_impact; /* (s) Simulation dynamic time of predicted impact. */
-  ImpactType impact_type; /* (--) Identifies type of impact. */
+  double surface_range{0.0};  /* (m) Total range from the launch reference point */
+  double time_to_impact{0.0}; /* (s) Time until impact */
+  double time_of_impact{0.0}; /* (s) Simulation dynamic time of predicted impact. */
+  ImpactType impact_type{UNDEFINED}; /* (--) Identifies type of impact. */
   RangeFromPfixReference  launch_range; /* (--) 
        The range from the reference point, typically the launch site. */
 
  protected:
-  double planet_ecc_factor; /* (--)
+  double planet_ecc_factor{0.0}; /* (--)
       ratio involving planetary eccentricity, e^2/(1-e^2) where e is the
       planet eccentricity */
   OrbElemSubset  orb_elem; /* (--) Orbital elements used in the model */

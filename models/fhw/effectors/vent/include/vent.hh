@@ -20,13 +20,13 @@ class Vent : public SimpleVent {
  protected:
   DynamicMassBody& tank; /* (--) Tank from which mass is depleted */
 
-  double flowrate;       /* (kg/s) Default flowrate */
-  double exhaust_speed;  /* (m/s) Speed of the exhaust plume; this is also the
+  double flowrate{0.0};       /* (kg/s) Default flowrate */
+  double exhaust_speed{0.0};  /* (m/s) Speed of the exhaust plume; this is also the
                                   N*s of impulse imparted per kg vented */
-  double prev_time;      /* (s) Used for calculating delta time */
-  bool flowrate_set;     /* (--) Internal flag indicating that this vent has
+  double prev_time{0.0};      /* (s) Used for calculating delta time */
+  bool flowrate_set{false};     /* (--) Internal flag indicating that this vent has
               knowledge of the rate at which mass should be depeleted */
-  bool exhaust_set;      /* (--) Internal flag indicating that this vent has
+  bool exhaust_set{false};      /* (--) Internal flag indicating that this vent has
               knowledge of the speed at which mass is expelled */
 
 

@@ -28,8 +28,7 @@ Constructor
 WatchValuesFlipFlop::WatchValuesFlipFlop(
   WatchValuesBaseCore & associated_watch_)
   :
-  associated_watch( associated_watch_),
-  state(false)
+  associated_watch( associated_watch_)
 {
   multi_shot = true;
   associated_watch.multi_shot = true;
@@ -41,12 +40,7 @@ WatchValuesFlipFlopDelayed::WatchValuesFlipFlopDelayed(
   const double & delay_variable_)
   :
   WatchValuesFlipFlop(associated_watch_),
-  delay_variable( delay_variable_),
-  in_delay(false),
-  baseline_delay_value(0.0),
-  delay_value(0.0),
-  up_delay(0.0),
-  down_delay(0.0)
+  delay_variable( delay_variable_)
 {}
 
 /*****************************************************************************

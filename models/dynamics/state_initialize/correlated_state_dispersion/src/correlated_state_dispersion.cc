@@ -29,32 +29,6 @@ Constructor
 *****************************************************************************/
 CorrelatedStateDispersion::CorrelatedStateDispersion()
   :
-  pv_covar_frame(PV_COVAR_INRTL),
-  corr_option(CORRELATED_PV),
-  corr_att_frame(REFERENCE_FRM),
-  att_rot_defined(PerturbedToTrue),
-  dispersion_distribution(NoDispersion),
-  hold_previous_random_vec(false),
-  max_iterations(2000),
-  sigma_limit(0.0),
-  seed(12345),
-  user_specified_distribution{0.0},
-  covariance{{0.0}},
-  TR_geodetic_altitude_disp(0.0),
-  pos_error{0.0, 0.0, 0.0},
-  vel_error{0.0, 0.0, 0.0},
-  att_error{0.0, 0.0, 0.0},
-  prm_error{0.0, 0.0, 0.0, 0.0, 0.0},
-  r_mag(0.0),
-  declination(0.0),
-  right_asc(0.0),
-  v_mag(0.0),
-  fp_angle(0.0),
-  azimuth(0.0),
-  generator_seeded(false),
-  dimension(6),
-  random_vec{0.0},
-  sqrt_covariance{{0.0}},
   rand_uniform(0.0, 1.0),
   rand_norm(0.0, 1.0)
 {}

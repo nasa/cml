@@ -50,17 +50,17 @@ PROGRAMMERS:
 // duplicate the data elements - mass, position, inertia.
 class DynamicMassBodyNominalProperties {
 public:
-   double position[3];   /* (m)
+   double position[3]{};   /* (m)
           Center of mass location in the parent body's structural frame. */
-   double core_mass;     /* (kg)    Mass (always >= 0). */
-   double inertia[3][3]; /* (kg*m2) Inertia matrix in element body frame. */
+   double core_mass{0.0};     /* (kg)    Mass (always >= 0). */
+   double inertia[3][3]{}; /* (kg*m2) Inertia matrix in element body frame. */
 
 protected:
-   bool   data_assigned; /* (--) Nominal data has been assigned. */
+   bool   data_assigned{false}; /* (--) Nominal data has been assigned. */
 
 // NOTE - source code found in dynamic_mass_body_properties.cc
 public:
-   DynamicMassBodyNominalProperties();
+   DynamicMassBodyNominalProperties() = default;
    DynamicMassBodyNominalProperties (const DynamicMassBodyNominalProperties&) = delete;
    DynamicMassBodyNominalProperties& operator = (const DynamicMassBodyNominalProperties&) = delete;
    void set_data( jeod::MassProperties & properties_in);

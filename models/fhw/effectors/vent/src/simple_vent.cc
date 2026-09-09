@@ -20,33 +20,7 @@ Constructor
 *************************************************************************/
 SimpleVent::SimpleVent( const double& dyn_time_in)
   :
-  dyn_time(dyn_time_in),
-  location{0.0, 0.0, 0.0},
-  active(true),
-  indefinite_duration(false),
-  quiet_message_start_inactive(false),
-  initialized(false),
-  apply_as_impulse(false),
-  venting(false),
-  indefinite_duration_warning_sent(false),
-  allocated_in_set(false),
-  force_mag(0.0),
-  impulse_mag(0.0),
-  duration(0.0),
-  start_time(0.0),
-  stop_time(0.0),
-  direction{0.0, 0.0, 0.0},
-  force{0.0, 0.0, 0.0},
-  impulse{0.0, 0.0, 0.0},
-  direction_set(false),
-  force_set(false),
-  force_mag_set(false),
-  impulse_set(false),
-  impulse_mag_set(false),
-  duration_set(false),
-  user_set_impulse(0.0),
-  user_set_duration(0.0),
-  name("no-name")
+  dyn_time(dyn_time_in)
 {}
 
 /*****************************************************************************

@@ -46,24 +46,24 @@ public:
   std::string   name;     /* (--)
           Table name, useful for being able to switch between tables at
           flight-phase boundaries.*/
-  double Aref; /* (m2)
+  double Aref{0.0}; /* (m2)
           Locally-specific value of the reference-area
           Tables may be configured for a particular value, so this becomes a
           table-level setting that must be pushed up to the master interface.*/
-  double Lref; /* (m)
+  double Lref{0.0}; /* (m)
           Locally-specific value of the reference-length
           Tables may be configured for a particular value, so this becomes a
           table-level setting that must be pushed up to the master interface.*/
-  double T_struc_to_aero_frame[3][3]; /* (--)
+  double T_struc_to_aero_frame[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--)
           Transformation matrix from the vehicle structure frame (used to
           specify the cg-position and mrc-position) and the aero-frame
           relative to which the coefficients are specified.*/
-  double mrc_position[3];       /* (m)
+  double mrc_position[3]{0.0, 0.0, 0.0};       /* (m)
         Current aerodynamic moment reference center in structural frame*/
 
 
 
-  bool uncertainties_expressed_as_percent;   /* (--)
+  bool uncertainties_expressed_as_percent{false};   /* (--)
         Uncertainties are typically expressed as either
         (m) +/- (n) or as
         (m) +/- (p%)
@@ -115,22 +115,22 @@ protected:
   // Internal variables
   /***************************************************************************/
 
-  bool aero_damping_in_table; /* (--) Result of verif from configure_table. */
-  AeroDataTableType data_table_type; /* (--)
+  bool aero_damping_in_table{false}; /* (--) Result of verif from configure_table. */
+  AeroDataTableType data_table_type{Unspecified}; /* (--)
           The type of data-table being used - identifies which variables are
           contained in the table. */
-  AeroDampingType aero_damping_on_diag_in_table;  /* (--)
+  AeroDampingType aero_damping_on_diag_in_table{NotInTable};  /* (--)
           The on-diagonal elements are set in the table. */
-  AeroDampingType aero_damping_off_diag_in_table; /* (--)
+  AeroDampingType aero_damping_off_diag_in_table{NotInTable}; /* (--)
           The on-diagonal elements are set in the table. */
 
-  bool uncertainty_data_present; /* (--)
+  bool uncertainty_data_present{false}; /* (--)
           Internal recognition that the tables include uncertainty data. */
-  bool coef_data_present;        /* (--)
+  bool coef_data_present{false};        /* (--)
           Internal recognition that the tables include regular coeff data. */
 
 public:
-  AeroTableSetBase( const std::string & name_in,
+  AeroTableSetBase( std::string name_in,
                     AeroCoefficientsTable & coefficients_out,
                     AeroCoefficientsDisp  & uncertainties_out);
   ~AeroTableSetBase() override = default;

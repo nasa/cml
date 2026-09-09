@@ -27,9 +27,7 @@ GravityFidelityManager::GravityFidelityManager(
   :
   grav_controls(grav_controls_),
   source_frame(source_frame_),
-  target_frame(target_frame_),
-  distance(0.0),
-  degree_order(0.0)
+  target_frame(target_frame_)
 {
   // There are no versions of this model that do not use the table lookup, so
   // go ahead and subscribe it now.

@@ -59,7 +59,7 @@ class FaultManager {
 
     ////    Operations    ////
 
-    FaultManager();
+    FaultManager() = default;
     virtual ~FaultManager();
     FaultManager(const FaultManager&) = delete;
     FaultManager& operator = (const FaultManager&) = delete;
@@ -163,14 +163,14 @@ class FaultManager {
   public:
     std::string fault_file; /* (--) Name of an XML file that defines faults. */
 
-    bool enabled; /* (--)
+    bool enabled{false}; /* (--)
       If true, this object will parse the XML file and construct faults
       accordingly. If false (default), this object will do nothing. */
     static bool global_enabled; /* (--)
       Set this to false to disable all FaultManagers. */
 
   private:
-    bool parsed; /* (--)
+    bool parsed{false}; /* (--)
       If true, fault_file is the name of a valid XML fault file and that file has
       been parsed. */
 

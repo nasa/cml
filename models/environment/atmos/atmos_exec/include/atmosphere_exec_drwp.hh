@@ -29,8 +29,8 @@ class AtmosphereExec_Drwp : public AtmosphereExec_AtmosWindsBase
     LookupAtmosWinds & DRWP_atmos; /* (--)
       Binary atmosphere-winds data reader based on Doppler Radar Wind values
       from SLS program */
-    bool initialized; /* (--) Internal flag to indicate that initialize has run.*/
-    double altitude_at_prev_update; /* (m)
+    bool initialized{false}; /* (--) Internal flag to indicate that initialize has run.*/
+    double altitude_at_prev_update{0.0}; /* (m)
             altitude at which DRWP was last updated. */
 
   public:

@@ -32,14 +32,7 @@ WakeEffectsBase::WakeEffectsBase(
    :
    objectA(objectA_in),
    objectB(objectB_in),
-   params(params_in),
-   grid_offset(0.0),
-   force_toward_A(0.0),
-   data_loaded(false),
-   in_region(false),
-   offset_trail_dist(0.0),
-   offset_radial_dist(0.0),
-   eff_wake_vel(0.0)
+   params(params_in)
 {
   subscribe_name = "WakeEffectsBase:";
 }

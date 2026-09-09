@@ -93,10 +93,10 @@ class StateInitialize : public jeod::DynBodyInit
     RITS_SolarPosEclipticPole
   };
 
-  InputDataType position_input_data_type; /* (--) enumeration for position */
-  InputDataType velocity_input_data_type; /* (--) enumeration for velocity */
-  InputDataType attitude_input_data_type; /* (--) enumeration for attitude */
-  InputDataType att_rate_input_data_type; /* (--) enumeration for att rate */
+  InputDataType position_input_data_type{Unspecified}; /* (--) enumeration for position */
+  InputDataType velocity_input_data_type{Unspecified}; /* (--) enumeration for velocity */
+  InputDataType attitude_input_data_type{Unspecified}; /* (--) enumeration for attitude */
+  InputDataType att_rate_input_data_type{Unspecified}; /* (--) enumeration for att rate */
 
   jeod::DynBodyInitOrbit         orb_elem_init; /* (--) orbital element initializer */
   jeod::DynBodyInitTransState    trans_init; /* (--) translational state initializer */
@@ -118,76 +118,76 @@ class StateInitialize : public jeod::DynBodyInit
   std::string planet_name; /* (--) Name of the planet (typically "Earth") */
 
   // Reference point definition for translational state initialization
-  double ref_point_altitude;  /* (m) The altitude of the reference point. */
-  double ref_point_latitude;  /* (rad) The latitude of the reference point. */
-  double ref_point_longitude; /* (rad) The longitude of the reference point. */
+  double ref_point_altitude{0.0};  /* (m) The altitude of the reference point. */
+  double ref_point_latitude{0.0};  /* (rad) The latitude of the reference point. */
+  double ref_point_longitude{0.0}; /* (rad) The longitude of the reference point. */
 
   // Target relative parameters for position initialization */
-  double TR_geodetic_altitude;/* (m)  Geodetic altitude of target relative
-                                      position */
-  double TR_theta_Rng; /* (rad)  Position range angle from target             */
-  double TR_theta_Rot; /* (rad)  Position rotation angle about target vector  */
-  double TR_phi_Cross; /* (rad)  Position cross angle                         */
+  double TR_geodetic_altitude{0.0};/* (m)  Geodetic altitude of target relative
+                                           position */
+  double TR_theta_Rng{0.0}; /* (rad)  Position range angle from target             */
+  double TR_theta_Rot{0.0}; /* (rad)  Position rotation angle about target vector  */
+  double TR_phi_Cross{0.0}; /* (rad)  Position cross angle                         */
 
   // Reference point definition for rotational state initialization
-  double rot_ref_latitude; /* (rad) latitude for rotational state initialization*/
-  double rot_ref_longitude;/* (rad) longitude for rotational state
-                                  initialization */
-  double rot_ref_azimuth;  /* (rad) azimuth for rotational state initialization */
+  double rot_ref_latitude{0.0}; /* (rad) latitude for rotational state initialization*/
+  double rot_ref_longitude{0.0};/* (rad) longitude for rotational state
+                                         initialization */
+  double rot_ref_azimuth{0.0};  /* (rad) azimuth for rotational state initialization */
 
   // Velocity definition for speed / flight-path / azimuth option
-  double speed;          /* (m/s) for speed/flight-path/azimuth
+  double speed{0.0};          /* (m/s) for speed/flight-path/azimuth
                                   and speed/flight-path/lateral-angle
                                   velocity options */
-  double flight_path_angle;/* (rad) for speed/flight-path/azimuth
-                                  and speed/flight-path/lateral-angle
-                                  velocity options */
-  double azimuth;          /* (rad) for speed/flight-path/azimuth
-                                  velocity options */
-  double TR_Lambda;        /* (rad) for speed/flight-path/lateral angle
-                                  velocity option */
+  double flight_path_angle{0.0};/* (rad) for speed/flight-path/azimuth
+                                   and speed/flight-path/lateral-angle
+                                   velocity options */
+  double azimuth{0.0};          /* (rad) for speed/flight-path/azimuth
+                                   velocity options */
+  double TR_Lambda{0.0};        /* (rad) for speed/flight-path/lateral angle
+                                   velocity option */
 
   // Attitude definition for yaw / pitch / roll option
-  double yaw;    /* (rad) for yaw / pitch / roll attitude init option */
-  double roll;   /* (rad) for yaw / pitch / roll attitude init option */
-  double pitch;  /* (rad) for yaw / pitch / roll attitude init option */
+  double yaw{0.0};    /* (rad) for yaw / pitch / roll attitude init option */
+  double roll{0.0};   /* (rad) for yaw / pitch / roll attitude init option */
+  double pitch{0.0};  /* (rad) for yaw / pitch / roll attitude init option */
 
   // Attitude defintion for bank / sideslip / attack option
-  double angle_of_bank;     /* (rad) bank angle     for EulerFreestream_RYP attitude option */
-  double angle_of_sideslip; /* (rad) sideslip angle for EulerFreestream_RYP attitude option */
-  double angle_of_attack;   /* (rad) attack angle   for EulerFreestream_RYP attitude option */
+  double angle_of_bank{0.0};     /* (rad) bank angle     for EulerFreestream_RYP attitude option */
+  double angle_of_sideslip{0.0}; /* (rad) sideslip angle for EulerFreestream_RYP attitude option */
+  double angle_of_attack{0.0};   /* (rad) attack angle   for EulerFreestream_RYP attitude option */
 
   // Attitude defintion for matrix option
-  double T_inrtl_body[3][3]; /* (--) Direct transform inertial to body. */
+  double T_inrtl_body[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--) Direct transform inertial to body. */
 
   // Euler sequence override
-  jeod::Orientation::EulerSequence ref_body_sequence_override; /* (--)
+  jeod::Orientation::EulerSequence ref_body_sequence_override{jeod::Orientation::NoSequence}; /* (--)
          The RPY/PRY etc sequence IF it is desirable to override the
          default settings for the specified attitude type.*/
 
   // Attitude rate defintion for roll / pitch / yaw option
-  double roll_rate_body;  /* (rad/s)
+  double roll_rate_body{0.0};  /* (rad/s)
          used for roll/pitch/yaw attitude rate init option */
-  double pitch_rate_body; /* (rad/s)
+  double pitch_rate_body{0.0}; /* (rad/s)
          used for roll/pitch/yaw attitude rate init option */
-  double yaw_rate_body;   /* (rad/s)
+  double yaw_rate_body{0.0};   /* (rad/s)
          used for roll/pitch/yaw attitude rate init option */
 
   // Attitude rate specifications for random state
-  double max_rate_random;  /* (rad/s) Max attitude rate for random rate option */
-  int att_random_seed;     /* (--) seed for the random attitude generator */
-  int att_rate_random_seed;/* (--) seed for the random attitude-rate generator */
+  double max_rate_random{0.0};  /* (rad/s) Max attitude rate for random rate option */
+  int att_random_seed{1};     /* (--) seed for the random attitude generator */
+  int att_rate_random_seed{2};/* (--) seed for the random attitude-rate generator */
 
 
   // Computed values that may be set or need to be accessed from outside:
-  double free_stream_velocity[3]; /* (m/s)
+  double free_stream_velocity[3]{}; /* (m/s)
          The velocity of the vehicle relative to the free stream, expressed in
          the inertial frame.*/
 
 
  protected:
-  bool initialized; /* (--) Model is initialized, planet is non-NULL. */
-  jeod::Planet * planet; /* (--) Pointer to the planet that defines the pfix frame. */
+  bool initialized{false}; /* (--) Model is initialized, planet is non-NULL. */
+  jeod::Planet * planet{nullptr}; /* (--) Pointer to the planet that defines the pfix frame. */
 
   // Reference frame names
   std::string reference_ref_frame_name_inertial; /* (--)
@@ -196,81 +196,81 @@ class StateInitialize : public jeod::DynBodyInit
       Planet-fixed reference frame name. */
 
   // Flags to indicate which state initializers are defined and to be used.
-  bool use_orbital_init; /* (--) flag to use orb_elem_init */
-  bool use_trans_init; /* (--) flag to use trans_init */
-  bool use_rot_init; /* (--) flag to use rot_init */
-  bool use_ned_rot_init; /* (--) flag to use ned_rot_init */
-  bool use_trans_init_passthrough; /* (--)
+  bool use_orbital_init{false}; /* (--) flag to use orb_elem_init */
+  bool use_trans_init{true}; /* (--) flag to use trans_init */
+  bool use_rot_init{true}; /* (--) flag to use rot_init */
+  bool use_ned_rot_init{false}; /* (--) flag to use ned_rot_init */
+  bool use_trans_init_passthrough{false}; /* (--)
                flag to use trans_init without input from this model.*/
-  bool use_rot_init_passthrough; /* (--)
+  bool use_rot_init_passthrough{false}; /* (--)
                flag to use rot_init without input from this model.*/
-  bool use_pfix_frame_trans; /* (--)
+  bool use_pfix_frame_trans{false}; /* (--)
                flag to use initialize trans state using pfix frame instead of inertial.*/
 
   // Flags to indicate procedural completions
-  bool pfix_ref_point_state_generated; /* (--)
+  bool pfix_ref_point_state_generated{false}; /* (--)
           The pfix-cartesian representation of the reference point is
           available. */
 
-  bool use_veh_position_as_reference; /* (--)
+  bool use_veh_position_as_reference{false}; /* (--)
           For cases in which the velocity is defined relative to the NED frame
           associated with the vehicle position.*/
 
-  bool populate_trans_init_pos_from_pfix; /* (--)
+  bool populate_trans_init_pos_from_pfix{false}; /* (--)
           The position may be initialized relative to some position that is
           defined in pfix.  pfix must be defined and computed in order to get
           the position in inertial, which is needed before the body action
           can be applied. So wait for the apply() method before populating
           trans)_init.position*/
 
-  bool populate_trans_init_vel_from_pfix; /* (--)
+  bool populate_trans_init_vel_from_pfix{false}; /* (--)
           The velocity is initialized in pfix but pfix must be defined and
           computed in order to get the velocity in inertial, which is needed
           before the body action can be applied.*/
 
-  bool velocity_is_relative_to_inertial; /* (--)
+  bool velocity_is_relative_to_inertial{false}; /* (--)
          Some init options provide an inertial-referenced velocity, and some
          provide a pfix/ned-referenced velocity.  This flag distinguishes the
          cases. */
 
-  bool requires_free_stream_velocity; /* (--)
+  bool requires_free_stream_velocity{false}; /* (--)
          For initializing the attitude relative to the free-stream.*/
 
-  RotInitTransformSource populate_rot_init_transform_source; /* (--)
+  RotInitTransformSource populate_rot_init_transform_source{RITS_None}; /* (--)
     Options set internally allowing apply() to branch appropriately to set the
     T_inertial->body transformation matrix.*/
 
-  bool z_axis_points_up; /* (--) Used with VelPos and SolarPosPos to orient z */
+  bool z_axis_points_up{false}; /* (--) Used with VelPos and SolarPosPos to orient z */
 
-  bool increment_rot_rate_init_with_pfix; /* (--)
+  bool increment_rot_rate_init_with_pfix{false}; /* (--)
          When attitude rate is specified wrt a pfix frame, the rate of the
          pfix frame needs adding.  Must be transformed to body frame first.*/
 
 
   // Derived states
-  double pfix_position[3]; /* (m)
+  double pfix_position[3]{}; /* (m)
      Position vector expressed relative to the pfix frame. */
-  double pfix_velocity[3]; /* (m/s)
+  double pfix_velocity[3]{}; /* (m/s)
      Velocity expressed in pfix frame.  May or may not be wrt pfix frame;
      see "velocity_is_relative_to_inertial" for associated specification
      of which frame the velocity is with respect to. */
 
-  double omega_cross_r[3]; /* (m/s)
+  double omega_cross_r[3]{}; /* (m/s)
          difference between pfix-expressed and inertial-expressed velocity.
          May be expressed in either inertial or pfix depending on context.*/
 
-  double T_pfix_reference[3][3]; /* (--)
+  double T_pfix_reference[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--)
          transform from pfix to some user-defined reference frame.*/
-  double T_inrtl_reference[3][3]; /* (--)
+  double T_inrtl_reference[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--)
          transform from inertial to some user-defined reference frame.*/
-  double T_reference_body[3][3]; /* (--)
+  double T_reference_body[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--)
          transform from some user-defined reference frame to vehicle body
          frame.*/
 
-  double E_pfix_reference[3]; /* (rad) Euler angles from pfix to reference frame */
-  double E_reference_body[3]; /* (rad) Euler angles from reference frame to body */
+  double E_pfix_reference[3]{}; /* (rad) Euler angles from pfix to reference frame */
+  double E_reference_body[3]{}; /* (rad) Euler angles from reference frame to body */
 
-  jeod::Orientation::EulerSequence ref_body_sequence; /* (--)
+  jeod::Orientation::EulerSequence ref_body_sequence{jeod::Orientation::NoSequence}; /* (--)
          The RPY/PRY etc sequence. */
 
   jeod::AltLatLongState pfix_ref_point; /* (--)
@@ -280,15 +280,15 @@ class StateInitialize : public jeod::DynBodyInit
 
 
   // Other useful values
-  double random_value; /* (--)
+  double random_value{0.0}; /* (--)
        Simple random number. Class element for debugging */
-  double random_unit_vector[3]; /* (--) a random unit vector */
+  double random_unit_vector[3]{}; /* (--) a random unit vector */
 
-  bool force_match_trans;   /* (--)
+  bool force_match_trans{false};   /* (--)
        The 0th and 1st derivative (pos/vel) are grouped together.
        Some initialization options require that companion state-set
        be initialized using the same option.*/
-  bool force_match_rot;   /* (--)
+  bool force_match_rot{false};   /* (--)
        The 0th and 1st derivative (att/att-rate) are grouped together.
        Some initialization options require that companion state-set
        be initialized using the same option.*/

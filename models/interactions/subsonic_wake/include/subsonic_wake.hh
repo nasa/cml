@@ -52,15 +52,15 @@ class SubsonicWake : public SubscriptionBase
   WakePrfModel        prf_model; /* (--) the pressure-recovery-fraction model.*/
   WakeReverseFlow     rev_flow;  /* (--) the reverse-flow model. */
 
-  bool use_prf_model; /* (--) whether to use the PRF model. */
-  bool use_rev_flow;  /* (--) whether to use the rev-flow model. */
+  bool use_prf_model{false}; /* (--) whether to use the PRF model. */
+  bool use_rev_flow{false};  /* (--) whether to use the rev-flow model. */
 
  protected:
   // These flags are used to determine whether to unsubscribe from the effect
   // models. The use_prf_model and use_rev_flow flags cannot be used for this
   // purpose because they are public and could be changed anytime.
-  bool subd_prf;  /* (--) Whether subscribed to the PRF model */
-  bool subd_revflow; /* (--) Whether subscribed to the rev-flow model*/
+  bool subd_prf{false};  /* (--) Whether subscribed to the PRF model */
+  bool subd_revflow{false}; /* (--) Whether subscribed to the rev-flow model*/
 
  public:
   SubsonicWake(const WakeParams & params_in,

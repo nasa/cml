@@ -27,17 +27,6 @@
 
 #include "../include/dynamic_mass_string.hh"
 
-/*******************************************************************************
-Method:
-Purpose: Constructor
-*******************************************************************************/
-DynamicMassString::DynamicMassString()
-  :
-  flow_down(false),
-  mass_consumed(0.0),
-  string_in_group(false)
-{ }
-
 /*****************************************************************************
 initialize
 Purpose:(Copies the body_collection to available_bodies)

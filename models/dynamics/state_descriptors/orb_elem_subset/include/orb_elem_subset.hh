@@ -37,7 +37,7 @@ class OrbElemSubset{
     PARABOLA = 2
   };
   // Flags
-  bool use_pfix_z_values; /* (--)
+  bool use_pfix_z_values{false}; /* (--)
       The z-values used in computing sinI_sinL and sinI_cosL should be pfix.
       The legacy implementation indicates pfix but actually does not
       distinguish between inertial and pfix, so uses inertial.
@@ -45,49 +45,49 @@ class OrbElemSubset{
       shall be used, and not the inertial values.  Defaults off. */
 
   // Inertial positions
-  double position[3];       /* (m)
+  double position[3]{};       /* (m)
        The position vector on which the orb-elem are based. */
-  double position_unit[3];  /* (--) unit vector */
-  double position_mag;      /* (m)  magnitude of position vector */
+  double position_unit[3]{};  /* (--) unit vector */
+  double position_mag{0.0};   /* (m)  magnitude of position vector */
 
   // Inertial velocities
-  double velocity[3];       /* (m/s)
+  double velocity[3]{};     /* (m/s)
        The velocity vector on which the orb-elem are based. */
-  double vel_vertical[3];   /* (m/s) component that represent vertical motion */
-  double vel_horizontal_unit[3]; /* (--)  unit vector of horizontal component */
-  double vel_vertical_scalar;    /* (m/s)
+  double vel_vertical[3]{}; /* (m/s) component that represent vertical motion */
+  double vel_horizontal_unit[3]{}; /* (--)  unit vector of horizontal component */
+  double vel_vertical_scalar{0.0}; /* (m/s)
            magnitude of vertical with sign (+up / -down) */
 
   // Classical elements
-  double semi_major_axis; /* (m) a */
-  double semi_parameter;  /* (m) p = h^2 / mu */
-  double ecc_mag;         /* (--)  magnitude of the eccentricity vector */
-  double ecc_anomaly;     /* (rad) Eccentric anomaly */
-  double true_anomaly;    /* (rad) true anomaly */
-  double arg_periapsis;   /* (rad) argument of periapsis */
-  double mean_motion;     /* (rad/s) rate of advance of mean anomaly. */
+  double semi_major_axis{0.0}; /* (m) a */
+  double semi_parameter{0.0};  /* (m) p = h^2 / mu */
+  double ecc_mag{0.0};         /* (--)  magnitude of the eccentricity vector */
+  double ecc_anomaly{0.0};     /* (rad) Eccentric anomaly */
+  double true_anomaly{0.0};    /* (rad) true anomaly */
+  double arg_periapsis{0.0};   /* (rad) argument of periapsis */
+  double mean_motion{0.0};     /* (rad/s) rate of advance of mean anomaly. */
 
   // Support values
-  OrbitType orbit_type;   /* (--) type of orbit */
-  double specific_energy; /* (J/kg) Specific orbital energy */
-  double tol_energy;      /* (J/kg) Tolerance to check if spec. energy is zero */
-  double ang_momentum[3]; /* (m2/s) Angular momentum vector (inertial) */
-  double node_line[3];    /* (--) Vector along line of nodes */
-  double cos_true_anomaly;/* (--) cosine of the true anomaly */
-  double node_angle;      /* (rad)
+  OrbitType orbit_type{UNDEFINED}; /* (--) type of orbit */
+  double specific_energy{0.0};     /* (J/kg) Specific orbital energy */
+  double tol_energy{1.0E-6};       /* (J/kg) Tolerance to check if spec. energy is zero */
+  double ang_momentum[3]{};        /* (m2/s) Angular momentum vector (inertial) */
+  double node_line[3]{};           /* (--) Vector along line of nodes */
+  double cos_true_anomaly{0.0};    /* (--) cosine of the true anomaly */
+  double node_angle{0.0};          /* (rad)
       angle from ascending node to current position.
       node_angle = arg_periapsis + true_anomaly.*/
-  double sinI_sinL;       /* (--) sin inclination * sin(node_angle) */
-  double sinI_cosL;       /* (--) sin inclination * cos(node_angle) */
-  double sin_sq_I;        /* (--) sin inclination * sin inclination */
-  double e_sinE;          /* (--) eccentricity * sin eccentric-anomaly */
-  double e_cosE;          /* (--) eccentricity * cos eccentric-anomaly */
+  double sinI_sinL{0.0};           /* (--) sin inclination * sin(node_angle) */
+  double sinI_cosL{0.0};           /* (--) sin inclination * cos(node_angle) */
+  double sin_sq_I{0.0};            /* (--) sin inclination * sin inclination */
+  double e_sinE{0.0};              /* (--) eccentricity * sin eccentric-anomaly */
+  double e_cosE{0.0};              /* (--) eccentricity * cos eccentric-anomaly */
 
   // J2 corrections:
-  double j2;             /* (--) The J2 term */
-  double j2_r_eq_2;      /* (m2) J2 time square of equatorial radius */
-  double j2_correction;  /* (m)  (j2_r_eq_2) / (4P), P = semiparameter */
-  double j2_delta;       /* (m)  height adjustment */
+  double j2{0.0010836};            /* (--) The J2 term */
+  double j2_r_eq_2{0.0};           /* (m2) J2 time square of equatorial radius */
+  double j2_correction{0.0};       /* (m)  (j2_r_eq_2) / (4P), P = semiparameter */
+  double j2_delta{0.0};            /* (m)  height adjustment */
 
  protected:
   const jeod::RefFrameTrans & inertial_state; /* (--)
@@ -95,7 +95,7 @@ class OrbElemSubset{
   const jeod::Planet & planet; /* (--)
        Reference to the planet used as the basis for the orbital elements. */
   const double  & mu; /* (m3/s2) Gravitational parameter for "planet". */
-  double polar_axis_inrtl[3]; /* (--)
+  double polar_axis_inrtl[3]{}; /* (--)
       Vector describing the orientation of the polar axis, expressed in the
       inertial frame.*/
 

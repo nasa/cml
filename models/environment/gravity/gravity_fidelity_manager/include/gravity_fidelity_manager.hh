@@ -50,8 +50,8 @@ class GravityFidelityManager : public SubscriptionBase
       NOTE - table behavior defaults to using proximity-overrides if the
              independent variable is with 1E-9 of the bin-width of
              one of the calibrated values.*/
-  double distance; /* (m) The distance between the two frames. */
-  double degree_order; /* (--)
+  double distance{0.0}; /* (m) The distance between the two frames. */
+  double degree_order{0.0}; /* (--)
       The desired degree and order of the gravity field.
       This is a "double" type because that is the native type of the
       SimpleTableLookup; the value will be cast to an unsigned int for

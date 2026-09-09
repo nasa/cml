@@ -26,7 +26,7 @@ class FaultRandNumber {
       FLAT = 1
     };
 
-    FaultRandNumber();
+    FaultRandNumber() = default;
     virtual ~FaultRandNumber() = default;
     FaultRandNumber(const FaultRandNumber&) = delete;
     FaultRandNumber& operator = (const FaultRandNumber&) = delete;
@@ -43,17 +43,17 @@ class FaultRandNumber {
 
     double get_random_number();
 
-    Distribution_enm distribution_type; /* (--)
+    Distribution_enm distribution_type{GAUSSIAN}; /* (--)
       The type of distribution used to generate random numbers. */
-    double mean; /* (--) The mean of the Gaussian distribution. */
-    double std_dev; /* (--)
+    double mean{0.0}; /* (--) The mean of the Gaussian distribution. */
+    double std_dev{0.0}; /* (--)
       The standard deviation of the Gaussian distribution. */
-    double lower_limit; /* (--) The lower limit of the uniform distribution. */
-    double upper_limit; /* (--) The upper limit of the uniform distribution. */
-    unsigned long seed; /* (--) The seed for the random number generator. */
+    double lower_limit{0.0}; /* (--) The lower limit of the uniform distribution. */
+    double upper_limit{0.0}; /* (--) The upper limit of the uniform distribution. */
+    unsigned long seed{0}; /* (--) The seed for the random number generator. */
 
   private :
-    bool seeded; /* (--)
+    bool seeded{false}; /* (--)
       Whether the random number generator has been given a seed. */
     std::mt19937 rng; /* (--) Random number generator. */
 };

@@ -81,7 +81,7 @@ struct EventTriggerBase
     MIN_CONDITIONAL_LAST,
     ABS_MAX_CONDITIONAL_LAST,
     ABS_MIN_CONDITIONAL_LAST
-  } comparison_logic; /* (--)
+  } comparison_logic{Undefined}; /* (--)
     Specifies how to compare the value of variable against the
     recorded reference value.*/
 
@@ -95,7 +95,7 @@ struct EventTriggerBase
     AbsSine,
     AbsCosine,
     AbsTan
-  } function_modifier; /* (--)
+  } function_modifier{NoModification}; /* (--)
     Specifies how to modify the value of "variable" before comparing against
     "reference". */
 
@@ -113,32 +113,32 @@ struct EventTriggerBase
     DEC                             = 2,
     Strictly_Increasing             = 3,
     Strictly_Decreasing             = 4,
-  } direction_limit; /* (--)
+  } direction_limit{NoDirectionLimit}; /* (--)
     Specifies further restrictions on what is considered a triggering.
     E.g. value has to be greater than threshold and decreasing.
     Using all legacy enumerations to try to maintain as much
     backward-compatibility as possible.*/
  protected:
-  double variable_dbl; /* (--)
+  double variable_dbl{0.0}; /* (--)
     The value obtained when the template pointer variable is dereferenced
     and cast to type double. This value may be further modified by a
     function in the enumerated list FunctionModifier.*/
-  double variable_dbl_prev; /* (--)
+  double variable_dbl_prev{0.0}; /* (--)
     The previous value of variable_dbl.*/
-  double variable_dbl_activation; /* (--)
+  double variable_dbl_activation{0.0}; /* (--)
     The value of variable_dbl at activation, used in cases of the reference
     threshold being assigned as an offset from the initial (activation)
     value.*/
-  double reference_dbl; /* (--)
+  double reference_dbl{0.0}; /* (--)
     The value obtained when the template reference value (or template
     reference pointer) is cast to type double. This defines the threshold
     for logical comparisons made in this class.*/
-  bool locked; /* (--)
+  bool locked{false}; /* (--)
     Boolean used to lock at each cycle, so each WatchValuesBase cannot be 
     tested more than once per cycle, leading to unintended behavior.*/
 
  public:
-  EventTriggerBase();
+  EventTriggerBase() = default;
   void apply_function_modifier();
   bool has_conditional_reference() const;
   void set_new_reference();
@@ -152,7 +152,7 @@ template <typename T>
 class EventTrigger : public WatchValuesDelay<T>,
                      public EventTriggerBase
 {
-  bool relative_to_activation_ET; /* (--)
+  bool relative_to_activation_ET{false}; /* (--)
     This is a bit kludgy. relative_to_activation is inherited from
     WatchValuesDelay (from WatchValuesBase) and is a public flag;
     for an EventTrigger, this needs to be locked down at activation.
@@ -169,8 +169,7 @@ class EventTrigger : public WatchValuesDelay<T>,
   explicit EventTrigger( const double & delay_ref,
                          std::string name_ = "")
     :
-    WatchValuesDelay<T> (delay_ref),
-    relative_to_activation_ET(false)
+    WatchValuesDelay<T> (delay_ref)
   {
     /* name is inherited from WatchValuesDelay from WatchValuesBase from
     * WatchValuesBaseCore.*/

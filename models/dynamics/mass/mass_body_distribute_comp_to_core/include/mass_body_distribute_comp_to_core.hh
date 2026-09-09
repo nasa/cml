@@ -46,7 +46,7 @@ class MassBodyDistributeCompToCore
                                       adjusted in order to meet the specified
                                       composite-properties of the target-body.*/
  public:
-  bool fail_if_mass_invalid; /* (--) Determines the model's behaviour if the new
+  bool fail_if_mass_invalid{true}; /* (--) Determines the model's behaviour if the new
                         mass properties are invalid.
                         If true:  simulation is terminated
                         If false: simulation continues with an error message
@@ -57,7 +57,7 @@ class MassBodyDistributeCompToCore
                         structure-point wrt the target-body structure-point. */
   jeod::MassProperties target_properties; /* (--) target properties generated from
                         a combination of nominal and dispersed properties. */
-  double old_mass; /* (kg) the original mass of the adjustable_body. */
+  double old_mass{0.0}; /* (kg) the original mass of the adjustable_body. */
 
  public:
   MassBodyDistributeCompToCore( jeod::MassBody & adjustable_body_in,

@@ -52,33 +52,33 @@ protected:
   /***************************************************************************/
   // Internal Values computed internally
   /***************************************************************************/
-  double T_body_to_aero_frame[3][3]; /* (--)
+  double T_body_to_aero_frame[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--)
           Transformation matrix from the vehicle body frame (used to
           specify the body rates) and the aero-frame
           relative to which the coefficients are specified. */
-  double cos_beta;   /* (--) cosine of beta angle. */
-  double sin_beta;   /* (--) sine of beta angle. */
-  double cos_alpha;  /* (--) cosine of alpha angle. */
-  double sin_alpha;  /* (--) sine of alpha angle. */
-  double cos_attack; /* (--) cosine of attack angle. */
-  double sin_attack; /* (--) sine of attack angle. */
-  double cos_roll;   /* (--) cosine of roll angle. */
-  double sin_roll;   /* (--) sine of roll angle. */
+  double cos_beta{1.0};   /* (--) cosine of beta angle. */
+  double sin_beta{0.0};   /* (--) sine of beta angle. */
+  double cos_alpha{1.0};  /* (--) cosine of alpha angle. */
+  double sin_alpha{0.0};  /* (--) sine of alpha angle. */
+  double cos_attack{1.0}; /* (--) cosine of attack angle. */
+  double sin_attack{0.0}; /* (--) sine of attack angle. */
+  double cos_roll{1.0};   /* (--) cosine of roll angle. */
+  double sin_roll{0.0};   /* (--) sine of roll angle. */
 
-  double moment_arm[3];  /* (m)
+  double moment_arm[3]{}; /* (m)
           Current moment arm from moment reference center (MRC) to CG. */
 
 
   /***************************************************************************/
   // Internal Values copied from current table
   /***************************************************************************/
-  double T_struc_to_aero_frame[3][3]; /* (--)
+  double T_struc_to_aero_frame[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--)
           Transformation matrix from the vehicle structure frame (used to
           specify the cg-position and mrc-position) and the aero-frame
           relative to which the coefficients are specified.*/
-  AeroTableSetBase::AeroDataTableType data_table_type; /* (--)
+  AeroTableSetBase::AeroDataTableType data_table_type{AeroTableSetBase::Unspecified}; /* (--)
           Copy of the aero-data-table type from the selected AeroTableSet. */
-  bool uncertainties_expressed_as_percent; /* (--)
+  bool uncertainties_expressed_as_percent{false}; /* (--)
           Uncertainties are typically expressed as either
           (m) +/- (n) or as
           (m) +/- (p%)
@@ -88,30 +88,30 @@ protected:
           If true,  bias = coeff * uncertainty * random.
           If false, bias = uncertainty * random.
           Default:false. */
-  bool uncertainties_are_variable; /* (--)
+  bool uncertainties_are_variable{false}; /* (--)
           Flag indicating whether uncertainties are intended to be variable.
           Typically this would be because the uncertainties are populated by
           the table lookup.
           Default: false.*/
 
-  bool aero_damping_in_table; /* (--) Damping data is provided. */
-  AeroTableSetBase::AeroDampingType aero_damping_on_diag_in_table;  /* (--)
+  bool aero_damping_in_table{false}; /* (--) Damping data is provided. */
+  AeroTableSetBase::AeroDampingType aero_damping_on_diag_in_table{AeroTableSetBase::NotInTable};  /* (--)
           Damping data includes on-diagonal terms. */
-  AeroTableSetBase::AeroDampingType aero_damping_off_diag_in_table; /* (--)
+  AeroTableSetBase::AeroDampingType aero_damping_off_diag_in_table{AeroTableSetBase::NotInTable}; /* (--)
           Damping data includes off-diagonal terms. */
 
 
   /***************************************************************************/
   // Internal Values - table-set selection
   /***************************************************************************/
-  AeroTableSetBase * current_table; /* (--)  The current set of table-data. */
+  AeroTableSetBase * current_table{nullptr}; /* (--)  The current set of table-data. */
   std::vector<AeroTableSetBase *> data_tables_vector; /* (--)
          All possible sets of table-data. */
 
   /***************************************************************************/
   // Internal Values - Safety
   /***************************************************************************/
-  double threshold_min_free_stream_vel_mag; /* (m/s)
+  double threshold_min_free_stream_vel_mag{1.0}; /* (m/s)
          The minimum value of free-stream velocity-magnitude for
          aero-damping algorithm to be valid.*/
 
@@ -119,7 +119,7 @@ public:
   /***************************************************************************/
   // Additional user-specified inputs
   /***************************************************************************/
-  bool dispersion_active; /* (--)
+  bool dispersion_active{false}; /* (--)
        Turns the dispersions on and off. */
   AeroCoefficientsDisp  bias; /* (--)
        The bias values to add to the nominal coefficient values. */
@@ -138,7 +138,7 @@ protected:
        a percentage. */
 
 public:
-  bool load_all_tables_at_init; /* (--)
+  bool load_all_tables_at_init{false}; /* (--)
        Flag to indicate whether all tables should be loaded and initialized
        before the sim begins. This is safer if trying to switch tables
        mid-sim, but can be time-consuming if there are multiple tables, from
@@ -154,9 +154,9 @@ public:
    Lref_over_2Vmag = 2    // Use "Lref/(2*Vmag)"
   };
 
-  LOverVEnum l_over_v_scale; /* (--) Which scale factor to use. */
+  LOverVEnum l_over_v_scale{Lref_over_Vmag}; /* (--) Which scale factor to use. */
 
-  double mrc_position[3];    /* (m)
+  double mrc_position[3]{};    /* (m)
         Current aerodynamic moment reference center in structural frame. */
 
   /***************************************************************************/

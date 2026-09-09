@@ -33,17 +33,7 @@ AeroExecutiveSimpleLiftDrag::AeroExecutiveSimpleLiftDrag(
   dynamic_pressure( dynamic_pressure_in),
   T_inrtl_traj( T_inrtl_traj_in),
   T_inrtl_struc( T_inrtl_struc_in),
-  mass( mass_in),
-  aero_type( constant_mag),
-  T_traj_wind(),
-  bank_angle(0.0),
-  LoD(0.0),
-  BC(1.0),
-  CL(0.0),
-  CD(0.0),
-  lift_mag(0.0),
-  drag_mag(0.0),
-  bc_epsilon(1E-6)
+  mass( mass_in)
 {
   jeod::Matrix3x3::identity(T_traj_wind);
 }

@@ -26,9 +26,7 @@ AccumulatedAbsoluteDeltas::AccumulatedAbsoluteDeltas(
      const unsigned int size_)
     :
     variable(variable_),
-    size(size_),
-    old_variable(nullptr),
-    accumulated_deltas(nullptr)
+    size(size_)
 {
   subscribe_name = "AccumulatedAbsoluteDeltas:";
 

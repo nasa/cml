@@ -45,18 +45,18 @@ protected:
   /***************************************************************************/
   // internal values
   /***************************************************************************/
-  AeroType aero_type;          /* (--) Specifies which model to use. */
-  double   T_traj_wind[3][3];  /* (--) Trajectory-to-wind transformation */
+  AeroType aero_type{constant_mag}; /* (--) Specifies which model to use. */
+  double   T_traj_wind[3][3]{};     /* (--) Trajectory-to-wind transformation */
 
 public:
-  double bank_angle;   /* (rad)   Bank angle. */
-  double LoD;          /* (--)    Lift-to-drag ratio. */
-  double BC;           /* (kg/m2) Ballistic Coefficient. */
-  double CL;           /* (--)    Coefficient of lift. */
-  double CD;           /* (--)    Coefficient of drag. */
-  double lift_mag;     /* (N)     Magnitude of lift force. */
-  double drag_mag;     /* (N)     Magnitude of drag force. */
-  double bc_epsilon;   /* (s2/m)
+  double bank_angle{0.0};  /* (rad)   Bank angle. */
+  double LoD{0.0};         /* (--)    Lift-to-drag ratio. */
+  double BC{1.0};          /* (kg/m2) Ballistic Coefficient. */
+  double CL{0.0};          /* (--)    Coefficient of lift. */
+  double CD{0.0};          /* (--)    Coefficient of drag. */
+  double lift_mag{0.0};    /* (N)     Magnitude of lift force. */
+  double drag_mag{0.0};    /* (N)     Magnitude of drag force. */
+  double bc_epsilon{1E-6}; /* (s2/m)
           A test-value for the validity of BC, ensuring that
           (dyn-pressure / BC) < (1/bc_epsilon).
           It is effectively 1/(the largest acceleration for which the

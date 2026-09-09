@@ -50,8 +50,7 @@ SweepSet::SweepSet(
   start( start_in),
   end( end_in),
   increment( incr_in),
-  value(start),
-  epsilon(0.0)
+  value(start)
 {
   // epsilon is the threshold around "end" that determines 'close-enough'
   // If adjusting this, the magic number (1.0E-12) should be larger than
@@ -131,19 +130,6 @@ SweepSet& SweepSet::operator = (const SweepSet &other)
   epsilon = other.epsilon;
   return *this;
 }
-/****************************************************************************/
-UnitTestFramework::UnitTestFramework()
-  :
-  enabled(true),
-  cycle_data(false),
-  initialized(false),
-  using_sweeps(false),
-  first_sweep(true),
-  sweeps_complete(false),
-  warning_on_sim_end(true),
-  cycle_overruns(0),
-  cycle_overruns_limit(2)
-{}
 
 /*****************************************************************************
 increment_sweep

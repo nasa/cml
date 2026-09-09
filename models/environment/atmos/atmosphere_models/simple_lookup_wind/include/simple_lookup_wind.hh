@@ -37,29 +37,29 @@ PROGRAMMERS:
 class SimpleLookupWind : public SubscriptionBase
 {
  protected:
-  double altitude_placeholder; /* (m)
+  double altitude_placeholder{0.0}; /* (m)
         Copy of the altitude; used to support multi-vehicle capabilities.
         The data tables must see this variable.*/
 
  public:
-  bool wind_components_specified; /* (--)
+  bool wind_components_specified{false}; /* (--)
         Flag to distinguish the cases where the winds are specified in a
         direction-magnitude-up set versus a North-East-Down set.
         Default: false (specified as direction-magnitude-Up).*/
-  bool include_vertical_component; /* (--)
+  bool include_vertical_component{false}; /* (--)
         Flag to indicate whether the winds are purely horizontal or whether
         a vertical component should also be included.
         Default: False (horizontal only).*/
 
-  double wind_blowing_from; /* (rad)
+  double wind_blowing_from{0.0}; /* (rad)
         Angle relative to North specifying the orientation from which
         the wind is blowing.*/
-  double wind_magnitude_horizontal; /* (m/s)
+  double wind_magnitude_horizontal{0.0}; /* (m/s)
         Magnitude of the HORIZONTAL COMPONENT of the current wind.
         Note this is not populated if data is provided as components.*/
-  double wind_magnitude; /* (m/s)
+  double wind_magnitude{0.0}; /* (m/s)
         Magnitude of the current wind.*/
-  double wind_vertical_up; /* (m/s)
+  double wind_vertical_up{0.0}; /* (m/s)
         Additional component oriented "upward" positive.
         Note this is not populated if data is provided as components.*/
 
@@ -79,14 +79,14 @@ class SimpleLookupWind : public SubscriptionBase
   GenericMultiInputTable wind_vertical_up_table;/* (--)
         Interpolation table for generating the vertical component of the
         wind velocity.*/
-  double wind_component[3]; /* (m/s)
+  double wind_component[3]{}; /* (m/s)
         A 3-vector representing the wind in the North-East-Down frame.
         NOTE - whether this is topocentric NED or Topodetic NED is left to the
         discretion of the user.  The difference can be specified in the
         AtmosphereExecutive model, where both values are generated.*/
   SimpleTableLookup component_table_set; /* (--)
        The table-system for generating the wind components from the altitude.*/
-  bool wind_blowing_from_warning; /* (--)
+  bool wind_blowing_from_warning{false}; /* (--)
         Indicates zero wind components in the North and East directions */
        
 

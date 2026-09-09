@@ -43,22 +43,22 @@ public:
   };
 
 
-  double mass;         /* (kg)    Dispersed mass. */
-  double position[3];  /* (m)     Dispersed position. */
-  double moi[3];       /* (kg*m2) Dispersed moments of inertia: xx, yy, zz. */
-  double poi[3];       /* (kg*m2) Dispersed products of inertia: xy, xz, yz. */
+  double mass{0.0};      /* (kg)    Dispersed mass. */
+  double position[3]{};  /* (m)     Dispersed position. */
+  double moi[3]{};       /* (kg*m2) Dispersed moments of inertia: xx, yy, zz. */
+  double poi[3]{};       /* (kg*m2) Dispersed products of inertia: xy, xz, yz. */
 
-  DispersionMatch position_match; /* (--) Uses match-options on pos. values. */
-  double position_match_sf;       /* (--) The generated value is this multiple
-                                          of the originally-dispersed value. */
+  DispersionMatch position_match{DispMatchNone}; /* (--) Uses match-options on pos. values. */
+  double position_match_sf{1.0}; /* (--) The generated value is this multiple
+                                         of the originally-dispersed value. */
 
-  DispersionMatch moi_match;      /* (--) Uses match-options on moi values. */
-  double moi_match_sf;            /* (--) The generated value is this multiple
-                                          of the originally-dispersed value. */
+  DispersionMatch moi_match{DispMatchNone}; /* (--) Uses match-options on moi values. */
+  double moi_match_sf{1.0}; /* (--) The generated value is this multiple
+                                    of the originally-dispersed value. */
 
-  DispersionMatch poi_match;      /* (--) Uses match-options on poi values. */
-  double poi_match_sf;            /* (--) The generated value is this multiple
-                                          of the originally-dispersed value. */
+  DispersionMatch poi_match{DispMatchNone}; /* (--) Uses match-options on poi values. */
+  double poi_match_sf{1.0}; /* (--) The generated value is this multiple
+                                    of the originally-dispersed value. */
 
 
   // These variables are optional, but can be used to set the magnitude of
@@ -66,19 +66,18 @@ public:
   // E.G. generate a number between (-mass_disp_mag, +mass_disp_mag); this
   // can then be assigned to mass to be applied as the dispersion.
 
-  double mass_disp_mag;       /* (kg)    Potential mass dispersion. */
-  double position_disp_mag[3];/* (m)     Potential position dispersion,
-                                         per axis. */
-  double moi_disp_mag[3];     /* (kg*m2) Potential disp on moment of inertia. */
-  double poi_disp_mag[3];     /* (kg*m2) Potential disp on product of inertia.*/
-  unsigned int seed_rand;     /* (--)    Value set in input file to seed the
-                                         random number generator. */
+  double mass_disp_mag{0.0};     /* (kg)    Potential mass dispersion. */
+  double position_disp_mag[3]{}; /* (m)     Potential position dispersion, per axis. */
+  double moi_disp_mag[3]{};      /* (kg*m2) Potential disp on moment of inertia. */
+  double poi_disp_mag[3]{};      /* (kg*m2) Potential disp on product of inertia.*/
+  unsigned int seed_rand{};      /* (--)    Value set in input file to seed the
+                                            random number generator. */
 
-  double inertia[3][3];       /* (kg*m2) Dispersed inertia tensor. This is
-                                         generated from from moi and poi, it is
-                                         not an input array. */
+  double inertia[3][3]{};        /* (kg*m2) Dispersed inertia tensor. This is
+                                            generated from from moi and poi, it is
+                                            not an input array. */
 
-  MassPropertiesDispersions();
+  MassPropertiesDispersions() = default;
   virtual ~MassPropertiesDispersions() = default;
   MassPropertiesDispersions (const MassPropertiesDispersions& rhs) = delete;
   MassPropertiesDispersions& operator = (const MassPropertiesDispersions& rhs) = delete;
@@ -105,30 +104,30 @@ PURPOSE:(POD class containing flags that provide interpretations of values
 *******************************************************************************/
 class MassPropertiesDispersionsFlags {
 public:
-  bool random_num_distribution;     /* (--)
+  bool random_num_distribution{false};     /* (--)
     Non monte carlo random number is used. */
 
-  bool mass_disp_is_relative;       /* (--)
+  bool mass_disp_is_relative{false};       /* (--)
     Input data in disperse.mass represents the fraction of the nominal,
     not the actual dispersion. */
 
-  bool pos_disp_is_relative;        /* (--)
+  bool pos_disp_is_relative{false};        /* (--)
     Input data in disperse.position represents the fraction of the nominal,
     not the actual dispersion. */
 
-  bool inertia_moi_disp_is_relative;/* (--)
+  bool inertia_moi_disp_is_relative{false};/* (--)
     Input data in disperse.moi represents the fraction of the nominal,
     not the actual dispersion. */
 
-  bool inertia_poi_disp_is_relative;/* (--)
+  bool inertia_poi_disp_is_relative{false};/* (--)
     Input data in disperse.poi represents the fraction of the nominal,
     not the actual dispersion. */
 
-  bool poi_are_negative_integrals;  /* (--)
+  bool poi_are_negative_integrals{true};  /* (--)
     Flag indicating that the poi values are representative of deltas to the
     negative integral -int(x y dm). Default true. */
 
-  MassPropertiesDispersionsFlags();
+  MassPropertiesDispersionsFlags() = default;
   virtual ~MassPropertiesDispersionsFlags() = default;
   MassPropertiesDispersionsFlags (const MassPropertiesDispersionsFlags& rhs) = delete;
   MassPropertiesDispersionsFlags & operator = (

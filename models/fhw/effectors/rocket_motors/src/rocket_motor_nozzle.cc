@@ -21,38 +21,6 @@ PROGRAMMERS:
 #include "../include/rocket_motor_nozzle.hh"
 
 /*****************************************************************************
-Constructor
-*****************************************************************************/
-RocketMotorNozzle::RocketMotorNozzle()
-  :
-  azimuth(0.0),
-  pitch(0.0),
-  radius(0.0),
-  height(0.0),
-  sf(0.0),
-  exit_area(0.0),
-  azimuth_disp(0.0),
-  pitch_disp(0.0),
-  thrust_azm_disp(0.0),
-  radius_disp(0.0),
-  height_disp(0.0),
-  sf_disp(0.0),
-  sf_true(0.0),
-  thrust_dir{0.0, 0.0, 0.0},
-  nominal_thrust_dir{0.0, 0.0, 0.0},
-  thrust{0.0, 0.0, 0.0},
-  thrust_vac{0.0, 0.0, 0.0},
-  azimuth_true(0.0),
-  pitch_true(0.0),
-  radius_true(0.0),
-  height_true(0.0),
-  position{0.0, 0.0, 0.0},
-  thrust_mag(0.0),
-  thrust_vac_mag(0.0),
-  azimuth_thrust(0.0)
-{}
-
-/*****************************************************************************
 initialize
 Purpose:(Initialize the rocket motors nozzle class and generate position 
          values and apply dispersion values to them)

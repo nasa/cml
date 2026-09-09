@@ -46,19 +46,6 @@ PistonThruster::PistonThruster( const double * pos_CoM_A,
   subscribe_name = "PistonThruster:";
   loadCoM( pos_CoM_A, pos_CoM_B);
 }
-/******************************************************************************/
-PistonThrusterVehicleSide::PistonThrusterVehicleSide()
-  :
-  param(),
-  T_local_to_struc{{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
-  position_local_frame_in_struc_frame{},
-  trig_variable(),
-  direction(),
-  moment_arm(),
-  position_struc(),
-  position_CoM(nullptr)
-{
-}
 
 /*******************************************************************************
 loadCoM

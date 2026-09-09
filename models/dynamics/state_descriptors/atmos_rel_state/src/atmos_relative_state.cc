@@ -62,65 +62,15 @@ AtmosRelativeState::AtmosRelativeState(
       ExtendedPlanetaryDerivedState & planet_rel_state_ref,
       AtmosphereExecInterface       & atmos_exec_ref)
   :
-  warn_on_v_parallel_r(true),
-  terminate_on_nan_euler(false),
-
-  free_stream_vel_mag(0.0),
-  free_stream_vel(),
-  free_stream_vel_unit(),
-  free_stream_td_vel(),
-  free_stream_body_vel(),
-
-  free_stream_flight_path(0.0),
-  free_stream_azimuth(0.0),
-  angle_of_attack(0.0),
-  angle_of_sideslip(0.0),
-  bank_angle(0.0),
-  total_angle_of_attack(0.0),
-  phi_roll(0.0),
-
-  mach_number(0.0),
-  dynamic_pressure(0.0),
-  drag_accel(0.0),
-  side_accel(0.0),
-  lift_accel(0.0),
-  sensed_accel_mag(0.0),
-
-  angle_of_attack_alt(0.0),
-  angle_of_sideslip_alt(0.0),
-  total_angle_of_attack_alt(0.0),
-  phi_roll_alt(0.0),
-
-  T_inrtl_traj(),
-  T_traj_body(),
-  T_traj_wind(),
-  T_inrtl_wind(),
-  T_wind_stab(),
-  T_inrtl_stab(),
-
-  reynolds_number(0.0),
-
-  qalpha_total(0.0),
-  qalpha_total_psfdeg(0.0),
-  qalpha(0.0),
-  qbeta(0.0),
-
   body(body_ref),
   planet_rel_state(planet_rel_state_ref),
   atmos_exec(atmos_exec_ref),
-  atmos(atmos_exec.out),
-  reference_length(nullptr),
-  compute_angles_subscriptions(0),
-  complete_calculation_subscriptions(0),
-  ref_length_null_msg_sent(false),
-  traj_to_body_RYP(),
-  psfdeg_converter(1.19664723485755)
+  atmos(atmos_exec.out)
 {
   subscribe_name = "AtmosRelativeState:";
   jeod::Matrix3x3::identity(T_inrtl_traj);
   jeod::Matrix3x3::identity(T_inrtl_wind);
   jeod::Matrix3x3::identity(T_inrtl_stab);
-  jeod::Vector3::initialize(traj_to_body_RYP);
 }
 
 /*****************************************************************************

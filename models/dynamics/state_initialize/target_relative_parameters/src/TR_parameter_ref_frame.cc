@@ -27,9 +27,6 @@ Constructor
 TR_Parameter_RefFrame::TR_Parameter_RefFrame(
     std::string name_)
   :
-  u_hat(),
-  n_hat(),
-  p_hat(),
   name(std::move(name_))
 {}
 

@@ -24,14 +24,10 @@ struct CompoundEventActionConfig
 {
   std::string name;
   std::string datatype;
-  void * target_ptr;
-  double target_value_assignment;
+  void * target_ptr{nullptr};
+  double target_value_assignment{0.0};
   std::string target_string_assignment;
-  CompoundEventActionConfig()
-    :
-    target_ptr(nullptr),
-    target_value_assignment(0.0)
-  {}
+  CompoundEventActionConfig() = default;
 };
 
 /*****************************************************************************

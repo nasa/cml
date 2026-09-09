@@ -43,13 +43,7 @@ Purpose: (Constructor)
 ********************************************************************************/
 DynamicMassBody::DynamicMassBody()
 :
-  dynamic_properties(core_properties.mass),
-  residual_mass(-1.0),
-  interp_enabled(false),
-  dyn_mass_initialized(false),
-  CM_offset(),
-  dry_mass_revert__consumable_mass(0.0),
-  dry_mass_revert__available(false)
+  dynamic_properties(core_properties.mass)
 {}
 
 /********************************************************************************

@@ -38,33 +38,6 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
-constructors
-*****************************************************************************/
-TableLookupTransposeDataSet_TableConfig::
-                                     TableLookupTransposeDataSet_TableConfig()
-  :
-  block_independent_addition(false),
-  index_low(0),
-  index_high(0),
-  table_ptr(nullptr),
-  table_type(AbstractTableLookup::Generic),
-  lookup_method( TableIndependentVariable::Interp),
-  num_variables(0),
-  total_num_lines(0)
-{}
-/****************************************************************************/
-TableLookupTransposeDataSet::TableLookupTransposeDataSet()
-  :
-  independent_var(nullptr),
-  indep_continuity(TableIndependentVariable::Linear),
-  populate_independent_from_file(false),
-  indep_index(0),
-  min_length(0),
-  min_length_line(0),
-  data_processed(false)
-{}
-
-/*****************************************************************************
 initialize
 Purpose:
   Initializes the internal values of the TableLookupTransposeDataSet_TableConfig

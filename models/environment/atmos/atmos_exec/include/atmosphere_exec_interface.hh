@@ -49,7 +49,7 @@ class AtmosphereExecInterface : public SubscriptionBase
     // Internal members
     AtmosphereExec_AtmosWindsBase   atmos_none; /* (--)
            Default connection to "no atmosphere" for atmos and winds.*/
-    bool subscribed_planet_state_topo_calcs; /* (--)
+    bool subscribed_planet_state_topo_calcs{false}; /* (--)
            internal flag to record subscriptions to planet-rel-state. */
 
   public:

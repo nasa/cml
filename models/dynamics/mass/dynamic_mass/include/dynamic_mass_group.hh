@@ -60,7 +60,7 @@ class MassBody;
 class DynamicMassGroup : public SubscriptionBase {
  public:
   // Inputs:
-  bool delta_mass_is_redistributed; /* (--)
+  bool delta_mass_is_redistributed{false}; /* (--)
       Flag indicating the dynamic behavior of the vehicle.  If the delta-mass
       is redistributed, the CM-motion is conserved, and the structural frame
       moves relative to the body-frame.  If the mass is lost (or gained) from
@@ -69,41 +69,41 @@ class DynamicMassGroup : public SubscriptionBase {
       the preferred behavior. Default: false (mass deltas are considered
       sink/source to external)*/
 
-  std::string name;     /* (--)
+  std::string name{"unnamed"};     /* (--)
       Group name, optional setting for message clarity and debugging only.*/
 
-  unsigned int countdown_reset; /* (count)
+  unsigned int countdown_reset{100}; /* (count)
        Sets the frequency with which the root body test is performed.*/
 
  protected:
-  bool flow_warn_msg_shown; /* (--)
+  bool flow_warn_msg_shown{false}; /* (--)
        Flag to limit showing the warning message in series_flow() to a
        single instance.*/
 
-  bool needs_tree_update; /* (--)
+  bool needs_tree_update{true}; /* (--)
        Flag to indicate whether any part of the dynamic masses have changed.
        If they have, the tree needs updating.
        NOTE -- this is a class member because it would typically default to
        false until a mass-change is detected; however, at initialization it
        must default to true to force a string-update. */
 
-  double total_mass;          /* (kg)
+  double total_mass{0.0};          /* (kg)
        Total mass from all bodies in the group. */
 
-  double total_initial_mass;  /* (kg)
+  double total_initial_mass{0.0};  /* (kg)
        Total mass from all bodies in the group at initialization of the
        group. */
 
-  double total_consumed_mass; /* (kg)
+  double total_consumed_mass{0.0}; /* (kg)
        Total mass consumed from all bodies in the group. */
 
-  unsigned int countdown_to_root_test; /* (count)
+  unsigned int countdown_to_root_test{0}; /* (count)
        Counts down to testing the legitimacy of the root body */
 
-  unsigned int num_dyn_masses; /* (--)
+  unsigned int num_dyn_masses{0}; /* (--)
        Size of the dyn_masses vector.*/
 
-  jeod::MassBody * root_body_ptr; /* (--)
+  jeod::MassBody * root_body_ptr{nullptr}; /* (--)
        Pointer to the root of the mass tree.*/
 
   std::vector< DynamicMassBody *> dyn_masses; /* (--)

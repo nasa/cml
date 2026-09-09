@@ -17,17 +17,12 @@ Purpose:(Jet-specific data for RcsScaleFactorInterface)
 class RcsScaleFactorInterfaceJet
 {
  public:
-  bool rcs_valve_open; /* (--) true:  Jet valve is open
+  bool rcs_valve_open{false}; /* (--) true:  Jet valve is open
                                false: Jet valve is closed */
-  double rcs_thrusting_start_time; /* (s) Sim-time when the jet valve opened */
-  double rcs_thrusting_stop_time;  /* (s) Sim-time when the jet valve closed */
+  double rcs_thrusting_start_time{-1.0}; /* (s) Sim-time when the jet valve opened */
+  double rcs_thrusting_stop_time{-1.0};  /* (s) Sim-time when the jet valve closed */
 
-  RcsScaleFactorInterfaceJet()
-  :
-    rcs_valve_open(false),
-    rcs_thrusting_start_time(-1.0),
-    rcs_thrusting_stop_time(-1.0)
-  {}
+  RcsScaleFactorInterfaceJet() = default;
 };
 
 /*****************************************************************************
@@ -39,10 +34,10 @@ class RcsScaleFactorInterface
  public:
   const unsigned int num_jets; /* (--) Number of jets in the system */
 
-  double valve_rise_time;  /* (s)
+  double valve_rise_time{0.0};  /* (s)
         Time required for the solenoid to generate a magnetic field strong
         enough to open the valve */
-  double valve_decay_time; /* (s)
+  double valve_decay_time{0.0}; /* (s)
         Time required for the solenoid's magnetic field to weaken and allow
         the valve to close */
 
@@ -54,9 +49,7 @@ class RcsScaleFactorInterface
 
   RcsScaleFactorInterface( const unsigned int num_jets_)
   :
-    num_jets(num_jets_),
-    valve_rise_time(0.0),
-    valve_decay_time(0.0)
+    num_jets(num_jets_)
   {}
 
   virtual ~RcsScaleFactorInterface() = default;

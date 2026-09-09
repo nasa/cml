@@ -25,13 +25,7 @@ Constructor
 MonteCarloStateDispersion::MonteCarloStateDispersion(
     jeod::DynBodyInitTransState & trans_init_in)
   :
-  trans_init(trans_init_in),
-  frame(Inertial),
-  disperse_pv(false),
-  position_dispersion{},
-  velocity_dispersion{},
-  position_dispersion_inertial{},
-  velocity_dispersion_inertial{}
+  trans_init(trans_init_in)
 {
 }
 

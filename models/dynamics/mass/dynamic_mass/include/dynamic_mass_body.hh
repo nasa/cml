@@ -58,22 +58,22 @@ class DynamicMassBody : public jeod::MassBody
      Typical mass-properties as initialized with MassBodyInit prior to
      adjusting mass properties within the sim. */
 
-  double residual_mass; /* (kg)
+  double residual_mass{-1.0}; /* (kg)
       The residual mass for this propellant tank.
       Total core mass = this value + dynamic_properties.consumable_mass*/
-  bool interp_enabled; /* (--)
+  bool interp_enabled{false}; /* (--)
       Whether to interpolate the position and inertia from data lookup
       tables, or simply use scaling.*/
  private:
-  bool dyn_mass_initialized; /* (--)
+  bool dyn_mass_initialized{false}; /* (--)
       Flag to inidicate whether method initialize_dyn_mass() has been called. */
-  double CM_offset[3];   /* (m)
+  double CM_offset[3]{};   /* (m)
         The CM offset from parent frame to CM table Frame */
 
-  double dry_mass_revert__consumable_mass; /* (kg)
+  double dry_mass_revert__consumable_mass{0.0}; /* (kg)
       The consumable-mass of record at the time the model was transitioned
       to check on dry-mass data.*/
-  bool dry_mass_revert__available; /* (--)
+  bool dry_mass_revert__available{false}; /* (--)
       Internal flag indicating that dry-mass-revert data is available.*/
 
  public:

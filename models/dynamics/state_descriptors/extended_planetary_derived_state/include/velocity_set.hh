@@ -33,17 +33,17 @@ Purpose:(Collection of velocity elements for topocentric and topodetic frame
 *****************************************************************************/
 class VelocitySet{
  public:
-  double velocity[3];   /* (m/s) 3-vector velocity in arbitrary frame */
-  double vel_xy;        /* (m/s) x-y-plane component of velocity */
-  double flight_path;   /* (rad) flight-path angle */
-  double azimuth;       /* (rad) azimuth */
-  double altitude_rate; /* (m/s) Altitude rate */
+  double velocity[3]{};   /* (m/s) 3-vector velocity in arbitrary frame */
+  double vel_xy{0.0};        /* (m/s) x-y-plane component of velocity */
+  double flight_path{0.0};   /* (rad) flight-path angle */
+  double azimuth{0.0};       /* (rad) azimuth */
+  double altitude_rate{0.0}; /* (m/s) Altitude rate */
  protected:
-  bool initialized;     /* (--) Indicates that all necessary inputs are set */
+  bool initialized{false};     /* (--) Indicates that all necessary inputs are set */
   const double (&T_inrtl_to_this)[3][3]; /* (--)
             reference to the inertial-to-topo* (NED) transformation matrix.
             This is computed in TopoContainer::update() */
-  const double * inrtl_velocity;         /* (m/s)
+  const double * inrtl_velocity{nullptr};         /* (m/s)
             pointer to either the relative- or inertial- velocity 3-vector */
 
  public:

@@ -28,7 +28,7 @@ class Fault {
 friend class FaultManager;
   public :
 
-    Fault();
+    Fault() = default;
 
     virtual ~Fault() = default;
 
@@ -57,23 +57,23 @@ friend class FaultManager;
 
     ////    Attributes    ////
   public:
-    bool enabled; /* (--) Whether this fault is enabled. */
+    bool enabled{false}; /* (--) Whether this fault is enabled. */
 
     std::string name; /* (--) Fault name. */
 
-    bool is_fire_limited; /* (--) Whether this fault is fire-limited. */
-    unsigned long fire_limit; /* (--)
+    bool is_fire_limited{false}; /* (--) Whether this fault is fire-limited. */
+    unsigned long fire_limit{1}; /* (--)
       The maximum number of times a fire-limited fault can be triggered. */
 
   protected:
-    bool initialized; /* (--)
+    bool initialized{false}; /* (--)
       Whether the fault has been successfully initialized. */
     std::list<TriggerGroup*> trigger_groups; /* (--)
       The fault is triggered when one of these trigger groups is triggered. */
-    bool was_triggered_last_pass; /* (--)
+    bool was_triggered_last_pass{false}; /* (--)
       True if the fault was triggered last timestep. Used to determine whether
       the fault should be reset. */
-    unsigned long fire_count; /* (--)
+    unsigned long fire_count{0}; /* (--)
       The number of times a fire-limited trigger has been triggered. */
 };
 

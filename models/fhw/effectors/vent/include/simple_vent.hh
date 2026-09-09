@@ -24,77 +24,77 @@ class SimpleVent {
   const double& dyn_time; /* (s) Dynamic time for timed vents */
 
  public:
-  double location[3]; /* (m)
+  double location[3]{}; /* (m)
      Position of vent in dyn_body's structural frame */
-  bool active; /* (--)
+  bool active{true}; /* (--)
       Flag controlling whether the vent is able to be switched on.
       Default: true */
-  bool indefinite_duration; /* (--)
+  bool indefinite_duration{false}; /* (--)
       Flag to control when vent closes.  If true, vent is opened with no
       specified duration and will remain open until stop_venting() called.
       Default: false. */
-  bool quiet_message_start_inactive; /* (--)
+  bool quiet_message_start_inactive{false}; /* (--)
       Flag used to identify whether the print an error message if a vent
       receives an instruction to start venting while inactive.
       This combination could be an error, or the system may deliberately use
       the active flag as a determination of whether to start venting.*/
 
  protected:
-  bool initialized; /* (--)
+  bool initialized{false}; /* (--)
       Internal flag indicating that the initialize method has completed
       successfully */
-  bool apply_as_impulse; /* (--)
+  bool apply_as_impulse{false}; /* (--)
       Flag indicating that the vent is to operate with an impulsive behavior;
       when the vent is switched on it will provide a single instantaneous
       impulse only.  Default: false. */
-  bool venting; /* (--)
+  bool venting{false}; /* (--)
       Internal flag indicating that this vent is actively producing a force.*/
-  bool indefinite_duration_warning_sent; /* (--)
+  bool indefinite_duration_warning_sent{false}; /* (--)
       Flag to control the sending of a warning message about opening a vent
       with an unspecified duration.  This warning message is sent only once.
       Default: false. */
-  bool allocated_in_set; /* (--)
+  bool allocated_in_set{false}; /* (--)
       Internal flag indicating that this vent was created by the vent-set,
       and needs destroying by the same.  Set only by the VentSet class.
       Default: false*/
-  double force_mag;    /* (N)    Magnitude of force from vent */
-  double impulse_mag;  /* (N*s)  Magnitude of impulse from vent */
-  double duration;     /* (s)    Duration of vent */
+  double force_mag{0.0};     /* (N)    Magnitude of force from vent */
+  double impulse_mag{0.0};   /* (N*s)  Magnitude of impulse from vent */
+  double duration{0.0};      /* (s)    Duration of vent */
 
-  double start_time;   /* (s)   Recorded time when current venting started.*/
-  double stop_time;    /* (s)   When to stop venting. */
-  double direction[3]; /* (--)
+  double start_time{0.0};    /* (s)   Recorded time when current venting started.*/
+  double stop_time{0.0};     /* (s)   When to stop venting. */
+  double direction[3]{};     /* (--)
       Force direction unit vector in structural frame of VentSet::dyn_body */
-  double force[3];         /* (N)
+  double force[3]{};         /* (N)
       Nominal force to be applied, expressed in the structural frame.*/
-  double impulse[3];       /* (N*s)
+  double impulse[3]{};       /* (N*s)
       Nominal impulse expressed in the structural frame.*/
-  bool direction_set; /* (--)
+  bool direction_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the direction
       in which its force/impulse is applied.*/
-  bool force_set; /* (--)
+  bool force_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the force
       to be applied.*/
-  bool force_mag_set; /* (--)
+  bool force_mag_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the force
       magnitude to be applied.*/
-  bool impulse_set; /* (--)
+  bool impulse_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the impulse
       to be applied.*/
-  bool impulse_mag_set; /* (--)
+  bool impulse_mag_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the impulse
       magnitude to be applied.*/
-  bool duration_set; /* (--)
+  bool duration_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the duration
       over which the force will be applied.*/
-  double user_set_impulse; /* (N*s)
+  double user_set_impulse{0.0}; /* (N*s)
       User-set impulse magnitude, used for warning when switching to
       impulse mode.i
       Note -- in later edits, values that are automatically generated at or
       before initialization are also assigned to this variable, making it a
       bit of a misnomer; it's purpose remains -- it is an initial
       value used for warning when switching to impulse mode.*/
-  double user_set_duration; /* (s)
+  double user_set_duration{0.0}; /* (s)
       User-set duration, used for warning when switching to dynamic mode.
       Note -- in later edits, values that are automatically generated at or
       before initialization are also assigned to this variable, making it a
@@ -102,7 +102,7 @@ class SimpleVent {
       value used for warning when switching to dynamic mode.*/
 
  public:
-  std::string name; /* (--) name of the vent */
+  std::string name{"no-name"}; /* (--) name of the vent */
 
   explicit SimpleVent(const double& dyn_time_in);
   virtual ~SimpleVent() = default;

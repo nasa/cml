@@ -19,35 +19,6 @@ PROGRAMMERS:
 #include "../include/constraint_test.hh"
 
 /*****************************************************************************
-Constructor
-*****************************************************************************/
-ConstraintTest::ConstraintTest()
-  :
-  enabled(true),
-  initialized(false),
-  active(false),
-  violation_condition( ConstraintEnum::Undefined),
-  violation(false),
-  prev_violation(false),
-  violation_count(0),
-  equality_threshold(1e-6)
-{}
-// ***************************************************************************
-ConstraintTestTimed::ConstraintTestTimed()
-  :
-  use_timer(true),
-  time_limit (0.0),
-  gap_time_limit (0.0),
-  recover_quiet_violation (false),
-  numerical_violation(false),
-  existing_numerical_violation (false),
-  checking_gap_timer(false),
-  violation_timer (0.0),
-  gap_timer (0.0),
-  accumulated_violation_timer (0.0)
-{}
-
-/*****************************************************************************
 Name: set_violation_condition
 Purpose:
   Sets the violation-condition enumeration, with protection for adjusting
@@ -236,5 +207,3 @@ ConstraintTestTimed::update_timer( double delta_time)
     }
   }
 }
-
-

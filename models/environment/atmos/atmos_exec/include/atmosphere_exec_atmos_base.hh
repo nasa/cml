@@ -28,16 +28,14 @@ class AtmosphereExec_AtmosBase
   protected:
     AtmosExecOutput & out; /* (--)
           Reference to output class from the master atmos-exec. */
-    bool active; /* (--) internal flag, indicates whether activate has been run*/
+    bool active{false}; /* (--) internal flag, indicates whether activate has been run*/
 
   public:
-    std::string name; /* (--) name of the atmosphere. */
+    std::string name{"NONE"}; /* (--) name of the atmosphere. */
 
     explicit AtmosphereExec_AtmosBase(AtmosExecOutput & master_output)
       :
-      out(master_output),
-      active(false),
-      name("NONE")
+      out(master_output)
     {}
 
     virtual ~AtmosphereExec_AtmosBase() = default;

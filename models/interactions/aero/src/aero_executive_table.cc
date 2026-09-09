@@ -41,35 +41,7 @@ AeroExecutiveTable::AeroExecutiveTable(AeroInterfaceOutput & output_ref,
   T_struc_to_body( T_struc_to_body_in),
   environment( environment_in),
   disable_aero_moments( disable_aero_moments_in),
-  disable_aero_damping( disable_aero_damping_in),
-
-  T_body_to_aero_frame{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  cos_beta(1.0),
-  sin_beta(0.0),
-  cos_alpha(1.0),
-  sin_alpha(0.0),
-  cos_attack(1.0),
-  sin_attack(0.0),
-  cos_roll(1.0),
-  sin_roll(0.0),
-  moment_arm{0.0, 0.0, 0.0},
-
-  T_struc_to_aero_frame{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  data_table_type( AeroTableSetBase::Unspecified),
-  uncertainties_expressed_as_percent(false),
-  uncertainties_are_variable(false),
-  aero_damping_in_table(false),
-  aero_damping_on_diag_in_table( AeroTableSetBase::NotInTable),
-  aero_damping_off_diag_in_table( AeroTableSetBase::NotInTable),
-
-  current_table(nullptr),
-
-  threshold_min_free_stream_vel_mag(1.0), // Arbitrary threshold.
-
-  dispersion_active(false),
-  load_all_tables_at_init(false),
-  l_over_v_scale( Lref_over_Vmag),
-  mrc_position()
+  disable_aero_damping( disable_aero_damping_in)
 {}
 
 

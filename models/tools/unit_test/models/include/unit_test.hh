@@ -28,12 +28,12 @@ Purpose:(Collection of data necessary for sweeping through a data set)
 *****************************************************************************/
 class SweepSet {
  protected:
-  double & variable; /* (--) reference to the variable being set. */
-  double start;      /* (--) start value of the sweep.  */
-  double end;        /* (--) end value of the sweep (inclusive). */
-  double increment;  /* (--) variable increment on each data point. */
-  double value;      /* (--) the value to be assigned to "variable" */
-  double epsilon;    /* (--)
+  double & variable;     /* (--) reference to the variable being set. */
+  double start{0.0};     /* (--) start value of the sweep.  */
+  double end{0.0};       /* (--) end value of the sweep (inclusive). */
+  double increment{0.0}; /* (--) variable increment on each data point. */
+  double value{start};   /* (--) the value to be assigned to "variable" */
+  double epsilon{0.0};   /* (--)
       the threshold for determining whether the sweep has reached "end". */
  public:
   SweepSet( double & variable_out,
@@ -55,9 +55,9 @@ Purpose:(The main unit-test framework)
 class UnitTestFramework {
 
  public:
-  bool enabled; /* (--)
+  bool enabled{true}; /* (--)
        allows selective engagement of multiple frameworks within a sim. */
-  bool cycle_data; /* (--)
+  bool cycle_data{false}; /* (--)
        cycle the data set when it reaches the end. */
   std::string vars_file_name ; /* (--)
      filename of file containing list of variable names for data */
@@ -68,14 +68,14 @@ class UnitTestFramework {
      its associated data-file-name. */
 
  protected:
-  bool initialized;  /* (--) model has been initialized. */
+  bool initialized{false};  /* (--) model has been initialized. */
 
-  bool using_sweeps; /* (--)
+  bool using_sweeps{false}; /* (--)
          model is using data sweeps (as opposed to a file containing the
          specific data values). */
-  bool first_sweep; /* (--) boolean flag for special treatment on the
+  bool first_sweep{true}; /* (--) boolean flag for special treatment on the
          first sweep. */
-  bool sweeps_complete; /* (--) all variable sweeps are complete. */
+  bool sweeps_complete{false}; /* (--) all variable sweeps are complete. */
   std::list<SweepSet> sweeps; /* (--) list of variables being swept. */
 
   std::vector<std::string> variables; /* (--) list of variables by name.*/
@@ -90,19 +90,19 @@ class UnitTestFramework {
   std::list<LinkedVars> linked_variables; /* (--)
       list of variables with their associated filenames.*/
 
-  bool warning_on_sim_end; /* (--)
+  bool warning_on_sim_end{true}; /* (--)
       flag to indicate whether to drop a warning if the sim overruns the
       available data.  defaults to true.  Set to false once the warning
       has been sent. */
-  unsigned int cycle_overruns; /* (--)
+  unsigned int cycle_overruns{0}; /* (--)
       Number of sim-cycles after the data has expired; used to provide
       a buffer before dropping the warning. */
 
  public:
-  unsigned int cycle_overruns_limit; /* (--)
+  unsigned int cycle_overruns_limit{2}; /* (--)
       Drop the warning when cycle_overruns exceeds this value. */
 
-  UnitTestFramework();
+  UnitTestFramework() = default;
   virtual ~UnitTestFramework() = default;
   UnitTestFramework (const UnitTestFramework&) = delete;
   UnitTestFramework & operator = (const UnitTestFramework&) = delete;

@@ -58,13 +58,13 @@ Purpose:( This is the typical interface that external models will use to
 *****************************************************************************/
 class DynamicMassBodyPropertiesInterface {
 public:
-   double mass_consumed_step;    /* (kg)
+   double mass_consumed_step{0.0};    /* (kg)
        The mass that has been consumed since last update.*/
 
-   double consumable_mass;  /* (kg)
+   double consumable_mass{0.0};  /* (kg)
        The mass remaining to be potentially consumed.  >= 0.  */
 
-   DynamicMassBodyPropertiesInterface();
+   DynamicMassBodyPropertiesInterface() = default;
    virtual ~DynamicMassBodyPropertiesInterface() = default;
 };
 
@@ -81,19 +81,19 @@ public:
    // are provided via inheritance from DynamicMassBodyPropertiesInterface.
    // This interface is shared with DynamicMassString
 
-   double mass_bias;       /* (kg)
+   double mass_bias{0.0};       /* (kg)
          additive mass bias                          */
 
-   double cg_bias[3];      /* (m)
+   double cg_bias[3]{};      /* (m)
          additive cg bias                            */
 
-   double moi_bias[3];     /* (kg*m2)
+   double moi_bias[3]{};     /* (kg*m2)
          additive moments of inertia bias            */
 
-   double poi_bias[3];     /* (kg*m2)
+   double poi_bias[3]{};     /* (kg*m2)
          additive products of inertia bias           */
 
-   bool mass_dispersion_flag; /* (--)
+   bool mass_dispersion_flag{false}; /* (--)
          Controls the dispersion (i.e. application of the bias values).*/
 
    DynamicMassBodyInterpolation       interpolation; /* (--)

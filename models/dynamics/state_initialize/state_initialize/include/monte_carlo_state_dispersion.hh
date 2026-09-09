@@ -31,21 +31,21 @@ class MonteCarloStateDispersion {
     UVW      = 2, /* Dispersion is in UVW */
   };
 
-  DispersionFrame frame; /* (--) specifies the frame in which the
+  DispersionFrame frame{Inertial}; /* (--) specifies the frame in which the
                                  position-velocity dispersion values are to be
                                  interpreted.*/
-  bool disperse_pv;      /* (--) Flag indicating whether to apply dispersions.*/
-  double position_dispersion[3]; /* (m) Input values by which the initial
+  bool disperse_pv{false};      /* (--) Flag indicating whether to apply dispersions.*/
+  double position_dispersion[3]{}; /* (m) Input values by which the initial
                                         position vector is to be dispersed */
-  double velocity_dispersion[3]; /* (m/s) Input values by which the initial
+  double velocity_dispersion[3]{}; /* (m/s) Input values by which the initial
                                         velocity vector is to be dispersed */
 
 
  protected: // working variables
-  double position_dispersion_inertial[3]; /* (m) position_dispersion values
+  double position_dispersion_inertial[3]{}; /* (m) position_dispersion values
                                                  transformed to inertial
                                                  reference frame.*/
-  double velocity_dispersion_inertial[3]; /* (m/s) velocity_dispersion values
+  double velocity_dispersion_inertial[3]{}; /* (m/s) velocity_dispersion values
                                                  transformed to inertial
                                                  reference frame.*/
 

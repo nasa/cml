@@ -25,22 +25,7 @@ Constructor
 *****************************************************************************/
 GustModel::GustModel(const double & time_in)
   :
-  time(time_in),
-
-  phase_angle(),
-  dir_unit_vector(),
-  elapsed_time(),
-  start_time(),
-  active(false),
-  period_message_sent(false),
-
-  gust_frame(TD_FRAME),
-  direction{0.0,0.0,0.0},
-  maximum_magnitude(0.0),
-  magnitude(0.0),
-  gust_vector{0.0,0.0,0.0},
-  period(0.0),
-  start(false)
+  time(time_in)
 {}
 
 /*****************************************************************************

@@ -23,12 +23,7 @@ AeroInterfaceBase::AeroInterfaceBase( AtmosRelativeState & atmos_rel_state_in,
                                       const double & geodetic_altitude_in)
   :
   atmos_rel_state( atmos_rel_state_in),
-  geodetic_altitude( geodetic_altitude_in),
-  executive_ptr(nullptr),
-  disable_aero_moments(false),
-  disable_aero_damping(false),
-  max_atmos_altitude(3.5E6) // This is an arbitrary value; atmosphere turns
-                            // off at altitudes above 3,500 km.
+  geodetic_altitude( geodetic_altitude_in)
 {
   subscribe_name = "AeroInterfaceBase:";
 }

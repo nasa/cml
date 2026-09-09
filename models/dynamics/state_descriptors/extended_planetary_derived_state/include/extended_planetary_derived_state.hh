@@ -49,20 +49,20 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
 {
  public:
   // Reference vectors for hang and roll angles
-  double hang_angle_body_vec[3]; /* (--) Unit body vector used for hang angle */
-  double roll_wrt_hdg_body_vec[3];  /*  (--)
+  double hang_angle_body_vec[3]{};    /* (--) Unit body vector used for hang angle */
+  double roll_wrt_hdg_body_vec[3]{};  /*  (--)
            Unit body vector use for roll angle wrt heading*/
 
   // Reference point coordinates for boost reference and plumbline frames
-  double br_ref_longitude;        /* (rad) Longitude of boost-reference
+  double br_ref_longitude{0.0};        /* (rad) Longitude of boost-reference
                                            origin.*/
-  double br_ref_geodetic_latitude;/* (rad) Geodetic latitude of boost-
+  double br_ref_geodetic_latitude{0.0};/* (rad) Geodetic latitude of boost-
                                            reference origin */
-  double pl_ref_longitude;        /* (rad) Longitude of plumbline origin */
-  double pl_ref_geodetic_latitude;/* (rad) Geodetic latitude of plumbline
+  double pl_ref_longitude{0.0};        /* (rad) Longitude of plumbline origin */
+  double pl_ref_geodetic_latitude{0.0};/* (rad) Geodetic latitude of plumbline
                                            origin */
-  double pl_ref_azimuth;          /* (rad) Reference azimuth for plumbline
-                                           frame */
+  double pl_ref_azimuth{0.0};          /* (rad) Reference azimuth for plumbline
+                                                frame */
 
   // OUTPUT VALUES:
 
@@ -75,10 +75,10 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
                                                 to the vehicle */
 
   // Positions
-  double topocentric_altitude;    /* (m)  radial above the ellipsoid. */
-  PointToPointManager pt_to_pt;   /* (--) the set of pt-to-pt computations
-                                          between a vehicle point and a
-                                          planetary point.*/
+  double topocentric_altitude{0.0};  /* (m)  radial above the ellipsoid. */
+  PointToPointManager pt_to_pt;      /* (--) the set of pt-to-pt computations
+                                             between a vehicle point and a
+                                             planetary point.*/
 
   // Range Safety Data:
   RangeSafetyData range_safety;   /* (--) Range safety data, state values in
@@ -88,32 +88,32 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
   TopoContainer topocentric; /* (--) State values in the topocentric NED frame*/
 
   // Velocity - inertial
-  double inrtl_vel_mag;      /* (m/s) Magnitude of the inertial velocity.*/
+  double inrtl_vel_mag{0.0}; /* (m/s) Magnitude of the inertial velocity.*/
 
   // Velocity - Planet-relative:
-  double relative_vel[3];    /* (m/s) Planet-relative velocity (expressed
-                                      in inrtl) */
-  double relative_vel_mag;   /* (m/s) Magnitude of relative_vel */
-  double pfix_rel_vel[3];    /* (m/s) Planet-relative velocity (expressed
-                                      in pfix) */
+  double relative_vel[3]{}; /* (m/s) Planet-relative velocity (expressed
+                                     in inrtl) */
+  double relative_vel_mag{0.0}; /* (m/s) Magnitude of relative_vel */
+  double pfix_rel_vel[3]{}; /* (m/s) Planet-relative velocity (expressed
+                                     in pfix) */
 
   // Planet-relative acceleration - pfix cartesian:
-  double relative_accel[3];  /* (m/s2) Planet-relative acceleration vector*/
+  double relative_accel[3]{}; /* (m/s2) Planet-relative acceleration vector*/
 
   // Transformation matrices
-  double T_inrtl_br[3][3];   /* (--) Inertial-to-boost-reference */
-  double T_inrtl_pl[3][3];   /* (--) Inertial-to-plumbline */
+  double T_inrtl_br[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--) Inertial-to-boost-reference */
+  double T_inrtl_pl[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--) Inertial-to-plumbline */
 
   // Euler angles
-  double E_br_body_YPR[3];   /* (rad) Boost reference to body Yaw-Pitch-Roll */
-  double E_pl_body_PYR[3];   /* (rad) Plumbline to body Pitch-Yaw-Roll */
+  double E_br_body_YPR[3]{}; /* (rad) Boost reference to body Yaw-Pitch-Roll */
+  double E_pl_body_PYR[3]{}; /* (rad) Plumbline to body Pitch-Yaw-Roll */
 
   // Hang and roll angles
-  double hang_angle;         /*  (rad) Angle between the Topodetic-Z (down)
-                                       vector and a unit vector specified in
-                                       the body frame */
+  double hang_angle{0.0}; /* (rad) Angle between the Topodetic-Z (down)
+                                    vector and a unit vector specified in
+                                    the body frame */
 
-  double roll_wrt_heading; /*  (rad)
+  double roll_wrt_heading{0.0}; /* (rad)
            Angle between the horizontal projection of the Topodetic relative
            velocity vector and a unit vector specified in the body frame and
            projected onto the Topodetic horizontal plane.*/
@@ -123,45 +123,45 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
    // Users should use sub/unsub-scribe_* methods, which increment/decrement
    // these counts and also make sure that initialization has been performed
    // when applicable
-   int calc_rel_vel;               /* (--)
+   int calc_rel_vel{0};                  /* (--)
        subscription-count to rel-vel computation. */
-   int calc_topocentric;           /* (--)
+   int calc_topocentric{0};              /* (--)
        subscription-count to topocentric computation.*/
-   int calc_topocentric_altitude;  /* (--)
+   int calc_topocentric_altitude{0};     /* (--)
        subscription-count to topocentric-altitude computation.
        Separated from topocentric primarily so that it can be called without
        invoking the full topocentric.  */
-   int calc_topodetic;             /* (--)
+   int calc_topodetic{0};                /* (--)
        subscription-count to topodetic computation.*/
-   int calc_pt_to_pt;        /* (--)
+   int calc_pt_to_pt{0};                 /* (--)
        subscription-count to point-to-point computations.*/
 
-   int calc_boost_reference;      /* (--)
+   int calc_boost_reference{0};          /* (--)
        subscription-count to boost-ref computation.*/
-   int calc_plumbline;            /* (--)
+   int calc_plumbline{0};                /* (--)
        subscription-count to plumbline computation.*/
-   int calc_range_safety;         /* (--)
+   int calc_range_safety{0};             /* (--)
        subscription-count to computation.*/
-   int calc_hang_roll;            /* (--)
+   int calc_hang_roll{0};                /* (--)
        subscription-count to hang-roll computation.*/
 
-   bool boost_ref_initialized;    /* (--)
+   bool boost_ref_initialized{false};    /* (--)
        internal flag; boost-ref init method processed*/
-   bool plumbline_initialized;    /* (--)
+   bool plumbline_initialized{false};    /* (--)
        internal flag; plumbline init method processed*/
-   bool range_safety_initialized; /* (--)
+   bool range_safety_initialized{false}; /* (--)
         internal flag; range-safety init method processed*/
-   bool using_launch_range;       /* (--)
+   bool using_launch_range{false};       /* (--)
        internal flag; subscription to launch range model.
        NOTE - only used during initialization, run-time queries ping the
        launch-range active flag directly.  So once this is set, it is never
        unset, even if all subscriptions go away.*/
-   bool using_landing_range;      /* (--)
+   bool using_landing_range{false};      /* (--)
        internal flag; subscription to landing range model.
        NOTE - only used during initialization, run-time queries ping the
        landing-range active flag directly.  So once this is set, it is never
        unset, even if all subscriptions go away.*/
-   bool using_entry_range;        /* (--)
+   bool using_entry_range{false};        /* (--)
        internal flag; subscription to entry range model.
        NOTE - only used during initialization, run-time queries ping the
        entry-range active flag directly.  So once this is set, it is never

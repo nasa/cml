@@ -25,8 +25,7 @@ RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
   :
   interface(interface_),
   jet(jet_),
-  current_time(time),
-  active(false)
+  current_time(time)
 {
   // NULL check
   if (jet == nullptr)

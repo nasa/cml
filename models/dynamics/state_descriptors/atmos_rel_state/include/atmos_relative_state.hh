@@ -43,69 +43,69 @@ class ExtendedPlanetaryDerivedState;
 class AtmosRelativeState : public SubscriptionBase
 {
  public:
-  bool warn_on_v_parallel_r; /* (--)
+  bool warn_on_v_parallel_r{true}; /* (--)
         Indicates whether to warn on condition where velocity and radial
         vectors are parallel.*/
-  bool terminate_on_nan_euler; /* (--)
+  bool terminate_on_nan_euler{false}; /* (--)
         Determines the recovery action following invalid computation
         of euler angles.
         True: terminate.  False: set them to 0 and continue.
         Default: false.*/
 
   // Velocity vectors and magnitudes
-  double free_stream_vel_mag;    /* (m/s) Magnitude of free-stream velocity */
-  double free_stream_vel[3];     /* (m/s) Free-stream velocity (inertial) */
-  double free_stream_vel_unit[3];/* (--)  unit-vector of free_stream_vel */
-  double free_stream_td_vel[3];  /* (m/s) Free-stream topodetic velocity
-                                          vector */
-  double free_stream_body_vel[3];/* (m/s) Free-stream velocity in body frame */
+  double free_stream_vel_mag{0.0};    /* (m/s) Magnitude of free-stream velocity */
+  double free_stream_vel[3]{};     /* (m/s) Free-stream velocity (inertial) */
+  double free_stream_vel_unit[3]{};/* (--)  unit-vector of free_stream_vel */
+  double free_stream_td_vel[3]{};  /* (m/s) Free-stream topodetic velocity
+                                            vector */
+  double free_stream_body_vel[3]{};/* (m/s) Free-stream velocity in body frame */
 
   // Velocity angles and aerodynamic angles
-  double free_stream_flight_path;/* (rad) Free stream flight path angle */
-  double free_stream_azimuth;    /* (rad) Free stream azimuth */
-  double angle_of_attack;        /* (rad) Angle of attack */
-  double angle_of_sideslip;      /* (rad) Angle of sideslip */
-  double bank_angle;             /* (rad) Bank angle (aerodynamic roll) */
-  double total_angle_of_attack;  /* (rad) Total angle of attack */
-  double phi_roll;               /* (rad) Angle from Z-body to wind vel in
-                                        body YZ */
+  double free_stream_flight_path{0.0};/* (rad) Free stream flight path angle */
+  double free_stream_azimuth{0.0};    /* (rad) Free stream azimuth */
+  double angle_of_attack{0.0};        /* (rad) Angle of attack */
+  double angle_of_sideslip{0.0};      /* (rad) Angle of sideslip */
+  double bank_angle{0.0};             /* (rad) Bank angle (aerodynamic roll) */
+  double total_angle_of_attack{0.0};  /* (rad) Total angle of attack */
+  double phi_roll{0.0};               /* (rad) Angle from Z-body to wind vel in
+                                               body YZ */
 
   // Other aerodynamic parameters
-  double mach_number;      /*   (--) Mach number */
-  double dynamic_pressure; /* (N/m2) Dynamic pressure */
-  double drag_accel;       /* (m/s2) Drag acceleration */
-  double side_accel;       /* (m/s2) Side acceleration */
-  double lift_accel;       /* (m/s2) Lift acceleration */
-  double sensed_accel_mag; /* (m/s2) Magnitude of the sensed acceleration */
+  double mach_number{0.0};      /*   (--) Mach number */
+  double dynamic_pressure{0.0}; /* (N/m2) Dynamic pressure */
+  double drag_accel{0.0};       /* (m/s2) Drag acceleration */
+  double side_accel{0.0};       /* (m/s2) Side acceleration */
+  double lift_accel{0.0};       /* (m/s2) Lift acceleration */
+  double sensed_accel_mag{0.0}; /* (m/s2) Magnitude of the sensed acceleration */
 
   // Alternate computations
-  double angle_of_attack_alt;   /* (rad) Alternate angle of attack computation */
-  double angle_of_sideslip_alt; /* (rad) Alternate sideslip angle computation */
-  double total_angle_of_attack_alt; /* (rad) Alternate total angle of attack
+  double angle_of_attack_alt{0.0};   /* (rad) Alternate angle of attack computation */
+  double angle_of_sideslip_alt{0.0}; /* (rad) Alternate sideslip angle computation */
+  double total_angle_of_attack_alt{0.0}; /* (rad) Alternate total angle of attack
                                            computation */
-  double phi_roll_alt;          /* (rad) Angle from Z-body to wind vel in
+  double phi_roll_alt{0.0};          /* (rad) Angle from Z-body to wind vel in
                                        body YZ */
 
   // Transformation matrices
-  double T_inrtl_traj[3][3]; /* (--) Inertial-to-trajectory transformation */
-  double T_traj_body[3][3];  /* (--) Trajectory-to-body transformation */
-  double T_traj_wind[3][3];  /* (--) Trajectory-to-wind transformation */
-  double T_inrtl_wind[3][3]; /* (--) Inertial-to-wind transformation */
-  double T_wind_stab[3][3];  /* (--) Wind-to-stability transformation */
-  double T_inrtl_stab[3][3]; /* (--) Inertial-to-stability transformation */
+  double T_inrtl_traj[3][3]{}; /* (--) Inertial-to-trajectory transformation */
+  double T_traj_body[3][3]{};  /* (--) Trajectory-to-body transformation */
+  double T_traj_wind[3][3]{};  /* (--) Trajectory-to-wind transformation */
+  double T_inrtl_wind[3][3]{}; /* (--) Inertial-to-wind transformation */
+  double T_wind_stab[3][3]{};  /* (--) Wind-to-stability transformation */
+  double T_inrtl_stab[3][3]{}; /* (--) Inertial-to-stability transformation */
 
   // General Atmospheric Params
-  double reynolds_number;    /* (--) Reynolds number */
+  double reynolds_number{0.0};    /* (--) Reynolds number */
 
   // Atmospheric load terms
-  double qalpha_total;        /* (N*rad/m2)  Aerodynamic load due to
+  double qalpha_total{0.0};        /* (N*rad/m2)  Aerodynamic load due to
                                            total angle of attack */
-  double qalpha_total_psfdeg; /* (lbf*degree/ft2) Aerodynamic load due to
+  double qalpha_total_psfdeg{0.0}; /* (lbf*degree/ft2) Aerodynamic load due to
                                              total angle of attack in
                                              (lb-force * degree) / (ft^2) */
-  double qalpha;              /* (N*rad/m2) Aerodynamic load due to
+  double qalpha{0.0};              /* (N*rad/m2) Aerodynamic load due to
                                           angle of attack */
-  double qbeta;               /* (N*rad/m2) Aerodynamic load due to
+  double qbeta{0.0};               /* (N*rad/m2) Aerodynamic load due to
                                           angle of sideslip */
 
  protected:
@@ -116,21 +116,21 @@ class AtmosRelativeState : public SubscriptionBase
         The state relative to the planet frame */
   AtmosphereExecInterface       & atmos_exec; /* (--) for subscription mgmt. */
   const AtmosExecOutput         & atmos;/* (--) atmospheric parameters. */
-  const double * reference_length; /* (m)
+  const double * reference_length{nullptr}; /* (m)
         Pointer to externally-defined reference length.
         Used only for full-calculation. */
 
   // Internal variables.
-  unsigned int compute_angles_subscriptions; /* (--)
+  unsigned int compute_angles_subscriptions{0}; /* (--)
         Count of the number of external models needing the computation of the
         flight-path-body angles. */
-  unsigned int complete_calculation_subscriptions; /* (--)
+  unsigned int complete_calculation_subscriptions{0}; /* (--)
       Count of the number of external models needing the complete calculation */
-  bool ref_length_null_msg_sent; /* (--) Has error message been sent. */
-  double traj_to_body_RYP[3]; /* (rad)
+  bool ref_length_null_msg_sent{false}; /* (--) Has error message been sent. */
+  double traj_to_body_RYP[3]{}; /* (rad)
         The Roll-Yaw-Pitch euler angles associated with the
         trajectory-to-body frame transformation.*/
-  const double psfdeg_converter; /* (--)
+  const double psfdeg_converter{1.19664723485755}; /* (--)
         A unit converter to convert from SI units to traditional units.
         This is a dimensionless quantity with a value of 1, or equivalently,
         1.19664723485755 ((deg/rad) ((lbf/ft^2)/(N/m^2))) */

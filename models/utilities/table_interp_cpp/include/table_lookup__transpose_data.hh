@@ -55,16 +55,16 @@ class TableLookupTransposeDataSet_TableConfig
   typedef std::list<DoubleVec>   DoubleVecList;
 
   std::string name; /* (--) Name of this table-configuration.*/
-  bool block_independent_addition; /* (--)
+  bool block_independent_addition{false}; /* (--)
     When used to configure the specific data-set, the corresponding Table
     (table_ptr) will by default be added to the table-manager
     (TableLookupTransposeDataSet). This flag blocks this addition.
     This is used when the configured table is only to be used indirectly.
     Default: false. */
-  size_t index_low; /* (--)
+  size_t index_low{0}; /* (--)
     First index in the data file containing contiguous data for this table.
     If the data is not contiguous, specify indices as a vector. */
-  size_t index_high; /* (--)
+  size_t index_high{0}; /* (--)
     Last index in the data file containing contiguous data for this table.
     If the data is not contiguous, specify indices as a vector. */
   std::vector<size_t> indices; /* (--)
@@ -74,17 +74,17 @@ class TableLookupTransposeDataSet_TableConfig
      If this vector is empty, model will use index_low, index_high.
      If this vector is non-empty, model will ignore index_low, index_high. */
 
-  GenericMultiInputTable * table_ptr; /* (--) pointer to this model's
+  GenericMultiInputTable * table_ptr{nullptr}; /* (--) pointer to this model's
                             data-table.  May be left NULL, in which case a
                             table will be created on-the-fly. */
   DoublePtrVec  dependent_variables; /* (--) STL-vector containing pointers
                             to the dependent variables; these variables will
                             be populated by the table found at table_ptr.  Used
                             only if the table is being constructed on-the-fly.*/
-  AbstractTableLookup::TableType table_type;/* (--) Type of table to be created if
+  AbstractTableLookup::TableType table_type{AbstractTableLookup::Generic};/* (--) Type of table to be created if
                             creating a table on-the-fly. Otherwise, this is
                             unused.  Default: Generic.*/
-  TableIndependentVariable::LookupMethod lookup_method; /* (--) Type of lookup
+  TableIndependentVariable::LookupMethod lookup_method{ TableIndependentVariable::Interp}; /* (--) Type of lookup
                             method to be used by the associated independent
                             variable.*/
  private:
@@ -94,13 +94,13 @@ class TableLookupTransposeDataSet_TableConfig
                             constructing the data vector from the
                             transpose data before being sent to table_ptr for
                             permanent storage.*/
-  size_t num_variables;  /* (count) number of variables in the associated table.*/
-  size_t total_num_lines;/* (count) number of lines of data coming in. Set by call
+  size_t num_variables{0};  /* (count) number of variables in the associated table.*/
+  size_t total_num_lines{0};/* (count) number of lines of data coming in. Set by call
                           from
                           TableLookupTransposeDataSet::process_transpose_data()*/
 
  public:
-  TableLookupTransposeDataSet_TableConfig();
+  TableLookupTransposeDataSet_TableConfig() = default;
   virtual ~TableLookupTransposeDataSet_TableConfig() = default;
 
  private: // called from TableLookupTransposeDataSet
@@ -128,30 +128,30 @@ class TableLookupTransposeDataSet : public TableLookupSet
               A set of table-configurations; these are used to extract the data
               from the consolidated data set for loading onto each instance of
               GenericMultiInputTable used by this manager.*/
-  const double * independent_var; /* (--)
+  const double * independent_var{nullptr}; /* (--)
               A pointer to the variable used as the independent-variable.
               Used only if the TableIndependentVariable is being created
               on-the-fly.*/
-  TableIndependentVariable::Continuity indep_continuity; /* (--)
+  TableIndependentVariable::Continuity indep_continuity{TableIndependentVariable::Linear}; /* (--)
               Indicates how the edges of the independent data are to be treated.
               Used only if the TableIndependentVariable is being created
               on-the-fly.*/
 
-  bool populate_independent_from_file; /* (--)
+  bool populate_independent_from_file{false}; /* (--)
               Flag indicating that the data for the independent variable is
               also found in the data file.*/
-  size_t indep_index; /* (--)
+  size_t indep_index{0}; /* (--)
               The index of the data for the independent variable.
               Used only if populate_independent_from_file is true */
  private:
-  size_t min_length;     /* (count) number of variables on the shortest line in
+  size_t min_length{0};     /* (count) number of variables on the shortest line in
                           the data set.*/
-  size_t min_length_line;/* (count) line number of the shortest line.*/
-  bool data_processed; /* (--) flag indicating that the process_data method
+  size_t min_length_line{0};/* (count) line number of the shortest line.*/
+  bool data_processed{false}; /* (--) flag indicating that the process_data method
                                has executed and the tables been populated.*/
 
  public:
-  TableLookupTransposeDataSet();
+  TableLookupTransposeDataSet() = default;
   ~TableLookupTransposeDataSet() override = default;
   TableLookupTransposeDataSet ( const TableLookupTransposeDataSet&) = delete;
   TableLookupTransposeDataSet& operator = ( const TableLookupTransposeDataSet&) = delete;

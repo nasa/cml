@@ -16,19 +16,17 @@ PROGRAMMERS:
 
 class RocketMotorDispersions {
 public:
-  double position_dispersion[3];  /* (m)   Dispersion in the position of the
-                                           motor frame. */
-  double motor_tolerance[3];      /* (rad) Dispersion in the attitude of the
-                                           motor frame. */
-  double tolerance_mag_threshold; /* (rad)
+  double position_dispersion[3]{}; /* (m)   Dispersion in the position of the motor frame. */
+  double motor_tolerance[3]{};     /* (rad) Dispersion in the attitude of the motor frame. */
+  double tolerance_mag_threshold{1.0E-12}; /* (rad)
               Minimum operable magnitude of the vector motor_tolerance.
               If magnitude of motor_tolerance is less than this value,
               consequential dispersion in attitude will be ignored. */
-  double T_dispersion_to_nominal[3][3]; /* (--)
+  double T_dispersion_to_nominal[3][3]{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}}; /* (--)
               Transformation matrix from the actual motor frame to the
               nominal motor frame; accounts for manufacturing tolerances. */
 
-  RocketMotorDispersions();
+  RocketMotorDispersions() = default;
   virtual ~RocketMotorDispersions() = default;
   RocketMotorDispersions (const RocketMotorDispersions&) = delete;
   RocketMotorDispersions & operator = (const RocketMotorDispersions&) = delete;

@@ -36,15 +36,13 @@ class EclipseCalculator : public SubscriptionBase
   jeod::RefFrame & vehicle_frame; /* (--)
       Reference to the vehicle reference frame being tested for being in
       eclipse */
-  char earth_name[6]; /* (--) "Earth" */
-  char moon_name[5];  /* (--) "Moon" */
 
   jeod::RadiationSource sun; /* (--) Radiation source provider */
   jeod::RadiationThirdBody earth; /* (--) eclipsing body */
   jeod::RadiationThirdBody moon; /* (--) eclipsing body */
 
  public:
-  double illum_factor; /* (--)
+  double illum_factor{1.0}; /* (--)
       Output factor indicating the fraction of the solar disk currently
       visible by veh_struc_frame.*/
 

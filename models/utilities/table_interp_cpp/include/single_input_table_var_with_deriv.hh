@@ -58,7 +58,7 @@ class SingleInputTableVarDeriv : public GenericSingleInputTable
   // derivs will be constructed using the default GenericSingleInputTable
   // constructor; the new constructors provide construction values to derivs.
   using GenericSingleInputTable::GenericSingleInputTable;
-  SingleInputTableVarDeriv();
+  SingleInputTableVarDeriv() = default;
   SingleInputTableVarDeriv( double *dependent_variables,
                             double *dependent_variables_derivs,
                             size_t num_vars);

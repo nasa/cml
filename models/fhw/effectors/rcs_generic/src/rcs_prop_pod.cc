@@ -29,9 +29,7 @@ RcsPodComponent::RcsPodComponent(
    :
    mass_consumed_step( &fake_interface.mass_consumed_step),
    consumable_mass(    &fake_interface.consumable_mass),
-   using_dyn_mass(false),
-   flow_rate_sf(max_num_jets_on, 0.0),
-   sum_consumption(0.0)
+   flow_rate_sf(max_num_jets_on, 0.0)
 { }
 
 /****************************************************************************/
@@ -40,21 +38,10 @@ RcsPropPod::RcsPropPod(
    unsigned int num_components_,
    const double & time_step_)
    :
-   mass_epsilon( 1.0e-12),
-   momentum_epsilon( 1.0e-12),
    time_step(time_step_),
    max_num_jets_on(max_num_jets_on_),
-   using_dyn_mass(false),
-   continue_thrust_after_depletion(false),
-   fail_on_depleted_mass(false),
-   health(HealthUndefined),
-   nominal_thrust(0.0),
-   pressure(0.0),
    thrust_factor( max_num_jets_on, 0.0),
-   components( num_components_, RcsPodComponent(max_num_jets_on_)),
-   sum_consumption(0.0),
-   equiv_momentum(0.0),
-   num_jets_on(0)
+   components( num_components_, RcsPodComponent(max_num_jets_on_))
 {
   // This is not at all obvious.   Having the RcsPodComponent constructor
   // set the mass_consumed_step and consumable_mass pointers to the addresses

@@ -60,45 +60,45 @@ class TwistSwayParams
 {
  public:
   //Scenario constants
-  double RocketHeight;  /* (m)  height of the rocket */
-  double wind_direction;/* (rad)  The direction the wind is heading
+  double RocketHeight{0.0};  /* (m)  height of the rocket */
+  double wind_direction{0.0};/* (rad)  The direction the wind is heading
                                   0- North; pi/2 - East, etc.*/
 
   //Define the frequency content, long period and short period
-  double tau;  /* (s) wind time constant for high-frequency response*/
-  double taul; /* (s) wind time constant for low-frequency response */
-  double limit_ln_epsilon; /* (--)
+  double tau{0.0};  /* (s) wind time constant for high-frequency response*/
+  double taul{0.0}; /* (s) wind time constant for low-frequency response */
+  double limit_ln_epsilon{-37.0}; /* (--)
          Natural log of the lower limit of resolution
          (default = ln(10^-16) = -37). */
 
-  double Parallel_Motion_Fast;    /* (m)
+  double Parallel_Motion_Fast{0.0};  /* (m)
          Maximum displacement parallel to wind for high-frequency response*/
-  double Normal_Motion_Fast;    /* (m)
+  double Normal_Motion_Fast{0.0};    /* (m)
          Maximum displacement normal to wind for high-frequency response*/
-  double Parallel_Motion_Slow;  /* (m)
+  double Parallel_Motion_Slow{0.0};  /* (m)
          Maximum displacement parallel to wind for low-frequency response*/
-  double Normal_Motion_Slow;    /* (m)
+  double Normal_Motion_Slow{0.0};    /* (m)
          Maximum displacement normal to wind for low-frequency response*/
 
-  double Twist_Mag;  /* (rad)  Maximum twist displacement */
+  double Twist_Mag{0.0};  /* (rad)  Maximum twist displacement */
 
-  double delta_T1_max;  /* (s)  The maximum time between the fast disturbances */
-  double delta_T1_min;  /* (s)  The minimum time between the fast disturbances */
-  double delta_T2_max;  /* (s)  The maximum time between the slow disturbances */
-  double delta_T2_min;  /* (s)  The minimum time between the slow disturbances */
+  double delta_T1_max{0.0};  /* (s)  The maximum time between the fast disturbances */
+  double delta_T1_min{0.0};  /* (s)  The minimum time between the fast disturbances */
+  double delta_T2_max{0.0};  /* (s)  The maximum time between the slow disturbances */
+  double delta_T2_min{0.0};  /* (s)  The minimum time between the slow disturbances */
 
-  double mode_freq_high; /* (Hz)
+  double mode_freq_high{0.0}; /* (Hz)
          The highest possible frequency for the rocket mode */
-  double mode_freq_low; /* (Hz)
+  double mode_freq_low{0.0}; /* (Hz)
          The lowest possible frequency for the rocket mode */
 
-  double decay_const;   /* (--)
+  double decay_const{0.0};   /* (--)
          A time-related constant governing the decay of the twist-sway as
          the simulation nears the end of the pad-alignment phase.  */
 
-  unsigned int seed; /* (--)  Manually chosen random seed */
+  unsigned int seed{0}; /* (--)  Manually chosen random seed */
 
-  TwistSwayParams();
+  TwistSwayParams() = default;
   virtual ~TwistSwayParams() = default;
 };
 
@@ -111,10 +111,11 @@ Purpose:( Simple POD class containing the parallel, normal, and twist
 class TwistSwayMagnitudes
 {
  public:
-  double parallel;   /* (m) Parallel component */
-  double normal;     /* (m) Normal component */
-  double twist;      /* (rad) Twist component */
-  TwistSwayMagnitudes();
+  double parallel{0.0};   /* (m) Parallel component */
+  double normal{0.0};     /* (m) Normal component */
+  double twist{0.0};      /* (rad) Twist component */
+
+  TwistSwayMagnitudes() = default;
 };
 
 /*****************************************************************************
@@ -129,7 +130,7 @@ class TwistSway : public SubscriptionBase
     ImpulseDecay = 1,
     GrowDecay = 2
   };
-  PerturbationModel perturb_algorithm; /* (--)
+  PerturbationModel perturb_algorithm{GrowHoldDecay}; /* (--)
                     Choice of algorithm for accumulating perturbations.*/
 
   TwistSwayParams  params;   /* (--)
@@ -143,18 +144,18 @@ class TwistSway : public SubscriptionBase
  // Output
 
   // Perturbations in ENU frame
-  double dp_enu[3];             /* (m)     twist/sway displacement of body
+  double dp_enu[3]{};             /* (m)     twist/sway displacement of body
                                            wrt base expressed in ENU */
-  double dv_enu[3];             /* (m/s)   twist/sway velocity (ENU) */
+  double dv_enu[3]{};             /* (m/s)   twist/sway velocity (ENU) */
   jeod::Quaternion Q_enu_to_ts;       /*(--) left-transformation-quaternion from base
                                        ENU frame to the final TS frame.*/
-  double w_ts_wrt_enu_in_enu[3];/* (rad/s) twist/sway angular rates (ENU) */
+  double w_ts_wrt_enu_in_enu[3]{};/* (rad/s) twist/sway angular rates (ENU) */
 
   // Perturbations in ECEF frame:
-  double dp_ecef[3];            /* (m)   twist/sway displacment (ECEF) */
-  double dv_ecef[3];            /* (m/s)  twist/sway velocity (ECEF) */
+  double dp_ecef[3]{};            /* (m)   twist/sway displacment (ECEF) */
+  double dv_ecef[3]{};            /* (m/s)  twist/sway velocity (ECEF) */
   jeod::Quaternion Q_ecef_to_ts;      /* (--) left-transform-quat from ECEF to TS*/
-  double w_ts_wrt_enu_in_ecef[3];/* (rad/s)  twist/sway angular rates (ECEF)*/
+  double w_ts_wrt_enu_in_ecef[3]{};/* (rad/s)  twist/sway angular rates (ECEF)*/
 
 
 
@@ -163,32 +164,32 @@ class TwistSway : public SubscriptionBase
       the Mersennes-Twister random number generator.*/
 
   const double & external_clock; /* (s) reference to an external clock. */
-  double previous_external_clock; /* (s) most recently known value of
+  double previous_external_clock{0.0}; /* (s) most recently known value of
                                          external_clock */
-  double start_time;    /* (s) Value of external_clock at which the twist-sway
+  double start_time{0.0};    /* (s) Value of external_clock at which the twist-sway
                                first runs; this is the time of the first
                                perturbation.*/
-  double elapsed_time;  /* (s) Time basis for calculating effects.
+  double elapsed_time{0.0};  /* (s) Time basis for calculating effects.
                                Computed as external_clock - start_time */
-  double end_time;      /* (s) Value of external_clock when twist-sway shall
+  double end_time{0.0};      /* (s) Value of external_clock when twist-sway shall
                                end. */
-  double dt; /* (s) time step */
+  double dt{0.0}; /* (s) time step */
 
-  double T_fast;   /* (s)  The time between the fast disturbances */
-  double T_slow;   /* (s)  The time between the slow disturbances */
-  double Freqw;    /* (Hz)  The driving frequency */
+  double T_fast{0.0};   /* (s)  The time between the fast disturbances */
+  double T_slow{0.0};   /* (s)  The time between the slow disturbances */
+  double Freqw{0.0};    /* (Hz)  The driving frequency */
 
-  double decay_mult;    /* (--) Multiplier to decay combined effect towards
+  double decay_mult{0.0};    /* (--) Multiplier to decay combined effect towards
                                end of pad-align. */
-  double p_factor_fast; /* (--) Multiplier to decay effect of a single
+  double p_factor_fast{0.0}; /* (--) Multiplier to decay effect of a single
                                perturbation over 1 "fast" interval, T_fast. */
-  double p_factor_slow; /* (--) Multiplier to decay effect of a single
+  double p_factor_slow{0.0}; /* (--) Multiplier to decay effect of a single
                                perturbation over 1 "slow" interval, T_slow. */
 
-  unsigned int ix_fast_next; /* (--)
+  unsigned int ix_fast_next{0}; /* (--)
       identification of the next multiple of the "fast" interval, T_fast.
       e.g. if T_fast = 2.0 and t = 5.0, ix_fast_next = 3.*/
-  unsigned int ix_slow_next; /* (--)
+  unsigned int ix_slow_next{0}; /* (--)
       identification of the next multiple of the "slow" interval, T_slow. */
 
   std::list< TwistSwayMagnitudes > fast_list; /* (--)
@@ -202,32 +203,32 @@ class TwistSway : public SubscriptionBase
       summed effect of all currently active "slow" perturbations. */
 
   // raw angles
-  double sway_parallel; /* (m)
+  double sway_parallel{0.0}; /* (m)
       the net perturbation representing sway distance parallel to the wind */
-  double sway_normal;   /* (m)
+  double sway_normal{0.0};   /* (m)
       the net perturbation respresenting sway distance perpendicular to wind*/
-  double twist_angle;   /* (rad)
+  double twist_angle{0.0};   /* (rad)
       the net perturbation respresenting twisting motion */
 
   // angles from previous cycle:
-  double prev_sway_parallel; /* (--)
+  double prev_sway_parallel{0.0}; /* (--)
       copy of the last known parallel-component of sway,
       used to obtain sway-rate and thereby dv_enu. */
-  double prev_sway_normal;   /* (--)
+  double prev_sway_normal{0.0};   /* (--)
       copy of the last known normal-component of sway,
       used to obtain sway-rate and thereby dv_enu. */
-  double prev_dp_up;         /* (--)
+  double prev_dp_up{0.0};         /* (--)
       copy of the last known vertical-component of dp_enu,
       used to obtain dv_enu. */
-  double prev_twist_sway_angle[3]; /* (--)
+  double prev_twist_sway_angle[3]{}; /* (--)
       copy of the last known twist_sway-angles, used to obtain attitude-rates.*/
 
-  double copy_wind_direction; /* (rad)
+  double copy_wind_direction{0.0}; /* (rad)
       copy of the last known wind-direction,
       used to identify need to recompute trig functions.*/
-  double sin_wind; /* (--) sine of wind direction. */
-  double cos_wind; /* (--) cosine of wind direction. */
-  bool small_angle_warning_sent; /* (--)
+  double sin_wind{0.0}; /* (--) sine of wind direction. */
+  double cos_wind{1.0}; /* (--) cosine of wind direction. */
+  bool small_angle_warning_sent{false}; /* (--)
       Controls the warning about the small angle violation. Restricts the
       warning to a single issue,  Default: false. */
 

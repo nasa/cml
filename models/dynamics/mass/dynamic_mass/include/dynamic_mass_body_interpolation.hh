@@ -49,10 +49,10 @@ PROGRAMMERS:
 
 class DynamicMassBodyInterpolation {
 public:
-   double position[3];    /* (m)
+   double position[3]{};    /* (m)
          Interpolated position value */
 
-   double inertia[3][3];  /* (kg*m2)
+   double inertia[3][3]{};  /* (kg*m2)
          Interpolated inertia tensor */
 
    TableIndependentVariable mass_indep; /* (--)
@@ -124,16 +124,16 @@ public:
    // The following flags allow DynamicsMassBodyProperties::*_bias to
    // be added to the respective values in the table so that the
    // tables may be shifted.
-   bool tab_mass_flag; /* (--)
+   bool tab_mass_flag{false}; /* (--)
          Flag to modify the mass table. */
 
-   bool tab_cg_flag;  /* (--)
+   bool tab_cg_flag{false};  /* (--)
          Flag to modify the position table. */
 
-   bool tab_moi_flag; /* (--)
+   bool tab_moi_flag{false}; /* (--)
          Flag to modify the moments of inertia in the inertia table. */
 
-   bool tab_poi_flag; /* (--)
+   bool tab_poi_flag{false}; /* (--)
          Flag to modify the products of inertia in the inertia table. */
 
    explicit DynamicMassBodyInterpolation(const double &mass_in);
@@ -159,30 +159,30 @@ protected:
    void warn_no_data(const char* const table_name);
 
 private:
-   bool interp_position_master; /* (--)
+   bool interp_position_master{true}; /* (--)
         controls access to all position interpolation/lookup options.*/
-   bool interp_inertia_master; /* (--)
+   bool interp_inertia_master{true}; /* (--)
         controls access to all inertia interpolation/lookup options. */
-   bool interp_position[3]; /* (--)
+   bool interp_position[3]{true, true, true}; /* (--)
         3 flags that independently control access to interpolation/lookup
         of position on each of the 3 axes.  Unused if the position-master flag
         is switched off.*/
-   bool interp_moi[3]; /* (--)
+   bool interp_moi[3]{true, true, true}; /* (--)
         3 flags that independently control access to interpolation/lookup of
         the 3 moments of inertia. Unused if the inertia-master flag is switched
         off.*/
-   bool interp_poi[3]; /* (--)
+   bool interp_poi[3]{true, true, true}; /* (--)
         3 flags that independently control access to interpolation/lookup of
         the 3 (negative) products of inertia. Unused if the inertia-master flag
         is switched off.*/
 
-   bool inertia_is_structural_cg;  /* (--)
+   bool inertia_is_structural_cg{false};  /* (--)
         Used to specify the interpretation of the data representing the inertia
         tensor.  Typically, inertia is specified relative to body axes
         and center-of-mass.  If data is provided for the inertia expressed
         relative to structural axes, this flag will trigger an internal
         conversion.*/
-   bool initialized; /* (--)
+   bool initialized{false}; /* (--)
         flag to indicate whether method initialize() has been called. */
 };
 

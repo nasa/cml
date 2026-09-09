@@ -28,17 +28,10 @@ TopoContainer::TopoContainer(
          const jeod::AltLatLongState & state_in,
          const int & calc_rel_vel_in)
    :
-   T_pfix_to_this(),
-   T_inrtl_to_this(),
-   T_this_to_body(),
-   E_this_to_body_YPR(),
    relative_vel(T_inrtl_to_this),
    inertial_vel(T_inrtl_to_this),
-   initialized(false),
    calc_rel_vel(calc_rel_vel_in),
-   state(state_in),
-   planet_rot_state(nullptr),
-   vehicle_rot_state(nullptr)
+   state(state_in)
 {}
 
 /*****************************************************************************
