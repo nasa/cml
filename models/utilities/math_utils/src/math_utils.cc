@@ -21,7 +21,7 @@
 #include <cmath>
 #include <cstddef>
 #include <limits>
-#include <fenv.h>
+#include <cfenv>
 #include <list>
 #include <string>
 #include <vector>

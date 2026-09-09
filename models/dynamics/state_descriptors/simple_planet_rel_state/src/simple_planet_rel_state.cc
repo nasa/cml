@@ -8,6 +8,7 @@ PROGRAMMERS:
 **********************************************************************/
 
 #include <string>
+#include <utility>
 
 #include "../include/simple_planet_rel_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
@@ -21,11 +22,11 @@ PROGRAMMERS:
 Constructor
 *****************************************************************************/
 SimplePlanetRelState::SimplePlanetRelState(
-     const std::string & body_frame_name_,
-     const std::string & planet_frame_name_)
+     std::string  body_frame_name_,
+     std::string  planet_frame_name_)
   :
-  body_frame_name(body_frame_name_),
-  planet_frame_name(planet_frame_name_)
+  body_frame_name(std::move(body_frame_name_)),
+  planet_frame_name(std::move(planet_frame_name_))
 {
   subscribe_name = "SimplePlanetRelState:";
 
