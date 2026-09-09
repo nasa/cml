@@ -18,7 +18,7 @@ VehicleEventsManager::VehicleEventsManager()
    // construct each of the event instances here, e.g.:
    // dummy_event()
    // another( trick_logging)  // need a ref to trick_logging to use this
-{}
+= default;
 
 /*****************************************************************************
 initialize

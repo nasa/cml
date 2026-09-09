@@ -81,7 +81,7 @@ TableLookupSet::add_table( GenericMultiInputTable &new_table)
   }
 
   // Add this table to the list and default it to be enabled.
-  tables.push_back(AbstractTableLookup::TableItem_t(&new_table, true));
+  tables.emplace_back(&new_table, true);
 }
 
 /*****************************************************************************

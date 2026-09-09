@@ -293,7 +293,7 @@ AbstractTableLookup::create_table(
   }
 
   tables_to_destroy.push_back(new_table);
-  tables.push_back(TableItem_t(new_table, true));
+  tables.emplace_back(new_table, true);
   return new_table;
 }
 

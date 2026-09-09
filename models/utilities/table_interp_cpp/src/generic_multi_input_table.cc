@@ -284,10 +284,10 @@ GenericMultiInputTable::add_independent(
     // Fill the independents with NULL values up to the specified index.
     TableIndependentVariable * null_ptr = nullptr;
     for (size_t ii = size; ii < index; ++ii) {
-      independents.push_back(IndepPair(null_ptr, lookup_method));
+      independents.emplace_back(null_ptr, lookup_method);
     }
     // Then add the specified independent at the back.
-    independents.push_back(IndepPair(&var, lookup_method));
+    independents.emplace_back(&var, lookup_method);
   }
 }
 

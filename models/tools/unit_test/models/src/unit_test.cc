@@ -106,14 +106,9 @@ SweepSet::SweepSet(
 /*****************************************************************************
 Copy Constructor
 *****************************************************************************/
-SweepSet::SweepSet(const SweepSet &other) :
-  variable(other.variable),
-  start(other.start),
-  end(other.end),
-  increment(other.increment),
-  value(other.value),
-  epsilon(other.epsilon)
-{}
+SweepSet::SweepSet(const SweepSet &other) 
+  
+= default;
 /*****************************************************************************
 Assignment Operator
 *****************************************************************************/
@@ -183,7 +178,7 @@ void UnitTestFramework::add_sweep(
     __FILE__,__LINE__," Invalid input sequence.\n",
     "Sweeps must be added before initialization.\n");
   }
-  sweeps.push_back(SweepSet(variable, start, end, incr));
+  sweeps.emplace_back(variable, start, end, incr);
   using_sweeps = true;
 }
 
@@ -366,7 +361,7 @@ UnitTestFramework::configure_from_definition_file()
       // fill in the title array from the last recorded element to this one
       // with blanks.
       for (unsigned int ii = titles.size(); ii < num_data_sets; ii++) {
-        titles.push_back("");
+        titles.emplace_back("");
       }
       // Add this line (without the !) as the title and go on to the next
       // line
@@ -502,7 +497,7 @@ Purpose:(Produces the list of commands to be sent at runtime)
 void
 UnitTestFramework::process_linked_variables()
 {
-  commands.push_back("");// create 1 empty element
+  commands.emplace_back("");// create 1 empty element
 
   for( auto file_it = linked_variables.begin();
        file_it != linked_variables.end();

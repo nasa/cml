@@ -185,8 +185,7 @@ bool FaultManager::set_fault_enabled(
   }
   // if not parsed, store it away for later.
   else {
-    set_enable_for_fault_cache.push_back(
-      std::pair<std::string, bool>(fault_name, enable_flag));
+    set_enable_for_fault_cache.emplace_back(fault_name, enable_flag);
   }
   return true;
 }
@@ -287,8 +286,7 @@ bool FaultManager::set_trigger_value(
 
     trigger->set_value(value);
   } else {
-    set_trigger_value_cache.push_back(
-      std::pair<std::string, double>(trigger_name, value));
+    set_trigger_value_cache.emplace_back(trigger_name, value);
   }
   return true;
 }

@@ -50,8 +50,7 @@ STD1976::STD1976()
 }
 
 STD1976::~STD1976()
-{
-}
+= default;
 
 //initialize the atmosphere parameters as the values at mean sea level
 void STD1976::initialize()
