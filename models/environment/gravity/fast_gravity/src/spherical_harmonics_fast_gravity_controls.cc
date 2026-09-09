@@ -15,6 +15,7 @@ Programmers:
 
 *******************************************************************************/
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include "jeod/models/dynamics/dyn_manager/include/base_dyn_manager.hh"
@@ -251,9 +252,9 @@ SphericalHarmonicsFastGravityControls::calc_nonspherical(// Return: --   Void
   // threshold that this set of fast gravity computations iproduced
 
   // accel_scratch is now the delta-accel: (fast-grav accel - full-grav accel)
-  double ratio_compare = (jeod::Vector3::vmag(accel_scratch) /
-                          jeod::Vector3::vmag(reference_accel_pfix)) /
-                          threshold_ratio_delta_acc;
+  const double ratio_compare = (jeod::Vector3::vmag(accel_scratch) /
+                                jeod::Vector3::vmag(reference_accel_pfix)) /
+                                threshold_ratio_delta_acc;
 
 
   // Adjust the count_limit to maximize the step size without exceeding
@@ -266,8 +267,6 @@ SphericalHarmonicsFastGravityControls::calc_nonspherical(// Return: --   Void
   }
   else {
      count_limit = std::floor(count_limit / ratio_compare);
-     if (count_limit < 1) {
-       count_limit = 1;
-     }
+     count_limit = std::max<unsigned int>(count_limit, 1);
   }
 }

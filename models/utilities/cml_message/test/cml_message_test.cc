@@ -2,9 +2,9 @@
 #include "mocks/cml/cml_message_mock.hh"
 
 #include <array>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <string>
-#include <iostream>
 
 namespace {
 

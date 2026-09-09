@@ -29,7 +29,6 @@ constructor
 *****************************************************************************/
     RestartableVector3FirstOrderODEIntegrator ()
     :
-    jeod::SimpleCheckpointable(),
     integrator(nullptr),
     integrator_manager(integrator)
     {

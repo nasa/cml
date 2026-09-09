@@ -23,7 +23,7 @@ Reference:(Default KSC Pad Due East Range Reference.
 *****************************************************************************/
 void
 RangeDefaultData::launch_pad_KSC_39B(
-       RangeFromPfixReference & pad)
+       RangeFromPfixReference & pad) const
 {
   pad.reference_data.position_type = PfixReferencePoint::topodetic;
   pad.reference_data.longitude = -80.6207970 * DTR;

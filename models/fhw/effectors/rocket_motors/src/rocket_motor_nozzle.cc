@@ -13,6 +13,7 @@ PROGRAMMERS:
             true parameters, simplified methods)))
 
 ******************************************************************************/
+#include <algorithm>
 #include <cmath>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -178,10 +179,8 @@ void
 RocketMotorNozzle::modify_thrust_mag_atmos(
    double atm_pressure)
 {
-  thrust_mag -= exit_area * atm_pressure;
-  if (thrust_mag < 0.0) {
-    thrust_mag = 0.0;
-  }
+  // Prevent a negative thrust magnitude.
+  thrust_mag = std::max(0.0, thrust_mag - exit_area * atm_pressure);
 }
 
 /*****************************************************************************

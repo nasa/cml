@@ -67,14 +67,9 @@ class VentSet : public SubscriptionBase {
           jeod::DynBody & dyn_body_,
           const double & time,
           DynamicMassBody & tank);
-#ifndef SWIG
-  // Hide this one from SWIG because SWIG cannot distinguish between
-  // "DynamicMassBody &" and "DynamicMassBody *"
-  VentSet(size_t num_vents,
-          jeod::DynBody & dyn_body_,
+  VentSet(jeod::DynBody & dyn_body_,
           const double & time,
-          DynamicMassBody * tank_array);
-#endif
+          const std::vector<DynamicMassBody *>& tank_array);
   // TODO Turner 2020/01
   //  - implement a Vent type running off a DynamicMassString rather than a
   //    single tank.
@@ -86,9 +81,9 @@ class VentSet : public SubscriptionBase {
 
   void initialize() override;
   virtual void update();
-  virtual void start_vent(unsigned int);
+  virtual void start_vent(unsigned int ix);
   virtual void start_vents();
-  virtual void stop_vent(unsigned int);
+  virtual void stop_vent(unsigned int ix);
   virtual void stop_vents();
   void use_impulse_mode(bool mode = true);
   void use_dynamic_mode(bool mode = true) { use_impulse_mode(!mode); }
@@ -97,7 +92,7 @@ class VentSet : public SubscriptionBase {
  protected:
   void collect_force_torque();
   void apply_impulse();
-  void apply_impulse_to_body( jeod::DynBody &);
+  void apply_impulse_to_body( jeod::DynBody & root_body);
   void activate() override;
   void deactivate() override;
 

@@ -198,7 +198,7 @@ void MassPropertiesDispersions::scale_mass( double nominal)
   mass *= nominal;
 }
 /******************************************************************************/
-void MassPropertiesDispersions::scale_position( double nominal[3])
+void MassPropertiesDispersions::scale_position( const double nominal[3])
 {
   for (unsigned int ii = 0; ii <3; ii++) {
     position[ii] *= nominal[ii];

@@ -27,8 +27,8 @@ class AeroInterfaceSimpleLiftDrag : public AeroInterfaceBase
 public:
   AeroExecutiveSimpleLiftDrag executive; /* (--) The simple executive. */
 
-  AeroInterfaceSimpleLiftDrag( AtmosRelativeState & atmos_rel_state,
-                       const double & geodetic_altitude,
+  AeroInterfaceSimpleLiftDrag( AtmosRelativeState & atmos_rel_state_in,
+                       const double & geodetic_altitude_in,
                        const double (&T_inrtl_struc)[3][3],
                        const double & mass);
   ~AeroInterfaceSimpleLiftDrag() override = default;

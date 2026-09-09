@@ -27,11 +27,9 @@ Constructors
 *****************************************************************************/
 CML_BinCounter::CML_BinCounter()
   :
-  bins(),
   bins_ready(false),
   nbin(),
-  bin_data(nullptr),
-  name()
+  bin_data(nullptr)
 {}
 /****************************************************************************/
 CML_BinCounter::CML_BinCounter(
@@ -74,7 +72,7 @@ CML_BinCounter::set_data(const std::vector<double> & edges,
   bins.clear();
   bins_ready = false;
 
-  size_t n_edges = edges.size();
+  const size_t n_edges = edges.size();
   // Sanity check for number of bins:
   if (n_edges <= 1 && closed_ends) {
     CMLMessage::error( __FILE__,__LINE__,
@@ -171,7 +169,7 @@ CML_BinCounter::set_data( double limit_a,
     bins[0].bin_floor = lower_limit;
     for (size_t ii = 0; ii < nbin-1; ii++) {
       bins[ii].bin_ceil    =
-      bins[ii+1].bin_floor = lower_limit + (ii+1) * interval;
+      bins[ii+1].bin_floor = lower_limit + static_cast<double>(ii+1) * interval;
       bins[ii].count = 0;
     }
     bins[nbin-1].bin_ceil = upper_limit;
@@ -184,7 +182,7 @@ CML_BinCounter::set_data( double limit_a,
     bins[0].bin_floor = std::numeric_limits<double>::lowest();
     for (size_t ii = 0; ii < nbin-1; ii++) {
       bins[ii].bin_ceil =
-      bins[ii+1].bin_floor = lower_limit + ii * interval;
+      bins[ii+1].bin_floor = lower_limit + static_cast<double>(ii) * interval;
       bins[ii].count = 0;
     }
     bins[nbin-1].bin_ceil = std::numeric_limits<double>::max();
@@ -212,7 +210,7 @@ CML_BinCounter::insert(double value)
   // Consider only values below upper edge and only if model passed sanity
   // check.
   if (bins_ready && value <= bins[nbin-1].bin_ceil) {
-    for (int ii = nbin - 1; ii >= 0; ii--) {
+    for (int ii = static_cast<int>(nbin) - 1; ii >= 0; ii--) {
       const size_t bin_index = static_cast<size_t>(ii);
       if (value >= bins[bin_index].bin_floor) {
         bins[bin_index].count++;

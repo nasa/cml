@@ -62,7 +62,6 @@ public:
                 const double &altitude_in /* (m) The given geometric height */
               );
 
-public:
    //use the static variables to define the constants and coefficients since they are class-wise.
    //This will put these data into data segment to avoid using stack.
    static const double min_valid_alt;           /* (m)              Lowest valid altitude for std1976 model */

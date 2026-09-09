@@ -21,13 +21,13 @@ Purpose:
   threshold if they are within equality_threshold of each other.
 *****************************************************************************/
 template<>
-bool ConstraintTest_ThresholdTimed<double>::query_equals( double variable)
+bool ConstraintTest_ThresholdTimed<double>::query_equals( double variable) const
 {
-  return (std::abs(variable-threshold) <= equality_threshold);
+  return std::abs(variable-threshold) <= equality_threshold;
 }
 
 template<>
-bool ConstraintTest_ThresholdTimed<float>::query_equals( float variable)
+bool ConstraintTest_ThresholdTimed<float>::query_equals( float variable) const
 {
-  return (std::abs(variable-threshold) <= equality_threshold);
+  return std::abs(variable-threshold) <= equality_threshold;
 }

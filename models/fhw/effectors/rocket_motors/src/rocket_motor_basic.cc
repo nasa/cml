@@ -39,7 +39,6 @@ RocketMotor_Basic::RocketMotor_Basic(
   dyn_mass_properties(mass_properties_in),
   time_now(time_in),
   veh_cm(veh_cm_in),
-  dispersions(),
   commanded(false),
   force_mass_update(true),
   motor_can_be_shutdown(false),
@@ -51,7 +50,6 @@ RocketMotor_Basic::RocketMotor_Basic(
   thrust{0.0, 0.0, 0.0},
   moment{0.0, 0.0, 0.0},
   status(Inactive),
-  mass_group_internal(),
   use_mass_string(use_mass_string_in),
   dt(0.0),
   time_last(0.0),
@@ -193,7 +191,7 @@ RocketMotor_Basic::initialize()
   dispersions.apply_dispersions(position, T_struc_to_motor_frame);
 
   // Calculate thrust direction in structural frame
-  double unit_vec_mag_sq = jeod::Vector3::vmagsq( thrust_unit_motor);
+  const double unit_vec_mag_sq = jeod::Vector3::vmagsq(thrust_unit_motor);
   if (MathUtils::is_near_equal( unit_vec_mag_sq, 0.0)) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid unit vector specification\n",

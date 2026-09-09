@@ -26,7 +26,6 @@ PROGRAMMERS:
 #include <cmath>
 #include <cstddef>
 
-#include "../include/rocket_motor_basic.hh"
 #include "../include/rocket_motor_multi_nozzle.hh"
 #include "../include/rocket_motor_nozzle.hh"
 #include "../include/rocket_motor_table_thrust.hh"
@@ -245,7 +244,8 @@ void
 RocketMotor_MultiNozzle::initialize_nozzles()
 {
   // Initialize the nozzles and sum the nominal and dispersed scale factors
-  double total_scale_factor = 0.0, total_dispersed_scale_factor = 0.0;
+  double total_scale_factor = 0.0;
+  double total_dispersed_scale_factor = 0.0;
   for (unsigned int ii = 0; ii < num_noz; ii++) {
     nozzles_ptr_vec[ii]->initialize( position,
                                      T_struc_to_motor_frame);
@@ -274,7 +274,8 @@ RocketMotor_MultiNozzle::initialize_nozzles()
         // The values specified in the nozzle are the nominal values, so execute
         // the computation of the scaled thrust for each nozzle.
 
-        double sf_thrust_dir[3], accum_sf_thrust_dir[3] = {0.0, 0.0, 0.0};
+        double sf_thrust_dir[3];
+        double accum_sf_thrust_dir[3] = {0.0, 0.0, 0.0};
         // Accumulate the vector-sum and the scalar-sum
         for (unsigned int ii = 0; ii < num_noz; ii++) {
           jeod::Vector3::scale( nozzles_ptr_vec[ii]->nominal_thrust_dir,
@@ -334,7 +335,7 @@ RocketMotor_MultiNozzle::initialize_nozzles()
      "Zeroing the scale-factor on all nozzles.\n");
   }
   else {
-    sf_scale = MathUtils::divide_protected( num_noz,
+    sf_scale = MathUtils::divide_protected( static_cast<double>(num_noz),
                                             total_dispersed_scale_factor,
                                             0.0);
   }
@@ -402,7 +403,7 @@ RocketMotor_MultiNozzle::update()
   // checked and enforced to be equal to the number of nozzles.
   // NOTE - num_noz != 0 verified at initialization, resulting in termination if
   // it failed.
-  double thrust_per_sf = thrust_magnitude / num_noz;
+  const double thrust_per_sf = thrust_magnitude / static_cast<double>(num_noz);
   // Start by initializing the system values to allow incremental accumulation
   jeod::Vector3::initialize(thrust);
   jeod::Vector3::initialize(thrust_vac);
@@ -428,10 +429,11 @@ RocketMotor_MultiNozzle::update()
 
     // Add the nozzle thrust and moment to the system totals
     if (using_flex) { // Adjust thrust and moment
+      const size_t noz_num = 3UL * ii;
       double new_position[3]; // For calculating moment
-      jeod::Vector3::sum(pos_wrt_cm, motor_lin_flex + 3*ii, new_position);
+      jeod::Vector3::sum(pos_wrt_cm, motor_lin_flex + noz_num, new_position);
 
-      double rotang = jeod::Vector3::vmag(motor_rot_flex + 3*ii);
+      const double rotang = jeod::Vector3::vmag(motor_rot_flex + noz_num);
       if (rotang > flex_threshold) {
         // Euler rotation: angle = vmag(motor_rot_flex_ii)
         //           unit vector = motor_rot_flex_ii / vmag(motor_rot_flex_ii)
@@ -439,7 +441,7 @@ RocketMotor_MultiNozzle::update()
         // Perform the rotation using a quaternion
         jeod::Quaternion Q_flex;
         Q_flex.scalar = std::cos(rotang / 2);
-        jeod::Vector3::scale( motor_rot_flex + 3*ii,
+        jeod::Vector3::scale( motor_rot_flex + noz_num,
                         std::sin(rotang / 2) / rotang,
                         Q_flex.vector);
 
@@ -489,7 +491,7 @@ RocketMotor_MultiNozzle::shutdown_motor()
   for (unsigned int ii = 0; ii<num_noz; ii++)  {
     nozzles_ptr_vec[ii]->shutdown_nozzle();
   }
-  RocketMotor_Basic::shutdown_motor();
+  RocketMotor_TableThrust::shutdown_motor();
 }
 
 /*******************************************************************************
@@ -505,7 +507,7 @@ RocketMotor_MultiNozzle::enable_flex()
   // If not initialized, set using_flex = true; these will then be checked at
   // initialization.
   if ( !initialized ||
-       (motor_lin_flex && motor_rot_flex && (num_flex_elements==3* num_noz))) {
+       ((motor_lin_flex != nullptr) && (motor_rot_flex != nullptr) && (num_flex_elements==3* num_noz))) {
     using_flex = true;
   }
   else {

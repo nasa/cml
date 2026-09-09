@@ -16,6 +16,7 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include <cmath>
+#include <string>
 #include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
@@ -66,13 +67,9 @@ AeroExecutiveTable::AeroExecutiveTable(AeroInterfaceOutput & output_ref,
   threshold_min_free_stream_vel_mag(1.0), // Arbitrary threshold.
 
   dispersion_active(false),
-  bias(),
-  uncertainty(),
-  random(),
   load_all_tables_at_init(false),
   l_over_v_scale( Lref_over_Vmag),
-  mrc_position(),
-  coefficients()
+  mrc_position()
 {}
 
 
@@ -109,7 +106,6 @@ AeroExecutiveTable::change_table( unsigned int new_ix)
       "Request to switch to table at index ", new_ix, ", but there are only ", data_tables_vector.size(), " tables "
       "available.\nRequest failed. Continuing with existing table (", current_table->name, ").\n");
   }
-  return;
 }
 /******************************************************************************/
 void
@@ -117,7 +113,7 @@ AeroExecutiveTable::change_table( const std::string & new_name)
 {
   // Check trivial case - change commanded to current table.
   if (current_table != nullptr) {
-    if (current_table->name.compare(new_name) == 0) {
+    if (current_table->name == new_name) {
       CMLMessage::inform(
         __FILE__,__LINE__,"Redundant request\n",
         "Request to change table to ", new_name, ", but already using that table.\n"
@@ -128,7 +124,7 @@ AeroExecutiveTable::change_table( const std::string & new_name)
   for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
                                                  it != data_tables_vector.end();
                                                  ++it) {
-    if ( (*it)->name.compare(new_name) == 0) {
+    if ( (*it)->name == new_name) {
       configure_new_table(*it);
       return;
     }
@@ -191,7 +187,7 @@ AeroExecutiveTable::add_table( AeroTableSetBase * table)
         "Check configuration for possibility of duplicate additions.\n"
         "Continuing with the addition of this table.\n");
     }
-    else if ((*it)->name.compare( table->name) == 0) {
+    else if ((*it)->name == table->name) {
       CMLMessage::warn(
         __FILE__,__LINE__,"Duplication of Aero table.\n",
         "An AeroTableSetBase with this name (", (*it)->name, ") has previously been added.\n"
@@ -531,7 +527,7 @@ AeroExecutiveTable::aero_forces_moments()
   //*****************************************************************
   //   Compute the aerodynamic forces along the body axes
   //*****************************************************************
-  double pA =  environment.get_dynamic_pressure() * Aref;
+  const double pA =  environment.get_dynamic_pressure() * Aref;
   output.force[0] =  coefficients.CX * pA;
   output.force[1] =  coefficients.CY * pA;
   output.force[2] =  coefficients.CZ * pA;
@@ -562,7 +558,7 @@ AeroExecutiveTable::aero_forces_moments()
 
   // Include the effects of rotational aerodynamic damping
   if ( aero_damping_in_table  && !disable_aero_damping) {
-    double fsv_mag = environment.get_free_stream_vel_mag();
+    const double fsv_mag = environment.get_free_stream_vel_mag();
     if (fsv_mag > threshold_min_free_stream_vel_mag) {
       //   If fsv_mag is small, L_over_V is large, the coefficients get large
       //   and thus the torque gets large. Dimensionally, this is correct, and
@@ -572,7 +568,7 @@ AeroExecutiveTable::aero_forces_moments()
       //   Added a safety threshold, set at construction time to prevent this
       //   from blowing up when unexpected winds produce small momentary
       //   free-stream velocities.
-      double L_over_V = Lref / (static_cast<double>(l_over_v_scale) * fsv_mag);
+      const  double L_over_V = Lref / (static_cast<double>(l_over_v_scale) * fsv_mag);
       double body_rate_aero_frm[3];
       jeod::Vector3::transform( T_body_to_aero_frame,
                           environment.get_true_body_rates(),
@@ -592,7 +588,7 @@ AeroExecutiveTable::aero_forces_moments()
                               L_over_V;
     }
   }
-  double pAL = pA *  Lref;
+  const double pAL = pA * Lref;
   /* About the CG */
   output.torque[0] =  coefficients.Cl_cg * pAL;
   output.torque[1] =  coefficients.Cm_cg * pAL;

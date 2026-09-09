@@ -22,7 +22,7 @@ Programmers:
 
 /**
  * Defines a reference frame (the Pointing Frame) based on two other reference
- * frames: the Originating Frrame and the Target Frame
+ * frames: the Originating Frame and the Target Frame
  *
  * The Pointing Frame is then defined by:
  *  - origin at the origin of the Originating Frame
@@ -93,9 +93,9 @@ class PointingRefFrame : public SubscriptionBase {
    * After calling @ref SubscriptionBase::initialize, the Originating Frame may
    * not be changed.
    *
-   * @param originating_frame Non-null pointer to the Originating Frame
+   * @param originating_frame_in Non-null pointer to the Originating Frame
    */
-  void set_originating_frame (jeod::RefFrame * originating_frame);
+  void set_originating_frame (jeod::RefFrame * originating_frame_in);
 
   /**
    * Set the Target Frame pointer
@@ -103,9 +103,9 @@ class PointingRefFrame : public SubscriptionBase {
    * After calling @ref SubscriptionBase::initialize, the Target Frame may not
    * be changed.
    *
-   * @param target_frame Non-null pointer to the Target Frame
+   * @param target_frame_in Non-null pointer to the Target Frame
    */
-  void set_target_frame (jeod::RefFrame * target_frame);
+  void set_target_frame (jeod::RefFrame * target_frame_in);
 
   /**
    * Update the state of the Pointing Frame

@@ -51,7 +51,7 @@ class CompoundEventsManager : public VehicleEventsManager
     This flag supports the disabling of undesirable components.
     Default: true.*/
 
-  explicit CompoundEventsManager(const double & time);
+  explicit CompoundEventsManager(const double & time_);
   ~CompoundEventsManager() override;
   CompoundEventsManager( const CompoundEventsManager&) = delete;
   CompoundEventsManager& operator=( const CompoundEventsManager&) = delete;
@@ -59,7 +59,7 @@ class CompoundEventsManager : public VehicleEventsManager
   void initialize() override;
   void update() override;
 
-  void add_event(WatchValuesBaseCore &);
+  void add_event(WatchValuesBaseCore & event);
   CompoundEvent& create_event();
   void add_trigger(WatchValuesBaseCore* new_trigger);
 
@@ -206,7 +206,7 @@ class CompoundEventsManager : public VehicleEventsManager
     }
 
     std::string type = var_name_ref->attr->type_name;
-    TRICK_TYPE trick_type = var_name_ref->attr->type;
+    TRICK_TYPE const trick_type = var_name_ref->attr->type;
     if (trick_type == TRICK_ENUMERATED) {
       type = "int";
     }

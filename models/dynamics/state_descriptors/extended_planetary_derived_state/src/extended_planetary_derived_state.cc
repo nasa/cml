@@ -50,7 +50,6 @@ Purpose: Constructor
 *************************************************************************/
 ExtendedPlanetaryDerivedState::ExtendedPlanetaryDerivedState()
   :
-  PlanetaryDerivedState(),
   hang_angle_body_vec{0.0, 0.0, 0.0},
   roll_wrt_hdg_body_vec{0.0, 0.0, 0.0},
   br_ref_longitude(0.0),
@@ -63,7 +62,6 @@ ExtendedPlanetaryDerivedState::ExtendedPlanetaryDerivedState()
   entry_range(state),
   topocentric_altitude(0.0),
   pt_to_pt(state),
-  range_safety(),
   topodetic( state.ellip_coords,
              calc_rel_vel),
   topocentric( state.sphere_coords,
@@ -172,7 +170,6 @@ ExtendedPlanetaryDerivedState::initialize(
   // If subscription is not pending initialization, then model has not been
   // subscribed, and there is no need to call update().
   // Either way, do not call update() from here.
-  return;
 }
 
 /*************************************************************************
@@ -249,7 +246,7 @@ ExtendedPlanetaryDerivedState::update()
   }
 
   if (calc_hang_roll>0) {
-    if (!calc_rel_vel)
+    if (calc_rel_vel == 0)
     {
       //if rel_vel has not been subscribed, then explicitly update it.
       topodetic.relative_vel.update();
@@ -441,7 +438,6 @@ ExtendedPlanetaryDerivedState::init_boost_reference()
                       planet->pfix.state.rot.T_parent_this,
                       T_inrtl_br);
   boost_ref_initialized = true;
-  return;
 }
 
 /*****************************************************************************
@@ -474,7 +470,6 @@ ExtendedPlanetaryDerivedState::init_plumbline()
                       planet->pfix.state.rot.T_parent_this,
                       T_inrtl_pl);
   plumbline_initialized = true;
-  return;
 }
 
 /*************************************************************************
@@ -537,7 +532,6 @@ ExtendedPlanetaryDerivedState::init_range_safety()
                      range_safety.T_pfix_pad_SEU,
                      range_safety.T_pfix_pad);
   range_safety_initialized = true;
-  return;
 }
 
 
@@ -552,13 +546,12 @@ Purpose:(calculates the radial disstance between the current position and the
 void
 ExtendedPlanetaryDerivedState::calculate_topocentric_altitude()
 {
-  double pos_mag_sq = jeod::Vector3::vmagsq(state.cart_coords);
-  double pos_mag = std::sqrt(pos_mag_sq);
-  double eq_pos_sq = state.cart_coords[0] * state.cart_coords[0] +
+  const double pos_mag_sq = jeod::Vector3::vmagsq(state.cart_coords);
+  const double pos_mag = std::sqrt(pos_mag_sq);
+  const double eq_pos_sq = state.cart_coords[0] * state.cart_coords[0] +
                      state.cart_coords[1] * state.cart_coords[1];
   topocentric_altitude = pos_mag * (1 - planet->r_pol /
                           std::sqrt (pos_mag_sq - planet->e_ellip_sq *eq_pos_sq));
-  return;
 }
 
 /*************************************************************************
@@ -592,7 +585,6 @@ ExtendedPlanetaryDerivedState::calculate_relative_vel()
   jeod::Vector3::transform(planet->pfix.state.rot.T_parent_this,
                      relative_vel,
                      pfix_rel_vel);
-  return;
 }
 
 /*************************************************************************
@@ -608,7 +600,7 @@ ExtendedPlanetaryDerivedState::hang_roll()
   jeod::Vector3::transform_transpose( topodetic.T_this_to_body,
                                 hang_angle_body_vec,
                                 hang_angle_body_vec_td);
-  double  mag_hang_angle_vec = jeod::Vector3::vmag(hang_angle_body_vec_td);
+  const double mag_hang_angle_vec = jeod::Vector3::vmag(hang_angle_body_vec_td);
 
   // The hang angle is the angle between the hang_angle_body_vector in the NED frame
   // and down, which is the 3rd index [2]
@@ -646,7 +638,6 @@ ExtendedPlanetaryDerivedState::hang_roll()
   else {
     roll_wrt_heading = 0.0;
   }
-  return;
 }
 
 
@@ -721,7 +712,7 @@ ExtendedPlanetaryDerivedState::analyze_range_safety()
       range_safety.pad_azimuth = 2.0*M_PI - range_safety.pad_azimuth;
   }
 
-  double inplane_mag = std::sqrt((range_safety.XVP[0] *
+  const double inplane_mag = std::sqrt((range_safety.XVP[0] *
                                   range_safety.XVP[0]) +
                                  (range_safety.XVP[1] *
                                   range_safety.XVP[1]));
@@ -732,8 +723,6 @@ ExtendedPlanetaryDerivedState::analyze_range_safety()
   range_safety.YVRT = inplane_mag *
                std::cos(range_safety.pad_azimuth - range_safety.YVRT_Azi);
   range_safety.ZVRT = range_safety.XVP[2];
-
-  return;
 }
 
 /*************************************************************************
@@ -777,6 +766,4 @@ ExtendedPlanetaryDerivedState::calculate_relative_accel()
   // a_{p:p} = relative_accel - omega_cross_omega_cross_r - two_omega_cross_v
   jeod::Vector3::decr(omega_cross_omega_cross_r, relative_accel);
   jeod::Vector3::decr(two_omega_cross_v, relative_accel);
-
-  return;
 }

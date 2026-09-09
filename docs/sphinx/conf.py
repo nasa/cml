@@ -9,20 +9,6 @@ _CONF_DIR = os.path.abspath(os.path.dirname(__file__))
 _CML_HOME = os.path.abspath(os.path.join(_CONF_DIR, "..", ".."))
 _toplevel_cmake_lists = os.path.join(_CML_HOME, "CMakeLists.txt")
 
-def _get_cml_release():
-    """Read the project version from our CMakeLists.txt file, which is the authoritative source."""
-    with open(_toplevel_cmake_lists) as f:
-        cmake_content = f.read()
-
-    match = re.search(
-        r"project\s*\([^)]*?\bVERSION\s+(\d+\.\d+(?:\.\d+){0,2})",
-        cmake_content,
-        re.IGNORECASE | re.DOTALL,
-    )
-    if not match:
-        raise RuntimeError(f"Unable to determine version from {cmake_file}")
-    return match.group(1)
-
 def _get_dependency_minimum_versions():
     """Read the minimum versions of dependencies from our CMakeLists.txt file."""
     with open(_toplevel_cmake_lists) as f:
@@ -48,8 +34,6 @@ project = "The Common Model Library"
 copyright = "%Y, National Aeronautics and Space Administration"
 
 author = ""
-release = _get_cml_release()
-version = ".".join(release.split(".")[:2])
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

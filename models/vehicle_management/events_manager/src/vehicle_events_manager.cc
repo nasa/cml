@@ -40,7 +40,6 @@ VehicleEventsManager::initialize()
   //        yet initialized, and there could be a falsely triggered event.
   //        Additionally, update() gets run as one of the very first scheduled
   //        executions, so it is coming up real soon....
-  return;
 }
 
 /*****************************************************************************
@@ -72,5 +71,4 @@ VehicleEventsManager::update()
       ++ii;
     }
   }
-  return;
 }

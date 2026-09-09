@@ -40,8 +40,6 @@ RcsJetGroup::RcsJetGroup(
   min_off_time(0.0),
   mixture_ratio (0.0),
   isp_prop_comp_ratio(num_prop_components, 0.0),
-  bd_force_coef(),
-  bd_isp_coef(),
   bd_pressure_limit(0.0),
   buffer_flag(false),
   buffer_on_size (0),
@@ -64,9 +62,9 @@ RcsJetGroup::initialize(
   /* Set up command buffers and initialize delays */
   /************************************************/
   /* total on delay is sum of signal delay and valve reaction time (dead_time) */
-  double total_on_delay = std::max(0.0, signal_delay_time + on_dead_time);
+  const double total_on_delay = std::max(0.0, signal_delay_time + on_dead_time);
   /* total off delay is sum of signal delay and valve reaction time (dead_time) */
-  double total_off_delay = std::max(0.0, signal_delay_time + off_dead_time);
+  const double total_off_delay = std::max(0.0, signal_delay_time + off_dead_time);
 
   // Check to see if a buffer is needed:
   // if on or off delays are equal or greater than one time_step, then

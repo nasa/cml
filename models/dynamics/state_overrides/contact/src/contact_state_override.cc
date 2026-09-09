@@ -17,6 +17,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "../include/contact_state_override.hh"
@@ -33,7 +34,6 @@ ContactStateOverride::ContactStateOverride(jeod::DynBody& reference_body_in,
   contact_normal{},
   contact_pos_overridestruc_wrt_refstruc{},
   contact_pos_overridenomcore_wrt_refnomcore{},
-  contact_quat_refstruc_to_overridestruc(),
   nominal_reference_core_position{},
   nominal_override_core_position{},
   user_set_contact_normal(false),
@@ -118,7 +118,7 @@ void ContactStateOverride::update()
   // Component of the delta parallel to contact normal vector, or the distance
   // between the two bodies that is in excess of their usual contact
   // separation.
-  double distance = jeod::Vector3::dot(scratch, contact_normal);
+  const double distance = jeod::Vector3::dot(scratch, contact_normal);
 
   // If <0, they are overlapping and the override-body must be placed at its
   // contact point.

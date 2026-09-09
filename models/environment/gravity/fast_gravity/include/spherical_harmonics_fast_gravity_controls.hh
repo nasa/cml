@@ -91,7 +91,11 @@ class SphericalHarmonicsFastGravityControls : public jeod::SphericalHarmonicsGra
                                      double dgdx[3][3],         // Out: 1/s2 Gradient for given grav body
                                      double & pot) override;    // Out: --   Potential
 
-   void reset_count_limit() { if (compute_count_limit) count_limit = 1;}
+   void reset_count_limit() {
+     if (compute_count_limit) {
+       count_limit = 1;
+     }
+   }
 };
 
 #endif

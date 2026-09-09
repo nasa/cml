@@ -33,11 +33,8 @@ Purpose: Constructor
 *******************************************************************************/
 DynamicMassString::DynamicMassString()
   :
-  DynamicMassBodyPropertiesInterface(),
   flow_down(false),
   mass_consumed(0.0),
-  body_collection(),
-  available_bodies(),
   string_in_group(false)
 { }
 
@@ -105,8 +102,12 @@ DynamicMassString::distribute_mass_consumption()
 
     // if flow_down, only use 1 body at a time, so put all the mass demand
     // onto that body:
-    double mass_per = (flow_down)? mass_to_distribute :
-                                   mass_to_distribute / available_bodies.size();
+    double mass_per;
+    if (flow_down) {
+      mass_per = mass_to_distribute;
+    } else {
+      mass_per = mass_to_distribute / static_cast<double>(available_bodies.size());
+    }
 
     // reset mass_to_distribute to 0 so that any shortfall can be incremented
     mass_to_distribute = 0.0;
@@ -114,7 +115,7 @@ DynamicMassString::distribute_mass_consumption()
     for (auto it = available_bodies.begin();
               it != available_bodies.end(); ++it) {
       DynamicMassBodyProperties & body_properties = (*it)->dynamic_properties;
-      double mass_available = body_properties.consumable_mass -
+      const double mass_available = body_properties.consumable_mass -
                               body_properties.mass_consumed_step;
       // Normally - there is enough mass in each body to supply its demands
       // Add the mass_per to the mass consumed by that body

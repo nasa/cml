@@ -11,10 +11,12 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
+#include <algorithm>
 #include <cstddef>
 
 #include "../include/generic_multi_input_table.hh"
 #include "../include/table_independent_variable.hh"
+#include "../include/table_type_defs.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 // NOTE - using [index] rather than .at(index) to index STL-vectors primarily
@@ -35,14 +37,7 @@ GenericMultiInputTable::GenericMultiInputTable()
   trivial_case(true),
   output_ptrs_set(false),
   data_loaded(false),
-  initialized(false),
-  data(),
-  size_of_dimension(),
-  data_point_weight(),
-  data_point_index(),
-  num_data_elements_per_increment_of_index(),
-  output(),
-  independents()
+  initialized(false)
 {}
 /****************************************************************************/
 GenericMultiInputTable::GenericMultiInputTable(
@@ -329,7 +324,7 @@ GenericMultiInputTable::initialize()
   }
 
   // number of dimensions of data in the array:
-  size_t data_dimension = size_of_dimension.size();
+  const size_t data_dimension = size_of_dimension.size();
   // number of independent variables:
   size_t num_independents = independents.size();
 
@@ -624,7 +619,7 @@ GenericMultiInputTable::populate_output(
   }
 
   const size_t num_vars = var_ptr_list.size();
-  if (!num_vars) {
+  if (num_vars == 0) {
     CMLMessage::fail(
       __FILE__,__LINE__,"Construction error:\n",
      "There should be at least 1 output for each table.  A zero-sized vector\n"
@@ -664,7 +659,7 @@ GenericMultiInputTable::copy_data(
     return false;
   }
   // Configure internal data structure, abort on error
-  size_t total_data_elements = configure_internal_data_structure();
+  const size_t total_data_elements = configure_internal_data_structure();
   if (total_data_elements == 0) {
     CMLMessage::error(
       __FILE__,__LINE__,"Table data-load error\n",
@@ -688,7 +683,7 @@ GenericMultiInputTable::copy_data(
            const DoubleVec & data_in)
 {
   // Configure internal data structure, abort on error
-  size_t total_data_elements = configure_internal_data_structure();
+  const size_t total_data_elements = configure_internal_data_structure();
   if (total_data_elements == 0) {
     CMLMessage::error(
       __FILE__,__LINE__,"Table data-load error\n",
@@ -796,13 +791,13 @@ GenericMultiInputTable::generate_base_values()
 {
   // First go through the list of the independents, computing how many
   // interpolation points are needed for this dependent variable.
-  size_t num_independents_interp = 0;
-  for( IndepPair independent : independents) {
-    if (  independent.second == TableIndependentVariable::Interp &&
-         !independent.first->is_off_table()) {
-      ++num_independents_interp;
-    }
-  }
+  const size_t num_independents_interp = static_cast<size_t>(std::count_if(
+    independents.begin(),
+    independents.end(),
+    [](const IndepPair& independent) {
+      return independent.second == TableIndependentVariable::Interp &&
+             !independent.first->is_off_table();
+    }));
   // Note - carry on even if there is nothing to interpolate.  It is still
   //        necessary to generate the index of the single data point used
   //        for a simple lookup.
@@ -817,7 +812,7 @@ GenericMultiInputTable::generate_base_values()
   // that is to be applied to each for taking the average of them.
   // Start by populating the STL-containers with the correct number of
   // points.
-  const size_t num_data_points_interp = size_t(1) << num_independents_interp;
+  const size_t num_data_points_interp = 1U << num_independents_interp;
   data_point_weight.assign(num_data_points_interp, 1.0);
   data_point_index.assign(num_data_points_interp, 0);
 
@@ -827,8 +822,8 @@ GenericMultiInputTable::generate_base_values()
   // Increment current_dimension as independents are processed.
   size_t current_dimension = 1;
 
-  for( IndepPair independent : independents) {
-    TableIndependentVariable & TIV = *independent.first;
+  for (const IndepPair& independent : independents) {
+    const TableIndependentVariable & TIV = *independent.first;
     // Trivial case, the independent variable has 1 (or fewer, if that is
     // possible) data point.
     // NOTE - this should not be possible; such an independent should have
@@ -896,9 +891,9 @@ GenericMultiInputTable::generate_base_values()
       //   rather than an "interpolation"), this index is not finalized for any
       //   data point until all independent variables have processed.
       //   The index value is incremented as each independent gets processed.
-      double weight_upper  = TIV.fraction;
-      double weight = 1-weight_upper;
-      size_t index_upper = index+1;
+      const double weight_upper  = TIV.fraction;
+      const double weight = 1-weight_upper;
+      const size_t index_upper = index+1;
       for (size_t jj=0; jj<num_data_points_interp; ) {
         // Apply the values from the lower index, applying the parameters to
         // "dwell" points before moving to the upper index.
@@ -991,11 +986,11 @@ Purpose:(Bias specified elements in the data array by the specified offset.)
 void
 GenericMultiInputTable::bias_data(
         double bias,
-        size_t ix_start,
-        size_t ix_stop)
+        size_t idx_start,
+        size_t idx_stop)
 {
-  if (index_checks(ix_start, ix_stop, "bias")) { return; }
-  for (size_t ii = ix_start; ii <= ix_stop; ++ii) {
+  if (index_checks(idx_start, idx_stop, "bias")) { return; }
+  for (size_t ii = idx_start; ii <= idx_stop; ++ii) {
     data[ii] += bias;
   }
 }
@@ -1007,11 +1002,11 @@ Purpose:(scale specified elements in the data array by the specified factor.)
 void
 GenericMultiInputTable::scale_data(
         double scale,
-        size_t ix_start,
-        size_t ix_stop)
+        size_t idx_start,
+        size_t idx_stop)
 {
-  if (index_checks(ix_start, ix_stop, "scale")) { return; }
-  for (size_t ii = ix_start; ii <= ix_stop; ++ii) {
+  if (index_checks(idx_start, idx_stop, "scale")) { return; }
+  for (size_t ii = idx_start; ii <= idx_stop; ++ii) {
     data[ii] *= scale;
   }
 }
@@ -1022,8 +1017,8 @@ Purpose:(Index checks common to bias_data and scale_data.)
 *****************************************************************************/
 bool
 GenericMultiInputTable::index_checks(
-        size_t & ix_start,
-        size_t & ix_stop,
+        size_t & idx_start,
+        size_t & idx_stop,
         const std::string & func)
 {
   // Note - data_loaded implies data.size() > 0.
@@ -1035,25 +1030,23 @@ GenericMultiInputTable::index_checks(
       "Check sequencing.\n");
     return true;
   }
-  if (ix_start > ix_stop) {
+  if (idx_start > idx_stop) {
     CMLMessage::warn(
       __FILE__,__LINE__,"Invalid arguments\n",
       "Call made to ",func," data between two indices with the start index (",
-      ix_start,")\n"
-      "higher than the stop index (",ix_stop,").  This could be an error.\n"
+      idx_start,")\n"
+      "higher than the stop index (",idx_stop,").  This could be an error.\n"
       "Will ",func," the data values between these indices.\n");
-    size_t ix_scratch = ix_start;
-    ix_start = ix_stop;
-    ix_stop = ix_scratch;
+    std::swap(idx_start, idx_stop);
   }
-  if (ix_stop >= data.size()) {
+  if (idx_stop >= data.size()) {
     CMLMessage::warn(__FILE__, __LINE__, "Invalid index\n",
-      "Call made to ",func," data with the stop index (",ix_stop,
+      "Call made to ",func," data with the stop index (",idx_stop,
       ") past the end of the list.\n"
       "Will ",func," all data between the start index and\n"
       "the end of the list.\n");
-    if (ix_start >= data.size()) { return true; }
-    ix_stop = data.size() - 1;
+    if (idx_start >= data.size()) { return true; }
+    idx_stop = data.size() - 1;
   }
   return false;
 }

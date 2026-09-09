@@ -55,23 +55,23 @@ class AtmosphereExecInterface : public SubscriptionBase
   public:
     AtmosExecOutput   out;             /* (--) Atmos exec outputs */
 
-    AtmosphereExecInterface(const double & dyn_time,
-                            ExtendedPlanetaryDerivedState & planet_state,
-                            const jeod::DynBody  & body);
+    AtmosphereExecInterface(const double & dyn_time_in,
+                            ExtendedPlanetaryDerivedState & planet_state_in,
+                            const jeod::DynBody  & body_in);
     ~AtmosphereExecInterface() override = default;
     AtmosphereExecInterface (const AtmosphereExecInterface&) = delete;
     AtmosphereExecInterface & operator = (const AtmosphereExecInterface&) = delete;
 
     void initialize() override;
 
-    std::string get_current_atmos_name() {
+    std::string get_current_atmos_name() const {
         std::string name = "N/A";
-        if (current_atmos) { name = current_atmos->name; }
+        if (current_atmos != nullptr) { name = current_atmos->name; }
         return name;
     }
-    std::string get_current_winds_name() {
+    std::string get_current_winds_name() const {
         std::string name = "N/A";
-        if (current_winds) { name = current_winds->name; }
+        if (current_winds != nullptr) { name = current_winds->name; }
         return name;
     }
 

@@ -36,8 +36,7 @@ AtmosphereExecInterface::AtmosphereExecInterface(
   current_atmos(&atmos_none),
   current_winds(&atmos_none),
   atmos_none(out, planet_state),
-  subscribed_planet_state_topo_calcs(false),
-  out()
+  subscribed_planet_state_topo_calcs(false)
 {
   subscribe_name = "AtmosphereExecInterface:";
 }
@@ -73,7 +72,7 @@ AtmosphereExecInterface::activate()
   //        to its subscription count.  Otherwise, it will activate it AND
   //        execute it.  Now, we need it to execute, so if it is already active
   //        force it to execute.
-  bool planet_state_already_active = planet_state.is_active();
+  const bool planet_state_already_active = planet_state.is_active();
   planet_state.subscribe();
   if (planet_state_already_active) {
     planet_state.update();

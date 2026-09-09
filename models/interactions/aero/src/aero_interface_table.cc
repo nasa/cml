@@ -85,7 +85,7 @@ AeroInterfaceTable::activate()
 {
   // This could get messy if it fails because we won't know for sure where it
   // failed. Get a record of the current subscriptions count.
-  unsigned int atmos_rel_angles_sub_count =
+  const unsigned int atmos_rel_angles_sub_count =
                         atmos_rel_state.get_angles_subscription_count();
   atmos_rel_state.subscribe_angles_calculation();
   AeroInterfaceBaseExtended::activate();

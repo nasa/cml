@@ -30,17 +30,8 @@ PROGRAMMERS:
 /*****************************************************************************
 Constructors
 *****************************************************************************/
-SingleInputTableForQuaternions::SingleInputTableForQuaternions()
-  :
-  GenericSingleInputTable(),
-  sph_interp()
-{}
-/****************************************************************************/
 SingleInputTableForQuaternions::SingleInputTableForQuaternions(
      jeod::Quaternion & quat)
-  :
-  GenericSingleInputTable(),
-  sph_interp()
 {
   add_dependent( quat.scalar);
   add_dependent( quat.vector[0]);
@@ -52,15 +43,13 @@ SingleInputTableForQuaternions::SingleInputTableForQuaternions(
      double *dependent_variables,
      size_t num_vars)
   :
-  GenericSingleInputTable( dependent_variables, num_vars),
-  sph_interp()
+  GenericSingleInputTable( dependent_variables, num_vars)
 {}
 /****************************************************************************/
 SingleInputTableForQuaternions::SingleInputTableForQuaternions(
      const DoublePtrVec & dependent_variables)
   :
-  GenericSingleInputTable( dependent_variables),
-  sph_interp()
+  GenericSingleInputTable( dependent_variables)
 {}
 
 /*****************************************************************************
@@ -118,7 +107,7 @@ SingleInputTableForQuaternions::generate_output()
   sph_interp.quat_1.scalar = data[ data_point_index[1]];
 
   for (size_t ii = 0; ii<3; ++ii) {
-    size_t var_base_ix = (ii+1) * num_data_elements_per_increment_of_index[0];
+    const size_t var_base_ix = (ii+1) * num_data_elements_per_increment_of_index[0];
     sph_interp.quat_0.vector[ii] = data[ var_base_ix + data_point_index[0]];
     sph_interp.quat_1.vector[ii] = data[ var_base_ix + data_point_index[1]];
   }

@@ -24,9 +24,7 @@ FaultFunctionIndependentVariable::FaultFunctionIndependentVariable() :
 Destructor
 *****************************************************************************/
 FaultFunctionIndependentVariable::~FaultFunctionIndependentVariable() {
-  if (variable != nullptr) {
     delete variable;
-  }
 }
 
 /*****************************************************************************
@@ -56,7 +54,7 @@ double FaultFunctionIndependentVariable::get_value() {
     return 0.0; // Protects against Variable being nullptr.
   }
 
-  double absolute = variable->get_value();
+  const double absolute = variable->get_value();
 
   return relative_value ? absolute - relative_value_init : absolute;
 }

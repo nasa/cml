@@ -147,18 +147,18 @@ protected:
                     const double                       * veh_cm_in,
                     bool                                 use_mass_string_in);
 public:
-  RocketMotor_Basic(DynamicMassBody & mass_in,
+  RocketMotor_Basic(DynamicMassBody & mass_body_in,
                     const double    & time_in,
                     const double    * veh_cm_in);
   RocketMotor_Basic(DynamicMassGroup & mass_group_in,
-                    DynamicMassBody  & mass_in,
+                    DynamicMassBody  & mass_body_in,
                     const double     & time_in,
                     const double     * veh_cm_in);
-  RocketMotor_Basic(DynamicMassString & string_in,
+  RocketMotor_Basic(DynamicMassString & mass_string_in,
                     const double      & time_in,
                     const double      * veh_cm_in);
-  RocketMotor_Basic(DynamicMassGroup  & mass_group,
-                    DynamicMassString & string_in,
+  RocketMotor_Basic(DynamicMassGroup  & mass_group_in,
+                    DynamicMassString & mass_string_in,
                     const double      & time_in,
                     const double      * veh_cm_in);
   ~RocketMotor_Basic() override = default;
@@ -170,7 +170,7 @@ public:
   virtual void hold_motor();
   virtual void shutdown_motor();
 
-  double get_mass() { return dyn_mass_properties.consumable_mass; }
+  double get_mass() const { return dyn_mass_properties.consumable_mass; }
   MotorStatus get_status() { return status; }
 
 protected:

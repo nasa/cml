@@ -233,16 +233,16 @@ class TwistSway : public SubscriptionBase
 
 
 public:
-  explicit TwistSway(const double & time_ref);
+  explicit TwistSway(const double & external_clock_);
   ~TwistSway() override = default;
   TwistSway (const TwistSway&) = delete;
   TwistSway& operator = (const TwistSway&) = delete;
 
-  void initialize(double end_time);
+  void initialize(double end_time_);
   bool update();
   void update_ecef();
 
-  void set_end_time(double time);
+  void set_end_time(double new_time);
   bool get_active() {return active;}
   TwistSwayMagnitudes & get_fast_mag() {return fast_mag;}
   TwistSwayMagnitudes & get_slow_mag() {return slow_mag;}

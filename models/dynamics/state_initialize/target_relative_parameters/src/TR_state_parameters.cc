@@ -28,13 +28,11 @@ Constructor
 *****************************************************************************/
 TargetRelative_StateParameter::TargetRelative_StateParameter()
   :
-  TargetRelative_StateParam(),
   target_point_altitude(0.0),
   target_point_latitude(0.0),
   target_point_longitude(0.0),
   tolerance(1e-08),
-  iter_limit(1000),
-  pfix_position()
+  iter_limit(1000)
 {}
 
 /*****************************************************************************
@@ -365,7 +363,7 @@ TargetRelative_StateParameter::compute_position_magnitude()
     pfix_position.update_from_cart(pfix_position.cart_coords);
 
     /* Check for convergence */
-    double deltaR = altitude - pfix_position.ellip_coords.altitude;
+    const double deltaR = altitude - pfix_position.ellip_coords.altitude;
     if ( std::abs(deltaR) < tolerance ) {
       break;
     } else {
@@ -387,5 +385,5 @@ TargetRelative_StateParameter::compute_position_magnitude()
   //-----------------------------------------------------
   // Return position magnitude that gives desired geodetic altitude
   //-----------------------------------------------------
-  return(Rmag);
+  return Rmag;
 }

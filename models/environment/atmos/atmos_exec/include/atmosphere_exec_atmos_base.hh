@@ -86,7 +86,7 @@ class AtmosphereExec_AtmosWindsBase : public AtmosphereExec_AtmosBase
     // re-run the planet-state update if the topocentric altitude was not
     // already subscribed.
     void subscribe_to_topocentric_altitude() {
-      bool already_subscribed = planet_state.is_topocentric_altitude_subscribed();
+      const bool already_subscribed = planet_state.is_topocentric_altitude_subscribed();
       planet_state.subscribe_topocentric_altitude();
       if (!already_subscribed) {
         planet_state.update();

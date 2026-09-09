@@ -58,7 +58,7 @@ class sSensorFaults : public FaultManager
                             xmlNodePtr        rand_node,
                             const char*       fault_name) override;
 
-    bool parse_periodic_param( FaultFunctionParameter&  var_param,
+    bool parse_periodic_param( FaultFunctionParameter&  param,
                                xmlNodePtr               function_node,
                                const char*              param_name,
                                xmlNodePtr               ind_var_node,

@@ -136,16 +136,16 @@ class TargetRelative_StateParam : public TR_ParameterSet
                                     double               (&V_wrt_PCI)[3]);
 
   void compute_velocity_from_params();
-  void compute_velocity_from_params( double        Vmag,
-                                     double        gamma,
-                                     double        Lambda,
+  void compute_velocity_from_params( double        Vmag_,
+                                     double        gamma_,
+                                     double        Lambda_,
                                      const double  (&R)[3], // in
                                      double        (&V_wrt_PCI)[3]); // out
-  void compute_velocity_from_params_SWIG( double        Vmag,
-                                          double        gamma,
-                                          double        Lambda,
-                                          const double  R_PCPF[3], // in
-                                          double        V_wrt_PCI_PCPF[3]); // out
+  void compute_velocity_from_params_SWIG( double        Vmag_,
+                                          double        gamma_,
+                                          double        Lambda_,
+                                          const double  R[3], // in
+                                          double        V_wrt_PCI[3]); // out
   double * get_tgt_position() {return Target_Reference_frame.u_hat;}
 
   /* Protected methods, called internally from the out-facing methods in

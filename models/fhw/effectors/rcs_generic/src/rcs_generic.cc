@@ -94,9 +94,6 @@ RcsGeneric::RcsGeneric(
   num_propellant_components(num_propellant_components_),
   prop_loss_on(num_propellant_components, 0.0),
   prop_loss_off(num_propellant_components, 0.0),
-  jets(),
-  prop_pods(),
-  groups(),
   mult_jet_flag(false),
   calc_flow_rate(false),
   self_impingement(false),
@@ -377,7 +374,7 @@ RcsGeneric::compute_force_and_fuel()
 
     (**jet_it).compute_prop_consumption();
     for (unsigned int ii = 0; ii < num_propellant_components; ++ii) {
-      double jet_component_step_consump =
+      const double jet_component_step_consump =
                            (**jet_it).get_component_consumption(ii);
       sum_component_consumptions[ii] += jet_component_step_consump;
       sum_consumption += jet_component_step_consump;

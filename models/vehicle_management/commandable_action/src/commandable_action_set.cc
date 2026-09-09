@@ -32,6 +32,7 @@ Programmers:
  (
 *******************************************************************************/
 
+#include "../include/commandable_action.hh"
 #include "../include/commandable_action_set.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <utility>
@@ -133,7 +134,7 @@ CommandableActionSet::generate_command (
       // also set. However, this is an abstract class, intended for extension
       // so there is no guarantee that this pattern will be retained
       // indefinitely.  The following check is currently unreachable.
-      if (!current_commandable) {
+      if (current_commandable == nullptr) {
         CMLMessage::fail(
           __FILE__,__LINE__,"Unknown error\n",
           "current_commandable is NULL but status is Send.\n"
@@ -141,8 +142,8 @@ CommandableActionSet::generate_command (
       }
 
       // and back to the real code:
-      std::string & new_name = command.get_name();
-      std::string & old_name = current_commandable->get_name();
+      const std::string & new_name = command.get_name();
+      const std::string & old_name = current_commandable->get_name();
       CMLMessage::error(
         __FILE__,__LINE__,"Sequencing error\n",
         "[", new_name, "] command ready for issuing from [", name, "]\n"
@@ -162,7 +163,7 @@ CommandableActionSet::generate_command (
   current_commandable = &command;
   message_status = Send;
 
-  std::string & command_name = command.get_name();
+  const std::string & command_name = command.get_name();
   CMLMessage::inform(
     __FILE__,__LINE__,"Command Issued from\n",
     "[", name, "] issued command [", command_name, "].\n");
@@ -189,7 +190,7 @@ void
 CommandableActionSet::flag_command_processed()
 {
   message_status = Recv;
-  if (current_commandable) {
+  if (current_commandable != nullptr) {
     current_commandable->flag_command_processed();
   }
   // If there is anything buffered, apply the front element now and remove it
@@ -215,7 +216,7 @@ Purpose:
 void
 CommandableActionSet::generate_fsw_command_safety_net()
 {
-  if (!current_commandable) {
+  if (current_commandable == nullptr) {
     // Unreachable code, except by invalid extension.
     CMLMessage::error(
       __FILE__,__LINE__,"NULL command.\n",

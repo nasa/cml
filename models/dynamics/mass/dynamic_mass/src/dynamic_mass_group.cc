@@ -12,6 +12,7 @@ PROGRAMMERS:
                       (Refactor to utilize new CML capabilities))
    )
 *******************************************************************************/
+#include <algorithm>
 #include <list>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
@@ -202,7 +203,7 @@ void DynamicMassGroup::update_group_mass()
     // using a temporary variable here to ensure that update_mass() gets
     // called without possibility of it being blocked by needs_tree_update if
     // put in as a direct component of the OR statement.
-    bool mass_change = (*it)->update_mass();
+    const bool mass_change = (*it)->update_mass();
     needs_tree_update = needs_tree_update || mass_change;
     total_mass += (*it)->core_properties.mass;
   }
@@ -306,10 +307,10 @@ DynamicMassGroup::series_flow(
 
   // Move mass from upstream tank to downstream tank, as long as there is mass
   // available in the upstream tank.
-  double upstream_available = 
+  const double upstream_available =
         dyn_masses[upstream_ix]->dynamic_properties.consumable_mass -
         dyn_masses[upstream_ix]->dynamic_properties.mass_consumed_step;
-  double downstream_demand = 
+  const double downstream_demand =
         dyn_masses[downstream_ix]->dynamic_properties.mass_consumed_step;
 
   if (upstream_available > downstream_demand) {
@@ -422,14 +423,10 @@ Purpose:(Tests whether a specified dynamic-mass-body is in this group.)
 *****************************************************************************/
 bool
 DynamicMassGroup::is_body_in_group(
-   DynamicMassBody * mass_body_query)
+   DynamicMassBody * mass_body_query) const
 {
-  for (unsigned int ii = 0; ii < dyn_masses.size(); ++ii) {
-    if (dyn_masses[ii] == mass_body_query) {
-      return true;
-    }
-  }
-  return false;
+  return std::any_of(dyn_masses.begin(), dyn_masses.end(),
+    [mass_body_query](const auto& element) {return element == mass_body_query;});
 }
   
 /*****************************************************************************
@@ -438,14 +435,10 @@ Purpose:(Tests whether a specified dynamic-mass-string is in this group.)
 *****************************************************************************/
 bool
 DynamicMassGroup::is_string_in_group(
-   DynamicMassString * mass_string_query)
+   DynamicMassString * mass_string_query) const
 {
-  for (auto it = mass_strings.begin(); it != mass_strings.end(); ++it) {
-    if (*it == mass_string_query) {
-      return true;
-    }
-  }
-  return false;
+  return std::any_of(mass_strings.begin(), mass_strings.end(),
+    [mass_string_query](const auto& element) {return element == mass_string_query;});
 }
 
 /*******************************************************************************
@@ -456,7 +449,7 @@ void
 DynamicMassGroup::test_root_body()
 {
   countdown_to_root_test = countdown_reset;
-  if (dyn_masses.size() >=1) {
+  if (!dyn_masses.empty()) {
     // set one root identification for reference
     const jeod::MassBody* first_root = dyn_masses[0]->get_root_body();
 
@@ -511,7 +504,7 @@ DynamicMassGroup::add_mass_to_group_internal(
       "Unsure how to proceed, terminating for safety.\n");
   }
   // check uniqueness to avoid inadvertent double-counting
-  unsigned int num_bodies = dyn_masses.size();
+  const unsigned int num_bodies = dyn_masses.size();
   for (unsigned int ii = 0; ii < num_bodies; ++ii) {
     if (mass == dyn_masses[ii]) {
       if (send_err_msg) {

@@ -108,8 +108,8 @@ public:
   PistonThrusterVehicleSide sideB; /* (--) The other of the two vehicles. */
 
   PistonThruster();
-  PistonThruster( const double *,
-                  const double *);
+  PistonThruster( const double * pos_CoM_A,
+                  const double * pos_CoM_B);
   ~PistonThruster() override = default;
   PistonThruster(const PistonThruster& rhs) = delete;
   PistonThruster & operator = (const PistonThruster& rhs) = delete;

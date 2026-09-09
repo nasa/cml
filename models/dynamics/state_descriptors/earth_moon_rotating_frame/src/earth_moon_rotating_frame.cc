@@ -26,9 +26,9 @@ Constructor
 Purpose:  (Construct a EarthMoonRotatingFrame object.)
 *******************************************************************************/
 EarthMoonRotatingFrame::EarthMoonRotatingFrame (
-     jeod::EphemeridesManager & ephem_mgr)
+     jeod::EphemeridesManager & ephem_manager_in)
   :
-  EphemBasedPointingRefFrame(ephem_mgr),
+  EphemBasedPointingRefFrame(ephem_manager_in),
   orientation(EMB_Moon),
   reverse_xy(false)
 { }
@@ -104,7 +104,7 @@ Purpose:(Configures the model)
 *****************************************************************************/
 void
 EarthMoonRotatingFrame::set_orientation(
-     FrameOrientation orient)
+     FrameOrientation new_orientation)
 {
   if (initialized) {
     CMLMessage::error(
@@ -113,7 +113,7 @@ EarthMoonRotatingFrame::set_orientation(
       "configuration.\nModel remains at its current setting.");
     return;
   }
-  orientation = orient;
+  orientation = new_orientation;
 }
 
 

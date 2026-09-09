@@ -48,7 +48,6 @@ RocketMotor_TableThrust::RocketMotor_TableThrust(
                      use_mass_string_in),
   thrust_fraction(0.0),
   thrust_max(0.0),
-  table_set(),
   thrust_table(thrust_magnitude),
   isp_table(isp),
   mdot_table(mass_flow_rate),
@@ -135,15 +134,20 @@ RocketMotor_TableThrust::load_thrust_data(
     double * data,
     size_t   num_elements)
 {
-  thrust_max = 0.0; // redundant, constructor assigns = 0, just a reminder.
-  for (size_t ii = 0; ii < num_elements; ++ii) {
-    if (data[ii] > thrust_max) {
-      thrust_max = data[ii];
-    }
+  if (num_elements == 0) {
+    CMLMessage::fail(
+      __FILE__, __LINE__, "Attempted to load invalid thrust data. "
+      "Cannot load thrust data of size 0!");
+    return;
   }
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( num_elements);
+  if (data == nullptr) {
+    CMLMessage::fail(
+      __FILE__, __LINE__, "Attempted to load invalid thrust data. "
+      "Thrust data pointer cannot be null!");
+    return;
+  }
+  thrust_max = *std::max_element(data, data + num_elements);
+  const std::vector<size_t> sizes {1, num_elements};
   thrust_table.load_data( data, sizes);
 }
 /****************************************************************************/
@@ -151,15 +155,14 @@ void
 RocketMotor_TableThrust::load_thrust_data(
     std::vector<double> & data)
 {
-  thrust_max = 0.0; // redundant, constructor assigns = 0, just a reminder.
-  for (size_t ii = 0; ii < data.size(); ++ii) {
-    if (data[ii] > thrust_max) {
-      thrust_max = data[ii];
-    }
+  if (data.empty()) {
+    CMLMessage::fail(
+      __FILE__, __LINE__, "Attempted to load invalid thrust data. "
+      "Cannot load thrust data of size 0!");
+    return;
   }
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( data.size());
+  thrust_max = *std::max_element(data.begin(), data.end());
+  const std::vector<size_t> sizes {1, data.size()};
   thrust_table.load_data( data, sizes);
 }
 

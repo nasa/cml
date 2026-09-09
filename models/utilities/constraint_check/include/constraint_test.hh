@@ -63,11 +63,11 @@ class ConstraintTest
   virtual double get_time_limit() {return 0.0;}
   void activate() {active = (initialized && enabled);}
 
-  bool is_initialized() {return initialized;}
+  bool is_initialized() const {return initialized;}
   void set_violation_condition( ConstraintEnum::ViolationCondition cond);
-  ConstraintEnum::ViolationCondition get_violation_condition() {
+  ConstraintEnum::ViolationCondition get_violation_condition() const {
                                                return violation_condition;}
-  bool get_violation(){return violation;}
+  bool get_violation() const {return violation;}
  protected:
   void initialize_threshold();
   void initialize_interval();

@@ -129,25 +129,25 @@ class RcsGeneric : public SubscriptionBase {
   RcsGeneric (const RcsGeneric& rhs) = delete;
   RcsGeneric & operator = (const RcsGeneric& rhs) = delete;
 
-  virtual void initialize( double   time_step,
+  virtual void initialize( double   time_step_in,
                            const double * center_of_mass);
   void update( const int  * rcs_command);
   void update( const bool * rcs_command);
 
-  const double * get_cm() {return cm;}
-  bool get_calc_flow_rate() {return calc_flow_rate;}
-  double get_prop_loss_on(unsigned int ii) {return prop_loss_on.at(ii);}
-  double get_prop_loss_off(unsigned int ii) {return prop_loss_off.at(ii);}
+  const double * get_cm() const {return cm;}
+  bool get_calc_flow_rate() const {return calc_flow_rate;}
+  double get_prop_loss_on(unsigned int ii) const {return prop_loss_on.at(ii);}
+  double get_prop_loss_off(unsigned int ii) const {return prop_loss_off.at(ii);}
 
   void set_prop_loss_on(  unsigned int ix, double value);
   void set_prop_loss_off( unsigned int ix, double value);
-  void set_mult_jet_flag (bool mult_jet_flag);
-  void set_calc_flow_rate(bool calc_flow_rate);
+  void set_mult_jet_flag (bool new_value);
+  void set_calc_flow_rate(bool new_value);
 
  protected:
   void compute_force_and_fuel();
   void apply_self_impingement();
-  bool update_part_I(const void *);
+  bool update_part_I(const void * rcs_command);
   void update_part_II();
   void check_mult_jet_flag_init();
 };

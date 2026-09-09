@@ -23,10 +23,7 @@ Constructor
 QuaternionSphericalInterpolator::QuaternionSphericalInterpolator()
   :
   use_spherical_interp(true),
-  quat_0(),
-  quat_1(),
   frac(0.0),
-  quat_out(),
   epsilon_interp(1.0E-15),
   epsilon_delta(1.0E-15)
 {}
@@ -129,8 +126,8 @@ QuaternionSphericalInterpolator::update()
       }
 
       // At this point, q_delta_s in range [0, 1-epsilon_delta)
-      double delta = std::acos(q_delta_s);
-      double sin_delta = std::sin(delta);
+      const double delta = std::acos(q_delta_s);
+      const double sin_delta = std::sin(delta);
       // (Note: if we only needed sin_delta, that could be obtained from
       // sqrt(1-q_delta_s^2).  But we also need delta.
 

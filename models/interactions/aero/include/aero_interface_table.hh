@@ -34,11 +34,10 @@ public:
   /***************************************************************************/
   AeroExecutiveTable  executive; /* (--) The executable component. */
 
-public:
   AeroInterfaceTable( AtmosRelativeState & atmos_rel_state_in,
-                      const double & geodetic_altitude,
-                      const double * const cg_position,
-                      const double * const true_body_rates,
+                      const double & geodetic_altitude_in,
+                      const double * const cg_position_in,
+                      const double * const true_body_rates_in,
                       const double (&T_struc_to_body_in)[3][3]);
   ~AeroInterfaceTable() override = default;
   AeroInterfaceTable (const AeroInterfaceTable &) = delete;

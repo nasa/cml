@@ -78,19 +78,19 @@ void SimpleVent::use_impulse_mode(bool mode)
         "Vent '", name, "': Cannot transition to impulsive mode because\n"
         "the impulse vector has not been set.\n");
     }
-    // Test 2: Check to see if the impulse value has changed since
-    // initialization; this could be the result of an external post-init
-    // setting.
-    else if ( MathUtils::has_changed_from( impulse_mag,
-                                           user_set_impulse)) {
-      apply_as_impulse = true;
-      CMLMessage::warn(__FILE__, __LINE__, "Impulse magnitude changed\n",
-        "The impulse magnitude was overwritten while vent '", name, "' was in\n"
-        "dynamic mode.\nUser-set value: ", user_set_impulse, " N*s\nCurrent value: ", impulse_mag, " N*s\n");
-    }
-    // else: post-init, impulse exists and matches that from initialization.
     else {
+      // Post-init and an impulse exists: transition is allowed.
       apply_as_impulse = true;
+
+      // Test 2: Check to see if the impulse value has changed since
+      // initialization; this could be the result of an external post-init
+      // setting.
+      if ( MathUtils::has_changed_from( impulse_mag,
+                                        user_set_impulse)) {
+        CMLMessage::warn(__FILE__, __LINE__, "Impulse magnitude changed\n",
+          "The impulse magnitude was overwritten while vent '", name, "' was in\n"
+          "dynamic mode.\nUser-set value: ", user_set_impulse, " N*s\nCurrent value: ", impulse_mag, " N*s\n");
+      }
     }
   }
 
@@ -106,15 +106,15 @@ void SimpleVent::use_impulse_mode(bool mode)
         "Vent '", name, "': Cannot transition to dynamic (force) mode because\n"
         "the force vector has not been set.\n");
     }
-    else if (MathUtils::has_changed_from( duration,
-                                          user_set_duration)) {
-      apply_as_impulse = false;
-      CMLMessage::warn(__FILE__, __LINE__, "Duration changed\n",
-        "The duration was overwritten while vent '", name, "' was in impulse mode.\n"
-        "User-set value: ", user_set_duration, " s\nCurrent value: ", duration, " s\n");
-    }
     else {
       apply_as_impulse = false;
+
+      if (MathUtils::has_changed_from( duration,
+                                       user_set_duration)) {
+        CMLMessage::warn(__FILE__, __LINE__, "Duration changed\n",
+          "The duration was overwritten while vent '", name, "' was in impulse mode.\n"
+          "User-set value: ", user_set_duration, " s\nCurrent value: ", duration, " s\n");
+      }
     }
   }
 }
@@ -359,10 +359,10 @@ void SimpleVent::set_impulse_vector(double impulse_[3], bool hold_force_mag)
 set_flowrate
 Purpose:(Placeholder for Vent class)
 *****************************************************************************/
-void SimpleVent::set_flowrate( double val, bool flag)
+void SimpleVent::set_flowrate( double val, bool hold_exhaust_speed)
 {
   (void) val;
-  (void) flag;
+  (void) hold_exhaust_speed;
   CMLMessage::error(
     __FILE__,__LINE__,"Invalid setting\n",
     "A simple vent '", name, "' does not model mass flow; it has no flowrate");
@@ -372,10 +372,10 @@ void SimpleVent::set_flowrate( double val, bool flag)
 set_exhaust_speed
 Purpose:(Placeholder for Vent class)
 *****************************************************************************/
-void SimpleVent::set_exhaust_speed( double val, bool flag)
+void SimpleVent::set_exhaust_speed( double val, bool hold_flowrate)
 {
   (void) val;
-  (void) flag;
+  (void) hold_flowrate;
   CMLMessage::error(
     __FILE__,__LINE__,"Invalid setting\n",
     "A simple vent '", name, "' does not model mass flow; it has no exhaust speed");
@@ -385,7 +385,7 @@ void SimpleVent::set_exhaust_speed( double val, bool flag)
 get_flowrate
 Purpose:(Placeholder for Vent class)
 *****************************************************************************/
-double SimpleVent::get_flowrate()
+double SimpleVent::get_flowrate() const
 {
   CMLMessage::error(
     __FILE__,__LINE__,"Invalid request\n",
@@ -397,7 +397,7 @@ double SimpleVent::get_flowrate()
 get_exhaust_speed
 Purpose:(Placeholder for Vent class)
 *****************************************************************************/
-double SimpleVent::get_exhaust_speed()
+double SimpleVent::get_exhaust_speed() const
 {
   CMLMessage::error(
     __FILE__,__LINE__,"Invalid request\n",
@@ -604,7 +604,7 @@ bool SimpleVent::check_configuration()
                                     // a potential conflict.
         }
         else {
-          double impulse_mag_ = force_mag * duration;
+          const double impulse_mag_ = force_mag * duration;
           CMLMessage::warn(
             __FILE__,__LINE__,"Overconstrained configuration\n",
             "Vent '", name, "' has force-magnitude, impulse-magnitude, and\n"
@@ -772,7 +772,9 @@ Purpose:
 void SimpleVent::set_force_internal()
 {
   // sanity check, just in case:
-  if (!impulse_mag_set || !duration_set || !initialized) return;
+  if (!impulse_mag_set || !duration_set || !initialized) {
+    return;
+  }
 
   force_mag =  MathUtils::divide_protected( impulse_mag,
                                             duration,

@@ -28,8 +28,8 @@ Programmers:
 class EphemBasedPointingRefFrame : public PointingRefFrame
 {
  protected:
-  jeod::EphemeridesManager & ephem_manager; /* (--) Reference to the
-                                               Ephemerides Manager*/
+  jeod::EphemeridesManager & ephem_manager; /**< (--) Reference to the
+                                                 JEOD Ephemerides Manager */
   /**
    * @ref PointingRefFrame::setup_frames "Sets up reference frames" and tells the
    *      JEOD Ephemeris Manager to update the ephemerides

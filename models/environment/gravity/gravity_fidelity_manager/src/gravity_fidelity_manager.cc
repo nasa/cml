@@ -15,6 +15,8 @@ PROGRAMMERS:
 
 #include "../include/gravity_fidelity_manager.hh"
 
+#include <cmath>
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -26,9 +28,6 @@ GravityFidelityManager::GravityFidelityManager(
   grav_controls(grav_controls_),
   source_frame(source_frame_),
   target_frame(target_frame_),
-  distance_data(),
-  deg_ord_data(),
-  table(),
   distance(0.0),
   degree_order(0.0)
 {
@@ -72,10 +71,9 @@ GravityFidelityManager::update()
 
   // The simple-table-lookup generic capability uses double as the default
   // data type.  Therefore, even though degree and order are unsigned int
-  // types, they must be stored as double.  Add 0.5 to prevent rounding error
-  // (cast rounds down).
+  // types, they must be stored as double.
   grav_controls.degree =
-  grav_controls.order = static_cast<unsigned int> (degree_order+0.5);
+  grav_controls.order = std::lround(degree_order);
 
   grav_controls.spherical = (grav_controls.degree == 0);
 }

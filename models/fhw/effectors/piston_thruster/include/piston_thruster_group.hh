@@ -71,8 +71,8 @@ public:
   TableIndependentVariable time_table;   /* (s)   Thruster stroke time data. */
   GenericMultiInputTable   thrust_table; /* (lbf) Thruster load data. */
 
-  PistonThrusterGroupInputs( const double & time,
-                             double & thrust);
+  PistonThrusterGroupInputs( const double & time_in,
+                             double & thrust_in);
   PistonThrusterGroupInputs(const PistonThrusterGroupInputs& rhs) = delete;
   PistonThrusterGroupInputs & operator = (const PistonThrusterGroupInputs& rhs) = delete;
 };

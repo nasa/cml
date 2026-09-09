@@ -105,11 +105,11 @@ overwrite_value
 Purpose:(Injects the fault.)
 *******************************************************************************/
 template<typename T> void FaultFunction<T>::overwrite_value() {
-  double ind = ind_variable.get_value();
+  const double ind = ind_variable.get_value();
   if (type == Linear) {
     variable += nominal + rate * ind;
   } else {
-    double freq = frequency.get_value();
+    const double freq = frequency.get_value();
     // phase = (phase offset) + integral(frequency d(ind_variable))
     // Use a trapezoidal approximation for integration.
     // See documentation for derivation.
@@ -118,9 +118,9 @@ template<typename T> void FaultFunction<T>::overwrite_value() {
     ind_prev = ind;
     freq_prev = freq;
 
-    double A = amplitude.get_value();
-    double psi = phase_offset.get_value();
-    double phi = psi + freq_int;
+    const double A = amplitude.get_value();
+    const double psi = phase_offset.get_value();
+    const double phi = psi + freq_int;
     switch (type) {
       case Sinewave:
         variable += A * std::sin(2 * M_PI * phi);

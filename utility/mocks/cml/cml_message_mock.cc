@@ -1,7 +1,9 @@
 #include <gmock/gmock.h>
 #include <stdexcept>
+#include <string>
 
 #include "cml_message_mock.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 namespace {
 

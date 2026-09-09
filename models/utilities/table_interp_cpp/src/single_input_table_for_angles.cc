@@ -33,7 +33,6 @@ Constructors
 SingleInputTableForAngles::SingleInputTableForAngles(
      bool output_in_radians_) // optional, default to true
   :
-  GenericSingleInputTable(),
   output_in_radians(output_in_radians_),
   half_circle(M_PI)
 {}
@@ -116,7 +115,7 @@ SingleInputTableForAngles::generate_output()
     // moving from the lower index to the upper index. So the upper index
     // should be weighted by fraction, and the lower index weighted by
     // (1-fraction)
-    double frac =  independents[0].first->fraction;
+    const double frac =  independents[0].first->fraction;
     for (double* out_ptr : output) {
       // Typically, the interpolated value would be:
       // data[ix] * (1-frac) + data[ix+1] * frac
@@ -156,7 +155,7 @@ Purpose:(sets the value to be in the range (-pi, pi])
 *****************************************************************************/
 void
 SingleInputTableForAngles::bound_to_half_circle(
-   double & angle)
+   double & angle) const
 {
   while (angle > half_circle) {
     angle -= 2 * half_circle;

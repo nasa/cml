@@ -40,7 +40,7 @@ PointingRefFrame::PointingRefFrame()
 // Set the Originating Frame pointer
 void
 PointingRefFrame::set_originating_frame(
-    jeod::RefFrame * orig_frame)
+    jeod::RefFrame * originating_frame_in)
 {
   if (active) {
     CMLMessage::error(
@@ -49,20 +49,20 @@ PointingRefFrame::set_originating_frame(
       "frame.\nOriginating-frame remains at its current setting.");
     return;
   }
-  if (orig_frame == nullptr) {
+  if (originating_frame_in == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Attempt to assign the originating-frame of PointingRefFrame ", pointing_frame.get_name(), " to be "
       "NULL.\nThis is not a valid setting.\nAttempt failed.\n");
     return;
   }
-  originating_frame = orig_frame;
+  originating_frame = originating_frame_in;
 }
 
 // Set the Target Frame pointer
 void
 PointingRefFrame::set_target_frame(
-    jeod::RefFrame * targ_frame)
+    jeod::RefFrame * target_frame_in)
 {
   if (active) {
     CMLMessage::error(
@@ -71,14 +71,14 @@ PointingRefFrame::set_target_frame(
       "frame.\nOriginating-frame remains at its current setting.");
     return;
   }
-  if (targ_frame == nullptr) {
+  if (target_frame_in == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Attempt to assign the target-frame of PointingRefFrame ", pointing_frame.get_name(), " to be "
       "NULL.\nThis is not a valid setting.\nAttempt failed.\n");
     return;
   }
-  target_frame = targ_frame;
+  target_frame = target_frame_in;
 }
 
 /**
@@ -102,7 +102,7 @@ PointingRefFrame::update()
   double axis_scratch[3];
 
   // check distance between orig. and target
-  double pos_r = jeod::Vector3::vmag( target_wrt_originating_state.trans.position );
+  const double pos_r = jeod::Vector3::vmag( target_wrt_originating_state.trans.position );
   if (MathUtils::is_near_equal( pos_r, 0.0, 1.0)) {
     // if pos = 0, T = Tprev (= Identity for first update) and ang_vel_this = 0
     CMLMessage::warn(

@@ -215,18 +215,18 @@ class ExtendedPlanetaryDerivedState : public jeod::PlanetaryDerivedState,
    Purpose: Return whether or not model has at least one subscription to
             submodels
    *****************************************************************************/
-   bool is_rel_vel_subscribed()       {return (calc_rel_vel > 0);}
-   bool is_topocentric_subscribed()   {return (calc_topocentric > 0);}
-   bool is_topocentric_altitude_subscribed() {return (calc_topocentric_altitude > 0);}
-   bool is_topodetic_subscribed()     {return (calc_topodetic > 0);}
-   bool is_pt_to_pt_subscribed()      {return (calc_pt_to_pt > 0);}
-   bool is_hang_roll_subscribed()     {return (calc_hang_roll > 0);}
-   bool is_boost_reference_subscribed() {return (calc_boost_reference>0);}
-   bool is_plumbline_subscribed()     {return (calc_plumbline > 0);}
-   bool is_launch_range_subscribed()  {return (using_launch_range);}
-   bool is_landing_range_subscribed() {return (using_landing_range);}
-   bool is_entry_range_subscribed()   {return (using_entry_range);}
-   bool is_range_safety_subscribed()  {return (calc_range_safety > 0);}
+   bool is_rel_vel_subscribed() const       {return (calc_rel_vel > 0);}
+   bool is_topocentric_subscribed() const   {return (calc_topocentric > 0);}
+   bool is_topocentric_altitude_subscribed() const {return (calc_topocentric_altitude > 0);}
+   bool is_topodetic_subscribed() const     {return (calc_topodetic > 0);}
+   bool is_pt_to_pt_subscribed() const      {return (calc_pt_to_pt > 0);}
+   bool is_hang_roll_subscribed() const     {return (calc_hang_roll > 0);}
+   bool is_boost_reference_subscribed() const {return (calc_boost_reference>0);}
+   bool is_plumbline_subscribed() const     {return (calc_plumbline > 0);}
+   bool is_launch_range_subscribed() const  {return (using_launch_range);}
+   bool is_landing_range_subscribed() const {return (using_landing_range);}
+   bool is_entry_range_subscribed() const   {return (using_entry_range);}
+   bool is_range_safety_subscribed() const  {return (calc_range_safety > 0);}
 
 protected:
    void init_boost_reference();
