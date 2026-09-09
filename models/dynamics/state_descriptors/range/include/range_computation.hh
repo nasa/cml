@@ -146,8 +146,8 @@ class RangeComputation : public RangeValues,
   void update();
 
  protected:
-  virtual void update_using_cartesian( void );
-  virtual void update_using_polar( void);
+  virtual void update_using_cartesian( );
+  virtual void update_using_polar( );
   virtual void is_abstract() = 0; // Makes this class non-instantiable
 };
 

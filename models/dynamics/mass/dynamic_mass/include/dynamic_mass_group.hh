@@ -114,7 +114,7 @@ class DynamicMassGroup : public SubscriptionBase {
 
 
  public:
-  DynamicMassGroup(void);
+  DynamicMassGroup();
   DynamicMassGroup (const DynamicMassGroup&) = delete;
   DynamicMassGroup& operator = (const DynamicMassGroup&) = delete;
   void add_mass_to_group( DynamicMassBody *mass);
