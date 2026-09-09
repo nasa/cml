@@ -23,6 +23,6 @@ class SubscriptionTestClass : public SubscriptionBase
   protected:
   void activate() override {
     std::cout << "******** ACTIVATION FAILS ********\n\n";
-    }
+  }
 };
 #endif

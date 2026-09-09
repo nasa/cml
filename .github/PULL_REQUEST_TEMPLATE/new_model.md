@@ -7,6 +7,9 @@
 - Primary model point of contact:
 - Backup model point of contact:
 
+**I hereby certify that this model's source code, documentation, and tests are free of ITAR, EAR, and CUI data**:
+- [ ] This pull request contains no sensitive data.
+
 ## Model Maturity
 
 - What is your team currently using the model for?
