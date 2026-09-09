@@ -3,18 +3,25 @@ name = "cml"
 version = "0.2.0"
 description = "The JSC Engineering EG Division Common Model Library"
 dependencies = [
+    "breathe",
+    "docutils",
     "gcovr",
     "guardonce",
     "numpy",
     "psutil",
     "pyyaml",
     "regex",
+    "sphinx",
+    "sphinx-autobuild",
+    "sphinx-book-theme",
 ]
 
 [project.urls]
-Documentation = "https://github.com/nasa/cml/wiki"
+Homepage = "https://nasa.github.io/cml"
+Documentation = "https://nasa.github.io/cml"
+Repository = "https://github.com/nasa/cml"
 Issues = "https://github.com/nasa/cml/issues"
-Source = "https://github.com/nasa/cml"
+Changelog = "https://github.com/nasa/cml/blob/main/CHANGELOG"
 
 [build-system]
 requires = ["hatchling"]
