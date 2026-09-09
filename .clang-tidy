@@ -22,7 +22,12 @@
 #         Not useful for Trick sims.
 #
 # modernize:
-#     To be added in a future pull request
+#     modernize-avoid-c-arrays:
+#         Trick doesn't yet have full support for std::array.
+#     modernize-use-nodiscard:
+#         The version of SWIG that we test against doesn't process this properly.
+#     modernize-use-trailing-return-type:
+#         Opinion-based check, not applicable to us.
 #
 # performance:
 #     performance-enum-size:
@@ -83,8 +88,10 @@ Checks: >
     misc-*,
         -misc-no-recursion,
         -misc-non-private-member-variables-in-classes,
-    modernize-use-equals-delete,
-    modernize-use-default-member-init,
+    modernize-*,
+        -modernize-avoid-c-arrays,
+        -modernize-use-nodiscard,
+        -modernize-use-trailing-return-type,
     portability-*,
         -portability-template-virtual-member-function,
     performance-*,

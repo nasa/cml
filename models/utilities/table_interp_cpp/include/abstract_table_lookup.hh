@@ -35,7 +35,7 @@ PROGRAMMERS:
 class AbstractTableLookup : public SubscriptionBase
 {
 public:
-  typedef std::pair<GenericMultiInputTable*, bool> TableItem_t;
+  using TableItem_t = std::pair<GenericMultiInputTable*, bool>;
 
 protected:
   // NOTE - these are vectors of pointers rather than vectors of instances to

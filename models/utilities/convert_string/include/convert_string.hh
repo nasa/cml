@@ -36,38 +36,15 @@ template<typename T> T ConvertString::convert(const std::string& str) {
   return convert<T>(str.c_str());
 }
 template<typename T> T ConvertString::convert(const char* str) {
-  if (!str) {
+  static_assert(std::is_arithmetic_v<T>, "String conversion only valid for numeric types");
+
+  if (str == nullptr) {
     CMLMessage::error(__FILE__, __LINE__, "Bad Pointer\n",
       "A null pointer was passed into ConvertString::convert.\n");
     return 0;
   }
 
-  T out = 0;
-  if (std::is_arithmetic<T>::value) {
-    out = convert_numeric<T>(str);
-  } else {
-    // Unreachable code. The convert_numeric<T>(str) method is defined for
-    // the following types: 
-    // - unsigned long, float, double, long long, unsigned long long, bool
-    // - default (i.e. none of the above)
-    // Of these types:
-    // - the specific types all pass the is_arithmetic<T> test
-    // - the default calls strtol, which returns a "long"; in order to
-    //   compile, there must be a natural conversion from "long" to T, but all
-    //   forms of T that are legitimate conversions from "long" also pass
-    //   is_arithmetic<T>.
-    // So to get here, T must be non-arithmetic => the default
-    // convert_numeric<T> must be compiled => there is a legal conversion from
-    // the resulting long to T => T is arithmetic, which is a contradiction.
-    // Result is that this else block is never even compiled, and will not be
-    // unless somebody finds a data type that can be converted from long and
-    // is non-arithmetic, or somebody redefines strtol to return a value that
-    // can be converted into a non-arithmetic T.
-    CMLMessage::error(__FILE__, __LINE__, "Invalid Type\n",
-      "ConvertString::convert only supports numeric types.\n");
-  }
-
-  return out;
+  return convert_numeric<T>(str);
 }
 
 

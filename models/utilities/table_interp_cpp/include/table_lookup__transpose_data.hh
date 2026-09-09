@@ -52,7 +52,7 @@ class TableLookupTransposeDataSet_TableConfig
 {
  friend class TableLookupTransposeDataSet;
  public:
-  typedef std::list<DoubleVec>   DoubleVecList;
+  using DoubleVecList = std::list<DoubleVec>;
 
   std::string name; /* (--) Name of this table-configuration.*/
   bool block_independent_addition{false}; /* (--)
@@ -122,7 +122,7 @@ Purpose:(A TableLookup that populates and holds a set of data populated by
 class TableLookupTransposeDataSet : public TableLookupSet
 {
  public:
-  typedef std::list<DoubleVec>   DoubleVecList;
+  using DoubleVecList = std::list<DoubleVec>;
 
   std::vector<TableLookupTransposeDataSet_TableConfig> table_config; /* (--)
               A set of table-configurations; these are used to extract the data

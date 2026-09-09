@@ -239,8 +239,8 @@ private:
 // (which this table accesses).  Default behavior is to interpolate based on
 // the neighboring calibrated values, but alternatives such as rounding,
 // ceiling, floor, etc. are also available to support discrete variables.
-   typedef std::pair<TableIndependentVariable*,
-                     TableIndependentVariable::LookupMethod> IndepPair;
-   typedef std::vector<IndepPair> IndepPairVec;
+   using IndepPair = std::pair<TableIndependentVariable*,
+                     TableIndependentVariable::LookupMethod>;
+   using IndepPairVec = std::vector<IndepPair>;
 
 #endif

@@ -24,7 +24,9 @@ PROGRAMMERS:
    (((Gary Turner) (OSR) (September 2014) (New))
  ******************************************************************************/
 
+#include <algorithm>
 #include <cmath>
+#include <iterator>
 #include <random>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"

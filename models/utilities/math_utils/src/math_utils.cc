@@ -20,6 +20,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <fenv.h>
 #include <limits>
 #include <cfenv>
 #include <list>

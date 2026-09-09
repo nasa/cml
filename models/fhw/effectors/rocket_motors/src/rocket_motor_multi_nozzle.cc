@@ -23,6 +23,7 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 
