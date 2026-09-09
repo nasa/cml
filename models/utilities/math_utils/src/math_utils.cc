@@ -616,7 +616,7 @@ MathUtils::polynomial( double x,
 
   double x_to_i = 1.0;
   double sum = 0.0;
-  for (std::vector< double >::iterator it = coeffs.begin();
+  for (auto it = coeffs.begin();
        it != coeffs.end();
        ++it) {
     sum += ((*it) * x_to_i);
@@ -912,7 +912,7 @@ MathUtils::compute_backward_difference( const std::list<double> & history)
   const size_t order = std::min(history.size() - 1, static_cast<size_t>(4));
 
   size_t ii = 0;
-  for (std::list<double>::const_iterator it = history.begin();
+  for (auto it = history.begin();
        it != history.end() && ii < 5;
        ++it) {
 

@@ -71,7 +71,7 @@ RcsJetGroup::initialize(
     if (num_prop_components > 1){ /* multi-propellant case */
       double sum_comp_ratio_ = 0.0;
       // Add up the values of isp_prop_comp_ratio.  It should come to 1.0
-      for (std::vector<double>::iterator it = isp_prop_comp_ratio.begin();
+      for (auto it = isp_prop_comp_ratio.begin();
            it != isp_prop_comp_ratio.end();
            ++it) {
         sum_comp_ratio_ += (*it);
@@ -92,7 +92,7 @@ RcsJetGroup::initialize(
         "It instead has value ", sum_comp_ratio_, "\n"
         "Normalizing the values to prevent incorrect propellant usage.\n");
 
-        for (std::vector<double>::iterator it=isp_prop_comp_ratio.begin();
+        for (auto it=isp_prop_comp_ratio.begin();
              it != isp_prop_comp_ratio.end();
              ++it) {
            (*it) /= sum_comp_ratio_;

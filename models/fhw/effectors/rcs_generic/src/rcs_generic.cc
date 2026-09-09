@@ -293,7 +293,7 @@ RcsGeneric::update_part_I(
     return false;
   }
   // Clear all pod data from last cycle
-  for (std::vector<RcsPropPod*>::iterator pod_it = prop_pods.begin();
+  for (auto pod_it = prop_pods.begin();
        pod_it != prop_pods.end();
        ++pod_it) {
     (**pod_it).reset_cycle();
@@ -305,7 +305,7 @@ void
 RcsGeneric::update_part_II()
 {
   // Determine how many jets are on for calculation of the thrust factor */
-  for (std::vector<RcsPropPod*>::iterator pod_it = prop_pods.begin();
+  for (auto pod_it = prop_pods.begin();
        pod_it != prop_pods.end();
        ++pod_it) {
     (**pod_it).compute_jets_on(mult_jet_flag);
@@ -348,7 +348,7 @@ RcsGeneric::compute_force_and_fuel()
   jeod::Vector3::initialize(force);
   jeod::Vector3::initialize(torque);
 
-  for (std::vector<RcsJet*>::iterator jet_it = jets.begin();
+  for (auto jet_it = jets.begin();
        jet_it != jets.end();
        ++jet_it) {
     (**jet_it).compute_jet_forces();
@@ -396,7 +396,7 @@ ASSUMPTIONS AND LIMITATIONS:
 void
 RcsGeneric::apply_self_impingement()
 {
-  for (std::vector<RcsJet*>::iterator jet_it = jets.begin();
+  for (auto jet_it = jets.begin();
        jet_it != jets.end();
        ++jet_it) {
     (**jet_it).scale_self_impingement();

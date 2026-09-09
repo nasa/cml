@@ -104,7 +104,7 @@ RcsPropPod::activate_dyn_mass()
   if (using_dyn_mass) {
     return;
   }
-  for (std::vector<RcsPodComponent>::iterator it=components.begin();
+  for (auto it=components.begin();
        it != components.end();
        ++it) {
     if ((*it).mass_consumed_step != &(*it).fake_interface.mass_consumed_step) {
@@ -123,7 +123,7 @@ RcsPropPod::deactivate_dyn_mass()
 {
   if (using_dyn_mass) {
     using_dyn_mass = false;
-    for (std::vector<RcsPodComponent>::iterator it=components.begin();
+    for (auto it=components.begin();
          it != components.end();
          ++it) {
       (*it).using_dyn_mass = false;
@@ -155,7 +155,7 @@ RcsPropPod::mass_available()
     return true; // mass is static; there is always mass available.
   }
 
-  for (std::vector<RcsPodComponent>::iterator it=components.begin();
+  for (auto it=components.begin();
        it != components.end();
        ++it) {
     // if any component is out, return false.

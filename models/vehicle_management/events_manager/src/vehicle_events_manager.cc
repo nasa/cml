@@ -49,7 +49,7 @@ Purpose:(Checks all active watches)
 void
 VehicleEventsManager::update()
 {
-  std::list<WatchValuesBaseCore *>::iterator ii = active_watches.begin();
+  auto ii = active_watches.begin();
   while (ii != active_watches.end()) {
     // If the crossing is detected
     if ( (*ii)->test_crossing()) {

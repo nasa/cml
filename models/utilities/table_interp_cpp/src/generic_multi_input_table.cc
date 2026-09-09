@@ -511,7 +511,7 @@ GenericMultiInputTable::generate_output()
                          // for each dependent variable
 
   // For each dependent variable:
-  DoublePtrVec::iterator out_iterator = output.begin();
+  auto out_iterator = output.begin();
   for (; out_iterator != output.end(); ++out_iterator) {
     (**out_iterator) = 0.0; // initialize output value to 0.0 for increments
 
@@ -791,7 +791,7 @@ GenericMultiInputTable::generate_base_values()
 {
   // First go through the list of the independents, computing how many
   // interpolation points are needed for this dependent variable.
-  const size_t num_independents_interp = static_cast<size_t>(std::count_if(
+  const auto num_independents_interp = static_cast<size_t>(std::count_if(
     independents.begin(),
     independents.end(),
     [](const IndepPair& independent) {

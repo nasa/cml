@@ -147,7 +147,7 @@ ContactStateOverride::override_state()
   }
   else {
     // Identify the root body and cast away the const-ness so we can move it
-    jeod::DynBody* override_root = const_cast<jeod::DynBody*>(
+    auto* override_root = const_cast<jeod::DynBody*>(
                                              override_body.get_root_body());
     if (override_root == nullptr) {
       CMLMessage::error(

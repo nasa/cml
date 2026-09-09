@@ -149,7 +149,7 @@ MassBodyCompositeDispersions::update_internal()
   else {
     // Need to find the relative position and orientation of the detaching
     // body to allow us to reattach it.
-    jeod::MassBody * parent_body = const_cast<jeod::MassBody*>
+    auto * parent_body = const_cast<jeod::MassBody*>
                                        (detach_sub_tree->get_parent_body());
     // Unreachable, safety net:
     // detach_sub_tree cannot be root because it must be subordinate to

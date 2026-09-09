@@ -71,7 +71,7 @@ void
 EventTriggerSet::populate_conditional_reference_trigger_list()
 {
   for (WatchValuesBaseCore * trigger : triggers) {
-    EventTriggerBase * event_trigger = dynamic_cast<EventTriggerBase*>(trigger);
+    auto * event_trigger = dynamic_cast<EventTriggerBase*>(trigger);
     if (event_trigger != nullptr &&
         event_trigger->has_conditional_reference()) {
       conditional_reference_triggers.push_back(event_trigger);

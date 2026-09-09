@@ -68,7 +68,7 @@ TableLookupSet::add_table( GenericMultiInputTable &new_table)
   // In this scenario, the second addition of the table will be a duplicate,
   // but checking the dependent variables is unsufficient.  So check the tables
   // as well.
-  std::vector<TableItem_t>::iterator it_tab =  tables.begin();
+  auto it_tab =  tables.begin();
   for (; it_tab!=tables.end(); ++it_tab) {
     if (&new_table == (*it_tab).first) {
       CMLMessage::warn(
@@ -102,7 +102,7 @@ TableLookupSet::add_independent_variable(
   }
 
   // Check that it has not already been added:
-  std::vector<TableIndependentVariable*>::iterator it = independents.begin();
+  auto it = independents.begin();
   for (; it != independents.end(); ++it) {
     if (&var_in == *it) {
       CMLMessage::warn(

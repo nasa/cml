@@ -252,7 +252,7 @@ UnitTestFramework::configure_sweeps()
       "Incompatible methods.  Cannot distinguish which to use."
       "If both are needed, use 2 framework instances.\n");
   }
-  for( std::list<SweepSet>::iterator it = sweeps.begin();
+  for( auto it = sweeps.begin();
        it != sweeps.end();
        ++it) {
     it->initialize();
@@ -504,7 +504,7 @@ UnitTestFramework::process_linked_variables()
 {
   commands.push_back("");// create 1 empty element
 
-  for( std::list<LinkedVars>::iterator file_it = linked_variables.begin();
+  for( auto file_it = linked_variables.begin();
        file_it != linked_variables.end();
        ++file_it) {
     std::ifstream data_file( file_it->filename);
@@ -578,7 +578,7 @@ UnitTestFramework::process_linked_variables()
     data_file.close();
 
     // insert new commands into command list
-    for( std::list<std::string>::iterator comm_it = commands.begin();
+    for( auto comm_it = commands.begin();
          comm_it != commands.end();
          /*increment internally*/ ) {
       comm_it->append( first_command);
@@ -651,7 +651,7 @@ UnitTestFramework::update_sweeps()
   }
 
   bool sweep_complete_ = true;
-  for( std::list<SweepSet>::iterator it = sweeps.begin();
+  for( auto it = sweeps.begin();
        it != sweeps.end();
        ++it)
   {

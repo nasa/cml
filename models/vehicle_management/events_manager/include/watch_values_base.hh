@@ -96,7 +96,7 @@ Purpose:(Sets the variable and the reference against which it will be compared)
   }
   void set_watch_primitives( const void * var, const void * ref) {
     const watchType * new_ptr = set_watch_primitives_test_ref_var( var,ref);
-    const watchType * new_ref = reinterpret_cast<const watchType *>(ref);
+    const auto * new_ref = reinterpret_cast<const watchType *>(ref);
     set_watch( *new_ptr, new_ref);
   }
   const watchType * set_watch_primitives_test_ref_val( const void * var)

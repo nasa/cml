@@ -67,7 +67,7 @@ PistonThrusterGroup::add_piston_thruster( PistonThruster & new_thruster)
     return;
   }
 
-  for (std::list<PistonThruster *>::iterator it =  piston_thrusters.begin();
+  for (auto it =  piston_thrusters.begin();
                                              it != piston_thrusters.end();
                                            ++it) {
     if ( (*it) == &new_thruster) {
@@ -97,7 +97,7 @@ PistonThrusterGroup::initialize()
     return;
   }
 
-  for (std::list<PistonThruster *>::iterator it =  piston_thrusters.begin();
+  for (auto it =  piston_thrusters.begin();
                                              it != piston_thrusters.end();
                                            ++it) {
     (*it)->initialize();
@@ -141,7 +141,7 @@ PistonThrusterGroup::activate()
 
   start_time = time;
   // activate each of the individual thrusters.
-  for (std::list<PistonThruster *>::iterator it =  piston_thrusters.begin();
+  for (auto it =  piston_thrusters.begin();
                                              it != piston_thrusters.end();
                                            ++it) {
     (*it)->subscribe();
@@ -198,7 +198,7 @@ PistonThrusterGroup::update()
   jeod::Vector3::initialize( out_B.force);
   jeod::Vector3::initialize( out_B.moment);
 
-  for (std::list<PistonThruster *>::iterator it =  piston_thrusters.begin();
+  for (auto it =  piston_thrusters.begin();
                                              it != piston_thrusters.end();
                                            ++it) {
     (*it)->update(force_mag);
@@ -239,7 +239,7 @@ PistonThrusterGroup::deactivate()
   jeod::Vector3::initialize( out_B.force);
   jeod::Vector3::initialize( out_B.moment);
   // deactivate each of the individual thrusters.
-  for (std::list<PistonThruster *>::iterator it =  piston_thrusters.begin();
+  for (auto it =  piston_thrusters.begin();
                                              it != piston_thrusters.end();
                                            ++it) {
     (*it)->unsubscribe();

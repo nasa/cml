@@ -53,7 +53,7 @@ VentSet::VentSet(
   VentSet(dyn_body_, time)
 {
   for (size_t ii = 0; ii < num_vents; ++ii) {
-    SimpleVent * new_vent = new SimpleVent(time);
+    auto * new_vent = new SimpleVent(time);
     new_vent->allocated_in_set = true;
     vents.push_back( new_vent);
   }
@@ -319,7 +319,7 @@ void VentSet::apply_impulse()
   else {
     // Identify the root body; cast away the const-ness because we have to
     // apply the impulse to the root body.
-    jeod::DynBody * root_body = const_cast<jeod::DynBody *>(dyn_body.get_root_body());
+    auto * root_body = const_cast<jeod::DynBody *>(dyn_body.get_root_body());
     // Sanity check -- root body pointer must be non-NULL to continue.
     if (root_body == nullptr) {
       // Possibly an unreachable error? 'dyn_body' is protected, so there is no

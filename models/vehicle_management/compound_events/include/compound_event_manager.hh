@@ -79,7 +79,7 @@ class CompoundEventsManager : public VehicleEventsManager
                                   EventTriggerBase::TriggerCondition comparison,
                                   std::string name = "")
   {
-    EventTrigger<T> * new_trigger = new EventTrigger<T>(time);
+    auto * new_trigger = new EventTrigger<T>(time);
     allocated_triggers.push_back( new_trigger);
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
@@ -95,7 +95,7 @@ class CompoundEventsManager : public VehicleEventsManager
                                   EventTriggerBase::TriggerCondition comparison,
                                   std::string name = "")
   {
-    EventTrigger<T> * new_trigger = new EventTrigger<T>(time);
+    auto * new_trigger = new EventTrigger<T>(time);
     allocated_triggers.push_back( new_trigger);
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
@@ -118,7 +118,7 @@ class CompoundEventsManager : public VehicleEventsManager
     }
     else {
       // Return an empty trigger if the trigger can't be found from the var_name.
-      EventTrigger<T> * new_trigger = new EventTrigger<T>(time);
+      auto * new_trigger = new EventTrigger<T>(time);
       return *new_trigger;
     }
   }
@@ -136,7 +136,7 @@ class CompoundEventsManager : public VehicleEventsManager
     }
     else {
       // Return an empty trigger if the trigger can't be found from the var_name.
-      EventTrigger<T> * new_trigger = new EventTrigger<T>(time);
+      auto * new_trigger = new EventTrigger<T>(time);
       return *new_trigger;
     }
   }
@@ -147,7 +147,7 @@ class CompoundEventsManager : public VehicleEventsManager
                                       WatchValuesBaseCore::Direction direction,
                                       std::string name = "")
   {
-    WatchValuesBase<T> * new_trigger = new WatchValuesBase<T>();
+    auto * new_trigger = new WatchValuesBase<T>();
     allocated_triggers.push_back( new_trigger);
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);
@@ -163,7 +163,7 @@ class CompoundEventsManager : public VehicleEventsManager
                                       WatchValuesBaseCore::Direction direction,
                                       std::string name = "")
   {
-    WatchValuesBase<T> * new_trigger = new WatchValuesBase<T>();
+    auto * new_trigger = new WatchValuesBase<T>();
     allocated_triggers.push_back( new_trigger);
     add_trigger( new_trigger);
     new_trigger->set_watch( var, ref);

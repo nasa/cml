@@ -110,7 +110,7 @@ Purpose:(Injects faults.)
 *******************************************************************************/
 void FaultManager::update( const Location& location) {
   if (enabled && global_enabled) {
-    const unsigned char location_index = static_cast<unsigned char>(location);
+    const auto location_index = static_cast<unsigned char>(location);
     if (location_index >= Location_count) {
       CMLMessage::fail(__FILE__, __LINE__,
         "Fault Management Error\n",
@@ -678,7 +678,7 @@ template<typename T> Fault* FaultManager::make_fault_bias(
     return nullptr;
   }
 
-  FaultBias<T>* new_fault = new FaultBias<T>(variable);
+  auto* new_fault = new FaultBias<T>(variable);
   new_fault->bias = ConvertString::convert<T>(bias_string);
 
   return new_fault;
@@ -716,7 +716,7 @@ template<typename T> Fault* FaultManager::make_fault_scale(
     return nullptr;
   }
 
-  FaultScale<T>* new_fault = new FaultScale<T>(variable);
+  auto* new_fault = new FaultScale<T>(variable);
   new_fault->scale_factor = ConvertString::convert<T>(scale_string);
 
   return new_fault;
@@ -788,7 +788,7 @@ template<typename T> Fault* FaultManager::make_fault_overwrite(
     random_value = false;
   }
 
-  FaultOverwrite<T>* new_fault = new FaultOverwrite<T>(variable);
+  auto* new_fault = new FaultOverwrite<T>(variable);
 
   new_fault->faulted_value = random_value ?
                              generate_random_value<T>() :
@@ -1204,7 +1204,7 @@ template<typename T> Fault* FaultManager::make_fault_white_noise(
     }
   }
 
-  FaultWhiteNoise<T>* new_fault = new FaultWhiteNoise<T>(variable);
+  auto* new_fault = new FaultWhiteNoise<T>(variable);
   // Parse the RandValue node and populate rand. If this fails, delete the
   // fault and return nullptr.
   if (!parse_rand_number(new_fault->noise, rand_node, fault_name)) {
@@ -1251,7 +1251,7 @@ template<typename T> Fault* FaultManager::make_fault_random_walk(
     }
   }
 
-  FaultRandomWalk<T>* new_fault = new FaultRandomWalk<T>(variable);
+  auto* new_fault = new FaultRandomWalk<T>(variable);
   // Parse the RandValue node and populate rand. If this fails, delete the
   // fault and return nullptr.
   if (!parse_rand_number(new_fault->rand, rand_node, fault_name)) {
@@ -1278,7 +1278,7 @@ TriggerGroup* FaultManager::parse_trigger_group(
   xmlNodePtr  trigger_group_node,
   const char* fault_name)
 {
-  TriggerGroup* new_trigger_group = new TriggerGroup;
+  auto* new_trigger_group = new TriggerGroup;
 
   bool empty_group = true;
   for (xmlNodePtr trigger_node = trigger_group_node->children;
@@ -1452,7 +1452,7 @@ TriggerBase* FaultManager::parse_trigger(
       // Note -- not using make_trigger because we do not want to be trying to
       // convert a string via the ConvertString algorithm which is used in
       // make_trigger.
-      Trigger<std::string>* string_trigger =
+      auto* string_trigger =
         new Trigger<std::string>(*static_cast<std::string*>(Symbol->address));
       if (value != nullptr) {
         string_trigger->set_value(value);
@@ -1504,7 +1504,7 @@ TriggerBase* FaultManager::parse_trigger(
     {
       // Note -- not using make_trigger because we do not want to be trying to
       // convert a set boolean periods etc. as used in make_trigger.
-      Trigger<bool>* bool_trigger =
+      auto* bool_trigger =
         new Trigger<bool>(*static_cast<bool*>(Symbol->address));
       bool_trigger->set_value(ConvertString::convert<bool>(value));
       new_trigger = bool_trigger;
@@ -1574,7 +1574,7 @@ template<typename T> TriggerBase* FaultManager::make_trigger(
   //*****************************************************
   //Make the new trigger                                *
   //*****************************************************
-  Trigger<T>* new_trigger = new Trigger<T>(variable);
+  auto* new_trigger = new Trigger<T>(variable);
   if (value != nullptr) {
     new_trigger->value = ConvertString::convert<T>(value);
   }

@@ -93,7 +93,7 @@ AeroExecutiveTable::change_table( const std::string & new_name)
       return; // already on that table.
     }
   }
-  for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
+  for (auto it = data_tables_vector.begin();
                                                  it != data_tables_vector.end();
                                                  ++it) {
     if ( (*it)->name == new_name) {
@@ -147,7 +147,7 @@ AeroExecutiveTable::add_table( AeroTableSetBase * table)
     return;
   }
 
-  for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
+  for (auto it = data_tables_vector.begin();
                                                  it != data_tables_vector.end();
                                                  ++it) {
     // Check the addresses for duplicates.
@@ -225,7 +225,7 @@ AeroExecutiveTable::initialize()
   //      initialize redundant tables.
   //      It is safer and slower to load and initialize at the front-end.
   if (load_all_tables_at_init) {
-    for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
+    for (auto it = data_tables_vector.begin();
                                                    it != data_tables_vector.end();
                                                    ++it) {
       if (!(*it)->is_initialized()) {

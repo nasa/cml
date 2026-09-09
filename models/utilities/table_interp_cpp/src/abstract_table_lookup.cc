@@ -47,13 +47,13 @@ Destructor
 *****************************************************************************/
 AbstractTableLookup::~AbstractTableLookup()
 {
-  std::vector<TableIndependentVariable*>::iterator it1 =
+  auto it1 =
                                               independents_to_destroy.begin();
   for (; it1!=independents_to_destroy.end(); ++it1) {
     delete (*it1);
   }
 
-  std::vector<GenericMultiInputTable*>::iterator it2 =  tables_to_destroy.begin();
+  auto it2 =  tables_to_destroy.begin();
   for (; it2!=tables_to_destroy.end(); ++it2) {
     delete (*it2);
   }
@@ -309,7 +309,7 @@ AbstractTableLookup::create_independent_variable(
 {
   verify_independent_name(name_in);
 
-  TableIndependentVariable* new_var =
+  auto* new_var =
     new TableIndependentVariable( name_in, variable_in, continuity );
 
   independents_to_destroy.push_back(new_var);
@@ -359,7 +359,7 @@ Purpose:(returns a bool indicating whether the specified dependent variable
 bool
 AbstractTableLookup::is_a_dependent_variable( double &variable)
 {
-  const DoublePtrVec::iterator it = std::find(dependents.begin(),
+  const auto it = std::find(dependents.begin(),
                                                 dependents.end(),
                                                 &variable);
   return dependents.end()!=it;

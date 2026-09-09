@@ -99,7 +99,7 @@ Purpose:
 CompoundEvent &
 CompoundEventsManager::create_event()
 {
-  CompoundEvent * new_event = new CompoundEvent(time);
+  auto * new_event = new CompoundEvent(time);
   allocated_events.push_back( new_event);
   add_event(*new_event);
   return *new_event;

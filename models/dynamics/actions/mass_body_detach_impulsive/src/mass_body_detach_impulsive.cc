@@ -71,7 +71,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   // Identify the parent before it gets detached.
   // Have to cast away the const-ness because we will be applying an impulse
   // to the parent.
-  jeod::MassBody * parent = const_cast<jeod::MassBody *>(subject->get_parent_body());
+  auto * parent = const_cast<jeod::MassBody *>(subject->get_parent_body());
   if (parent == nullptr) {
     CMLMessage::error (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
