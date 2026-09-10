@@ -55,7 +55,7 @@ public:
    STD1976();
 
    /** destructor */
-   ~STD1976();
+   ~STD1976() = default;
 
    /** compute the atmosphere parameters above at the given geometric height */
    void update(

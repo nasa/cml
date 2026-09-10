@@ -111,14 +111,6 @@ Purpose: Increments the count for the specific target.
 void
 CML_TargetCounter::insert(int value)
 {
-  /* Note:
-   *   Can use std::find_if here; using a lambda expression for the unary
-   *   predicate
-   *     - capture the input value
-   *     - test each target's value against the captured "value"; if it
-   *       matches, identify the target.
-   *     - If a target was identified, increment its count.
-   */
   auto it = std::find_if( targets.begin(), targets.end(),
                           [value](const CML_TargetCounterElement & target) {
                             return (target.value == value);}

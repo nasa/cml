@@ -4,7 +4,7 @@ CML_HOME ?= $(abspath $(lastword $(MAKEFILE_LIST))/../..)
 INSTALL_DIR ?= $(abspath $(lastword $(MAKEFILE_LIST))/..)
 
 export TRICKIFY_OBJECT_NAME := cml_trickified.o
-export TRICKIFY_CXX_FLAGS := -I${CML_HOME}/.. -I${JEOD_HOME}/.. -I${JEOD_HOME}/models -isystem${TRICK_HOME}/include -isystem${TRICK_HOME}/trick_source -O2 -g -w
+export TRICKIFY_CXX_FLAGS := -I${CML_HOME}/.. -I${JEOD_HOME}/.. -I${JEOD_HOME}/models -isystem${TRICK_HOME}/include -isystem${TRICK_HOME}/trick_source -O2 -g -w -std=c++17
 export TRICKIFY_EXT_LIB_DIRS += :${JEOD_HOME}/models
 export TRICKIFY_PYTHON_DIR := python.zip
 export ICG_EXCLUDE += :${JEOD_HOME}/models

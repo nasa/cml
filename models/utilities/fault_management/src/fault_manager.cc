@@ -44,8 +44,8 @@ bool FaultManager::global_enabled = true;
 Destructor
 *****************************************************************************/
 FaultManager::~FaultManager() {
-  for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto* fault : faults[ii]) {
+  for (auto & fault_list : faults) {
+    for (auto* fault : fault_list) {
       delete fault;
     }
   }
@@ -89,8 +89,8 @@ void FaultManager::initialize() {
     return;
   }
   parse();
-  for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto* fault : faults[ii]) {
+  for (auto & ii : faults) {
+    for (auto* fault : ii) {
       fault->initialize(); // Initialize fault
     }
   }
@@ -110,7 +110,7 @@ Purpose:(Injects faults.)
 *******************************************************************************/
 void FaultManager::update( const Location& location) {
   if (enabled && global_enabled) {
-    const unsigned char location_index = static_cast<unsigned char>(location);
+    const auto location_index = static_cast<unsigned char>(location);
     if (location_index >= Location_count) {
       CMLMessage::fail(__FILE__, __LINE__,
         "Fault Management Error\n",
@@ -130,10 +130,10 @@ Purpose:(Looks up a fault by name. If no fault with that name is found, returns
          nullptr.)
 *******************************************************************************/
 Fault* FaultManager::get_fault( const std::string& name) {
-  for (unsigned int ii = 0; ii < Location_count; ii++) {
-    const auto fault = std::find_if(faults[ii].begin(), faults[ii].end(),
+  for (auto & fault_list : faults) {
+    const auto fault = std::find_if(fault_list.begin(), fault_list.end(),
       [&name](const Fault* fault_) {return name == fault_->name;});
-    if (fault != faults[ii].end()) {
+    if (fault != fault_list.end()) {
       return *fault;
     }
   }
@@ -185,8 +185,7 @@ bool FaultManager::set_fault_enabled(
   }
   // if not parsed, store it away for later.
   else {
-    set_enable_for_fault_cache.push_back(
-      std::pair<std::string, bool>(fault_name, enable_flag));
+    set_enable_for_fault_cache.emplace_back(fault_name, enable_flag);
   }
   return true;
 }
@@ -287,8 +286,7 @@ bool FaultManager::set_trigger_value(
 
     trigger->set_value(value);
   } else {
-    set_trigger_value_cache.push_back(
-      std::pair<std::string, double>(trigger_name, value));
+    set_trigger_value_cache.emplace_back(trigger_name, value);
   }
   return true;
 }
@@ -678,7 +676,7 @@ template<typename T> Fault* FaultManager::make_fault_bias(
     return nullptr;
   }
 
-  FaultBias<T>* new_fault = new FaultBias<T>(variable);
+  auto* new_fault = new FaultBias<T>(variable);
   new_fault->bias = ConvertString::convert<T>(bias_string);
 
   return new_fault;
@@ -716,7 +714,7 @@ template<typename T> Fault* FaultManager::make_fault_scale(
     return nullptr;
   }
 
-  FaultScale<T>* new_fault = new FaultScale<T>(variable);
+  auto* new_fault = new FaultScale<T>(variable);
   new_fault->scale_factor = ConvertString::convert<T>(scale_string);
 
   return new_fault;
@@ -788,7 +786,7 @@ template<typename T> Fault* FaultManager::make_fault_overwrite(
     random_value = false;
   }
 
-  FaultOverwrite<T>* new_fault = new FaultOverwrite<T>(variable);
+  auto* new_fault = new FaultOverwrite<T>(variable);
 
   new_fault->faulted_value = random_value ?
                              generate_random_value<T>() :
@@ -1204,7 +1202,7 @@ template<typename T> Fault* FaultManager::make_fault_white_noise(
     }
   }
 
-  FaultWhiteNoise<T>* new_fault = new FaultWhiteNoise<T>(variable);
+  auto* new_fault = new FaultWhiteNoise<T>(variable);
   // Parse the RandValue node and populate rand. If this fails, delete the
   // fault and return nullptr.
   if (!parse_rand_number(new_fault->noise, rand_node, fault_name)) {
@@ -1251,7 +1249,7 @@ template<typename T> Fault* FaultManager::make_fault_random_walk(
     }
   }
 
-  FaultRandomWalk<T>* new_fault = new FaultRandomWalk<T>(variable);
+  auto* new_fault = new FaultRandomWalk<T>(variable);
   // Parse the RandValue node and populate rand. If this fails, delete the
   // fault and return nullptr.
   if (!parse_rand_number(new_fault->rand, rand_node, fault_name)) {
@@ -1278,7 +1276,7 @@ TriggerGroup* FaultManager::parse_trigger_group(
   xmlNodePtr  trigger_group_node,
   const char* fault_name)
 {
-  TriggerGroup* new_trigger_group = new TriggerGroup;
+  auto* new_trigger_group = new TriggerGroup;
 
   bool empty_group = true;
   for (xmlNodePtr trigger_node = trigger_group_node->children;
@@ -1452,7 +1450,7 @@ TriggerBase* FaultManager::parse_trigger(
       // Note -- not using make_trigger because we do not want to be trying to
       // convert a string via the ConvertString algorithm which is used in
       // make_trigger.
-      Trigger<std::string>* string_trigger =
+      auto* string_trigger =
         new Trigger<std::string>(*static_cast<std::string*>(Symbol->address));
       if (value != nullptr) {
         string_trigger->set_value(value);
@@ -1504,7 +1502,7 @@ TriggerBase* FaultManager::parse_trigger(
     {
       // Note -- not using make_trigger because we do not want to be trying to
       // convert a set boolean periods etc. as used in make_trigger.
-      Trigger<bool>* bool_trigger =
+      auto* bool_trigger =
         new Trigger<bool>(*static_cast<bool*>(Symbol->address));
       bool_trigger->set_value(ConvertString::convert<bool>(value));
       new_trigger = bool_trigger;
@@ -1574,7 +1572,7 @@ template<typename T> TriggerBase* FaultManager::make_trigger(
   //*****************************************************
   //Make the new trigger                                *
   //*****************************************************
-  Trigger<T>* new_trigger = new Trigger<T>(variable);
+  auto* new_trigger = new Trigger<T>(variable);
   if (value != nullptr) {
     new_trigger->value = ConvertString::convert<T>(value);
   }

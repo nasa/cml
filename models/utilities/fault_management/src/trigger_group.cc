@@ -40,7 +40,7 @@ add_trigger
 Purpose:(Adds a trigger to the group.)
 *******************************************************************************/
 void TriggerGroup::add_trigger( TriggerBase& trigger) {
-  triggers.push_back(std::pair<bool, TriggerBase*>(true, &trigger));
+  triggers.emplace_back(true, &trigger);
 }
 
 

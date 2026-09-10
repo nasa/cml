@@ -92,7 +92,7 @@ class PointToPointPosition
   // Accept default operator=; it isn't used in the implementation.
 
   bool check_names (const std::string & v_pt_name,
-                    const std::string & p_pt_name);
+                    const std::string & p_pt_name) const;
 };
 
 

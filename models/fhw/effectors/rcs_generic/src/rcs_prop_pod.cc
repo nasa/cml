@@ -16,7 +16,6 @@ PROGRAMMERS:
 
 #include "../include/rcs_prop_pod.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include <cstddef>
 #include <vector>
 
 #include <cmath>
@@ -55,8 +54,8 @@ RcsPropPod::RcsPropPod(
   //              component.set_dyn_mass_interface(component.fake_interface);
   // at this point still results in passing a temporary address for the
   // fake-interface so the pointers still go to the wrong place.
-  for (size_t ii = 0; ii < components.size(); ++ii) {
-    components[ii].set_dyn_mass_interface(components[ii].fake_interface);
+  for (auto & component : components) {
+    component.set_dyn_mass_interface(component.fake_interface);
   }
 }
 
@@ -104,12 +103,10 @@ RcsPropPod::activate_dyn_mass()
   if (using_dyn_mass) {
     return;
   }
-  for (std::vector<RcsPodComponent>::iterator it=components.begin();
-       it != components.end();
-       ++it) {
-    if ((*it).mass_consumed_step != &(*it).fake_interface.mass_consumed_step) {
+  for (auto & component : components) {
+    if (component.mass_consumed_step != &component.fake_interface.mass_consumed_step) {
       using_dyn_mass = true;
-      (*it).using_dyn_mass = true;
+      component.using_dyn_mass = true;
     }
   }
 }
@@ -123,10 +120,8 @@ RcsPropPod::deactivate_dyn_mass()
 {
   if (using_dyn_mass) {
     using_dyn_mass = false;
-    for (std::vector<RcsPodComponent>::iterator it=components.begin();
-         it != components.end();
-         ++it) {
-      (*it).using_dyn_mass = false;
+    for (auto & component : components) {
+      component.using_dyn_mass = false;
     }
   }
 }
@@ -155,11 +150,9 @@ RcsPropPod::mass_available()
     return true; // mass is static; there is always mass available.
   }
 
-  for (std::vector<RcsPodComponent>::iterator it=components.begin();
-       it != components.end();
-       ++it) {
+  for (auto & component : components) {
     // if any component is out, return false.
-    if ( !(*it).mass_available()) {
+    if ( !component.mass_available()) {
       // if the model is intended to be used such that mass depletes, but
       // mass-depletion does not prevent thrusting, turn off the dynamic-mass
       // at this point.  Mass will not deplete any further for any component.

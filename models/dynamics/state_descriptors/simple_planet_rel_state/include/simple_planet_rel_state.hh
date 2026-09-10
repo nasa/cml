@@ -34,8 +34,8 @@ class SimplePlanetRelState : public SubscriptionBase,
   double altitude{0.0};         /* (m) height of the frame-of-interest above the
                                   reference-height. */
 
-  SimplePlanetRelState(const std::string & body_frame_name_,
-                       const std::string & planet_frame_name_);
+  SimplePlanetRelState(std::string  body_frame_name_,
+                       std::string  planet_frame_name_);
   SimplePlanetRelState (const SimplePlanetRelState&) = delete;
   SimplePlanetRelState & operator = (const SimplePlanetRelState&) = delete;
 

@@ -421,17 +421,14 @@ TableLookupTransposeDataSet::get_config( const char * name_in)
 TableLookupTransposeDataSet_TableConfig *
 TableLookupTransposeDataSet::get_config( const std::string & name_in)
 {
-
-  std::vector<TableLookupTransposeDataSet_TableConfig>::iterator table_it =
-                                                           table_config.begin();
   size_t num_matches = 0;
   TableLookupTransposeDataSet_TableConfig * ret_val = nullptr;
 
-  for (; table_it != table_config.end(); ++table_it) {
-    if (name_in == table_it->name) {
+  for (auto& table_it : table_config) {
+    if (name_in == table_it.name) {
       num_matches++;
       if (ret_val == nullptr) {
-        ret_val = &(*table_it);
+        ret_val = &table_it;
       }
     }
   }

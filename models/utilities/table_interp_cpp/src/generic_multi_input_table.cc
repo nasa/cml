@@ -284,10 +284,10 @@ GenericMultiInputTable::add_independent(
     // Fill the independents with NULL values up to the specified index.
     TableIndependentVariable * null_ptr = nullptr;
     for (size_t ii = size; ii < index; ++ii) {
-      independents.push_back(IndepPair(null_ptr, lookup_method));
+      independents.emplace_back(null_ptr, lookup_method);
     }
     // Then add the specified independent at the back.
-    independents.push_back(IndepPair(&var, lookup_method));
+    independents.emplace_back(&var, lookup_method);
   }
 }
 
@@ -510,10 +510,8 @@ GenericMultiInputTable::generate_output()
   size_t index_basis = 0;// index_basis marks the first data point
                          // for each dependent variable
 
-  // For each dependent variable:
-  DoublePtrVec::iterator out_iterator = output.begin();
-  for (; out_iterator != output.end(); ++out_iterator) {
-    (**out_iterator) = 0.0; // initialize output value to 0.0 for increments
+  for (double* var : output) {
+    *var = 0.0; // initialize output value to 0.0 for increments
 
     // For each of the 2^n interpolation points
     for (size_t jj = 0; jj < num_data_points_interp; ++jj) {
@@ -523,7 +521,7 @@ GenericMultiInputTable::generate_output()
       //         The sizes of the two vectors have been confirmed
       //         to match in precheck_output().
       const size_t data_index = index_basis + data_point_index[jj];
-      (**out_iterator) += data_point_weight[jj] * data[data_index];
+      (*var) += data_point_weight[jj] * data[data_index];
     }
     // Move on to the next dependent variable.
     index_basis +=  num_data_elements_per_increment_of_index[0];
@@ -791,7 +789,7 @@ GenericMultiInputTable::generate_base_values()
 {
   // First go through the list of the independents, computing how many
   // interpolation points are needed for this dependent variable.
-  const size_t num_independents_interp = static_cast<size_t>(std::count_if(
+  const auto num_independents_interp = static_cast<size_t>(std::count_if(
     independents.begin(),
     independents.end(),
     [](const IndepPair& independent) {

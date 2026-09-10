@@ -40,7 +40,7 @@ class sSensorFaults : public FaultManager
 {
   public:
     sSensorFaults() = default;
-    virtual ~sSensorFaults() = default;
+    ~sSensorFaults() override = default;
     sSensorFaults(const sSensorFaults&) = delete;
     sSensorFaults& operator = (const sSensorFaults&) = delete;
 

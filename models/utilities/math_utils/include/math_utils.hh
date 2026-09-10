@@ -79,7 +79,7 @@ public:
   // STL-vector.  The first element of the coeffs vector is the x^0 term, the
   // last is the x^n term where n = coeffs.size()-1
   static double polynomial( double x,
-                            std::vector<double> & coeffs,
+                            const std::vector<double> & coeffs,
                             const double failed_val  = 0.0,
                             const bool   failed_flag = false);
                         // Last 2 optional arguments are for if values near inf.

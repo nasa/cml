@@ -11,16 +11,6 @@ PROGRAMMERS:
 #include <list>
 
 /*****************************************************************************
-Constructor
-******************************************************************************/
-VehicleEventsManager::VehicleEventsManager()
-   // :
-   // construct each of the event instances here, e.g.:
-   // dummy_event()
-   // another( trick_logging)  // need a ref to trick_logging to use this
-{}
-
-/*****************************************************************************
 initialize
 Purpose:(initializes all of the watches)
 ******************************************************************************/
@@ -49,7 +39,7 @@ Purpose:(Checks all active watches)
 void
 VehicleEventsManager::update()
 {
-  std::list<WatchValuesBaseCore *>::iterator ii = active_watches.begin();
+  auto ii = active_watches.begin();
   while (ii != active_watches.end()) {
     // If the crossing is detected
     if ( (*ii)->test_crossing()) {

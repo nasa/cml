@@ -140,7 +140,7 @@ std::string printf_fmt( const std::string & format, Args&&... args)
   /* Allocate the char array to take the printf output, and write to it:
    * Use snprintf again just because it is safer, but we do not need the
    * return value this time.*/
-  const size_t size_to_alloc = static_cast<size_t>(char_len);
+  const auto size_to_alloc = static_cast<size_t>(char_len);
   char* out_char = new char[size_to_alloc];
   std::snprintf(out_char, size_to_alloc, format.c_str(), args...);
   // assign to a STL-string, and return it.

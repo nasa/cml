@@ -23,6 +23,7 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 
@@ -148,14 +149,12 @@ void
 RocketMotor_MultiNozzle::add_nozzle(
     RocketMotorNozzle &nozzle)
 {
-  for (size_t ii = 0; ii < nozzles_ptr_vec.size(); ++ii) {
-    if (&nozzle == nozzles_ptr_vec[ii]) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Configuration error\n",
-        "Instruction received to add a nozzle that is already in the vector\n"
-        "of nozzles.\nInstruction ignored.\n");
-      return;
-    }
+  if (std::find(nozzles_ptr_vec.begin(), nozzles_ptr_vec.end(), &nozzle) != nozzles_ptr_vec.end()) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Configuration error\n",
+      "Instruction received to add a nozzle that is already in the vector\n"
+      "of nozzles.\nInstruction ignored.\n");
+    return;
   }
   nozzles_ptr_vec.push_back( &nozzle);
   num_noz = nozzles_ptr_vec.size();

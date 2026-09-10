@@ -15,6 +15,7 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
 *******************************************************************************/
 
+#include <algorithm>
 #include <cmath>
 #include <string>
 #include <vector>
@@ -93,13 +94,11 @@ AeroExecutiveTable::change_table( const std::string & new_name)
       return; // already on that table.
     }
   }
-  for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
-                                                 it != data_tables_vector.end();
-                                                 ++it) {
-    if ( (*it)->name == new_name) {
-      configure_new_table(*it);
-      return;
-    }
+  const auto table = std::find_if(data_tables_vector.begin(), data_tables_vector.end(),
+    [&new_name](const AeroTableSetBase* data_table){return data_table->name == new_name;});
+  if (table != data_tables_vector.end()) {
+    configure_new_table(*table);
+    return;
   }
   // if current_table == NULL, the model has not yet been initialized and will
   // fail at initialization if this is not corrected.
@@ -147,11 +146,9 @@ AeroExecutiveTable::add_table( AeroTableSetBase * table)
     return;
   }
 
-  for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
-                                                 it != data_tables_vector.end();
-                                                 ++it) {
+  for (auto & it : data_tables_vector) {
     // Check the addresses for duplicates.
-    if ((*it) == table) {
+    if (it == table) {
       CMLMessage::warn(
         __FILE__,__LINE__,"Duplication of Aero table.\n",
         "An AeroTableSetBase with this address has previously been added.\n"
@@ -159,10 +156,10 @@ AeroExecutiveTable::add_table( AeroTableSetBase * table)
         "Check configuration for possibility of duplicate additions.\n"
         "Continuing with the addition of this table.\n");
     }
-    else if ((*it)->name == table->name) {
+    else if (it->name == table->name) {
       CMLMessage::warn(
         __FILE__,__LINE__,"Duplication of Aero table.\n",
-        "An AeroTableSetBase with this name (", (*it)->name, ") has previously been added.\n"
+        "An AeroTableSetBase with this name (", it->name, ") has previously been added.\n"
         "Caution should be exercised when switching between tables based\n"
         "on table-name which is now ambiguous.\n");
     }
@@ -225,11 +222,9 @@ AeroExecutiveTable::initialize()
   //      initialize redundant tables.
   //      It is safer and slower to load and initialize at the front-end.
   if (load_all_tables_at_init) {
-    for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
-                                                   it != data_tables_vector.end();
-                                                   ++it) {
-      if (!(*it)->is_initialized()) {
-        (*it)->initialize();
+    for (auto & it : data_tables_vector) {
+      if (!it->is_initialized()) {
+        it->initialize();
       }
     }
   }

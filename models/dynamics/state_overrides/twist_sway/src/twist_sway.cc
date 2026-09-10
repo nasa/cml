@@ -16,6 +16,7 @@ Programmers:
 
 *******************************************************************************/
 #include <cmath>
+#include <iterator>
 #include <list>
 #include <random>
 
@@ -236,23 +237,21 @@ Purpose:(Adds a new perturbation to the high-frequency or low-frequency list)
 void
 TwistSway::new_fast_perturbation()
 {
-  TwistSwayMagnitudes new_perturb;
-  std::uniform_real_distribution<double> dist( 0,1);
+  auto& new_perturb = fast_list.emplace_front();
+  std::uniform_real_distribution dist( 0.0,1.0);
   new_perturb.parallel = dist(random_generator) * params.Parallel_Motion_Fast;
   new_perturb.normal   = dist(random_generator) * params.Normal_Motion_Fast;
   new_perturb.twist    = dist(random_generator) * params.Twist_Mag;
-  fast_list.push_front( new_perturb);
 }
 /****************************************************************************/
 void
 TwistSway::new_slow_perturbation()
 {
-  TwistSwayMagnitudes new_perturb;
-  std::uniform_real_distribution<double> dist( 0,1);
+  auto& new_perturb = slow_list.emplace_front();
+  std::uniform_real_distribution dist( 0.0,1.0);
   new_perturb.parallel = dist(random_generator) * params.Parallel_Motion_Slow;
   new_perturb.normal   = dist(random_generator) * params.Normal_Motion_Slow;
   new_perturb.twist    = 0.0;
-  slow_list.push_front( new_perturb);
 }
 
 /*****************************************************************************
@@ -337,15 +336,11 @@ TwistSway::accumulate_perturbations()
       fast_mag.normal   = fast_list.front().normal   * (1-p_factor);
       fast_mag.twist    = fast_list.front().twist    * (1-p_factor);
       p_factor *= (1 - p_factor_fast);
-      // use an iterator rather than simple whole-list because starting with
-      // element #2.
-      std::list< TwistSwayMagnitudes >::iterator iter;
-      for ( iter = ++fast_list.begin(); // element 2
-            iter != fast_list.end();
-            ++iter) {
-        fast_mag.parallel += (*iter).parallel * p_factor;
-        fast_mag.normal   += (*iter).normal   * p_factor;
-        fast_mag.twist    += (*iter).twist    * p_factor;
+      // Start with element #2.
+      for (auto iter = std::next(fast_list.begin()); iter != fast_list.end(); ++iter) {
+        fast_mag.parallel += iter->parallel * p_factor;
+        fast_mag.normal   += iter->normal   * p_factor;
+        fast_mag.twist    += iter->twist    * p_factor;
         p_factor *=  p_factor_fast;
       }
       break;
@@ -385,14 +380,10 @@ TwistSway::accumulate_perturbations()
       slow_mag.parallel = slow_list.front().parallel * (1-p_factor);
       slow_mag.normal   = slow_list.front().normal   * (1-p_factor);
       p_factor *= (1 - p_factor_slow);
-      // use an iterator rather than simple whole-list because starting with
-      // element #2.
-      std::list< TwistSwayMagnitudes >::iterator iter;
-      for ( iter = ++slow_list.begin(); // element 2
-            iter != slow_list.end();
-            ++iter) {
-        slow_mag.parallel += (*iter).parallel * p_factor;
-        slow_mag.normal   += (*iter).normal   * p_factor;
+      // Start with element #2.
+      for (auto iter = std::next(slow_list.begin()); iter != slow_list.end(); ++iter) {
+        slow_mag.parallel += iter->parallel * p_factor;
+        slow_mag.normal   += iter->normal   * p_factor;
         p_factor *=  p_factor_slow;
       }
       break;

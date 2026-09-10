@@ -18,14 +18,6 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-EventTriggerSet::EventTriggerSet()
-{}
-
-
 /*****************************************************************************
 Destructor
 *****************************************************************************/
@@ -71,7 +63,7 @@ void
 EventTriggerSet::populate_conditional_reference_trigger_list()
 {
   for (WatchValuesBaseCore * trigger : triggers) {
-    EventTriggerBase * event_trigger = dynamic_cast<EventTriggerBase*>(trigger);
+    auto * event_trigger = dynamic_cast<EventTriggerBase*>(trigger);
     if (event_trigger != nullptr &&
         event_trigger->has_conditional_reference()) {
       conditional_reference_triggers.push_back(event_trigger);

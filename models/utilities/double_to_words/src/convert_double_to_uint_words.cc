@@ -220,7 +220,7 @@ ConvertDoubleToUintWords::update()
   double remainder = convert_value;
   for (int word_id = static_cast<int>(word_count) - 1; word_id >= 0; word_id--) {
     // Take the whole multiple of the significance of this word
-    const unsigned int word_index = static_cast<unsigned int>(word_id);
+    const auto word_index = static_cast<unsigned int>(word_id);
     words.at(word_index) = static_cast<unsigned int> (remainder /
                                                       significance.at(word_index));
 

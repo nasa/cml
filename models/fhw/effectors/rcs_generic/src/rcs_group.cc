@@ -15,6 +15,7 @@ PROGRAMMERS:
 **********************************************************************/
 
 #include <algorithm>
+#include <numeric>
 #include <vector>
 #include "../include/rcs_group.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -69,13 +70,12 @@ RcsJetGroup::initialize(
   // usage.
   if (propc_use_isp) {
     if (num_prop_components > 1){ /* multi-propellant case */
-      double sum_comp_ratio_ = 0.0;
       // Add up the values of isp_prop_comp_ratio.  It should come to 1.0
-      for (std::vector<double>::iterator it = isp_prop_comp_ratio.begin();
-           it != isp_prop_comp_ratio.end();
-           ++it) {
-        sum_comp_ratio_ += (*it);
-      }
+      const double sum_comp_ratio_ = std::accumulate(
+        isp_prop_comp_ratio.begin(),
+        isp_prop_comp_ratio.end(),
+        0.0);
+
       // Protection against missing isp_prop_comp_ratio setting
       if( MathUtils::is_near_equal( sum_comp_ratio_, 0.0)){
         CMLMessage::fail(
@@ -92,11 +92,8 @@ RcsJetGroup::initialize(
         "It instead has value ", sum_comp_ratio_, "\n"
         "Normalizing the values to prevent incorrect propellant usage.\n");
 
-        for (std::vector<double>::iterator it=isp_prop_comp_ratio.begin();
-             it != isp_prop_comp_ratio.end();
-             ++it) {
-           (*it) /= sum_comp_ratio_;
-        }
+        std::for_each(isp_prop_comp_ratio.begin(), isp_prop_comp_ratio.end(),
+          [&sum_comp_ratio_](double& ratio){ratio /= sum_comp_ratio_;});
       }
       // Otherwise, the isp_prop_comp_ratio values are appropriately valued.
     }

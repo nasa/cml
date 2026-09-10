@@ -11,6 +11,7 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
+#include <algorithm>
 #include <cstddef>
 #include <string>
 #include <vector>
@@ -68,9 +69,8 @@ TableLookupSet::add_table( GenericMultiInputTable &new_table)
   // In this scenario, the second addition of the table will be a duplicate,
   // but checking the dependent variables is unsufficient.  So check the tables
   // as well.
-  std::vector<TableItem_t>::iterator it_tab =  tables.begin();
-  for (; it_tab!=tables.end(); ++it_tab) {
-    if (&new_table == (*it_tab).first) {
+  for (const auto& [table, enabled_flag] : tables) {
+    if (&new_table == table) {
       CMLMessage::warn(
         __FILE__,__LINE__,"Initialization duplication detected.\n",
         "The same table was added to the table-manager twice.\n"
@@ -81,7 +81,7 @@ TableLookupSet::add_table( GenericMultiInputTable &new_table)
   }
 
   // Add this table to the list and default it to be enabled.
-  tables.push_back(AbstractTableLookup::TableItem_t(&new_table, true));
+  tables.emplace_back(&new_table, true);
 }
 
 /*****************************************************************************
@@ -102,16 +102,13 @@ TableLookupSet::add_independent_variable(
   }
 
   // Check that it has not already been added:
-  std::vector<TableIndependentVariable*>::iterator it = independents.begin();
-  for (; it != independents.end(); ++it) {
-    if (&var_in == *it) {
-      CMLMessage::warn(
-        __FILE__, __LINE__, "Duplicate variable addition\n",
-        "Attempted to add variable ",var_in.get_name(),
-        " but it has already been added.\n"
-        "Addition aborted.\n");
-      return;
-    }
+  if (std::find(independents.begin(), independents.end(), &var_in) != independents.end()) {
+    CMLMessage::warn(
+      __FILE__, __LINE__, "Duplicate variable addition\n",
+      "Attempted to add variable ",var_in.get_name(),
+      " but it has already been added.\n"
+      "Addition aborted.\n");
+    return;
   }
 
   // Check that it has a unique name, names are used for lookups.

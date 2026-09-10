@@ -20,8 +20,8 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cfenv>
 #include <limits>
-#include <fenv.h>
 #include <list>
 #include <string>
 #include <vector>
@@ -605,21 +605,20 @@ Purpose:( Evaluates a polynomial y= Sigma a_i x^i given a vector of
 *******************************************************************************/
 double
 MathUtils::polynomial( double x,
-                       std::vector<double> & coeffs,
+                       const std::vector<double> & coeffs,
                        const double failed_val,
                        const bool   failed_flag)
 {
   // Temporary disable fp exceptions, storing the set of
   // previously configured exceptions.
-  const int fe_prev = fedisableexcept(FE_ALL_EXCEPT);
+  std::fenv_t fenv;
+  const int fe_prev = std::feholdexcept(&fenv);
   assert(-1 != fe_prev);  // If -1, there was a failure
 
   double x_to_i = 1.0;
   double sum = 0.0;
-  for (std::vector< double >::iterator it = coeffs.begin();
-       it != coeffs.end();
-       ++it) {
-    sum += ((*it) * x_to_i);
+  for (const double & coeff : coeffs) {
+    sum += (coeff * x_to_i);
     x_to_i *= x;
   }
 
@@ -638,7 +637,7 @@ MathUtils::polynomial( double x,
     }
     sum = failed_val;
   }
-  feenableexcept(fe_prev); // restore the previous settings of fp exceptions
+  std::fesetenv(&fenv); // restore the previous settings of fp exceptions
   return sum;
 }
 
@@ -912,7 +911,7 @@ MathUtils::compute_backward_difference( const std::list<double> & history)
   const size_t order = std::min(history.size() - 1, static_cast<size_t>(4));
 
   size_t ii = 0;
-  for (std::list<double>::const_iterator it = history.begin();
+  for (auto it = history.begin();
        it != history.end() && ii < 5;
        ++it) {
 

@@ -64,7 +64,7 @@ class SeparationState : public SubscriptionBase
                                           side of the relation. */
 
  public:
-   SeparationState (void);
+   SeparationState ();
    explicit SeparationState (const std::string & name_);
    ~SeparationState() override = default;
    SeparationState (const SeparationState&) = delete;

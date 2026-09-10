@@ -53,8 +53,7 @@ class WatchValuesGravityAdjust : public WatchValuesBase<varT> {
                   unsigned int * deg_order)
   {
     for (size_t ii = 0; ii < size; ++ii) {
-      std::pair< varT, unsigned int > new_pair( thresholds[ii], deg_order[ii]);
-      grav_fidelity_list.push_back( new_pair);
+      grav_fidelity_list.emplace_back(thresholds[ii], deg_order[ii]);
     }
   }
  protected:
@@ -63,9 +62,10 @@ class WatchValuesGravityAdjust : public WatchValuesBase<varT> {
   ***************************************************************************/
   virtual bool specific_execution()
   {
-     grav_controls.degree =
-     grav_controls.order  = grav_fidelity_list.front().second;
-     grav_controls.spherical = (grav_controls.degree == 0);
+     const auto degree_order = grav_fidelity_list.front().second;
+     grav_controls.degree = degree_order;
+     grav_controls.order  = degree_order;
+     grav_controls.spherical = (degree_order == 0);
      grav_fidelity_list.pop_front();
 
      // If that is the last setting, can stop watching.
