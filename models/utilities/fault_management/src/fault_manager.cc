@@ -44,8 +44,8 @@ bool FaultManager::global_enabled = true;
 Destructor
 *****************************************************************************/
 FaultManager::~FaultManager() {
-  for (auto & ii : faults) {
-    for (auto* fault : ii) {
+  for (auto & fault_list : faults) {
+    for (auto* fault : fault_list) {
       delete fault;
     }
   }

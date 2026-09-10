@@ -183,14 +183,14 @@ void DynamicMassGroup::update_group_mass()
   // then the mass tree needs updating all the way to the root-body. 
   total_mass = 0.0;
   // Update each dynamic mass.
-  for (auto & dyn_masse : dyn_masses) {
+  for (auto & dyn_mass : dyn_masses) {
 
     // using a temporary variable here to ensure that update_mass() gets
     // called without possibility of it being blocked by needs_tree_update if
     // put in as a direct component of the OR statement.
-    const bool mass_change = dyn_masse->update_mass();
+    const bool mass_change = dyn_mass->update_mass();
     needs_tree_update = needs_tree_update || mass_change;
-    total_mass += dyn_masse->core_properties.mass;
+    total_mass += dyn_mass->core_properties.mass;
   }
   total_consumed_mass = total_initial_mass - total_mass;
 

@@ -113,7 +113,7 @@ Purpose:
   instance corresponding to the specified names.
 *****************************************************************************/
 bool
-PointToPointPosition::check_names (
+PointToPointPosition::check_names(
     const std::string & v_pt_name,
     const std::string & p_pt_name) const
 {
@@ -285,12 +285,13 @@ PointToPointManager::remove_relative_position(
     const std::string & v_pt_name,
     const std::string & p_pt_name)
 {
-  const auto item = std::find_if(relative_positions.begin(), relative_positions.end(),
+  // TODO Nino Tarantino 09/10/26: in C++20, use return value of remove_if.
+  const auto original_size = relative_positions.size();
+  relative_positions.remove_if(
     [&v_pt_name, &p_pt_name](const PointToPointPosition& point) {
       return point.check_names(v_pt_name, p_pt_name);
     });
-  if (item != relative_positions.end()) {
-    relative_positions.erase(item);
+  if (relative_positions.size() < original_size) {
     return;
   }
 

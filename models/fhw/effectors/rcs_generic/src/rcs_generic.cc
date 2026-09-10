@@ -141,7 +141,7 @@ RcsGeneric::initialize(
 
   generator.seed(seed);
 
-  for (auto * jet : jets) {
+  for (const auto * jet : jets) {
     if (jet == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
@@ -149,7 +149,7 @@ RcsGeneric::initialize(
         "This vector must be populated with valid pointers.\n");
     }
   }
-  for (auto * prop_pod : prop_pods) {
+  for (const auto * prop_pod : prop_pods) {
     if (prop_pod == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
@@ -157,7 +157,7 @@ RcsGeneric::initialize(
         "This vector must be populated with valid pointers.\n");
     }
   }
-  for (auto * group : groups) {
+  for (const auto * group : groups) {
     if (group == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",

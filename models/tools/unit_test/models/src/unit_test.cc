@@ -18,7 +18,6 @@ PROGRAMMERS:
 #include <cstddef>
 #include <cstdlib>
 #include <iostream>
-#include <iterator>
 #include <list>
 #include <sstream>
 #include <fstream>
@@ -103,23 +102,6 @@ SweepSet::SweepSet(
       "This could take a while.  Verify intent.\nContinuing.\n",
       static_cast<int>(std::abs((end - start)/increment)));
   }
-}
-
-/*****************************************************************************
-Assignment Operator
-*****************************************************************************/
-SweepSet& SweepSet::operator = (const SweepSet &other)
-{
-  if (this == &other) {
-    return *this;
-  }
-  variable = other.variable;
-  start = other.start;
-  end = other.end;
-  increment = other.increment;
-  value = other.value;
-  epsilon = other.epsilon;
-  return *this;
 }
 
 /*****************************************************************************
@@ -567,10 +549,10 @@ UnitTestFramework::process_linked_variables()
     // insert new commands into command list
     for( auto comm_it = commands.begin();
          comm_it != commands.end();
-         ++comm_it ) {
+         /*increment internally*/ ) {
       comm_it->append( first_command);
-      // Insert subsequent commands immediately after the current command.
-      commands.insert(std::next(comm_it),
+      ++comm_it;
+      commands.insert(comm_it,
                       subsequent_commands.begin(),
                       subsequent_commands.end());
     }
