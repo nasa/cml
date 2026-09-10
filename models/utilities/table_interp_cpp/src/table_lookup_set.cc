@@ -102,9 +102,7 @@ TableLookupSet::add_independent_variable(
   }
 
   // Check that it has not already been added:
-  const auto existing_var = std::find_if(independents.begin(), independents.end(),
-    [&var_in](const TableIndependentVariable* var) {return var == &var_in;});
-  if (existing_var != independents.end()) {
+  if (std::find(independents.begin(), independents.end(), &var_in) != independents.end()) {
     CMLMessage::warn(
       __FILE__, __LINE__, "Duplicate variable addition\n",
       "Attempted to add variable ",var_in.get_name(),

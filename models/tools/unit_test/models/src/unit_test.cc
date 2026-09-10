@@ -18,6 +18,7 @@ PROGRAMMERS:
 #include <cstddef>
 #include <cstdlib>
 #include <iostream>
+#include <iterator>
 #include <list>
 #include <sstream>
 #include <fstream>
@@ -103,12 +104,7 @@ SweepSet::SweepSet(
       static_cast<int>(std::abs((end - start)/increment)));
   }
 }
-/*****************************************************************************
-Copy Constructor
-*****************************************************************************/
-SweepSet::SweepSet(const SweepSet &other) 
-  
-= default;
+
 /*****************************************************************************
 Assignment Operator
 *****************************************************************************/
@@ -571,10 +567,10 @@ UnitTestFramework::process_linked_variables()
     // insert new commands into command list
     for( auto comm_it = commands.begin();
          comm_it != commands.end();
-         /*increment internally*/ ) {
+         ++comm_it ) {
       comm_it->append( first_command);
-      ++comm_it;
-      commands.insert(comm_it,
+      // Insert subsequent commands immediately after the current command.
+      commands.insert(std::next(comm_it),
                       subsequent_commands.begin(),
                       subsequent_commands.end());
     }

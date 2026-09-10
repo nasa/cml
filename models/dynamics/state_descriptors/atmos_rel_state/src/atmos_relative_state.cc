@@ -616,8 +616,8 @@ AtmosRelativeState::check_euler_for_nan()
       // Note - could make this method iterate on itself, but there is at
       //        most one follow-on iteration so this is easier than adding
       //        infinite-loop protection
-      for (const double jj : traj_to_body_RYP) {
-        if ( std::isnan(jj)) {
+      for (const double element : traj_to_body_RYP) {
+        if ( std::isnan(element)) {
           // Still got a NAN in there.  Nothing we can do to fix it at this
           // point.  Got 2 options for bailing out:
           if (terminate_on_nan_euler) {

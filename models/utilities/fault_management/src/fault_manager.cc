@@ -130,10 +130,10 @@ Purpose:(Looks up a fault by name. If no fault with that name is found, returns
          nullptr.)
 *******************************************************************************/
 Fault* FaultManager::get_fault( const std::string& name) {
-  for (auto & ii : faults) {
-    const auto fault = std::find_if(ii.begin(), ii.end(),
+  for (auto & fault_list : faults) {
+    const auto fault = std::find_if(fault_list.begin(), fault_list.end(),
       [&name](const Fault* fault_) {return name == fault_->name;});
-    if (fault != ii.end()) {
+    if (fault != fault_list.end()) {
       return *fault;
     }
   }

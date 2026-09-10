@@ -22,8 +22,8 @@ PROGRAMMERS:
 Constructor
 *****************************************************************************/
 SimplePlanetRelState::SimplePlanetRelState(
-     std::string  body_frame_name_,
-     std::string  planet_frame_name_)
+     std::string body_frame_name_,
+     std::string planet_frame_name_)
   :
   body_frame_name(std::move(body_frame_name_)),
   planet_frame_name(std::move(planet_frame_name_))

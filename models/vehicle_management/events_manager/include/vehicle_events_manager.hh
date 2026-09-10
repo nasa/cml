@@ -44,7 +44,7 @@ class VehicleEventsManager
   std::list<WatchValuesBaseCore *> all_watches;
 
  public:
-  VehicleEventsManager();
+  VehicleEventsManager() = default;
   virtual ~VehicleEventsManager() = default;
   VehicleEventsManager (const VehicleEventsManager& rhs) = delete;
   VehicleEventsManager& operator = (const VehicleEventsManager& rhs) = delete;

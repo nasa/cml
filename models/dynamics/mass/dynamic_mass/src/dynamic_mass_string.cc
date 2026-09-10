@@ -182,9 +182,7 @@ void DynamicMassString::add_mass_to_string( // Return: -- void
   }
 
   // check uniqueness to avoid inadvertent double-counting
-  const auto duplicate_body = std::find_if(body_collection.begin(), body_collection.end(),
-    [new_mass_body](const DynamicMassBody* body) {return new_mass_body == body;});
-  if (duplicate_body != body_collection.end()) {
+  if (std::find(body_collection.begin(), body_collection.end(), new_mass_body) != body_collection.end()) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid object addition\n",
       "Attempt to add a new DynamicMassBody (", new_mass_body->name.get_name(), ") that is already assigned\n"

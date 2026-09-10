@@ -49,8 +49,6 @@ STD1976::STD1976()
   initialize();
 }
 
-
-
 //initialize the atmosphere parameters as the values at mean sea level
 void STD1976::initialize()
 {

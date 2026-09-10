@@ -42,7 +42,7 @@ class EventTriggerSet : public WatchValuesSet
     WatchValuesSet) that have the necessity of maintaining the reference
     value subject to the condition that the CompoundEvent is triggered. */
 
-  EventTriggerSet();
+  EventTriggerSet() = default;
   ~EventTriggerSet() override;
   EventTriggerSet( const EventTriggerSet&) = delete;
   EventTriggerSet& operator=( const EventTriggerSet&) = delete;

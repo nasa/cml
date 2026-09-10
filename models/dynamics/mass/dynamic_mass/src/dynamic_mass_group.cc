@@ -58,9 +58,7 @@ void DynamicMassGroup::add_string_to_group(
   }
 
   // check uniqueness to avoid inadvertent double-counting
-  const auto duplicate_string = std::find_if(mass_strings.begin(), mass_strings.end(),
-    [new_mass_string] (const DynamicMassString* mass_string) {return new_mass_string == mass_string;});
-  if (duplicate_string != mass_strings.end()) {
+  if (std::find(mass_strings.begin(), mass_strings.end(), new_mass_string) != mass_strings.end()) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid object addition\n",
       "Attempt to add a DynamicMassString that is already assigned\n"
@@ -491,9 +489,7 @@ DynamicMassGroup::add_mass_to_group_internal(
       "Unsure how to proceed, terminating for safety.\n");
   }
   // check uniqueness to avoid inadvertent double-counting
-  const auto existing_mass = std::find_if(dyn_masses.begin(), dyn_masses.end(),
-    [mass](const DynamicMassBody* element) {return element == mass;});
-  if (existing_mass != dyn_masses.end()) {
+  if (std::find(dyn_masses.begin(), dyn_masses.end(), mass) != dyn_masses.end()) {
     if (send_err_msg) {
       CMLMessage::error(
         __FILE__,__LINE__,"Invalid object addition\n",

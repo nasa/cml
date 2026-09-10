@@ -149,11 +149,7 @@ void
 RocketMotor_MultiNozzle::add_nozzle(
     RocketMotorNozzle &nozzle)
 {
-  const auto existing_nozzle = std::find_if(
-    nozzles_ptr_vec.begin(),
-    nozzles_ptr_vec.end(),
-    [&nozzle](const RocketMotorNozzle* existing){return existing == &nozzle;});
-  if (existing_nozzle != nozzles_ptr_vec.end()) {
+  if (std::find(nozzles_ptr_vec.begin(), nozzles_ptr_vec.end(), &nozzle) != nozzles_ptr_vec.end()) {
     CMLMessage::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Instruction received to add a nozzle that is already in the vector\n"

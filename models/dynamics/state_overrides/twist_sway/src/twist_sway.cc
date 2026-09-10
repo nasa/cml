@@ -238,7 +238,7 @@ void
 TwistSway::new_fast_perturbation()
 {
   auto& new_perturb = fast_list.emplace_front();
-  std::uniform_real_distribution<double> dist( 0,1);
+  std::uniform_real_distribution dist( 0.0,1.0);
   new_perturb.parallel = dist(random_generator) * params.Parallel_Motion_Fast;
   new_perturb.normal   = dist(random_generator) * params.Normal_Motion_Fast;
   new_perturb.twist    = dist(random_generator) * params.Twist_Mag;
@@ -248,7 +248,7 @@ void
 TwistSway::new_slow_perturbation()
 {
   auto& new_perturb = slow_list.emplace_front();
-  std::uniform_real_distribution<double> dist( 0,1);
+  std::uniform_real_distribution dist( 0.0,1.0);
   new_perturb.parallel = dist(random_generator) * params.Parallel_Motion_Slow;
   new_perturb.normal   = dist(random_generator) * params.Normal_Motion_Slow;
   new_perturb.twist    = 0.0;

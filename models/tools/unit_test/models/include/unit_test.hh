@@ -40,7 +40,7 @@ class SweepSet {
             double start_in,
             double end_in,
             double incr_in);
-  SweepSet(const SweepSet &other);
+  SweepSet(const SweepSet &other) = default;
   SweepSet& operator = (const SweepSet &other);
 
   virtual ~SweepSet() = default;

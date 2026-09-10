@@ -68,11 +68,7 @@ PistonThrusterGroup::add_piston_thruster( PistonThruster & new_thruster)
     return;
   }
 
-  const auto existing_thruster = std::find_if(
-    piston_thrusters.begin(),
-    piston_thrusters.end(),
-    [&new_thruster](const PistonThruster* thruster) {return thruster == &new_thruster;});
-  if (existing_thruster != piston_thrusters.end()) {
+  if (std::find(piston_thrusters.begin(), piston_thrusters.end(), &new_thruster) != piston_thrusters.end()) {
     CMLMessage::error(
       __FILE__,__LINE__, "Invalid thruster addition.\n",
       "Attempted to add a thruster instance that has already been added.\n"

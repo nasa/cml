@@ -234,8 +234,8 @@ StateInitializeWithPropagation::rk4_integration()
     compute_planet_orientation( time_from_env_config);
 
     // initialize the interim velocities
-    for (auto & jj : interim_pos_dot) {
-      jeod::Vector3::copy( integ_vel, jj);
+    for (auto & element : interim_pos_dot) {
+      jeod::Vector3::copy( integ_vel, element);
     }
 
     // Compute k1 (interim_pos_dot[0], interim_vel_dot[0])
