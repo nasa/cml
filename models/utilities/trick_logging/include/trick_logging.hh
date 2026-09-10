@@ -47,11 +47,8 @@ class TrickLogging {
     //   to log_now() (see RUN_group1_set_cycle_offstep_with_reset)
     /***************************************************************************/
     void set_cycle(double cycle) {
-      for (std::list<Trick::DataRecordGroup *>::iterator ii = group_list.begin();
-           ii != group_list.end();
-           ++ii) {
-        (*ii)->set_cycle(cycle);
-      }
+      std::for_each(group_list.begin(), group_list.end(),
+        [cycle](Trick::DataRecordGroup* group){group->set_cycle(cycle);});
     }
     /***************************************************************************/
     void set_cycle( double cycle, const char * name) {

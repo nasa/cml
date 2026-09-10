@@ -75,18 +75,7 @@ class EventActionSimStopDyn : public EventActionBase {
  public:
   std::list<bool*> trans_dyn_flags;
   bool specific_execution() override {
-    // once we delete ii from the list we can no longer increment it.
-    // so we do some gymnastics to avoid that problem: get a copy of the
-    // to-be-deleted item's pointer, move on to the next item, then delete the
-    // item behind it using the copied pointer.
-    for(std::list<bool*>::iterator ii = trans_dyn_flags.begin();
-                                   ii != trans_dyn_flags.end(); ) {
-       std::list<bool*>::iterator to_parse = ii;
-       ++ii;
-       if(!(**to_parse)) {
-          trans_dyn_flags.erase(to_parse);
-       }
-    }
+    trans_dyn_flags.remove_if([](const bool* is_enabled){return !*is_enabled;});
     if(trans_dyn_flags.empty()) {
        exec_set_terminate_time(exec_get_sim_time());
     }
