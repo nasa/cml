@@ -54,14 +54,12 @@ class MslAlt : public SubscriptionBase
           double &geod_lat_in,
           double &geod_lon_in);
 
+   MslAlt (const MslAlt&) = delete;
+   MslAlt& operator = (const MslAlt&) = delete;
+   
    /*Methods*/
    void initialize() override;
    void update();
-
- private:
-   // Disable the copy/assignment operations
-   MslAlt (const MslAlt&) = delete;
-   MslAlt& operator = (const MslAlt&) = delete;
 };
 
 #endif /*CML_MSL_ALT_HH*/

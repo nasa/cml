@@ -30,8 +30,6 @@ MslAlt::MslAlt(double &geod_alt_in,
    geodLat(geod_lat_in),
    geodLon(geod_lon_in),
    geodAlt(geod_alt_in),
-   mslAltitude(0.0),
-   altFromTable(0.0),
    mslTable(altFromTable),
    tableLat(geodLat),
    tableLon(geodLon, TableIndependentVariable::WrapAround)
