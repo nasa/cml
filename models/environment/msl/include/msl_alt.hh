@@ -38,11 +38,11 @@ class MslAlt : public SubscriptionBase
 
    static const double   table[latSize][lonSize]; /* (m)
                                 Geoid vs. MSL error lookup table  */
-   double   mslAltitude; /* (m) Altitude with respect to mean sea level */
+   double   mslAltitude{0.0}; /* (m) Altitude with respect to mean sea level */
 
  protected:
    static const double      rad_per_deg; /* (rad/degree) unit converter.*/
-   double                   altFromTable;  /* (m) Altitude from the table */
+   double                   altFromTable{0.0};  /* (m) Altitude from the table */
    GenericMultiInputTable   mslTable; /* (--) Mean sea level height table */
    TableLookupSet           tableSet; /* (--) Interpolation table manager */
    TableIndependentVariable tableLat; /* (--) Lookup table latitude */
@@ -60,8 +60,8 @@ class MslAlt : public SubscriptionBase
 
  private:
    // Disable the copy/assignment operations
-   MslAlt (const MslAlt&);
-   MslAlt& operator = (const MslAlt&);
+   MslAlt (const MslAlt&) = delete;
+   MslAlt& operator = (const MslAlt&) = delete;
 };
 
 #endif /*CML_MSL_ALT_HH*/

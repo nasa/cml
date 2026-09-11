@@ -14,7 +14,11 @@ PROGRAMMERS:
    )
 *******************************************************************************/
 
+#include <cstddef>
+#include <vector>
+
 #include "../include/msl_alt.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 /*****************************************************************************
 Constructor
@@ -29,7 +33,6 @@ MslAlt::MslAlt(double &geod_alt_in,
    mslAltitude(0.0),
    altFromTable(0.0),
    mslTable(altFromTable),
-   tableSet(),
    tableLat(geodLat),
    tableLon(geodLon, TableIndependentVariable::WrapAround)
 {
@@ -45,14 +48,14 @@ void MslAlt::initialize()
    if (!enabled) { return; }
 
    double scratchLat[latSize] = {0.0};
-   for(uint ii =0; ii<latSize; ii++)
+   for(int ii =0; ii<latSize; ++ii)
    {
       scratchLat[ii] = (ii-90.0) * rad_per_deg;
    }
    tableLat.load_data(scratchLat, latSize);
 
    double scratchLon[lonSize] = {0.0};
-   for(uint ii =0; ii<lonSize; ii++)
+   for(int ii =0; ii<lonSize; ++ii)
    {
       scratchLon[ii] = ii * rad_per_deg;
    }
@@ -60,7 +63,7 @@ void MslAlt::initialize()
 
    // table-data is provided in the msl_alt_dd.cc file, which populates the
    // table[latSize][lonSize] array.
-   std::vector<size_t> size_vec{1, latSize, lonSize};
+   const std::vector<std::size_t> size_vec{1, latSize, lonSize};
    mslTable.load_data(&table[0][0], size_vec );
    tableSet.add_table(mslTable);
 
