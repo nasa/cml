@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "../include/dynamic_mass_body_nominal_properties.hh"
 #include <cstddef>
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructors
@@ -86,3 +88,5 @@ DynamicMassBodyProperties::disperse_mass_properties ()
     }
   }
 }
+
+} // namespace cml

@@ -20,6 +20,8 @@ PROGRAMMERS:
 #ifndef CML_ROCKET_MOTOR_NOZZLE_HH
 #define CML_ROCKET_MOTOR_NOZZLE_HH
 
+namespace cml {
+
 class RocketMotorNozzle {
 friend class RocketMotor_MultiNozzle;
 public:
@@ -89,4 +91,8 @@ protected:
   void modify_thrust_mag_atmos (double atm_pressure);
   void compute_thrust_vec();
 };
+
+
+} // namespace cml
+
 #endif

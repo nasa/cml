@@ -23,6 +23,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/lvlh_frame/include/lvlh_frame.hh"
 #include <string>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -329,3 +331,6 @@ LvlhSeparationState::deactivate()
   }
   SeparationState::deactivate();
 }
+
+
+} // namespace cml

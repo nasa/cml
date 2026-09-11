@@ -21,6 +21,8 @@ PROGRAMMERS:
 #include "rcs_group.hh"
 #include "rcs_generic.hh"
 
+namespace cml {
+
 /*****************************************************************************
 RcsJet
 Purpose:(The individual jets)
@@ -237,4 +239,8 @@ class RcsJet {
   void apply_direction_dispersion();
   void switch_status( RcsJetStatus new_status);
 };
+
+
+} // namespace cml
+
 #endif

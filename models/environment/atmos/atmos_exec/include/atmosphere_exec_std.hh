@@ -22,6 +22,8 @@ PROGRAMMERS:
 
 #include "atmosphere_exec_atmos_base.hh"
 
+namespace cml {
+
 class AtmosExecOutput;
 class STD1976;
 
@@ -44,4 +46,8 @@ class AtmosphereExec_STD : public AtmosphereExec_AtmosBase
     bool initialize_atmos() override {return true;}
     void update_atmos() override;
 };
+
+
+} // namespace cml
+
 #endif

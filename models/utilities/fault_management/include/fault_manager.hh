@@ -30,6 +30,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 // Forward declaration
 class FaultFunctionParameter;
 
@@ -213,5 +215,9 @@ class FaultManager {
       Cache for set_trigger_value commands sent before the XML file is parsed. */
 };
 template<> bool FaultManager::generate_random_value<bool>();
+
+
+
+} // namespace cml
 
 #endif

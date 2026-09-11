@@ -34,6 +34,8 @@ PROGRAMMERS:
 #include "trick/input_processor_proto.h"
 #include "trick/IPPython.hh"
 
+namespace cml {
+
 extern Trick::IPPython* the_pip;
 
 
@@ -677,3 +679,5 @@ UnitTestFramework::update_file()
   }
   commands.pop_front();
 }
+
+} // namespace cml

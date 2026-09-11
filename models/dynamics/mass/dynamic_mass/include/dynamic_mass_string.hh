@@ -30,6 +30,8 @@ PROGRAMMERS:
 #include <list>
 #include <cstddef>
 
+namespace cml {
+
 class DynamicMassString  : public DynamicMassBodyPropertiesInterface
 {
 public:
@@ -82,4 +84,8 @@ public:
 
    void set_string_in_group() {string_in_group = true;}
 };
+
+
+} // namespace cml
+
 #endif

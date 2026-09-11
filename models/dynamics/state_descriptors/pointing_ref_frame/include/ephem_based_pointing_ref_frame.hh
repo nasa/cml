@@ -17,6 +17,8 @@ Programmers:
 #include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
 #include "pointing_ref_frame.hh"
 
+namespace cml {
+
 /**
  * Extension of the @ref PointingRefFrame for cases where the Originating Frame
  * or Target Frame are ephemeris-based frames.
@@ -77,4 +79,8 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
     SubscriptionBase::initialize();
   }
 };
+
+
+} // namespace cml
+
 #endif

@@ -20,6 +20,8 @@ Programmers:
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 /**
  * Defines a reference frame (the Pointing Frame) based on two other reference
  * frames: the Originating Frame and the Target Frame
@@ -131,4 +133,8 @@ class PointingRefFrame : public SubscriptionBase {
    */
   void deactivate() override;
 };
+
+
+} // namespace cml
+
 #endif

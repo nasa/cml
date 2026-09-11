@@ -25,6 +25,8 @@ PROGRAMMERS:
 #include <cstddef>
 #include <vector>
 
+namespace cml {
+
 class RocketMotor_MultiNozzle : public RocketMotor_TableThrust {
 protected:
   // external references
@@ -133,4 +135,8 @@ public:
 
   size_t get_num_noz() const { return num_noz; }
 };
+
+
+} // namespace cml
+
 #endif

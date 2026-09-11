@@ -12,6 +12,8 @@ PROGRAMMERS:
 
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*******************************************************************************
 AeroInterfaceOutput
 Purpose:(The data elements recognized as the primary outputs of the aero models.)
@@ -59,4 +61,8 @@ public:
     zero_torque();
   }
 };
+
+
+} // namespace cml
+
 #endif

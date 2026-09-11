@@ -18,6 +18,8 @@ PROGRAMMERS:
 
 #include "watch_values_base_core.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 WatchValuesBase
@@ -391,4 +393,8 @@ Purpose:(Generates the new reference value.)
     reference += variable_at_activation;
   }
 };
+
+
+} // namespace cml
+
 #endif

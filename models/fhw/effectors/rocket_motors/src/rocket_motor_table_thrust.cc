@@ -27,6 +27,8 @@ PROGRAMMERS:
 #include "../include/rocket_motor_basic.hh"
 #include "../include/rocket_motor_table_thrust.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -521,3 +523,6 @@ RocketMotor_TableThrust::start_motor()
   RocketMotor_Basic::start_motor();
   prop_mass_init = dyn_mass_properties.consumable_mass;
 }
+
+
+} // namespace cml

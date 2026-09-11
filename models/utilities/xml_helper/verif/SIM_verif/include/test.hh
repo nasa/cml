@@ -16,6 +16,8 @@
 
 #include "cml/models/utilities/xml_helper/include/xml_helper.hh"
 
+namespace cml {
+
 
 struct XmlHelperTester {
   std::string filename;
@@ -228,4 +230,8 @@ struct XmlHelperTester {
   }
 
 };
+
+
+} // namespace cml
+
 #endif

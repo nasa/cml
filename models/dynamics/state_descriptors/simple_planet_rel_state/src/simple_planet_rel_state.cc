@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/dyn_manager/include/class_declarations.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -69,3 +71,5 @@ SimplePlanetRelState::update()
   jeod::RelativeDerivedState::update();
   altitude = jeod::Vector3::vmag(rel_state.trans.position) - reference_radius;
 }
+
+} // namespace cml

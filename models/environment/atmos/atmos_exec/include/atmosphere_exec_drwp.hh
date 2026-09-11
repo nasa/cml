@@ -19,6 +19,8 @@ PROGRAMMERS:
 
 #include "atmosphere_exec_atmos_base.hh"
 
+namespace cml {
+
 class AtmosExecOutput;
 class ExtendedPlanetaryDerivedState;
 class LookupAtmosWinds;
@@ -51,4 +53,8 @@ class AtmosphereExec_Drwp : public AtmosphereExec_AtmosWindsBase
   protected:
     bool initialize();
 };
+
+
+} // namespace cml
+
 #endif

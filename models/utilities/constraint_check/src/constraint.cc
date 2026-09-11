@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include <algorithm>
 #include <cstddef>
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -124,3 +126,5 @@ Constraint::activate()
   }
   active = true;
 }
+
+} // namespace cml

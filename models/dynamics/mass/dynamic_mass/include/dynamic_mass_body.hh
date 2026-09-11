@@ -46,6 +46,8 @@ PROGRAMMERS:
 #include "dynamic_mass_body_properties.hh"
 #include "dynamic_mass_body_nominal_properties.hh"
 
+namespace cml {
+
 // Inherit directly from JEOD Mass Body
 class DynamicMassBody : public jeod::MassBody
 {
@@ -97,5 +99,9 @@ class DynamicMassBody : public jeod::MassBody
   bool interpolate_properties();
 };
 
+
+
+
+} // namespace cml
 
 #endif

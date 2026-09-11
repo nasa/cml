@@ -23,9 +23,11 @@ PROGRAMMERS:
 #ifdef SWIG
 #ifndef CML_COMPOUND_EVENTS_SWIG_TEMPLATES
 #define CML_COMPOUND_EVENTS_SWIG_TEMPLATES
-%template(WatchValuesDelay_bool) WatchValuesDelay<bool>;
+%template(WatchValuesDelay_bool) cml::WatchValuesDelay<bool>;
 #endif
 #endif
+
+namespace cml {
 
 /*****************************************************************************
 CompoundEvent
@@ -123,4 +125,8 @@ class CompoundEvent : public WatchValuesDelay<bool>
   void activate() override;
 //  void check_arming_trigger();
 };
+
+
+} // namespace cml
+
 #endif

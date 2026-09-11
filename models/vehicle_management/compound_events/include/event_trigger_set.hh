@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/vehicle_management/events_manager/include/watch_values_set.hh"
 #include "event_trigger.hh"
+
+namespace cml {
 /*****************************************************************************
 EventTriggerSet
 Purpose:
@@ -51,4 +53,8 @@ class EventTriggerSet : public WatchValuesSet
   void update_conditional_trigger_references();
   WatchValuesBaseCore * find_trigger( const std::string& trigger_name_in);
 };
+
+
+} // namespace cml
+
 #endif

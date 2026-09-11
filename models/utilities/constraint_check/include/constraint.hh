@@ -23,6 +23,8 @@ PROGRAMMERS:
 #include "constraint_enum.hh"
 #include "constraint_test.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constraint
 Purpose:
@@ -88,4 +90,8 @@ class Constraint
   void count_violations();
   void post_update();
 };
+
+
+} // namespace cml
+
 #endif

@@ -18,6 +18,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "../include/wake_bodies.hh"
 
+namespace cml {
+
 
 
 /*****************************************************************************
@@ -242,3 +244,5 @@ WakeFollowingBodyWithForce::compute_force(double force_mag)
                   -force_mag, // switch direction
                   force);     // in B structural frame.
 }
+
+} // namespace cml

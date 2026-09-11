@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <string>
 
+namespace cml {
+
 /*******************************************************************************
 initialize
 Purpose:(Initializes the fault. This method only sets the initialized flag, but
@@ -95,3 +97,5 @@ bool Fault::is_triggered() {
 
   return is_triggered;
 }
+
+} // namespace cml

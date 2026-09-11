@@ -22,6 +22,8 @@ NOTES:
 #include "../include/wake_effects.hh"
 #include "../include/wake_params.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+
+namespace cml {
 /*****************************************************************************
 constructor
 *****************************************************************************/
@@ -82,3 +84,5 @@ WakeEffectsBase::generate_trail_and_radial_dist()
                (offset_radial_dist < params.radial_dist));
   force_toward_A = 0.0;
 }
+
+} // namespace cml

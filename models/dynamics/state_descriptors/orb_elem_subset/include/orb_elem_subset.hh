@@ -24,8 +24,10 @@ PROGRAMMERS:
 
 // Forward declaration
 namespace jeod {
-   class Planet;
+class Planet;
 }
+
+namespace cml {
 
 class OrbElemSubset{
 
@@ -117,5 +119,9 @@ class OrbElemSubset{
   OrbElemSubset(const OrbElemSubset& rhs) = delete;
   OrbElemSubset & operator = (const OrbElemSubset&) = delete;
 };
+
+
+
+} // namespace cml
 
 #endif

@@ -15,6 +15,8 @@ PROGRAMMERS:
 
 #include "jeod/models/utils/quaternion/include/quat.hh"
 
+namespace cml {
+
 // NOTE - this does not attempt to get any values or put any values anywhere.
 //        It is the responsibility of the table to populate and extract data
 //        from this class because the table class knows where the
@@ -62,4 +64,8 @@ class QuaternionSphericalInterpolator
   void set_epsilon_interp( double new_epsilon);
   void set_epsilon_delta( double new_epsilon);
 };
+
+
+} // namespace cml
+
 #endif

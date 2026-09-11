@@ -26,6 +26,8 @@ PROGRAMMERS:
 #ifndef CML_VELOCITY_SET_HH
 #define CML_VELOCITY_SET_HH
 
+namespace cml {
+
 /*****************************************************************************
 VelocitySet
 Purpose:(Collection of velocity elements for topocentric and topodetic frame
@@ -53,4 +55,8 @@ class VelocitySet{
   void initialize(const double * vel_in);
   void update();
 };
+
+
+} // namespace cml
+
 #endif

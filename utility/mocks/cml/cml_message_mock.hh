@@ -6,7 +6,7 @@
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
-namespace CMLMessage {
+namespace cml::CMLMessage {
 
 // Mock interface to CML's CMLMessage class
 class Mock final {

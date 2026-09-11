@@ -23,6 +23,8 @@ PROGRAMMERS:
 
 #include "simple_spring_individual.hh"
 
+namespace cml {
+
 /*******************************************************************************
 SpringGroup
 Purpose:(Collection of Springs)
@@ -98,5 +100,9 @@ public:
   void deactivate();
   void update();
 };
+
+
+
+} // namespace cml
 
 #endif

@@ -19,6 +19,8 @@ PROGRAMMERS:
 
 #include <vector>
 
+namespace cml {
+
 /*****************************************************************************
 RcsGenericModel
 Purpose:(Jet models)
@@ -100,5 +102,9 @@ class RcsJetGroup {
   bool get_blow_down() const {return blow_down;}
   unsigned int get_num_prop_components() const {return num_prop_components;}
 };
+
+
+
+} // namespace cml
 
 #endif

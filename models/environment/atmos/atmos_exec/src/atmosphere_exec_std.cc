@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "../include/atmosphere_exec_out.hh"
 #include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Purpose:(Construct the class)
@@ -49,3 +51,5 @@ AtmosphereExec_STD::update_atmos()
   out.dynamic_viscosity     = std76.dynamic_viscosity;
   out.mean_free_path        = std76.mean_free_path;  
 }
+
+} // namespace cml

@@ -23,6 +23,8 @@ PROGRAMMERS:
 
 #include "aero_coefficients.hh"
 
+namespace cml {
+
 class AeroTableSetBase: public TableLookupSet
 {
 protected:
@@ -154,4 +156,8 @@ protected:
   void query_off_diag_aero_damping();
   AeroDampingType verify_aero_damping(const std::string & type) const;
 };
+
+
+} // namespace cml
+
 #endif

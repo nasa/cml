@@ -27,6 +27,8 @@ PROGRAMMERS:
 #include <cstring>
 #include <algorithm>
 
+namespace cml {
+
 template<size_t N>
 class PolygonEnclosure
 {
@@ -250,4 +252,8 @@ Purpose:
   PolygonEnclosure<N>( const PolygonEnclosure<N> &);
   PolygonEnclosure<N>& operator=( const PolygonEnclosure<N>&);
 };
+
+
+} // namespace cml
+
 #endif

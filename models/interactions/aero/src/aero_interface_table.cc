@@ -21,6 +21,8 @@ PROGRAMMERS:
 #include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructors
 *******************************************************************************/
@@ -130,3 +132,6 @@ AeroInterfaceTable::deactivate()
     AeroInterfaceBaseExtended::deactivate();
   }
 }
+
+
+} // namespace cml

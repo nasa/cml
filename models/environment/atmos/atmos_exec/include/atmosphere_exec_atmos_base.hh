@@ -18,6 +18,8 @@ PROGRAMMERS:
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*******************************************************************************
 AtmosphereExec_AtmosBase
 Purpose:(Base class containing members and methods common to all atmosphere
@@ -109,4 +111,8 @@ class AtmosphereExec_AtmosWindsBase : public AtmosphereExec_AtmosBase
                                 out.wind_velocity_tc);
     }
 };
+
+
+} // namespace cml
+
 #endif

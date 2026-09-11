@@ -14,6 +14,8 @@ PROGRAMMERS:
 
 #include "fault.hh"
 
+namespace cml {
+
 /*******************************************************************************
 FaultOverwrite
 Purpose:(Manages injection of a fixed-value fault.)
@@ -63,4 +65,8 @@ template<>
 bool FaultOverwrite<bool>::set_param( const std::string& param_name,
                                       double val_,
                                       bool reset_nominal);
+
+
+} // namespace cml
+
 #endif

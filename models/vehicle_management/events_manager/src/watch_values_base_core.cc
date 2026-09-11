@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include <list>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
  ******************************************************************************/
@@ -115,3 +117,5 @@ WatchValuesBaseCore::~WatchValuesBaseCore()
     delete assgt;
   }
 }
+
+} // namespace cml

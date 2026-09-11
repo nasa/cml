@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include "../include/bin_counter.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -219,3 +221,6 @@ CML_BinCounter::insert(double value)
     }
   }
 }
+
+
+} // namespace cml

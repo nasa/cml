@@ -54,6 +54,8 @@ PROGRAMMERS:
 
 #include "../include/atmos_relative_state.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -690,3 +692,5 @@ AtmosRelativeState::normalize_T_traj_body()
   Q_traj_body.normalize();
   Q_traj_body.left_quat_to_transformation( T_traj_body);
 }
+
+} // namespace cml

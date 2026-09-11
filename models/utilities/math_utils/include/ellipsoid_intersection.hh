@@ -25,6 +25,8 @@ NOTES:
 #include "quadratic_solver.hh"
 #include "std_array_ops.hh"
 
+namespace cml {
+
 class EllipsoidIntersection{
  private:
   const double (&end1)[3]; /* (m)
@@ -108,4 +110,8 @@ Algorithm:
   EllipsoidIntersection( const EllipsoidIntersection&);
   EllipsoidIntersection& operator= (const EllipsoidIntersection&);
 };
+
+
+} // namespace cml
+
 #endif

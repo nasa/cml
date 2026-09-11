@@ -41,6 +41,8 @@ PROGRAMMERS:
 
 #include "commandable_action_set.hh"
 
+namespace cml {
+
 /*****************************************************************************
 CommandableAction
 Purpose:(
@@ -101,4 +103,8 @@ class CommandableAction
   void disable() {enabled = false;}
   std::string & get_name() {return name;}
 };
+
+
+} // namespace cml
+
 #endif

@@ -29,6 +29,8 @@ NOTES:
 
 #include "TR_state_param.hh"
 
+namespace cml {
+
 /*****************************************************************************
 TargetRelative_StateParameter
 Purpose:
@@ -109,4 +111,8 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
   void initialize_internal(const double R_Ref_PCPF[3]);
   double compute_position_magnitude();
 };
+
+
+} // namespace cml
+
 #endif

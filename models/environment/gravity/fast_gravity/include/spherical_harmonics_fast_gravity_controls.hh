@@ -22,6 +22,8 @@ Programmers:
 #include "jeod/models/environment/gravity/include/gravity_integ_frame.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 
+namespace cml {
+
 class SphericalHarmonicsFastGravityControls : public jeod::SphericalHarmonicsGravityControls {
 
 // Member data
@@ -96,5 +98,9 @@ class SphericalHarmonicsFastGravityControls : public jeod::SphericalHarmonicsGra
      }
    }
 };
+
+
+
+} // namespace cml
 
 #endif

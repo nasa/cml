@@ -29,6 +29,8 @@ PROGRAMMERS:
 #include <list>
 #include <string>
 
+namespace cml {
+
 
 /*****************************************************************************
 PointToPointElement
@@ -149,4 +151,8 @@ class PointToPointManager
   PointToPointManager ( const PointToPointManager &) = delete;
   PointToPointManager & operator = ( const PointToPointManager &) = delete;
 };
+
+
+} // namespace cml
+
 #endif

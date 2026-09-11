@@ -21,6 +21,8 @@ PROGRAMMERS:
 
 #include "velocity_set.hh"
 
+namespace cml {
+
 /*****************************************************************************
 TopoContainer
 Purpose:(The TopoContainer class provides the velocity-related values that may
@@ -59,5 +61,9 @@ class TopoContainer {
                    const double * inrtl_rel_vel_in);
   void update();
 };
+
+
+
+} // namespace cml
 
 #endif

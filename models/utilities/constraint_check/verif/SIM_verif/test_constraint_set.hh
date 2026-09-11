@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "../../include/threshold_constraint.hh"
 #include "../../include/interval_constraint.hh"
 
+namespace cml {
+
 // This dummy struct is required to force Trick ICG to generate attributes for
 // template members of template types when we Trickify CML. We don't actually
 // use this struct. If you run into similar issues in your sim, you'll need to
@@ -182,5 +184,9 @@ class TestConstraintSet
   TestConstraintSet( const TestConstraintSet&);
   TestConstraintSet & operator=( const TestConstraintSet&);
 };
+
+
+
+} // namespace cml
 
 #endif

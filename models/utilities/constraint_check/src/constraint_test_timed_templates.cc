@@ -11,6 +11,8 @@ PROGRAMMERS:
 #include "../include/constraint_test_timed_templates.hh"
 #include <cmath>
 
+namespace cml {
+
 /*****************************************************************************
 Template specializations
 Purpose:
@@ -31,3 +33,6 @@ bool ConstraintTest_ThresholdTimed<float>::query_equals( float variable) const
 {
   return std::abs(variable-threshold) <= equality_threshold;
 }
+
+
+} // namespace cml

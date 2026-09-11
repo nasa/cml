@@ -24,6 +24,8 @@ NOTES:
 #include "../include/wake_effects.hh"
 #include "../include/wake_params.hh"
 
+namespace cml {
+
 /*****************************************************************************
 constructor
 *****************************************************************************/
@@ -101,3 +103,5 @@ WakeReverseFlow::deactivate()
   Qrev = 0.0;
   WakeEffectsBase::deactivate();
 }
+
+} // namespace cml

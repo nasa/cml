@@ -39,6 +39,8 @@ namespace jeod {
 class DynManager;
 }
 
+namespace cml {
+
 /*******************************************************************************
 MassBodyCompositeDispersions
 PURPOSE:(Manages dispersions to be applied to the composite-properties.
@@ -114,4 +116,8 @@ private:
   void comp_to_core_updates();
   void process_dispersions();
 };
+
+
+} // namespace cml
+
 #endif

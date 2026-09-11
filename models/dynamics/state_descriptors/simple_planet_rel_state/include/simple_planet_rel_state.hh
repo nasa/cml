@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/dyn_manager/include/class_declarations.hh"
 
+namespace cml {
+
 class SimplePlanetRelState : public SubscriptionBase,
                              public jeod::RelativeDerivedState
 {
@@ -43,4 +45,8 @@ class SimplePlanetRelState : public SubscriptionBase,
                           jeod::DynManager & dyn_manager) override;
   void update() override;
 };
+
+
+} // namespace cml
+
 #endif

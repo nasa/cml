@@ -13,6 +13,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/fault_management/include/fault_manager.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*******************************************************************************
 sSFault
 Purpose:
@@ -65,4 +67,8 @@ class sSensorFaults : public FaultManager
                                const char*              fault_name,
                                bool                     nom_required) override;
 };
+
+
+} // namespace cml
+
 #endif

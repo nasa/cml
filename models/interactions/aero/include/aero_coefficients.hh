@@ -21,6 +21,8 @@ PROGRAMMERS:
 #ifndef CML_AERO_COEFFICIENTS_HH
 #define CML_AERO_COEFFICIENTS_HH
 
+namespace cml {
+
 /*******************************************************************************
 AeroCoefficientsCoreBase
 Purpose: (These are the core-values, shared between the Table-lookup, the API,
@@ -125,4 +127,8 @@ public:
 
   AeroCoefficientsDisp() = default;
 };
+
+
+} // namespace cml
+
 #endif

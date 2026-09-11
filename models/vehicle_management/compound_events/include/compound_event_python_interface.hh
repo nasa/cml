@@ -14,6 +14,8 @@ PROGRAMMERS:
 #include <string>
 #include <vector>
 
+namespace cml {
+
 /*****************************************************************************
 CompoundEventActionConfig
 Purpose:
@@ -65,5 +67,9 @@ struct CompoundEventPythonInterface
   void add_action( std::string action_name, void* target_ptr);
   void add_action( std::string action_name);
 };
+
+
+
+} // namespace cml
 
 #endif

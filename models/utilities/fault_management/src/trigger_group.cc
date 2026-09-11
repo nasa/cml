@@ -11,6 +11,8 @@ PROGRAMMERS:
 #include <string>
 #include <utility>
 
+namespace cml {
+
 /*******************************************************************************
 operate
 Purpose:(Determines whether all of the triggers are triggered.)
@@ -62,3 +64,6 @@ bool TriggerGroup::set_trigger_enable( const std::string & trigger_name,
 
   return trigger_found;
 }
+
+
+} // namespace cml

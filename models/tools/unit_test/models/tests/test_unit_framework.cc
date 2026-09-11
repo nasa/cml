@@ -6,13 +6,13 @@
 #include "mocks/cml/cml_message_mock.hh"
 
 // Create a test subclass to access protected methods (if needed)
-class UnitTestFrameworkTest : public UnitTestFramework {
+class UnitTestFrameworkTest : public cml::UnitTestFramework {
 public:
     using UnitTestFramework::expand_env_variables;
 };
 
 TEST(UnitTestFrameworkTest, DefaultConstructorInitializesState) {
-    UnitTestFramework utf;
+    cml::UnitTestFramework utf;
 
     EXPECT_TRUE(utf.enabled);
     EXPECT_FALSE(utf.cycle_data);
@@ -36,14 +36,14 @@ TEST(UnitTestFrameworkTest, ExpandEnvVariableUnknownThrows) {
     using testing::_;
     using testing::HasSubstr;
 
-    CMLMessage::Mock cml_message_mock;
+    cml::CMLMessage::Mock cml_message_mock;
 
     unsetenv("NON_EXISTENT_VAR");
     UnitTestFrameworkTest utf;
 
     EXPECT_CALL(
         cml_message_mock,
-        publish(CMLMessage::Error, _, _, HasSubstr("'NON_EXISTENT_VAR' is not set")));
+        publish(cml::CMLMessage::Error, _, _, HasSubstr("'NON_EXISTENT_VAR' is not set")));
     std::string input = "${NON_EXISTENT_VAR}/file.txt";
     EXPECT_THROW(utf.expand_env_variables(input), std::runtime_error);
 }

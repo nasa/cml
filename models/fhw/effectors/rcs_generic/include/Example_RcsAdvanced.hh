@@ -16,6 +16,8 @@ PROGRAMMERS:
 #include "rcs_group.hh"
 #include "rcs_jet.hh"
 
+namespace cml {
+
 class RcsAdvancedExample : public RcsGeneric
 {
  public:
@@ -56,4 +58,8 @@ class RcsAdvancedExample : public RcsGeneric
    RcsAdvancedExample (const RcsAdvancedExample& rhs);
    RcsAdvancedExample & operator = (const RcsAdvancedExample& rhs);;
 };
+
+
+} // namespace cml
+
 #endif

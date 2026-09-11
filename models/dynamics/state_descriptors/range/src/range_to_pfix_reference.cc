@@ -16,6 +16,8 @@ Programmers:
 
 #include "../include/range_to_pfix_reference.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -159,3 +161,6 @@ RangeToPfixReference::update_using_cartesian()
 
   RangeComputation::update_using_cartesian();
 }
+
+
+} // namespace cml

@@ -9,6 +9,8 @@ PROGRAMMERS:
 #ifndef CML_UNTYPED_VARIABLE_HH
 #define CML_UNTYPED_VARIABLE_HH
 
+namespace cml {
+
 /*******************************************************************************
 UntypedVariableBase
 Purpose:(Allows access to a variable's value without knowing its type at compile
@@ -38,5 +40,9 @@ template<typename T> class UntypedVariable : public UntypedVariableBase {
 
     T& variable; /* (--) A variable of any type. */
 };
+
+
+
+} // namespace cml
 
 #endif

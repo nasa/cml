@@ -21,6 +21,8 @@ PROGRAMMERS:
 #include <string>
 #include <utility>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -82,3 +84,5 @@ bool TR_Parameter_RefFrame::compute_frame(
   jeod::Vector3::normalize( p_hat);
   return true;
 }
+
+} // namespace cml

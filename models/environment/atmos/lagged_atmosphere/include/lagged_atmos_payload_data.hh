@@ -8,6 +8,8 @@ Purpose:
 #ifndef CML_LAGGED_ATMOS_PAYLOAD_DATA_HH
 #define CML_LAGGED_ATMOS_PAYLOAD_DATA_HH
 
+namespace cml {
+
 class LaggedAtmosPayloadData {
   public:
 
@@ -39,4 +41,8 @@ class LaggedAtmosPayloadData {
   // copy assignment operator
   LaggedAtmosPayloadData& operator=(const LaggedAtmosPayloadData& orig) = default;
 };
+
+
+} // namespace cml
+
 #endif

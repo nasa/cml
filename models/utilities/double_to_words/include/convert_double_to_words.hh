@@ -21,6 +21,8 @@ PROGRAMMERS:
 #include <cstdint>
 #include <vector>
 
+namespace cml {
+
 void convert_double_to_uint_words( double convert_value,
                                    double resolution,
                                    std::vector<uint32_t> &words,
@@ -71,5 +73,9 @@ public:
   void compute_significance();
   bool check_values();
 };
+
+
+
+} // namespace cml
 
 #endif

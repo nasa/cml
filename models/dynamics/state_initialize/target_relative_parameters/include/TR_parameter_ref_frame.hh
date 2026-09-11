@@ -20,6 +20,8 @@ PROGRAMMERS:
 
 #include <string>
 
+namespace cml {
+
 /*****************************************************************************
 TR_Parameter_RefFrame
 Purpose:A class that specifies the 3 basis vectors of a frame defined by 2
@@ -51,4 +53,8 @@ class TR_Parameter_RefFrame {
     bool compute_frame( const double vec_A[3],
                         const double vec_B[3]);
 };
+
+
+} // namespace cml
+
 #endif

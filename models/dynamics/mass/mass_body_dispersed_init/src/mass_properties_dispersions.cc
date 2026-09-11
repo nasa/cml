@@ -14,6 +14,8 @@ PROGRAMMERS:
 
 #include <random>
 
+namespace cml {
+
 /*******************************************************************************
 generate_inertia_tensor
 PURPOSE:(Generates the inertia tensor from the moment and products of inertia.)
@@ -189,3 +191,5 @@ void MassPropertiesDispersions::scale_poi( double nominal_xy,
   poi[1] *= nominal_xz;
   poi[2] *= nominal_yz;
 }
+
+} // namespace cml

@@ -30,6 +30,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/table_interp_cpp/include/table_type_defs.hh"
 #include "generic_single_input_table.hh"
 
+namespace cml {
+
 class SingleInputTableForAngles : public GenericSingleInputTable
 {
  public:
@@ -58,4 +60,8 @@ class SingleInputTableForAngles : public GenericSingleInputTable
   bool generate_output() override;
   void bound_to_half_circle( double & angle) const;
 };
+
+
+} // namespace cml
+
 #endif

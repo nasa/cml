@@ -26,6 +26,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 
 /*******************************************************************************
 PistonThrusterOutputs
@@ -126,4 +128,8 @@ protected:
                                       positions have been loaded. */
   void deactivate() override;
 };
+
+
+} // namespace cml
+
 #endif

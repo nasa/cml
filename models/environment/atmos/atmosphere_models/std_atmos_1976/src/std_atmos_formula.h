@@ -20,6 +20,8 @@ PROGRAMMERS:
 #include <algorithm>
 #include "../include/std_atmos_1976.hh"
 
+namespace cml {
+
 //to calculate the mass density
 static inline double cal_density(const double &press, //pressure, unit:N/m2
                                  const double &k_t,   //kinetic temperature, unit: K
@@ -102,6 +104,7 @@ static inline double log_interp(const double x_vals[],  //the data set of x-axis
 
   return std::exp(log_y);
 }
-                                 
+
+} // namespace
 
 #endif

@@ -18,6 +18,8 @@ PROGRAMMERS:
 #include "../include/constraint_enum.hh"
 #include "../include/constraint_test.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Name: set_violation_condition
 Purpose:
@@ -207,3 +209,5 @@ ConstraintTestTimed::update_timer( double delta_time)
     }
   }
 }
+
+} // namespace cml

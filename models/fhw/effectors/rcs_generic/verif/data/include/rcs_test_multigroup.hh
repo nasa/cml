@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_group.hh"
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_jet.hh"
 
+namespace cml {
+
 class RcsTestMultigroup : public RcsGeneric
 {
  public:
@@ -42,4 +44,8 @@ class RcsTestMultigroup : public RcsGeneric
    RcsTestMultigroup (const RcsTestMultigroup& rhs);
    RcsTestMultigroup & operator = (const RcsTestMultigroup& rhs);
 };
+
+
+} // namespace cml
+
 #endif

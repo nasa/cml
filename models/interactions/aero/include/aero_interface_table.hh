@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "aero_interface_base_extended.hh"
 #include "aero_executive_table.hh"
 
+namespace cml {
+
 class AtmosRelativeState;
 
 /*******************************************************************************
@@ -49,4 +51,8 @@ protected:
   void activate() override;
   void deactivate() override;
 };
+
+
+} // namespace cml
+
 #endif

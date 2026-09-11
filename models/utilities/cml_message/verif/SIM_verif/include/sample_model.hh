@@ -12,6 +12,8 @@ Programmers:
 #include <string>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+namespace cml {
 struct SampleModel {
   bool terminate {false}; /* (--) If true, will terminate the sim on the next update() call */
 
@@ -50,4 +52,8 @@ struct SampleModel {
       }
     }
 };
+
+
+} // namespace cml
+
 #endif

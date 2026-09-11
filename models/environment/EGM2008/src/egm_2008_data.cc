@@ -13,6 +13,8 @@ PROGRAMMERS:
 #include <cstddef>
 #include <vector>
 
+namespace cml {
+
 /*****************************************************************************
 load_data()
 *****************************************************************************/
@@ -410,3 +412,6 @@ EGM2008_WGS84::load_data()
   table_set.add_independent_variable( tiv_lon);
   table_set.associate_table_and_independent();
 }
+
+
+} // namespace cml

@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 /*****************************************************************************
 add_trigger
 Purpose:
@@ -156,3 +158,5 @@ WatchValuesSet::deactivate()
   }
   active = false;
 }
+
+} // namespace cml

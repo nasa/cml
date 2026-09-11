@@ -13,6 +13,8 @@ PROGRAMMERS:
 #ifndef CML_WAKE_PARAMS_HH
 #define CML_WAKE_PARAMS_HH
 
+namespace cml {
+
 /*****************************************************************************
 WakeParamsSub
 Purpose:(A set of distance thresholds for the rev-flow and PRF models)
@@ -54,4 +56,8 @@ class WakeParams
 
   WakeParams() = default;
 };
+
+
+} // namespace cml
+
 #endif

@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include "../include/TR_state_parameter_set.hh"
 #include "../include/TR_state_parameters.hh"
 
+namespace cml {
+
 /*****************************************************************************
 initialize
 Purpose:(Initialize uhat_Ref_PCPF given a reference geodetic altitude,
@@ -374,3 +376,5 @@ TargetRelative_StateParameter::compute_position_magnitude()
   //-----------------------------------------------------
   return Rmag;
 }
+
+} // namespace cml

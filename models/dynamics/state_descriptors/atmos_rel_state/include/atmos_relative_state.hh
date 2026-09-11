@@ -36,6 +36,9 @@ PROGRAMMERS:
 namespace jeod {
 class DynBody;
 }
+
+namespace cml {
+
 class AtmosphereExecInterface;
 class AtmosExecOutput;
 class ExtendedPlanetaryDerivedState;
@@ -173,5 +176,9 @@ class AtmosRelativeState : public SubscriptionBase
   virtual void normalize_T_traj_body();
 };
 
+
+
+
+} // namespace cml
 
 #endif

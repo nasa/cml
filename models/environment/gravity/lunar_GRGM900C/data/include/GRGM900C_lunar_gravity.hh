@@ -30,6 +30,8 @@ Programmers:
 
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
 
+namespace cml {
+
 class GRGM900C_LunarGravity
 {
  public:
@@ -55,5 +57,9 @@ class GRGM900C_LunarGravity
 };
 
 
+
+
+
+} // namespace cml
 
 #endif

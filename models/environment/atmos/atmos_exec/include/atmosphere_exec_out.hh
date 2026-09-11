@@ -11,6 +11,8 @@ PROGRAMMERS:
 #ifndef CML_ATMOSPHERE_EXEC_OUT_HH
 #define CML_ATMOSPHERE_EXEC_OUT_HH
 
+namespace cml {
+
 class AtmosExecOutput {
   public:
     double temperature{0.0};             /* (K)      Temperature */
@@ -41,5 +43,9 @@ class AtmosExecOutput {
       }
     }
 };
+
+
+
+} // namespace cml
 
 #endif

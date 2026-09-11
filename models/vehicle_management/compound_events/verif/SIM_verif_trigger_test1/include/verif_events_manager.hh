@@ -10,6 +10,8 @@ PROGRAMMERS:
 #include "../../../include/compound_event_manager.hh"
 #include "sample_sim_data.hh"
 
+namespace cml {
+
 
 class VerifCompoundEventsManager : public CompoundEventsManager
 {
@@ -47,4 +49,8 @@ class VerifCompoundEventsManager : public CompoundEventsManager
   VerifCompoundEventsManager(const VerifCompoundEventsManager&) = delete;
   VerifCompoundEventsManager& operator=(const VerifCompoundEventsManager&) = delete;
 };
+
+
+} // namespace cml
+
 #endif

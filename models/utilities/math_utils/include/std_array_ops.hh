@@ -18,6 +18,8 @@ PROGRAMMERS:
 #include <ostream>
 #include "math_utils.hh"
 
+namespace cml {
+
 /*******************************************************************************
  * Insertion
  * std::cout << some_std_arr << std::endl;
@@ -514,5 +516,8 @@ std::array<double, N> operator/(const double (&lhs)[N], std::array<double, N>&& 
   return result;
 }
 
+} // namespace cml
+
 #endif
+
 #endif

@@ -23,6 +23,8 @@ PROGRAMMERS:
 #include "../include/rcs_prop_pod.hh"
 #include "../include/rcs_jet.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -1157,3 +1159,5 @@ RcsJet::set_force_direction(
   scratch[2] = force_dir_z;
   set_force_direction(scratch);
 }
+
+} // namespace cml

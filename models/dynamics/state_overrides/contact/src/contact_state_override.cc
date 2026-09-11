@@ -22,6 +22,8 @@ PROGRAMMERS:
 
 #include "../include/contact_state_override.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -484,3 +486,5 @@ ContactStateOverride::set_deactivation_threshold( double threshold)
     deactivation_threshold = threshold;
   }
 }
+
+} // namespace cml

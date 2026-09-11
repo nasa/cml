@@ -11,6 +11,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/buffers/include/tagged_ring_buffer.hh"
 
+namespace cml {
+
 struct TestStruc
 {
   double x;
@@ -61,5 +63,9 @@ struct SampleModel
     }
   }
 };
+
+
+
+} // namespace cml
 
 #endif

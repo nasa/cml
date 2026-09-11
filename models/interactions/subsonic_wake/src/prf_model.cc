@@ -25,6 +25,8 @@ NOTES:
 #include "../include/wake_effects.hh"
 #include "../include/wake_params.hh"
 
+namespace cml {
+
 /*****************************************************************************
 constructor
 *****************************************************************************/
@@ -150,3 +152,5 @@ WakePrfModel::deactivate()
   force_toward_A = 0;
   WakeEffectsBase::deactivate();
 }
+
+} // namespace cml

@@ -12,6 +12,8 @@ PROGRAMMERS:
 #include "fault.hh"
 #include "rand_number.hh"
 
+namespace cml {
+
 /*******************************************************************************
 FaultRandomWalk
 Purpose:(Manages injection of a random-walk fault.)
@@ -82,5 +84,9 @@ bool FaultRandomWalk<T>::set_param(const std::string& param_name, double value, 
 
   return true;
 }
+
+
+
+} // namespace cml
 
 #endif

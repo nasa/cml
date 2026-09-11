@@ -12,6 +12,8 @@ PROGRAMMERS:
 #include "../include/aero_interface_base.hh"
 #include "../include/aero_interface_simple.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor:
 *******************************************************************************/
@@ -63,3 +65,5 @@ AeroInterfaceSimple::update()
   }
   executive.update();
 }
+
+} // namespace cml

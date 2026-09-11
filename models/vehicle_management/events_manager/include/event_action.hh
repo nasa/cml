@@ -52,6 +52,8 @@ PROGRAMMERS:
 
 #include "event_action_base.hh"
 
+namespace cml {
+
 /*****************************************************************************
 EventActionSimStopNow
 Purpose:
@@ -204,4 +206,8 @@ class EventActionLogNow : public EventActionBase {
   EventActionLogNow (const EventActionLogNow& rhs);
   EventActionLogNow& operator = (const EventActionLogNow& rhs);
 };
+
+
+} // namespace cml
+
 #endif

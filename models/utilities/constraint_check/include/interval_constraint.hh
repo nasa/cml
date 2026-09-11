@@ -20,6 +20,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <cstddef>
 
+namespace cml {
+
 
 /*****************************************************************************
 Name: IntervalInstantConstraint
@@ -213,4 +215,8 @@ class IntervalTimedConstraint : public Constraint
   IntervalTimedConstraint( const IntervalTimedConstraint &);
   IntervalTimedConstraint & operator=( const IntervalTimedConstraint &);
 };
+
+
+} // namespace cml
+
 #endif

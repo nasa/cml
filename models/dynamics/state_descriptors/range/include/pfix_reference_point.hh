@@ -16,6 +16,8 @@ Programmers:
 
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 
+namespace cml {
+
 class PfixReferencePoint : public jeod::PlanetFixedPosition
 {
  public:
@@ -65,5 +67,9 @@ class PfixReferencePoint : public jeod::PlanetFixedPosition
   void set_point (double & reference_radius, bool & ref_point_set);
   void set_direction (bool & use_polar_direction, bool & ref_point_set);
 };
+
+
+
+} // namespace cml
 
 #endif

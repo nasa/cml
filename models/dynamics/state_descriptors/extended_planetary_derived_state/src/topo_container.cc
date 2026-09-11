@@ -19,6 +19,8 @@ PROGRAMMERS:
 
 #include "../include/topo_container.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 TopoContainer
@@ -93,3 +95,5 @@ TopoContainer::update()
 
   inertial_vel.update();
 }
+
+} // namespace cml

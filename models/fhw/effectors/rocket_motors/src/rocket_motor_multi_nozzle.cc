@@ -31,6 +31,8 @@ PROGRAMMERS:
 #include "../include/rocket_motor_nozzle.hh"
 #include "../include/rocket_motor_table_thrust.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -531,3 +533,5 @@ RocketMotor_MultiNozzle::set_flex_threshold(double new_threshold)
   }
   else { flex_threshold = new_threshold; }
 }
+
+} // namespace cml

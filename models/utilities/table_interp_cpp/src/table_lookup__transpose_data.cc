@@ -37,6 +37,8 @@ PROGRAMMERS:
 #include "../include/table_type_defs.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*****************************************************************************
 initialize
 Purpose:
@@ -553,3 +555,5 @@ TableLookupTransposeDataSet::remove_config(
   }
   return true;
 }
+
+} // namespace cml

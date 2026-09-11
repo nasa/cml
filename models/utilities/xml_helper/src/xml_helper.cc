@@ -13,6 +13,8 @@ PROGRAMMERS:
 #include <libxml/tree.h>
 #include <string>
 
+namespace cml {
+
 /*******************************************************************************
 xml_find
 Purpose:(Finds an XML node with the given name at the same level as the
@@ -150,3 +152,6 @@ const char * XmlHelper::xml_convert_ptr( const unsigned char* ptr)
 {
   return reinterpret_cast<const char *>(ptr);
 }
+
+
+} // namespace cml

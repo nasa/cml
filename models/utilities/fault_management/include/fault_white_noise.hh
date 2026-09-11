@@ -12,6 +12,8 @@ PROGRAMMERS:
 #include "fault.hh"
 #include "rand_number.hh"
 
+namespace cml {
+
 /*******************************************************************************
 FaultWhiteNoise
 Purpose:(Manages injection of a white-noise fault.)
@@ -72,5 +74,9 @@ bool FaultWhiteNoise<T>::set_param(const std::string& param_name, double value, 
 
   return true;
 }
+
+
+
+} // namespace cml
 
 #endif

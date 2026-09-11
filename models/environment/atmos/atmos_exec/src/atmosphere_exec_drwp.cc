@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "../include/atmosphere_exec_drwp.hh"
 #include "../include/atmosphere_exec_out.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Purpose:(Construct the class)
@@ -121,3 +123,5 @@ AtmosphereExec_Drwp::update_winds()
 
   winds_from_topocentric();
 }
+
+} // namespace cml

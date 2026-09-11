@@ -45,6 +45,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 class ContactStateOverride : public SubscriptionBase
 {
  protected:
@@ -125,4 +127,8 @@ class ContactStateOverride : public SubscriptionBase
                             const jeod::Quaternion & Q_override_struc_to_integ_frame);
   void activate() override;
 };
+
+
+} // namespace cml
+
 #endif

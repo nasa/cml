@@ -24,6 +24,8 @@ PROGRAMMERS:
 
 #include "../include/separation_state.hh"
 
+namespace cml {
+
 /********************************************************************************
 Method: SeparationState
 Purpose: (Constructor)
@@ -217,3 +219,6 @@ void SeparationState::deactivate()
   }
   active = false;
 }
+
+
+} // namespace cml

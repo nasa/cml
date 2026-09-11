@@ -13,6 +13,8 @@ PROGRAMMERS:
 #include "../include/constraint_set.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 initialize
@@ -68,3 +70,5 @@ ConstraintSet::constraint_disabled( const Constraint * c)
 {
   return !(c->enabled);
 }
+
+} // namespace cml

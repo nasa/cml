@@ -27,6 +27,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include <cstddef>
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -124,3 +126,6 @@ SingleInputTableForQuaternions::generate_output()
 
   return true;
 }
+
+
+} // namespace cml

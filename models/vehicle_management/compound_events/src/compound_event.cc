@@ -25,6 +25,8 @@ PROGRAMMERS:
 #include "cml/models/vehicle_management/events_manager/include/watch_values_delay.hh"
 #include <list>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -384,3 +386,5 @@ CompoundEvent::activate()
   // Identify which of the triggers has a conditional reference value.
   action_triggers.populate_conditional_reference_trigger_list();
 }
+
+} // namespace cml

@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include "../include/atmosphere_exec_out.hh"
 #include "../include/atmosphere_exec_simple_winds.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -151,3 +153,5 @@ AtmosphereExec_SimpleLookupWind::set_altitude_type(
     }
   }
 }
+
+} // namespace cml

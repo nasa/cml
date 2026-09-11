@@ -27,6 +27,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor
 *******************************************************************************/
@@ -301,3 +303,5 @@ MassBodyCompositeDispersions::process_dispersions()
   // inertia dispersions.
   disperse.generate_inertia_tensor( poi_are_negative_integrals);
 }
+
+} // namespace cml

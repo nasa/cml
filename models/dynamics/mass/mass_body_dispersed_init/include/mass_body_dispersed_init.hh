@@ -26,6 +26,8 @@ namespace jeod {
 class DynManager;
 }
 
+namespace cml {
+
 /*******************************************************************************
 The instantiable replacement for MassBodyInit. The apply(...) method in this
 class can be used as a direct replacement for the
@@ -42,4 +44,8 @@ public:
 
   void apply( jeod::DynManager & dyn_manager) override;
 };
+
+
+} // namespace cml
+
 #endif

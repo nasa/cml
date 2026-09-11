@@ -16,6 +16,8 @@ PROGRAMMERS:
 
 #include "../../include/range_from_pfix_reference.hh"
 
+namespace cml {
+
 // TODO Nino Tarantino: this needs to be a single free function, not a class.
 class RangeDefaultData
 {
@@ -27,4 +29,8 @@ class RangeDefaultData
 
   void launch_pad_KSC_39B(RangeFromPfixReference & pad) const;
 };
+
+
+} // namespace cml
+
 #endif

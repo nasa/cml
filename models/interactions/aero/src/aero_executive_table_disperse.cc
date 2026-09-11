@@ -13,6 +13,8 @@ PROGRAMMERS:
 #include "../include/aero_table_set_base.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*******************************************************************************
 process_prelim_uncertainties
 Purpose: (For the tables in which the uncertainties are specified and fixed,
@@ -659,3 +661,6 @@ AeroExecutiveTable::increment_damping_coeffs_with_bias()
     coefficients.dCn_dq += bias.dCn_dq;
   }
 }
+
+
+} // namespace cml

@@ -20,6 +20,8 @@ PROGRAMMERS:
 
 #include "trigger_group.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Fault
 Purpose:(Base class for managing fault injection for a single variable.)
@@ -76,5 +78,9 @@ friend class FaultManager;
     unsigned long fire_count{0}; /* (--)
       The number of times a fire-limited trigger has been triggered. */
 };
+
+
+
+} // namespace cml
 
 #endif

@@ -37,6 +37,8 @@ PROGRAMMERS:
 #include "trick/parameter_types.h"
 #include "trick/reference.h"
 
+namespace cml {
+
 bool FaultManager::global_enabled = true;
 
 
@@ -1743,3 +1745,5 @@ bool FaultManager::parse_rand_number(
 
   return true;
 }
+
+} // namespace cml

@@ -7,6 +7,8 @@ PROGRAMMERS:
 
 #include "../include/rcs_test_multigroup.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -130,3 +132,6 @@ RcsTestMultigroup::configure_jets()
   jet_03.set_isp(200);
   jet_04.set_isp(200);
 }
+
+
+} // namespace cml

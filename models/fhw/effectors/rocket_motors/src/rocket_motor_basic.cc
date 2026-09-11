@@ -20,6 +20,8 @@ PROGRAMMERS:
 
 #include "../include/rocket_motor_basic.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 constructor
@@ -375,3 +377,6 @@ RocketMotor_Basic::activate()
   }
   SubscriptionBase::activate();
 }
+
+
+} // namespace cml

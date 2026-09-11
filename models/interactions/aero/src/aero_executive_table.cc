@@ -29,6 +29,8 @@ PROGRAMMERS:
 #include "../include/aero_interface_output.hh"
 #include "../include/aero_table_set_base.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructors
 *******************************************************************************/
@@ -570,3 +572,5 @@ AeroExecutiveTable::aero_forces_moments()
   jeod::Vector3::transform_transpose( T_struc_to_aero_frame,
                                 output.moment_mrc);
 }
+
+} // namespace cml

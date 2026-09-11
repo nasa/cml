@@ -11,6 +11,8 @@
 #include "../include/subscriptions.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 // Instructs this model to turn itself on if everything is configured correctly
 void
 SubscriptionBase::subscribe()
@@ -175,3 +177,6 @@ SubscriptionBase::subscribe_internal()
     num_subscriptions=0;
   }
 }
+
+
+} // namespace cml

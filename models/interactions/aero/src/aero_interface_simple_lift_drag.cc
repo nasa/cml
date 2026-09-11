@@ -11,6 +11,8 @@ PROGRAMMERS:
 #include "../include/aero_interface_base.hh"
 #include "../include/aero_interface_simple_lift_drag.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor:
 *******************************************************************************/
@@ -65,3 +67,6 @@ AeroInterfaceSimpleLiftDrag::update()
   }
   executive.update();
 }
+
+
+} // namespace cml

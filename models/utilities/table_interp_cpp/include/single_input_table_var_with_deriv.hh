@@ -25,6 +25,8 @@
 #include "generic_single_input_table.hh"
 #include <cstddef>
 
+namespace cml {
+
 class SingleInputTableVarDeriv : public GenericSingleInputTable
 {
  public:
@@ -73,4 +75,8 @@ class SingleInputTableVarDeriv : public GenericSingleInputTable
   protected:
   bool generate_output() override;
 };
+
+
+} // namespace cml
+
 #endif

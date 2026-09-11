@@ -26,6 +26,8 @@ PROGRAMMERS:
 #include <algorithm>
 #include <array>
 
+namespace cml {
+
 template<size_t N>
 class PolygonEnclosureSphere
 {
@@ -601,4 +603,8 @@ Purpose:
   PolygonEnclosureSphere<N>( const PolygonEnclosureSphere<N> &);
   PolygonEnclosureSphere<N>& operator=( const PolygonEnclosureSphere<N>&);
 };
+
+
+} // namespace cml
+
 #endif

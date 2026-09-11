@@ -13,6 +13,8 @@ PROGRAMMERS:
 #include <iostream>
 #include "../../include/subscriptions.hh"
 
+namespace cml {
+
 class SubscriptionTestClass : public SubscriptionBase
 {
   public:
@@ -25,4 +27,8 @@ class SubscriptionTestClass : public SubscriptionBase
     std::cout << "******** ACTIVATION FAILS ********\n\n";
   }
 };
+
+
+} // namespace cml
+
 #endif

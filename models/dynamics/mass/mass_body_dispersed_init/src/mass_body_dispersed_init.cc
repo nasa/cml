@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*******************************************************************************
 apply
 PURPOSE:(Applies the body-action after first adding the dispersions to the
@@ -65,3 +67,6 @@ MassBodyDispersedInit::apply(jeod::DynManager & dyn_manager)
   // variables to the Mass Body.
   MassBodyInit::apply( dyn_manager);
 }
+
+
+} // namespace cml

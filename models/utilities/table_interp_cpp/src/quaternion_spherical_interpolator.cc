@@ -16,6 +16,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*****************************************************************************
 update
 Purpose:(main method)
@@ -181,3 +183,5 @@ QuaternionSphericalInterpolator::set_epsilon_delta( double new_epsilon)
     epsilon_delta = new_epsilon;
   }
 }
+
+} // namespace cml

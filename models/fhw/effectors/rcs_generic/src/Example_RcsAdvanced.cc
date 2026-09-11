@@ -7,6 +7,8 @@ PROGRAMMERS:
 
 #include "../include/Example_RcsAdvanced.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -349,3 +351,6 @@ RcsAdvancedExample::configure_jets()
     }
   }
 }
+
+
+} // namespace cml

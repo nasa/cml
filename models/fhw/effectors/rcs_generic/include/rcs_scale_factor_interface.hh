@@ -10,6 +10,8 @@ PROGRAMMERS:
 #ifndef CML_RCS_SCALE_FACTOR_INTERFACE_HH
 #define CML_RCS_SCALE_FACTOR_INTERFACE_HH
 
+namespace cml {
+
 /*****************************************************************************
 RcsScaleFactorInterfaceJet
 Purpose:(Jet-specific data for RcsScaleFactorInterface)
@@ -56,4 +58,8 @@ class RcsScaleFactorInterface
   RcsScaleFactorInterface(const RcsScaleFactorInterface&) = delete;
   RcsScaleFactorInterface & operator= (const RcsScaleFactorInterface&) = delete;
 };
+
+
+} // namespace cml
+
 #endif

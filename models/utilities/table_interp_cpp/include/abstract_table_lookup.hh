@@ -32,6 +32,8 @@ PROGRAMMERS:
 #include <vector>
 #include <string>
 
+namespace cml {
+
 class AbstractTableLookup : public SubscriptionBase
 {
 public:
@@ -109,4 +111,8 @@ protected:
   virtual TableIndependentVariable* lookup_independent(
                                                  const std::string &var_name);
 };
+
+
+} // namespace cml
+
 #endif

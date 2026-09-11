@@ -16,6 +16,8 @@ PROGRAMMERS:
 #include <list>
 #include <string>
 
+namespace cml {
+
 /*******************************************************************************
 TriggerGroup
 Purpose:(A group of fault triggers.)
@@ -44,5 +46,9 @@ class TriggerGroup {
    std::list<std::pair<bool, TriggerBase*> > triggers; /* (--)
      List of triggers and whether they are enabled for this group. */
 };
+
+
+
+} // namespace cml
 
 #endif

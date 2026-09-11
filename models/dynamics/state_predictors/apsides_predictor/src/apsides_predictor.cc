@@ -15,6 +15,8 @@ PROGRAMMERS:
 
 #include "../include/apsides_predictor.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -225,3 +227,5 @@ ApsidesPredictor::activate()
   active = true;
   update();
 }
+
+} // namespace cml

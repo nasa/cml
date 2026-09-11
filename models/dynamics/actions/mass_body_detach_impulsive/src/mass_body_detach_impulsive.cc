@@ -28,6 +28,8 @@ Programmers:
 
 #include <string>
 
+namespace cml {
+
 /*******************************************************************************
 Function: MassBodyDetachImpulsive::initialize
 Purpose: (Initialize a MassBodyDetach)
@@ -291,3 +293,5 @@ MassBodyDetachImpulsive::apply_impulse( jeod::DynBody     & dyn_body,
                                 root_body->composite_body);
   root_body->propagate_state();
 }
+
+} // namespace cml

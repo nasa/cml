@@ -21,6 +21,8 @@ PROGRAMMERS:
 #include "../include/atmosphere_exec_gram.hh"
 #include "../include/atmosphere_exec_out.hh"
 
+namespace cml {
+
 // TODO: move these GramInterface lines to their own file?
 GramInterface::GramInterface()
 :
@@ -302,3 +304,6 @@ AtmosphereExec_Gram::update_winds()
 
   winds_from_topocentric();
 }
+
+
+} // namespace cml

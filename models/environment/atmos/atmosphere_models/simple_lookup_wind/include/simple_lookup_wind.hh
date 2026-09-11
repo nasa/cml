@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include <cstddef>
 
+namespace cml {
+
 // NOTES - the table-lookup capabilities assume that the driving independent
 //         variable is altitude;
 //       - the general application of this model has the wind-model being
@@ -108,4 +110,8 @@ class SimpleLookupWind : public SubscriptionBase
   void assign_dir_mag_vert_data( const double * data_array,
                                  size_t         num_elem_per_variable);
 };
+
+
+} // namespace cml
+
 #endif

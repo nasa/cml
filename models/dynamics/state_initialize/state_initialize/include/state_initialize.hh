@@ -36,6 +36,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/alt_lat_long_state.hh"
 #include "monte_carlo_state_dispersion.hh"
 
+namespace cml {
+
 class StateInitialize : public jeod::DynBodyInit
 {
  public:
@@ -327,4 +329,8 @@ class StateInitialize : public jeod::DynBodyInit
   void generate_rot_init_values(jeod::DynManager & dyn_manager);
   void apply_internal(jeod::DynManager & dyn_manager);
 };
+
+
+} // namespace cml
+
 #endif

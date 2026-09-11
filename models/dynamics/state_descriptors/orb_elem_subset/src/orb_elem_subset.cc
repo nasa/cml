@@ -19,6 +19,8 @@ PROGRAMMERS:
 
 #include "../include/orb_elem_subset.hh"
 
+namespace cml {
+
 /*****************************************************************************
 constructor
 *****************************************************************************/
@@ -260,3 +262,5 @@ OrbElemSubset::correct_for_j2()
   vel_vertical_scalar += (4.0 * j2_correction * sinI_sinL*sinI_cosL * mean_motion);
   semi_major_axis -= (j2_correction * (2.0 - 3.0 * sin_sq_I));
 }
+
+} // namespace cml

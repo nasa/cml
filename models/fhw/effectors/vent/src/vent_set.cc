@@ -26,6 +26,8 @@ PROGRAMMERS:
 #include "../include/vent.hh"
 #include "../include/vent_set.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 (a) baseline, do not create any vents
@@ -475,3 +477,6 @@ void VentSet::start_vent_internal(SimpleVent * vent)
     dynamic_vents.push_back(vent);
   }
 }
+
+
+} // namespace cml

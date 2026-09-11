@@ -28,6 +28,8 @@ ASSUMPTIONS:
 #include <cstddef>
 #include <vector>
 
+namespace cml {
+
 /*****************************************************************************
 CMLTaggedRingBufferMember
 Purpose:
@@ -227,4 +229,8 @@ Note:
     return &data_[prox_ix].data;
   }
 };
+
+
+} // namespace cml
+
 #endif

@@ -27,6 +27,8 @@ PROGRAMMERS:
 
 #include "rocket_motor_basic.hh"
 
+namespace cml {
+
 class RocketMotor_TableThrust : public RocketMotor_Basic {
 public:
   enum ConsumptionType {
@@ -126,4 +128,8 @@ protected:
   void update_table();
   void compute_flow_rate_and_isp();
 };
+
+
+} // namespace cml
+
 #endif

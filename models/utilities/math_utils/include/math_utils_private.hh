@@ -9,6 +9,8 @@
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 class MathUtilsPrivate {
 
  protected:
@@ -193,4 +195,8 @@ class MathUtilsPrivate {
     return res;
   }
 };
+
+
+} // namespace cml
+
 #endif

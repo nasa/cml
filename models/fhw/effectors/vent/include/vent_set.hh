@@ -21,6 +21,8 @@ PROGRAMMERS:
 
 #include "simple_vent.hh"
 
+namespace cml {
+
 class VentSet : public SubscriptionBase {
  protected: // external references
   jeod::DynBody& dyn_body; /* (--) jeod::DynBody to which vents are attached */
@@ -99,4 +101,8 @@ class VentSet : public SubscriptionBase {
  private:
   void start_vent_internal( SimpleVent * vent);
 };
+
+
+} // namespace cml
+
 #endif

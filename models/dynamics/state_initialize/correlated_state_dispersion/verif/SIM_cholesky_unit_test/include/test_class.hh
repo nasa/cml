@@ -14,6 +14,8 @@ PROGRAMMERS:
 #include "../../../include/correlated_state_dispersion.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+namespace cml {
+
 class TestCorrelatedStateDispersion : public CorrelatedStateDispersion  {
  public:
   double reconstruct[9][9];
@@ -70,4 +72,8 @@ class TestCorrelatedStateDispersion : public CorrelatedStateDispersion  {
     TestCorrelatedStateDispersion (const TestCorrelatedStateDispersion&);
     TestCorrelatedStateDispersion & operator = (const TestCorrelatedStateDispersion&);
 };
+
+
+} // namespace cml
+
 #endif

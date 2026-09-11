@@ -34,6 +34,8 @@ PROGRAMMERS:
 
 #include "aero_interface_output.hh"
 
+namespace cml {
+
 /*****************************************************************************
 AeroExecutiveBase
 Purpose: Baseline Aero Executive, intended to be common across all aero
@@ -73,4 +75,8 @@ public:
 
   virtual void update() = 0;
 };
+
+
+} // namespace cml
+
 #endif

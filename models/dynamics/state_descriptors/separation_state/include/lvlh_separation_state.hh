@@ -27,6 +27,8 @@ class DynManager;
 class RefFrame;
 }
 
+namespace cml {
+
 class LvlhSeparationState : public SeparationState
 {
  public:
@@ -82,5 +84,9 @@ class LvlhSeparationState : public SeparationState
   void activate() override;
   void deactivate() override;
 };
+
+
+
+} // namespace cml
 
 #endif

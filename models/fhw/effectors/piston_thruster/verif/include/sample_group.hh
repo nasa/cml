@@ -12,6 +12,8 @@
 #include "trick/constant.h"
 #include "../../include/piston_thruster_group.hh"
 
+namespace cml {
+
 class SamplePistonGroup : public PistonThrusterGroup
 {
  public:
@@ -166,5 +168,9 @@ class SamplePistonGroup : public PistonThrusterGroup
   SamplePistonGroup (const SamplePistonGroup&);
   SamplePistonGroup & operator = (const SamplePistonGroup&);
 };
+
+
+
+} // namespace cml
 
 #endif

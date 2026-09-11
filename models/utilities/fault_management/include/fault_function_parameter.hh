@@ -15,6 +15,8 @@ PROGRAMMERS:
 
 #include "independent_variable.hh"
 
+namespace cml {
+
 /*******************************************************************************
 FaultFunctionParameter
 Purpose:(Returns a parameter that is a linear function of some arbitrary
@@ -40,4 +42,8 @@ class FaultFunctionParameter {
       independent variable is relative, this is the initial value of the
       parameter. */
 };
+
+
+} // namespace cml
+
 #endif

@@ -20,6 +20,8 @@ PROGRAMMERS:
 #include "aero_table_set_base.hh"
 #include "aero_executive_table.hh"
 
+namespace cml {
+
 class AeroTableSet: public AeroTableSetBase
 {
 public:
@@ -43,4 +45,8 @@ private:
   AeroTableSet (const AeroTableSet &);
   AeroTableSet & operator = (const AeroTableSet &);
 };
+
+
+} // namespace cml
+
 #endif

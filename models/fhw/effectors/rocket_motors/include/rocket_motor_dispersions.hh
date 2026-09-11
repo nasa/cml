@@ -14,6 +14,8 @@ PROGRAMMERS:
 #ifndef CML_ROCKET_MOTOR_DISPERSIONS_HH
 #define CML_ROCKET_MOTOR_DISPERSIONS_HH
 
+namespace cml {
+
 class RocketMotorDispersions {
 public:
   double position_dispersion[3]{}; /* (m)   Dispersion in the position of the motor frame. */
@@ -34,4 +36,8 @@ public:
   void apply_dispersions( double position[3],
                           double T_parent_to_motor[3][3]);
 };
+
+
+} // namespace cml
+
 #endif

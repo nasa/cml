@@ -28,6 +28,8 @@ PROGRAMMERS:
 
 #include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 
+namespace cml {
+
 /*****************************************************************************
 VehicleEventsManager
 Purpose:(Collection of all sets of watch-values.)
@@ -55,5 +57,9 @@ class VehicleEventsManager
 
   void register_watch(WatchValuesBaseCore & watch) {all_watches.push_back(&watch);}
 };
+
+
+
+} // namespace cml
 
 #endif

@@ -39,6 +39,8 @@ class DynBody;
 class DynManager;
 }
 
+namespace cml {
+
 /*****************************************************************************
 ExtendedPlanetaryDerivedState
 Purpose:(Provides a plethora of options for expressing the state relative
@@ -240,5 +242,9 @@ protected:
    void analyze_range_safety();
 };
 
+
+
+
+} // namespace cml
 
 #endif
