@@ -556,11 +556,13 @@ Coding Standards Waiver
 
 Waivers to any coding standard may be granted on a case-by-case basis when it can be demonstrated that the following
 criteria are both met:
+
 1. Safeguards are in place to ensure that the exception does not create a risk to the overall project.
 2. The effort required to bring the code to a satisfactory standard would be excessive.
 
 The request for a waiver is made during Pull Request Review. The request may be in the form of a PowerPoint
 presentation, a memo, or any other format capable of conveying the following information:
+
 -  Violation (with code)
 -  Options for mitigation/resolution
 -  Rationale why the violation is acceptable

@@ -147,7 +147,7 @@ subject to the following guidelines:
   GitHub repository must be authored by a human. AI tools are not permitted
   to automatically open an issue or respond to a pull request review.
 - A pull request must be fully understood by the human author who submits it.
-- AI tools are notpermitted to be credited as authors. An AI tool may not be
+- AI tools are not permitted to be credited as authors. An AI tool may not be
   listed as the co-author of a commit, the author of a change to documentation,
   or an author in the Trick header of a source file, for example.
 
