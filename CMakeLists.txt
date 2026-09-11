@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.24..3.26)
 
 project(cml
-    VERSION 0.2.0
+    VERSION 0.3.0
     DESCRIPTION "The JSC Engineering EG Division Common Model Library"
     HOMEPAGE_URL "https://github.com/nasa/cml"
     LANGUAGES C CXX

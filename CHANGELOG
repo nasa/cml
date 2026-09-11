@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 
 --------------------------------
+CML v0.3.0, September 2026
+--------------------------------
+
+CML minor release. Several major breaking changes are planned following this
+release.
+
+* Dependencies:
+    - Trick 25.1.0 or newer.
+    - JEOD 5.4.1 or newer.
+
+* Bugs addressed:
+    - Fixed issues where the Polygon Enclosure model could read from invalid
+      memory on certain execution paths.
+
+* Changes to models:
+    - Removed several low-maturity models which lacked documentation, tests, or
+      prior verification and validation. Some of these may be reinstated in the
+      future when they meet CML's inclusion criteria.
+
+* Changes to tools:
+    - Implemented continuous integration pipeline.
+    - Started enforcing that all models pass inspection by static analysis
+      tools cleanly.
+
+* Changes to documentation:
+    - Began moving documentation to GitHub Pages at https://nasa.github.io/cml.
+      Existing meta-documentation like the coding standards and getting started
+      guides have already been ported over. Individual model documentation will
+      be moved to GitHub pages incrementally in future releases.
+
+--------------------------------
 CML v0.2.0, May 2026
 --------------------------------
 
