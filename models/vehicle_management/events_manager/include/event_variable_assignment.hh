@@ -11,6 +11,8 @@ PROGRAMMERS:
 #ifndef CML_EVENT_VARIABLE_ASSIGNMENT_HH
 #define CML_EVENT_VARIABLE_ASSIGNMENT_HH
 
+namespace cml {
+
 /*****************************************************************************
 EventVariableAssignmentBase
 Purpoise:(Provides a convenient base class to support assignment operators
@@ -67,4 +69,8 @@ class EventVariableAssignmentRef : public EventVariableAssignmentBase
   {}
   void make_assignment() override {variable = value;}
 };
+
+
+} // namespace cml
+
 #endif

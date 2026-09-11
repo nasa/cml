@@ -20,6 +20,8 @@ PROGRAMMERS:
 #include "generic_multi_input_table.hh"
 #include "table_independent_variable.hh"
 
+namespace cml {
+
 class TableLookupSet : public AbstractTableLookup
 {
 public:
@@ -90,4 +92,8 @@ public:
   TableIndependentVariable* lookup_independent(
                                           const std::string &var_name) override;
 };
+
+
+} // namespace cml
+
 #endif

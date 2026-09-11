@@ -21,6 +21,7 @@ PROGRAMMERS:
 #include <vector>
 #include <string>
 
+namespace cml {
 
 /*****************************************************************************
 SweepSet
@@ -123,8 +124,8 @@ class UnitTestFramework {
 
   void update_sweeps();
   void update_file();
- private:
-  friend class UnitTestFrameworkTest;
+
+  // TODO Nino Tarantino 9/11/26: Move to env utils model
   std::string expand_env_variables(const std::string& input);
 };
 
@@ -135,4 +136,7 @@ inline void unit_test_init( UNIT_TEST * data) {data->initialize();}
 inline void unit_test( UNIT_TEST * data) {data->update();}
 inline void unit_test_dd( UNIT_TEST * data) {(void) data;}
 inline void unit_test_shutdown( UNIT_TEST * data) {(void) data;}
+
+} // namespace cml
+
 #endif

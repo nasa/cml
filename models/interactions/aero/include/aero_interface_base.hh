@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "aero_interface_output.hh"
 #include "aero_executive_base.hh"
 
+namespace cml {
+
 /*******************************************************************************
 AeroInterfaceBase
 Purpose: (Abstract class providing the base for the AeroInterface options.)
@@ -68,4 +70,8 @@ protected:
   void activate() override;
   void deactivate() override;
 };
+
+
+} // namespace cml
+
 #endif

@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "../../include/event_action.hh"
 #include "cml/models/utilities/trick_logging/include/trick_logging.hh"
 
+namespace cml {
+
 class VerifVehicleEventsManager : public VehicleEventsManager
 {
  public:
@@ -92,4 +94,8 @@ class VerifVehicleEventsManager : public VehicleEventsManager
   VerifVehicleEventsManager& operator = (const VerifVehicleEventsManager& rhs);
 
 };
+
+
+} // namespace cml
+
 #endif

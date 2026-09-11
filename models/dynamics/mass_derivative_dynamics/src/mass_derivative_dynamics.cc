@@ -24,6 +24,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include <cstddef>
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -434,3 +436,6 @@ MassDerivativeDynamics::modify_velocity()
                      body.composite_body);
   body.propagate_state();
 }
+
+
+} // namespace cml

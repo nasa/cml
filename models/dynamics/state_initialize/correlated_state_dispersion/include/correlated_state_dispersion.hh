@@ -47,6 +47,7 @@ namespace jeod {
 class RefFrameState;
 }
 
+namespace cml {
 
 class CorrelatedStateDispersion {
  public:
@@ -333,4 +334,8 @@ class CorrelatedStateDispersion {
   void transform_TR_param(  const double position[3],
                             const double velocity[3]);
 };
+
+
+} // namespace cml
+
 #endif

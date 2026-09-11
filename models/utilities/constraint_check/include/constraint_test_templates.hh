@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include "constraint_test.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Notes:
  - The classes defined in here are class-template extensions of
@@ -261,4 +263,8 @@ class ConstraintTest_ValSet : public ConstraintTest
     return violation;
   }
 };
+
+
+} // namespace cml
+
 #endif

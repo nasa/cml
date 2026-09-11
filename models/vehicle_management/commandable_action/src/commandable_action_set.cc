@@ -37,6 +37,8 @@ Programmers:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <utility>
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -233,3 +235,6 @@ CommandableActionSet::generate_fsw_command_safety_net()
       "disposition in generate_fsw_commands().\n");
   }
 }
+
+
+} // namespace cml

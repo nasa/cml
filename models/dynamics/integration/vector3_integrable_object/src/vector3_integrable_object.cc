@@ -33,6 +33,8 @@ PROGRAMMERS:
 
 #include "../include/vector3_integrable_object.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 empty
@@ -282,3 +284,6 @@ Vector3IntegrableObject::integrate (
 {
   return integrator.integrate (dyn_dt, target_stage, deriv_ptr, variable);
 }
+
+
+} // namespace cml

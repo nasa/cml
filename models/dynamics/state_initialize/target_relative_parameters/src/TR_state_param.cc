@@ -23,6 +23,8 @@ PROGRAMMERS:
 #include "../include/TR_state_param.hh"
 #include "../include/TR_state_parameter_set.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -691,3 +693,5 @@ TargetRelative_StateParam::compute_biased_target()
   }
   return true;
 }
+
+} // namespace cml

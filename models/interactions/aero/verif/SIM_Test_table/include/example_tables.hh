@@ -13,6 +13,8 @@ PROGRAMMERS:
 #include "cml/models/interactions/aero/include/aero_table_set.hh"
 #include "cml/models/interactions/aero/include/aero_executive_table.hh"
 
+namespace cml {
+
 /*****************************************************************************
 SimpleAeroTableSet
 Purpose:(Basic form for testing the 6 types of input sets.
@@ -461,5 +463,9 @@ class ExampleTableSet1 : public AeroTableSet
   ExampleTableSet1 (const ExampleTableSet1 &);
   ExampleTableSet1 & operator= (const ExampleTableSet1 &);
 };
+
+
+
+} // namespace cml
 
 #endif

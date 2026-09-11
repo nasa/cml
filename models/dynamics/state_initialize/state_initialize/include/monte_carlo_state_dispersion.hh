@@ -19,6 +19,8 @@ PROGRAMMERS:
 
 #include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
 
+namespace cml {
+
 class MonteCarloStateDispersion {
  protected: // external reference
   jeod::DynBodyInitTransState & trans_init; /* (--) reference to StateInitialize's
@@ -57,4 +59,8 @@ class MonteCarloStateDispersion {
 
   void disperse_trans_state();
 };
+
+
+} // namespace cml
+
 #endif

@@ -23,6 +23,8 @@ PROGRAMMERS:
 #include <string>
 #include <vector>
 
+namespace cml {
+
 /*****************************************************************************
 CML_ProximityCounterElement
 Purpose: Contents of each element of the working vector
@@ -69,4 +71,8 @@ class CML_ProximityCounter {
     set_data( targets_v);
   }
 };
+
+
+} // namespace cml
+
 #endif

@@ -15,6 +15,8 @@ PROGRAMMERS:
 
 #include "simple_vent.hh"
 
+namespace cml {
+
 class Vent : public SimpleVent {
   friend class VentSet;
  protected:
@@ -67,4 +69,8 @@ class Vent : public SimpleVent {
   void update_mass_demand() override;
   void stop_venting() override;
 };
+
+
+} // namespace cml
+
 #endif

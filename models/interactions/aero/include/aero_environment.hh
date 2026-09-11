@@ -13,6 +13,8 @@ PROGRAMMERS:
 #include <cstring>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*******************************************************************************
 AeroEnvironment
 Purpose: (References the environment variables;
@@ -81,4 +83,8 @@ public:
   const double * get_cg_position() const { return cg_position;}
   const double * get_true_body_rates() const { return true_body_rates;}
 };
+
+
+} // namespace cml
+
 #endif

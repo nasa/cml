@@ -43,6 +43,7 @@ PROGRAMMERS:
 #include "../include/std_atmos_1976.hh"
 #include "std_atmos_formula.h"
 
+namespace cml {
 
 STD1976::STD1976()
 {
@@ -170,3 +171,5 @@ void STD1976::update(const double &altitude_in  //the given geometric height
   //to calculate mean free path (m)
   mean_free_path = cal_mfp(kinetic_temperature, pressure);
 }
+
+} // namespace cml

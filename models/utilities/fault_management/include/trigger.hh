@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+namespace cml {
+
 /*******************************************************************************
 TestEqual_Trait
 Purpose:(Contains an equality test. This test is different for integers than for
@@ -377,4 +379,8 @@ template<typename T> void Trigger<T>::set_periodic(T length, T period)
   periodic_length = length;
   periodic_period = period;
 }
+
+
+} // namespace cml
+
 #endif

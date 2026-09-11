@@ -20,6 +20,8 @@
 
 #include "generic_multi_input_table.hh"
 
+namespace cml {
+
 class GenericSingleInputTable : public GenericMultiInputTable
 {
  friend class SingleInputTableVarDeriv;
@@ -33,4 +35,8 @@ class GenericSingleInputTable : public GenericMultiInputTable
   void generate_base_values() override;
   bool generate_output() override;
 };
+
+
+} // namespace cml
+
 #endif

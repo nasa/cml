@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include <cstddef>
 #include <vector>
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -134,3 +136,6 @@ CML_ProximityCounter::insert(double value)
     }
   }
 }
+
+
+} // namespace cml

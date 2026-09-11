@@ -26,6 +26,8 @@ PROGRAMMERS:
 #include "../include/table_type_defs.hh"
 #include "../include/single_input_table_for_angles.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructors
@@ -164,3 +166,6 @@ SingleInputTableForAngles::bound_to_half_circle(
     angle += 2 * half_circle;
   }
 }
+
+
+} // namespace cml

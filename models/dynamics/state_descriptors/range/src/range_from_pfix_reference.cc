@@ -18,6 +18,8 @@ Programmers:
 #include "../include/range_computation.hh"
 #include "../include/range_from_pfix_reference.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -115,3 +117,6 @@ RangeFromPfixReference::update_using_cartesian()
 
   RangeComputation::update_using_cartesian();
 }
+
+
+} // namespace cml

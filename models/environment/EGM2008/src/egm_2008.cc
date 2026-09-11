@@ -18,6 +18,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -71,3 +73,5 @@ EGM2008_WGS84::update()
 
   table_set.update();
 }
+
+} // namespace cml

@@ -21,6 +21,8 @@ PROGRAMMERS:
 #include <vector>
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
 
+namespace cml {
+
 /*****************************************************************************
 RcsPodComponent
 Purpose:(Represents each source of mass-draw-down, e.g. fuel and other gasses
@@ -179,4 +181,8 @@ class RcsPropPod{
   bool is_healthy() const { return health != HealthFail;}
 
 };
+
+
+} // namespace cml
+
 #endif

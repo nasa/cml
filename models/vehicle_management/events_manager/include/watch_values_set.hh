@@ -16,6 +16,8 @@ PROGRAMMERS:
 #include <vector>
 #include "watch_values_base_core.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 WatchValuesSet
@@ -72,4 +74,8 @@ class WatchValuesSet : public WatchValuesBaseCore
   void activate() override;
   void deactivate() override;
 };
+
+
+} // namespace cml
+
 #endif

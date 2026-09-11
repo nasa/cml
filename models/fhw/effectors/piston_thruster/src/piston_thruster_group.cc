@@ -31,6 +31,8 @@ PROGRAMMERS:
 #include "../include/piston_thruster.hh"
 #include "../include/piston_thruster_group.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructors
 *******************************************************************************/
@@ -235,3 +237,5 @@ PistonThrusterGroup::deactivate()
   }
   active = false;
 }
+
+} // namespace cml

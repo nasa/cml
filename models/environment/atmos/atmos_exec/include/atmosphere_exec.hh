@@ -47,6 +47,9 @@ namespace jeod {
 class DynBody;
 class TimeStandard;
 }
+
+namespace cml {
+
 class ExtendedPlanetaryDerivedState;
 class LookupAtmosWinds;
 class STD1976;
@@ -134,5 +137,9 @@ class AtmosphereExec : public AtmosphereExecInterface {
     void initialize_winds();
     void add_gust();
 };
+
+
+
+} // namespace cml
 
 #endif

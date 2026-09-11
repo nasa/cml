@@ -43,6 +43,8 @@ PROGRAMMERS:
 
 #include "dynamic_mass_body_interpolation.hh"
 
+namespace cml {
+
 /*****************************************************************************
 DynamicMassBodyPropertiesInterface
 Purpose:( This is the typical interface that external models will use to 
@@ -105,5 +107,9 @@ public:
    DynamicMassBodyProperties& operator = (const DynamicMassBodyProperties&) = delete;
    void disperse_mass_properties();
 };
+
+
+
+} // namespace cml
 
 #endif

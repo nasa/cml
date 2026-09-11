@@ -3,6 +3,8 @@
 #include "trick/realtimesync_proto.h"
 #include "trick/external_application_c_intf.h"
 
+namespace cml {
+
 /*****************************************************************************
 run_*
 Purpose: Define the settings for each run.
@@ -201,3 +203,6 @@ void run_1ah() {
   verif.manager.trigger_i.direction_limit = EventTriggerBase::Decreasing;
 }
 
+
+
+} // namespace cml

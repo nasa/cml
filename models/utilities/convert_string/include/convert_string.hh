@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include <type_traits>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*******************************************************************************
 ConvertString
 Purpose:(Utility to convert strings to various formats.)
@@ -98,5 +100,9 @@ bool ConvertString::convert_numeric<bool>(const char* str) {
 
   return false;
 }
+
+
+
+} // namespace cml
 
 #endif

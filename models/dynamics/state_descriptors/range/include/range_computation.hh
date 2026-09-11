@@ -27,6 +27,8 @@ class Planet;
 class PlanetFixedPosition;
 }
 
+namespace cml {
+
 /*****************************************************************************
 RangeValues
 Purpose:(Provides the collective range and range-angle variables in one place)
@@ -150,5 +152,9 @@ class RangeComputation : public RangeValues,
   virtual void update_using_polar();
   virtual void is_abstract() = 0; // Makes this class non-instantiable
 };
+
+
+
+} // namespace cml
 
 #endif

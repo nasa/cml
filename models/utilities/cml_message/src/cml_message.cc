@@ -22,6 +22,8 @@ Programmers:
 #include <iostream>
 #include <string>
 
+namespace cml {
+
 namespace {
 
 CMLMessage::PublishLevel publish_level = CMLMessage::Warning;
@@ -116,3 +118,6 @@ void publish(PublishLevel msg_level,
 }
 
 }
+
+
+} // namespace cml

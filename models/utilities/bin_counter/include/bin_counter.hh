@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include <string>
 #include <vector>
 
+namespace cml {
+
 
 /*****************************************************************************
 CML_BinCounterElement
@@ -82,4 +84,8 @@ class CML_BinCounter {
     set_data( edges_v, closed_ends);
   }
 };
+
+
+} // namespace cml
+
 #endif

@@ -34,6 +34,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 class AccumulatedAbsoluteDeltas : public SubscriptionBase
 {
  protected:
@@ -58,4 +60,8 @@ class AccumulatedAbsoluteDeltas : public SubscriptionBase
  protected:
   void activate() override;
 };
+
+
+} // namespace cml
+
 #endif

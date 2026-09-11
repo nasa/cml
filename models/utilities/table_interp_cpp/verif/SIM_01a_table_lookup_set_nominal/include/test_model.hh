@@ -27,6 +27,8 @@ PROGRAMMERS:
 #include "../../../include/table_lookup_set.hh"
 #include "../../../include/table_independent_variable.hh"
 
+namespace cml {
+
 class TestModelBase
 {
 public:
@@ -472,4 +474,8 @@ private:
   TestModelPreInstantiated (const TestModelPreInstantiated&);
   TestModelPreInstantiated& operator = (const TestModelPreInstantiated&);
 };
+
+
+} // namespace cml
+
 #endif

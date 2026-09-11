@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include <string>
 #include <vector>
 
+namespace cml {
+
 /*****************************************************************************
 CML_TargetCounterElement
 Purpose: Contents of each element of the working vector
@@ -70,4 +72,8 @@ class CML_TargetCounter {
     set_data( targets_v);
   }
 };
+
+
+} // namespace cml
+
 #endif

@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "fault_function_parameter.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*******************************************************************************
 FaultFunctionBase
 Purpose:(Allows access to most members of FaultFunction without knowing the
@@ -144,4 +146,8 @@ template<typename T> void FaultFunction<T>::overwrite_value() {
     }
   }
 }
+
+
+} // namespace cml
+
 #endif

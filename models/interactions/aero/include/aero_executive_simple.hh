@@ -15,6 +15,8 @@ PROGRAMMERS:
 
 #include "aero_executive_base.hh"
 
+namespace cml {
+
 class AeroInterfaceOutput;
 
 /*******************************************************************************
@@ -79,4 +81,8 @@ public:
   void initialize() override;
   void update() override;
 };
+
+
+} // namespace cml
+
 #endif

@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "../include/aero_executive_simple_lift_drag.hh"
 #include "../include/aero_interface_output.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor:
 *******************************************************************************/
@@ -155,3 +157,5 @@ AeroExecutiveSimpleLiftDrag::set_aero_type(AeroType aero_type_in)
   }
   aero_type = aero_type_in;
 }
+
+} // namespace cml

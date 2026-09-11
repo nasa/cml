@@ -20,6 +20,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <cstddef>
 
+namespace cml {
+
 /* TODO Turner 2023/03
  *   Investigate: Can Trick support doubly-templated classes?
  *      I.e. can we use a solidified class-template as the data type for
@@ -216,4 +218,8 @@ class ValSetTimedConstraint : public Constraint
   ValSetTimedConstraint( const ValSetTimedConstraint &);
   ValSetTimedConstraint & operator=( const ValSetTimedConstraint &);
 };
+
+
+} // namespace cml
+
 #endif

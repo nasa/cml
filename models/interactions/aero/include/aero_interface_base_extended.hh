@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "aero_interface_base.hh"
 #include "aero_environment.hh"
 
+namespace cml {
+
 /*******************************************************************************
 AeroInterfaceExtended
 Purpose:(Common elements for the Table-lookup and Api options.)
@@ -50,4 +52,8 @@ public:
   AeroInterfaceBaseExtended (const AeroInterfaceBaseExtended &) = delete;
   AeroInterfaceBaseExtended & operator = (const AeroInterfaceBaseExtended &) = delete;
 };
+
+
+} // namespace cml
+
 #endif

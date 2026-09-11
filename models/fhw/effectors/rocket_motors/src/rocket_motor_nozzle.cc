@@ -20,6 +20,8 @@ PROGRAMMERS:
 
 #include "../include/rocket_motor_nozzle.hh"
 
+namespace cml {
+
 /*****************************************************************************
 initialize
 Purpose:(Initialize the rocket motors nozzle class and generate position 
@@ -161,3 +163,5 @@ RocketMotorNozzle::compute_thrust_vec()
   jeod::Vector3::scale( thrust_dir, thrust_mag, thrust );
   jeod::Vector3::scale( thrust_dir, thrust_vac_mag, thrust_vac );
 }
+
+} // namespace cml

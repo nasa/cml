@@ -24,6 +24,8 @@ PROGRAMMERS:
 
 #include "../include/table_independent_variable.hh"
 
+namespace cml {
+
 /*****************************************************************************
 TableIndependentVariable
 Constructors
@@ -654,3 +656,6 @@ TableIndependentVariable::check_monotonicity(
   delta       = max_value - min_value;
   return true;
 }
+
+
+} // namespace cml

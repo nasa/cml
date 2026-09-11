@@ -18,6 +18,8 @@ PROGRAMMERS:
 #include "../include/aero_coefficients.hh"
 #include "../include/aero_table_set_base.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor
 *******************************************************************************/
@@ -243,3 +245,5 @@ AeroTableSetBase::set_table_type( AeroDataTableType new_type)
     data_table_type = new_type;
   }
 }
+
+} // namespace cml

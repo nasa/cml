@@ -29,6 +29,8 @@ PROGRAMMERS:
 #include "quaternion_spherical_interpolator.hh"
 #include <cstddef>
 
+namespace cml {
+
 class SingleInputTableForQuaternions : public GenericSingleInputTable
 {
  protected:
@@ -61,4 +63,8 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
  protected:
   bool generate_output() override;
 };
+
+
+} // namespace cml
+
 #endif

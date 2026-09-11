@@ -29,6 +29,8 @@ class DynManager;
 class MassPoint;
 }
 
+namespace cml {
+
 // Causes the subject body to detach from its parent with a specified impulse.
 class MassBodyDetachImpulsive : public jeod::BodyAction {
   // Member data
@@ -73,5 +75,9 @@ class MassBodyDetachImpulsive : public jeod::BodyAction {
     virtual void apply_impulse( jeod::DynBody     & dyn_body,
                                 const std::string & mass_point_name);
 };
+
+
+
+} // namespace cml
 
 #endif

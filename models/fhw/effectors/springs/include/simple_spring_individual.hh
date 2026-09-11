@@ -13,6 +13,8 @@ PROGRAMMERS:
 #ifndef CML_SIMPLE_SPRING_INDIVIDUAL_HH
 #define CML_SIMPLE_SPRING_INDIVIDUAL_HH
 
+namespace cml {
+
 /* Spring specific info for each spring */
 class SimpleSpringIndividual{
 public:
@@ -53,5 +55,9 @@ public:
   double calculate_force( double separation_distance,
                           double separation_speed);
 };
+
+
+
+} // namespace cml
 
 #endif

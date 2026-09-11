@@ -28,6 +28,8 @@ PROGRAMMERS:
 
 #include "../include/piston_thruster.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructors
 *******************************************************************************/
@@ -156,3 +158,5 @@ PistonThruster::deactivate()
   jeod::Vector3::initialize( sideB.out.moment);
   active = false;
 }
+
+} // namespace cml

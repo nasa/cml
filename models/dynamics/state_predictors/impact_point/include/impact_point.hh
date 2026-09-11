@@ -35,6 +35,8 @@ class Planet;
 class RefFrameTrans;
 }
 
+namespace cml {
+
 class ImpactPoint : public jeod::PlanetFixedPosition, 
                     public SubscriptionBase 
 {
@@ -101,4 +103,8 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
   void activate() override;
 };
  
+
+
+} // namespace cml
+
 #endif

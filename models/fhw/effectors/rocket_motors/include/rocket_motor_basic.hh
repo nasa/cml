@@ -24,6 +24,8 @@ PROGRAMMERS:
 
 #include "rocket_motor_dispersions.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 RocketMotor_Basic
@@ -180,4 +182,8 @@ protected:
   virtual void start_motor();
   void activate() override;
 };
+
+
+} // namespace cml
+
 #endif

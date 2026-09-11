@@ -11,6 +11,8 @@ PROGRAMMERS:
 
 #include "fault.hh"
 
+namespace cml {
+
 /*******************************************************************************
 FaultScale
 Purpose:(Manages injection of a scale-factor fault.)
@@ -66,5 +68,9 @@ bool FaultScale<T>::set_param(const std::string& param_name, double value, bool 
 
   return true;
 }
+
+
+
+} // namespace cml
 
 #endif

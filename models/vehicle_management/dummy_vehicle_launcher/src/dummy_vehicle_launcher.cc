@@ -30,6 +30,8 @@ ASSUMPTIONS AND LIMITATIONS:
 
 #include "../include/dummy_vehicle_launcher.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -336,3 +338,6 @@ DummyVehicleLauncher::process_inconsistent_setup()
   current_integ_group->delete_dyn_body( body );
   add_to_integ_group_at_launch = true;
 }
+
+
+} // namespace cml

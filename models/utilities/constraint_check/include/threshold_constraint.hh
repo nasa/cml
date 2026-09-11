@@ -21,6 +21,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Name: ThresholdInstantConstraint
@@ -618,4 +620,8 @@ class ThresholdTimedConstraintSpecData : public Constraint
   ThresholdTimedConstraintSpecData & operator=(
                                      const ThresholdTimedConstraintSpecData &);
 };
+
+
+} // namespace cml
+
 #endif

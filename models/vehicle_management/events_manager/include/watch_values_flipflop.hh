@@ -38,6 +38,8 @@ PROGRAMMERS:
 #include "cml/models/vehicle_management/events_manager/include/event_action_base.hh"
 #include "watch_values_base_core.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Name: WatchValuesFlipFlop
 Purpose:
@@ -147,4 +149,8 @@ class WatchValuesFlipFlopDelayed : public WatchValuesFlipFlop
  protected:
   bool evaluate_delay() const;
 };
+
+
+} // namespace cml
+
 #endif

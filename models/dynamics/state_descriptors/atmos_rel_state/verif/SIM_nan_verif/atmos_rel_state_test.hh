@@ -13,6 +13,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/orientation/include/orientation.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 
 class AtmosRelStateTest : public AtmosRelativeState
 {
@@ -57,5 +59,9 @@ inline void AtmosRelStateTest::compute_euler_angles()
 }
 
 
+
+
+
+} // namespace cml
 
 #endif

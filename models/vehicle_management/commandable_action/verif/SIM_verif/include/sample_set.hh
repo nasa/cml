@@ -11,6 +11,8 @@ PROGRAMMERS:
 #include "../../../include/commandable_action_set.hh"
 #include "../../../include/commandable_action.hh"
 
+namespace cml {
+
 /*****************************************************************************
 FswBus
 Purpose:
@@ -126,4 +128,8 @@ class DirectCommandableActionSet : public CommandableActionSet
     flag_command_processed();
   }
 };
+
+
+} // namespace cml
+
 #endif

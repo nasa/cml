@@ -8,6 +8,8 @@ Purpose: (Apply ANSI color codes to strings in order to change the color of the
 
 #include <string>
 
+namespace cml {
+
 class ColorString {
   public:
     // This set of static casts will turn the inputed text into the
@@ -86,5 +88,9 @@ class ColorString {
       return "\033[47m" + input + "\033[0m";
     }
 };
+
+
+
+} // namespace cml
 
 #endif

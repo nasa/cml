@@ -18,6 +18,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -111,3 +113,5 @@ AccumulatedAbsoluteDeltas::update()
     old_variable[ii] = variable[ii];
   }
 }
+
+} // namespace cml

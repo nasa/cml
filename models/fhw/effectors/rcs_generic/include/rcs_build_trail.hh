@@ -18,6 +18,8 @@ PROGRAMMERS:
 
 #include "rcs_scale_factor_interface.hh"
 
+namespace cml {
+
 /*****************************************************************************
 RcsBuildUpTrailOffJetData
 Purpose:(Jet-specific data for RcsBuildUpTrailOff)
@@ -58,4 +60,8 @@ class RcsBuildUpTrailOff
   virtual ~RcsBuildUpTrailOff() = default;
   virtual void build_up_trail_off_effects();
 };
+
+
+} // namespace cml
+
 #endif

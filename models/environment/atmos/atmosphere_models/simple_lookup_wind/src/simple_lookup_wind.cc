@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "../include/simple_lookup_wind.hh"
+
+namespace cml {
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -207,3 +209,5 @@ SimpleLookupWind::assign_dir_mag_vert_data(
               data_array+3*num_elem_per_variable,
               dim_list);
 }
+
+} // namespace cml

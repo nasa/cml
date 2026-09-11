@@ -26,6 +26,8 @@ PROGRAMMERS:
 #include <vector>
 #include <string>
 
+namespace cml {
+
 class AeroInterfaceOutput;
 class AeroEnvironment;
 
@@ -206,4 +208,8 @@ private:
   AeroExecutiveTable (const AeroExecutiveTable &);
   AeroExecutiveTable & operator = (const AeroExecutiveTable &);
 };
+
+
+} // namespace cml
+
 #endif

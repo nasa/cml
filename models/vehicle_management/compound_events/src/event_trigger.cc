@@ -14,6 +14,8 @@ PROGRAMMERS:
 #include <cmath>
 #include <cstdlib>
 
+namespace cml {
+
 /*****************************************************************************
 apply_function_modifier
 Purpose:
@@ -120,3 +122,5 @@ EventTriggerBase::set_new_reference()
     break;
   }
 }
+
+} // namespace cml

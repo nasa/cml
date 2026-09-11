@@ -33,6 +33,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -446,3 +448,5 @@ AbstractTableLookup::enable_table_interp(
     it->second = flag;
   }
 }
+
+} // namespace cml

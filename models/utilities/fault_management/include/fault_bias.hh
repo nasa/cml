@@ -11,6 +11,8 @@ PROGRAMMERS:
 
 #include "fault.hh"
 
+namespace cml {
+
 /*******************************************************************************
 FaultBias
 Purpose:(Manages injection of a bias fault.)
@@ -65,5 +67,9 @@ bool FaultBias<T>::set_param(const std::string& param_name, double value, bool r
 
   return true;
 }
+
+
+
+} // namespace cml
 
 #endif

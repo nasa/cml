@@ -22,6 +22,8 @@ Programmers:
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -350,3 +352,5 @@ MassBodyDistributeCompToCore::check_for_valid_mass_properties() const
     }
   }
 }
+
+} // namespace cml

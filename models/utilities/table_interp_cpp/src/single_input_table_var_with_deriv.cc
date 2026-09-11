@@ -22,6 +22,8 @@
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <cstddef>
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -198,3 +200,5 @@ SingleInputTableVarDeriv::generate_output()
   }
   return true;
 }
+
+} // namespace cml

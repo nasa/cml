@@ -12,6 +12,8 @@ PROGRAMMERS:
 
 #include "../include/simple_spring_individual.hh"
 
+namespace cml {
+
 /*******************************************************************************
 initialize
 Purpose:(Used to set the initial compression of the springs.)
@@ -64,3 +66,5 @@ SimpleSpringIndividual::calculate_force( double separation_distance,
   axial_force  -= damping_force;
   return axial_force;
 }
+
+} // namespace cml

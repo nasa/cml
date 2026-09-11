@@ -31,6 +31,8 @@ PROGRAMMERS:
 #include <random>
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 // Forward declaration
 class RcsPropPod;
 class RcsJetGroup;
@@ -151,4 +153,8 @@ class RcsGeneric : public SubscriptionBase {
   void update_part_II();
   void check_mult_jet_flag_init();
 };
+
+
+} // namespace cml
+
 #endif

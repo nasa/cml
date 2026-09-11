@@ -57,6 +57,8 @@ namespace jeod {
 class MassBody;
 }
 
+namespace cml {
+
 class DynamicMassGroup : public SubscriptionBase {
  public:
   // Inputs:
@@ -133,4 +135,8 @@ class DynamicMassGroup : public SubscriptionBase {
   void add_mass_to_group_internal( DynamicMassBody *mass,
                                    bool send_err_msg);
 };
+
+
+} // namespace cml
+
 #endif

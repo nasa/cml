@@ -20,6 +20,8 @@ PROGRAMMERS:
 
 #include "../include/first_order_hold.hh"
 
+namespace cml {
+
 
 /*******************************************************************************
 Method:
@@ -183,3 +185,5 @@ FirstOrderHold::update()
     out.wind_angle_blowing_from = out.wind_angle_blowing_to + M_PI;
   }
 }
+
+} // namespace cml

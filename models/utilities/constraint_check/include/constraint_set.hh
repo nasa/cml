@@ -21,6 +21,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Name: ConstraintSet
 Purpose:
@@ -57,4 +59,8 @@ class ConstraintSet : public SubscriptionBase
   void activate() override;
   static bool constraint_disabled( const Constraint * c);
 };
+
+
+} // namespace cml
+
 #endif

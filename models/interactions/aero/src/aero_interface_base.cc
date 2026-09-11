@@ -16,6 +16,8 @@ PROGRAMMERS:
 
 #include "../include/aero_interface_base.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor
 *******************************************************************************/
@@ -148,3 +150,6 @@ AeroInterfaceBase::deactivate()
 
   SubscriptionBase::deactivate();
 }
+
+
+} // namespace cml

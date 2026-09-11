@@ -14,6 +14,8 @@ PROGRAMMERS:
 
 #include <random>
 
+namespace cml {
+
 /*******************************************************************************
 FaultRandNumber
 Purpose:(Generates random numbers using a Gaussian or uniform distribution.)
@@ -57,5 +59,9 @@ class FaultRandNumber {
       Whether the random number generator has been given a seed. */
     std::mt19937 rng; /* (--) Random number generator. */
 };
+
+
+
+} // namespace cml
 
 #endif

@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
+namespace cml {
+
 // JEOD Dependencies
 
 
@@ -58,4 +60,8 @@ class EGM2008_WGS84 : public SubscriptionBase
   EGM2008_WGS84 (const EGM2008_WGS84&);
   EGM2008_WGS84& operator= (const EGM2008_WGS84&);
 };
+
+
+} // namespace cml
+
 #endif

@@ -48,6 +48,8 @@ PROGRAMMERS:
 
 #include "state_initialize.hh"
 
+namespace cml {
+
 class StateInitializeWithPropagation : public StateInitialize
 {
  protected:
@@ -90,4 +92,8 @@ class StateInitializeWithPropagation : public StateInitialize
   void rk4_integration();
   void compute_planet_orientation (double time);
 };
+
+
+} // namespace cml
+
 #endif

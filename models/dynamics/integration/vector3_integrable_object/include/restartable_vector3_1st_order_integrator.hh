@@ -20,6 +20,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/memory/include/jeod_alloc.hh"
 #include "jeod/models/utils/integration/include/restartable_state_integrator_templates.hh"
 
+namespace cml {
+
 
 class RestartableVector3FirstOrderODEIntegrator : public jeod::SimpleCheckpointable {
   public:
@@ -138,4 +140,8 @@ Purpose:(Restore the integrator on restart.)
     */
     jeod::RestartableFirstOrderODEIntegrator<3> integrator_manager; //!< trick_io(**)
 };
+
+
+} // namespace cml
+
 #endif

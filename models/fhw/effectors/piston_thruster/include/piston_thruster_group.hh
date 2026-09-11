@@ -49,6 +49,8 @@ PROGRAMMERS:
 
 #include "piston_thruster.hh"
 
+namespace cml {
+
 /*****************************************************************************
 PistonThrusterGroupInputs
 Purpose:(Initialization of user-specified inputs for a group of piston
@@ -140,4 +142,8 @@ protected:
   void activate() override;
   void deactivate() override;
 };
+
+
+} // namespace cml
+
 #endif

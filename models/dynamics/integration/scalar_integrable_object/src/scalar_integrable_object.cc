@@ -12,6 +12,8 @@ Programmers:
 #include "er7_utils/integration/core/include/integrator_constructor.hh"
 #include "er7_utils/integration/core/include/integrator_result.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor
 *******************************************************************************/
@@ -74,3 +76,6 @@ er7_utils::IntegratorResult ScalarIntegrableObject::integrate(
 {
   return integrator.integrate(dyn_dt, target_stage, &derivative, &value);
 }
+
+
+} // namespace cml

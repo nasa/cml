@@ -20,6 +20,8 @@ PROGRAMMERS:
 #include "atmosphere_exec_atmos_base.hh"
 #include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
 
+namespace cml {
+
 class AtmosExecOutput;
 class ExtendedPlanetaryDerivedState;
 
@@ -69,4 +71,8 @@ class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
 
     void set_altitude_type(TopoType type);
 };
+
+
+} // namespace cml
+
 #endif

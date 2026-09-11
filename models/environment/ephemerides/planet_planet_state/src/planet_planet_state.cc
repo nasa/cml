@@ -28,6 +28,8 @@ PROGRAMMERS:
 
 #include "../include/planet_planet_state.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -159,3 +161,6 @@ PlanetPlanetState::deactivate()
   to_frame->unsubscribe();
   SubscriptionBase::deactivate();
 }
+
+
+} // namespace cml

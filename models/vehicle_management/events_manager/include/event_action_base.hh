@@ -44,6 +44,8 @@ PROGRAMMERS:
 #ifndef CML_EVENT_ACTION_BASE_HH
 #define CML_EVENT_ACTION_BASE_HH
 
+namespace cml {
+
 /*****************************************************************************
 EventActionBase
 Purpose:
@@ -55,4 +57,8 @@ class EventActionBase {
   virtual bool specific_execution() { return false;}
   virtual ~EventActionBase() = default;
 };
+
+
+} // namespace cml
+
 #endif

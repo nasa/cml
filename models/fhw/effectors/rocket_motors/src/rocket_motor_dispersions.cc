@@ -17,6 +17,8 @@ PROGRAMMERS:
 
 #include "../include/rocket_motor_dispersions.hh"
 
+namespace cml {
+
 /*****************************************************************************
 apply_dispersions
 Purpose:(Disperse the position and attitude of the motor frame. The nominal
@@ -145,3 +147,5 @@ RocketMotorDispersions::apply_dispersions(
                                      scratch,
                                      T_parent_to_motor);
 }
+
+} // namespace cml

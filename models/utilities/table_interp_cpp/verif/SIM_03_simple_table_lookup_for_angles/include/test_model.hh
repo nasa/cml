@@ -15,6 +15,8 @@ PROGRAMMERS:
 
 #include "../../../include/simple_angle_table_lookup.hh"
 
+namespace cml {
+
 class TestModel {
 public: 
   SimpleAngleTableLookup lookup;
@@ -66,5 +68,9 @@ private:
   TestModel (const TestModel&);
   TestModel& operator = (const TestModel&); 
 };
+
+
+
+} // namespace cml
 
 #endif

@@ -12,6 +12,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "../include/constraint_test_templates.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Template specializations
 Purpose:
@@ -36,3 +38,6 @@ bool ConstraintTest_Threshold<float>::query_equals( float variable) const
                                       static_cast<double>(threshold),
                                       equality_threshold));
 }
+
+
+} // namespace cml

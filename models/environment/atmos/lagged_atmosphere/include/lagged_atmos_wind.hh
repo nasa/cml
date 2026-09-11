@@ -21,6 +21,8 @@ Author:
 
 #include "lagged_atmos_payload_data.hh"
 
+namespace cml {
+
 // The atmosphere of the payload is saved as a function of altitude, and is
 // then interpolated using the parachute's altitude.  This causes the
 // parachute to fly through the same atmosphere profile as the payload, but
@@ -77,5 +79,9 @@ class LaggedAtmosWind {
      decreasing altitude, so this reference point is to the "left" of the input
      altitude.*/
 };
+
+
+
+} // namespace cml
 
 #endif

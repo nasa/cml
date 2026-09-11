@@ -28,6 +28,8 @@ Programmers:
 
 #include "../include/spherical_harmonics_fast_gravity_controls.hh"
 
+namespace cml {
+
 /*******************************************************************************
   Function: SphericalHarmonicsFastGravityControls::initialize
   Purpose:  (Sets the encessary parameters)
@@ -246,3 +248,5 @@ SphericalHarmonicsFastGravityControls::calc_nonspherical(// Return: --   Void
      count_limit = std::max<unsigned int>(count_limit, 1);
   }
 }
+
+} // namespace cml

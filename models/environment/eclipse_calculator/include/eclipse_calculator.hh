@@ -25,6 +25,8 @@ class DynManager;
 class RefFrame;
 }
 
+namespace cml {
+
 class EclipseCalculator : public SubscriptionBase
 {
  protected:
@@ -67,4 +69,8 @@ class EclipseCalculator : public SubscriptionBase
   void activate() override;
   void deactivate() override;
 };
+
+
+} // namespace cml
+
 #endif

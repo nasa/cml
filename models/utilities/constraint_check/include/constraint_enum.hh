@@ -11,6 +11,8 @@ PROGRAMMERS:
 #ifndef CML_CONSTRAINT_ENUM_HH
 #define CML_CONSTRAINT_ENUM_HH
 
+namespace cml {
+
 
 struct ConstraintEnum
 {
@@ -33,4 +35,8 @@ struct ConstraintEnum
     OpenOpen
   };
 };
+
+
+} // namespace cml
+
 #endif

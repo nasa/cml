@@ -14,6 +14,8 @@ PROGRAMMERS:
 #ifndef CML_WAKE_BODIES_HH
 #define CML_WAKE_BODIES_HH
 
+namespace cml {
+
 /*****************************************************************************
 WakeGeneratingBody
 Purpose:(The body that is generating the wake)
@@ -172,4 +174,8 @@ class WakeFollowingBodyWithForce : public WakeFollowingBody
   void compute_force(double force_mag) override;
   double get_drag_area() const override {return Cd * area;}
 };
+
+
+} // namespace cml
+
 #endif

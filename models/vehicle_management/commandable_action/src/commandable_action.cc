@@ -17,6 +17,8 @@ Programmers:
 #include "../include/commandable_action_set.hh"
 #include <utility>
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -113,3 +115,6 @@ CommandableAction::flag_command_processed()
     enabled = false;
   }
 }
+
+
+} // namespace cml

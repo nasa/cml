@@ -23,6 +23,8 @@ PROGRAMMERS:
 
 #include "../include/simple_spring_group.hh"
 
+namespace cml {
+
 /*******************************************************************************
 initialize
 Purpose:(Sets the pointers.)
@@ -330,3 +332,5 @@ SimpleSpringGroup::update()
     }
   }
 }
+
+} // namespace cml

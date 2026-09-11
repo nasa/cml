@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 
+namespace cml {
+
 class FirstOrderHold {
  public:
   bool FO_hold{false};            /* (--) First order holding will be performed */
@@ -51,4 +53,8 @@ class FirstOrderHold {
            reference to vehicle's planet-state.*/
   AtmosExecOutput & out;   /* (--) reference to atmos-exec output struct */
 };
+
+
+} // namespace cml
+
 #endif

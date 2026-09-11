@@ -25,6 +25,8 @@ PROGRAMMERS:
 #ifndef CML_MASS_PROPERTIES_DISPERSIONS_HH
 #define CML_MASS_PROPERTIES_DISPERSIONS_HH
 
+namespace cml {
+
 /*******************************************************************************
 MassPropertiesDispersions
 PURPOSE: (Primarily data-storage. May include some dispersion functionality
@@ -133,4 +135,8 @@ public:
   MassPropertiesDispersionsFlags & operator = (
                                   const MassPropertiesDispersionsFlags& rhs) = delete;
 };
+
+
+} // namespace cml
+
 #endif

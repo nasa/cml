@@ -12,6 +12,8 @@ PROGRAMMERS:
 #ifndef CML_TR_STATE_PARAMETER_SET_HH
 #define CML_TR_STATE_PARAMETER_SET_HH
 
+namespace cml {
+
 /*****************************************************************************
 TR_ParameterSet
 Purpose:A POD class providing the 7 target-relative parameters.
@@ -33,4 +35,8 @@ class TR_ParameterSet {
   }
 
 };
+
+
+} // namespace cml
+
 #endif

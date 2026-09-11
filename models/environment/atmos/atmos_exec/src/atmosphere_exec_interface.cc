@@ -21,6 +21,8 @@ PROGRAMMERS:
 
 #include "../include/atmosphere_exec_interface.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -138,3 +140,5 @@ AtmosphereExecInterface::initialize()
   }
   SubscriptionBase::initialize();
 }
+
+} // namespace cml

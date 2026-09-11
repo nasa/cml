@@ -17,6 +17,8 @@ PROGRAMMERS:
 
 #include <cmath>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -75,3 +77,5 @@ GravityFidelityManager::update()
 
   grav_controls.spherical = (grav_controls.degree == 0);
 }
+
+} // namespace cml

@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "untyped_variable.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*******************************************************************************
 FaultFunctionIndependentVariable
 Purpose:(An independent variable for a function. Can be absolute or relative to
@@ -62,4 +64,8 @@ template<typename T> void FaultFunctionIndependentVariable::initialize(T& var) {
   variable = new UntypedVariable<T>(var);
   initialized = true;
 }
+
+
+} // namespace cml
+
 #endif

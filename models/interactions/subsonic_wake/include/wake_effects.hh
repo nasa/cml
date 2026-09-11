@@ -30,6 +30,8 @@ NOTES:
 #include "wake_params.hh"
 #include "wake_bodies.hh"
 
+namespace cml {
+
 /*****************************************************************************
 WakeEffectsBase
 Purpose:(Provides the common variable interface that is shared between
@@ -213,4 +215,8 @@ class WakeEffectsOut {
   WakePrfOut prf_model; /* (--) Output from PRF model */
   WakeRevFlowOut rev_flow; /* (--) Output from reverse-flow model */
 };
+
+
+} // namespace cml
+
 #endif

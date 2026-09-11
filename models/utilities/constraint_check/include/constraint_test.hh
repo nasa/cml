@@ -17,6 +17,8 @@ PROGRAMMERS:
 
 #include "constraint_enum.hh"
 
+namespace cml {
+
 /*****************************************************************************
 ConstraintTest
 Purpose:
@@ -132,4 +134,8 @@ class ConstraintTestTimed : public ConstraintTest
   void initialize_gap_time();
   void update_timer(double delta_time);
 };
+
+
+} // namespace cml
+
 #endif

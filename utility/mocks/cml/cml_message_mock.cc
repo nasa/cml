@@ -7,11 +7,11 @@
 
 namespace {
 
-CMLMessage::Mock* global_mock_ptr = nullptr;
+cml::CMLMessage::Mock* global_mock_ptr = nullptr;
 
 } // namespace
 
-namespace CMLMessage {
+namespace cml::CMLMessage {
 
 Mock::Mock() {
     if (global_mock_ptr != nullptr) {

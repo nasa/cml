@@ -44,6 +44,8 @@ PROGRAMMERS:
 
 #include "jeod/models/dynamics/mass/include/mass_properties.hh"
 
+namespace cml {
+
 // NOTE - this class does not inherit from jeod::MassProperties because of the
 // extraneous capabilities that jeod::MassPoint (parent to jeod::MassProperties)
 // provides that this class will never need.  A cleaner interface is to just
@@ -66,5 +68,9 @@ public:
    void set_data( jeod::MassProperties & properties_in);
 };
 
+
+
+
+} // namespace cml
 
 #endif

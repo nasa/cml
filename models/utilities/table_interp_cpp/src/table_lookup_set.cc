@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include "../include/table_lookup_set.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 
 /*****************************************************************************
 Constructor
@@ -296,3 +298,5 @@ TableLookupSet::lookup_independent(
   }
   return ret;
 }
+
+} // namespace cml

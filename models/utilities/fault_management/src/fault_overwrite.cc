@@ -10,6 +10,8 @@ PROGRAMMERS:
 #include "../include/fault_overwrite.hh"
 #include <string>
 
+namespace cml {
+
 /*****************************************************************************
 Name: set_param
 Purpose:
@@ -33,3 +35,6 @@ bool FaultOverwrite<bool>::set_param( const std::string& param_name,
   // else
   return Fault::set_param(param_name, val_);
 }
+
+
+} // namespace cml

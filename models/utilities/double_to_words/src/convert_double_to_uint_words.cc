@@ -21,6 +21,8 @@ PROGRAMMERS:
 #include <cstdint>
 #include <vector>
 
+namespace cml {
+
 /*******************************************************************************
 Purpose:(Run the class function that calls the variables and creates the
          words array that is populated with the converted values for
@@ -249,3 +251,5 @@ ConvertDoubleToUintWords::update()
     }
   }
 }
+
+} // namespace cml

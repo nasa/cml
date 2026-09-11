@@ -11,6 +11,8 @@ PROGRAMMERS:
 
 #include "fault.hh"
 
+namespace cml {
+
 /*******************************************************************************
 FaultStale
 Purpose:(Manages injection of a stale-value fault.)
@@ -48,5 +50,9 @@ Purpose:(Injects the fault.)
 template<typename T> void FaultStale<T>::overwrite_value() {
   variable = stale_value;
 }
+
+
+
+} // namespace cml
 
 #endif

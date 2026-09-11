@@ -23,6 +23,8 @@ namespace jeod {
 class PlanetFixedPosition;
 }
 
+namespace cml {
+
 class RangeToPfixReference : public RangeComputation
 {
  protected:
@@ -49,5 +51,9 @@ class RangeToPfixReference : public RangeComputation
   void is_abstract() override {} // Makes this class instantiable
 
 };
+
+
+
+} // namespace cml
 
 #endif

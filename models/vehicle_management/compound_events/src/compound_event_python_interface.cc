@@ -12,6 +12,8 @@ PROGRAMMERS:
 #include <utility>
 #include "../include/compound_event_python_interface.hh"
 
+namespace cml {
+
 /* Note: these are the ways in which an event can have an action added to it via
    the input file. But most of the action content can be redirected anyway,
    Available actions are:
@@ -92,3 +94,6 @@ CompoundEventPythonInterface::add_action( std::string action_name)
   config.name = std::move(action_name);
   actions.push_back(config);
 }
+
+
+} // namespace cml

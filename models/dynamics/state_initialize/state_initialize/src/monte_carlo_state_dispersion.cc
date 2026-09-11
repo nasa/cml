@@ -19,6 +19,8 @@ PROGRAMMERS:
 
 #include "../include/monte_carlo_state_dispersion.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -77,3 +79,5 @@ MonteCarloStateDispersion::disperse_trans_state()
   jeod::Vector3::incr( velocity_dispersion_inertial,
                  trans_init.velocity);
 }
+
+} // namespace cml

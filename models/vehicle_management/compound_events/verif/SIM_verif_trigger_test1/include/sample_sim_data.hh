@@ -11,6 +11,8 @@ PURPOSE: (
      ***********************************************************************/
 #ifndef CML_SAMPLE_SIM_DATA_HH
 #define CML_SAMPLE_SIM_DATA_HH
+
+namespace cml {
 struct SampleSimData
 {
   double time;
@@ -18,4 +20,8 @@ struct SampleSimData
   bool   sim_bool;
   bool   action_assgt;
 };
+
+
+} // namespace cml
+
 #endif

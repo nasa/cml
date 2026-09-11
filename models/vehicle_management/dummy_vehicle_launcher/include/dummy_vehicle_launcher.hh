@@ -27,6 +27,8 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/mass/include/mass.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dynamics_integration_group.hh"
 
+namespace cml {
+
 class DummyVehicleLauncher
 {
  public:
@@ -78,4 +80,8 @@ class DummyVehicleLauncher
   void add_to_integ_group();
   void process_inconsistent_setup();
 };
+
+
+} // namespace cml
+
 #endif

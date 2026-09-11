@@ -12,6 +12,8 @@ PROGRAMMERS:
 #include <ctime>
 #include <random>
 
+namespace cml {
+
 /*******************************************************************************
 initialize
 Purpose:(Seeds the random number generator.)
@@ -90,3 +92,5 @@ double FaultRandNumber::get_random_number()
 
   return rand_number;
 }
+
+} // namespace cml

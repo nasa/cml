@@ -45,6 +45,8 @@ PROGRAMMERS:
 
 #include "../include/state_initialize.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -1627,3 +1629,5 @@ StateInitialize::verify_compatibility() const
       "Att-Rate: ", att_rate_input_data_type, " \n");
   }
 }
+
+} // namespace cml

@@ -26,6 +26,8 @@ PROGRAMMERS:
 
 #include "../include/impact_point.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -348,3 +350,5 @@ ImpactPoint::activate()
   active = true;
   update();
 }
+
+} // namespace cml

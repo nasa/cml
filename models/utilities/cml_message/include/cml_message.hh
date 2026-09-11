@@ -24,6 +24,8 @@ Programmers:
 
 #include "cml/models/utilities/color_string/include/color_string.hh"
 
+namespace cml {
+
 namespace CMLMessage {
 
 enum PublishLevel {
@@ -159,5 +161,9 @@ std::string set_prec( T var, int precision)
 #endif
 
 }
+
+
+
+} // namespace cml
 
 #endif

@@ -26,9 +26,11 @@ PROGRAMMERS:
 #ifdef SWIG
 #ifndef CML_EVENT_TRIGGERS_SWIG_TEMPLATES
 #define CML_EVENT_TRIGGERS_SWIG_TEMPLATES
-%template(WatchValuesDelay_double) WatchValuesDelay<double>;
+%template(WatchValuesDelay_double) cml::WatchValuesDelay<double>;
 #endif
 #endif
+
+namespace cml {
 
 /*****************************************************************************
 EventTriggeBaser
@@ -525,4 +527,7 @@ Notes:
     this->active = true;
   }
 };
+
+} // namespace cml
+
 #endif

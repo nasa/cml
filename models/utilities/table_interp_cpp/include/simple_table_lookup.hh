@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include "table_type_defs.hh"
 #include <cstddef>
 
+namespace cml {
+
 
 // This class provides the simple, most used lookup case where one independent
 // variable is used as the basis for one-to-many dependent variables.
@@ -126,4 +128,8 @@ public:
   void initialize() override;
   GenericMultiInputTable * get_table();
 };
+
+
+} // namespace cml
+
 #endif
