@@ -472,7 +472,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
     double threshold_resolution =
          (threshold_spec[num_specs-1] - threshold_spec[0])*1.0 / (num_tests-1);
     for (size_t ii = 1; ii <= num_tests-2; ++ii) {
-      tests[ii].threshold = threshold_spec[0] + ii * threshold_resolution;
+      tests[ii].threshold = threshold_spec[0] + static_cast<double>(ii) * threshold_resolution;
     }
 
     /* Set the test threshold values for the time.

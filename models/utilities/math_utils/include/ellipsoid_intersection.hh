@@ -87,9 +87,9 @@ Algorithm:
    Now solve for s as a quadratic equation.
 *****************************************************************************/
   bool update( bool compute_roots = true) {
-    std::array<double,3>  Q_P = MathUtils::diff( end2, end1);
-    std::array<double,3>  q_p = inv_r * Q_P;
-    std::array<double,3>  p = inv_r * end1;
+    const std::array<double,3>  Q_P = MathUtils::diff( end2, end1);
+    const std::array<double,3>  q_p = inv_r * Q_P;
+    const std::array<double,3>  p = inv_r * end1;
 
 
     quadratic.a = MathUtils::vector_scalar_product( q_p, q_p);

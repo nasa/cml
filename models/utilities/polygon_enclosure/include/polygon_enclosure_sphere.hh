@@ -130,6 +130,7 @@ Purpose:
        construction, but that wouldn't block its usage (unless it was made to
        be a terminal fault). */
     if (N < 3) {
+      // TODO Nino Tarantino: make this a compile-time error
       CMLMessage::error( __FILE__,__LINE__,
         "Cannot form a polygon with less than 3 vertices.\n"
         "Polygon initialization failed.\n");
@@ -254,15 +255,15 @@ Purpose:
                   MathUtils::vector_cross_product( r_cross_next[ix],
                                                    R_pole),
                   r_cross_next[ix]);
-          double VxTdS = MathUtils::vector_scalar_product(
-                            MathUtils::vector_cross_product( vertices[ix],
-                                                             T),
+          const double VxTdS = MathUtils::vector_scalar_product(
+                                 MathUtils::vector_cross_product( vertices[ix],
+                                                                  T),
                             r_cross_next[ix]);
           if (VxTdS <= 0.0) {
             continue;
           }
-          double S_mag = MathUtils::vec_mag( r_cross_next[ix]);
-          double T_mag = MathUtils::vec_mag(T);
+          const double S_mag = MathUtils::vec_mag( r_cross_next[ix]);
+          const double T_mag = MathUtils::vec_mag(T);
           if ( VxTdS < S_mag * T_mag) {
             box_max[i_axis] = T[i_axis] / T_mag;
           }
@@ -296,15 +297,15 @@ Purpose:
                   MathUtils::vector_cross_product( r_cross_next[ix],
                                                    R_pole),
                   r_cross_next[ix]);
-          double VxTdS = MathUtils::vector_scalar_product(
-                            MathUtils::vector_cross_product( vertices[ix],
-                                                             T),
-                            r_cross_next[ix]);
+          const double VxTdS = MathUtils::vector_scalar_product(
+                                 MathUtils::vector_cross_product( vertices[ix],
+                                                                  T),
+                                 r_cross_next[ix]);
           if (VxTdS >= 0.0) {
             continue;
           }
-          double S_mag = MathUtils::vec_mag( r_cross_next[ix]);
-          double T_mag = MathUtils::vec_mag(T);
+          const double S_mag = MathUtils::vec_mag( r_cross_next[ix]);
+          const double T_mag = MathUtils::vec_mag(T);
           if( VxTdS < S_mag * T_mag) {
             box_min[i_axis] = T[i_axis] / T_mag;
           }
@@ -491,9 +492,9 @@ Purpose:
   {
     if (!initialized ||!enabled) {return false;}
     const double cos_phi = std::cos( phi);
-    double R_P[3] = {cos_phi * std::cos( lambda),
-                     cos_phi * std::sin( lambda),
-                     std::sin( phi)};
+    const double R_P[3] = {cos_phi * std::cos( lambda),
+                           cos_phi * std::sin( lambda),
+                           std::sin( phi)};
     return in_polygon( R_P);
   }
 /****************************************************************************/
@@ -527,7 +528,7 @@ Purpose:
     return true;
   }
 /****************************************************************************/
-  bool in_polygon( const std::array<double,3> & R_P)
+  bool in_polygon( const std::array<double,3> & R_P) const
   {
     if (!initialized ||!enabled) {return false;}
 
@@ -570,7 +571,7 @@ Purpose:
         "Check configuration.\n");
     } else {
       for (size_t ix = 0; ix < N; ix++) {
-        double cos_phi = std::cos( vals[ix][1]);
+        const double cos_phi = std::cos( vals[ix][1]);
         vertices[ix][0] = cos_phi * std::cos( vals[ix][0]);
         vertices[ix][1] = cos_phi * std::sin( vals[ix][0]);
         vertices[ix][2] = std::sin( vals[ix][1]);

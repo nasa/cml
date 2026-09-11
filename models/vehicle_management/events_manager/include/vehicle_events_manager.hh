@@ -40,8 +40,8 @@ class VehicleEventsManager
   // WatchValuesAdjustLogging<double>  logging_rate_change; /* (--) another
 
  protected:
-  std::list<WatchValuesBaseCore *> active_watches{};
-  std::list<WatchValuesBaseCore *> all_watches{};
+  std::list<WatchValuesBaseCore *> active_watches;
+  std::list<WatchValuesBaseCore *> all_watches;
 
  public:
   VehicleEventsManager() = default;

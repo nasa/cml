@@ -69,8 +69,7 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
 
   CMLTaggedRingBuffer( std::string name)
     :
-    CMLSimpleRingBuffer(name)
-    
+    CMLSimpleRingBuffer<CMLTaggedRingBufferMember<T_Tag, T_Data>>(name)
   {};
   ~CMLTaggedRingBuffer() override = default;
 

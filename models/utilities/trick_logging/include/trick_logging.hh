@@ -18,7 +18,7 @@ PROGRAMMERS:
 
 class TrickLogging {
   public:
-    std::list<Trick::DataRecordGroup *> group_list{};
+    std::list<Trick::DataRecordGroup *> group_list;
 
     TrickLogging() = default;
     TrickLogging (const TrickLogging&) = delete;

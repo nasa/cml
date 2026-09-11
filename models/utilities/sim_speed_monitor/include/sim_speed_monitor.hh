@@ -43,7 +43,7 @@ class SimSpeedMonitor : public SubscriptionBase {
 
   void calculate_rate(double sim_dt)
   {
-    if (!active && !sub_pending) {
+    if (!active && sub_pending == 0) {
       return;
     }
 
@@ -54,7 +54,7 @@ class SimSpeedMonitor : public SubscriptionBase {
       return;
     }
 
-    std::chrono::steady_clock::time_point new_time =
+    const std::chrono::steady_clock::time_point new_time =
                                                std::chrono::steady_clock::now();
     delta_t =
               std::chrono::duration_cast<std::chrono::duration<double> >

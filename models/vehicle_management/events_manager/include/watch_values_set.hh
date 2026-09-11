@@ -39,7 +39,7 @@ Notes:
 class WatchValuesSet : public WatchValuesBaseCore
 {
  protected:
-  std::vector< WatchValuesBaseCore *> triggers{};
+  std::vector< WatchValuesBaseCore *> triggers;
   std::string trigger_name; /* (--)
     The name of the first trigger in the triggers vector that is satisfied
     whenever the set has been triggered. If the set is not triggered, this

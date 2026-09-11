@@ -74,7 +74,7 @@ public:
         "correctly and their effect will not be applied when the bodies "
         "detach.\n");
     }
-  };
+  }
 
   void initialize( const jeod::DynBody & parent)
   {
@@ -101,13 +101,13 @@ public:
         "correctly and their effect will not be applied when the bodies "
         "detach.\n");
     }
-  };
+  }
 
   void apply( jeod::DynManager & dyn_manager) override
   {  
     springs.action_body_is_child = child_is_action_body;
     springs.activate();
     jeod::BodyDetach::apply(dyn_manager);
-  };
+  }
 };
 #endif

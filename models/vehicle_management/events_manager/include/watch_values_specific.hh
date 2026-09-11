@@ -139,7 +139,6 @@ class WatchValuesAdjustLoggingGroup : public WatchValuesBase<varT> {
   {
     this->add_action(event_action);
   }
- private:
   WatchValuesAdjustLoggingGroup (
                              const WatchValuesAdjustLoggingGroup& rhs) = delete;
   WatchValuesAdjustLoggingGroup& operator = (
