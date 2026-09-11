@@ -73,6 +73,8 @@ class ValSetInstantConstraint : public Constraint
     }
   }
   ~ValSetInstantConstraint() override = default;
+  ValSetInstantConstraint( const ValSetInstantConstraint &) = delete;
+  ValSetInstantConstraint & operator=( const ValSetInstantConstraint &) = delete;
 
   /***************************************************************************
   * Name: initialize
@@ -109,10 +111,6 @@ class ValSetInstantConstraint : public Constraint
     }
     post_update(); // inherited.
   }
-
- private: // not implemented; not copyable
-  ValSetInstantConstraint( const ValSetInstantConstraint &);
-  ValSetInstantConstraint & operator=( const ValSetInstantConstraint &);
 };
 
 
@@ -175,6 +173,8 @@ class ValSetTimedConstraint : public Constraint
   }
 
   ~ValSetTimedConstraint() override = default;
+  ValSetTimedConstraint( const ValSetTimedConstraint &) = delete;
+  ValSetTimedConstraint & operator=( const ValSetTimedConstraint &) = delete;
 
   /***************************************************************************
   * Name: initialize
@@ -211,9 +211,5 @@ class ValSetTimedConstraint : public Constraint
     }
     post_update(); // inherited.
   }
-
- private: // not implemented; not copyable
-  ValSetTimedConstraint( const ValSetTimedConstraint &);
-  ValSetTimedConstraint & operator=( const ValSetTimedConstraint &);
 };
 #endif

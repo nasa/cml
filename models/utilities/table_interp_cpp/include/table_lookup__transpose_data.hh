@@ -67,7 +67,7 @@ class TableLookupTransposeDataSet_TableConfig
   size_t index_high{0}; /* (--)
     Last index in the data file containing contiguous data for this table.
     If the data is not contiguous, specify indices as a vector. */
-  std::vector<size_t> indices; /* (--)
+  std::vector<size_t> indices{}; /* (--)
      Set of indices in the data file containing data for this table.
      Used when data is not contiguous and cannot be specified by a range
      [index_low,index_high].
@@ -124,7 +124,7 @@ class TableLookupTransposeDataSet : public TableLookupSet
  public:
   using DoubleVecList = std::list<DoubleVec>;
 
-  std::vector<TableLookupTransposeDataSet_TableConfig> table_config; /* (--)
+  std::vector<TableLookupTransposeDataSet_TableConfig> table_config{}; /* (--)
               A set of table-configurations; these are used to extract the data
               from the consolidated data set for loading onto each instance of
               GenericMultiInputTable used by this manager.*/

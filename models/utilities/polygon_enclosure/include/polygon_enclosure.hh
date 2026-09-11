@@ -37,25 +37,25 @@ class PolygonEnclosure
   const double & y; /* (--)
     Reference to the y-axis value of the (x,y) coordinates of the test point
     -- is this point inside the polygon?*/
-  double min_x; /* (--)
+  double min_x{0.0}; /* (--)
     Minimum x-value of the coordinates of the polygon vertices.
     Used to draw a simple rectangular box for a first-pass when qerying "is
     this point inside the polygon"?*/
-  double max_x;/* (--)
+  double max_x{0.0};/* (--)
     Maximum x-value of the coordinates of the polygon vertices.
     Used to draw a simple rectangular box for a first-pass when qerying "is
     this point inside the polygon"?*/
-  double min_y;/* (--)
+  double min_y{0.0};/* (--)
     Minimum y-value of the coordinates of the polygon vertices.
     Used to draw a simple rectangular box for a first-pass when qerying "is
     this point inside the polygon"?*/
-  double max_y;/* (--)
+  double max_y{0.0};/* (--)
     Maximum y-value of the coordinates of the polygon vertices.
     Used to draw a simple rectangular box for a first-pass when qerying "is
     this point inside the polygon"?*/
-  double vertices[N][2]; /* (--)
+  double vertices[N][2]{}; /* (--)
     array of 2-D coordinates (x,y) for N vertices.*/
-  double r_cross_next[N]; /* (--)
+  double r_cross_next[N]{}; /* (--)
     The cross product of coordinates of each vertex with those of the vertex
     immediately following it in the set of vertices.
     Because the vertices are both in the x-y plane, the vector product of
@@ -63,21 +63,21 @@ class PolygonEnclosure
     value per vector-product.
     The "next" vertex from the vertex at the end of the list is the first
     vertex in the list, thereby closing the polygon.*/
-  double r_to_next[N][2]; /* (--)
+  double r_to_next[N][2]{}; /* (--)
     the difference in  coordinate values from this vertex to the vertex
     immediately following it in the set of vertices.
     The "next" vertex from the vertex at the end of the list is the first
     vertex in the list, thereby closing the polygon.*/
-  int direction_sign; /* (--)
+  int direction_sign{0}; /* (--)
     Value is +1 if polygon vertices are ordered in a counter-clockwise sequence
     on the x-y plane, -1 if they are ordered clockwise.
     Default: 0 (linearly aligned vertices) */
-  bool initialized; /* (--)
+  bool initialized{false}; /* (--)
     Indicates that initial snaity checks have passed and polygon is valid.*/
 
 
  public:
-  bool enabled; /* (--)
+  bool enabled{true}; /* (--)
     Model enabled flag.*/
   const size_t num_pts; /* (--)
     External interface to output information about the size of this polygon.*/
@@ -86,17 +86,17 @@ class PolygonEnclosure
 /*****************************************************************************
 Constructor
 *****************************************************************************/
-  PolygonEnclosure<N>(
+  PolygonEnclosure(
     const double & x_,
     const double & y_)
     :
     x(x_),
     y(y_),
-    direction_sign(0),
-    initialized(false),
-    enabled(true),
     num_pts(N)
   {}
+
+  PolygonEnclosure( const PolygonEnclosure&) = delete;
+  PolygonEnclosure& operator=( const PolygonEnclosure&) = delete;
 
 /*****************************************************************************
 initialize()
@@ -245,9 +245,5 @@ Purpose:
       memcpy( vertices, vals, num_pts*2*sizeof(double));
     }
   }
-
- private:
-  PolygonEnclosure<N>( const PolygonEnclosure<N> &);
-  PolygonEnclosure<N>& operator=( const PolygonEnclosure<N>&);
 };
 #endif

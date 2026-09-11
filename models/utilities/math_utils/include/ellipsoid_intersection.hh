@@ -38,9 +38,9 @@ class EllipsoidIntersection{
     Tool for solving quadratic equation. */
 
  public:
-  bool intersection;
-  std::array<double, 3> root1;
-  std::array<double, 3> root2;
+  bool intersection{false};
+  std::array<double, 3> root1{};
+  std::array<double, 3> root2{};
 
   EllipsoidIntersection( const double (&end1_)[3],
                          const double (&end2_)[3],
@@ -56,6 +56,8 @@ class EllipsoidIntersection{
            MathUtils::divide_protected( 1, r3)}
   {}
   virtual ~EllipsoidIntersection() = default;
+  EllipsoidIntersection( const EllipsoidIntersection&) = delete;
+  EllipsoidIntersection& operator= (const EllipsoidIntersection&) = delete;
 
 /*****************************************************************************
 update
@@ -103,9 +105,5 @@ Algorithm:
   }
   double get_scaled_root1() const {return quadratic.root1;}
   double get_scaled_root2() const {return quadratic.root2;}
-
- private: // delete / not implemented.
-  EllipsoidIntersection( const EllipsoidIntersection&);
-  EllipsoidIntersection& operator= (const EllipsoidIntersection&);
 };
 #endif

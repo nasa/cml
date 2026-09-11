@@ -60,7 +60,7 @@ template <typename T_Tag, typename T_Data>
 class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >
 {
  public:
-  bool require_exact_tag; /* (--)
+  bool require_exact_tag{false}; /* (--)
     When looking for a data-set with the specified tag, this flag determines
     whether the model looks for the data-set with a tag closest in value to
     the specified tag (false, default), or for a data-set with a tag identical
@@ -69,8 +69,8 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
 
   CMLTaggedRingBuffer( std::string name)
     :
-    CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >(name),
-    require_exact_tag(false)
+    CMLSimpleRingBuffer(name)
+    
   {};
   ~CMLTaggedRingBuffer() override = default;
 

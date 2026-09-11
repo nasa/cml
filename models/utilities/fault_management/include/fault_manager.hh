@@ -174,22 +174,22 @@ class FaultManager {
       If true, fault_file is the name of a valid XML fault file and that file has
       been parsed. */
 
-    std::list<Fault*> faults[Location_count]; /* (--)
+    std::list<Fault*> faults[Location_count]{}; /* (--)
       Pointers to the individual faults, stored as pointers to the base class to
       support polymorphic storage. The faults themselves are allocated when the
       XML file is parsed. */
-    std::list<TriggerBase*> triggers; /* (--)
+    std::list<TriggerBase*> triggers{}; /* (--)
       Pointers to individual triggers, stored as pointers to the base class to
       support polymorphic storage. The triggers themselves are allocated when
       the XML file is parsed. */
-    std::list<TriggerGroup*> trigger_groups; /* (--)
+    std::list<TriggerGroup*> trigger_groups{}; /* (--)
       Pointers to the trigger groups, stored as pointers because the groups are
       non-copyable. The groups themselves are allocated when the XML file is
       parsed. */
 
     FaultRandNumber rand; /* (--) Random number generator. */
 
-    std::list<std::pair<std::string, bool> > set_enable_for_fault_cache; /* (--)
+    std::list<std::pair<std::string, bool> > set_enable_for_fault_cache{}; /* (--)
       Cache for set_fault_enabled commands sent before the XML file is parsed. */
 
     struct SetTriggerEnableEntry {
@@ -197,7 +197,7 @@ class FaultManager {
       std::string trigger_name; /* (--) Trigger name. */
       bool enable_flag; /* (--) Whether to enable or disable the trigger. */
     }; /* Structure for storing set_fault_trigger_enabled commands. */
-    std::list<SetTriggerEnableEntry> set_trigger_enable_for_fault_cache; /* (--)
+    std::list<SetTriggerEnableEntry> set_trigger_enable_for_fault_cache{}; /* (--)
       Cache for set_fault_trigger_enabled commands sent before the XML file is
       parsed. */
 
@@ -206,10 +206,10 @@ class FaultManager {
       std::string param_name; /* (--) Parameter name. */
       double value; /* (--) Value to set the parameter to. */
     }; /* Structure for storing set_fault_param() commands. */
-    std::list<SetFaultParamEntry> set_fault_param_cache; /* (--)
+    std::list<SetFaultParamEntry> set_fault_param_cache{}; /* (--)
       Cache for set_fault_param commands sent before the XML file is parsed. */
 
-    std::list<std::pair<std::string, double> > set_trigger_value_cache; /* (--)
+    std::list<std::pair<std::string, double> > set_trigger_value_cache{}; /* (--)
       Cache for set_trigger_value commands sent before the XML file is parsed. */
 };
 template<> bool FaultManager::generate_random_value<bool>();

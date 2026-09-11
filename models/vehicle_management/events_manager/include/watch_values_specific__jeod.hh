@@ -27,7 +27,7 @@ class WatchValuesGravityAdjust : public WatchValuesBase<varT> {
  protected:
   jeod::SphericalHarmonicsGravityControls & grav_controls; /* (--)
        reference to the JEOD gravity controls being managed by this event.*/
-  std::list< std::pair< varT, unsigned int> > grav_fidelity_list; /* (--)
+  std::list< std::pair< varT, unsigned int> > grav_fidelity_list{}; /* (--)
        A list of paired triggers and targets.  Triggers are type varT template
        and might be, e.g., radial distance.  Targets are the values to which
        the spherical harmonics degree and order will be assigned; this event
@@ -45,6 +45,9 @@ class WatchValuesGravityAdjust : public WatchValuesBase<varT> {
     // method when the list of events has run out.
     this->multi_shot = true;
   }
+  WatchValuesGravityAdjust ( const WatchValuesGravityAdjust& rhs) = delete;
+  WatchValuesGravityAdjust & operator = (
+                                const WatchValuesGravityAdjust& rhs) = delete;
   /***************************************************************************
   load_data populates grav_fidelity_list
   ***************************************************************************/
@@ -79,9 +82,5 @@ class WatchValuesGravityAdjust : public WatchValuesBase<varT> {
      }
      return false;
   }
- private:
-  WatchValuesGravityAdjust ( const WatchValuesGravityAdjust& rhs);
-  WatchValuesGravityAdjust & operator = (
-                                const WatchValuesGravityAdjust& rhs);
 };
 #endif

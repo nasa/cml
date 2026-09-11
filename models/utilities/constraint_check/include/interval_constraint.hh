@@ -70,6 +70,8 @@ class IntervalInstantConstraint : public Constraint
     set.constraints.push_back(this);
   }
   ~IntervalInstantConstraint() override = default;
+  IntervalInstantConstraint( const IntervalInstantConstraint &) = delete;
+  IntervalInstantConstraint & operator=( const IntervalInstantConstraint &) = delete;
 
   /***************************************************************************
   * Name: initialize
@@ -106,10 +108,6 @@ class IntervalInstantConstraint : public Constraint
     }
     post_update(); // inherited.
   }
-
- private: // not implemented; not copyable
-  IntervalInstantConstraint( const IntervalInstantConstraint &);
-  IntervalInstantConstraint & operator=( const IntervalInstantConstraint &);
 };
 
 
@@ -172,6 +170,8 @@ class IntervalTimedConstraint : public Constraint
   }
 
   ~IntervalTimedConstraint() override = default;
+  IntervalTimedConstraint( const IntervalTimedConstraint &) = delete;
+  IntervalTimedConstraint & operator=( const IntervalTimedConstraint &) = delete;
 
   /***************************************************************************
   * Name: initialize
@@ -208,9 +208,5 @@ class IntervalTimedConstraint : public Constraint
     }
     post_update(); // inherited.
   }
-
- private: // not implemented; not copyable
-  IntervalTimedConstraint( const IntervalTimedConstraint &);
-  IntervalTimedConstraint & operator=( const IntervalTimedConstraint &);
 };
 #endif

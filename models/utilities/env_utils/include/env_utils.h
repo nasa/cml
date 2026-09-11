@@ -10,7 +10,7 @@
 inline const char* getenv_or_exit(const char* var_name, void (*exit_fn)(int) = std::exit)
 {
     const char* value = std::getenv(var_name);
-    if (!value) 
+    if (value == nullptr) 
     {
         std::cerr << "Error: Environment variable " << var_name << " is not set.\n";
         exit_fn(EXIT_FAILURE);
@@ -26,10 +26,11 @@ inline const char* getenv_or_default(const char* var_name, const char* default_v
 
 inline const char* getenv_or_throw(const char* var_name) 
 {
-    if (!var_name)
+    if (var_name == nullptr) {
         throw std::runtime_error("Invalid parameter: var_name is nullptr, 0 or NULL");
+    }
     const char* value = std::getenv(var_name);
-    if (!value) 
+    if (value == nullptr) 
     {
         throw std::runtime_error("Error: Environment variable \"" + std::string(var_name) + "\" is not set.");
     }

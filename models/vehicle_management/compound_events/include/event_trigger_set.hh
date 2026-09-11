@@ -31,13 +31,13 @@ Purpose:
 class EventTriggerSet : public WatchValuesSet
 {
  protected:
-  std::list<WatchValuesBaseCore*>  allocated_triggers; /* (--)
+  std::list<WatchValuesBaseCore*>  allocated_triggers{}; /* (--)
     Set of triggers allocated for unique use within this trigger-set.
     This trigger-set may also use triggers allocated elsewhere; this is
     the list of triggers for which this EventTriggerSet instance has
     memory-management responsibilities.*/
  public:
-  std::list< EventTriggerBase*> conditional_reference_triggers; /* (--)
+  std::list< EventTriggerBase*> conditional_reference_triggers{}; /* (--)
     A subset of the triggers found in the triggers vector (inherited from
     WatchValuesSet) that have the necessity of maintaining the reference
     value subject to the condition that the CompoundEvent is triggered. */

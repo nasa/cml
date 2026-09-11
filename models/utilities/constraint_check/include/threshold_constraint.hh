@@ -89,6 +89,8 @@ class ThresholdInstantConstraint : public Constraint
     set.constraints.push_back(this);
   }
   ~ThresholdInstantConstraint() override = default;
+  ThresholdInstantConstraint( const ThresholdInstantConstraint &) = delete;
+  ThresholdInstantConstraint & operator=( const ThresholdInstantConstraint &) = delete;
 
   /***************************************************************************
   * Inherited -  initialize
@@ -107,10 +109,6 @@ class ThresholdInstantConstraint : public Constraint
     }
     post_update(); // inherited.
   }
-
- private: // not implemented; not copyable
-  ThresholdInstantConstraint( const ThresholdInstantConstraint &);
-  ThresholdInstantConstraint & operator=( const ThresholdInstantConstraint &);
 };
 
 
@@ -187,6 +185,8 @@ class ThresholdTimedConstraint : public Constraint
     set.constraints.push_back(this);
   }
   ~ThresholdTimedConstraint() override = default;
+  ThresholdTimedConstraint( const ThresholdTimedConstraint &) = delete;
+  ThresholdTimedConstraint & operator=( const ThresholdTimedConstraint &) = delete;
 
   /***************************************************************************
   * Inherited -  initialize
@@ -206,10 +206,6 @@ class ThresholdTimedConstraint : public Constraint
     }
     post_update(); // inherited.
   }
-
- private: // not implemented; not copyable
-  ThresholdTimedConstraint( const ThresholdTimedConstraint &);
-  ThresholdTimedConstraint & operator=( const ThresholdTimedConstraint &);
 };
 
 
@@ -329,6 +325,9 @@ class ThresholdTimedConstraintSpecData : public Constraint
     set.constraints.push_back(this);
   }
   ~ThresholdTimedConstraintSpecData() override = default;
+  ThresholdTimedConstraintSpecData( const ThresholdTimedConstraintSpecData &) = delete;
+  ThresholdTimedConstraintSpecData & operator=(
+                                     const ThresholdTimedConstraintSpecData &) = delete;
 
   /***************************************************************************
   Name: set_num_specs
@@ -612,10 +611,5 @@ class ThresholdTimedConstraintSpecData : public Constraint
     }
     post_update(); // inherited.
   }
-
- private: // not implemented; not copyable
-  ThresholdTimedConstraintSpecData( const ThresholdTimedConstraintSpecData &);
-  ThresholdTimedConstraintSpecData & operator=(
-                                     const ThresholdTimedConstraintSpecData &);
 };
 #endif

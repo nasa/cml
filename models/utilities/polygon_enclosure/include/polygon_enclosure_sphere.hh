@@ -46,10 +46,10 @@ class PolygonEnclosureSphere
 //    Maximum phi-value of the coordinates of the polygon vertices.
 //    Used to draw a simple rectangular box for a first-pass when qerying "is
 //    this point inside the polygon"?*/
-  double box_min[3]; /* (--)
+  double box_min[3]{}; /* (--)
     Minimum [x,y,z]-values of the simple right prism used to quickly eliminate
     test points when querying "is this point inside the polygon"?*/
-  double box_max[3]; /* (--)
+  double box_max[3]{}; /* (--)
     Maximum [x,y,z]-values of the simple right prism used to quickly eliminate
     test points when querying "is this point inside the polygon"?*/
 //  double max_x;/* (--)
@@ -85,22 +85,22 @@ class PolygonEnclosureSphere
     immediately following it in the set of vertices.
     The "next" vertex from the vertex at the end of the list is the first
     vertex in the list, thereby closing the polygon.*/
-  int direction_sign; /* (--)
+  int direction_sign{0}; /* (--)
     Value is +1 if polygon vertices are ordered in a counter-clockwise sequence
     on the x-y plane, -1 if they are ordered clockwise.
     Default: 0 (linearly aligned vertices) */
-  bool initialized; /* (--)
+  bool initialized{false}; /* (--)
     Indicates that initial snaity checks have passed and polygon is valid.*/
 
  public:
-  bool enabled; /* (--)
+  bool enabled{true}; /* (--)
     Model enabled flag.*/
   const size_t num_pts; /* (--)
     External interface to provide information about the size of this polygon.*/
 //  bool lambda_is_0_to_2pi; /* (--)
 //    Flag indicating that the lambda values in vertices_angles are in
 //    [0,2pi) rather than the default (-pi,pi].*/
-  bool apply_bounding_box;  /* (--)
+  bool apply_bounding_box{true};  /* (--)
     Falg determines whether to apply a bounding box around the polygon.*/
 
 
@@ -108,14 +108,14 @@ class PolygonEnclosureSphere
 /*****************************************************************************
 Constructor
 *****************************************************************************/
-  PolygonEnclosureSphere<N>()
+  PolygonEnclosureSphere()
     :
-    direction_sign(0),
-    initialized(false),
-    enabled(true),
-    num_pts(N),
-    apply_bounding_box(true)
+    num_pts(N)
   {}
+
+
+  PolygonEnclosureSphere( const PolygonEnclosureSphere&) = delete;
+  PolygonEnclosureSphere& operator=( const PolygonEnclosureSphere&) = delete;
 
 /*****************************************************************************
 initialize()
@@ -146,7 +146,7 @@ Purpose:
 
     /* First, identify the direction sign of the first pair of side (that are
        not aligned).*/
-    std::array<double,3> r_cross_next_prev;
+    std::array<double,3> r_cross_next_prev{};
     r_cross_next_prev = MathUtils::vector_cross_product( vertices[1],
                                                          vertices[N-1]);
     direction_sign = MathUtils::sign(
@@ -249,7 +249,7 @@ Purpose:
           if ( direction_sign * r_cross_next[ix][i_axis] >=0) {
             continue;
           }
-          std::array< double,3> T; // see documentation for interpretation
+          std::array< double,3> T{}; // see documentation for interpretation
           T = MathUtils::vector_cross_product(
                   MathUtils::vector_cross_product( r_cross_next[ix],
                                                    R_pole),
@@ -291,7 +291,7 @@ Purpose:
           if ( direction_sign * r_cross_next[ix][i_axis] <=0) {
             continue;
           }
-          std::array< double,3> T; // see documentation for interpretation
+          std::array< double,3> T{}; // see documentation for interpretation
           T = MathUtils::vector_cross_product(
                   MathUtils::vector_cross_product( r_cross_next[ix],
                                                    R_pole),
@@ -490,7 +490,7 @@ Purpose:
                    double phi)
   {
     if (!initialized ||!enabled) {return false;}
-    double cos_phi = std::cos( phi);
+    const double cos_phi = std::cos( phi);
     double R_P[3] = {cos_phi * std::cos( lambda),
                      cos_phi * std::sin( lambda),
                      std::sin( phi)};
@@ -596,9 +596,5 @@ Purpose:
       }
     }
   }
-
- private:
-  PolygonEnclosureSphere<N>( const PolygonEnclosureSphere<N> &);
-  PolygonEnclosureSphere<N>& operator=( const PolygonEnclosureSphere<N>&);
 };
 #endif
