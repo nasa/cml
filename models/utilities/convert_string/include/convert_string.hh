@@ -38,12 +38,12 @@ template<typename T> T ConvertString::convert(const std::string& str) {
     return 0;
   }
 
-  T out = 0; 
+  T out = 0;
   if (std::is_arithmetic<T>::value) {
     out = convert_numeric<T>(str);
   } else {
     // Unreachable code. The convert_numeric<T>(str) method is defined for
-    // the following types: 
+    // the following types:
     // - unsigned long, float, double, long long, unsigned long long, bool
     // - default (i.e. none of the above)
     // Of these types:
@@ -73,6 +73,13 @@ Purpose:(Converts strings into the desired numerical format.)
 *******************************************************************************/
 // Default: use strtol (string to long integer). This should cover all the
 // shorter integer types (char, short, int).
+template <typename T>
+inline T ConvertString::convert_numeric(const std::string& str) {
+    std::stringstream ss(str);
+    T value;
+    ss >> value;
+    return value;
+}
 template <> inline
 unsigned long ConvertString::convert_numeric<unsigned long>(const std::string& str) {
   return strtoul(str.c_str(), nullptr, 10);

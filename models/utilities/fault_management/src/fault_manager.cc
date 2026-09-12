@@ -868,13 +868,13 @@ bool FaultManager::populate_fault_function(
     is_periodic_function = false;
     new_fault->type = FaultFunctionBase::Linear;
   }
-  else if (function_type_string, "SINEWAVE") {
+  else if (function_type_string == "SINEWAVE") {
     new_fault->type = FaultFunctionBase::Sinewave;
   }
-  else if (function_type_string, "SQUAREWAVE") {
+  else if (function_type_string == "SQUAREWAVE") {
     new_fault->type = FaultFunctionBase::Squarewave;
   }
-  else if (function_type_string, "TRIANGLEWAVE") {
+  else if (function_type_string == "TRIANGLEWAVE") {
     new_fault->type = FaultFunctionBase::Trianglewave;
   }
   else {
