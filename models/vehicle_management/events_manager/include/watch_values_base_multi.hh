@@ -81,7 +81,7 @@ Purpose:( inheriting classes use this to implement their own specific
           execution.  It is called from test_crossing, which is NOT virtual.
           In the base class, nothing more needs doing.
 *****************************************************************************/
-  bool specific_execution() override {return false;};
+  bool specific_execution() override {return false;}
 
 
 /*****************************************************************************

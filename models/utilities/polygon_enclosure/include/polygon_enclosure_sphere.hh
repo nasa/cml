@@ -123,6 +123,7 @@ Purpose:
   Sets the min, max values for the enclosing rectangular box,
   verifies the convex nature of the specified vertices, and identifies the
   direction in which the vertices are ordered.
+TODO Nino Tarantino 9/11/26: This function is way too long. Split it apart.
 *****************************************************************************/
   void initialize()
   {
@@ -230,9 +231,9 @@ Purpose:
         // else, compute box-limit from geometry
         // Start wwith the vertices.
         box_max[i_axis] = vertices[0][i_axis];
-        for (size_t ix =1; ix < N; ix++) {
+        for (size_t ii =1; ii < N; ii++) {
           box_max[i_axis] = std::max( box_max[i_axis],
-                                      vertices[ix][i_axis]);
+                                      vertices[ii][i_axis]);
         }
         // Get max value from edges if box extends into positive values.
         /* TODO Turner 2024/05:
@@ -246,23 +247,23 @@ Purpose:
         if (box_max[i_axis] <= 0) {
           continue;
         }
-        for (size_t ix =0; ix < N; ix++) {
-          if ( direction_sign * r_cross_next[ix][i_axis] >=0) {
+        for (size_t ii =0; ii < N; ii++) {
+          if ( direction_sign * r_cross_next[ii][i_axis] >=0) {
             continue;
           }
           std::array< double,3> T{}; // see documentation for interpretation
           T = MathUtils::vector_cross_product(
-                  MathUtils::vector_cross_product( r_cross_next[ix],
+                  MathUtils::vector_cross_product( r_cross_next[ii],
                                                    R_pole),
-                  r_cross_next[ix]);
+                  r_cross_next[ii]);
           const double VxTdS = MathUtils::vector_scalar_product(
-                                 MathUtils::vector_cross_product( vertices[ix],
+                                 MathUtils::vector_cross_product( vertices[ii],
                                                                   T),
-                            r_cross_next[ix]);
+                            r_cross_next[ii]);
           if (VxTdS <= 0.0) {
             continue;
           }
-          const double S_mag = MathUtils::vec_mag( r_cross_next[ix]);
+          const double S_mag = MathUtils::vec_mag( r_cross_next[ii]);
           const double T_mag = MathUtils::vec_mag(T);
           if ( VxTdS < S_mag * T_mag) {
             box_max[i_axis] = T[i_axis] / T_mag;
@@ -280,31 +281,31 @@ Purpose:
         // else, compute box-min values from geometry
         // Start with the vertices.
         box_min[i_axis] = vertices[0][i_axis];
-        for (size_t ix =1; ix < N; ix++) {
+        for (size_t ii =1; ii < N; ii++) {
           box_min[i_axis] = std::min( box_min[i_axis],
-                                      vertices[ix][i_axis]);
+                                      vertices[ii][i_axis]);
         }
         // Get min value from edges if vertices extend into negative values.
         if (box_min[i_axis] >= 0) {
           continue;
         }
-        for (size_t ix =0; ix < N; ix++) {
-          if ( direction_sign * r_cross_next[ix][i_axis] <=0) {
+        for (size_t ii =0; ii < N; ii++) {
+          if ( direction_sign * r_cross_next[ii][i_axis] <=0) {
             continue;
           }
           std::array< double,3> T{}; // see documentation for interpretation
           T = MathUtils::vector_cross_product(
-                  MathUtils::vector_cross_product( r_cross_next[ix],
+                  MathUtils::vector_cross_product( r_cross_next[ii],
                                                    R_pole),
-                  r_cross_next[ix]);
+                  r_cross_next[ii]);
           const double VxTdS = MathUtils::vector_scalar_product(
-                                 MathUtils::vector_cross_product( vertices[ix],
+                                 MathUtils::vector_cross_product( vertices[ii],
                                                                   T),
-                                 r_cross_next[ix]);
+                                 r_cross_next[ii]);
           if (VxTdS >= 0.0) {
             continue;
           }
-          const double S_mag = MathUtils::vec_mag( r_cross_next[ix]);
+          const double S_mag = MathUtils::vec_mag( r_cross_next[ii]);
           const double T_mag = MathUtils::vec_mag(T);
           if( VxTdS < S_mag * T_mag) {
             box_min[i_axis] = T[i_axis] / T_mag;

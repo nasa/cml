@@ -159,12 +159,12 @@ class IntervalTimedConstraint : public Constraint
     }
   }
   /*******************************************************************/
-  IntervalTimedConstraint (const T & variable,
-                           const double & delta_time,
+  IntervalTimedConstraint (const T & variable_,
+                           const double & delta_time_,
                            ConstraintSet & set)
     :
-    IntervalTimedConstraint (variable,
-                             delta_time)
+    IntervalTimedConstraint (variable_,
+                             delta_time_)
   {
     set.constraints.push_back(this);
   }

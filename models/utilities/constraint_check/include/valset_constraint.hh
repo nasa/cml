@@ -162,12 +162,12 @@ class ValSetTimedConstraint : public Constraint
     }
   }
   /*******************************************************************/
-  ValSetTimedConstraint (const T & variable,
-                         const double & delta_time,
+  ValSetTimedConstraint (const T & variable_,
+                         const double & delta_time_,
                          ConstraintSet & set)
     :
-    ValSetTimedConstraint (variable,
-                           delta_time)
+    ValSetTimedConstraint (variable_,
+                           delta_time_)
   {
     set.constraints.push_back(this);
   }

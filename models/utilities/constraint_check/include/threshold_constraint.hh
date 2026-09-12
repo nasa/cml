@@ -175,12 +175,12 @@ class ThresholdTimedConstraint : public Constraint
     }
   }
   /********************************************************************/
-  ThresholdTimedConstraint (const T & variable,
-                            const double & delta_time,
+  ThresholdTimedConstraint (const T & variable_,
+                            const double & delta_time_,
                             ConstraintSet & set)
     :
-    ThresholdTimedConstraint (variable,
-                              delta_time)
+    ThresholdTimedConstraint (variable_,
+                              delta_time_)
   {
     set.constraints.push_back(this);
   }
@@ -315,12 +315,12 @@ class ThresholdTimedConstraintSpecData : public Constraint
       test_list.push_back(&test);
     }
   }
-  ThresholdTimedConstraintSpecData (const T & variable,
-                                    const double & delta_time,
+  ThresholdTimedConstraintSpecData (const T & variable_,
+                                    const double & delta_time_,
                                     ConstraintSet & set)
     :
-    ThresholdTimedConstraintSpecData (variable,
-                                      delta_time)
+    ThresholdTimedConstraintSpecData (variable_,
+                                      delta_time_)
   {
     set.constraints.push_back(this);
   }

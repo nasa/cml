@@ -48,14 +48,11 @@ class EGM2008_WGS84 : public SubscriptionBase
   EGM2008_WGS84( const double & wgs_84_lat,
                  const double & wgs_84_lon);
   ~EGM2008_WGS84() override = default;
+  EGM2008_WGS84 (const EGM2008_WGS84&) = delete;
+  EGM2008_WGS84& operator= (const EGM2008_WGS84&) = delete;
 
   void initialize() override;
   void load_data();
   void update();
-
- private:
-  // Copy-constructor and operator= declared private and not implemented.
-  EGM2008_WGS84 (const EGM2008_WGS84&);
-  EGM2008_WGS84& operator= (const EGM2008_WGS84&);
 };
 #endif

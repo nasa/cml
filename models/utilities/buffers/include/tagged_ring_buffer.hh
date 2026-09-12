@@ -47,7 +47,7 @@ struct CMLTaggedRingBufferMember
     :
     tag(),
     data()
-  {};
+  {}
 };
 
 /*****************************************************************************
@@ -70,7 +70,7 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
   CMLTaggedRingBuffer( std::string name)
     :
     CMLSimpleRingBuffer<CMLTaggedRingBufferMember<T_Tag, T_Data>>(name)
-  {};
+  {}
   ~CMLTaggedRingBuffer() override = default;
 
 

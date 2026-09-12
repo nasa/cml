@@ -36,7 +36,7 @@ public:
     active = false;
     // Add this table to the executive list for later selection:
     exec_table.add_table(this);
-  };
+  }
   AeroTableSet (const AeroTableSet &) = delete;
   AeroTableSet & operator = (const AeroTableSet &) = delete;
 };

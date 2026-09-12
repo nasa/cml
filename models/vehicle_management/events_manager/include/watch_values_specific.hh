@@ -20,7 +20,7 @@ PROGRAMMERS:
 class WatchValues  : public WatchValuesBase {
  public:
  protected:
-  virtual bool specific_execution() {};
+  virtual bool specific_execution() override {}
 }
 *****************************************************************************/
 
@@ -153,13 +153,13 @@ class WatchValuesLogNow : public WatchValuesBase<varT> {
  public:
   WatchValuesLogNow(TrickLogging & logging_in)
      :
-     logging(logging_in){};
+     logging(logging_in){}
   WatchValuesLogNow (const WatchValuesLogNow& rhs) = delete;
   WatchValuesLogNow& operator = (const WatchValuesLogNow& rhs) = delete;
  protected:
   TrickLogging & logging;
   bool specific_execution() override {logging.log_now();
-                                     return false;};
+                                     return false;}
 };
 /**************************************************************************
  Log data immediately after event modifications are applied
