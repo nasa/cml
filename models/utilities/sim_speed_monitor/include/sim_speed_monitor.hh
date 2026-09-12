@@ -18,14 +18,17 @@ class SimSpeedMonitor : public SubscriptionBase {
  protected:
   #ifndef SWIG
   std::chrono::steady_clock::time_point cycle_time;
-  std::chrono::duration<double> delta_t;
+  std::chrono::duration<double> delta_t{};
   #endif
  public:
-  double sim_speed;
+  double sim_speed{};
 
   SimSpeedMonitor() = default;
 
   ~SimSpeedMonitor() override = default;
+
+  SimSpeedMonitor (const SimSpeedMonitor&) = delete;
+  SimSpeedMonitor& operator = (const SimSpeedMonitor&) = delete;
 
   // Note -- model is self-initializing, this gets called on the first pass
   // through calculate_rate(...)
@@ -36,11 +39,13 @@ class SimSpeedMonitor : public SubscriptionBase {
 
   // class methods are not callable from the input file.
   #ifndef SWIG
-  double get_dt() {return delta_t.count();}
+  double get_dt() const {return delta_t.count();}
 
   void calculate_rate(double sim_dt)
   {
-    if (!active && !sub_pending) return;
+    if (!active && sub_pending == 0) {
+      return;
+    }
 
     if (!initialized) {
       // first pass, record the current time but do not try to generate a speed
@@ -49,7 +54,7 @@ class SimSpeedMonitor : public SubscriptionBase {
       return;
     }
 
-    std::chrono::steady_clock::time_point new_time =
+    const std::chrono::steady_clock::time_point new_time =
                                                std::chrono::steady_clock::now();
     delta_t =
               std::chrono::duration_cast<std::chrono::duration<double> >
@@ -61,9 +66,5 @@ class SimSpeedMonitor : public SubscriptionBase {
                                              false);
   }
   #endif
-
- private: // and undefined:
-  SimSpeedMonitor (const SimSpeedMonitor&);
-  SimSpeedMonitor& operator = (const SimSpeedMonitor&);
 };
 #endif

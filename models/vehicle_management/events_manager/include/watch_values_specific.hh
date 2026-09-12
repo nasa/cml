@@ -20,7 +20,7 @@ PROGRAMMERS:
 class WatchValues  : public WatchValuesBase {
  public:
  protected:
-  virtual bool specific_execution() {};
+  virtual bool specific_execution() override {}
 }
 *****************************************************************************/
 
@@ -58,13 +58,8 @@ class WatchValuesSimStopVar : public WatchValuesBase<varT> {
   {
     this->add_action(event_action);
   }
-// protected:
-//  virtual bool specific_execution()
-//     {exec_set_terminate_time(exec_get_sim_time());
-//      return true;};
- private:
-  WatchValuesSimStopVar (const WatchValuesSimStopVar& rhs);
-  WatchValuesSimStopVar& operator = (const WatchValuesSimStopVar& rhs);
+  WatchValuesSimStopVar (const WatchValuesSimStopVar& rhs) = delete;
+  WatchValuesSimStopVar& operator = (const WatchValuesSimStopVar& rhs) = delete;
 };
 
 /***************************************************************************/
@@ -82,9 +77,8 @@ class WatchValuesSimStop : public WatchValuesBase<bool> {
   {
     this->add_action(event_action);
   }
- private:
-  WatchValuesSimStop (const WatchValuesSimStop& rhs);
-  WatchValuesSimStop& operator = (const WatchValuesSimStop& rhs);
+  WatchValuesSimStop (const WatchValuesSimStop& rhs) = delete;
+  WatchValuesSimStop& operator = (const WatchValuesSimStop& rhs) = delete;
 };
 
 /***************************************************************************/
@@ -98,9 +92,8 @@ class WatchValuesDeactivateSimObject : public WatchValuesBase<double> {
   {
     this->add_action(event_action);
   }
- private:
-  WatchValuesDeactivateSimObject (const WatchValuesDeactivateSimObject& rhs);
-  WatchValuesDeactivateSimObject& operator = (const WatchValuesDeactivateSimObject& rhs);
+  WatchValuesDeactivateSimObject (const WatchValuesDeactivateSimObject& rhs) = delete;
+  WatchValuesDeactivateSimObject& operator = (const WatchValuesDeactivateSimObject& rhs) = delete;
 };
 
 /***************************************************************************/
@@ -109,10 +102,8 @@ template <typename varT>
 class WatchValuesAdjustLogging : public WatchValuesBase<varT> {
  public:
   EventActionAdjustLogging event_action;
- #ifndef SWIG
   double & log_cycle; /* (s) New logging frequency */
   bool   & log_now;   /* (--) log and reset the logging schedule immediately.*/
- #endif
   WatchValuesAdjustLogging(TrickLogging & logging_in)
     :
     event_action( logging_in),
@@ -121,9 +112,8 @@ class WatchValuesAdjustLogging : public WatchValuesBase<varT> {
   {
     this->add_action(event_action);
   }
- private:
-  WatchValuesAdjustLogging (const WatchValuesAdjustLogging& rhs);
-  WatchValuesAdjustLogging& operator = (const WatchValuesAdjustLogging& rhs);
+  WatchValuesAdjustLogging (const WatchValuesAdjustLogging& rhs) = delete;
+  WatchValuesAdjustLogging& operator = (const WatchValuesAdjustLogging& rhs) = delete;
 };
 /***************************************************************************/
 // Adjust logging rate and activity for a specific group
@@ -131,16 +121,14 @@ template <typename varT>
 class WatchValuesAdjustLoggingGroup : public WatchValuesBase<varT> {
  public:
   EventActionAdjustLoggingGroup event_action;
- #ifndef SWIG
   std::string & group_name; /* (--)
     Reference to event_action.group_name.*/
-  bool enable_group; /* (--)
+  bool enable_group{false}; /* (--)
     Reference to event_action.enable_group.*/
   double & log_cycle; /* (s)
     Reference to event_action.log_cycle.*/
   bool   & log_now;   /* (--)
     Reference to event_action.log_now.*/
- #endif
   WatchValuesAdjustLoggingGroup(TrickLogging & logging_in)
     :
     event_action( logging_in),
@@ -151,7 +139,6 @@ class WatchValuesAdjustLoggingGroup : public WatchValuesBase<varT> {
   {
     this->add_action(event_action);
   }
- private:
   WatchValuesAdjustLoggingGroup (
                              const WatchValuesAdjustLoggingGroup& rhs) = delete;
   WatchValuesAdjustLoggingGroup& operator = (
@@ -166,14 +153,13 @@ class WatchValuesLogNow : public WatchValuesBase<varT> {
  public:
   WatchValuesLogNow(TrickLogging & logging_in)
      :
-     logging(logging_in){};
+     logging(logging_in){}
+  WatchValuesLogNow (const WatchValuesLogNow& rhs) = delete;
+  WatchValuesLogNow& operator = (const WatchValuesLogNow& rhs) = delete;
  protected:
   TrickLogging & logging;
   bool specific_execution() override {logging.log_now();
-                                     return false;};
- private:
-  WatchValuesLogNow (const WatchValuesLogNow& rhs);
-  WatchValuesLogNow& operator = (const WatchValuesLogNow& rhs);
+                                     return false;}
 };
 /**************************************************************************
  Log data immediately after event modifications are applied
@@ -194,8 +180,7 @@ class WatchValuesLogNowPost : public WatchValuesBase<varT> {
   {
     this->add_action(event_action);
   }
- private:
-  WatchValuesLogNowPost (const WatchValuesLogNowPost& rhs);
-  WatchValuesLogNowPost& operator = (const WatchValuesLogNowPost& rhs);
+  WatchValuesLogNowPost (const WatchValuesLogNowPost& rhs) = delete;
+  WatchValuesLogNowPost& operator = (const WatchValuesLogNowPost& rhs) = delete;
 };
 #endif

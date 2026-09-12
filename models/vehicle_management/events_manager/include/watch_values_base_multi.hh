@@ -20,16 +20,12 @@ class WatchValuesBase2 : public WatchValuesBaseCore
     One of the two sub-events / triggers to test.*/
   WatchValuesBase<B> watch_b; /* (--)
     The other of the two sub-events / triggers to test.*/
-  bool require_all; /* (--)
+  bool require_all{true}; /* (--)
     Flag indicating how to combine watch_a and watch_b.
     True  -- this event triggers when watch_a AND watch_b are satisfied.
     False -- this event triggers when watch_a OR watch_b are satsified.*/
 
   WatchValuesBase2()
-    :
-    watch_a(),
-    watch_b(),
-    require_all(true)
   {
     // Keep both perpetually active; we don't want one deactivating while
     // waiting for the other to trigger.
@@ -41,6 +37,9 @@ class WatchValuesBase2 : public WatchValuesBaseCore
     watch_a.add_self_to_manager_active_list = false;
     watch_b.add_self_to_manager_active_list = false;
   }
+
+  WatchValuesBase2 (const WatchValuesBase2& rhs) = delete;
+  WatchValuesBase2& operator = (const WatchValuesBase2& rhs) = delete;
 
 /*****************************************************************************
 intialize
@@ -82,7 +81,7 @@ Purpose:( inheriting classes use this to implement their own specific
           execution.  It is called from test_crossing, which is NOT virtual.
           In the base class, nothing more needs doing.
 *****************************************************************************/
-  bool specific_execution() override {return false;};
+  bool specific_execution() override {return false;}
 
 
 /*****************************************************************************
@@ -115,9 +114,6 @@ Purpose:(Unsubscribe from watch_a and watch_b to deactivate them.
     watch_b.unsubscribe();
     active = false;
   }
- private:
-  WatchValuesBase2 (const WatchValuesBase2& rhs);
-  WatchValuesBase2& operator = (const WatchValuesBase2& rhs);
 };
 
 #endif

@@ -89,6 +89,8 @@ class ThresholdInstantConstraint : public Constraint
     set.constraints.push_back(this);
   }
   ~ThresholdInstantConstraint() override = default;
+  ThresholdInstantConstraint( const ThresholdInstantConstraint &) = delete;
+  ThresholdInstantConstraint & operator=( const ThresholdInstantConstraint &) = delete;
 
   /***************************************************************************
   * Inherited -  initialize
@@ -107,10 +109,6 @@ class ThresholdInstantConstraint : public Constraint
     }
     post_update(); // inherited.
   }
-
- private: // not implemented; not copyable
-  ThresholdInstantConstraint( const ThresholdInstantConstraint &);
-  ThresholdInstantConstraint & operator=( const ThresholdInstantConstraint &);
 };
 
 
@@ -177,16 +175,18 @@ class ThresholdTimedConstraint : public Constraint
     }
   }
   /********************************************************************/
-  ThresholdTimedConstraint (const T & variable,
-                            const double & delta_time,
+  ThresholdTimedConstraint (const T & variable_,
+                            const double & delta_time_,
                             ConstraintSet & set)
     :
-    ThresholdTimedConstraint (variable,
-                              delta_time)
+    ThresholdTimedConstraint (variable_,
+                              delta_time_)
   {
     set.constraints.push_back(this);
   }
   ~ThresholdTimedConstraint() override = default;
+  ThresholdTimedConstraint( const ThresholdTimedConstraint &) = delete;
+  ThresholdTimedConstraint & operator=( const ThresholdTimedConstraint &) = delete;
 
   /***************************************************************************
   * Inherited -  initialize
@@ -206,10 +206,6 @@ class ThresholdTimedConstraint : public Constraint
     }
     post_update(); // inherited.
   }
-
- private: // not implemented; not copyable
-  ThresholdTimedConstraint( const ThresholdTimedConstraint &);
-  ThresholdTimedConstraint & operator=( const ThresholdTimedConstraint &);
 };
 
 
@@ -319,16 +315,19 @@ class ThresholdTimedConstraintSpecData : public Constraint
       test_list.push_back(&test);
     }
   }
-  ThresholdTimedConstraintSpecData (const T & variable,
-                                    const double & delta_time,
+  ThresholdTimedConstraintSpecData (const T & variable_,
+                                    const double & delta_time_,
                                     ConstraintSet & set)
     :
-    ThresholdTimedConstraintSpecData (variable,
-                                      delta_time)
+    ThresholdTimedConstraintSpecData (variable_,
+                                      delta_time_)
   {
     set.constraints.push_back(this);
   }
   ~ThresholdTimedConstraintSpecData() override = default;
+  ThresholdTimedConstraintSpecData( const ThresholdTimedConstraintSpecData &) = delete;
+  ThresholdTimedConstraintSpecData & operator=(
+                                     const ThresholdTimedConstraintSpecData &) = delete;
 
   /***************************************************************************
   Name: set_num_specs
@@ -473,7 +472,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
     double threshold_resolution =
          (threshold_spec[num_specs-1] - threshold_spec[0])*1.0 / (num_tests-1);
     for (size_t ii = 1; ii <= num_tests-2; ++ii) {
-      tests[ii].threshold = threshold_spec[0] + ii * threshold_resolution;
+      tests[ii].threshold = threshold_spec[0] + static_cast<double>(ii) * threshold_resolution;
     }
 
     /* Set the test threshold values for the time.
@@ -612,10 +611,5 @@ class ThresholdTimedConstraintSpecData : public Constraint
     }
     post_update(); // inherited.
   }
-
- private: // not implemented; not copyable
-  ThresholdTimedConstraintSpecData( const ThresholdTimedConstraintSpecData &);
-  ThresholdTimedConstraintSpecData & operator=(
-                                     const ThresholdTimedConstraintSpecData &);
 };
 #endif

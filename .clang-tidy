@@ -16,6 +16,8 @@
 #         of padding.
 #
 # misc:
+#     misc-multiple-inheritance:
+#         Not ideal but fine in certain situations.
 #     misc-no-recursion:
 #         Recursion is fine.
 #     misc-non-private-member-variables-in-classes:
@@ -86,6 +88,7 @@ Checks: >
     google-build-using-namespace,
     google-global-names-in-headers,
     misc-*,
+        -misc-multiple-inheritance,
         -misc-no-recursion,
         -misc-non-private-member-variables-in-classes,
     modernize-*,

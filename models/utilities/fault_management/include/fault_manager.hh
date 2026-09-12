@@ -174,7 +174,7 @@ class FaultManager {
       If true, fault_file is the name of a valid XML fault file and that file has
       been parsed. */
 
-    std::list<Fault*> faults[Location_count]; /* (--)
+    std::list<Fault*> faults[Location_count]{}; /* (--)
       Pointers to the individual faults, stored as pointers to the base class to
       support polymorphic storage. The faults themselves are allocated when the
       XML file is parsed. */

@@ -46,10 +46,10 @@ class PolygonEnclosureSphere
 //    Maximum phi-value of the coordinates of the polygon vertices.
 //    Used to draw a simple rectangular box for a first-pass when qerying "is
 //    this point inside the polygon"?*/
-  double box_min[3]; /* (--)
+  double box_min[3]{}; /* (--)
     Minimum [x,y,z]-values of the simple right prism used to quickly eliminate
     test points when querying "is this point inside the polygon"?*/
-  double box_max[3]; /* (--)
+  double box_max[3]{}; /* (--)
     Maximum [x,y,z]-values of the simple right prism used to quickly eliminate
     test points when querying "is this point inside the polygon"?*/
 //  double max_x;/* (--)
@@ -85,22 +85,22 @@ class PolygonEnclosureSphere
     immediately following it in the set of vertices.
     The "next" vertex from the vertex at the end of the list is the first
     vertex in the list, thereby closing the polygon.*/
-  int direction_sign; /* (--)
+  int direction_sign{0}; /* (--)
     Value is +1 if polygon vertices are ordered in a counter-clockwise sequence
     on the x-y plane, -1 if they are ordered clockwise.
     Default: 0 (linearly aligned vertices) */
-  bool initialized; /* (--)
+  bool initialized{false}; /* (--)
     Indicates that initial snaity checks have passed and polygon is valid.*/
 
  public:
-  bool enabled; /* (--)
+  bool enabled{true}; /* (--)
     Model enabled flag.*/
   const size_t num_pts; /* (--)
     External interface to provide information about the size of this polygon.*/
 //  bool lambda_is_0_to_2pi; /* (--)
 //    Flag indicating that the lambda values in vertices_angles are in
 //    [0,2pi) rather than the default (-pi,pi].*/
-  bool apply_bounding_box;  /* (--)
+  bool apply_bounding_box{true};  /* (--)
     Falg determines whether to apply a bounding box around the polygon.*/
 
 
@@ -108,14 +108,14 @@ class PolygonEnclosureSphere
 /*****************************************************************************
 Constructor
 *****************************************************************************/
-  PolygonEnclosureSphere<N>()
+  PolygonEnclosureSphere()
     :
-    direction_sign(0),
-    initialized(false),
-    enabled(true),
-    num_pts(N),
-    apply_bounding_box(true)
+    num_pts(N)
   {}
+
+
+  PolygonEnclosureSphere( const PolygonEnclosureSphere&) = delete;
+  PolygonEnclosureSphere& operator=( const PolygonEnclosureSphere&) = delete;
 
 /*****************************************************************************
 initialize()
@@ -123,6 +123,7 @@ Purpose:
   Sets the min, max values for the enclosing rectangular box,
   verifies the convex nature of the specified vertices, and identifies the
   direction in which the vertices are ordered.
+TODO Nino Tarantino 9/11/26: This function is way too long. Split it apart.
 *****************************************************************************/
   void initialize()
   {
@@ -130,6 +131,7 @@ Purpose:
        construction, but that wouldn't block its usage (unless it was made to
        be a terminal fault). */
     if (N < 3) {
+      // TODO Nino Tarantino: make this a compile-time error
       CMLMessage::error( __FILE__,__LINE__,
         "Cannot form a polygon with less than 3 vertices.\n"
         "Polygon initialization failed.\n");
@@ -146,7 +148,7 @@ Purpose:
 
     /* First, identify the direction sign of the first pair of side (that are
        not aligned).*/
-    std::array<double,3> r_cross_next_prev;
+    std::array<double,3> r_cross_next_prev{};
     r_cross_next_prev = MathUtils::vector_cross_product( vertices[1],
                                                          vertices[N-1]);
     direction_sign = MathUtils::sign(
@@ -229,9 +231,9 @@ Purpose:
         // else, compute box-limit from geometry
         // Start wwith the vertices.
         box_max[i_axis] = vertices[0][i_axis];
-        for (size_t ix =1; ix < N; ix++) {
+        for (size_t ii =1; ii < N; ii++) {
           box_max[i_axis] = std::max( box_max[i_axis],
-                                      vertices[ix][i_axis]);
+                                      vertices[ii][i_axis]);
         }
         // Get max value from edges if box extends into positive values.
         /* TODO Turner 2024/05:
@@ -245,24 +247,24 @@ Purpose:
         if (box_max[i_axis] <= 0) {
           continue;
         }
-        for (size_t ix =0; ix < N; ix++) {
-          if ( direction_sign * r_cross_next[ix][i_axis] >=0) {
+        for (size_t ii =0; ii < N; ii++) {
+          if ( direction_sign * r_cross_next[ii][i_axis] >=0) {
             continue;
           }
-          std::array< double,3> T; // see documentation for interpretation
+          std::array< double,3> T{}; // see documentation for interpretation
           T = MathUtils::vector_cross_product(
-                  MathUtils::vector_cross_product( r_cross_next[ix],
+                  MathUtils::vector_cross_product( r_cross_next[ii],
                                                    R_pole),
-                  r_cross_next[ix]);
-          double VxTdS = MathUtils::vector_scalar_product(
-                            MathUtils::vector_cross_product( vertices[ix],
-                                                             T),
-                            r_cross_next[ix]);
+                  r_cross_next[ii]);
+          const double VxTdS = MathUtils::vector_scalar_product(
+                                 MathUtils::vector_cross_product( vertices[ii],
+                                                                  T),
+                            r_cross_next[ii]);
           if (VxTdS <= 0.0) {
             continue;
           }
-          double S_mag = MathUtils::vec_mag( r_cross_next[ix]);
-          double T_mag = MathUtils::vec_mag(T);
+          const double S_mag = MathUtils::vec_mag( r_cross_next[ii]);
+          const double T_mag = MathUtils::vec_mag(T);
           if ( VxTdS < S_mag * T_mag) {
             box_max[i_axis] = T[i_axis] / T_mag;
           }
@@ -279,32 +281,32 @@ Purpose:
         // else, compute box-min values from geometry
         // Start with the vertices.
         box_min[i_axis] = vertices[0][i_axis];
-        for (size_t ix =1; ix < N; ix++) {
+        for (size_t ii =1; ii < N; ii++) {
           box_min[i_axis] = std::min( box_min[i_axis],
-                                      vertices[ix][i_axis]);
+                                      vertices[ii][i_axis]);
         }
         // Get min value from edges if vertices extend into negative values.
         if (box_min[i_axis] >= 0) {
           continue;
         }
-        for (size_t ix =0; ix < N; ix++) {
-          if ( direction_sign * r_cross_next[ix][i_axis] <=0) {
+        for (size_t ii =0; ii < N; ii++) {
+          if ( direction_sign * r_cross_next[ii][i_axis] <=0) {
             continue;
           }
-          std::array< double,3> T; // see documentation for interpretation
+          std::array< double,3> T{}; // see documentation for interpretation
           T = MathUtils::vector_cross_product(
-                  MathUtils::vector_cross_product( r_cross_next[ix],
+                  MathUtils::vector_cross_product( r_cross_next[ii],
                                                    R_pole),
-                  r_cross_next[ix]);
-          double VxTdS = MathUtils::vector_scalar_product(
-                            MathUtils::vector_cross_product( vertices[ix],
-                                                             T),
-                            r_cross_next[ix]);
+                  r_cross_next[ii]);
+          const double VxTdS = MathUtils::vector_scalar_product(
+                                 MathUtils::vector_cross_product( vertices[ii],
+                                                                  T),
+                                 r_cross_next[ii]);
           if (VxTdS >= 0.0) {
             continue;
           }
-          double S_mag = MathUtils::vec_mag( r_cross_next[ix]);
-          double T_mag = MathUtils::vec_mag(T);
+          const double S_mag = MathUtils::vec_mag( r_cross_next[ii]);
+          const double T_mag = MathUtils::vec_mag(T);
           if( VxTdS < S_mag * T_mag) {
             box_min[i_axis] = T[i_axis] / T_mag;
           }
@@ -490,10 +492,10 @@ Purpose:
                    double phi)
   {
     if (!initialized ||!enabled) {return false;}
-    double cos_phi = std::cos( phi);
-    double R_P[3] = {cos_phi * std::cos( lambda),
-                     cos_phi * std::sin( lambda),
-                     std::sin( phi)};
+    const double cos_phi = std::cos( phi);
+    const double R_P[3] = {cos_phi * std::cos( lambda),
+                           cos_phi * std::sin( lambda),
+                           std::sin( phi)};
     return in_polygon( R_P);
   }
 /****************************************************************************/
@@ -527,7 +529,7 @@ Purpose:
     return true;
   }
 /****************************************************************************/
-  bool in_polygon( const std::array<double,3> & R_P)
+  bool in_polygon( const std::array<double,3> & R_P) const
   {
     if (!initialized ||!enabled) {return false;}
 
@@ -570,7 +572,7 @@ Purpose:
         "Check configuration.\n");
     } else {
       for (size_t ix = 0; ix < N; ix++) {
-        double cos_phi = std::cos( vals[ix][1]);
+        const double cos_phi = std::cos( vals[ix][1]);
         vertices[ix][0] = cos_phi * std::cos( vals[ix][0]);
         vertices[ix][1] = cos_phi * std::sin( vals[ix][0]);
         vertices[ix][2] = std::sin( vals[ix][1]);
@@ -596,9 +598,5 @@ Purpose:
       }
     }
   }
-
- private:
-  PolygonEnclosureSphere<N>( const PolygonEnclosureSphere<N> &);
-  PolygonEnclosureSphere<N>& operator=( const PolygonEnclosureSphere<N>&);
 };
 #endif

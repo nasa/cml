@@ -92,7 +92,7 @@ class EventActionDeactivateSimObject : public EventActionBase {
    std::string simobj_name;
    bool specific_execution() override {
      exec_set_sim_object_onoff(simobj_name.c_str(), 0);
-     return false;};
+     return false;}
 };
 
 /*****************************************************************************
@@ -103,14 +103,15 @@ class EventActionAdjustLogging : public EventActionBase {
  protected:
   TrickLogging & logging;
  public:
-  double log_cycle; /* (s) New logging frequency */
-  bool   log_now;   /* (--) log and reset the logging schedule immediately.*/
+  double log_cycle{1.0}; /* (s) New logging frequency */
+  bool   log_now{false};   /* (--) log and reset the logging schedule immediately.*/
   EventActionAdjustLogging(TrickLogging & logging_in)
     :
-    logging(logging_in),
-    log_cycle(1.0),
-    log_now(false)
-  {};
+    logging(logging_in)
+  {}
+  EventActionAdjustLogging (const EventActionAdjustLogging&) = delete;
+  EventActionAdjustLogging& operator = (const EventActionAdjustLogging&) = delete;
+
   bool specific_execution() override {
     logging.set_cycle(log_cycle);
     if (log_now) {
@@ -118,9 +119,6 @@ class EventActionAdjustLogging : public EventActionBase {
     }
     return false;
   }
- private:
-  EventActionAdjustLogging (const EventActionAdjustLogging&);
-  EventActionAdjustLogging& operator = (const EventActionAdjustLogging&);
 };
 
 /*****************************************************************************
@@ -140,26 +138,26 @@ class EventActionAdjustLoggingGroup : public EventActionBase {
     If this is used for a specific group, this is the group name.
     If this is left empty, the intruction will be applied to all Trick
     Logging groups.*/
-  bool enable_group; /* (--)
+  bool enable_group{true}; /* (--)
     This flag is used to enable and disable the group.
     Note -- this flag can be set as part of the add_ext_bool_on/off within the
     same event that executes this action.
     Default: true (group is enabled).*/
-  double log_cycle; /* (s) New logging frequency */
-  bool   log_now;   /* (--) log and reset the logging schedule immediately.*/
+  double log_cycle{1.0}; /* (s) New logging frequency */
+  bool   log_now{};   /* (--) log and reset the logging schedule immediately.*/
   EventActionAdjustLoggingGroup(TrickLogging & logging_in)
     :
-    logging(logging_in),
-    group_name(),
-    enable_group(true),
-    log_cycle(1.0)
-  {};
+    logging(logging_in)
+  {}
+  EventActionAdjustLoggingGroup (const EventActionAdjustLoggingGroup&) = delete;
+  EventActionAdjustLoggingGroup& operator = (
+                                 const EventActionAdjustLoggingGroup&) = delete;
 
   bool specific_execution() override {
     if (group_name_list.empty()) {
       process_group( group_name);
     } else {
-      for (std::string & name : group_name_list) {
+      for (const std::string & name : group_name_list) {
         process_group (name);
       }
     }
@@ -169,17 +167,13 @@ class EventActionAdjustLoggingGroup : public EventActionBase {
   void process_group( const std::string & group_name_)
   {
     Trick::DataRecordGroup * drg = logging.get_group( group_name_);
-    if (drg) {
+    if (drg != nullptr) {
       if (enable_group) {drg->enable();}
       else {drg->disable();}
       drg->set_cycle(log_cycle);
       logging.reset_next_call_time(*drg);
     }
   }
- private:
-  EventActionAdjustLoggingGroup (const EventActionAdjustLoggingGroup&) = delete;
-  EventActionAdjustLoggingGroup& operator = (
-                                 const EventActionAdjustLoggingGroup&) = delete;
 };
 
 /*****************************************************************************
@@ -195,13 +189,13 @@ class EventActionLogNow : public EventActionBase {
   EventActionLogNow(TrickLogging & logging_in)
      :
      logging(logging_in)
-  {};
+  {}
+  EventActionLogNow (const EventActionLogNow& rhs) = delete;
+  EventActionLogNow& operator = (const EventActionLogNow& rhs) = delete;
+
   bool specific_execution() override {
     logging.log_now();
     return false;
   }
- private:
-  EventActionLogNow (const EventActionLogNow& rhs);
-  EventActionLogNow& operator = (const EventActionLogNow& rhs);
 };
 #endif

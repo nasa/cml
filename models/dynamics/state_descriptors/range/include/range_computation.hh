@@ -143,7 +143,7 @@ class RangeComputation : public RangeValues,
                                             const double direction_in[3]);
   void set_reference_data_from_state( const double position_in[3],
                                       const double direction_in[3]);
-  void update();
+  virtual void update();
 
  protected:
   virtual void update_using_cartesian();

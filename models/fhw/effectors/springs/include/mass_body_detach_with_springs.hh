@@ -33,15 +33,15 @@ class MassBodyDetachWithSprings : public jeod::BodyDetach
 {
 public:
   SimpleSpringGroup springs; // (--) collection of springs.
-  bool child_is_action_body; /* (--)
+  bool child_is_action_body{true}; /* (--)
        Specifies whether the child body in the attachment is the one that
        hosts the separation-state and is therefore the action body.
        The action force is applied along the -ve x-axis of the source frame
        of the separation state. */
 
-  MassBodyDetachWithSprings() : BodyDetach(),
-                                springs(),
-                                child_is_action_body(true){};
+  MassBodyDetachWithSprings() = default;
+  MassBodyDetachWithSprings(const MassBodyDetachWithSprings& rhs) = delete;
+  MassBodyDetachWithSprings & operator= (const MassBodyDetachWithSprings&) = delete;
 
   // NOTE - initialize(jeod::DynManager) is called from Dynamics Manager as a
   // consequence of adding this body action with the add_body_action method
@@ -74,7 +74,7 @@ public:
         "correctly and their effect will not be applied when the bodies "
         "detach.\n");
     }
-  };
+  }
 
   void initialize( const jeod::DynBody & parent)
   {
@@ -101,18 +101,13 @@ public:
         "correctly and their effect will not be applied when the bodies "
         "detach.\n");
     }
-  };
+  }
 
   void apply( jeod::DynManager & dyn_manager) override
   {  
     springs.action_body_is_child = child_is_action_body;
     springs.activate();
     jeod::BodyDetach::apply(dyn_manager);
-  };
-
-private:
-  // operator= and copy constructor declared private and not implemented
-  MassBodyDetachWithSprings(const MassBodyDetachWithSprings& rhs);
-  MassBodyDetachWithSprings & operator= (const MassBodyDetachWithSprings&);
+  }
 };
 #endif

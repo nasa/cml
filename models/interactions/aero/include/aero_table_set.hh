@@ -16,6 +16,7 @@ PROGRAMMERS:
 #ifndef CML_AERO_TABLE_SET_HH
 #define CML_AERO_TABLE_SET_HH
 #include<string>
+#include <utility>
 
 #include "aero_table_set_base.hh"
 #include "aero_executive_table.hh"
@@ -26,7 +27,7 @@ public:
   AeroTableSet( std::string name_in,
                 AeroExecutiveTable & exec_table)
   :
-  AeroTableSetBase( name_in,
+  AeroTableSetBase( std::move(name_in),
                     exec_table.coefficients,
                     exec_table.uncertainty)
   {
@@ -35,12 +36,8 @@ public:
     active = false;
     // Add this table to the executive list for later selection:
     exec_table.add_table(this);
-  };
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroTableSet (const AeroTableSet &);
-  AeroTableSet & operator = (const AeroTableSet &);
+  }
+  AeroTableSet (const AeroTableSet &) = delete;
+  AeroTableSet & operator = (const AeroTableSet &) = delete;
 };
 #endif
