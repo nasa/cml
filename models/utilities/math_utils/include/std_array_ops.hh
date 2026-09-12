@@ -87,24 +87,6 @@ std::array<double, N> operator+(const std::array<double, N>& lhs, const std::arr
 }
 
 template <size_t N>
-std::array<double, N> operator+(std::array<double, N>&& lhs, const std::array<double, N>& rhs) {
-  lhs += rhs;
-  return lhs;
-}
-
-template <size_t N>
-std::array<double, N> operator+(const std::array<double, N>& lhs, std::array<double, N>&& rhs) {
-  rhs += lhs;  // To avoid unnecessary copying, we take advantage of the fact
-  return rhs;  // that rhs + lhs == lhs + rhs.
-}
-
-template <size_t N>
-std::array<double, N> operator+(std::array<double, N>&& lhs, std::array<double, N>&& rhs) {
-  lhs += rhs;
-  return lhs;
-}
-
-template <size_t N>
 std::array<double, N> operator+(const std::array<double, N>& lhs, const double (&rhs)[N]) {
   std::array<double, N> result = lhs;
   for (size_t ii = 0; ii < N; ii++) { result[ii] += rhs[ii]; }
@@ -112,22 +94,10 @@ std::array<double, N> operator+(const std::array<double, N>& lhs, const double (
 }
 
 template <size_t N>
-std::array<double, N> operator+(std::array<double, N>&& lhs, const double (&rhs)[N]) {
-  for (size_t ii = 0; ii < N; ii++) { lhs[ii] += rhs[ii]; }
-  return lhs;
-}
-
-template <size_t N>
 std::array<double, N> operator+(const double (&lhs)[N], const std::array<double, N>& rhs) {
   std::array<double, N> result = rhs;
   for (size_t ii = 0; ii < N; ii++) { result[ii] += lhs[ii]; }
   return result;  // We again use rhs + lhs == lhs + rhs.
-}
-
-template <size_t N>
-std::array<double, N> operator+(const double (&lhs)[N], std::array<double, N>&& rhs) {
-  for (size_t ii = 0; ii < N; ii++) { rhs[ii] += lhs[ii]; }
-  return rhs;  // We again use rhs + lhs == lhs + rhs.
 }
 
 /*******************************************************************************
@@ -141,12 +111,6 @@ std::array<double, N> operator-(const std::array<double, N>& rhs) {
   std::array<double, N> result = rhs;
   for (size_t ii = 0; ii < N; ii++) { result[ii] = -result[ii]; }
   return result;
-}
-
-template <size_t N>
-std::array<double, N> operator-(std::array<double, N>&& rhs) {
-  for (size_t ii = 0; ii < N; ii++) { rhs[ii] = -rhs[ii]; }
-  return rhs;
 }
 
 /*******************************************************************************
@@ -185,24 +149,6 @@ std::array<double, N> operator-(const std::array<double, N>& lhs, const std::arr
 }
 
 template <size_t N>
-std::array<double, N> operator-(std::array<double, N>&& lhs, const std::array<double, N>& rhs) {
-  lhs -= rhs;
-  return lhs;
-}
-
-template <size_t N>
-std::array<double, N> operator-(const std::array<double, N>& lhs, std::array<double, N>&& rhs) {
-  rhs -= lhs;   // To avoid unnecessary copying, we take advantage of the fact
-  return -rhs;  // that lhs - rhs == -(rhs - lhs).
-}
-
-template <size_t N>
-std::array<double, N> operator-(std::array<double, N>&& lhs, std::array<double, N>&& rhs) {
-  lhs -= rhs;
-  return lhs;
-}
-
-template <size_t N>
 std::array<double, N> operator-(const std::array<double, N>& lhs, const double (&rhs)[N]) {
   std::array<double, N> result = lhs;
   for (size_t ii = 0; ii < N; ii++) { result[ii] -= rhs[ii]; }
@@ -210,22 +156,10 @@ std::array<double, N> operator-(const std::array<double, N>& lhs, const double (
 }
 
 template <size_t N>
-std::array<double, N> operator-(std::array<double, N>&& lhs, const double (&rhs)[N]) {
-  for (size_t ii = 0; ii < N; ii++) { lhs[ii] -= rhs[ii]; }
-  return lhs;
-}
-
-template <size_t N>
 std::array<double, N> operator-(const double (&lhs)[N], const std::array<double, N>& rhs) {
   std::array<double, N> result = rhs;
   for (size_t ii = 0; ii < N; ii++) { result[ii] -= lhs[ii]; }
   return -result;  // We again use lhs - rhs == -(rhs - lhs).
-}
-
-template <size_t N>
-std::array<double, N> operator-(const double (&lhs)[N], std::array<double, N>&& rhs) {
-  for (size_t ii = 0; ii < N; ii++) { rhs[ii] -= lhs[ii]; }
-  return -rhs;  // We again use lhs - rhs == -(rhs - lhs).
 }
 
 /*******************************************************************************
@@ -257,25 +191,11 @@ std::array<double, N> operator*(const std::array<double, N>& lhs,
 }
 
 template <size_t N>
-std::array<double, N> operator*(std::array<double, N>&& lhs,
-                                double rhs) {
-  lhs *= rhs;
-  return lhs;
-}
-
-template <size_t N>
 std::array<double, N> operator*(double lhs,
                                 const std::array<double, N>& rhs) {
   std::array<double, N> result = rhs;
   result *= lhs;  // To make use of our existing operator*=, we take advantage
   return result;  // of the fact that lhs * rhs == rhs * lhs.
-}
-
-template <size_t N>
-std::array<double, N> operator*(double lhs,
-                                std::array<double, N>&& rhs) {
-  rhs *= lhs;  // To make use of our existing operator*=, we take advantage
-  return rhs;  // of the fact that lhs * rhs == rhs * lhs.
 }
 
 /*******************************************************************************
@@ -314,24 +234,6 @@ std::array<double, N> operator*(const std::array<double, N>& lhs, const std::arr
 }
 
 template <size_t N>
-std::array<double, N> operator*(std::array<double, N>&& lhs, const std::array<double, N>& rhs) {
-  lhs *= rhs;
-  return lhs;
-}
-
-template <size_t N>
-std::array<double, N> operator*(const std::array<double, N>& lhs, std::array<double, N>&& rhs) {
-  rhs *= lhs;  // To avoid unnecessary copying, we take advantage of the fact
-  return rhs;  // that lhs * rhs == rhs * lhs.
-}
-
-template <size_t N>
-std::array<double, N> operator*(std::array<double, N>&& lhs, std::array<double, N>&& rhs) {
-  lhs *= rhs;
-  return lhs;
-}
-
-template <size_t N>
 std::array<double, N> operator*(const std::array<double, N>& lhs, const double (&rhs)[N]) {
   std::array<double, N> result = lhs;
   for (size_t ii = 0; ii < N; ii++) { result[ii] *= rhs[ii]; }
@@ -339,22 +241,10 @@ std::array<double, N> operator*(const std::array<double, N>& lhs, const double (
 }
 
 template <size_t N>
-std::array<double, N> operator*(std::array<double, N>&& lhs, const double (&rhs)[N]) {
-  for (size_t ii = 0; ii < N; ii++) { lhs[ii] *= rhs[ii]; }
-  return lhs;
-}
-
-template <size_t N>
 std::array<double, N> operator*(const double (&lhs)[N], const std::array<double, N>& rhs) {
   std::array<double, N> result = rhs;
   for (size_t ii = 0; ii < N; ii++) { result[ii] *= lhs[ii]; }
   return result;  // We again use lhs * rhs == rhs * lhs.
-}
-
-template <size_t N>
-std::array<double, N> operator*(const double (&lhs)[N], std::array<double, N>&& rhs) {
-  for (size_t ii = 0; ii < N; ii++) { rhs[ii] *= lhs[ii]; }
-  return rhs;  // We again use lhs * rhs == rhs * lhs.
 }
 
 /*******************************************************************************
@@ -389,12 +279,6 @@ std::array<double, N> operator/(const std::array<double, N>& lhs,
 }
 
 template <size_t N>
-std::array<double, N> operator/(std::array<double, N>&& lhs, const double& rhs) {
-  lhs /= rhs;
-  return lhs;
-}
-
-template <size_t N>
 std::array<double, N> operator/(const double& lhs,
                                 const std::array<double, N>& rhs) {
   std::array<double, N> result = rhs;
@@ -403,16 +287,6 @@ std::array<double, N> operator/(const double& lhs,
                                              result[ii]);
   }
   return result;  // Can't re-use operator/= in this case.
-}
-
-template <size_t N>
-std::array<double, N> operator/(const double& lhs,
-                                std::array<double, N>&& rhs) {
-  for (size_t ii = 0; ii < N; ii++) {
-    rhs[ii] = MathUtils::divide_protected( lhs,
-                                          rhs[ii]);
-  }
-  return rhs;  // Can't re-use operator/= in this case.
 }
 
 /*******************************************************************************
@@ -457,25 +331,6 @@ std::array<double, N> operator/(const std::array<double, N>& lhs, const std::arr
 }
 
 template <size_t N>
-std::array<double, N> operator/(std::array<double, N>&& lhs, const std::array<double, N>& rhs) {
-  lhs /= rhs;
-  return lhs;
-}
-
-template <size_t N>
-std::array<double, N> operator/(const std::array<double, N>& lhs, std::array<double, N>&& rhs) {
-  std::array<double, N> result = lhs;
-  result /= rhs;  // In this case, we have to choose between an extra copy and
-  return result;  // an extra division operation, so we choose the latter.
-}
-
-template <size_t N>
-std::array<double, N> operator/(std::array<double, N>&& lhs, std::array<double, N>&& rhs) {
-  lhs /= rhs;
-  return lhs;
-}
-
-template <size_t N>
 std::array<double, N> operator/(const std::array<double, N>& lhs, const double (&rhs)[N]) {
   std::array<double, N> result;
   for (size_t ii = 0; ii < N; ii++) {
@@ -486,27 +341,8 @@ std::array<double, N> operator/(const std::array<double, N>& lhs, const double (
 }
 
 template <size_t N>
-std::array<double, N> operator/(std::array<double, N>&& lhs, const double (&rhs)[N]) {
-  for (size_t ii = 0; ii < N; ii++) {
-    lhs[ii] = MathUtils::divide_protected( lhs[ii],
-                                          rhs[ii]);
-  }
-  return lhs;
-}
-
-template <size_t N>
 std::array<double, N> operator/(const double (&lhs)[N], const std::array<double, N>& rhs) {
   std::array<double, N> result;// = std_copy(lhs) / rhs;
-  for (size_t ii = 0; ii < N; ii++) {
-    result[ii] = MathUtils::divide_protected( lhs[ii],
-                                             rhs[ii]);
-  }
-  return result;
-}
-
-template <size_t N>
-std::array<double, N> operator/(const double (&lhs)[N], std::array<double, N>&& rhs) {
-  std::array<double, N> result;
   for (size_t ii = 0; ii < N; ii++) {
     result[ii] = MathUtils::divide_protected( lhs[ii],
                                              rhs[ii]);

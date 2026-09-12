@@ -41,7 +41,7 @@ class RangeToPfixReference : public RangeComputation
   RangeToPfixReference & operator = (const RangeToPfixReference&) = delete;
 
   void set_reference_data() override;
-  void update ();
+  void update() override;
 
  protected:
   void update_using_cartesian() override;
