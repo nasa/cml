@@ -1,0 +1,3 @@
+mslUnitTest.geodetic_altitude
+mslUnitTest.geodetic_latitude
+mslUnitTest.longitude

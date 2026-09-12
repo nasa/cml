@@ -74,6 +74,7 @@ PROGRAMMERS:
 #include "cml/models/environment/gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh"
 #include "cml/models/environment/gravity/gravity_fidelity_manager/include/gravity_fidelity_manager.hh"
 #include "cml/models/environment/gravity/lunar_GRGM900C/data/include/GRGM900C_lunar_gravity.hh"
+#include "cml/models/environment/msl/include/msl_alt.hh"
 #include "cml/models/fhw/effectors/piston_thruster/include/piston_thruster_group.hh"
 #include "cml/models/fhw/effectors/piston_thruster/include/piston_thruster.hh"
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_build_trail.hh"
