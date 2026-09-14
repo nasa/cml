@@ -335,7 +335,7 @@ Purpose:(Internal activation sub-method for case where reference is relative\
           "flipped so that the event will trigger when the watch variable\n "
           "flips value relative to its value at activation.\n");
     }
-    reference = !variable_at_activation;
+    reference = static_cast<watchType>(!variable_at_activation);
   }
   /***************************************************************************/
   // int

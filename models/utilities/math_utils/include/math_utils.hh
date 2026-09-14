@@ -378,14 +378,14 @@ Linear Algebra Section
   template <size_t N>
   static std::array<double, N> diff( const double (&lhs)[N],
                                      const double (&rhs)[N]) {
-    std::array<double, N> result;
+    std::array<double, N> result{};
     for (size_t ii = 0; ii < N; ++ii) { result[ii] = lhs[ii] - rhs[ii];}
     return result;
   }
   template <size_t N>
   static std::array<double, N> sum( const double (&lhs)[N],
                                     const double (&rhs)[N]) {
-    std::array<double, N> result;
+    std::array<double, N> result{};
     for (size_t ii = 0; ii < N; ++ii) { result[ii] = lhs[ii] + rhs[ii];}
     return result;
   }

@@ -41,7 +41,7 @@ class CMLSimpleRingBuffer {
 /*****************************************************************************
 Constructor/ destructor
 *****************************************************************************/
-  CMLSimpleRingBuffer(std::string name_)
+  explicit CMLSimpleRingBuffer(std::string name_)
     :
     name(std::move(std::move(name_))),
     max_buffer_size( data.max_size())

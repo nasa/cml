@@ -104,7 +104,7 @@ class WatchValuesAdjustLogging : public WatchValuesBase<varT> {
   EventActionAdjustLogging event_action;
   double & log_cycle; /* (s) New logging frequency */
   bool   & log_now;   /* (--) log and reset the logging schedule immediately.*/
-  WatchValuesAdjustLogging(TrickLogging & logging_in)
+  explicit WatchValuesAdjustLogging(TrickLogging & logging_in)
     :
     event_action( logging_in),
     log_cycle(    event_action.log_cycle),
@@ -129,7 +129,7 @@ class WatchValuesAdjustLoggingGroup : public WatchValuesBase<varT> {
     Reference to event_action.log_cycle.*/
   bool   & log_now;   /* (--)
     Reference to event_action.log_now.*/
-  WatchValuesAdjustLoggingGroup(TrickLogging & logging_in)
+  explicit WatchValuesAdjustLoggingGroup(TrickLogging & logging_in)
     :
     event_action( logging_in),
     group_name(   event_action.group_name),
@@ -151,7 +151,7 @@ class WatchValuesAdjustLoggingGroup : public WatchValuesBase<varT> {
 template <typename varT>
 class WatchValuesLogNow : public WatchValuesBase<varT> {
  public:
-  WatchValuesLogNow(TrickLogging & logging_in)
+  explicit WatchValuesLogNow(TrickLogging & logging_in)
      :
      logging(logging_in){}
   WatchValuesLogNow (const WatchValuesLogNow& rhs) = delete;
@@ -174,7 +174,7 @@ template <typename varT>
 class WatchValuesLogNowPost : public WatchValuesBase<varT> {
  public:
   EventActionLogNow event_action;
-  WatchValuesLogNowPost(TrickLogging & logging_in)
+  explicit WatchValuesLogNowPost(TrickLogging & logging_in)
     :
     event_action( logging_in)
   {

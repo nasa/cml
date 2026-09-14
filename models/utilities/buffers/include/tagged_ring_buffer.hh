@@ -67,7 +67,7 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
     to the specified tag (true).*/
 
 
-  CMLTaggedRingBuffer( std::string name)
+  explicit CMLTaggedRingBuffer( const std::string& name)
     :
     CMLSimpleRingBuffer<CMLTaggedRingBufferMember<T_Tag, T_Data>>(name)
   {}

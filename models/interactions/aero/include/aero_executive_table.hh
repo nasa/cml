@@ -173,6 +173,9 @@ public:
 
   ~AeroExecutiveTable() override = default;
 
+  AeroExecutiveTable (const AeroExecutiveTable &) = delete;
+  AeroExecutiveTable & operator = (const AeroExecutiveTable &) = delete;
+
   void change_table(unsigned int new_ix);
   void change_table(const std::string & new_name);
   void change_table(AeroTableSetBase & new_table);
@@ -198,12 +201,5 @@ protected:
   void scale_damping_bias();
   void increment_coeffs_with_bias();
   void increment_damping_coeffs_with_bias();
-
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroExecutiveTable (const AeroExecutiveTable &);
-  AeroExecutiveTable & operator = (const AeroExecutiveTable &);
 };
 #endif

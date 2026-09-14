@@ -11,6 +11,7 @@ PROGRAMMERS:
 #ifndef CML_THRESHOLD_CONSTRAINT_HH
 #define CML_THRESHOLD_CONSTRAINT_HH
 
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 
@@ -71,15 +72,15 @@ class ThresholdInstantConstraint : public Constraint
   /*******************************************************************
   Constructor / Destructor
   ********************************************************************/
-  ThresholdInstantConstraint (const T & var)
+  explicit ThresholdInstantConstraint (const T & var)
     :
     Constraint(NumThresholds),
     variable(var),
     tests()
   {
-    for (auto & test : tests) {
-      test_list.push_back(&test);
-    }
+    // Add all tests to the test list.
+    std::transform(tests.begin(), tests.end(), std::back_inserter(test_list),
+      [](ConstraintTest* test){return test;});
   }
   ThresholdInstantConstraint (const T & var,
                               ConstraintSet & set)
@@ -170,9 +171,9 @@ class ThresholdTimedConstraint : public Constraint
     delta_time(delta_time_),
     tests()
   {
-    for (auto & test : tests) {
-      test_list.push_back(&test);
-    }
+    // Add all tests to the test list.
+    std::transform(tests.begin(), tests.end(), std::back_inserter(test_list),
+      [](ConstraintTest* test){return test;});
   }
   /********************************************************************/
   ThresholdTimedConstraint (const T & variable_,
@@ -311,9 +312,9 @@ class ThresholdTimedConstraintSpecData : public Constraint
     use_linear_interpolation(true),
     test_violation_value()
   {
-    for (auto & test : tests) {
-      test_list.push_back(&test);
-    }
+    // Add all tests to the test list.
+    std::transform(tests.begin(), tests.end(), std::back_inserter(test_list),
+      [](ConstraintTest* test){return test;});
   }
   ThresholdTimedConstraintSpecData (const T & variable_,
                                     const double & delta_time_,
@@ -521,10 +522,6 @@ class ThresholdTimedConstraintSpecData : public Constraint
       mapped_ix[test_ix] = spec_ix;
     }
 
-
-    // The fraction -- and the way it is used -- differs between algorithms.
-    double frac = 0.0; // fraction of interval between spec values
-
     if (use_linear_interpolation) {
       /* t = t_0 + f * (t_1 - t_0)
          with f = (x - x_0) / (x_1 - x_0)
@@ -536,8 +533,8 @@ class ThresholdTimedConstraintSpecData : public Constraint
          - the non-subscripted values are the test values.*/
       for (size_t test_ix = 1; test_ix <= num_tests-2; ++test_ix) {
         size_t map_ix = mapped_ix[test_ix];
-        frac = (tests[test_ix].threshold - threshold_spec[map_ix]) /
-            (threshold_spec[map_ix+1] -  threshold_spec[map_ix]);
+        const double frac = (tests[test_ix].threshold - threshold_spec[map_ix]) /
+                            (threshold_spec[map_ix+1] -  threshold_spec[map_ix]);
         tests[test_ix].time_limit = time_spec[map_ix] +
           frac * (time_spec[map_ix+1] -  time_spec[map_ix]);
       }
@@ -587,8 +584,8 @@ class ThresholdTimedConstraintSpecData : public Constraint
         // Note -- div-0 protected: log_param_ratios=0 would require two
         // adjacent entries in threshold_spec to be equal. That is protected
         // against by ensuring that threshold_spec must be monotonic.
-        frac = std::log10( tests[test_ix].threshold / threshold_spec[map_ix]) /
-                    log_threshold_ratios[map_ix];
+        const double frac = std::log10( tests[test_ix].threshold / threshold_spec[map_ix]) /
+                                        log_threshold_ratios[map_ix];
         tests[test_ix].time_limit = time_spec[map_ix] *
                                   std::pow( time_spec[map_ix+1] / time_spec[map_ix],
                                             frac);

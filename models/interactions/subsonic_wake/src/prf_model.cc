@@ -62,12 +62,13 @@ WakePrfModel::initialize()
   indep_eff_diam.load_data(effective_diam_axis);
 
   // Load dependent data
-  std::vector<size_t> dim_list;
-  dim_list.push_back(1);
-  dim_list.push_back(mach_axis.size());
-  dim_list.push_back(alpha_axis.size());
-  dim_list.push_back(trail_diam_axis.size());
-  dim_list.push_back(effective_diam_axis.size());
+  const std::vector<size_t> dim_list {
+    1,
+    mach_axis.size(),
+    alpha_axis.size(),
+    trail_diam_axis.size(),
+    effective_diam_axis.size()
+  };
   prf_lookup.load_data(prf_table, dim_list);
 
   // Link it all together

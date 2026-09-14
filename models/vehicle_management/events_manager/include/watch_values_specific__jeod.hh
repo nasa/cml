@@ -33,7 +33,7 @@ class WatchValuesGravityAdjust : public WatchValuesBase<varT> {
        the spherical harmonics degree and order will be assigned; this event
        execution will assign degree = order.  For spherical gravity, use 0.*/
  public:
-  WatchValuesGravityAdjust( jeod::SphericalHarmonicsGravityControls & grav_controls_)
+  explicit WatchValuesGravityAdjust( jeod::SphericalHarmonicsGravityControls & grav_controls_)
     :
     WatchValuesBase<varT>(),
     grav_controls(grav_controls_)

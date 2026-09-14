@@ -105,7 +105,7 @@ class EventActionAdjustLogging : public EventActionBase {
  public:
   double log_cycle{1.0}; /* (s) New logging frequency */
   bool   log_now{false};   /* (--) log and reset the logging schedule immediately.*/
-  EventActionAdjustLogging(TrickLogging & logging_in)
+  explicit EventActionAdjustLogging(TrickLogging & logging_in)
     :
     logging(logging_in)
   {}
@@ -145,7 +145,7 @@ class EventActionAdjustLoggingGroup : public EventActionBase {
     Default: true (group is enabled).*/
   double log_cycle{1.0}; /* (s) New logging frequency */
   bool   log_now{};   /* (--) log and reset the logging schedule immediately.*/
-  EventActionAdjustLoggingGroup(TrickLogging & logging_in)
+  explicit EventActionAdjustLoggingGroup(TrickLogging & logging_in)
     :
     logging(logging_in)
   {}
@@ -186,7 +186,7 @@ class EventActionLogNow : public EventActionBase {
  protected:
   TrickLogging & logging;
  public:
-  EventActionLogNow(TrickLogging & logging_in)
+  explicit EventActionLogNow(TrickLogging & logging_in)
      :
      logging(logging_in)
   {}
