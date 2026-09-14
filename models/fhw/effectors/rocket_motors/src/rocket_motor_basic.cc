@@ -31,7 +31,7 @@ RocketMotor_Basic::RocketMotor_Basic(
         DynamicMassBodyPropertiesInterface & mass_properties_in,
         const double                       & time_in,
         const double                       * veh_cm_in,
-        bool                                 use_mass_string_in)
+        const bool                           use_mass_string_in)
   :
   mass_group(mass_group_in),
   prop_mass_body(mass_body_in),
@@ -39,23 +39,7 @@ RocketMotor_Basic::RocketMotor_Basic(
   dyn_mass_properties(mass_properties_in),
   time_now(time_in),
   veh_cm(veh_cm_in),
-  commanded(false),
-  force_mass_update(true),
-  motor_can_be_shutdown(false),
-  thrust_magnitude(0.0),
-  thrust_unit_motor{0.0, 0.0, 0.0},
-  position{0.0, 0.0, 0.0},
-  mass_flow_rate(0.0),
-  T_struc_to_motor_frame{{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
-  thrust{0.0, 0.0, 0.0},
-  moment{0.0, 0.0, 0.0},
-  status(Inactive),
-  use_mass_string(use_mass_string_in),
-  dt(0.0),
-  time_last(0.0),
-  command_time(0.0),
-  burnout_time(0.0),
-  thrust_unit_struc{0.0, 0.0, 0.0}
+  use_mass_string(use_mass_string_in)
 {
   if (!use_mass_string) {
     mass_group_internal.add_mass_to_group(prop_mass_body);

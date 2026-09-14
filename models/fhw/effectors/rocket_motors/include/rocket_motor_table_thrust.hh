@@ -37,10 +37,10 @@ public:
     PropConsumptionMburn = 3
   };
 
-  double thrust_fraction; /* (--) Current thrust divided by thrust_max. */
+  double thrust_fraction{0.0}; /* (--) Current thrust divided by thrust_max. */
 
 protected:
-  double thrust_max;      /* (N)  Maximum possible output thrust contribution
+  double thrust_max{0.0};      /* (N)  Maximum possible output thrust contribution
                                   of this motor. */
 
   TableLookupSet           table_set;    /* (--) Interpolation tables manager.*/
@@ -55,18 +55,18 @@ protected:
   TableIndependentVariable table_time;   /* (--) Time-points table. Values
                                                  assume units: s */
 
-  double isp;             /* (s)  Current Specific Impulse. */
-  double mburn;           /* (kg) Mass burned according to the mburn-table */
-  double delta_mass;      /* (kg)
+  double isp{0.0};             /* (s)  Current Specific Impulse. */
+  double mburn{0.0};           /* (kg) Mass burned according to the mburn-table */
+  double delta_mass{0.0};      /* (kg)
        Mass removed on any given frame. This value resets every cycle.
        This value is positive if the current record of consumable mass
        is larger than the table-driven record of how much mass should remain.
        Used only in the case of consumption_type = PropConsumptionBurn. */
-  double elapsed_time;    /* (s) Time since the motor started. Used as
+  double elapsed_time{0.0};    /* (s) Time since the motor started. Used as
                                  independent variable for table lookup. */
-  ConsumptionType consumption_type; /* (--)   Consumption-type enumeration */
-  double prop_mass_init;            /* (kg)   Initial consumable mass. */
-  static constexpr double grav_sea_level = 9.80665; /* (m/s2)
+  ConsumptionType consumption_type{Undefined}; /* (--)   Consumption-type enumeration */
+  double prop_mass_init{0.0};  /* (kg)   Initial consumable mass. */
+  static constexpr double grav_sea_level{9.80665}; /* (m/s2)
                                  Gravity at sea-level for Isp calc. */
 
   // The public constructors all call this protected constructor, which

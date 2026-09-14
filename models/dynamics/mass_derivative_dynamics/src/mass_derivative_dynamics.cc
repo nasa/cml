@@ -55,27 +55,7 @@ MassDerivativeDynamics::MassDerivativeDynamics(
   intrinsic_prop_inertia(intrinsic_prop_inertia_),
   R_propellant( R_propellant_),
   R_nozzle( R_nozzle_),
-  body( body_),
-
-  mass_order(2),
-  R_propellant_order(2),
-  J_order(2),
-  pseudo_torque{0.0, 0.0, 0.0},
-  pseudo_force{0.0, 0.0, 0.0},
-  pseudo_dv{0.0, 0.0, 0.0},
-
-  last_time(0.0),
-  dt (0.0),
-  include_velocity_effect(false),
-  m_dot(0.0),
-  r_nozzle{0.0, 0.0, 0.0},
-  r_propellant{0.0, 0.0, 0.0},
-  R_propellant_dot{0.0, 0.0, 0.0},
-  r_nozzle_skew{{0.0, 0.0, 0.0},{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}},
-  r_propellant_skew{{0.0, 0.0, 0.0},{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}},
-  R_propellant_dot_skew{{0.0, 0.0, 0.0},{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}},
-  torque_mx{{0.0, 0.0, 0.0},{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}},
-  J_dot{{0.0, 0.0, 0.0},{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}}
+  body( body_)
 {
   subscribe_name = "idot_dynamics";
   // R_propellant_history is a 3-array of history data for each component

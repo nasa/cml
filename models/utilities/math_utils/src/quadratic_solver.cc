@@ -7,21 +7,11 @@ PROGRAMMERS:
 
 #include "../include/quadratic_solver.hh"
 #include <cmath>
-#include <cfloat>
+#include <limits>
 
 /*****************************************************************************
 Constructor
 *****************************************************************************/
-QuadraticSolver::QuadraticSolver()
-  :
-  a(0.0),
-  b(0.0),
-  c(0.0),
-  root1(0.0),
-  root2(0.0),
-  roots_exist(false)
-{}
-/****************************************************************************/
 QuadraticSolver::QuadraticSolver(
   double a_,
   double b_,
@@ -30,12 +20,11 @@ QuadraticSolver::QuadraticSolver(
   :
   a(a_),
   b(b_),
-  c(c_),
-  root1(0.0),
-  root2(0.0),
-  roots_exist(false)
+  c(c_)
 {
-  if (compute_roots) {solve();}
+  if (compute_roots) {
+    solve();
+  }
 }
 
 /*****************************************************************************
@@ -47,7 +36,8 @@ Purpose:
 *****************************************************************************/
 bool QuadraticSolver::solve( bool compute_roots)
 {
-  root1 = root2 = 0.0;
+  root1 = 0.0;
+  root2 = 0.0;
   roots_exist = false;
 
   // normalize if b^2 overflows
@@ -62,12 +52,12 @@ bool QuadraticSolver::solve( bool compute_roots)
   if ( compute_roots && b*b >= std::abs(a*c)*1E16 ) {
     // approximate the smaller root
     // (primarily affected by the cancellation)
-    if (std::abs(c) / DBL_MAX < std::abs(b)) {
+    if (std::abs(c) / std::numeric_limits<double>::max() < std::abs(b)) {
       root1 = -c/b;
       roots_exist = true;
     }
     // approximate the larger root
-    if (std::abs(b) / DBL_MAX < std::abs(a)) {
+    if (std::abs(b) / std::numeric_limits<double>::max() < std::abs(a)) {
       root2 = -b/a;
       // If the smaller root was not found, duplicate the larger root
       if (!roots_exist) {

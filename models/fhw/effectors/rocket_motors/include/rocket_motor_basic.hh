@@ -43,13 +43,13 @@ protected:
      However, because of the potential for race-conditions between two
      groups managing the same mass, if a MassGroup exists, it should be
      passed in at construction time. */
-  DynamicMassBody                    * prop_mass_body; /* (--)
+  DynamicMassBody                    * prop_mass_body{nullptr}; /* (--)
      pointer to the propellant mass-body.
      When the model is used with propellant being drawn from a single tank,
      this is that tank.
      When the model is used with propellant being drawn from a string, this
      is nullptr. */
-  DynamicMassString                  * prop_mass_string; /* (--)
+  DynamicMassString                  * prop_mass_string{nullptr}; /* (--)
      pointer to the propellant mass-string.
      When the model is used with propellant being drawn from a mass-string,
      this is that string.
@@ -65,22 +65,22 @@ protected:
      DynamicMassBodyPropertiesInterface). */
 
   const double & time_now; /* (s)   Current time during the model run */
-  const double * veh_cm;   /* (--)
+  const double * veh_cm{nullptr};  /* (--)
                             3-vec position of the vehicle-CoM in struc frm */
 
 public:
   // Input values
   RocketMotorDispersions dispersions; /* (--) dispersion values.*/
 
-  bool   commanded;          /* (--)   True if command sent to ignite */
-  bool   force_mass_update;  /* (--)
+  bool   commanded{false};         /* (--)   True if command sent to ignite */
+  bool   force_mass_update{true};  /* (--)
         Flag controlling whether to force mass updates to propagate through the
         mass-tree at the time they are applied versus waiting for
         a regularly scheduled mass-group update.  If the mass-group is NOT being
         externally updated (which is likely if the internal mass-group is being
         used), then this flag should be True or the mass tree will never update.
         Default: true. */
-  bool   motor_can_be_shutdown; /* (--)
+  bool   motor_can_be_shutdown{false}; /* (--)
         Additional control flag based on the interpretation of the commanded
         flag.  If this is false, then once commanded the motor will run until
         it exhausts its propellant
@@ -90,24 +90,24 @@ public:
         In either case, if the motor exhausts its propellant it will shutdown
         automatically with status=Finished.
         Default: false*/
-  double thrust_magnitude;     /* (N)  Magnitude of thrust */
-  double thrust_unit_motor[3]; /* (--) Thrust direction in the motor frame */
-  double position[3];          /* (m)  Reference position of action for the
+  double thrust_magnitude{0.0};  /* (N)  Magnitude of thrust */
+  double thrust_unit_motor[3]{}; /* (--) Thrust direction in the motor frame */
+  double position[3]{};          /* (m)  Reference position of action for the
                                          motor expressed in structural frame.
                                          Used to generate moment. */
-  double mass_flow_rate; /* (kg/s) Rocket mass burn rate */
+  double mass_flow_rate{0.0}; /* (kg/s) Rocket mass burn rate */
 
   // input / output
-  double T_struc_to_motor_frame[3][3]; /* (--)
+  double T_struc_to_motor_frame[3][3]{{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}}; /* (--)
             Input as the nominal transformation from struc to the motor
             frame.  Internally modified to provide the transformation after
             dispersions have been applied.*/
 
   // output
-  double thrust[3];    /* (N)   Output thrust contribution of this motor,
-                                expressed in structural frame */
-  double moment[3];    /* (N*m) Moment of this motor, expressed in structural
-                                frame */
+  double thrust[3]{}; /* (N) Output thrust contribution of this motor,
+                             expressed in structural frame */
+  double moment[3]{}; /* (N*m) Moment of this motor, expressed in structural
+                               frame */
 
   enum MotorStatus {
     Inactive, // Motor has not yet fired or has been shut down before depleting
@@ -117,7 +117,7 @@ public:
   };
 
 protected:
-  MotorStatus status;  /* (--)  Current status of this motor. */
+  MotorStatus status{Inactive};  /* (--)  Current status of this motor. */
   DynamicMassGroup  mass_group_internal; /* (--)
       An internally-used dynamic-mass-group, used for ensuring the changing
       mass properties are propagated at the same calling rate as this model.
@@ -125,17 +125,17 @@ protected:
       threads, this can produce a race condition with the existing group.
       In this situation, the existing group should be passed in at
       construction time. */
-  bool   use_mass_string; /* (--)
+  bool   use_mass_string{false}; /* (--)
       Indicates whether the motor is drawing mass off a single body (false)
       or a string of bodies (true).
       Set based on which constructor is used. */
 
-  double dt;           /* (s)   Model cycle time */
-  double time_last;    /* (s)   Last time update() was executed */
-  double command_time; /* (s)   Time at which ignition command is received */
-  double burnout_time; /* (s)   Time of burnout, when tailoff ends */
+  double dt{0.0};           /* (s)   Model cycle time */
+  double time_last{0.0};    /* (s)   Last time update() was executed */
+  double command_time{0.0}; /* (s)   Time at which ignition command is received */
+  double burnout_time{0.0}; /* (s)   Time of burnout, when tailoff ends */
 
-  double thrust_unit_struc[3]; /* (--) Thrust direction in the struc frame */
+  double thrust_unit_struc[3]{}; /* (--) Thrust direction in the struc frame */
 
   // The public constructors all call this protected constructor, which
   // eliminates the need to have four nearly-identical initialization lists.

@@ -51,23 +51,8 @@ RocketMotor_MultiNozzle::RocketMotor_MultiNozzle(
                            time,
                            veh_cm_in,
                            use_mass_string_in),
-  atmos_pressure(atm_press),
-  motor_lin_flex(nullptr),
-  motor_rot_flex(nullptr),
-  table_is_net_thrust(false),
-  compute_cosine_losses(false),
-  atm_press_adjust(false),
-  cosine_loss_scale_factor(1.0),
-  net_roll_torq(0.0),
-  thrust_vac{0.0, 0.0, 0.0},
-  thrust_vac_mag(0.0),
-  using_flex(false),
-  flex_threshold(1.0E-12),
-  num_flex_elements(0),
-  num_noz(0)
+  atmos_pressure(atm_press)
 {
-  nozzles_ptr_vec.clear();
-
   // thrust_unit_motor is not used for a multi-nozzle configuration because the
   // direction is determined by the nozzle directions.
   // So set it to an arbitrary unit vector so its absence does not trigger any

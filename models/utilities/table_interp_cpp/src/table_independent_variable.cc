@@ -32,25 +32,7 @@ TableIndependentVariable::TableIndependentVariable(
     const double    &variable_in,
     double           frac_eps_in)
   :
-  perform_full_search(false),
-  fraction(0.0),
-  prox_override(true),
-  index_prox(0),
-  index(0),
   variable(variable_in),
-  size(0),
-  data_loaded(false),
-  initialized(false),
-  table_values_increasing(true),
-  off_table_front(false),
-  off_table_back(false),
-  continuity(TableIndependentVariable::Linear),
-  back_value(0.0),
-  front_value(0.0),
-  max_value(0.0),
-  min_value(0.0),
-  delta(0.0),
-  modified_value(0.0),
   FRAC_EPS(frac_eps_in)
 {
   data.clear();

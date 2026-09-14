@@ -29,13 +29,6 @@ Method: SeparationState
 Purpose: (Constructor)
 ********************************************************************************/
 SeparationState::SeparationState()
-  :
-  generate_euler_angles(true),
-  separation_distance(0.0),
-  separation_rate(0.0),
-  frames_subscribed(false),
-  source(nullptr),
-  subject(nullptr)
 {
   subscribe_name = "SeparationState:";
 
@@ -48,7 +41,7 @@ SeparationState::SeparationState( const std::string & name_)
   SeparationState()
 {
   subscribe_name += name_;
-  subscribe_name += ":";
+  subscribe_name += ':';
 }
 
 

@@ -30,28 +30,28 @@ protected:
   // external references
   const double & atmos_pressure; /* (N/m2) For back-pressure
                                            considerations */
-  const double * motor_lin_flex; /* (m)    Linear flex perturbations,
-                                           3*num_noz in length */
-  const double * motor_rot_flex; /* (rad)  Rotational flex perturbation,
-                                           3*num_noz in length */
+  const double * motor_lin_flex{nullptr}; /* (m)    Linear flex perturbations,
+                                                    3*num_noz in length */
+  const double * motor_rot_flex{nullptr}; /* (rad)  Rotational flex perturbation,
+                                                    3*num_noz in length */
 
 public:
-  bool table_is_net_thrust;   /* (--)
+  bool table_is_net_thrust{false};   /* (--)
                Flag indicates that the data tables provided already account
                for cosine losses and other factors. In this case, the tabulated
                value represents the magnitude of the vector sum of the nozzle
                thrusts, not the sum of their vector magnitudes.
                Default: false. */
-  bool compute_cosine_losses; /* (--)
+  bool compute_cosine_losses{false}; /* (--)
                Flag indicating whether to compute cosine losses by accumulating
                nozzle thrust vectors.
                Valid only in the case that table_is_net_thrust = true.
                If true, code will compute the public cosine_loss_scale_factor.
                If false, code will use the input value, which defaults to 1.0.
                Default: false. */
-  bool   atm_press_adjust;    /* (--)
+  bool   atm_press_adjust{false};    /* (--)
                Adjust the thrust based on the atmospheric pressure */
-  double cosine_loss_scale_factor; /* (--)
+  double cosine_loss_scale_factor{1.0}; /* (--)
                A scale factor to convert from raw-thrust values (before cosine
                losses are included) to net-thrust values (including cosine
                losses).
@@ -59,23 +59,23 @@ public:
                Default 1.0. */
 
   // Output:
-  double net_roll_torq;       /* (N*m) Roll torque */
-  double thrust_vac[3];       /* (N)   Vacuum thrust vector. */
-  double thrust_vac_mag;      /* (N)   Magnitude of vacuum thrust vector. */
+  double net_roll_torq{0.0};  /* (N*m) Roll torque */
+  double thrust_vac[3]{};     /* (N)   Vacuum thrust vector. */
+  double thrust_vac_mag{0.0}; /* (N)   Magnitude of vacuum thrust vector. */
 
 protected:
-  bool   using_flex;          /* (--)  Factor in perturbations due to
-                                       flex if true */
-  double flex_threshold;      /* (rad) Angle below which rotational flex
-                                       perturbations are considered negligible.
-                                       Default: 1.0E-12. */
-  size_t num_flex_elements;   /* (--)  Number of flex elements. This must be
+  bool   using_flex{false}; /* (--) Factor in perturbations due to
+                                    flex if true */
+  double flex_threshold{1.0E-12}; /* (rad) Angle below which rotational flex
+                                           perturbations are considered negligible.
+                                           Default: 1.0E-12. */
+  size_t num_flex_elements{0}; /* (--) Number of flex elements. This must be
                                        3x larger than the number of nozzles. It
                                        is passed in at initialization as a
                                        sanity check.*/
   std::vector<RocketMotorNozzle *> nozzles_ptr_vec; /* (--)
         Vector of pointers to nozzles used by this motor.*/
-  size_t num_noz;             /* (--)  Number of nozzles on motor */
+  size_t num_noz{0};             /* (--)  Number of nozzles on motor */
 
   // The public constructors all call this protected constructor, which
   // eliminates the need to have four nearly-identical initialization lists.

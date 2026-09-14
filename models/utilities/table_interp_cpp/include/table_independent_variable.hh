@@ -84,24 +84,24 @@ public:
 
 
 // Behavioral inputs:
-  bool perform_full_search; /* (--)
+  bool perform_full_search{false}; /* (--)
        Flag indicating that a global binary search should be performed every
        time.  This is used when the independent variable is random; when the
        variable is sequential, a sweeping search (default) is more efficient.
        Default: false. */
 
 // Variables with public access for monitoring purposes:
-  double fraction; /* (--)
+  double fraction{0.0}; /* (--)
        Represents the location of the data value as a fraction of the
        interval between adjacent calibration points. fraction = 0.0 means at
        the lower index.*/
-  bool prox_override; /* (--)
+  bool prox_override{true}; /* (--)
        Instruction to the table manager to use index_prox instead of index
        for cases involving discrete interpretations of this variable.
        Indicates that the variable is in very close proximity to a
        calibrated value, and the index associated with that value should be
        used instead of the regular index.*/
-  size_t index_prox; /* (--)
+  size_t index_prox{0}; /* (--)
        The index of the data point that is very close to the value of the
        independent variable.  This is only used in conjunction with
        prox_override = true. */
@@ -110,7 +110,7 @@ public:
        The array of calibrated data points for this independent variable */
 
 protected:
-  size_t index; /* (--)
+  size_t index{0}; /* (--)
        The index of the calibrated data point whose value immediately precedes
        (or is equal to) the value of the independent variable.
        For a data set that is increasing, this is the closest data point that
@@ -122,45 +122,46 @@ private:
   const double  &variable; /* (--)
        reference to the value used as the independent variable. */
   std::string name;        /* (--) name of this independent variable */
-  size_t size; /* (--)
+  size_t size{0}; /* (--)
        length of the data table ("array") for this independent variable. */
 
-  bool data_loaded;        /* (--)
+  bool data_loaded{false}; /* (--)
        Flag to indicate whether the data is loaded into the data table array.
        Default: False */
-  bool initialized; /* (--)
+  bool initialized{false}; /* (--)
        initialize() method successfully ran.
        Default: False*/
-  bool table_values_increasing; /* (--)
+  bool table_values_increasing{true}; /* (--)
        Flag indicating whether the data increases with index.
        Default: True.*/
-  bool off_table_front;      /* (--)
+  bool off_table_front{false}; /* (--)
        Flag indicating that lookup value is off the front end of data table:
        - if table-values increase, the value of the independent variable is
        less than that of the the first calibration point
        - if table-values decrease, the value of the independent variable is
        greater than that of the the first calibration point.
        Default: False*/
-  bool off_table_back;     /* (--)
+  bool off_table_back{false}; /* (--)
       flag indicating that the lookup value is off the back end of data table.
       See also off_table_front.
       Default: False. */
-  Continuity continuity;   /* (--) determines how the independent variable
-      handles values that are out of bounds. */
+  Continuity continuity{TableIndependentVariable::Linear}; /* (--)
+      determines how the independent variable handles values that are out of
+      bounds. */
 
-  double back_value;       /* (--) last value in vector data. */
-  double front_value;      /* (--) first value in vector data. */
-  double max_value;        /* (--) largest value in vector data; equals
+  double back_value{0.0};     /* (--) last value in vector data. */
+  double front_value{0.0};    /* (--) first value in vector data. */
+  double max_value{0.0};      /* (--) largest value in vector data; equals
       front_value if values are decreasing, or back_value if values are
       increasing. */
-  double min_value;        /* (--) smallest value in vector data; equals
+  double min_value{0.0};      /* (--) smallest value in vector data; equals
       front_value if values are increasing, or back_value if values are
       decreasing. */
-  double delta;            /* (--) difference between maxValue and minValue. */
-  double modified_value;   /* (--) value of independent variable after rounding
+  double delta{0.0};          /* (--) difference between maxValue and minValue. */
+  double modified_value{0.0}; /* (--) value of independent variable after rounding
       or truncating has been applied, if needed */
 
-  const double FRAC_EPS;   /* (--) the gate value to consider fraction as zero. */
+  const double FRAC_EPS; /* (--) the gate value to consider fraction as zero. */
 
 public:
   explicit TableIndependentVariable( const double &variable_in,

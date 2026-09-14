@@ -41,10 +41,10 @@ class MassDerivativeDynamics : public SubscriptionBase
   const double (& intrinsic_prop_inertia)[3][3]; /* (--)
         Reference to the tensor representing the intrinsic
         inertia of the propellant.*/
-  const double * R_propellant; /* (--)
+  const double * R_propellant{nullptr}; /* (--)
         Reference to the position of the center of mass of the
         propellant; expressed relative to structural frame.*/
-  const double * R_nozzle; /* (--)
+  const double * R_nozzle{nullptr}; /* (--)
         Reference to the position of the point at which mass is released
         (typically a rocket motor nozzle -- hence the name);
         expressed relative to the structural frame of the root body, which
@@ -56,24 +56,24 @@ class MassDerivativeDynamics : public SubscriptionBase
 
  public:
   // INPUTS (model configuration)
-  size_t mass_order;   /* (--)
+  size_t mass_order{2};   /* (--)
       The desired order of the backward-difference operator to be used
       when computing m-dot.*/
-  size_t R_propellant_order;  /* (--)
+  size_t R_propellant_order{2};  /* (--)
       The desired order of the backward-difference operator to be used
       when computing R-dot.*/
-  size_t J_order;  /* (--)
+  size_t J_order{2};  /* (--)
       The desired order of the backward-difference operator to be used
       when computing J-dot.*/
 
   // OUTPUTS:
-  double pseudo_torque[3]; /* (N*m)
+  double pseudo_torque[3]{}; /* (N*m)
       The pseudo-torque necessary to address the assumption of constant
       inertia in the state integration.*/
-  double pseudo_force[3]; /* (N)
+  double pseudo_force[3]{}; /* (N)
       The pseudo-force necessary to address the assumption of constant
       mass in the state integration.*/
-  double pseudo_dv[3]; /* (m/s)
+  double pseudo_dv[3]{}; /* (m/s)
       The pseudo-velocity associated with the reassignment of the
       center-of-mass within the vehicle structure.*/
 
@@ -88,37 +88,37 @@ class MassDerivativeDynamics : public SubscriptionBase
           elements of the inertia tensor. */
 
  protected:
-  double last_time; /* (s)
+  double last_time{0.0}; /* (s)
         The value of dynamic-time on the most recent evaluation of
         derivatives. */
-  double dt; /* (s)
+  double dt{0.0}; /* (s)
         The time elapsed since the previous evaluation of derivatives. */
-  bool include_velocity_effect; /* (--)
+  bool include_velocity_effect{false}; /* (--)
         Indicates whether to include the velocity effect.  Default false. */
-  double m_dot; /* (kg/s)
+  double m_dot{0.0}; /* (kg/s)
         The time-derivative of the propellant mass. */
-  double r_nozzle[3]; /* (m)
+  double r_nozzle[3]{}; /* (m)
         The position of the nozzle relative to the center of mass
         expressed in the structural frame. */
-  double r_propellant[3]; /* (m)
+  double r_propellant[3]{}; /* (m)
         The position of the propellant relative to the center of mass
         expressed in the structural frame. */
-  double R_propellant_dot[3]; /* (m/s)
+  double R_propellant_dot[3]{}; /* (m/s)
         The vector representing the time-derivative
         of the structural position of the propellant.*/
 
-  double r_nozzle_skew[3][3]; /* (m)
+  double r_nozzle_skew[3][3]{}; /* (m)
         The skew matrix of the vector representing the position of the
         nozzle relative to the center of mass. */
-  double r_propellant_skew[3][3]; /* (m)
+  double r_propellant_skew[3][3]{}; /* (m)
         The skew matrix of the vector representing the position of the
         propellant relative to the center of mass. */
-  double R_propellant_dot_skew[3][3]; /* (m/s)
+  double R_propellant_dot_skew[3][3]{}; /* (m/s)
         The skew matrix of the vector representing the time-derivative
         of the structural position of the propellant.*/
-  double torque_mx[3][3]; /* (N*m*s)
+  double torque_mx[3][3]{}; /* (N*m*s)
         The multiplicative factor [K] in tau = [K] omega. */
-  double J_dot[3][3]; /* (kg*m2/s)
+  double J_dot[3][3]{}; /* (kg*m2/s)
         The derivative of the inertia tensor. */
 
  public:
@@ -132,6 +132,9 @@ class MassDerivativeDynamics : public SubscriptionBase
                           const double R_propellant_[3],
                           const double R_nozzle_[3],
                           jeod::DynBody & body_);
+
+  MassDerivativeDynamics (const MassDerivativeDynamics&) = delete;
+  MassDerivativeDynamics& operator = (const MassDerivativeDynamics&) = delete;
 
   void update();
   void update_force_torque() {update_force(); update_torque();}
@@ -147,9 +150,5 @@ class MassDerivativeDynamics : public SubscriptionBase
   void compute_R_propellant_dot();
   void compute_J_dot();
   void modify_velocity();
- private:
-  // Disable the copy/assignment operations
-  MassDerivativeDynamics (const MassDerivativeDynamics&);
-  MassDerivativeDynamics& operator = (const MassDerivativeDynamics&);
 };
 #endif

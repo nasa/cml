@@ -33,7 +33,7 @@ class SeparationState : public SubscriptionBase
  public:
    // The relative state is the state of "subject" relative to and
    // expressed in "source".  "subject" and "source" are protected.
-   bool generate_euler_angles; /* (--)
+   bool generate_euler_angles{true}; /* (--)
        Flag indicating whether it is necessary to compute the Euler angles
        from frame to frame.  Default: True. */
    jeod::RefFrameState  rel_state; /* (--)
@@ -45,22 +45,22 @@ class SeparationState : public SubscriptionBase
        entire object will not be updated. The relative transformation matrix
        and quaternion are in rel_state.rot.T_parent_this and
        rel_state.rot.Q_parent_this, respectively. */
-   double separation_distance; /* (m) magnitude of rel_state.trans.position. */
-   double separation_rate; /* (m/s)
+   double separation_distance{0.0}; /* (m) magnitude of rel_state.trans.position. */
+   double separation_rate{0.0}; /* (m/s)
      Rate at which the separation distance changes.
      The component of the relative velocity along the line
      separating the two points.*/
 
  protected:
-   bool frames_subscribed; /* (--)
+   bool frames_subscribed{false}; /* (--)
        The jeod::DynManager has subscriptions to the necessary frames on account
        of this instance.  Used to determine whether to unsubscribe. */
 
    // The state will be computed between two reference frames.
    // These are identified as "source" and "subject"
-   jeod::RefFrame * source;  /* (--) the root frame of the relative state,
+   jeod::RefFrame * source{nullptr};  /* (--) the root frame of the relative state,
                                      the "from" side of the relation. */
-   jeod::BodyRefFrame * subject;  /* (--) the other of the relative state, the "to"
+   jeod::BodyRefFrame * subject{nullptr};  /* (--) the other of the relative state, the "to"
                                           side of the relation. */
 
  public:
