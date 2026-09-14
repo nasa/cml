@@ -144,7 +144,7 @@ class EventActionAdjustLoggingGroup : public EventActionBase {
     same event that executes this action.
     Default: true (group is enabled).*/
   double log_cycle{1.0}; /* (s) New logging frequency */
-  bool   log_now{};   /* (--) log and reset the logging schedule immediately.*/
+  bool   log_now{false}; /* (--) log and reset the logging schedule immediately.*/
   explicit EventActionAdjustLoggingGroup(TrickLogging & logging_in)
     :
     logging(logging_in)

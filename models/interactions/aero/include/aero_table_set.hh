@@ -16,7 +16,6 @@ PROGRAMMERS:
 #ifndef CML_AERO_TABLE_SET_HH
 #define CML_AERO_TABLE_SET_HH
 #include<string>
-#include <utility>
 
 #include "aero_table_set_base.hh"
 #include "aero_executive_table.hh"
@@ -24,10 +23,10 @@ PROGRAMMERS:
 class AeroTableSet: public AeroTableSetBase
 {
 public:
-  AeroTableSet( std::string name_in,
+  AeroTableSet( const std::string & name_in,
                 AeroExecutiveTable & exec_table)
   :
-  AeroTableSetBase( std::move(name_in),
+  AeroTableSetBase( name_in,
                     exec_table.coefficients,
                     exec_table.uncertainty)
   {

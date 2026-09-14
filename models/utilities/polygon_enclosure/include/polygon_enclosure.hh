@@ -79,7 +79,7 @@ class PolygonEnclosure
  public:
   bool enabled{true}; /* (--)
     Model enabled flag.*/
-  const size_t num_pts; /* (--)
+  static constexpr size_t num_pts{N}; /* (--)
     External interface to output information about the size of this polygon.*/
 
 
@@ -91,8 +91,7 @@ Constructor
     const double & y_)
     :
     x(x_),
-    y(y_),
-    num_pts(N)
+    y(y_)
   {}
 
   PolygonEnclosure( const PolygonEnclosure&) = delete;
@@ -242,7 +241,7 @@ Purpose:
         "Cannot define xy data after the polygon has been initialized.\n"
         "Check configuration.\n");
     } else {
-      memcpy( vertices, vals, num_pts*2*sizeof(double));
+      std::memcpy( vertices, vals, sizeof(vertices));
     }
   }
 };
