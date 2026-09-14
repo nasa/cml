@@ -18,8 +18,6 @@ PROGRAMMERS:
 #include "constraint_set.hh"
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-
-#include <algorithm>
 #include <cstddef>
 
 
@@ -59,9 +57,7 @@ class IntervalInstantConstraint : public Constraint
     variable(var),
     tests()
   {
-    // Add all tests to the test list.
-    std::transform(tests.begin(), tests.end(), std::back_inserter(test_list),
-      [](ConstraintTest* test){return test;});
+    register_tests(tests);
   }
   /*******************************************************************/
   IntervalInstantConstraint (const T & var,
@@ -156,9 +152,7 @@ class IntervalTimedConstraint : public Constraint
     delta_time(delta_time_),
     tests()
   {
-    // Add all tests to the test list.
-    std::transform(tests.begin(), tests.end(), std::back_inserter(test_list),
-      [](ConstraintTest* test){return test;});
+    register_tests(tests);
   }
   /*******************************************************************/
   IntervalTimedConstraint (const T & variable_,

@@ -16,8 +16,10 @@ PROGRAMMERS:
 #ifndef CML_CONSTRAINT_HH
 #define CML_CONSTRAINT_HH
 
+#include <algorithm>
 #include <string>
 #include <cstddef>
+#include <iterator>
 #include <vector>
 
 #include "constraint_enum.hh"
@@ -81,6 +83,12 @@ class Constraint
 
   virtual void initialize();
   virtual void update() = 0;
+
+  template <typename TestType, size_t NumTests>
+  void register_tests(TestType (&new_tests)[NumTests]) {
+    std::transform(std::begin(new_tests), std::end(new_tests), std::back_inserter(test_list),
+      [](TestType& new_test){return &new_test;});
+  }
 
   void activate();
   void deactivate() {active = false;}

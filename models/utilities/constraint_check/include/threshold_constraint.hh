@@ -11,7 +11,6 @@ PROGRAMMERS:
 #ifndef CML_THRESHOLD_CONSTRAINT_HH
 #define CML_THRESHOLD_CONSTRAINT_HH
 
-#include <algorithm>
 #include <cmath>
 #include <cstddef>
 
@@ -78,9 +77,7 @@ class ThresholdInstantConstraint : public Constraint
     variable(var),
     tests()
   {
-    // Add all tests to the test list.
-    std::transform(tests.begin(), tests.end(), std::back_inserter(test_list),
-      [](ConstraintTest* test){return test;});
+    register_tests(tests);
   }
   ThresholdInstantConstraint (const T & var,
                               ConstraintSet & set)
@@ -171,9 +168,7 @@ class ThresholdTimedConstraint : public Constraint
     delta_time(delta_time_),
     tests()
   {
-    // Add all tests to the test list.
-    std::transform(tests.begin(), tests.end(), std::back_inserter(test_list),
-      [](ConstraintTest* test){return test;});
+    register_tests(tests);
   }
   /********************************************************************/
   ThresholdTimedConstraint (const T & variable_,
@@ -312,9 +307,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
     use_linear_interpolation(true),
     test_violation_value()
   {
-    // Add all tests to the test list.
-    std::transform(tests.begin(), tests.end(), std::back_inserter(test_list),
-      [](ConstraintTest* test){return test;});
+    register_tests(tests);
   }
   ThresholdTimedConstraintSpecData (const T & variable_,
                                     const double & delta_time_,

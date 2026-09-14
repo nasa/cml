@@ -18,8 +18,6 @@ PROGRAMMERS:
 #include "constraint_set.hh"
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-
-#include <algorithm>
 #include <cstddef>
 
 /* TODO Turner 2023/03
@@ -70,9 +68,7 @@ class ValSetInstantConstraint : public Constraint
     variable(var),
     tests()
   {
-    // Add all tests to the test list.
-    std::transform(tests.begin(), tests.end(), std::back_inserter(test_list),
-      [](ConstraintTest* test){return test;});
+    register_tests(tests);
   }
   ~ValSetInstantConstraint() override = default;
   ValSetInstantConstraint( const ValSetInstantConstraint &) = delete;
@@ -159,9 +155,7 @@ class ValSetTimedConstraint : public Constraint
     delta_time(delta_time_),
     tests()
   {
-    // Add all tests to the test list.
-    std::transform(tests.begin(), tests.end(), std::back_inserter(test_list),
-      [](ConstraintTest* test){return test;});
+    register_tests(tests);
   }
   /*******************************************************************/
   ValSetTimedConstraint (const T & variable_,
