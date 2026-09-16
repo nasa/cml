@@ -28,6 +28,7 @@ if (TARGET Doxygen::doxygen AND Sphinx_FOUND)
             models/fhw/index.rst
             models/interactions/index.rst
             models/tools/index.rst
+            models/utilities/env-utils.rst
             models/utilities/index.rst
             models/utilities/subscriptions.rst
             models/vehicle_management/index.rst
