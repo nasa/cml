@@ -74,6 +74,7 @@ add_cml_library(
         constraint_check/src/constraint_test_templates.cc
         constraint_check/src/constraint_test_timed_templates.cc
         double_to_words/src/convert_double_to_uint_words.cc
+        env_utils/src/env_utils.cc
         fault_arch/src/sSensorFaults.cc
         fault_management/src/fault.cc
         fault_management/src/fault_function.cc

@@ -49,10 +49,8 @@ Architectural Considerations
 Existing External Capabilities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Support
-^^^^^^^
-
-No dependencies.
+The C++ standard library has the ``std::getenv`` function, which exposes a C-based API. This model extends
+that standard library function to perform error handling and environment variable expansion.
 
 Model Structure
 ~~~~~~~~~~~~~~~
@@ -106,7 +104,7 @@ Define a default value to use if the requested environment variable is not set:
 Throw an Error if the Variable is Not Set
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Retrieve an environment variable's value, or else throw a runtime error.
+Retrieve an environment variable's value, or else throw a runtime error:
 
 .. code-block:: cpp
 
@@ -120,7 +118,14 @@ Retrieve an environment variable's value, or else throw a runtime error.
 Expanding Environment Variables in a String
 -------------------------------------------
 
-TODO: move this over here!
+Expand all environment variables in a string:
+
+.. code-block:: cpp
+
+    const std::filesystem::path data_path = expand_env_variables("${DATA_DIR}/${SCENARIO_NAME}/data.csv");
+
+Note that an ``std::runtime_error`` is always thrown if any environment variable in the
+provided string is not set.
 
 Extension
 ---------
@@ -139,12 +144,28 @@ Each model requirement has associated unit tests which verify it. The unit tests
 Code Coverage
 -------------
 
+.. code-block:: text
+
+    ------------------------------------------------------------------------------
+                               GCC Code Coverage Report
+    Directory: .
+    ------------------------------------------------------------------------------
+    File                                       Lines     Exec  Cover   Missing
+    ------------------------------------------------------------------------------
+    include/env_utils.hh
+                                                  17       17   100%
+    src/env_utils.cc
+                                                  20       20   100%
+    ------------------------------------------------------------------------------
+    TOTAL                                         37       37   100%
+    ------------------------------------------------------------------------------
+
 See detailed coverage information `here <https://coveralls.io/github/nasa/cml?branch=main>`_.
 
 Exceptions
 ----------
 
-TODO
+N/A
 
 
 .. _test-cases:
@@ -152,17 +173,24 @@ TODO
 Unit-Test Cases
 ---------------
 
-Each requirement is verified by one or more unit test constructed using the GoogleTest framework.
+Each requirement is verified by one or more unit tests constructed using the GoogleTest framework.
 
-+---------------------------------------------------+-------------------------+
-| Test                                              | Requirement(s) Verified |
-+===================================================+=========================+
-| :ref:`EnvUtils.Exit <exit-test>`                  | CML-ENV-UTILS-1         |
-+---------------------------------------------------+-------------------------+
-| :ref:`EnvUtils.DefaultValue <default-value-test>` | CML-ENV-UTILS-2         |
-+---------------------------------------------------+-------------------------+
-| :ref:`EnvUtils.Throw <throw-test>`                | CML-ENV-UTILS-3         |
-+---------------------------------------------------+-------------------------+
+.. table:: Requirements Traceability
+    :widths: 35 100
+
+    +-------------------------+-----------------------------------------------------------------------------------+
+    | Requirement             | Test(s) Which Verify It                                                           |
+    +=========================+===================================================================================+
+    | CML-ENV-UTILS-1         | :ref:`EnvUtils.Exit <exit-test>`                                                  |
+    +-------------------------+-----------------------------------------------------------------------------------+
+    | CML-ENV-UTILS-2         | :ref:`EnvUtils.DefaultValue <default-value-test>`                                 |
+    +-------------------------+-----------------------------------------------------------------------------------+
+    | CML-ENV-UTILS-3         | :ref:`EnvUtils.Throw <throw-test>`                                                |
+    +-------------------------+-----------------------------------------------------------------------------------+
+    | CML-ENV-UTILS-4         | :ref:`EnvUtils.ExpandBracedEnvironmentVariables <braced-env-vars-test>`           |
+    |                         | :ref:`EnvUtils.ExpandUnBracedEnvironmentVariables <unbraced-env-vars-test>`       |
+    |                         | :ref:`EnvUtils.ExpandEnvironmentVariablesEdgeCases <edge-cases-test>`             |
+    +-------------------------+-----------------------------------------------------------------------------------+
 
 
 .. _exit-test:
@@ -284,3 +312,92 @@ By showing that:
   error being throw
 
 the test ``EnvUtils.Throw`` verifies that the model satisfies the requirement **CML-ENV-UTILS-3**.
+
+.. _braced-env-vars-test:
+
+EnvUtils.ExpandBracedEnvironmentVariables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*Purpose*: Demonstrate that environment variables are correctly expanded when specified in braced form.
+
+*Requirement*: Satisfactory conclusion of the test partially satisfies the verification of requirement
+**CML-ENV-UTILS-4**.
+
+*Procedure*:
+
+1. Set the contents of an environment variable, ``CML_ENVUTILS_TEST_VAR_BRACED1``, equal to ``"blue"``.
+2. Set the contents of an environment variable, ``CML_ENVUTILS_TEST_VAR_BRACED2``, equal to ``"mouse"``.
+3. Expand the environment variables in the string ``"I have a pet ${CML_ENVUTILS_TEST_VAR_BRACED1} ${CML_ENVUTILS_TEST_VAR_BRACED2}"``.
+4. Attempt to expand the string when one of the environment variables is not set.
+5. Attempt to expand the string when all of the environment variables are not set.
+
+*Success Criteria*: When both environment variables are defined, the string should expand to ``"I have a pet blue mouse"``.
+If any of the variables are not set, an error is thrown.
+
+*Results*:
+
++-------------------------------------------------------------------------------+----------------------------------------+--------+
+| Test Step                                                                     | Expectation                            | Result |
++===============================================================================+========================================+========+
+| :cpp:func:`expand_env_variables` called with both variables set               | ``"I have a pet blue mouse"`` returned | Pass   |
++-------------------------------------------------------------------------------+----------------------------------------+--------+
+| :cpp:func:`expand_env_variables` called with one variable not set             | ``std::runtime_error`` thrown          | Pass   |
++-------------------------------------------------------------------------------+----------------------------------------+--------+
+| :cpp:func:`expand_env_variables` called with neither variable set             | ``std::runtime_error`` thrown          | Pass   |
++-------------------------------------------------------------------------------+----------------------------------------+--------+
+
+By showing that:
+
+- Both environment variables are expanded correctly when set
+- An error is thrown if any environment variable in the string is not set
+
+the test ``EnvUtils.ExpandBracedEnvironmentVariables`` partially verifies that the model satisfies the requirement
+**CML-ENV-UTILS-4**.
+
+.. _unbraced-env-vars-test:
+
+EnvUtils.ExpandUnbracedEnvironmentVariables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This test is identical to to :ref:`braced environment variable expansion test <braced-env-vars-test>`, except it uses the
+``$UNBRACED_VAR`` form instead of the ``${BRACED_VAR_FORM}``. The test procedure, inputs, and expected outputs are
+otherwise identical.
+
+the test ``EnvUtils.ExpandUnbracedEnvironmentVariables`` partially verifies that the model satisfies the requirement
+**CML-ENV-UTILS-4**.
+
+.. _edge-cases-test:
+
+EnvUtils.ExpandEnvironmentVariablesEdgeCases
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*Purpose*: Demonstrate that environment variables are correctly expanded under certain edge conditions.
+
+*Requirement*: Satisfactory conclusion of the test partially satisfies the verification of requirement
+**CML-ENV-UTILS-4**.
+
+*Procedure*:
+
+1. Attempt to expand environment variables in an input which has no environment variables to expand.
+2. Attempt to expand unbraced environment variables with so spaces between them.
+
+*Success Criteria*:
+
+1. A string with no environment variables to expand is returned unmodified.
+2. Two unbraced environment variables which are not separated by a space are correctly expanded.
+
++----------------------------------------------------------------------------------+-----------------------------------------+--------+
+| Test Step                                                                        | Expectation                             | Result |
++==================================================================================+=========================================+========+
+| :cpp:func:`expand_env_variables` called with ``"No environment variables"``      | ``"No environment variables"`` returned | Pass   |
++----------------------------------------------------------------------------------+-----------------------------------------+--------+
+| :cpp:func:`expand_env_variables` called with two consecutive, unbraced variables | Variables are both expanded             | Pass   |
++----------------------------------------------------------------------------------+-----------------------------------------+--------+
+
+By showing that:
+
+- A string with no environment variables to expand is returned unmodified
+- Two unbraced environment variables which are not separated by a space are correctly expanded
+
+the test ``EnvUtils.ExpandEnvironmentVariablesEdgeCases`` partially verifies that the model satisfies the requirement
+**CML-ENV-UTILS-4**.

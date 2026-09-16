@@ -3,7 +3,8 @@ PURPOSE:    (To provide a Trick-friendly unit-test framework)
 REFERENCES: (../models-C by Jason Arnold)
 
 LIBRARY DEPENDENCIES:
-  ((cml/models/utilities/cml_message/src/cml_message.cc))
+  ((cml/models/utilities/env_utils/src/env_utils.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc))
 
 PROGRAMMERS:
   (((Jason Arnold) (Titan) (Jul 2005))
@@ -15,27 +16,20 @@ PROGRAMMERS:
 #include <cmath>
 #include <cfloat>
 #include <algorithm>
-#include <cstddef>
 #include <cstdlib>
 #include <iostream>
 #include <list>
 #include <sstream>
 #include <fstream>
-#include <regex>
-#include <stdexcept>
 #include <string>
 
 #include "../include/unit_test.hh"
 
+#include "cml/models/utilities/env_utils/include/env_utils.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
-
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "trick/input_processor_proto.h"
-#include "trick/IPPython.hh"
-
-extern Trick::IPPython* the_pip;
-
 
 /*****************************************************************************
 Constructor
@@ -250,51 +244,6 @@ UnitTestFramework::configure_file_combinations()
 
   populate_linked_variables();
   process_linked_variables();
-}
-
-/*****************************************************************************
-expand_env_variables
-Purpose: (Replaces environment variable placeholders in the form `${VAR_NAME}`
-          within the input string with their corresponding values from the
-          process environment. The search pattern matches variable names
-          beginning with a letter or underscore, followed by letters, digits,
-          or underscores. If an environment variable is found, its value is
-          inserted into the output string. If a variable is not set, the
-          placeholder is left unchanged, a warning is printed via `CMLMessage::error`,
-          and a runtime exception is thrown. The method preserves any text
-          outside of `${}` sequences unchanged.)
-*****************************************************************************/
-std::string UnitTestFramework::expand_env_variables(const std::string& input) {
-    static const std::regex pattern(R"(\$\{([A-Za-z_][A-Za-z0-9_]*)\})");
-
-    std::string result;
-    const std::sregex_iterator begin(input.begin(), input.end(), pattern);
-    const std::sregex_iterator end;
-
-    std::size_t last_pos = 0;
-
-    for (auto it = begin; it != end; ++it) {
-        const std::smatch& match = *it;
-        const std::size_t substr_len = static_cast<std::size_t>(match.position()) - last_pos;
-        result.append(input.substr(last_pos, substr_len));  // text before match
-
-        const std::string var_name = match[1].str();
-        const char* env_val = std::getenv(var_name.c_str());
-        if (env_val != nullptr) 
-        {
-            result.append(env_val);
-        } else 
-        {
-            CMLMessage::error(__FILE__, __LINE__, 
-              "Warning: Environment variable '", var_name, "' is not set. Leaving placeholder unchanged.\n");
-            result.append(match[0].str());  // Keep the original "${VAR}"
-            throw std::runtime_error("Missing environment variable: " + var_name);
-        }
-        last_pos = static_cast<std::size_t>(match.position() + match.length());
-    }
-
-    result.append(input.substr(last_pos));  // remaining text
-    return result;
 }
 
 /*****************************************************************************
