@@ -34,7 +34,7 @@ void terminate([[maybe_unused]] const std::string & file,
   exec_terminate_with_return(1, file.c_str(), line, msg.c_str());
   #else
   std::cout << ColorString::red(
-     "No instruction provided for terminating on a critical fault") << "\n";
+     "In a Trick environment the simulation would have terminated at this point") << '\n';
   #endif
 }
 
