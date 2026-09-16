@@ -130,7 +130,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/constraint_check/include/valset_constraint.hh"
 #include "cml/models/utilities/convert_string/include/convert_string.hh"
 #include "cml/models/utilities/double_to_words/include/convert_double_to_words.hh"
-#include "cml/models/utilities/env_utils/include/env_utils.h"
+#include "cml/models/utilities/env_utils/include/env_utils.hh"
 #include "cml/models/utilities/fault_arch/include/sSensorFaults.hh"
 #include "cml/models/utilities/fault_management/include/fault_bias.hh"
 #include "cml/models/utilities/fault_management/include/fault_function.hh"
