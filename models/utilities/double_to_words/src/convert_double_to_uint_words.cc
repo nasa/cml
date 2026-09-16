@@ -18,7 +18,10 @@ PROGRAMMERS:
 *******************************************************************************/
 #include "../include/convert_double_to_words.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cmath>
 #include <cstdint>
+#include <limits>
+#include <utility>
 #include <vector>
 
 /*******************************************************************************
@@ -68,8 +71,8 @@ void convert_double_to_uint_words( double convert_value,
 
   local_conv.update();
 
-  // Copy the class data to the output.
-  words = local_conv.words;
+  // Move the class data to the output.
+  words = std::move(local_conv.words);
 }
 
 /*******************************************************************************
@@ -133,13 +136,13 @@ ConvertDoubleToUintWords::check_values()
     // severity so that it can be viewed as wanted by the user
     CMLMessage::inform(
       __FILE__,__LINE__,"Roundoff warning:\n\n",
-      "inputvalue ", convert_value, " is too large to be represented by words.\n"
+      "input value ", convert_value, " is too large to be represented by words.\n"
       "The output will be the max possible value (", significance.at(word_count)-resolution, ") instead.\n");
     return false;
   }
 
   // Check whether the specified separation between words ("resolution") is
-  // finer than the separation between adjacen double values.  If it is, there
+  // finer than the separation between adjacent double values.  If it is, there
   // will be words that are not available because they will be skipped before
   // reaching the next value available using the double data type.
   //
@@ -148,18 +151,14 @@ ConvertDoubleToUintWords::check_values()
   //   Sign bit: 1 bit
   //   Exponent: 11 bits
   //   Significand precision: 53 bits (52 explicitly stored)
-  // 2^53 = 9,007,199,254,740,992, the largest integer preresentable
+  // 2^53 = 9,007,199,254,740,992, the largest integer representable
   // in 53 bits of binary64
   //
   // Thus the next nearest value to convert_value that can be expressed as a
   // double will be approximately 1 part in 9,007,199,254,740,992 away from
   // the current value.  If that distance is larger than "resolution", then
   // there will be words that fit in the gap that will therefore be unusable.
-  // Rather than using division (and the risk of sub-normal numbers) and writing
-  //     "if (resolution <= convert_value / 9,007,199,254,740,992)",
-  // the test is structured with multiplication:
-  if (convert_value >= (0.900719926*1e16)*resolution) {
-    //error message
+  if (convert_value >= std::ldexp(resolution, std::numeric_limits<double>::digits)) {
     CMLMessage::error(
       __FILE__,__LINE__,"Initialization error:\n\n",
       "Resolution of words is lower than the resolution of double.\n "
@@ -171,14 +170,13 @@ ConvertDoubleToUintWords::check_values()
 /*******************************************************************************
 compute_significance
 Purpose:(Class function that calculates the significance at each word-array
-         column and is then used in calculations to convert the inputed value
+         column and is then used in calculations to convert the input value
          into words.)
 *******************************************************************************/
 void
 ConvertDoubleToUintWords::compute_significance()
 {
-
-  // First identify the largest value expressable by an unsigned int
+  // First identify the largest value expressible by an unsigned int
   max_uint = 2.0*static_cast<double>(1UL<<(bit_size-1));
   max_uint_f = max_uint - 1.0;
 
@@ -208,12 +206,11 @@ Purpose:(Class function that updates the words array with converted
 void
 ConvertDoubleToUintWords::update()
 {
-
   if (!check_values()) {
     return;
   }
   // Otherwise, work backward from the most significant uint to the least
-  // Note that the value of the significance of the least-signifiant bit of the
+  // Note that the value of the significance of the least-significant bit of the
   // word that (is / would be) found at index max_index is larger than
   // convert_value, so the max_index word must be zero, and the most
   // significant non-zero word is at max_index -1.
