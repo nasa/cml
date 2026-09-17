@@ -256,9 +256,9 @@ Model Structure
 
 This model is usable as:
 
+- Free functions, useful for one-off conversions.
 - An instantiated class, :cpp:class:`ConvertDoubleToUintWords`. Useful for when a conversion is needed as a simulation
   scheduled job.
-- Free functions, useful for one-off conversions.
 
 .. doxygenfile:: convert_double_to_words.hh
 
@@ -405,10 +405,11 @@ ConvertDoubleToUintWords.NoRoundoff
 -----------------------------------
 
 A variety of cases are run where no round-off correction is required: i.e., either the value is convertible to bits with
-no remainder or the remainder is less than half the bit resolution, in which case the remainder is lost. For the following
-cases, all three APIs are used for each case and the expected value is checked against the output from each.
+no remainder or the remainder is less than half the bit resolution, in which case the remainder is lost due to rounding
+down.
 
-Expected values are described in detail in the test source file, so are repeated here with no explanation.
+For the following cases, all three APIs are used for each case and the expected value is checked against the output from
+each. Expected values are described in detail in the test source file, so are repeated here with no explanation.
 
 .. list-table::
    :widths: 20 20 20 50 20
@@ -460,11 +461,12 @@ ConvertDoubleToUintWords.RoundoffCorrection
 
 A variety of cases are run where round-off correction is required: i.e., the value is not exactly convertible to bits
 given the resolution and the remainder is greater than half the bit resolution. In that case, the least significant word
-will be incremented by 1 (round-up), which potentially will cascade up through more significant words if the maximum word
-value is surpassed. For the following cases, all three APIs are used for each case and the expected value is checked
-against the output from each.
+will be incremented by 1 (round-up). This has the potential to spill over into the next most significant word if the
+round-up results in the least significant word surpassing its maximum value. Cases were designed to exercise the no
+spillover, single spillover, and multi-word spillover scenarios.
 
-Expected values are described in detail in the test source file, so are repeated here with no explanation.
+For the following cases, all three APIs are used for each case and the expected value is checked against the output from
+each. Expected values are described in detail in the test source file, so are repeated here with no explanation.
 
 .. list-table::
    :widths: 20 20 20 50 20

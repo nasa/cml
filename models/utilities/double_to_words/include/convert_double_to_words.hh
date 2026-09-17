@@ -81,7 +81,7 @@ protected:
   double resolution;       /**< (--) Incrementation stepping for inputted value. */
   unsigned int word_count; /**< (--) Number of words; size of the words vector. */
   unsigned int bit_size;   /**< (--) Determines the max possible value a word
-                                     can be. @see max_uint. */
+                                     can be. @see max_uint */
 
   std::vector<double> significance; /**< (--) The amount by which the real
                                               number being represented by the
