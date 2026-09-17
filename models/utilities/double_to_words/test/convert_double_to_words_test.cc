@@ -52,7 +52,8 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         EXPECT_CALL(
             cml_message_mock,
             publish(CMLMessage::Error, _, _, HasSubstr("will generate 0 words")));
-        ConvertDoubleToUintWords(value, resolution, word_count, bit_size);
+        const ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
+        EXPECT_EQ(article.words.size(), 0);
     }
 
     // Invalid bit size.
@@ -78,6 +79,11 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
             cml_message_mock,
             publish(CMLMessage::Inform, _, _, HasSubstr("too large to be represented")));
         article.update();
+
+        // All bits should be set to 1. With 16 bits, expecting 16^4 - 1 = 65535.
+        ASSERT_EQ(article.words.size(), 2);
+        ASSERT_EQ(article.words[0], 65535);
+        ASSERT_EQ(article.words[1], 65535);
     }
 
     // Value to convert is too small.
@@ -88,6 +94,8 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         constexpr unsigned int bit_size = 16U;
         ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
         EXPECT_FALSE(article.check_values());
+        ASSERT_EQ(article.words[0], 0);
+        ASSERT_EQ(article.words[1], 0);
     }
 
     // Resolution is finer than the separation between double values.

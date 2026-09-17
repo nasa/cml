@@ -833,29 +833,6 @@ SIM_color_string_color_string:
   build_args: CML_OFFLINE_BUILD=1
   runs:
     RUN_test/input.py: null
-SIM_convert_double_to_words_comparison_double_to_words:
-  model_dir: models/utilities/double_to_words
-  path: models/utilities/double_to_words/verif/SIM_convert_double_to_words_comparison
-  build_args: CML_OFFLINE_BUILD=1
-  runs:
-    RUN_test/input.py:
-      compare:
-      - models/utilities/double_to_words/verif/SIM_convert_double_to_words_comparison/RUN_test/log_test_data.csv
-        vs. models/utilities/double_to_words/verif/SIM_convert_double_to_words_comparison/verif_data/RUN_test/log_test_data.csv
-SIM_convert_double_to_words_double_to_words:
-  model_dir: models/utilities/double_to_words
-  path: models/utilities/double_to_words/verif/SIM_convert_double_to_words
-  build_args: CML_OFFLINE_BUILD=1
-  runs:
-    ERROR_test/input.py: null
-    RUN_test/input.py:
-      compare:
-      - models/utilities/double_to_words/verif/SIM_convert_double_to_words/RUN_test/log_test_data.csv
-        vs. models/utilities/double_to_words/verif/SIM_convert_double_to_words/verif_data/RUN_test/log_test_data.csv
-    RUN_test_warn/input.py:
-      compare:
-      - models/utilities/double_to_words/verif/SIM_convert_double_to_words/RUN_test_warn/log_test_data.csv
-        vs. models/utilities/double_to_words/verif/SIM_convert_double_to_words/verif_data/RUN_test_warn/log_test_data.csv
 SIM_correlated_state_dispersion_correlated_state_dispersion:
   model_dir: models/dynamics/state_initialize/correlated_state_dispersion
   path: models/dynamics/state_initialize/correlated_state_dispersion/verif/SIM_correlated_state_dispersion

@@ -24,11 +24,9 @@ PROGRAMMERS:
 #include <utility>
 #include <vector>
 
-/*******************************************************************************
-Purpose:(Run the class function that calls the variables and creates the
-         words array that is populated with the converted values for
-         the original variable pass in format.)
-*******************************************************************************/
+/**
+ * Instantiates a @ref ConvertDoubleToUintWords class to do the conversion.
+ */
 void convert_double_to_uint_words( double convert_value,
                                    double resolution,
                                    uint32_t *words,
@@ -55,10 +53,9 @@ void convert_double_to_uint_words( double convert_value,
   }
 }
 
-/*******************************************************************************
-Purpose:(Run the class function that calls the variables and creates the
-         words array that is populated with the converted values.)
-*******************************************************************************/
+/**
+ * Instantiates a @ref ConvertDoubleToUintWords class to do the conversion.
+ */
 void convert_double_to_uint_words( double convert_value,
                                    double resolution,
                                    std::vector<uint32_t> &words,
@@ -75,10 +72,7 @@ void convert_double_to_uint_words( double convert_value,
   words = std::move(local_conv.words);
 }
 
-/*******************************************************************************
-ConvertDoubleToUintWords
-Purpose:(Defines the class constructor for the object local_conv.)
-*******************************************************************************/
+// Constructor
 ConvertDoubleToUintWords::ConvertDoubleToUintWords( const double & in_convert_value,
                                                     double in_resolution,
                                                     unsigned int in_word_count,
@@ -109,10 +103,14 @@ ConvertDoubleToUintWords::ConvertDoubleToUintWords( const double & in_convert_va
   }
 }
 
-/*******************************************************************************
-Purpose:(Check passed in values to see if they're in acceptable tolerance
-         or to see if they're initialized correctly.)
-*******************************************************************************/
+/**
+ * Checks that:
+ * - The value to convert is at least half of the specified bit-resolution.
+ * - The value to convert is not too large to be representable in the number of
+ *   words specified with the given resolution.
+ * - The separation between words ("resolution") is not finer than the separation
+ *   between adjacent values representable by a double.
+ */
 bool
 ConvertDoubleToUintWords::check_values()
 {
@@ -167,12 +165,10 @@ ConvertDoubleToUintWords::check_values()
   return true;
 }
 
-/*******************************************************************************
-compute_significance
-Purpose:(Class function that calculates the significance at each word-array
-         column and is then used in calculations to convert the input value
-         into words.)
-*******************************************************************************/
+/**
+ * Automatically called during construction. Used to convert the input value
+ * into words.
+ */
 void
 ConvertDoubleToUintWords::compute_significance()
 {
@@ -199,10 +195,7 @@ ConvertDoubleToUintWords::compute_significance()
   }
 }
 
-/*******************************************************************************
-Purpose:(Class function that updates the words array with converted
-         variable values.)
-*******************************************************************************/
+// Perform the conversion
 void
 ConvertDoubleToUintWords::update()
 {
