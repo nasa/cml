@@ -80,7 +80,7 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
             publish(CMLMessage::Inform, _, _, HasSubstr("too large to be represented")));
         article.update();
 
-        // All bits should be set to 1. With 16 bits, expecting 16^4 - 1 = 65535.
+        // All bits should be set to 1. With 16 bits, expecting 2^16 - 1 = 65535.
         ASSERT_EQ(article.words.size(), 2);
         ASSERT_EQ(article.words[0], 65535);
         ASSERT_EQ(article.words[1], 65535);
@@ -116,21 +116,21 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
 // correction.
 TEST(ConvertDoubleToUintWords, NoRoundoff) {
     // Case 1
-    // 0.001 with a resolution of 0.001. Max word value = 16^4 = 65536.
+    // 0.001 with a resolution of 0.001. Max word value = 2^4 = 16.
     // Significance values:
-    //     Index 3: 0.001 * 65536^3 = 281474976710.656
-    //     Index 2: 0.001 * 65536^2 = 4294967.296
-    //     Index 1: 0.001 * 65536^1 = 65.536
-    //     Index 0: 0.001 * 65536^0 = 0.001
+    //     Index 3: 0.001 * 16^3 = 4.096
+    //     Index 2: 0.001 * 16^2 = 0.256
+    //     Index 1: 0.001 * 16^1 = 0.016
+    //     Index 0: 0.001 * 16^0 = 0.001
     //
-    //     Word 3 = 0.001 / 281474976710656.0 = 0; remainder = 0.001
-    //     Word 2 = 0.001 / 4294967296.0      = 0; remainder = 0.001
-    //     Word 1 = 0.001 / 65536.0           = 0; remainder = 0.001
-    //     Word 0 = 0.001 / 1.0               = 1; remainder = 0.000
+    //     Word 3 = 0.001 / 4.096 = 0; remainder = 0.001
+    //     Word 2 = 0.001 / 0.256 = 0; remainder = 0.001
+    //     Word 1 = 0.001 / 0.016 = 0; remainder = 0.001
+    //     Word 0 = 0.001 / 0.001 = 1; remainder = 0.000
     test_double_to_words(0.001, 0.001, 4U, {1U, 0U, 0U, 0U});
 
     // Case 2
-    // 5.002 with a resolution of 0.001. Max word value = 4^4 = 16.
+    // 5.002 with a resolution of 0.001. Max word value = 2^4 = 16.
     // Significance values:
     //     Index 3: 0.001 * 16^3 = 4.096
     //     Index 2: 0.001 * 16^2 = 0.256
@@ -144,7 +144,7 @@ TEST(ConvertDoubleToUintWords, NoRoundoff) {
     test_double_to_words(5.002, 0.001, 4U, {10U, 8U, 3U, 1U});
 
     // Case 3
-    // 5.001 with a resolution of 0.001. Max word value = 4^4 = 16.
+    // 5.001 with a resolution of 0.001. Max word value = 2^4 = 16.
     // Significance values:
     //     Index 3: 0.001 * 16^3 = 4.096
     //     Index 2: 0.001 * 16^2 = 0.256
@@ -158,7 +158,7 @@ TEST(ConvertDoubleToUintWords, NoRoundoff) {
     test_double_to_words(5.001, 0.001, 4U, {9U, 8U, 3U, 1U});
 
     // Case 4
-    // 123456.0 with a resolution of 1.0. Max word value = 16^4 = 65536.
+    // 123456.0 with a resolution of 1.0. Max word value = 2^16 = 65536.
     // Significance values:
     //     Index 3: 1.0 * 65536^3 = 281474976710656.0
     //     Index 2: 1.0 * 65536^2 = 4294967296.0
@@ -172,7 +172,7 @@ TEST(ConvertDoubleToUintWords, NoRoundoff) {
     test_double_to_words(123456.0, 1.0, 16U, {57920U, 1U, 0U, 0U});
 
     // Case 5
-    // 123457.0 with a resolution of 1.0. Max word value = 16^4 = 65536.
+    // 123457.0 with a resolution of 1.0. Max word value = 2^16 = 65536.
     // Significance values:
     //     Index 3: 1.0 * 65536^3 = 281474976710656.0
     //     Index 2: 1.0 * 65536^2 = 4294967296.0
@@ -186,7 +186,7 @@ TEST(ConvertDoubleToUintWords, NoRoundoff) {
     test_double_to_words(123457.0, 1.0, 16U, {57921U, 1U, 0U, 0U});
 
     // Case 6
-    // 123458.0 with a resolution of 1.0. Max word value = 16^4 = 65536.
+    // 123458.0 with a resolution of 1.0. Max word value = 2^16 = 65536.
     // Significance values:
     //     Index 3: 1.0 * 65536^3 = 281474976710656.0
     //     Index 2: 1.0 * 65536^2 = 4294967296.0
@@ -200,7 +200,7 @@ TEST(ConvertDoubleToUintWords, NoRoundoff) {
     test_double_to_words(123458.0, 1.0, 16U, {57922U, 1U, 0U, 0U});
 
     // Case 7
-    // 900987654321.181 with a resolution of 0.001. Max word value = 16^4 = 65536.
+    // 900987654321.181 with a resolution of 0.001. Max word value = 2^16 = 65536.
     // Significance values:
     //     Index 3: 0.001 * 65536^3 = 281474976710.656
     //     Index 2: 0.001 * 65536^2 = 4294967.296
@@ -219,7 +219,7 @@ TEST(ConvertDoubleToUintWords, NoRoundoff) {
 // Test cases where we need to correct for round off error.
 TEST(ConvertDoubleToUintWords, RoundoffCorrection) {
     // Case 1
-    // 0.001553 with a resolution of 0.0001. Max word value = 4^4 = 16
+    // 0.001553 with a resolution of 0.0001. Max word value = 2^4 = 16
     // Significance values:
     //     Index 3: 0.0001 * 16^3 = 0.4096
     //     Index 2: 0.0001 * 16^2 = 0.0256
@@ -237,7 +237,7 @@ TEST(ConvertDoubleToUintWords, RoundoffCorrection) {
     test_double_to_words(0.003153, 0.0001, 4U, {0U, 2U, 0U, 0U});
 
     // Case 2
-    // 12287.8 with a resolution of 1.0. Max word value = 4^4 = 16
+    // 12287.8 with a resolution of 1.0. Max word value = 2^4 = 16
     // Significance values:
     //     Index 3: 1.0 * 16^3 = 4096
     //     Index 2: 1.0 * 16^2 = 256
@@ -255,7 +255,7 @@ TEST(ConvertDoubleToUintWords, RoundoffCorrection) {
     test_double_to_words(12287.8, 1.0, 4U, {0U, 0U, 0U, 3U});
 
     // Case 3
-    // 900987654321.182 with a resolution of 0.001. Max word value = 16^4 = 65536.
+    // 900987654321.182 with a resolution of 0.001. Max word value = 2^16 = 65536.
     // Significance values:
     //     Index 3: 0.001 * 65536^3 = 281474976710.656
     //     Index 2: 0.001 * 65536^2 = 4294967.296
