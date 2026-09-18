@@ -11,8 +11,8 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2017) (Antares) (new)))
 **********************************************************************/
 
+#include <algorithm>
 #include <cmath>
-#include <new>
 
 #include "../include/accumulated_absolute_deltas.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -33,7 +33,7 @@ AccumulatedAbsoluteDeltas::AccumulatedAbsoluteDeltas(
   if (variable == nullptr) {
     CMLMessage::fail(
     __FILE__,__LINE__,"Invalid construction\n",
-    "The variable being accumulated in NULL.\n");
+    "The variable being accumulated is NULL.\n");
   }
   if (size == 0) {
     CMLMessage::fail(
@@ -44,6 +44,8 @@ AccumulatedAbsoluteDeltas::AccumulatedAbsoluteDeltas(
 
   accumulated_deltas = new double[size];
   old_variable = new double[size];
+
+  std::fill_n(accumulated_deltas, size, 0.0);
 }
 
 /*****************************************************************************
@@ -90,10 +92,8 @@ Purpose:(resets the accumulated value and the starting values)
 void
 AccumulatedAbsoluteDeltas::reset()
 {
-  for (unsigned int  ii = 0; ii < size; ++ii) {
-    old_variable[ii] = variable[ii];
-    accumulated_deltas[ii] = 0.0;
-  }
+  std::copy_n(variable, size, old_variable);
+  std::fill_n(accumulated_deltas, size, 0.0);
 }
 
 /*****************************************************************************
