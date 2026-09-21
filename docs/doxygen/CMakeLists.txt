@@ -1,4 +1,4 @@
-find_package(Doxygen)
+find_package(Doxygen COMPONENTS doxygen dot)
 
 if (Doxygen_FOUND)
     # Tell Doxygen to only check the sources and headers that we're building. This
