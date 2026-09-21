@@ -1,0 +1,19 @@
+A documentation pertaining to the details the model is included:
+- msl.pdf
+- msl.odt
+
+Included here are 4 color-plots:
+- Table_data.png               a straightforward plot of the table data
+- World_Map_TableData.png      a shifted plot of the table data to the
+                               conventional world view, with zero longitude in
+                               the middle; the eye more naturally picks out the
+                               continents in this image.
+- Geoid_Altitude_TableData.png a map of the height-above-sea-level of the
+                               zero-altitude Geoid with data taken from the
+                               table.  This is the negative of Table_data.png.
+- Geoid_Altitude_simData.png   a map of the height-above-sea-level of the
+                               zero-altitude Geoid with data taken from
+                               RUN_sweep in the verification sim.
+                               Comparison against Geoid_Altitude_TableData.png
+                               confirms that the model is using the data table
+                               as expected.
