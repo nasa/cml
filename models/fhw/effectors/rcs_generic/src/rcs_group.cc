@@ -58,8 +58,14 @@ RcsJetGroup::initialize(
 
   // buffer size is the number of full time-steps necessary before a command
   // will be seen
-  buffer_on_size  = static_cast<unsigned int>(total_on_delay  / time_step);
-  buffer_off_size = static_cast<unsigned int>(total_off_delay / time_step);
+  buffer_on_size  = static_cast<unsigned int>(
+                        MathUtils::divide_protected( total_on_delay,
+                                                     time_step,
+                                                     0.0, true));
+  buffer_off_size = static_cast<unsigned int>(
+                        MathUtils::divide_protected( total_off_delay,
+                                                     time_step,
+                                                     0.0, true));
 
   /* delay time = remainder of last time_step before jet is turned on or off */
   delay_time_on = total_on_delay - buffer_on_size * time_step;
