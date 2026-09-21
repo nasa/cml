@@ -47,6 +47,13 @@ WatchValuesSet::initialize( std::list<WatchValuesBaseCore *> * active_watch_in)
     return;
   }
   for (WatchValuesBaseCore * trigger : triggers) {
+    // if (require_all) {
+    //   // force multi_shot for all triggers when the set requires all triggers
+    //   // to be fulfilled for the set to be fulfilled. This fixes a discrepancy
+    //   // with DataCollect's behavior without requiring the logging user to be
+    //   // careful with the multi_shot optimization.
+    //   trigger->multi_shot = true;
+    // }
     trigger->add_self_to_manager_active_list = false;
     trigger->SubscriptionBase::initialize();
   }

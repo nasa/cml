@@ -57,10 +57,29 @@ class WatchValuesBase : public WatchValuesBaseCore {
 /*****************************************************************************
 set_watch
 Purpose:(Sets the variable and the reference against which it will be compared)
+Notes:
+- If the variable passed in is not of type watchType, the compiler would
+  implicitly cast that variable to a temporary storage space of the expected
+  type, and the watch value would monitor that temporary storage space, not
+  the intended variable, for changes. This is a big problem if a user gets the
+  type wrong in setting up their WatchValue, or setse it up correctly and the
+  variable type later changes.
+- To rule that out and explicitly require a type match, we delete set_watch
+  for all types of "var", then implement only the one in which "var" is of
+  type "watchType". Now if the types do not match, the project will not build.
+- When setting the reference by pointer: set_watch( T1&, T2*)
+  T2 must be of type watchType already; everything else is blocked.
+  So we only need to check on the type of var.
 *****************************************************************************/
+  template <typename T>
+  void set_watch (const T& var, watchType ref) = delete;
+  template <typename T1>
+  void set_watch (const T1& var, const watchType * ref) = delete;
+
+  // ************************************************************************
   // ** reference is fixed-value **
   // ************************************************************************
-  void set_watch( const watchType & var, watchType   ref) {
+  void set_watch( const watchType & var, watchType ref) {
     variable = &var;
     reference = ref;
     reference_is_variable = false;
@@ -391,4 +410,12 @@ Purpose:(Generates the new reference value.)
     reference += variable_at_activation;
   }
 };
+
+template <> inline void WatchValuesBase<bool>::set_dbl_reference(double ref)
+{
+  // Semantically equivalent to static_cast<bool>(ref) (i.e., ref != 0.0),
+  // but avoids '=='/'!=' comparisons that trigger -Wfloat-equal.
+  reference = (ref > 0.0) || (ref < 0.0) || std::isnan(ref);
+}
+
 #endif
