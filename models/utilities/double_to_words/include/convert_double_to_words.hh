@@ -127,6 +127,11 @@ public:
   ConvertDoubleToUintWords & operator = (const ConvertDoubleToUintWords&) = delete;
 
   /**
+   * Default destructor
+   */
+  virtual ~ConvertDoubleToUintWords() = default;
+
+  /**
    * Perform the conversion.
    */
   void update();

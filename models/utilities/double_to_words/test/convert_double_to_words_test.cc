@@ -219,7 +219,7 @@ TEST(ConvertDoubleToUintWords, NoRoundoff) {
 // Test cases where we need to correct for round off error.
 TEST(ConvertDoubleToUintWords, RoundoffCorrection) {
     // Case 1
-    // 0.001553 with a resolution of 0.0001. Max word value = 2^4 = 16
+    // 0.003153 with a resolution of 0.0001. Max word value = 2^4 = 16
     // Significance values:
     //     Index 3: 0.0001 * 16^3 = 0.4096
     //     Index 2: 0.0001 * 16^2 = 0.0256

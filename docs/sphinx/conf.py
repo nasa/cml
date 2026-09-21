@@ -41,6 +41,7 @@ author = ""
 extensions = [
     "breathe",
     "sphinx.ext.graphviz",
+    "sphinx_design"
 ]
 
 templates_path = ["_templates"]
