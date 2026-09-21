@@ -2,9 +2,6 @@
 PURPOSE:
   (Simulates the effects of RCS thruster build-up and trail-off.)
 
-LIBRARY DEPENDENCIES:
-  ((cml/models/utilities/cml_message/src/cml_message.cc))
-
 PROGRAMMERS:
   (((Michael McCarthy) (OSR) (Jul 2019) (ANTARES) (CM RCS Refactor, removed C
                              interfacing, split scale factors model into
@@ -14,9 +11,8 @@ PROGRAMMERS:
 ******************************************************************************/
 
 #include "../include/rcs_build_trail.hh"
-#include "../include/rcs_scale_factor_interface.hh"
 
-#include <algorithm>
+#include <algorithm> // min
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
@@ -25,7 +21,8 @@ RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
   :
   interface(interface_),
   jet(jet_),
-  current_time(time)
+  current_time(time),
+  active(false)
 {
   // NULL check
   if (jet == nullptr)
@@ -37,9 +34,7 @@ RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
 
 void RcsBuildUpTrailOff::build_up_trail_off_effects()
 {
-  if (!active) {
-    return;
-  }
+  if (!active) return;
 
   for (unsigned int id = 0; id < interface.num_jets; id++)
   {

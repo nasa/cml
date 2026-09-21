@@ -5,9 +5,6 @@ PURPOSE: (The RcsPropPod provides a convenient mechanism for grouping
   had several instances of RCS_PPOD that needed instantiating; this object
   represents a very similar concept to RCS_PPOD.)
 
-LIBRARY DEPENDENCIES:
-  ((cml/models/utilities/cml_message/src/cml_message.cc))
-
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation))
@@ -15,10 +12,6 @@ PROGRAMMERS:
 **********************************************************************/
 
 #include "../include/rcs_prop_pod.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include <vector>
-
-#include <cmath>
 
 /*****************************************************************************
 Constructor
@@ -26,9 +19,12 @@ Constructor
 RcsPodComponent::RcsPodComponent(
    unsigned int max_num_jets_on)
    :
+   fake_interface(),
    mass_consumed_step( &fake_interface.mass_consumed_step),
    consumable_mass(    &fake_interface.consumable_mass),
-   flow_rate_sf(max_num_jets_on, 0.0)
+   using_dyn_mass(false),
+   flow_rate_sf(max_num_jets_on, 0.0),
+   sum_consumption(0.0)
 { }
 
 /****************************************************************************/
@@ -37,10 +33,21 @@ RcsPropPod::RcsPropPod(
    unsigned int num_components_,
    const double & time_step_)
    :
+   mass_epsilon( 1.0e-12),
+   momentum_epsilon( 1.0e-12),
    time_step(time_step_),
    max_num_jets_on(max_num_jets_on_),
+   using_dyn_mass(false),
+   continue_thrust_after_depletion(false),
+   fail_on_depleted_mass(false),
+   health(HealthUndefined),
+   nominal_thrust(0.0),
+   pressure(0.0),
    thrust_factor( max_num_jets_on, 0.0),
-   components( num_components_, RcsPodComponent(max_num_jets_on_))
+   components( num_components_, RcsPodComponent(max_num_jets_on_)),
+   sum_consumption(0.0),
+   equiv_momentum(0.0),
+   num_jets_on(0)
 {
   // This is not at all obvious.   Having the RcsPodComponent constructor
   // set the mass_consumed_step and consumable_mass pointers to the addresses
@@ -54,8 +61,8 @@ RcsPropPod::RcsPropPod(
   //              component.set_dyn_mass_interface(component.fake_interface);
   // at this point still results in passing a temporary address for the
   // fake-interface so the pointers still go to the wrong place.
-  for (auto & component : components) {
-    component.set_dyn_mass_interface(component.fake_interface);
+  for (size_t ii = 0; ii < components.size(); ++ii) {
+    components[ii].set_dyn_mass_interface(components[ii].fake_interface);
   }
 }
 
@@ -65,17 +72,17 @@ Purpose:(pushes the dynamic-mass-interface through to the specified component)
 *****************************************************************************/
 void
 RcsPropPod::set_dyn_mass_interface(
-      unsigned int component_index,
+      unsigned int component_ix,
       DynamicMassBodyPropertiesInterface & dyn_mass_interface)
 {
-  if (component_index >= components.size()) {
+  if (component_ix >= components.size()) {
     CMLMessage::error(
     __FILE__,__LINE__,"Assignment error\n",
-    "Cannot assign a dyn-mass interface to component index ", component_index, " because\n"
+    "Cannot assign a dyn-mass interface to component index ", component_ix, " because\n"
     "there are only ", components.size(), " components (so max index is ", components.size()-1, ").\n");
   }
   else {
-    components.at(component_index).set_dyn_mass_interface( dyn_mass_interface);
+    components.at(component_ix).set_dyn_mass_interface( dyn_mass_interface);
     using_dyn_mass = true;
   }
 }
@@ -84,7 +91,12 @@ void
 RcsPodComponent::set_dyn_mass_interface(
      DynamicMassBodyPropertiesInterface & dyn_mass_interface)
 {
-  using_dyn_mass = &dyn_mass_interface != &fake_interface;
+  if (&dyn_mass_interface != &fake_interface) {
+    using_dyn_mass = true;
+  }
+  else {
+    using_dyn_mass = false;
+  }
   mass_consumed_step = &dyn_mass_interface.mass_consumed_step;
   consumable_mass = &dyn_mass_interface.consumable_mass;
 }
@@ -103,10 +115,12 @@ RcsPropPod::activate_dyn_mass()
   if (using_dyn_mass) {
     return;
   }
-  for (auto & component : components) {
-    if (component.mass_consumed_step != &component.fake_interface.mass_consumed_step) {
+  for (std::vector<RcsPodComponent>::iterator it=components.begin();
+       it != components.end();
+       ++it) {
+    if ((*it).mass_consumed_step != &(*it).fake_interface.mass_consumed_step) {
       using_dyn_mass = true;
-      component.using_dyn_mass = true;
+      (*it).using_dyn_mass = true;
     }
   }
 }
@@ -120,8 +134,10 @@ RcsPropPod::deactivate_dyn_mass()
 {
   if (using_dyn_mass) {
     using_dyn_mass = false;
-    for (auto & component : components) {
-      component.using_dyn_mass = false;
+    for (std::vector<RcsPodComponent>::iterator it=components.begin();
+         it != components.end();
+         ++it) {
+      (*it).using_dyn_mass = false;
     }
   }
 }
@@ -150,9 +166,11 @@ RcsPropPod::mass_available()
     return true; // mass is static; there is always mass available.
   }
 
-  for (auto & component : components) {
+  for (std::vector<RcsPodComponent>::iterator it=components.begin();
+       it != components.end();
+       ++it) {
     // if any component is out, return false.
-    if ( !component.mass_available()) {
+    if ( !(*it).mass_available()) {
       // if the model is intended to be used such that mass depletes, but
       // mass-depletion does not prevent thrusting, turn off the dynamic-mass
       // at this point.  Mass will not deplete any further for any component.
@@ -196,7 +214,7 @@ RcsPropPod::increment_mass_consumption(
   }
 
   for (unsigned int ii = 0; ii < components.size(); ++ii) {
-    const double incr_consumption = jet_consumption.at(ii);
+    double incr_consumption = jet_consumption.at(ii);
     components.at(ii).increment_mass_consumption( incr_consumption);
     sum_consumption += incr_consumption;
   }
@@ -226,8 +244,8 @@ RcsPropPod::compute_jets_on(
     // back out number of active jets: total momentum divided by momentum of
     // each jet.  NOTE: if one jet is on for less than half of time_step,
     // num_jets_on will round down to 0
-    num_jets_on = std::lround(equiv_momentum /
-                                     (nominal_thrust * time_step));
+    num_jets_on = static_cast<unsigned int>( 0.5 + equiv_momentum /
+                                      (nominal_thrust * time_step));
   }
   else {
     // In this case, multiple jets DO NOT degrade thrust performance, and
@@ -265,20 +283,20 @@ Purpose:(returns the scale-factor for the specified component in the pod
 *****************************************************************************/
 double
 RcsPropPod::get_flow_rate_scale_factor(
-   const unsigned int component_index) const
+   const unsigned int component_ix)
 {
   if (num_jets_on == 0) {
     return 1.0;
   }
-  if (component_index >= components.size()) {
+  if (component_ix >= components.size()) {
     CMLMessage::error(
     __FILE__,__LINE__,"Assignment error\n",
-    "Cannot extract the flow-rate scale-factor from component index ", component_index, "\n"
+    "Cannot extract the flow-rate scale-factor from component index ", component_ix, "\n"
     "because there are only ", components.size(), " components (so max index is ", components.size()-1, ").\n");
     return 0.0;
   }
 
-  return components.at(component_index).flow_rate_sf[num_jets_on-1];
+  return components.at(component_ix).flow_rate_sf[num_jets_on-1];
 }
 
 
@@ -287,7 +305,7 @@ get_thrust_factor
 Purpose:(Returns the currently used value from the thrust_factor vector)
 *****************************************************************************/
 double
-RcsPropPod::get_thrust_factor() const
+RcsPropPod::get_thrust_factor()
 {
   if (num_jets_on == 0) {
     return 1.0;
@@ -295,6 +313,16 @@ RcsPropPod::get_thrust_factor() const
   else {
     return thrust_factor.at(num_jets_on-1);
   }
+}
+
+/*****************************************************************************
+get_max_num_jets_on
+Purpose:(Returns the protected max_num_jets_on value)
+*****************************************************************************/
+unsigned int
+RcsPropPod::get_max_num_jets_on()
+{
+  return max_num_jets_on;
 }
 
 /*****************************************************************************
