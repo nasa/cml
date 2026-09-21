@@ -48,6 +48,13 @@ class RcsJet {
   std::vector<double> component_consumption;/* (kg)
        Work space for prop consumption during delta_time_on maximum for each
        propellant component */
+  std::vector<double> sum_component_consumption;/* (kg)
+       Accumulated values of component_consumption, provides pre-component
+       consumption over the duration of the simulation.*/
+  double sum_consumption; /* (kg)
+       accumulated values of component_consumption across all components.
+       Provides total consumption by the jet over the duration of the
+       simulation.*/
 
   double force_hat[3]{}; /* (--)
        Unit-vector force direction. */
@@ -227,6 +234,9 @@ class RcsJet {
   void scale_self_impingement();
   void set_isp( double isp_);
   double get_isp() const {return isp;}
+  
+  const double & get_sum_consumption() const {return sum_consumption;}
+
  protected:
   void compute_component_flow_rates();
   void blow_down();
