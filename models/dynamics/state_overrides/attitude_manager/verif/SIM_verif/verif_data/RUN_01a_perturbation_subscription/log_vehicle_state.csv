@@ -1,0 +1,5 @@
+sys.exec.out.time {s},test.body.composite_body.state.rot.Q_parent_this.scalar {--},test.body.composite_body.state.rot.Q_parent_this.vector[0] {--},test.body.composite_body.state.rot.Q_parent_this.vector[1] {--},test.body.composite_body.state.rot.Q_parent_this.vector[2] {--},test.body.composite_body.state.rot.ang_vel_this[0] {rad/s},test.body.composite_body.state.rot.ang_vel_this[1] {rad/s},test.body.composite_body.state.rot.ang_vel_this[2] {rad/s}
+                   0,  0.9999812813669918,-0.002487458437707985,0.002512458229375347,-0.004993698008033518,               0.001,               0.002,               0.002
+                   1,  0.9999863587224527,-0.002982442312891961,0.001512535040389878,-0.004012436246995498,                   0,                   0,                   0
+                   2,  0.9999863587224527,-0.002982442312891961,0.001512535040389878,-0.004012436246995498,                   0,                   0,                   0
+                   3,  0.9999863587224527,-0.002982442312891961,0.001512535040389878,-0.004012436246995498,                   0,                   0,                   0

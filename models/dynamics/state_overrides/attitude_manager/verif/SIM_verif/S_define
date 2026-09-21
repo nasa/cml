@@ -1,0 +1,80 @@
+/*****************************************************************************
+PURPOSE: (Verifies the Target Vehicle Prescribed Attitude Model)
+
+PROGRAMMERS:
+    (
+     ((Jeb Stefan) (OSR) (June 2021) (Antares) (verification))
+     ((Alexandre Masset) (OSR) (March 2026) (Antares) (refactor to match changes
+        in AttitudeManager model))
+    )
+*****************************************************************************/
+
+#include "default_priority_settings.sm"
+#define DYNAMICS 0.005
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_basic.sm"
+
+/*****************************************************************************
+AttitudeManagerUnitTestSimObject
+Purpose:(The sim)
+*****************************************************************************/
+
+// Include headers for classes that this class contains:
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_trans_state.hh"
+##include "jeod/models/dynamics/body_action/include/dyn_body_init_rot_state.hh"
+##include "dynamics/body_action/include/dyn_body_init_lvlh_state.hh"
+##include "jeod/models/utils/lvlh_frame/include/lvlh_frame.hh"
+##include "../../include/attitude_manager.hh"
+
+class AttitudeManagerUnitTestSimObject: public Trick::SimObject
+{
+ protected:
+  jeod::DynManager & dyn_manager;
+  const double & dyn_time;
+ public:
+  AttitudeManager att_manager;
+  jeod::DynBody body;
+  jeod::MassBodyInit mass_init;
+  jeod::DynBodyInitTransState trans_init;
+  jeod::DynBodyInitRotState rot_init;
+  jeod::DynBodyInitLvlhState lvlh_init;
+  jeod::LvlhFrame ref_frame;
+  jeod::RefFrameState * null_frame_state;
+  jeod::Quaternion quatTargetRefToNominal;
+
+
+  AttitudeManagerUnitTestSimObject( jeod::DynManager & dyn_mgr_in,
+                                 double & dyn_time_in)
+    :
+    dyn_manager(dyn_mgr_in),
+    dyn_time(dyn_time_in),
+    att_manager( dyn_time,
+             body),
+    null_frame_state(NULL)
+  {
+    // support jobs:
+    P_ENV ("initialization") body.initialize_model( dyn_manager);
+    P_ENV ("initialization") ref_frame.initialize( dyn_manager);
+    P_DYN ("initialization") att_manager.initialize();
+    (DYNAMICS, "environment") ref_frame.update();
+    (DYNAMICS, "environment") att_manager.update();
+  }
+
+ private:
+  AttitudeManagerUnitTestSimObject (const AttitudeManagerUnitTestSimObject&);
+  AttitudeManagerUnitTestSimObject & operator = (const AttitudeManagerUnitTestSimObject&);
+};
+AttitudeManagerUnitTestSimObject test( dynamics.dyn_manager,
+                                            jeod_time.time_manager.dyn_time.seconds);
+
+IntegLoop tankgroup_intg_loop (DYNAMICS) dynamics;

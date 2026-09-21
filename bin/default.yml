@@ -2775,6 +2775,83 @@ SIM_verif_atmos_rel_state:
     RUN_10_null_length/input.py: null
     RUN_11_rerun_planet_rel/input.py: null
     RUN_12_zero_velocity/input.py: null
+SIM_verif_attitude_manager:
+  model_dir: models/dynamics/state_overrides/attitude_manager
+  path: models/dynamics/state_overrides/attitude_manager/verif/SIM_verif
+  build_args: CML_OFFLINE_BUILD=1
+  runs:
+    RUN_01a_perturbation_subscription/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_01a_perturbation_subscription/log_submodel_status.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_01a_perturbation_subscription/log_submodel_status.csv
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_01a_perturbation_subscription/log_vehicle_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_01a_perturbation_subscription/log_vehicle_state.csv
+    RUN_01b_maneuver_subscription/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_01b_maneuver_subscription/log_submodel_status.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_01b_maneuver_subscription/log_submodel_status.csv
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_01b_maneuver_subscription/log_vehicle_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_01b_maneuver_subscription/log_vehicle_state.csv
+    RUN_02a_deadbanding_only/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_02a_deadbanding_only/log_perturbation_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_02a_deadbanding_only/log_perturbation_state.csv
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_02a_deadbanding_only/log_vehicle_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_02a_deadbanding_only/log_vehicle_state.csv
+    RUN_02b_maneuver_only/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_02b_maneuver_only/log_maneuver_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_02b_maneuver_only/log_maneuver_state.csv
+    RUN_02c_db_and_mnvr/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_02c_db_and_mnvr/log_maneuver_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_02c_db_and_mnvr/log_maneuver_state.csv
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_02c_db_and_mnvr/log_perturbation_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_02c_db_and_mnvr/log_perturbation_state.csv
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_02c_db_and_mnvr/log_submodel_status.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_02c_db_and_mnvr/log_submodel_status.csv
+    RUN_03_smoothing/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_03_smoothing/log_maneuver_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_03_smoothing/log_maneuver_state.csv
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_03_smoothing/log_perturbation_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_03_smoothing/log_perturbation_state.csv
+    RUN_04a_db_random/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_04a_db_random/log_perturbation_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_04a_db_random/log_perturbation_state.csv
+    RUN_04b_db_random_smoothing/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_04b_db_random_smoothing/log_perturbation_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_04b_db_random_smoothing/log_perturbation_state.csv
+    RUN_05_enforce_lat_vel/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_05_enforce_lat_vel/log_lateral_velocity.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_05_enforce_lat_vel/log_lateral_velocity.csv
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_05_enforce_lat_vel/log_perturbation_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_05_enforce_lat_vel/log_perturbation_state.csv
+    RUN_06_lvlh_fixed/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_06_lvlh_fixed/log_lvlh_frame.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_06_lvlh_fixed/log_lvlh_frame.csv
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_06_lvlh_fixed/log_vehicle_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_06_lvlh_fixed/log_vehicle_state.csv
+    RUN_07_no_submodel/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_07_no_submodel/log_vehicle_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_07_no_submodel/log_vehicle_state.csv
+    RUN_08_sequential_mnvrs/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_08_sequential_mnvrs/log_maneuver_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_08_sequential_mnvrs/log_maneuver_state.csv
+    RUN_09_pert_limit/input.py:
+      compare:
+      - models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/RUN_09_pert_limit/log_perturbation_state.csv
+        vs. models/dynamics/state_overrides/attitude_manager/verif/SIM_verif/verif_data/RUN_09_pert_limit/log_perturbation_state.csv
+    WARN_att_manager/input.py: null
+    WARN_init_pert/input.py: null
+    WARN_mnvr_accel/input.py: null
+    WARN_zero_moment/input.py: null
 SIM_verif_bin_counter:
   model_dir: models/utilities/bin_counter
   path: models/utilities/bin_counter/verif/SIM_verif
