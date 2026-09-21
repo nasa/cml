@@ -1566,6 +1566,13 @@ SIM_lookup_simple_lookup_wind:
       compare:
       - models/environment/atmos/atmosphere_models/simple_lookup_wind/verif/SIM_lookup/RUN_windcomponents_zero/log_test_data.csv
         vs. models/environment/atmos/atmosphere_models/simple_lookup_wind/verif/SIM_lookup/verif_data/RUN_windcomponents_zero/log_test_data.csv
+SIM_msl_alt:
+  model_dir: models/environment/msl
+  path: models/environment/msl/verif/SIM_msl_alt
+  build_args: CML_OFFLINE_BUILD=1
+  runs:
+    RUN_example_oceanic_coordinates/input.py:
+    RUN_sweep/input.py:
 SIM_multi_body_composite_dispersion_mass_body_dispersed_init:
   model_dir: models/dynamics/mass/mass_body_dispersed_init
   path: models/dynamics/mass/mass_body_dispersed_init/verif/SIM_multi_body_composite_dispersion
