@@ -48,7 +48,3 @@ TEST(MathUtils, Sign) {
 TEST(MathUtils, Polynomial) {
 
 }
-
-TEST(MathUtils, QuadraticSolver) {
-
-}

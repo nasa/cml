@@ -112,6 +112,7 @@ add_cml_tests(
         math_utils/test/frame_transformations_test.cc
         math_utils/test/linear_algebra_test.cc
         math_utils/test/protection_methods_test.cc
+        math_utils/test/quadratic_solver_test.cc
         math_utils/test/numerical_methods_test.cc
         table_interp_cpp/test/table_independent_variable_test.cc
 )
