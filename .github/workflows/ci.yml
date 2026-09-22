@@ -78,6 +78,17 @@ jobs:
           source .bashrc
           cmake --workflow --preset dev --fresh
 
+      # Test that all models build properly in a Trick environment (i.e not using
+      # the CMake build process or Trickification). Purge the sim build afterward
+      # to save on runner memory usage.
+      - name: Check Trick compatibility
+        run: |
+          export PATH=${TRICK_HOME}/bin:${PATH}
+          source .bashrc
+          cd utility/sims/SIM_test_trick_compatibility
+          trick-CP
+          make spotless
+
       - name: Build verification sims
         id: build_verif_sims
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
