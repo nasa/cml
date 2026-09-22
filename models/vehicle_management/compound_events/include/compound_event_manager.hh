@@ -34,7 +34,15 @@ class CompoundEventsManager : public VehicleEventsManager
     CompoundEventsManager is responsible for the memory-management cleanup /
     destruction of these event / watch-value instances.*/
   std::list<WatchValuesBaseCore*>  managed_triggers; /* (--)
-    List of all triggers being used, used to unlock triggers.*/
+    List of all triggers being managed by the manager. This list is used for:
+    - at the start of each cycle all of these triggers are unlocked; when a
+      trigger on this list trigger is updated, it gets locked so that it only
+      gets evaluated once per cycle; this is useful if a trigger is used in
+      multiple events, and especially so for multi-shot triggers monitoring
+      for something like a variable reaching a maximum value.
+    - when looking for a trigger by name, it is this list that gets searched.
+    Events are updated from their event(s). They do not need to be included in
+    this list, especially if a trigger is used in only one event.*/
   std::list<WatchValuesBaseCore*>  allocated_triggers; /* (--)
     Set of triggers allocated for use by any trigger-set.*/
   EventTriggerSet allocated_triggers_; /* (--)
@@ -230,5 +238,9 @@ class CompoundEventsManager : public VehicleEventsManager
 
     return reinterpret_cast<T*>(var_name_ref->address);
   }
+
+  // Copy-constructor and operator= not implemented / deleted
+  CompoundEventsManager( const CompoundEventsManager&) = delete;
+  CompoundEventsManager& operator=( const CompoundEventsManager&) = delete;
 };
 #endif

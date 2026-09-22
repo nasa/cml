@@ -74,6 +74,24 @@ EventTriggerSet::populate_conditional_reference_trigger_list()
 }
 
 /*****************************************************************************
+Name: force_multi_shot_for_managed_values
+Purpose:
+  Triggers that have managed value references should always have multi_shot
+  forced.  Otherwise, they'll inappropriately stop updating.
+*****************************************************************************/
+void
+EventTriggerSet::force_multi_shot_for_managed_values()
+{
+  for (WatchValuesBaseCore * trigger : triggers) {
+    EventTriggerBase * event_trigger = dynamic_cast<EventTriggerBase*>(trigger);
+      if (event_trigger != nullptr &&
+        event_trigger->has_managed_value()) {
+      trigger->multi_shot = true;
+    }
+  }
+}
+
+/*****************************************************************************
 Name: update_conditional_trigger_references
 Purpose:
   Updates the conditional triggers' reference values; called only if the
