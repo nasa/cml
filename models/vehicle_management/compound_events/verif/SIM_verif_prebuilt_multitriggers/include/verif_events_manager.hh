@@ -101,7 +101,9 @@ class VerifCompoundEventsManager : public CompoundEventsManager
     add_event( event);
 
   }
-  VerifCompoundEventsManager(const VerifCompoundEventsManager&) = delete;
-  VerifCompoundEventsManager& operator=(const VerifCompoundEventsManager&) = delete;
+ private:
+  VerifCompoundEventsManager( const VerifCompoundEventsManager&) = delete;
+  VerifCompoundEventsManager& operator=(
+                              const VerifCompoundEventsManager&) = delete;
 };
 #endif

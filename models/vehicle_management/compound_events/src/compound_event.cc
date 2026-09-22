@@ -128,11 +128,15 @@ CompoundEvent::test_crossing()
 }
 
 /*****************************************************************************
-test_crossing
+test_crossing_iterative
 Purpose:
-  FIXME Comment Me
+  Sets the status of a CompoundEvent according to the status of its triggers.
+  This method is iterative in that when moving from an Unarmed state to an
+  armed state, it can call itself if the event allows for simultaneous
+  processing of its arming triggers and other triggers (including action and
+  disarming triggers)An iterative call to process the Event's triggers
 *****************************************************************************/
-void 
+void
 CompoundEvent::test_crossing_iterative()
 {
   switch (status) {
@@ -374,11 +378,17 @@ CompoundEvent::activate()
   if (arming_triggers.get_num_triggers() > 0) {
     status = Unarmed;
     arming_triggers.subscribe();
+    // arming_triggers.force_multi_shot_for_managed_values();
   }
   else {
     status = Armed;
     action_triggers.subscribe();
   }
+
+  //Apply multi_shot to triggers where necessary:
+  // * Action triggers with managed references
+  action_triggers.force_multi_shot_for_managed_values();
+
   WatchValuesDelay::activate();
 
   // Identify which of the triggers has a conditional reference value.
