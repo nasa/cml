@@ -21,8 +21,10 @@
 #include <cmath>
 #include <cstddef>
 #include <cfenv>
+#include <iterator>
 #include <limits>
 #include <list>
+#include <numeric>
 #include <string>
 #include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
@@ -32,9 +34,11 @@
 
 #include "../include/math_utils.hh"
 
+#include <numeric>
+
 /*******************************************************************************
 generate_inertial_to_lvlh
-Purpose:( Generates the transfromation matrix from inertial to LVLH given
+Purpose:( Generates the transformation matrix from inertial to LVLH given
           a position and velocity expressed in inertial.
           LVLH is defined as:
           X - completes
@@ -61,7 +65,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
       __FILE__,__LINE__,"Invalid arguments\n",
       "The inertial-to-LVLH method cannot function when\n"
       "the input arguments are NULL.\n"
-      "Setting transformation matrix to identitiy.\n");
+      "Setting transformation matrix to identity.\n");
     jeod::Matrix3x3::identity(T_inrtl_lvlh);
     return;
   }
@@ -138,11 +142,9 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
 
   jeod::Vector3::normalize(x_unit);
 
-  for (unsigned int ii = 0; ii < 3; ++ii) {
-    T_inrtl_lvlh[0][ii] = x_unit[ii];
-    T_inrtl_lvlh[1][ii] = y_unit[ii];
-    T_inrtl_lvlh[2][ii] = z_unit[ii];
-  }
+  jeod::Vector3::copy(x_unit, T_inrtl_lvlh[0]);
+  jeod::Vector3::copy(y_unit, T_inrtl_lvlh[1]);
+  jeod::Vector3::copy(z_unit, T_inrtl_lvlh[2]);
 }
 
 /*******************************************************************************
@@ -174,7 +176,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
       __FILE__,__LINE__,"Invalid arguments\n",
       "The inertial-to-UVW method cannot function when\n"
       "the input arguments are NULL.\n"
-      "Setting transformation matrix to identitiy.\n");
+      "Setting transformation matrix to identity.\n");
     jeod::Matrix3x3::identity(T_inrtl_uvw);
     return;
   }
@@ -248,11 +250,9 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
     jeod::Vector3::normalize( w_unit);
   }
   jeod::Vector3::normalize( v_unit);
-  for (unsigned int ii = 0; ii < 3; ++ii) {
-    T_inrtl_uvw[0][ii] = u_unit[ii];
-    T_inrtl_uvw[1][ii] = v_unit[ii];
-    T_inrtl_uvw[2][ii] = w_unit[ii];
-  }
+  jeod::Vector3::copy(u_unit, T_inrtl_uvw[0]);
+  jeod::Vector3::copy(v_unit, T_inrtl_uvw[1]);
+  jeod::Vector3::copy(w_unit, T_inrtl_uvw[2]);
 }
 
 /*******************************************************************************
@@ -361,11 +361,9 @@ MathUtils::generate_inrtl_to_reference( const double x_axis_inrtl[3],
   // T_inrtl_reference =  [ x0 x1 x2]
   //                    [ [ y0 y1 y2] ]
   //                      [ z0 z1 z2]]
-  for (unsigned int ii = 0; ii < 3; ii++) {
-    T_inrtl_reference[0][ii] = x_unit[ii];
-    T_inrtl_reference[1][ii] = y_unit[ii];
-    T_inrtl_reference[2][ii] = z_unit[ii];
-  }
+  jeod::Vector3::copy(x_unit, T_inrtl_reference[0]);
+  jeod::Vector3::copy(y_unit, T_inrtl_reference[1]);
+  jeod::Vector3::copy(z_unit, T_inrtl_reference[2]);
 }
 
 /*******************************************************************************
@@ -435,11 +433,9 @@ MathUtils::generate_inrtl_to_vnc( const double (&position)[3],
   // T_inrtl_vnc =  [ x0 x1 x2]
   //              [ [ y0 y1 y2] ]
   //                [ z0 z1 z2]]
-  for (unsigned int ii = 0; ii < 3; ii++) {
-    T_inrtl_vnc[0][ii] = x_unit[ii];
-    T_inrtl_vnc[1][ii] = y_unit[ii];
-    T_inrtl_vnc[2][ii] = z_unit[ii];
-  }
+  jeod::Vector3::copy(x_unit, T_inrtl_vnc[0]);
+  jeod::Vector3::copy(y_unit, T_inrtl_vnc[1]);
+  jeod::Vector3::copy(z_unit, T_inrtl_vnc[2]);
 }
 
 /*****************************************************************************
@@ -480,15 +476,15 @@ MathUtils::generate_T_pfix_to_enu( const double position_pfix[3],
       __FILE__,__LINE__,"Invalid Position\n",
       "Position vector is NULL.\n"
       "Cannot generate the ENU frame.\n"
-      "Setting transformation matrix to identitiy.\n");
+      "Setting transformation matrix to identity.\n");
     jeod::Matrix3x3::identity(T_pfix_to_enu);
     return;
   }
 
   // Create 3-arrays to express the 3 axes of ENU in the ECEF frame
-  double east_hat[3]={0};
-  double north_hat[3]={0};
-  double up_hat[3]={0};
+  double east_hat[3] {};
+  double north_hat[3] {};
+  double up_hat[3] {};
 
   // Up is the position vector, passed in as an argument.  Need to normalize
   // this vector to get a unit-vector.
@@ -502,7 +498,8 @@ MathUtils::generate_T_pfix_to_enu( const double position_pfix[3],
       "Aligning east with pfix +x\n"
       "         north to complete.\n");
     east_hat[0] = 1.0;
-    north_hat[1] = up_hat[2] = (up_hat[2]>0) ? 1.0 : -1.0;
+    up_hat[2] = std::copysign(1.0, up_hat[2]);
+    north_hat[1] = up_hat[2];
   }
   else {
     // East unit-vector is the normalization of (ECEF-z) x (up).
@@ -573,11 +570,10 @@ MathUtils::generate_Q_enu_to_pfix( double longitude,
       longitude += M_PI;
   }
 
-
   jeod::Quaternion Q_enu_to_uen;
-  Q_enu_to_uen.scalar    =
-  Q_enu_to_uen.vector[0] =
-  Q_enu_to_uen.vector[1] =
+  Q_enu_to_uen.scalar    = 0.5;
+  Q_enu_to_uen.vector[0] = 0.5;
+  Q_enu_to_uen.vector[1] = 0.5;
   Q_enu_to_uen.vector[2] = 0.5;
 
   // equatorial East-y frame (equEy) is the rotation of the UEN frame such that
@@ -622,7 +618,7 @@ MathUtils::polynomial( double x,
     x_to_i *= x;
   }
 
-  if (std::isnan(sum) || std::isinf(sum)) {  //chec invalid ops and overflow
+  if (std::isnan(sum) || std::isinf(sum)) {  //check invalid ops and overflow
     if (failed_flag) {
       CMLMessage::fail(
         __FILE__, __LINE__,"Overflow value detected.\n",
@@ -848,7 +844,7 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
       //  -- the element in row (ii), and
       //  -- the element in this row
       // for every column to the left of the current column.
-      // This is analgous to subtracting off the scalar product of the row(ii)
+      // This is analogous to subtracting off the scalar product of the row(ii)
       // and this row for elements to the left.
       // These values have already been computed because values are computed
       // for all rows as each column is processed, moving to the right.
@@ -901,24 +897,20 @@ MathUtils::compute_backward_difference( const std::list<double> & history)
     return 0.0;
   }
 
-  static const std::array<std::array<double, 5>, 5> back_diff_coefficients =
+  static constexpr std::array<std::array<double, 5>, 5> back_diff_coefficients =
     {{{     0,     0,    0,    0,     0   },
       {     1,    -1.0,  0,    0,     0   },
       {   1.5,    -2.0,  0.5,  0,     0   },
       {  11.0/6,  -3.0,  1.5, -1.0/3, 0   },
       {  25.0/12, -4.0,  3.0, -4.0/3, 0.25}}};
-  double derivative = 0.0;
-  const size_t order = std::min(history.size() - 1, static_cast<size_t>(4));
+  constexpr auto max_order = back_diff_coefficients.size() - 1;
 
-  size_t ii = 0;
-  for (auto it = history.begin();
-       it != history.end() && ii < 5;
-       ++it) {
+  // Use at most the first 5 items in the history (4th order difference).
+  const auto order = std::min(history.size() - 1, max_order);
+  const auto begin = history.begin();
+  const auto end = std::next(begin, static_cast<std::ptrdiff_t>(order) + 1);
 
-    derivative += (*it) * back_diff_coefficients[order][ii];
-    ++ii;
-  }
-  return derivative;
+  return std::inner_product(begin, end, back_diff_coefficients[order].begin(), 0.0);
 }
 
 
