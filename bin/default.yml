@@ -3030,15 +3030,6 @@ SIM_verif_eclipse_calculator:
       compare:
       - models/environment/eclipse_calculator/verif/SIM_verif/RUN_moon_shadow/log_test_data.csv
         vs. models/environment/eclipse_calculator/verif/SIM_verif/verif_data/RUN_moon_shadow/log_test_data.csv
-SIM_verif_env_utils:
-  model_dir: models/utilities/env_utils
-  path: models/utilities/env_utils/verif/SIM_verif
-  build_args: CML_OFFLINE_BUILD=1
-  runs:
-    RUN_verif/input.py:
-      compare:
-      - models/utilities/env_utils/verif/SIM_verif/RUN_verif/log_test_data.csv vs.
-        models/utilities/env_utils/verif/SIM_verif/verif_data/RUN_verif/log_test_data.csv
 SIM_verif_events_manager:
   model_dir: models/vehicle_management/events_manager
   path: models/vehicle_management/events_manager/verif/SIM_verif

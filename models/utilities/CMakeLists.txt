@@ -22,7 +22,7 @@ add_cml_library(
         constraint_check/include/valset_constraint.hh
         convert_string/include/convert_string.hh
         double_to_words/include/convert_double_to_words.hh
-        env_utils/include/env_utils.h
+        env_utils/include/env_utils.hh
         fault_arch/include/sSensorFaults.hh
         fault_management/include/fault.hh
         fault_management/include/fault_bias.hh
@@ -74,6 +74,7 @@ add_cml_library(
         constraint_check/src/constraint_test_templates.cc
         constraint_check/src/constraint_test_timed_templates.cc
         double_to_words/src/convert_double_to_uint_words.cc
+        env_utils/src/env_utils.cc
         fault_arch/src/sSensorFaults.cc
         fault_management/src/fault.cc
         fault_management/src/fault_function.cc
@@ -109,5 +110,6 @@ add_cml_tests(
 
     SOURCES
         cml_message/test/cml_message_test.cc
+        env_utils/test/env_utils_test.cc
         table_interp_cpp/test/table_independent_variable_test.cc
 )

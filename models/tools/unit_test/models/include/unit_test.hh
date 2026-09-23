@@ -123,9 +123,6 @@ class UnitTestFramework {
 
   void update_sweeps();
   void update_file();
- private:
-  friend class UnitTestFrameworkTest;
-  std::string expand_env_variables(const std::string& input);
 };
 
 // Interface to make this look like the C-style unit-test framework:
