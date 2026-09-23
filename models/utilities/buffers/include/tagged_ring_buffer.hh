@@ -9,6 +9,7 @@ PURPOSE: (
 
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2023) (ANTARES) (initial))
+   ((Dohyeung Kim) (OSR) (Apr 2026) (Update Proximity Case))
   )
 
 ASSUMPTIONS:
@@ -66,10 +67,26 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
     the specified tag (false, default), or for a data-set with a tag identical
     to the specified tag (true).*/
 
+  bool proximity_flag; /* (--)
+    When the model looks for the data-set with a tag closest in value to
+    the specified tag (require_exact_tag == false), this flag determines 
+    whether the searched closest data-set is within a certain proximity (true)
+    or simply the absolute closest regardless of time difference (false,
+    default) */
+
+  double proximity_th; /* (--)
+    The maximum allowable time difference between a tag closest and the 
+    specified tag. If the proximity_flag is true, the lookup_tag function
+    returns the data-set with a tag closest in value to the specified tag
+    only if the difference is within this threshold; otherwise, it returns
+    a null pointer with a error message*/
 
   explicit CMLTaggedRingBuffer( const std::string& name)
     :
     CMLSimpleRingBuffer<CMLTaggedRingBufferMember<T_Tag, T_Data>>(name)
+    require_exact_tag(false),
+    proximity_flag(false),
+    proximity_th(std::numeric_limits<double>::infinity())
   {}
   ~CMLTaggedRingBuffer() override = default;
 
@@ -222,6 +239,16 @@ Note:
         tag_delta_min = tag_delta;
       }
     }
+    
+    if (proximity_flag && tag_delta_min > proximity_th) {
+      CMLMessage::error( __FILE__,__LINE__,
+        "In buffer ", name_,", could not find a tag ",t," within the proximity threshold ",
+        proximity_th,"\n"
+        "Cannot identify the desired data set.\n"
+        "Returning NULL.\n");
+      return nullptr;        
+    }
+    
     // return the data at the index identified with prox_ix.
     return &data_[prox_ix].data;
   }
