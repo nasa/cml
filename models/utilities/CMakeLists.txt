@@ -109,12 +109,13 @@ add_cml_tests(
 
     SOURCES
         cml_message/test/cml_message_test.cc
-        math_utils/test/cholesky_decomposition_test.cc
         math_utils/test/ellipsoid_intersection_test.cc
-        math_utils/test/frame_transformations_test.cc
-        math_utils/test/linear_algebra_test.cc
-        math_utils/test/protection_methods_test.cc
+        math_utils/test/math_utils_cholesky_decomposition_test.cc
+        math_utils/test/math_utils_frame_transformations_test.cc
+        math_utils/test/math_utils_linear_algebra_test.cc
+        math_utils/test/math_utils_numerical_methods_test.cc
+        math_utils/test/math_utils_protection_methods_test.cc
         math_utils/test/quadratic_solver_test.cc
-        math_utils/test/numerical_methods_test.cc
+        math_utils/test/std_array_ops_test.cc
         table_interp_cpp/test/table_independent_variable_test.cc
 )
