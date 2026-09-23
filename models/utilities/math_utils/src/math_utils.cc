@@ -21,8 +21,10 @@
 #include <cmath>
 #include <cstddef>
 #include <cfenv>
+#include <iterator>
 #include <limits>
 #include <list>
+#include <numeric>
 #include <string>
 #include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
@@ -31,6 +33,8 @@
 #include "jeod/models/utils/quaternion/include/quat.hh"
 
 #include "../include/math_utils.hh"
+
+#include <numeric>
 
 /*******************************************************************************
 generate_inertial_to_lvlh
@@ -893,24 +897,20 @@ MathUtils::compute_backward_difference( const std::list<double> & history)
     return 0.0;
   }
 
-  static const std::array<std::array<double, 5>, 5> back_diff_coefficients =
+  static constexpr std::array<std::array<double, 5>, 5> back_diff_coefficients =
     {{{     0,     0,    0,    0,     0   },
       {     1,    -1.0,  0,    0,     0   },
       {   1.5,    -2.0,  0.5,  0,     0   },
       {  11.0/6,  -3.0,  1.5, -1.0/3, 0   },
       {  25.0/12, -4.0,  3.0, -4.0/3, 0.25}}};
-  double derivative = 0.0;
-  const size_t order = std::min(history.size() - 1, static_cast<size_t>(4));
+  constexpr auto max_order = back_diff_coefficients.size() - 1;
 
-  size_t ii = 0;
-  for (auto it = history.begin();
-       it != history.end() && ii < 5;
-       ++it) {
+  // Use at most the first 5 items in the history (4th order difference).
+  const auto order = std::min(history.size() - 1, max_order);
+  const auto begin = history.begin();
+  const auto end = std::next(begin, static_cast<std::ptrdiff_t>(order) + 1);
 
-    derivative += (*it) * back_diff_coefficients[order][ii];
-    ++ii;
-  }
-  return derivative;
+  return std::inner_product(begin, end, back_diff_coefficients[order].begin(), 0.0);
 }
 
 
