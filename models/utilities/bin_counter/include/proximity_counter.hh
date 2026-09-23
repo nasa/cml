@@ -4,9 +4,6 @@ PURPOSE:
   times some variable of type double has a value that falls closest to each
   of a set of target values.)
 
-ASSUMPTIONS:
-  (Target values are monotonically increasing)
-
 LIBRARY DEPENDENCY:
   (../src/proximity_counter.cc)
 
@@ -14,6 +11,7 @@ PROGRAMMERS:
   (
     ((Matthew Elmer, Gary Turner) (OSR) (Jun 2023)
       (Refactored content from GNC_PAR; Overhauled grok_bin_counter))
+    ((Hansen Lian) (OSR) (July 2026) (Inherits from BinCounter))
   )
 *******************************************************************************/
 #ifndef CML_PROXIMITY_COUNTER_HH
@@ -22,19 +20,9 @@ PROGRAMMERS:
 #include <cstddef>
 #include <string>
 #include <vector>
+#include <algorithm>
 
-/*****************************************************************************
-CML_ProximityCounterElement
-Purpose: Contents of each element of the working vector
-*****************************************************************************/
-struct CML_ProximityCounterElement {
-  double value; /* (--)
-    Target value to be counted */
-  unsigned int count; /* (--)
-    Counter. Incremented when value is the closest one among 
-    CML_ProximityCounterElement vector to the variable. */
-};
-
+#include "cml/models/utilities/bin_counter/include/bin_counter.hh"
 
 /*****************************************************************************
 CML_ProximityCounter
@@ -42,25 +30,16 @@ Purpose:
   Receives a value via the insert() command and bins it into one of
   a set of bins, each covering a finite domain.
 *****************************************************************************/
-class CML_ProximityCounter {
- protected:
-  std::vector<CML_ProximityCounterElement> targets;  /* (--)
-    The target values. */
-  bool targets_ready; /* (--)
-    Check on presence of data in the targets array.*/
-  size_t ntarget;  /* (--)
-    Number of targets.*/
-  const CML_ProximityCounterElement* target_data;  /* (--)
-    Array of targets data. For logging compatibility only.*/
-
+class CML_ProximityCounter : public CML_BinCounter {
+  protected:
+  const CML_BinCounterElement* target_data;  /* (--)
+    Array of bins data. For logging compatibility only.*/
  public:
-  std::string name; /* (--)
-    Name of group (for debugging purposes)*/
   CML_ProximityCounter();
   explicit CML_ProximityCounter(const std::vector<double> & targets_);
   CML_ProximityCounter(const CML_ProximityCounter&) = delete;
   CML_ProximityCounter& operator=(const CML_ProximityCounter&) = delete;
-  void insert(double value);
+  using CML_BinCounter::insert;
   void set_data( const std::vector<double> & targets_);
   template <size_t n_targets>
   void set_data( const double (&new_targets)[n_targets])
@@ -68,5 +47,6 @@ class CML_ProximityCounter {
     std::vector<double> targets_v( new_targets, new_targets+n_targets);
     set_data( targets_v);
   }
+  size_t get_ntarget() const {return nbin;}
 };
 #endif
