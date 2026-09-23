@@ -14,6 +14,7 @@ PROGRAMMERS:
   (
     ((Matthew Elmer, Gary Turner) (OSR) (Jun 2023)
       (Refactored content from GNC_PAR; Overhauled grok_target_counter))
+      ((Hansen Lian) (OSR) (July 2026) (Inherits from BinCounter))
   )
 *******************************************************************************/
 
@@ -21,14 +22,14 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <cstddef>
 #include <vector>
+#include <limits>
 
 /*****************************************************************************
 Constructors
 *****************************************************************************/
 CML_ProximityCounter::CML_ProximityCounter()
   :
-  targets_ready(false),
-  ntarget(),
+  CML_BinCounter(),
   target_data(nullptr)
 {}
 /****************************************************************************/
@@ -37,7 +38,7 @@ CML_ProximityCounter::CML_ProximityCounter(
   :
   CML_ProximityCounter()
 {
-  set_data(targets_);
+  CML_ProximityCounter::set_data(targets_);
 }
 
 /*****************************************************************************
@@ -46,18 +47,16 @@ Purpose:
   Sets the edge data for constructing the targets. Deletes all previous
   target structure and counts for those targets.
 Options:
- - Pass in a STL-vector of n edge values, there will be (n-1) targets from
-   these n values
- - Pass in a C-style array of n edge values, there will be (n-1) targets from
-   these n values
- - Pass in an upper limit and a lower limit and the number of targets;
-   targets will be equally spaced ebtween the two limits.
+ - Pass in a STL-vector of n target values, there will be (n) targets from
+   these n values with bins spaced at the midpoint of consecutive targets.
+ - Pass in a C-style array of n target values, there will be (n) targets from
+   these n values with bins spaced at the midpoint of consecutive target
 *****************************************************************************/
 void
 CML_ProximityCounter::set_data(const std::vector<double> & targets_)
 {
-  targets.clear();
-  targets_ready = false;
+  bins.clear();
+  bins_ready = false;
 
   const size_t n_targets_ = targets_.size();
   // Sanity check for number of targets:
@@ -68,69 +67,24 @@ CML_ProximityCounter::set_data(const std::vector<double> & targets_)
     return;
   }
 
-  // Sanity check for monotonicity of targets_:
-  for (size_t ii = 1; ii < n_targets_; ii++) {
-    if (targets_[ii] <= targets_[ii-1]) {
-      CMLMessage::error( __FILE__,__LINE__,
-        "Bin targets_ (target-group name : ",name,") are malformed,\n"
-        "they are not monotonically increasing.\n"
-        "  edge(",ii-1,") = ",targets_[ii-1],"\n"
-        "  edge(",ii,  ") = ",targets_[ii],  "\n"
-        "Group (",name,") cannot be used.\n");
-      return;
-    }
-  }
 
-  ntarget = n_targets_;
-  targets.resize(ntarget);
-  targets_ready = true;
-  target_data = targets.data();
-  for (size_t ii = 0; ii < ntarget; ii++) {
-    targets[ii].value = targets_[ii];
-    targets[ii].count = 0;
-  }
-}
+  std::vector<double> sorted_targets = targets_;
 
-/*****************************************************************************
-insert
-Purpose:Increments the count in the target in which the specified value falls.
-Note:
-  Check each target on the half-open interval [L, R) except for the last, which
-  is a fully closed interval [L, R].
-  Processing upward from lower limit requires special treatment of last
-  target (all but last upper bound are open).
-  Processing downward from upper limit does not (all lower bounds are
-  closed) so we do that.
-*****************************************************************************/
-void
-CML_ProximityCounter::insert(double value)
-{
-  // Consider only values below upper edge and only if model passed sanity
-  // check.
-  if (!targets_ready) {return;}
+  // Sort the local copy
+  std::sort(sorted_targets.begin(), sorted_targets.end());
 
-  if (value < targets[0].value) {
-    targets[0].count++;
+  nbin = n_targets_;
+  bins.resize(nbin);
+  bins_ready = true;
+  bin_data = target_data = bins.data();
+  bins[0].bin_floor = std::numeric_limits<double>::lowest();
+  for (size_t ii = 0; ii < nbin-1; ii++) {
+    bins[ii].value = sorted_targets[ii];
+    bins[ii].count = 0;
+    bins[ii].bin_ceil =
+    bins[ii+1].bin_floor = (sorted_targets[ii] + sorted_targets[ii+1])/2;
   }
-  else if (value >= targets[ntarget-1].value) {
-    targets[ntarget-1].count++;
-  }
-  else {
-    size_t ix_search = 0;
-    while (ix_search < ntarget-2 &&
-           value > targets[ix_search+1].value) {
-      ix_search++;
-    }
-    // ix_search is between 0 and ntarget-2
-    // value lies between targets[ix_search] and targets[ix_search+1]
-    // Find the difference between value and the two bounding target values.
-    const double delta_low = value - targets[ix_search].value;
-    const double delta_high = targets[ix_search+1].value - value;
-    // increment the count for the closer target.
-    if (delta_high > delta_low) {
-      targets[ix_search].count++;
-    } else {
-      targets[ix_search+1].count++;
-    }
-  }
+  bins[nbin - 1].value = sorted_targets[nbin-1];
+  bins[nbin - 1].count = 0;
+  bins[nbin - 1].bin_ceil = std::numeric_limits<double>::max();
 }

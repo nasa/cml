@@ -28,12 +28,16 @@ CML_BinCounterElement
 Purpose: Contents of each element of the working vector
 *****************************************************************************/
 struct CML_BinCounterElement {
+  double value; /* (--)
+  Target value to be counted, used by proximity counter */
   double bin_floor; /* (--)
     Bin lower bound.*/
   double bin_ceil; /* (--)
     Bin upper bound. */
-  unsigned int count; /* (--)
-    Counter. Incremented when falling in this specific bin. */
+  unsigned int count; /* (1)
+    Counter. Incremented when falling in this specific bin.
+    For Proximity element, incremented when value is the closest one among
+    CML_BinCounterElement vector to the variable. */
 };
 
 /*****************************************************************************
@@ -73,7 +77,8 @@ class CML_BinCounter {
   void set_data( double limit_a,
                  double limit_b,
                  unsigned int num_bins,
-                 bool closed_ends = true);
+                 bool closed_ends = true);           
+  void apply_tolerance(double);
   template <size_t n_edges>
   void set_data( const double (&edges)[n_edges],
                  bool closed_ends = true)
@@ -81,5 +86,6 @@ class CML_BinCounter {
     std::vector<double> edges_v( edges, edges+n_edges);
     set_data( edges_v, closed_ends);
   }
+  size_t get_nbin() const {return nbin;}
 };
 #endif
