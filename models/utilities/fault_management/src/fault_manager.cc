@@ -95,8 +95,8 @@ void FaultManager::initialize() {
     }
   }
   // Go back and put in all the requested param changes.
-  for (const auto& it : set_trigger_value_cache) {
-    set_trigger_value(it.first, it.second);
+  for (const auto& [trigger_name, value] : set_trigger_value_cache) {
+    set_trigger_value(trigger_name, value);
   }
   for (const auto& it : set_fault_param_cache) {
     set_fault_param(it.fault_name, it.param_name, it.value);
@@ -352,8 +352,8 @@ void FaultManager::parse() {
 
   // Go back and re-send the externally set variables that were cached off
   // prior to parsing.
-  for (const auto& it : set_enable_for_fault_cache) {
-    set_fault_enabled(it.first, it.second);
+  for (const auto& [fault_name, enable_flag] : set_enable_for_fault_cache) {
+    set_fault_enabled(fault_name, enable_flag);
   }
   for (const auto& it : set_trigger_enable_for_fault_cache) {
     set_fault_trigger_enabled(it.fault_name, it.trigger_name, it.enable_flag);
