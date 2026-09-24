@@ -568,7 +568,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
        * redundant repetition (typically, we are adding more tests than
        * specified, so the same spec-ix will be used multiple times).
        *      lg_ratio[i] = lg (threshold[i+1] / threshold[i]) */
-      double log_threshold_ratios[num_specs-1];
+      std::vector<double> log_threshold_ratios(num_specs-1);
       for (spec_ix = 0; spec_ix <= num_specs-2; ++spec_ix) {
         log_threshold_ratios[spec_ix] = std::log10( threshold_spec[spec_ix+1] /
                                                     threshold_spec[spec_ix]);
