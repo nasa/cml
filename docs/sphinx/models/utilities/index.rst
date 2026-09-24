@@ -10,4 +10,5 @@ really fit under other model categories.
     :name: utilities-models
     :titlesonly:
 
+    convert-double-to-words.rst
     subscriptions.rst

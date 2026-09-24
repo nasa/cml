@@ -1,3 +1,0 @@
-convert_double_words.convert_value
-convert_double_words.resolution
-convert_double_words.bit_size
