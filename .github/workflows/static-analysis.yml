@@ -21,8 +21,9 @@ jobs:
     steps:
       - name: Install system dependencies
         run: |
-          dnf config-manager --set-enabled crb
           dnf install -y epel-release
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --set-enabled crb
           dnf update -y
           dnf install -y git python3-devel
 
@@ -88,8 +89,9 @@ jobs:
     steps:
       - name: Install system dependencies
         run: |
-          dnf config-manager --set-enabled crb
           dnf install -y epel-release
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --set-enabled crb
           dnf update -y
           dnf install -y git bison clang clang-devel cmake diffutils flex gcc \
             gcc-c++ libxml2-devel llvm-devel llvm-static perl perl-Digest-MD5 \
@@ -179,8 +181,9 @@ jobs:
     steps:
       - name: Install system dependencies
         run: |
-          dnf config-manager --set-enabled crb
           dnf install -y epel-release
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --set-enabled crb
           dnf update -y
           dnf install -y git bison clang clang-devel cmake diffutils flex gcc \
             gcc-c++ libxml2-devel llvm-devel llvm-static perl perl-Digest-MD5 \
