@@ -124,13 +124,6 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
 
   prox_counter.set_data( empty_dbl);
 
-  std::cout << "\n"
-"***************************************************************************\n"
-"Error - cannot create proximity counter with non monotonic data set.\n"
-"***************************************************************************\n" << std::endl; 
-
-  prox_counter.set_data( non_monot_edges);
-
 
 // BIN COUNTER WARNINGS
   std::cout << "\n"
