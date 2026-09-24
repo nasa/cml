@@ -21,6 +21,7 @@ PROGRAMMERS:
 #include "constraint_enum.hh"
 #include "constraint_test.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
 
 /*****************************************************************************
 Notes:
@@ -104,6 +105,16 @@ class ConstraintTest_Threshold : public ConstraintTest
     }
     return violation;
   }
+  
+  /****************************************************************************
+  * get_threshold
+  * Purpose: Returns the threshold, cast to double, for logging purposes.
+  ****************************************************************************/
+  double get_threshold() override
+  {
+    return static_cast<double>(threshold);
+  }
+
   /****************************************************************************
   * query_equals
   * Purpose: evaluates (variable == threshold)
@@ -158,12 +169,12 @@ class ConstraintTest_Interval : public ConstraintTest
       lower_bound = temporary;
     }
 
-    if (upper_bound == lower_bound) {
+    if (MathUtils::is_within_abs_tolerance(upper_bound, lower_bound, equality_threshold)) {
       CMLMessage::error( __FILE__,__LINE__,
         "Cannot initialize an interval constraint-test with a \n"
         "zero-width interval. Bounds are set to:\n",
-        lower_bound," and ",upper_bound,".\n"
-        "Initialization failed.\n");
+        lower_bound," and ",upper_bound," with equality threshold\n",
+        equality_threshold,". Initialization failed.\n");
       return false;
     }
     initialize_interval();

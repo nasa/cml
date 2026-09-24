@@ -25,7 +25,11 @@ Constructor
 *****************************************************************************/
 Constraint::Constraint( size_t num_tests_)
   :
-  num_tests(num_tests_)
+  test_violated_index(0),
+  test_violated_time_limit(0.0),
+  test_violated_threshold(0.0),
+  num_tests(num_tests_),
+  test_list()
 {}
 
 /*****************************************************************************
@@ -68,47 +72,44 @@ Purpose:
 void
 Constraint::post_update()
 {
+  bool violated_ = false; // local temporary measure of constraint status
   // If configured with "Any", trip on the first test that is violated;
   // record its index.
   if (violate_on_any_test) {
-    bool violated_ = false;
     // Step through by index because we want to record which test violated.
     for (size_t ii = 0; ii < num_tests; ii++) {
       if (test_list[ii]->get_violation()) {
         test_violated_index = ii;
         test_violated_time_limit = test_list[ii]->get_time_limit();
+        test_violated_threshold = test_list[ii]->get_threshold();
         violated_ = true;
-        violated = true;
-        count_violations();
+        /* increment the count if this violation is not a holdover from the
+           previous cycle (violated is the copy held over from the previous
+           cycle). */
+        violation_count += static_cast<int>(!violated);
         break;
       }
     }
-    violated = violated_; // in case violated_ is still false.
   }
 
   // If configured with "All", require all test violations to trip the
-  // constraint violation:
+  // constraint violation. Start with an assumption that there is a
+  // violation, and correct that assumption as necessary:
   else {
-    violated = std::all_of(test_list.begin(), test_list.end(),
-      [](const auto& test) {return test->get_violation();});
-    if (violated) {
-      count_violations();
+    violated_ = true;
+    // Don't need to record which test violated, so don't need indices.
+    for (ConstraintTest * test : test_list) {
+      if (!test->get_violation()) {
+        violated_ = false;
+        break;
+      }
     }
+    /* increment the count if this violation is not a holdover from the
+       previous cycle (violated is the copy held over from the previous
+       cycle). */
+    violation_count += static_cast<int>(violated_ && !violated);
   }
-  prev_violated = violated;
-}
-
-/*****************************************************************************
-Name: count_violations
-Purpose: Counts the number of unique violations
-*****************************************************************************/
-void
-Constraint::count_violations()
-{
-  if (violated != prev_violated) {
-    violation_count += static_cast<unsigned int>(violated);
-    prev_violated = violated;
-  }
+  violated = violated_;
 }
 
 /*****************************************************************************

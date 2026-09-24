@@ -53,9 +53,13 @@ ConstraintSet::update()
   if (!active) {return;}
 
   num_violations = 0;
+  violated_constraints.erase();
   for (Constraint * constraint : constraints) {
     constraint->update();
-    num_violations += static_cast<unsigned int>(constraint->violated);
+    if (constraint->violated) {
+      num_violations++;
+      violated_constraints += (constraint->name + ",  ");
+    }
   }
 }
 

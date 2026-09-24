@@ -36,13 +36,16 @@ Notes:
 *****************************************************************************/
 class ConstraintSet : public SubscriptionBase
 {
- protected:
+  protected:
   unsigned int num_violations{0}; /* (--)
     Counts the number of constraints violated in each cycle.
     Do not confuse with ConstraintBase::violate_count, which counts the number
     of occurrences of a specific constraint violation. across all cycles.*/
+  std::string violated_constraints;  /* (--)
+    Comma-separated list of the names of all constraints in the set that are
+    violated on this timestep.*/
 
- public:
+  public:
   std::list< Constraint *> constraints; /* (--)
     Set of pointers to the instances of ConstraintBase being managed by this
     class. Constraints should be instantiated independently and added to the
@@ -56,5 +59,6 @@ class ConstraintSet : public SubscriptionBase
   void update();
   void activate() override;
   static bool constraint_disabled( const Constraint * c);
+  std::string & get_violated_constraints() { return violated_constraints;}
 };
 #endif

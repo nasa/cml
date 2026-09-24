@@ -118,6 +118,16 @@ class ConstraintTest_ThresholdTimed : public ConstraintTestTimed
     }
     return violation;
   }
+
+    /****************************************************************************
+  * get_threshold
+  * Purpose: Returns the threshold, cast to double, for logging purposes.
+  ****************************************************************************/
+  double get_threshold() override
+  {
+    return static_cast<double>(threshold);
+  }
+
   /****************************************************************************
   * query_equals
   * Purpose: evaluates (variable == threshold)
