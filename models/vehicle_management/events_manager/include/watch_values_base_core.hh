@@ -64,14 +64,18 @@ class WatchValuesBaseCore : public SubscriptionBase {
   std::string name; /* (--)
     Name, primarily for debugging purposes. May be left blank.*/
   bool locked{false}; /* (--)
-    Boolean used to lock at each cycle, so each WatchValuesBase cannot be 
-    tested more than once per cycle, leading to unintended behavior.*/
+    Boolean used to lock at each cycle, so each WatchValuesBase cannot be
+    tested more than once per cycle. Elaborate extension of WatchValuesBaseCore
+    -- such as EventTrigger -- caan create false negatives if evaluated
+    multiple times with the same value of the watch-variable.  */
   bool externally_managed{false}; /* (--)
     Boolean setting that bool "locked" is set to once trigger is evaluated
     true: lock after evaluation
-      (commonly set in CompoundEventsManager::create_trigger())
+      (commonly set when an WatchValue is added to the CompoundEventsManager's
+       managed_triggers listi, such as when using create)trigger(...))
     false: do not lock after evaluation, can be evaluated multiple times per
-      logging cycle (default, but overriden by create_trigger())  */
+      logging cycle (default, but overriden by
+      CompoundEventssManager::add_trigger(...))  */
 
 
  protected:
