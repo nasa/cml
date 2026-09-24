@@ -33,7 +33,7 @@ Purpose:
 *****************************************************************************/
 class Constraint
 {
- public:
+  public:
   ConstraintEnum::ViolationCondition violation_condition{ConstraintEnum::Undefined}; /* (--)
     The default violation-condition to be appllied to all constraint-tests
     within this cosntraint, unless they are configured separately.*/
@@ -52,6 +52,25 @@ class Constraint
     Flag indicating this constraint is intended to be evaluated.
     Constraints may be disabled, which prevents them from being activated.
     An active constraint gets processed.*/
+    
+  // the following are all outputs of constraint.cc
+  unsigned int test_violated_index; /* (--)
+    Record of which test caused the constraint to be violated. */
+  double test_violated_time_limit; /* (s)
+    The time-limit -- where applicable -- of (one of) the test(s) that
+    resulted in a violation.
+    If multiple tests result in a violation, the value recorded here is that
+    of the lowest indexed test.
+    If the tests do not include time limits, this value will remain 0.0 */
+  double test_violated_threshold; /* (--)
+    The threshold  -- where applicable -- of (one of) the test(s) that
+    resulted in a violation, cast to a double for logging purposes.
+    If multiple tests result in a violation, the value recorded here is that
+    of the lowest indexed test.
+    If the tests do not include thresholdss, this value will remain 0.0.
+    Technically in the units of the threhold / test, which are unknown. */
+
+
  protected:
   bool active{false}; /* (--)
     Flag indicating this constraint is going to be checked by the next cycle
@@ -59,21 +78,11 @@ class Constraint
   bool initialized{false}; /* (--)
     Flag indicating this constraint-checker has passed sanity checks
     and is ready to be used.*/
-  bool prev_violated{false}; /* (--)
-    Copy of previous value of violated.*/
   const size_t num_tests; /* (--)
     Record of the number of tests in the constraint.*/
 
   std::vector<ConstraintTest*> test_list; /* (--)
     List of pointers to constraint-tests, used for baseline functionality.*/
-  unsigned int test_violated_index{0}; /* (--)
-    Record of which test caused the constraint to be violated. */
-  double test_violated_time_limit{0.0}; /* (--)
-    The time-limit -- where applicable -- of (one of) the test(s) that
-    resulted in a violation.
-    If multiple tests result in a violation, the value recorded here is that
-    of the lowest indexed test.
-    If the tests do not include time limits, this value will remain 0.0*/
 
  public:
   Constraint( size_t num_tests_ = 1);
@@ -93,7 +102,6 @@ class Constraint
   void activate();
   void deactivate() {active = false;}
  protected:
-  void count_violations();
   void post_update();
 };
 #endif

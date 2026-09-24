@@ -9,7 +9,6 @@ PROGRAMMERS:
  )
 *******************************************************************************/
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "../include/constraint_test_templates.hh"
 
 /*****************************************************************************
@@ -24,15 +23,15 @@ Purpose:
 template<>
 bool ConstraintTest_Threshold<double>::query_equals( double variable) const
 {
-  return (MathUtils::is_within_range( variable,
-                                      threshold,
-                                      equality_threshold));
+  return (MathUtils::is_within_abs_tolerance( variable,
+                                              threshold,
+                                              equality_threshold));
 }
 
 template<>
 bool ConstraintTest_Threshold<float>::query_equals( float variable) const
 {
-  return (MathUtils::is_within_range( static_cast<double>(variable),
-                                      static_cast<double>(threshold),
-                                      equality_threshold));
+  return (MathUtils::is_within_abs_tolerance( static_cast<double>(variable),
+                                              static_cast<double>(threshold),
+                                              equality_threshold));
 }
