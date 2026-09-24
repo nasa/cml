@@ -151,6 +151,7 @@ jobs:
             --project=build/debug/compile_commands.json \
             --max-configs=1 \
             --enable=all \
+            --inline-suppr \
             -i ${{ env.CML_HOME }}/models/environment/EGM2008/src/egm_2008_data.cc \
             -i ${{ env.CML_HOME }}/models/environment/gravity/lunar_GRGM900C/data/src/GRGM900C_lunar_gravity.cc \
             -j $(nproc) \

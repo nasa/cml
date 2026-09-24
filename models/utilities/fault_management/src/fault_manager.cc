@@ -44,15 +44,15 @@ bool FaultManager::global_enabled = true;
 Destructor
 *****************************************************************************/
 FaultManager::~FaultManager() {
-  for (auto & fault_list : faults) {
-    for (auto* fault : fault_list) {
+  for (const auto & fault_list : faults) {
+    for (const auto* fault : fault_list) {
       delete fault;
     }
   }
-  for (auto* trigger : triggers) {
+  for (const auto* trigger : triggers) {
     delete trigger;
   }
-  for (auto* trigger_group : trigger_groups) {
+  for (const auto* trigger_group : trigger_groups) {
     delete trigger_group;
   }
 }
@@ -89,16 +89,16 @@ void FaultManager::initialize() {
     return;
   }
   parse();
-  for (auto & ii : faults) {
+  for (const auto & ii : faults) {
     for (auto* fault : ii) {
       fault->initialize(); // Initialize fault
     }
   }
   // Go back and put in all the requested param changes.
-  for (auto& it : set_trigger_value_cache) {
+  for (const auto& it : set_trigger_value_cache) {
     set_trigger_value(it.first, it.second);
   }
-  for (auto& it : set_fault_param_cache) {
+  for (const auto& it : set_fault_param_cache) {
     set_fault_param(it.fault_name, it.param_name, it.value);
   }
 }
@@ -212,8 +212,12 @@ bool FaultManager::set_fault_trigger_enabled(
     } else {
       bool trigger_found = false;
       for (auto* tg : fault->trigger_groups) {
-        trigger_found = tg->set_trigger_enable(trigger_name, enable_flag) ||
-          trigger_found;
+        // Operate on all trigger groups in case multiple groups have the same
+        // trigger name.
+        if (tg->set_trigger_enable(trigger_name, enable_flag)) {
+          // cppcheck-suppress useStlAlgorithm
+          trigger_found = true;
+        }
       }
 
       if (!trigger_found) {
@@ -348,10 +352,10 @@ void FaultManager::parse() {
 
   // Go back and re-send the externally set variables that were cached off
   // prior to parsing.
-  for (auto& it : set_enable_for_fault_cache) {
+  for (const auto& it : set_enable_for_fault_cache) {
     set_fault_enabled(it.first, it.second);
   }
-  for (auto& it : set_trigger_enable_for_fault_cache) {
+  for (const auto& it : set_trigger_enable_for_fault_cache) {
     set_fault_trigger_enabled(it.fault_name, it.trigger_name, it.enable_flag);
   }
   // Note -- the fault_param_cache and trigger_value_cache pending assignments

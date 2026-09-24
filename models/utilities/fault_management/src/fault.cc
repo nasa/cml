@@ -79,10 +79,13 @@ Purpose:(Determines whether any trigger group is triggered.)
 bool Fault::is_triggered() {
   bool is_triggered = false;
   for (auto* tg : trigger_groups) {
-    is_triggered = tg->operate() || is_triggered;
     // Operate on all trigger groups (even if it has already been determined
     // that one of them is triggered) because periodic triggers should be
     // updated every frame.
+    if (tg->operate()) {
+      // cppcheck-suppress useStlAlgorithm
+      is_triggered = true;
+    }
   }
 
   // If this is a fresh trigger, then reset anything that needs to be reset

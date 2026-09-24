@@ -134,6 +134,7 @@ TableLookupTransposeDataSet_TableConfig::populate_table()
     CMLMessage::fail(
     __FILE__,__LINE__,"Invalid table management sequence\n",
     "Allocation for a GenericMultiInputTable failed.\n");
+    return;
   }
   // define internal sizing of vector
   SizeVec dim_list(2);

@@ -133,12 +133,14 @@ RocketMotor_Basic::initialize()
         "The prop_mass_string pointer has not been set, but the "
         "use_mass_string\nswitch has been set to True\n"
         "This configuration is not supported.\n");
+      return;
     }
     if (prop_mass_string->get_body_collection_size() == 0) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "The specified prop_mass_string has no bodies associated with it.\n"
         "This configuration is not supported.\n");
+      return;
     }
     if (!mass_group.is_string_in_group( prop_mass_string)) {
       mass_group.add_string_to_group(prop_mass_string);
@@ -153,12 +155,14 @@ RocketMotor_Basic::initialize()
         "The prop_mass_body pointer has not been set, but the use_mass_string\n"
         "switch has been set to False, indicating that the model is using a\n"
         "dynamic-mass-body directly.\nThis use-case is not supported.\n");
+      return;
     }
     if (!mass_group.is_body_in_group( prop_mass_body)) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "The specified prop_mass_body is not managed by the specified "
         "mass-group.\nThis configuration is not supported.\n");
+      return;
     }
   }
 
@@ -170,6 +174,7 @@ RocketMotor_Basic::initialize()
       __FILE__,__LINE__,"Invalid Initialization\n",
       "The consumable mass cannot be < 0.\n"
       "Verify the specification of residual mass and core-mass.\n");
+    return;
   }
 
   dispersions.apply_dispersions(position, T_struc_to_motor_frame);
