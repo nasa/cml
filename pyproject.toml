@@ -2,7 +2,7 @@
 name = "cml"
 version = "0.3.0"
 description = "The JSC Engineering EG Division Common Model Library"
-requires-python = ">= 3.11"
+requires-python = ">= 3.9"
 dependencies = [
     "breathe",
     "docutils",
