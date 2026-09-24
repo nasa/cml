@@ -34,8 +34,6 @@
 
 #include "../include/math_utils.hh"
 
-#include <numeric>
-
 /*******************************************************************************
 generate_inertial_to_lvlh
 Purpose:( Generates the transformation matrix from inertial to LVLH given
