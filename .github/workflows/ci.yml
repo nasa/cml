@@ -91,27 +91,72 @@ jobs:
           trick-CP
           make spotless
 
-      - name: Build verification sims
-        id: build_verif_sims
+      # Each model category has its verification sims built, run, and sim outputs
+      # compared one at a time. After doing so, artifacts are purged. GitHub Actions
+      # have limited memory allocated, so attempting to build/run all sims at once
+      # is likely to run out of memory.
+      - name: Dynamics model verification sims
+        id: dynamics_verif_sims
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
         run: |
           export PATH=${TRICK_HOME}/bin:${PATH}
           source .bashrc
-          ./bin/test.py builds --quiet
+          ./bin/test.py builds runs comparisons -j $(nproc) --quiet -m models/dynamics
+          git -C models/dynamics clean -x -d -f
 
-      - name: Run verification sims
-        id: run_verif_sims
+      - name: Environment model verification sims
+        id: environment_verif_sims
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
         run: |
+          export PATH=${TRICK_HOME}/bin:${PATH}
           source .bashrc
-          ./bin/test.py runs --quiet
+          ./bin/test.py builds runs comparisons -j $(nproc) --quiet -m models/environment
+          git -C models/environment clean -x -d -f
 
-      - name: Compare verification data
-        id: compare_verif_sim_data
+      - name: Fhw model verification sims
+        id: fhw_verif_sims
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
         run: |
+          export PATH=${TRICK_HOME}/bin:${PATH}
           source .bashrc
-          ./bin/test.py comparisons --quiet
+          ./bin/test.py builds runs comparisons -j $(nproc) --quiet -m models/fhw
+          git -C models/fhw clean -x -d -f
+
+      - name: Interactions model verification sims
+        id: interactions_verif_sims
+        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        run: |
+          export PATH=${TRICK_HOME}/bin:${PATH}
+          source .bashrc
+          ./bin/test.py builds runs comparisons -j $(nproc) --quiet -m models/interactions
+          git -C models/interactions clean -x -d -f
+
+      - name: Tools model verification sims
+        id: tools_verif_sims
+        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        run: |
+          export PATH=${TRICK_HOME}/bin:${PATH}
+          source .bashrc
+          ./bin/test.py builds runs comparisons -j $(nproc) --quiet -m models/tools
+          git -C models/tools clean -x -d -f
+
+      - name: Utilities model verification sims
+        id: utilities_verif_sims
+        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        run: |
+          export PATH=${TRICK_HOME}/bin:${PATH}
+          source .bashrc
+          ./bin/test.py builds runs comparisons -j $(nproc) --quiet -m models/utilities
+          git -C models/utilities clean -x -d -f
+
+      - name: Vehicle management model verification sims
+        id: vehicle_management_verif_sims
+        if: ${{ env.RUN_VERIF_SIMS == 'true' }}
+        run: |
+          export PATH=${TRICK_HOME}/bin:${PATH}
+          source .bashrc
+          ./bin/test.py builds runs comparisons -j $(nproc) --quiet -m models/vehicle_management
+          git -C models/vehicle_management clean -x -d -f
 
       - name: Generate coverage report
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
@@ -133,9 +178,13 @@ jobs:
       - name: Upload logs on failure
         if: >-
           ${{ failure() && env.RUN_VERIF_SIMS == 'true' && (
-            steps.build_verif_sims.outcome == 'failure' ||
-            steps.run_verif_sims.outcome == 'failure' ||
-            steps.compare_verif_sim_data.outcome == 'failure'
+            steps.dynamics_verif_sims.outcome == 'failure' ||
+            steps.environment_verif_sims.outcome == 'failure' ||
+            steps.fhw_verif_sims.outcome == 'failure' ||
+            steps.interactions_verif_sims.outcome == 'failure' ||
+            steps.tools_verif_sims.outcome == 'failure' ||
+            steps.utilities_verif_sims.outcome == 'failure' ||
+            steps.vehicle_management_verif_sims.outcome == 'failure'
           ) }}
         uses: actions/upload-artifact@v4
         with:
