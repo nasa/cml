@@ -214,7 +214,7 @@ bool FaultManager::set_fault_trigger_enabled(
         // Operate on all trigger groups in case multiple groups have the same
         // trigger name.
         if (tg->set_trigger_enable(trigger_name, enable_flag)) {
-          // cppcheck-suppress useStlAlgorithm
+          // cppcheck-suppress useStlAlgorithm: this is the cleanest way
           trigger_found = true;
         }
       }

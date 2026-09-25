@@ -83,7 +83,7 @@ bool Fault::is_triggered() {
     // that one of them is triggered) because periodic triggers should be
     // updated every frame.
     if (tg->operate()) {
-      // cppcheck-suppress useStlAlgorithm
+      // cppcheck-suppress useStlAlgorithm: this is the cleanest way
       is_triggered = true;
     }
   }

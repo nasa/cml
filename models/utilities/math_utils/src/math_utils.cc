@@ -616,13 +616,13 @@ MathUtils::polynomial( double x,
   assert(-1 != fe_prev);  // If -1, there was a failure
 
   double x_to_i = 1.0;
-  double sum_ = 0.0;
+  double result = 0.0;
   for (const double & coeff : coeffs) {
-    sum_ += (coeff * x_to_i);
+    result += (coeff * x_to_i);
     x_to_i *= x;
   }
 
-  if (std::isnan(sum_) || std::isinf(sum_)) {  //chec invalid ops and overflow
+  if (std::isnan(result) || std::isinf(result)) {  //chec invalid ops and overflow
     if (failed_flag) {
       CMLMessage::fail(
         __FILE__, __LINE__,"Overflow value detected.\n",
@@ -635,10 +635,10 @@ MathUtils::polynomial( double x,
         "The polynomial sum is overflow,"
         " and the result is set as ", failed_val, ".6e.\n");
     }
-    sum_ = failed_val;
+    result = failed_val;
   }
   std::fesetenv(&fenv); // restore the previous settings of fp exceptions
-  return sum_;
+  return result;
 }
 
 /*******************************************************************************
@@ -788,7 +788,7 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
       return false;
     }
 
-    // if "sum" is equal to zero, we are about to set the sqrt_mx value at
+    // if "sum_" is equal to zero, we are about to set the sqrt_mx value at
     // position [ii][ii] to 0.0.
     // To generate the values below the diagonal element at position [ii][ii],
     // we have to divide by this value ... which means dividing by zero.
@@ -796,10 +796,10 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
     //   - If f != 0.0, this fails.
     //   - If f == 0.0, the result is ambiguous and we (arbitrarily) decide that
     //     it will have the value 0.0
-    //     (note - this best supports the most common cause of sum = 0.0,
+    //     (note - this best supports the most common cause of sum_ = 0.0,
     //             which is that, for all values jj,
     //             input_mx[jj][ii] = input_mx[ii][jj]  = 0.0)
-    // So if sum = 0.0, we need to evaluate f_jj for all jj > ii
+    // So if sum_ = 0.0, we need to evaluate f_jj for all jj > ii
     //    if f_jj != 0.0, the decomposition fails.
     //    f_jj = input_mx[jj][ii] -
     //           sigma_{kk=0:ii-1} ( sqrt_mx[jj][kk] * sqrt_mx[ii][kk])
@@ -860,7 +860,7 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
       // scaled by a common value.  That value is equal to the value of the
       // diagonal element at the top of this column (of lower-diagonal
       // elements).  Note that this is true even for the diagonal element
-      // itself, which is the square root of its "sum" value.
+      // itself, which is the square root of its "sum_" value.
       sqrt_mx[jj][ii] = sum_ / sqrt_mx[ii][ii];
     }
   } // processed an array with dimension:  sub_mx_size x sub_mx_size
