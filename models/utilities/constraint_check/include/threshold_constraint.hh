@@ -503,7 +503,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
           (num_specs-1) and fraction 0 by definition.
         - The first and last test values have already been assigned.
         - The highest value of any other mapped-index is num_specs-2.*/
-    size_t mapped_ix[num_tests-1];
+    size_t mapped_ix[NumTests-1] {};
     mapped_ix[0] = 0; // unused spacer, we already have values for test-0.
     size_t spec_ix=0;
     for (size_t test_ix = 1; test_ix <= num_tests-2; ++test_ix) {
@@ -525,7 +525,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
          - subscript 1 references the next spec value after the mapped-index,
          - the non-subscripted values are the test values.*/
       for (size_t test_ix = 1; test_ix <= num_tests-2; ++test_ix) {
-        size_t map_ix = mapped_ix[test_ix];
+        const size_t map_ix = mapped_ix[test_ix];
         const double frac = (tests[test_ix].threshold - threshold_spec[map_ix]) /
                             (threshold_spec[map_ix+1] -  threshold_spec[map_ix]);
         tests[test_ix].time_limit = time_spec[map_ix] +
@@ -567,13 +567,13 @@ class ThresholdTimedConstraintSpecData : public Constraint
        * redundant repetition (typically, we are adding more tests than
        * specified, so the same spec-ix will be used multiple times).
        *      lg_ratio[i] = lg (threshold[i+1] / threshold[i]) */
-      double log_threshold_ratios[num_specs-1];
+      double log_threshold_ratios[NumSpecs-1] {};
       for (spec_ix = 0; spec_ix <= num_specs-2; ++spec_ix) {
         log_threshold_ratios[spec_ix] = std::log10( threshold_spec[spec_ix+1] /
                                                     threshold_spec[spec_ix]);
       }
       for (size_t test_ix = 1; test_ix <= num_tests-2; ++test_ix) {
-        size_t map_ix = mapped_ix[test_ix];
+        const size_t map_ix = mapped_ix[test_ix];
         // Note -- div-0 protected: log_param_ratios=0 would require two
         // adjacent entries in threshold_spec to be equal. That is protected
         // against by ensuring that threshold_spec must be monotonic.

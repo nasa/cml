@@ -47,10 +47,10 @@ Destructor
 *****************************************************************************/
 AbstractTableLookup::~AbstractTableLookup()
 {
-  for (auto* independent : independents_to_destroy) {
+  for (const auto* independent : independents_to_destroy) {
     delete independent;
   }
-  for (auto* table : tables_to_destroy) {
+  for (const auto* table : tables_to_destroy) {
     delete table;
   }
 }
@@ -101,7 +101,8 @@ AbstractTableLookup::initialize()
   for (TableIndependentVariable * indep : independents) {
     // If any of the independents fail to initialize, stop the table-manager
     // initialization.
-    if (!indep->initialize()) {
+    const bool success = indep->initialize();
+    if (!success) {
       CMLMessage::error(
         __FILE__,__LINE__,"Initialization error.\n",
         "Failure to initialize TableIndependentVariable ",
@@ -118,7 +119,8 @@ AbstractTableLookup::initialize()
    * - NOTE: this could use a std::all_of algorithm, but is left as a for-loop
    *         because it is easier to read.*/
   for (TableItem_t & table_iter: tables) {
-    if (!table_iter.first->initialize()) {
+    const bool success = table_iter.first->initialize();
+    if (!success) {
       CMLMessage::error(
         __FILE__,__LINE__,"Initialization error.\n",
         "Failure to initialize GenericMultiInputTable results in a\n"

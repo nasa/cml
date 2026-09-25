@@ -88,6 +88,7 @@ SimpleSpringGroup::set_sep_state( SeparationState  & sep_state_in)
       "by the conclusion of the initialization of the sep-state), or a \n"
       "configuration error in the separation state itself.\n"
       "Sep-state initialization flag is ", separation_state->is_initialized(), "");
+    return;
   }
 
   spring_frame = dynamic_cast<jeod::BodyRefFrame*>(sep_source);
@@ -100,6 +101,7 @@ SimpleSpringGroup::set_sep_state( SeparationState  & sep_state_in)
       "The Spring model requires that the RefFrame also be a BodyRefFrame\n"
       "and in this case it is not.\n"
       "Frame name is ", sep_source->get_name(), "\n");
+    return;
   }
   // TODO Turner Jan 2017
   // Assumption here that the sep-state's source is a member of the

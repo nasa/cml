@@ -111,7 +111,7 @@ Destructor
 Vector3IntegrableObject::~Vector3IntegrableObject ()
 {
   JEOD_DEREGISTER_CHECKPOINTABLE (this, integrator);
-  destroy_integrators();
+  integrator.destroy_integrator();
 }
 
 /*****************************************************************************

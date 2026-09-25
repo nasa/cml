@@ -105,8 +105,13 @@ class CmlTestWorkflow(TrickWorkflow):
         if len(args.model) > 0:
           all_sims = self.get_sims()
           for sim in all_sims:
-            if 'model_dir' in self.config[sim.name] and os.path.normpath(self.config[sim.name]['model_dir']) in args.model:
-              sims.append(sim)
+            if 'model_dir' not in self.config[sim.name]:
+              continue
+
+            for model_path in args.model:
+              if os.path.normpath(model_path) in os.path.normpath(self.config[sim.name]['model_dir']):
+                print(sim.name)
+                sims.append(sim)
         else:
            sims = self.get_sims()
         return sims
