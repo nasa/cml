@@ -111,4 +111,5 @@ add_cml_tests(
         cml_message/test/cml_message_test.cc
         double_to_words/test/convert_double_to_words_test.cc
         table_interp_cpp/test/table_independent_variable_test.cc
+        table_interp_cpp/test/table_move_data_test.cc
 )

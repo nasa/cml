@@ -13,6 +13,7 @@ PROGRAMMERS:
 
 #include <algorithm>
 #include <cstddef>
+#include <utility>
 
 #include "../include/generic_multi_input_table.hh"
 #include "../include/table_independent_variable.hh"
@@ -103,10 +104,23 @@ GenericMultiInputTable::load_data(
   return copy_data(data_in);
 }
 
+/****************************************************************************/
+bool
+GenericMultiInputTable::load_data(
+            DoubleVec && data_in,
+            const SizeVec &dim_list)
+{
+  if (!load_data_internal_check(dim_list) || !check_vector_data(data_in)) {
+    return false;
+  }
+  data = std::move(data_in);
+  data_loaded = true;
+  return true;
+}
+
 /*****************************************************************************
 load_data_internal_check
-Purpose:(Perform internal checks on data, common to both methods of loading
-         data)
+Purpose:(Perform internal checks common to all data-loading methods.)
 *****************************************************************************/
 bool
 GenericMultiInputTable::load_data_internal_check(
@@ -680,6 +694,22 @@ bool
 GenericMultiInputTable::copy_data(
            const DoubleVec & data_in)
 {
+  if (!check_vector_data(data_in)) {
+    return false;
+  }
+  data = data_in;
+  data_loaded = true;
+  return true;
+}
+
+/*****************************************************************************
+check_vector_data
+Purpose:(Check vector dimensions before copying or moving the data.)
+*****************************************************************************/
+bool
+GenericMultiInputTable::check_vector_data(
+           const DoubleVec & data_in)
+{
   // Configure internal data structure, abort on error
   const size_t total_data_elements = configure_internal_data_structure();
   if (total_data_elements == 0) {
@@ -703,8 +733,6 @@ GenericMultiInputTable::copy_data(
     num_data_elements_per_increment_of_index.clear();
     return false;
   }
-  data = data_in;
-  data_loaded = true;
   return true;
 }
 

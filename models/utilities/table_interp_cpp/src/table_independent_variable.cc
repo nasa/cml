@@ -18,6 +18,7 @@ PROGRAMMERS:
 #include <cmath>
 #include <cstddef>
 #include <string>
+#include <utility>
 #include <vector>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
@@ -105,6 +106,34 @@ bool
 TableIndependentVariable::load_data(
        const DoubleVec & data_in)
 {
+  if (!check_data(data_in)) {
+    return false;
+  }
+  data = data_in;
+  data_loaded = true;
+  return true;
+}
+/****************************************************************************/
+bool
+TableIndependentVariable::load_data(
+       DoubleVec && data_in)
+{
+  if (!check_data(data_in)) {
+    return false;
+  }
+  data = std::move(data_in);
+  data_loaded = true;
+  return true;
+}
+
+/*****************************************************************************
+check_data
+Purpose:(Validate input before copying or moving its storage.)
+*****************************************************************************/
+bool
+TableIndependentVariable::check_data(
+       const DoubleVec & data_in)
+{
   if (data_loaded) {
     CMLMessage::error(
       __FILE__, __LINE__, "Data load error.\n",
@@ -136,11 +165,6 @@ TableIndependentVariable::load_data(
       "There is nothing wrong, just nothing to look up; output value "
       "is constant.\n");
   }
-  // copy the data.
-  data = data_in;
-
-  data_loaded = true;
-
   return true;
 }
 

@@ -34,3 +34,40 @@ This model is independently documented in the docs directory.
 ## Verification
 
 This model contains independent verification test cases in the verif directory.
+
+## Loading vectors without copying
+
+`TableIndependentVariable::load_data` and `GenericMultiInputTable::load_data`
+accept rvalue `DoubleVec` (`std::vector<double>`) arguments. Use `std::move` when
+transferring a large data vector that the caller no longer needs:
+
+```cpp
+#include <utility>
+
+double input = 0.5;
+double output = 0.0;
+TableIndependentVariable axis(input);
+DoubleVec calibration{0.0, 1.0, 2.0};
+if (!axis.load_data(std::move(calibration)) || !axis.initialize()) {
+    return;
+}
+
+GenericMultiInputTable table(output);
+table.add_independent(axis);
+DoubleVec samples{10.0, 20.0, 30.0};
+if (!table.load_data(std::move(samples), SizeVec{1, 3}) || !table.initialize()) {
+    return;
+}
+table.update(); // output is 15.0
+```
+
+The same move overload is inherited by the single-input table classes. Existing
+lvalue and pointer overloads continue to copy. Validation is shared between the
+copy and move paths: independent data must be nonempty and monotonic, and
+dependent data must match its dimensions and output count. Rejected vector
+arguments are not moved from. After a successful move, the caller's vector is
+valid but its contents are unspecified; reassign it before using its data again.
+
+These methods keep the existing reload rules. Independent-variable data must
+be cleared before reloading; a dependent table can replace previously loaded
+data and retains its existing warning.

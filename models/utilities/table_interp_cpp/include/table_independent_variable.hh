@@ -183,6 +183,8 @@ public:
   virtual bool load_data( const double* const data_in,
                           size_t size_in);
   virtual bool load_data( const DoubleVec & data_in);
+  // Move validated vector storage into the table; rejected inputs are unchanged.
+  virtual bool load_data( DoubleVec && data_in);
 
   bool initialize();
 
@@ -225,6 +227,7 @@ private:
   void tag_as_off_table_back();
   void tag_as_off_table_front();
   void generate_fraction();
+  bool check_data( const DoubleVec & data_in);
   bool check_monotonicity( const std::vector<double> & data_in);
 };
 

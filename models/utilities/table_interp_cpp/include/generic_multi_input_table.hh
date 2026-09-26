@@ -79,6 +79,9 @@ class GenericMultiInputTable
                   const SizeVec &dim_list);
   bool load_data( const DoubleVec & data_in,
                   const SizeVec &dim_list);
+  // Move validated vector storage into the table; rejected inputs are unchanged.
+  bool load_data( DoubleVec && data_in,
+                  const SizeVec &dim_list);
 
   void add_dependent( double & new_dep_var);
   void append_dependent_data( double & new_dep_var,
@@ -124,6 +127,7 @@ class GenericMultiInputTable
   bool load_data_internal_check( const SizeVec &dim_list );
   bool copy_data(const double * data_in);
   bool copy_data(const DoubleVec & data_in);
+  bool check_vector_data(const DoubleVec & data_in);
   size_t configure_internal_data_structure();
   void configure_support_arrays();
   virtual void generate_base_values();
