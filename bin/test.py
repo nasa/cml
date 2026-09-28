@@ -110,7 +110,6 @@ class CmlTestWorkflow(TrickWorkflow):
 
             for model_path in args.model:
               if os.path.normpath(model_path) in os.path.normpath(self.config[sim.name]['model_dir']):
-                print(sim.name)
                 sims.append(sim)
         else:
            sims = self.get_sims()
