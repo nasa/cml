@@ -32,7 +32,7 @@ jobs:
           dnf config-manager --set-enabled crb
           dnf update -y
           dnf install -y \
-            bison clang clang-devel cmake diffutils flex gcc \
+            bash bison clang clang-devel cmake diffutils flex gcc \
             gcc-c++ git java-17-openjdk-devel \
             libxml2-devel llvm-devel llvm-static maven ncurses-devel \
             motif motif-devel perl perl-Digest-MD5 python3-devel \
