@@ -167,13 +167,12 @@ jobs:
             --exclude '.*/test/.*' --exclude utility/mocks \
             --filter '^models/.*' -o coverage.xml
 
-      - name: Upload coverage report
+      - name: Save coverage report
         if: ${{ env.RUN_VERIF_SIMS == 'true' }}
-        uses: coverallsapp/github-action@v2
+        uses: actions/upload-artifact@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          file: coverage.xml
-          format: cobertura
+          name: coverage-xml
+          path: coverage.xml
 
       - name: Upload logs on failure
         if: >-
@@ -192,3 +191,21 @@ jobs:
           path: bin/logs/*.txt
           if-no-files-found: warn
           retention-days: 2
+
+  coverage:
+    needs: test
+    if: ${{ needs.test.result == 'success' && (github.event_name != 'pull_request' || github.event.pull_request.draft == false) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage-xml
+
+      - uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: coverage.xml
+          format: cobertura
