@@ -876,7 +876,7 @@ double
 RcsJet::get_component_consumption(
       unsigned int ix)
 {
-  if (ix > component_consumption.size()) {
+  if (ix >= component_consumption.size()) {
     CMLMessage::error(
       __FILE__,__LINE__,"Request error\n",
       "Cannot extract the index ", ix, " because component_consumption has "
@@ -895,7 +895,7 @@ double
 RcsJet::get_component_flow_rate(
       unsigned int ix)
 {
-  if (ix > component_flow_rate.size()) {
+  if (ix >= component_flow_rate.size()) {
     CMLMessage::error(
       __FILE__,__LINE__,"Request error\n",
       "Cannot extract the index ", ix, " because component_flow_rate has "
@@ -925,7 +925,7 @@ RcsJet::set_component_flow_rate(
     unsigned int component_ix,
     double rate)
 {
-  if (component_ix > component_flow_rate.size()) {
+  if (component_ix >= component_flow_rate.size()) {
     CMLMessage::error(
     __FILE__,__LINE__,"Assignment error\n",
     "Cannot assign a component flow-rate to component index ", component_ix, " because\n"

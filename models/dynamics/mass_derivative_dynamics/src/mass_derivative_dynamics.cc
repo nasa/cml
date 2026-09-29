@@ -352,8 +352,8 @@ void
 MassDerivativeDynamics::compute_J_dot()
 {
   size_t ix = 0;
-  double J_dot_6[6]; // The differences of the 6 unique elements of the
-                     // inertia tensor.
+  double J_dot_6[6] {}; // The differences of the 6 unique elements of the
+                        // inertia tensor.
   // Step through the upper triangle (including diagonals) of the inertia
   // tensor.  Ignore the 3 terms in the lower triangle; they are duplicates.
   for (size_t ii = 0; ii < 3; ++ii) {

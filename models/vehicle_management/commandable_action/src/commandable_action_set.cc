@@ -139,6 +139,7 @@ CommandableActionSet::generate_command (
           __FILE__,__LINE__,"Unknown error\n",
           "current_commandable is NULL but status is Send.\n"
           "This is not a legal combination.\n");
+        return false;
       }
 
       // and back to the real code:

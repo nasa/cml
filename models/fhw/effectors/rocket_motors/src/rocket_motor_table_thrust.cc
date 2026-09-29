@@ -123,8 +123,8 @@ Purpose:(Pushes the specified data onto the thrust_table and scans the data
 *****************************************************************************/
 void
 RocketMotor_TableThrust::load_thrust_data(
-    double * data,
-    size_t   num_elements)
+    const double * data,
+    size_t num_elements)
 {
   if (num_elements == 0) {
     CMLMessage::fail(
@@ -145,7 +145,7 @@ RocketMotor_TableThrust::load_thrust_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_thrust_data(
-    std::vector<double> & data)
+    const std::vector<double> & data)
 {
   if (data.empty()) {
     CMLMessage::fail(
@@ -165,8 +165,8 @@ Purpose:(These methods provide interface-consistency between the various
 *****************************************************************************/
 void
 RocketMotor_TableThrust::load_isp_data(
-    double * data,
-    size_t   num_elements)
+    const double * data,
+    size_t num_elements)
 {
   const std::vector<size_t> sizes {1, num_elements};
   // non-terminal NULL check in load_data, but returns false if NULL
@@ -188,7 +188,7 @@ RocketMotor_TableThrust::load_isp_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_isp_data(
-    std::vector<double> & data)
+    const std::vector<double> & data)
 {
   const std::vector<size_t> sizes {1, data.size()};
   if (isp_table.load_data( data, sizes)) {
@@ -209,8 +209,8 @@ RocketMotor_TableThrust::load_isp_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_mdot_data(
-    double * data,
-    size_t   num_elements)
+    const double * data,
+    size_t num_elements)
 {
   const std::vector<size_t> sizes {1, num_elements};
   mdot_table.load_data( data, sizes);// non-terminal NULL check in load_data
@@ -219,7 +219,7 @@ RocketMotor_TableThrust::load_mdot_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_mdot_data(
-    std::vector<double> & data)
+    const std::vector<double> & data)
 {
   const std::vector<size_t> sizes {1, data.size()};
   mdot_table.load_data( data, sizes);
@@ -228,8 +228,8 @@ RocketMotor_TableThrust::load_mdot_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_mburn_data(
-    double * data,
-    size_t   num_elements)
+    const double * data,
+    size_t num_elements)
 {
   const std::vector<size_t> sizes {1, num_elements};
   mburn_table.load_data( data, sizes);// non-terminal NULL check in load_data
@@ -238,7 +238,7 @@ RocketMotor_TableThrust::load_mburn_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_mburn_data(
-    std::vector<double> & data)
+    const std::vector<double> & data)
 {
   const std::vector<size_t> sizes {1, data.size()};
   mburn_table.load_data( data, sizes);
@@ -247,8 +247,8 @@ RocketMotor_TableThrust::load_mburn_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_time_data(
-    double * data,
-    size_t   num_elements)
+    const double * data,
+    size_t num_elements)
 {
   table_time.load_data( data, num_elements);
   // non-terminal NULL check in load_data

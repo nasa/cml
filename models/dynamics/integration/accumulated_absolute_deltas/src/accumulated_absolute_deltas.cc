@@ -12,7 +12,6 @@ PROGRAMMERS:
 **********************************************************************/
 
 #include <cmath>
-#include <new>
 
 #include "../include/accumulated_absolute_deltas.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
