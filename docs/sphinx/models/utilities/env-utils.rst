@@ -24,7 +24,7 @@ Introduction
 ============
 
 The Environment Variable Utilities model provides C++ interfaces to retrieve environment variables
-with a variety of selectable fallback behaviors of the requested variable is not set.
+with a variety of selectable fallback behaviors if the requested variable is not set.
 
 ________________________________________________________
 
@@ -49,8 +49,8 @@ Architectural Considerations
 Existing External Capabilities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The C++ standard library has the ``std::getenv`` function, which exposes a C-based API. This model extends
-that standard library function to perform error handling and environment variable expansion.
+The C++ standard library has the ``std::getenv`` function, which exposes a C-based API. This model wraps
+that standard library function with a C++ API and performs error handling and environment variable expansion.
 
 Model Structure
 ~~~~~~~~~~~~~~~

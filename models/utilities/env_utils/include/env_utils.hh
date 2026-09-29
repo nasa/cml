@@ -21,7 +21,7 @@ PROGRAMMERS:
 #include <string>
 
 /**
- * Retrieve the environment variable if it exists, otherwise terminate the program
+ * Retrieve the environment variable if it is set, otherwise terminate the program
  *
  * @param var_name Environment variable to retrieve
  * @param exit_fn  Function to be called if the variable is not set
@@ -41,7 +41,7 @@ inline std::string getenv_or_exit(
 }
 
 /**
- * Retrieve the environment variable if it exists, otherwise return a user-defined default value
+ * Retrieve the environment variable if it is set, otherwise return a user-defined default value
  *
  * @param var_name      Environment variable to retrieve
  * @param default_value Value to return if the variable is not set
@@ -57,7 +57,7 @@ inline std::string getenv_or_default(const std::string& var_name, const std::str
 }
 
 /**
- * Retrieve the environment variable if it exists, otherwise throw an error
+ * Retrieve the environment variable if it is set, otherwise throw an error
  *
  * @throws std::runtime_error If the environment variable is not set
  * @param var_name            Environment variable to retrieve
@@ -87,6 +87,7 @@ inline std::string getenv_or_throw(const std::string& var_name) noexcept(false)
  * @note Nested environment variables are not supported. Variables of the form
  *       `${SOME${VAR}}` will not expand correctly.
  *
+ * @throws std::runtime_error If any expanded environment variable is not set
  * @param input String containing environment variables
  * @return      The original string with environment variables expanded
  */

@@ -9,14 +9,16 @@ namespace {
 
 // Test usage of the function which exits when the environment variable is not set.
 TEST(EnvUtils, Exit) {
+    bool exit_called = false;
+    auto dummy_exit_fn = [&exit_called] ([[maybe_unused]] int ret) noexcept -> void {exit_called = true;};
+
     // Variable exists.
     setenv("CML_ENVUTILS_TEST_VAR_EXIT_TEST", "test-value", 1);
-    EXPECT_EQ(getenv_or_exit("CML_ENVUTILS_TEST_VAR_EXIT_TEST"), "test-value");
+    EXPECT_EQ(getenv_or_exit("CML_ENVUTILS_TEST_VAR_EXIT_TEST", dummy_exit_fn), "test-value");
+    EXPECT_FALSE(exit_called);
 
     // Variable doesn't exist.
     unsetenv("DOES_NOT_EXIST_EXIT_TEST");
-    bool exit_called = false;
-    auto dummy_exit_fn = [&exit_called] ([[maybe_unused]] int ret) -> void {exit_called = true;};
     getenv_or_exit("DOES_NOT_EXIST_EXIT_TEST", dummy_exit_fn);
     EXPECT_TRUE(exit_called);
 }
