@@ -113,8 +113,7 @@ class CompoundEventsManager : public VehicleEventsManager
   {
     T* var = address_from_name(var_name, ref);
     if (var != nullptr) {
-      T& var_ref = *var;
-      return create_trigger(var_ref, ref, comparison, name);
+      return create_trigger(*var, ref, comparison, name);
     }
     else {
       // Return an empty trigger if the trigger can't be found from the var_name.
@@ -131,8 +130,7 @@ class CompoundEventsManager : public VehicleEventsManager
    {
     T* var = address_from_name(var_name, *ref);
     if (var != nullptr) {
-      T& var_ref = *var;
-      return create_trigger(var_ref, ref, comparison, name);
+      return create_trigger(*var, ref, comparison, name);
     }
     else {
       // Return an empty trigger if the trigger can't be found from the var_name.

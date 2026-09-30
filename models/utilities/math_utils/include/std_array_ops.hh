@@ -43,6 +43,8 @@ std::ostream& operator<<(std::ostream& out, const std::array<double, N>& rhs) {
 /* Copy the C-style array into a std::array
  * temp = std_copy(c_arr);
  * other_result = temp + other_c_arr; */
+// TODO Nino Tarantino 9/30/26: deprecate when we move to C++20. Use std::to_array
+// instead. See https://github.com/nasa/cml/issues/86.
 template <size_t N>
 std::array<double, N> std_copy(const double (&c_arr)[N]) {
   std::array<double, N> result;

@@ -12,7 +12,7 @@ jobs:
   code-format:
     runs-on: ubuntu-latest
     container:
-      image: rockylinux:8
+      image: rockylinux/rockylinux:9
 
     defaults:
       run:
@@ -22,7 +22,8 @@ jobs:
       - name: Install system dependencies
         run: |
           dnf install -y epel-release
-          dnf config-manager --enable powertools
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --set-enabled crb
           dnf update -y
           dnf install -y git python3-devel
 
@@ -79,7 +80,7 @@ jobs:
   cppcheck:
     runs-on: ubuntu-latest
     container:
-      image: rockylinux:8
+      image: rockylinux/rockylinux:9
 
     defaults:
       run:
@@ -89,11 +90,12 @@ jobs:
       - name: Install system dependencies
         run: |
           dnf install -y epel-release
-          dnf config-manager --enable powertools
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --set-enabled crb
           dnf update -y
-          dnf install -y git make cmake gcc gcc-c++ libxml2-devel openmotif-devel \
-            perl perl-Digest-MD5 udunits2-devel zlib-devel libX11-devel libXt-devel \
-            python3-devel cppcheck
+          dnf install -y git bison clang clang-devel cmake diffutils flex gcc \
+            gcc-c++ libxml2-devel llvm-devel llvm-static perl perl-Digest-MD5 \
+            python3-devel udunits2 udunits2-devel zlib-devel cppcheck
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -149,8 +151,9 @@ jobs:
             --project=build/debug/compile_commands.json \
             --max-configs=1 \
             --enable=all \
-            -i ${{ env.CML_HOME }}/models/environment/EGM2008/src/egm_2008_data.cc \
-            -i ${{ env.CML_HOME }}/models/environment/gravity/lunar_GRGM900C/data/src/GRGM900C_lunar_gravity.cc \
+            --inline-suppr \
+            -i models/environment/EGM2008/src/egm_2008_data.cc \
+            -i models/environment/gravity/lunar_GRGM900C/data/src/GRGM900C_lunar_gravity.cc \
             -j $(nproc) \
             --suppress=unusedFunction \
             --suppress=unmatchedSuppression \
@@ -170,7 +173,7 @@ jobs:
   clang-tidy:
     runs-on: ubuntu-latest
     container:
-      image: rockylinux:8
+      image: rockylinux/rockylinux:9
 
     defaults:
       run:
@@ -180,11 +183,12 @@ jobs:
       - name: Install system dependencies
         run: |
           dnf install -y epel-release
-          dnf config-manager --enable powertools
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --set-enabled crb
           dnf update -y
-          dnf install -y git make cmake gcc gcc-c++ libxml2-devel openmotif-devel \
-            perl perl-Digest-MD5 udunits2-devel zlib-devel libX11-devel libXt-devel \
-            python3-devel clang-tools-extra
+          dnf install -y git bison clang clang-devel cmake diffutils flex gcc \
+            gcc-c++ libxml2-devel llvm-devel llvm-static perl perl-Digest-MD5 \
+            python3-devel udunits2 udunits2-devel zlib-devel clang-tools-extra
 
       - name: Checkout code
         uses: actions/checkout@v4

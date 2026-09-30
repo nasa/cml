@@ -100,20 +100,20 @@ public:
   RocketMotor_TableThrust (const RocketMotor_TableThrust&) = delete;
   RocketMotor_TableThrust & operator = (const RocketMotor_TableThrust&) = delete;
 
-  void load_thrust_data(double * data,
-                        size_t   num_elements);
-  void load_thrust_data(std::vector<double> & data);
-  void load_isp_data(   double * data,
-                        size_t   num_elements);
-  void load_isp_data(   std::vector<double> & data);
-  void load_mdot_data(  double * data,
-                        size_t   num_elements);
-  void load_mdot_data(  std::vector<double> & data);
-  void load_mburn_data( double * data,
-                        size_t   num_elements);
-  void load_mburn_data( std::vector<double> & data);
-  void load_time_data(  double * data,
-                        size_t   num_elements);
+  void load_thrust_data(const double * data,
+                        size_t num_elements);
+  void load_thrust_data(const std::vector<double> & data);
+  void load_isp_data(   const double * data,
+                        size_t num_elements);
+  void load_isp_data(   const std::vector<double> & data);
+  void load_mdot_data(  const double * data,
+                        size_t num_elements);
+  void load_mdot_data(  const std::vector<double> & data);
+  void load_mburn_data( const double * data,
+                        size_t num_elements);
+  void load_mburn_data( const std::vector<double> & data);
+  void load_time_data(  const double * data,
+                        size_t num_elements);
   void load_time_data(  const std::vector<double> & data);
 
   void initialize() override;
