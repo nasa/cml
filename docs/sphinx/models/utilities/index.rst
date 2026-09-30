@@ -11,4 +11,5 @@ really fit under other model categories.
     :titlesonly:
 
     convert-double-to-words.rst
+    env-utils.rst
     subscriptions.rst
