@@ -11,10 +11,9 @@ PROGRAMMERS:
 
 #ifndef SWIG
 
-#include <stddef.h>
 #include <algorithm>
 #include <array>
-#include <cmath>
+#include <cstddef>
 #include <ostream>
 #include "math_utils.hh"
 

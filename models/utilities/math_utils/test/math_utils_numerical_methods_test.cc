@@ -89,7 +89,6 @@ TEST(MathUtils, IsWithinRelativeTolerance) {
 
     testing::StrictMock<CMLMessage::Mock> cml_message_mock;
 
-
     // Nominal tests.
     EXPECT_TRUE(MathUtils::is_within_rel_tolerance(1.65, 1.5, 0.1));
     EXPECT_FALSE(MathUtils::is_within_rel_tolerance(1.65, 1.5, 0.09999));

@@ -214,4 +214,8 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
     }
 }
 
+// Test inverting a matrix using Cholesky decomposition
+TEST(MathUtils, MatrixInversionUsingCholeskyDecomp) {
+}
+
 }
