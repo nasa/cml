@@ -413,9 +413,7 @@ Purpose:(Generates the new reference value.)
 
 template <> inline void WatchValuesBase<bool>::set_dbl_reference(double ref)
 {
-  // Semantically equivalent to static_cast<bool>(ref) (i.e., ref != 0.0),
-  // but avoids '=='/'!=' comparisons that trigger -Wfloat-equal.
-  reference = (ref > 0.0) || (ref < 0.0) || std::isnan(ref);
+  reference = std::fpclassify(ref) != FP_ZERO;
 }
 
 #endif

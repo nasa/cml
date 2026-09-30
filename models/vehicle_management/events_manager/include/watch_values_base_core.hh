@@ -66,13 +66,13 @@ class WatchValuesBaseCore : public SubscriptionBase {
   bool locked{false}; /* (--)
     Boolean used to lock at each cycle, so each WatchValuesBase cannot be
     tested more than once per cycle. Elaborate extension of WatchValuesBaseCore
-    -- such as EventTrigger -- caan create false negatives if evaluated
+    -- such as EventTrigger -- can create false negatives if evaluated
     multiple times with the same value of the watch-variable.  */
   bool externally_managed{false}; /* (--)
     Boolean setting that bool "locked" is set to once trigger is evaluated
     true: lock after evaluation
-      (commonly set when an WatchValue is added to the CompoundEventsManager's
-       managed_triggers listi, such as when using create)trigger(...))
+      (commonly set when a WatchValue is added to the CompoundEventsManager's
+       managed_triggers list, such as when using create_trigger(...))
     false: do not lock after evaluation, can be evaluated multiple times per
       logging cycle (default, but overriden by
       CompoundEventssManager::add_trigger(...))  */

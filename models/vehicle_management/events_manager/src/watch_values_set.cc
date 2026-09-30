@@ -47,13 +47,6 @@ WatchValuesSet::initialize( std::list<WatchValuesBaseCore *> * active_watch_in)
     return;
   }
   for (WatchValuesBaseCore * trigger : triggers) {
-    // if (require_all) {
-    //   // force multi_shot for all triggers when the set requires all triggers
-    //   // to be fulfilled for the set to be fulfilled. This fixes a discrepancy
-    //   // with DataCollect's behavior without requiring the logging user to be
-    //   // careful with the multi_shot optimization.
-    //   trigger->multi_shot = true;
-    // }
     trigger->add_self_to_manager_active_list = false;
     trigger->SubscriptionBase::initialize();
   }
@@ -79,16 +72,6 @@ WatchValuesSet::test_crossing()
     }
   }
 
-  /* If the set triggers with ANY trigger, and any trigger satisfies its
-     condition, the set is Triggered.
-     If the set only triggers with ALL triggers, and any trigger does not
-     satisfy its condition, the set is NotTriggered.
-     So we can compare the require_all boolean against the event_triggered
-     value of each trigger-event to identify any significant single results.
-     - If any trigger has a status that does not match with "require_all", then
-       the overall status is "not require_all"
-     - Conversely, if all triggers have status matching "require_all", then the
-       overall status is going to be "require_all"*/
   event_triggered = std::any_of( triggers.begin(), triggers.end(),
                       [this](WatchValuesBaseCore * trigger_) {
                         return (require_all != trigger_->event_triggered);} )?
