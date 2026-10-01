@@ -36,9 +36,8 @@ RcsJet::RcsJet(
   group(group_),
   time_step( system.time_step),
   component_flow_rate( prop_pod.components.size()),
-  component_consumption( prop_pod.components.size())
-  sum_component_consumption( prop_pod.components.size()),
-  sum_consumption(0.0),
+  component_consumption( prop_pod.components.size()),
+  sum_component_consumption( prop_pod.components.size())
 
 {
   // Start the command list with an "Off":

@@ -51,7 +51,7 @@ class RcsJet {
   std::vector<double> sum_component_consumption;/* (kg)
        Accumulated values of component_consumption, provides pre-component
        consumption over the duration of the simulation.*/
-  double sum_consumption; /* (kg)
+  double sum_consumption{0.0}; /* (kg)
        accumulated values of component_consumption across all components.
        Provides total consumption by the jet over the duration of the
        simulation.*/
