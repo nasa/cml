@@ -67,14 +67,14 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
     the specified tag (false, default), or for a data-set with a tag identical
     to the specified tag (true).*/
 
-  bool proximity_flag; /* (--)
+  bool proximity_flag{false}; /* (--)
     When the model looks for the data-set with a tag closest in value to
     the specified tag (require_exact_tag == false), this flag determines 
     whether the searched closest data-set is within a certain proximity (true)
     or simply the absolute closest regardless of time difference (false,
     default) */
 
-  double proximity_th; /* (--)
+  double proximity_th{std::numeric_limits<double>::infinity()}; /* (--)
     The maximum allowable time difference between a tag closest and the 
     specified tag. If the proximity_flag is true, the lookup_tag function
     returns the data-set with a tag closest in value to the specified tag
@@ -84,10 +84,8 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
   explicit CMLTaggedRingBuffer( const std::string& name)
     :
     CMLSimpleRingBuffer<CMLTaggedRingBufferMember<T_Tag, T_Data>>(name)
-    require_exact_tag(false),
-    proximity_flag(false),
-    proximity_th(std::numeric_limits<double>::infinity())
   {}
+  
   ~CMLTaggedRingBuffer() override = default;
 
 
