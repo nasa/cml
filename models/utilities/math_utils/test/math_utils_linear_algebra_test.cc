@@ -63,7 +63,7 @@ TEST(MathUtils, UnitVector) {
 
     // Unit vector calculation. Magnitude is 11.
     const std::array<double, 4> vec4 {-4.0, 4.0, 5.0, -8.0};
-    const std::array<double, 4> c_vec4 {-4.0, 4.0, 5.0, -8.0};
+    const double c_vec4[4] {-4.0, 4.0, 5.0, -8.0};
     const std::array<double, 4> expected {
         -4.0 / 11.0, // -0.3636363636363636
         4.0 / 11.0,  //  0.3636363636363636
@@ -420,6 +420,39 @@ TEST(MathUtils, MatrixOperations) {
         MathUtils::matrix_mult_trans_trans(lhs, rhs, output);
         test_matrices_equal(output, expected);
     }
+
+    // Matrix transformations.
+    {
+        const double mat[3][3] {
+            {1.0, -3.0, 2.0},
+            {0.0, 4.0, 5.0},
+            {-1.0, -2.0, 6.0}
+        };
+        const double trans[3][3] {
+            {0.0, 1.0, 0.0},
+            {-1.0, 0.0, 0.0},
+            {0.0, 0.0, 1.0}
+        };
+        const double transformation_expected[3][3] {
+            {4.0, 0.0, 5.0},
+            {3.0, 1.0, -2.0},
+            {-2.0, 1.0, 6.0}
+        };
+        const double inverse_transform_expected[3][3] {
+            {4.0, 0.0, -5.0},
+            {3.0, 1.0, 2.0},
+            {2.0, -1.0, 6.0}
+        };
+        double output[3][3] {};
+
+        MathUtils::matrix_transformation(trans, mat, output);
+        test_matrices_equal(output, transformation_expected);
+
+        MathUtils::matrix_inverse_transformation(trans, mat, output);
+        test_matrices_equal(output, inverse_transform_expected);
+    }
+
+    // Matrix inverse transformation.
 }
 
 // Test the function which generates a correlation matrix from a square covariance matrix.
@@ -576,6 +609,34 @@ TEST(MathUtils, CorrelationMatrix) {
             publish(CMLMessage::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals"))).Times(3);
         const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_TRUE(success);
+        test_matrices_equal(output, expected);
+    }
+
+    // Transform PV matrix.
+    {
+        const double transform[3][3] {
+            {0.0, 1.0, 0.0},
+            {-1.0, 0.0, 0.0},
+            {0.0, 0.0, 1.0}
+        };
+        const double pv_matrix[6][6] {
+            {1.0, 2.0, 3.0, 4.0, 5.0, 6.0},
+            {-2.0, 3.0, -4.0, 5.0, 6.0, 7.0},
+            {0.5, 0.25, 0.1625, -1.0, -0.5, -0.6},
+            {4.0, 2.0, 3.0, 1.0, 5.0, 9.0},
+            {10.0, -11.0, 0.1, 0.4, 0.5, -0.6},
+            {-5.0, -8.0, -20.0, 3.0, 5.0, 2.0}
+        };
+        const double expected[6][6] {
+            { 3.0,   2.0,  -4.0,     6.0, -5.0,  7.0},
+            {-2.0,   1.0,  -3.0,    -5.0,  4.0, -6.0},
+            { 0.25, -0.5,   0.1625, -0.5,  1.0, -0.6},
+            {-11.0, -10.0,  0.1,     0.5, -0.4, -0.6},
+            {-2.0,   4.0,  -3.0,    -5.0,  1.0, -9.0},
+            {-8.0,   5.0, -20.0,     5.0, -3.0,  2.0}
+        };
+        double output[6][6];
+        MathUtils::transform_pv_matrix(transform, pv_matrix, output);
         test_matrices_equal(output, expected);
     }
 }

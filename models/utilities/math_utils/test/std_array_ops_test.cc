@@ -1,3 +1,4 @@
+#include "../include/math_utils.hh"
 #include "../include/std_array_ops.hh"
 
 #include <array>
@@ -9,6 +10,27 @@ namespace {
 
 // Floating point comparison tolerance.
 constexpr double tolerance = 1e-12;
+
+// Test the is_near_equal function for arrays.
+TEST(StdArrayOps, Equality) {
+    // Double precision
+    {
+        const std::array<double, 3> lhs {1.0, -2.0, 3.0};
+        const std::array<double, 3> rhs1 {1.0, -2.0, 3.0};
+        const std::array<double, 3> rhs2 {1.0, 0.0, 0.0};
+        EXPECT_TRUE(MathUtils::is_near_equal(lhs, rhs1));
+        EXPECT_FALSE(MathUtils::is_near_equal(lhs, rhs2));
+    }
+
+    // Single precision
+    {
+        const std::array<float, 3> lhs {1.0, -2.0, 3.0};
+        const std::array<float, 3> rhs1 {1.0, -2.0, 3.0};
+        const std::array<float, 3> rhs2 {1.0, 0.0, 0.0};
+        EXPECT_TRUE(MathUtils::is_near_equal(lhs, rhs1));
+        EXPECT_FALSE(MathUtils::is_near_equal(lhs, rhs2));
+    }
+}
 
 // Test the std::ostream operator<< overload.
 TEST(StdArrayOps, Ostream) {
