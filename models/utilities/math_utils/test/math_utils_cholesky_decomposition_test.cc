@@ -216,6 +216,60 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
 
 // Test inverting a matrix using Cholesky decomposition
 TEST(MathUtils, MatrixInversionUsingCholeskyDecomp) {
+    using testing::_;
+    using testing::HasSubstr;
+
+    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+
+    // Valid case.
+    {
+        const double input[3][3] {
+            {1.0, 1.0, 1.0},
+            {1.0, 2.0, 2.0},
+            {1.0, 2.0, 3.0}
+        };
+        const double expected[3][3] {
+            {2.0, -1.0, 0.0},
+            {-1.0, 2.0, -1.0},
+            {0.0, -1.0, 1.0}
+        };
+        double output[3][3] {};
+
+        const bool success = MathUtils::matrix_inv_using_cholesky(input, output);
+        EXPECT_TRUE(success);
+        test_matrices_equal(output, expected);
+    }
+
+    // Cholesky decomposition failed.
+    {
+        const double input[2][2] {
+            {0.0, 1.0},
+            {1.0, 0.0}
+        };
+        // Set some default data in the output location to test that a failed decomposition doesn't
+        // override it.
+        double output[2][2] {
+            {1.0, 2.0},
+            {3.0, 4.0}
+        };
+        const double original_output[2][2] {
+            {output[0][0], output[0][1]},
+            {output[1][0], output[1][1]},
+        };
+
+        // Fail on error. Original output location remains unchanged.
+        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, HasSubstr("Decomposition failed")));
+        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Fail, _, _, HasSubstr("Matrix Inverse failed")));
+        EXPECT_FALSE(MathUtils::matrix_inv_using_cholesky(input, output));
+        test_matrices_equal(output, original_output);
+
+        // Warn on error. Output location is filled with zeros.
+        const double zeros[2][2] {};
+        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, HasSubstr("Decomposition failed")));
+        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, HasSubstr("Matrix Inverse failed")));
+        EXPECT_FALSE(MathUtils::matrix_inv_using_cholesky(input, output, false));
+        test_matrices_equal(output, zeros);
+    }
 }
 
 }
