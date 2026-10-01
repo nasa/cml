@@ -62,7 +62,7 @@ Notes:
   implicitly cast that variable to a temporary storage space of the expected
   type, and the watch value would monitor that temporary storage space, not
   the intended variable, for changes. This is a big problem if a user gets the
-  type wrong in setting up their WatchValue, or setse it up correctly and the
+  type wrong in setting up their WatchValue, or sets it up correctly and the
   variable type later changes.
 - To rule that out and explicitly require a type match, we delete set_watch
   for all types of "var", then implement only the one in which "var" is of
