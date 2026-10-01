@@ -23,14 +23,14 @@ PROGRAMMERS:
 #include <cstddef>
 #include <vector>
 #include <limits>
+#include <algorithm>
 
 /*****************************************************************************
 Constructors
 *****************************************************************************/
 CML_ProximityCounter::CML_ProximityCounter()
   :
-  CML_BinCounter(),
-  target_data(nullptr)
+  CML_BinCounter()
 {}
 /****************************************************************************/
 CML_ProximityCounter::CML_ProximityCounter(
@@ -76,13 +76,14 @@ CML_ProximityCounter::set_data(const std::vector<double> & targets_)
   nbin = n_targets_;
   bins.resize(nbin);
   bins_ready = true;
-  bin_data = target_data = bins.data();
+  bin_data = bins.data();
   bins[0].bin_floor = std::numeric_limits<double>::lowest();
   for (size_t ii = 0; ii < nbin-1; ii++) {
     bins[ii].value = sorted_targets[ii];
     bins[ii].count = 0;
-    bins[ii].bin_ceil =
-    bins[ii+1].bin_floor = (sorted_targets[ii] + sorted_targets[ii+1])/2;
+    const double bin_boundary = 0.5 * (sorted_targets[ii] + sorted_targets[ii+1]);
+    bins[ii].bin_ceil = bin_boundary;
+    bins[ii + 1].bin_floor = bin_boundary;
   }
   bins[nbin - 1].value = sorted_targets[nbin-1];
   bins[nbin - 1].count = 0;
