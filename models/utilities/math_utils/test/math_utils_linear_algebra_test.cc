@@ -10,6 +10,16 @@ namespace {
 // Floating point comparison tolerance.
 constexpr double tolerance = 1e-12;
 
+// Function to compare the values between two matrices.
+template <std::size_t rows, std::size_t cols>
+void test_matrices_equal(const double (&lhs)[rows][cols], const double (&rhs)[rows][cols]) {
+    using testing::DoubleNear;
+    using testing::Pointwise;
+    for (unsigned int row = 0; row < rows; ++row) {
+        EXPECT_THAT(lhs[row], Pointwise(DoubleNear(tolerance), rhs[row]));
+    }
+}
+
 // Test addition and subtraction of C-style vectors.
 TEST(MathUtils, VectorAlgebra) {
     using testing::DoubleNear;
@@ -121,32 +131,453 @@ TEST(MathUtils, VectorCrossProduct) {
 
 // Test the scalar product functions.
 TEST(MathUtils, VectorScalarProduct) {
+    const std::array<double, 4> lhs {5.0, -3.0, 2.0, 6.0};
+    const std::array<double, 4> rhs {-3.0, 1.0, 4.0, -2.0};
+    const double c_lhs[4] {lhs[0], lhs[1], lhs[2], lhs[3]};
+    const double c_rhs[4] {rhs[0], rhs[1], rhs[2], rhs[3]};
 
+    ASSERT_NEAR(MathUtils::vector_scalar_product(lhs, rhs), -22.0, tolerance);
+    ASSERT_NEAR(MathUtils::vector_scalar_product(c_lhs, rhs), -22.0, tolerance);
+    ASSERT_NEAR(MathUtils::vector_scalar_product(lhs, c_rhs), -22.0, tolerance);
+    ASSERT_NEAR(MathUtils::vector_scalar_product(c_lhs, c_rhs), -22.0, tolerance);
+
+    double output = 0.0;
+    MathUtils::vector_scalar_product(c_lhs, c_rhs, output);
+    ASSERT_NEAR(output, -22.0, tolerance);
 }
 
 // Test the functions which swap a vector/matrix between a 1D vector and 2D matrix.
 TEST(MathUtils, ConvertBetweenOneDimensionalVectorAndMatrix) {
+    using testing::DoubleNear;
+    using testing::Pointwise;
 
+    // Set up the following matrix as a column-major and row-major vector:
+    const double expected[4][3] {
+       { 1.0, -2.0,  3.0},
+       {-4.0,  5.5,  6.0},
+       {-7.0, -8.0,  9.0},
+       { 0.0, 10.0, -1.0}
+    };
+    const double col_major_vec[12] {1.0, -4.0, -7.0, 0.0, -2.0, 5.5, -8.0, 10.0, 3.0, 6.0, 9.0, -1.0};
+    const double row_major_vec[12] {1.0, -2.0, 3.0, -4.0, 5.5, 6.0, -7.0, -8.0, 9.0, 0.0, 10.0, -1.0};
+
+    double col_major_output[4][3] {};
+    double row_major_output[4][3] {};
+    MathUtils::col_maj_vec_to_matrix(col_major_vec, col_major_output);
+    MathUtils::row_maj_vec_to_matrix(row_major_vec, row_major_output);
+
+    test_matrices_equal(col_major_output, expected);
+    test_matrices_equal(row_major_output, expected);
 }
 
 // Test the various matrix copy functions.
 TEST(MathUtils, MatrixCopyOperations) {
+    using testing::_;
 
+    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+
+    const double input[3][4] {
+        {1.0, 2.0, 3.0, 4.0},
+        {5.0, 6.0, 7.0, 8.0},
+        {9.0, 10.0, 11.0, 12.0}
+    };
+
+    // Matrix copy
+    {
+        double output[3][4] {};
+        MathUtils::matrix_copy(input, output);
+        test_matrices_equal(input, output);
+    }
+
+    // Copy submatrix out
+    {
+        // Valid case.
+        double output[2][2] {};
+        const double expected1[2][2] {
+            {6.0, 7.0},
+            {10.0, 11.0}
+        };
+        MathUtils::matrix_copy_submatrix_out(input, output, 1, 1);
+        test_matrices_equal(output, expected1);
+
+        // Invalid case.
+        const double expected2[2][2] {
+            {8.0, 0.0},
+            {12.0, 0.0}
+        };
+        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, _));
+        MathUtils::matrix_copy_submatrix_out(input, output, 1, 3);
+        test_matrices_equal(output, expected2);
+    }
+
+    // Copy submatrix in
+    {
+        // Valid case.
+        double output1[4][5] {
+            {100.0, 200.0, 300.0, 400.0, 500.0},
+            {600.0, 700.0, 800.0, 900.0, 1000.0},
+            {1100.0, 1200.0, 1300.0, 1400.0, 1500.0},
+            {1600.0, 1700.0, 1800.0, 1900.0, 2000.0}
+        };
+        const double expected1[4][5] {
+            {100.0, 1.0, 2.0, 3.0, 4.0},
+            {600.0, 5.0, 6.0, 7.0, 8.0},
+            {1100.0, 9.0, 10.0, 11.0, 12.0},
+            {1600.0, 1700.0, 1800.0, 1900.0, 2000.0}
+        };
+        MathUtils::matrix_copy_submatrix_in(input, output1, 0, 1);
+        test_matrices_equal(output1, expected1);
+
+        // Invalid case.
+        double output2[4][5] {
+            {100.0, 200.0, 300.0, 400.0, 500.0},
+            {600.0, 700.0, 800.0, 900.0, 1000.0},
+            {1100.0, 1200.0, 1300.0, 1400.0, 1500.0},
+            {1600.0, 1700.0, 1800.0, 1900.0, 2000.0}
+        };
+        const double expected2[4][5] {
+            {100.0, 200.0, 300.0, 400.0, 500.0},
+            {600.0, 700.0, 800.0, 900.0, 1000.0},
+            {1100.0, 1200.0, 1300.0, 1.0, 2.0},
+            {1600.0, 1700.0, 1800.0, 5.0, 6.0}
+        };
+        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, _));
+        MathUtils::matrix_copy_submatrix_in(input, output2, 2, 3);
+        test_matrices_equal(output2, expected2);
+    }
 }
 
 // Test the various matrix algebra functions.
 TEST(MathUtils, MatrixAlgebra) {
+    // Zero matrix
+    {
+        double input[3][2] {
+            {1.0, 2.0},
+            {3.0, 4.0},
+            {5.0, 6.0}
+        };
+        const double zeros[3][2] {};
+        MathUtils::zero_matrix(input);
+        test_matrices_equal(input, zeros);
+    }
 
+    // Increment
+    {
+        double input[3][2] {
+            {1.0, 2.0},
+            {3.0, 4.0},
+            {5.0, 6.0}
+        };
+        const double increment[3][2] {
+            {-1.0, 5.0},
+            {2.0, -3.0},
+            {0.0, 10.0}
+        };
+        const double expected[3][2] {
+            {0.0, 7.0},
+            {5.0, 1.0},
+            {5.0, 16.0}
+        };
+        MathUtils::matrix_incr(increment, input);
+        test_matrices_equal(input, expected);
+    }
+
+    // Decrement
+    {
+        double input[3][2] {
+            {1.0, 2.0},
+            {3.0, 4.0},
+            {5.0, 6.0}
+        };
+        const double decrement[3][2] {
+            {-1.0, 5.0},
+            {2.0, -3.0},
+            {0.0, 10.0}
+        };
+        const double expected[3][2] {
+            {2.0, -3.0},
+            {1.0, 7.0},
+            {5.0, -4.0}
+        };
+        MathUtils::matrix_decr(decrement, input);
+        test_matrices_equal(input, expected);
+    }
+
+    // Scale
+    {
+        double input[3][2] {
+            {1.0, 2.0},
+            {-0.5, 0.0},
+            {-10.0, -11.0}
+        };
+        const double expected[3][2] {
+            {2.0, 4.0},
+            {-1.0, 0.0},
+            {-20.0, -22.0}
+        };
+        MathUtils::matrix_scale(2.0, input);
+        test_matrices_equal(input, expected);
+    }
 }
 
-// Test the various matrix multiplication functions.
-TEST(MathUtils, MatrixMultiplication) {
+// Test the various matrix multiplication and miscellaneous functions.
+TEST(MathUtils, MatrixOperations) {
+    // Transpose
+    {
+        const double input[2][3] {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0}
+        };
+        double output[3][2] {};
+        const double expected[3][2] {
+            {1.0, 4.0},
+            {2.0, 5.0},
+            {3.0, 6.0}
+        };
+        MathUtils::matrix_trans(input, output);
+        test_matrices_equal(output, expected);
+    }
 
+    // Multiplication: L * R
+    {
+        const double lhs[3][2] {
+            { 1.0, -2.0},
+            {-3.0,  0.0},
+            { 5.0,  3.0}
+        };
+        const double rhs[2][3] {
+            {7.0, -3.0, 2.0},
+            {-4.0, -10.0, 0.0}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {
+            {15.0, 17.0, 2.0},
+            {-21.0, 9.0, -6.0},
+            {23.0, -45.0, 10.0}
+        };
+        MathUtils::matrix_mult(lhs, rhs, output);
+        test_matrices_equal(output, expected);
+    }
+
+    // Multiplication: L' * R
+    {
+        const double lhs[2][3] {
+            {1.0, -3.0, 5.0},
+            {-2.0, 0.0, 3.0}
+        };
+        const double rhs[2][3] {
+            {7.0, -3.0, 2.0},
+            {-4.0, -10.0, 0.0}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {
+            {15.0, 17.0, 2.0},
+            {-21.0, 9.0, -6.0},
+            {23.0, -45.0, 10.0}
+        };
+        MathUtils::matrix_mult_left_trans(lhs, rhs, output);
+        test_matrices_equal(output, expected);
+    }
+
+    // Multiplication: L * R'
+    {
+        const double lhs[3][2] {
+            { 1.0, -2.0},
+            {-3.0,  0.0},
+            { 5.0,  3.0}
+        };
+        const double rhs[3][2] {
+            {7.0, -4.0},
+            {-3.0, -10.0},
+            {2.0, 0.0}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {
+            {15.0, 17.0, 2.0},
+            {-21.0, 9.0, -6.0},
+            {23.0, -45.0, 10.0}
+        };
+        MathUtils::matrix_mult_right_trans(lhs, rhs, output);
+        test_matrices_equal(output, expected);
+    }
+
+    // Multiplication: L' * R'
+    {
+        const double lhs[3][2] {
+            { 1.0, -2.0},
+            {-3.0,  0.0},
+            { 5.0,  3.0}
+        };
+        const double rhs[2][3] {
+            {7.0, -3.0, 2.0},
+            {-4.0, -10.0, 0.0}
+        };
+        double output[2][2] {};
+        const double expected[2][2] {
+            {26.0, 26.0},
+            {-8.0, 8.0}
+        };
+        MathUtils::matrix_mult_trans_trans(lhs, rhs, output);
+        test_matrices_equal(output, expected);
+    }
 }
 
 // Test the function which generates a correlation matrix from a square covariance matrix.
 TEST(MathUtils, CorrelationMatrix) {
+    using testing::_;
+    using testing::HasSubstr;
 
+    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+
+    // Ordinary covariance matrix.
+    {
+        const double covariance[3][3] {
+            {4.0, 100.0, 100.0},
+            {2.0, 3.0, 100.0},
+            {0.6, 0.9, 2.0}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {
+            {1.0, 0.5773502691896258, 0.2121320343559642},
+            {0.5773502691896258, 1.0, 0.3674234614174767},
+            {0.2121320343559642, 0.3674234614174767, 1.0}
+        };
+
+        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        EXPECT_TRUE(success);
+        test_matrices_equal(output, expected);
+    }
+
+    // Positive variances and negative covariances.
+    {
+        const double covariance[3][3] {
+            {4.0, 100.0, 100.0},
+            {-1.2, 3.0, 100.0},
+            {0.6, -0.9, 2.5}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {
+            {1.0, -0.3464101615137755, 0.1897366596101027},
+            {-0.3464101615137755, 1.0, -0.3286335345030997},
+            {0.1897366596101027, -0.3286335345030997, 1.0}
+        };
+
+        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        EXPECT_TRUE(success);
+        test_matrices_equal(output, expected);
+    }
+
+    // Negative variances.
+    {
+        const double covariance[3][3] {
+            {-1.0, 100.0, 100.0},
+            {0.0, -2.0, 100.0},
+            {0.0, 0.0, -3.0}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {};
+
+        EXPECT_CALL(cml_message_mock,
+            publish(CMLMessage::Error, _, _, HasSubstr("a diagonal element is negative")));
+        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        ASSERT_FALSE(success);
+        test_matrices_equal(output, expected);
+    }
+
+    // Only positive variances.
+    {
+        const double covariance[3][3] {
+            {1.0, 100.0, 100.0},
+            {0.0, 2.0, 100.0},
+            {0.0, 0.0, 3.0}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {
+            {1.0, 0.0, 0.0},
+            {0.0, 1.0, 0.0},
+            {0.0, 0.0, 1.0}
+        };
+
+        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        EXPECT_TRUE(success);
+        test_matrices_equal(output, expected);
+    }
+
+    // Zero variance and non-zero covariance in row.
+    {
+        const double covariance[3][3] {
+            {1.0, 100.0, 100.0},
+            {1.0, 0.0, 100.0},
+            {0.0, 0.0, 1.0}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {};
+
+        EXPECT_CALL(cml_message_mock,
+            publish(CMLMessage::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
+        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        EXPECT_FALSE(success);
+        test_matrices_equal(output, expected);
+    }
+
+    // Zero variance and non-zero covariance in column.
+    {
+        const double covariance[3][3] {
+            {1.0, 100.0, 100.0},
+            {0.0, 0.0, 100.0},
+            {0.0, 1.0, 1.0}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {};
+
+        EXPECT_CALL(cml_message_mock,
+            publish(CMLMessage::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
+        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        EXPECT_FALSE(success);
+        test_matrices_equal(output, expected);
+    }
+
+    // Zero variance and zero respective covariance.
+    {
+        const double covariance[3][3] {
+            {0.0, 100.0, 100.0},
+            {0.0, 1.0, 100.0},
+            {0.0, 1.0, 1.0}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {
+            {1.0, 0.0, 0.0},
+            {0.0, 1.0, 1.0},
+            {0.0, 1.0, 1.0}
+        };
+
+        EXPECT_CALL(cml_message_mock,
+            publish(CMLMessage::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals")));
+        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        EXPECT_TRUE(success);
+        test_matrices_equal(output, expected);
+    }
+
+    // All zero variance and covariances.
+    {
+        const double covariance[3][3] {
+            {0.0, 100.0, 100.0},
+            {0.0, 0.0, 100.0},
+            {0.0, 0.0, 0.0}
+        };
+        double output[3][3] {};
+        const double expected[3][3] {
+            {1.0, 0.0, 0.0},
+            {0.0, 1.0, 0.0},
+            {0.0, 0.0, 1.0}
+        };
+
+        EXPECT_CALL(cml_message_mock,
+            publish(CMLMessage::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals"))).Times(3);
+        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        EXPECT_TRUE(success);
+        test_matrices_equal(output, expected);
+    }
 }
 
 }
