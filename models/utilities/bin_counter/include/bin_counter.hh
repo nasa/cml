@@ -78,7 +78,7 @@ class CML_BinCounter {
                  double limit_b,
                  unsigned int num_bins,
                  bool closed_ends = true);           
-  void apply_tolerance(double);
+  void apply_tolerance(double tol);
   template <size_t n_edges>
   void set_data( const double (&edges)[n_edges],
                  bool closed_ends = true)

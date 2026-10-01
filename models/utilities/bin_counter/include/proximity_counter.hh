@@ -20,7 +20,6 @@ PROGRAMMERS:
 #include <cstddef>
 #include <string>
 #include <vector>
-#include <algorithm>
 
 #include "cml/models/utilities/bin_counter/include/bin_counter.hh"
 
@@ -31,9 +30,6 @@ Purpose:
   a set of bins, each covering a finite domain.
 *****************************************************************************/
 class CML_ProximityCounter : public CML_BinCounter {
-  protected:
-  const CML_BinCounterElement* target_data;  /* (--)
-    Array of bins data. For logging compatibility only.*/
  public:
   CML_ProximityCounter();
   explicit CML_ProximityCounter(const std::vector<double> & targets_);

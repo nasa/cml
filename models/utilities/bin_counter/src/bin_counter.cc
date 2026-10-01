@@ -212,9 +212,9 @@ CML_BinCounter::insert(double value)
   if (bins_ready && value <= bins[nbin-1].bin_ceil) {
     //ii-- is a post decrement. tests ii > 0, then decrements.
     //so index ii runs from nbin - 1 to 0.
-    for (size_t ii = nbin; ii-- > 0; ) {
-      if (value >= bins[ii].bin_floor) {
-        bins[ii].count++;
+    for (auto bin = bins.rbegin(), end = bins.rend(); bin != end; ++bin) {
+      if (value >= bin->bin_floor) {
+        bin->count++;
         return;
       }
     }
