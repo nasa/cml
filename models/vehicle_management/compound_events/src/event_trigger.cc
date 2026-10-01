@@ -79,22 +79,27 @@ Purpose:
 bool
 EventTriggerBase::has_managed_value()
 {
-  return ((comparison_logic == MAX_FIRST) ||
-          (comparison_logic == MIN_FIRST) ||
-          (comparison_logic == ABS_MAX_FIRST) ||
-          (comparison_logic == ABS_MIN_FIRST) ||
-          (comparison_logic == MAX_LAST) ||
-          (comparison_logic == MIN_LAST) ||
-          (comparison_logic == ABS_MAX_LAST) ||
-          (comparison_logic == ABS_MIN_LAST) ||
-          (comparison_logic == MAX_CONDITIONAL_FIRST) ||
-          (comparison_logic == MIN_CONDITIONAL_FIRST) ||
-          (comparison_logic == ABS_MAX_CONDITIONAL_FIRST) ||
-          (comparison_logic == ABS_MIN_CONDITIONAL_FIRST) ||
-          (comparison_logic == MAX_CONDITIONAL_LAST) ||
-          (comparison_logic == MIN_CONDITIONAL_LAST) ||
-          (comparison_logic == ABS_MAX_CONDITIONAL_LAST) ||
-          (comparison_logic == ABS_MIN_CONDITIONAL_LAST));
+  switch (comparison_logic) {
+    case MAX_FIRST:
+    case MIN_FIRST:
+    case ABS_MAX_FIRST:
+    case ABS_MIN_FIRST:
+    case MAX_LAST:
+    case MIN_LAST:
+    case ABS_MAX_LAST:
+    case ABS_MIN_LAST:
+    case MAX_CONDITIONAL_FIRST:
+    case MIN_CONDITIONAL_FIRST:
+    case ABS_MAX_CONDITIONAL_FIRST:
+    case ABS_MIN_CONDITIONAL_FIRST:
+    case MAX_CONDITIONAL_LAST:
+    case MIN_CONDITIONAL_LAST:
+    case ABS_MAX_CONDITIONAL_LAST:
+    case ABS_MIN_CONDITIONAL_LAST:
+      return true;
+  }
+
+  return false;
 }
 
 /*****************************************************************************

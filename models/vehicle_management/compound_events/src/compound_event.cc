@@ -378,7 +378,6 @@ CompoundEvent::activate()
   if (arming_triggers.get_num_triggers() > 0) {
     status = Unarmed;
     arming_triggers.subscribe();
-    // arming_triggers.force_multi_shot_for_managed_values();
   }
   else {
     status = Armed;
