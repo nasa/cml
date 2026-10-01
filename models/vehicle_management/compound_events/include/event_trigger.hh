@@ -138,7 +138,7 @@ struct EventTriggerBase
   EventTriggerBase() = default;
   void apply_function_modifier();
   bool has_conditional_reference() const;
-  bool has_managed_value();
+  bool has_managed_value() const;
   void set_new_reference();
 };
 
