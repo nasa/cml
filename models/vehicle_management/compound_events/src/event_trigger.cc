@@ -77,7 +77,7 @@ Purpose:
   managed values of reference.  These should be multi-shot.
 *****************************************************************************/
 bool
-EventTriggerBase::has_managed_value()
+EventTriggerBase::has_managed_value() const
 {
   switch (comparison_logic) {
     case MAX_FIRST:

@@ -83,7 +83,7 @@ void
 EventTriggerSet::force_multi_shot_for_managed_values()
 {
   for (WatchValuesBaseCore * trigger : triggers) {
-    EventTriggerBase * event_trigger = dynamic_cast<EventTriggerBase*>(trigger);
+    auto * event_trigger = dynamic_cast<EventTriggerBase*>(trigger);
       if (event_trigger != nullptr &&
         event_trigger->has_managed_value()) {
       trigger->multi_shot = true;
