@@ -123,7 +123,7 @@ class ConstraintTest_ThresholdTimed : public ConstraintTestTimed
   * get_threshold
   * Purpose: Returns the threshold, cast to double, for logging purposes.
   ****************************************************************************/
-  double get_threshold() override
+  double get_threshold() const override
   {
     return static_cast<double>(threshold);
   }

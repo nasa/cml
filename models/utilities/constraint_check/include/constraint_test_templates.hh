@@ -110,7 +110,7 @@ class ConstraintTest_Threshold : public ConstraintTest
   * get_threshold
   * Purpose: Returns the threshold, cast to double, for logging purposes.
   ****************************************************************************/
-  double get_threshold() override
+  double get_threshold() const override
   {
     return static_cast<double>(threshold);
   }
