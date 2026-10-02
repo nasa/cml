@@ -71,6 +71,40 @@ EventTriggerBase::has_conditional_reference() const
 }
 
 /*****************************************************************************
+has_managed_value_reference
+Purpose:
+  Returns a simple flag indicating whether the trigger has
+  managed values of reference.  These should be multi-shot.
+*****************************************************************************/
+bool
+EventTriggerBase::has_managed_value() const
+{
+  switch (comparison_logic) {
+    case MAX_FIRST:
+    case MIN_FIRST:
+    case ABS_MAX_FIRST:
+    case ABS_MIN_FIRST:
+    case MAX_LAST:
+    case MIN_LAST:
+    case ABS_MAX_LAST:
+    case ABS_MIN_LAST:
+    case MAX_CONDITIONAL_FIRST:
+    case MIN_CONDITIONAL_FIRST:
+    case ABS_MAX_CONDITIONAL_FIRST:
+    case ABS_MIN_CONDITIONAL_FIRST:
+    case MAX_CONDITIONAL_LAST:
+    case MIN_CONDITIONAL_LAST:
+    case ABS_MAX_CONDITIONAL_LAST:
+    case ABS_MIN_CONDITIONAL_LAST:
+      return true;
+    case Undefined:
+      return false;
+  }
+
+  return false;
+}
+
+/*****************************************************************************
 set_new_reference
 Purpose:
   For events with a conditional reference, resets the reference when
