@@ -53,12 +53,15 @@ ConstraintSet::update()
   if (!active) {return;}
 
   num_violations = 0;
-  violated_constraints.erase();
+  violated_constraints.clear();
   for (Constraint * constraint : constraints) {
     constraint->update();
     if (constraint->violated) {
       num_violations++;
-      violated_constraints += (constraint->name + ",  ");
+      if (!violated_constraints.empty()) {
+        violated_constraints += ", ";
+      }
+      violated_constraints += constraint->name;
     }
   }
 }

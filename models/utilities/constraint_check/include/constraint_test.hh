@@ -68,8 +68,8 @@ class ConstraintTest
      - {ConstraintTestTimed} and its derivatives, and
      - {ConstraintTest_Threshold, ConstraintTest_ThresholdTimed}
      respectively, and are redefined in those specfic classes.*/
-  virtual double get_time_limit() { return 0.0;}
-  virtual double get_threshold() { return 0.0;}
+  virtual double get_time_limit() const { return 0.0;}
+  virtual double get_threshold() const { return 0.0;}
 
   void activate() {active = (initialized && enabled);}
 
@@ -138,7 +138,7 @@ class ConstraintTestTimed : public ConstraintTest
   ConstraintTestTimed() = default;
   ~ConstraintTestTimed() override = default;
 
-  double get_time_limit() override {return time_limit;}
+  double get_time_limit() const override {return time_limit;}
   void initialize_gap_time();
   void update_timer(double delta_time);
 };

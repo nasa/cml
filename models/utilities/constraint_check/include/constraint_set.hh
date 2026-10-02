@@ -59,6 +59,6 @@ class ConstraintSet : public SubscriptionBase
   void update();
   void activate() override;
   static bool constraint_disabled( const Constraint * c);
-  std::string & get_violated_constraints() { return violated_constraints;}
+  const std::string & get_violated_constraints() const { return violated_constraints;}
 };
 #endif

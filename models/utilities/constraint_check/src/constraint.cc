@@ -72,7 +72,7 @@ Purpose:
 void
 Constraint::post_update()
 {
-  bool violated_ = false; // local temporary measure of constraint status
+  bool new_violation_status = false; // local temporary measure of constraint status
   // If configured with "Any", trip on the first test that is violated;
   // record its index.
   if (violate_on_any_test) {
@@ -82,7 +82,7 @@ Constraint::post_update()
         test_violated_index = ii;
         test_violated_time_limit = test_list[ii]->get_time_limit();
         test_violated_threshold = test_list[ii]->get_threshold();
-        violated_ = true;
+        new_violation_status = true;
         /* increment the count if this violation is not a holdover from the
            previous cycle (violated is the copy held over from the previous
            cycle). */
@@ -96,20 +96,14 @@ Constraint::post_update()
   // constraint violation. Start with an assumption that there is a
   // violation, and correct that assumption as necessary:
   else {
-    violated_ = true;
-    // Don't need to record which test violated, so don't need indices.
-    for (ConstraintTest * test : test_list) {
-      if (!test->get_violation()) {
-        violated_ = false;
-        break;
-      }
-    }
+    new_violation_status = std::all_of(test_list.begin(), test_list.end(),
+      [](const auto& test) {return test->get_violation();});
     /* increment the count if this violation is not a holdover from the
        previous cycle (violated is the copy held over from the previous
        cycle). */
-    violation_count += static_cast<int>(violated_ && !violated);
+    violation_count += static_cast<int>(new_violation_status && !violated);
   }
-  violated = violated_;
+  violated = new_violation_status;
 }
 
 /*****************************************************************************
