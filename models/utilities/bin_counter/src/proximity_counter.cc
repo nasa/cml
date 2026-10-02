@@ -28,8 +28,7 @@ PROGRAMMERS:
 /*****************************************************************************
 Constructors
 *****************************************************************************/
-CML_ProximityCounter::CML_ProximityCounter()
-{}
+CML_ProximityCounter::CML_ProximityCounter() = default;
 /****************************************************************************/
 CML_ProximityCounter::CML_ProximityCounter(
   const std::vector<double> & targets_)
