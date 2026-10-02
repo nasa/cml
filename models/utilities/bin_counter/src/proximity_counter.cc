@@ -29,8 +29,6 @@ PROGRAMMERS:
 Constructors
 *****************************************************************************/
 CML_ProximityCounter::CML_ProximityCounter()
-  :
-  CML_BinCounter()
 {}
 /****************************************************************************/
 CML_ProximityCounter::CML_ProximityCounter(
