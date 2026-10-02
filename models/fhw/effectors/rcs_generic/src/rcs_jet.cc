@@ -36,7 +36,9 @@ RcsJet::RcsJet(
   group(group_),
   time_step( system.time_step),
   component_flow_rate( prop_pod.components.size()),
-  component_consumption( prop_pod.components.size())
+  component_consumption( prop_pod.components.size()),
+  sum_component_consumption( prop_pod.components.size())
+
 {
   // Start the command list with an "Off":
   commands.push_back(false);
@@ -852,6 +854,12 @@ RcsJet::compute_prop_consumption()
                                     component_flow_rate.at(ii) * delta_time_on;
       }
     }
+  }
+  
+  // Accumulate component consumption:
+  for (unsigned int ii = 0; ii < component_consumption.size(); ++ii) {
+    sum_component_consumption[ii] += component_consumption[ii];
+    sum_consumption += component_consumption[ii];
   }
 
   // Add this jet's prop consumption (per component) to the pod
