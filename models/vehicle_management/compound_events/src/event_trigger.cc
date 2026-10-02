@@ -97,6 +97,8 @@ EventTriggerBase::has_managed_value() const
     case ABS_MAX_CONDITIONAL_LAST:
     case ABS_MIN_CONDITIONAL_LAST:
       return true;
+    case Undefined:
+      return false;
   }
 
   return false;
