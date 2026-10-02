@@ -26,7 +26,7 @@ Purpose: Contents of each element of the working vector
 struct CML_TargetCounterElement {
   int value; /* (--)
     Target integer value to be counted */
-  unsigned int count; /* (--)
+  unsigned int count; /* (1)
     Counter. Incremented when variable = value. */
 };
 
@@ -69,5 +69,6 @@ class CML_TargetCounter {
     std::vector<int> targets_v( targets_, targets_+n_targets);
     set_data( targets_v);
   }
+  size_t get_ntarget() const {return ntarget;}
 };
 #endif
