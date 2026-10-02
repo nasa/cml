@@ -466,8 +466,13 @@ RocketMotor_TableThrust::compute_flow_rate_and_isp()
                                                   0.0);
     break;
   case PropConsumptionMburn:
-    // mburn from table, in kg
-    delta_mass =  dyn_mass_properties.consumable_mass -
+    /* mass-change since last calculation is the difference between
+           (mass known to be remaining) and
+           (mass that should be remaining after mburn has been consumed)
+       mburn is from table, in kg
+    */
+    delta_mass =  (dyn_mass_properties.consumable_mass -
+                   dyn_mass_properties.mass_consumed_step) -
                   (prop_mass_init - mburn);
     if (MathUtils::is_near_equal( delta_mass, 0.0)) {
       mass_flow_rate = 0.0;
