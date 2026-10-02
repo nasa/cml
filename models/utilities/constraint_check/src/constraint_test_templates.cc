@@ -10,6 +10,7 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "../include/constraint_test_templates.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 /*****************************************************************************
 Template specializations
