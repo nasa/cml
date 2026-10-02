@@ -54,15 +54,15 @@ class Constraint
     An active constraint gets processed.*/
     
   // the following are all outputs of constraint.cc
-  unsigned int test_violated_index; /* (--)
+  unsigned int test_violated_index{0}; /* (--)
     Record of which test caused the constraint to be violated. */
-  double test_violated_time_limit; /* (s)
+  double test_violated_time_limit{0.0}; /* (s)
     The time-limit -- where applicable -- of (one of) the test(s) that
     resulted in a violation.
     If multiple tests result in a violation, the value recorded here is that
     of the lowest indexed test.
     If the tests do not include time limits, this value will remain 0.0 */
-  double test_violated_threshold; /* (--)
+  double test_violated_threshold{0.0}; /* (--)
     The threshold  -- where applicable -- of (one of) the test(s) that
     resulted in a violation, cast to a double for logging purposes.
     If multiple tests result in a violation, the value recorded here is that

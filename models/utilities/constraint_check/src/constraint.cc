@@ -25,11 +25,7 @@ Constructor
 *****************************************************************************/
 Constraint::Constraint( size_t num_tests_)
   :
-  test_violated_index(0),
-  test_violated_time_limit(0.0),
-  test_violated_threshold(0.0),
-  num_tests(num_tests_),
-  test_list()
+  num_tests(num_tests_)
 {}
 
 /*****************************************************************************
