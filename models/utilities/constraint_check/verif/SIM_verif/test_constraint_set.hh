@@ -79,12 +79,14 @@ class TestConstraintSet
     threshold_x4t.tests[2].time_limit = 0.8;
     threshold_x4t.tests[3].time_limit = 0.5;
     threshold_x4t.violation_condition = ConstraintEnum::GE;
+    threshold_x4t.name = "x4t";
 
     threshold_x4i.tests[0].threshold = 10.0;
     threshold_x4i.tests[1].threshold = 20.0;
     threshold_x4i.tests[2].threshold = 30.0;
     threshold_x4i.tests[3].threshold = 35.0;
     threshold_x4i.violation_condition = ConstraintEnum::GT;
+    threshold_x4i.name = "x4i";
 
     threshold_i4t.tests[0].threshold = 10;
     threshold_i4t.tests[1].threshold = 20;
@@ -95,12 +97,14 @@ class TestConstraintSet
     threshold_i4t.tests[2].time_limit = 1.8;
     threshold_i4t.tests[3].time_limit = 2.5;
     threshold_i4t.violation_condition = ConstraintEnum::LT;
+    threshold_i4t.name = "i4t";
 
     threshold_i4i.tests[0].threshold = 10;
     threshold_i4i.tests[1].threshold = 20;
     threshold_i4i.tests[2].threshold = 30;
     threshold_i4i.tests[3].threshold = 40;
     threshold_i4i.violation_condition = ConstraintEnum::EQ;
+    threshold_i4i.name = "i4i";
 
     threshold_x4s.threshold_spec[0] = 10.0;
     threshold_x4s.threshold_spec[1] = 20.0;
@@ -111,6 +115,7 @@ class TestConstraintSet
     threshold_x4s.time_spec[2] = 1.8;
     threshold_x4s.time_spec[3] = 2.5;
     threshold_x4s.violation_condition = ConstraintEnum::LE;
+    threshold_x4s.name = "x4s";
 
     threshold_x3s.threshold_spec[0] = 10.0;
     threshold_x3s.threshold_spec[1] = 20.0;
@@ -121,6 +126,7 @@ class TestConstraintSet
     threshold_x3s.time_spec[2] = 1.8;
     threshold_x3s.time_spec[3] = 1.5;
     threshold_x3s.violation_condition = ConstraintEnum::LT;
+    threshold_x3s.name = "x3s";
 
     threshold_x3s_neg.threshold_spec[0] = -10.0;
     threshold_x3s_neg.threshold_spec[1] = -20.0;
@@ -131,6 +137,7 @@ class TestConstraintSet
     threshold_x3s_neg.time_spec[2] = 1.8;
     threshold_x3s_neg.time_spec[3] = 1.5;
     threshold_x3s_neg.violation_condition = ConstraintEnum::GT;
+    threshold_x3s_neg.name = "x3s_neg";
 
     threshold_x5s.threshold_spec[0] = 10.0;
     threshold_x5s.threshold_spec[1] = 20.0;
@@ -141,6 +148,7 @@ class TestConstraintSet
     threshold_x5s.time_spec[2] = 0.3;
     threshold_x5s.time_spec[3] = 0.1;
     threshold_x5s.violation_condition = ConstraintEnum::GT;
+    threshold_x5s.name = "x5s";
 
     interval_x2t.tests[0].lower_bound = 10.0;
     interval_x2t.tests[0].upper_bound = 20.0;
@@ -149,6 +157,7 @@ class TestConstraintSet
     interval_x2t.tests[0].time_limit = 0.5;
     interval_x2t.tests[1].time_limit = 0.8;
     interval_x2t.violation_condition = ConstraintEnum::In;
+    interval_x2t.name = "x2t";
 
     interval_x2t_neg.tests[0].lower_bound = -20.0;
     interval_x2t_neg.tests[0].upper_bound = -10.0;
@@ -157,6 +166,7 @@ class TestConstraintSet
     interval_x2t_neg.tests[0].time_limit = 0.5;
     interval_x2t_neg.tests[1].time_limit = 0.8;
     interval_x2t_neg.violation_condition = ConstraintEnum::In;
+    interval_x2t_neg.name = "x2t_neg";
 
     interval_i2t.tests[0].lower_bound = 10;
     interval_i2t.tests[0].upper_bound = 20;
@@ -165,12 +175,14 @@ class TestConstraintSet
     interval_i2t.tests[0].time_limit = 0.5;
     interval_i2t.tests[1].time_limit = 0.8;
     interval_i2t.violation_condition = ConstraintEnum::In;
+    interval_i2t.name = "i2t";
 
     interval_x2i.tests[0].lower_bound = 10.0;
     interval_x2i.tests[0].upper_bound = 20.0;
     interval_x2i.tests[1].lower_bound = 30.0;
     interval_x2i.tests[1].upper_bound = 40.0;
     interval_x2i.violation_condition = ConstraintEnum::In;
+    interval_x2i.name = "x2i";
   }
 
   void run_4_config()
