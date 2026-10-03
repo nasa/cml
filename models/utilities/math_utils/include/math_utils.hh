@@ -517,13 +517,6 @@ Linear Algebra Section
   }
 
   template <size_t N>
-  static std::array<double, N> vector_elementwise_sqrt(
-                                         const std::array<double, N>&& vec) {
-    for (size_t ii = 0; ii < N; ii++) { vec[ii] = sqrt_protected(vec[ii]); }
-    return vec;
-  }
-
-  template <size_t N>
   static std::array<double, N> vector_elementwise_sqrt(const double (&vec)[N]) {
     std::array<double, N> result;
     for (size_t ii = 0; ii < N; ii++) { result[ii] = sqrt_protected(vec[ii]); }

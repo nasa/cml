@@ -9,7 +9,7 @@
 namespace CMLMessage {
 
 // Mock interface to CML's CMLMessage class
-class Mock final {
+class Mock {
 public:
     Mock();
     ~Mock();
