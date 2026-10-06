@@ -98,6 +98,20 @@ EventTriggerBase::has_managed_value() const
     case ABS_MIN_CONDITIONAL_LAST:
       return true;
     case Undefined:
+    case EQ:
+    case NE:
+    case GT:
+    case LT:
+    case GE:
+    case LE:
+    case ABS_EQ:
+    case ABS_GT:
+    case ABS_GE:
+    case ABS_LT:
+    case ABS_LE:
+    case OC:
+    case Change:
+    case Crossing:
       return false;
   }
 
