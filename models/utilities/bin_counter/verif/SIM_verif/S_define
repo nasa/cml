@@ -1,5 +1,5 @@
 /*****************************************************************************
-PURPOSE: (Tests the bin- and target- counter algorithms
+PURPOSE: (Tests the bin- and target- counter algorithms)
 PROGRAMMERS:
     (
      ((Gary Turner) (OSR) (09/2023) (ANTARES) (verification))
@@ -123,6 +123,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
 "***************************************************************************\n" << std::endl; 
 
   prox_counter.set_data( empty_dbl);
+
 
 
 // BIN COUNTER WARNINGS

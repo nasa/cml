@@ -243,11 +243,14 @@ CML_BinCounter::apply_tolerance(double tol)
     return;
   }
 
+  for (size_t ii = 0; ii + 1 < nbin; ++ii) {
+    const double shifted_boundary = bins[ii].bin_ceil - tol;
+    bins[ii].bin_ceil = shifted_boundary;
+    bins[ii+1].bin_floor = shifted_boundary;
+  }
+
   if (bins[0].bin_floor != std::numeric_limits<double>::lowest()) {
     bins[0].bin_floor -= tol;
-  }
-  for (size_t ii = 0; ii < nbin; ii++) {
-      bins[ii].bin_ceil =
-      bins[ii+1].bin_floor = bins[ii].bin_ceil - tol;    
+    bins[nbin - 1].bin_ceil -= tol;
   }
 }
