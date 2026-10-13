@@ -60,6 +60,7 @@ AttitudeManager::activate()
 {
     if (!initialized) { return;}
     active = true;
+    dynamicTimePrevious = dynamicTime;
     // Store previous value of rotational_dynamics, resumed after model deactivation
     rotational_dynamics_prev = body.rotational_dynamics;
     body.rotational_dynamics = false;

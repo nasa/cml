@@ -81,7 +81,7 @@ Input file settings:
 public:
     double mnvrRateMaxInput; /* (rad/s) 
         Input variable for the maximum maneuver rate (in magnitude) */
-    double mnvrAccelInput; /* (rad/s) 
+    double mnvrAccelInput; /* (rad/s^2) 
         Input variable for the maneuver acceleration (in magnitude) if smoothing */
     int randSeed; /* (--)
         Randomization seed to generate noise about final target state */
