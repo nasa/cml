@@ -44,9 +44,8 @@ class VerifCompoundEventsManager : public CompoundEventsManager
     event.action_triggers.multi_shot = true;
     add_event( event);
   }
- private:
-  VerifCompoundEventsManager( const VerifCompoundEventsManager&) = delete;
-  VerifCompoundEventsManager& operator=(
-                              const VerifCompoundEventsManager&) = delete;
+  
+  VerifCompoundEventsManager(const VerifCompoundEventsManager&) = delete;
+  VerifCompoundEventsManager& operator=(const VerifCompoundEventsManager&) = delete;
 };
 #endif
