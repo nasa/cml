@@ -28,6 +28,7 @@ ASSUMPTIONS:
 #include <string>
 #include <cstddef>
 #include <vector>
+#include <limits>
 
 /*****************************************************************************
 CMLTaggedRingBufferMember
@@ -74,7 +75,7 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
     or simply the absolute closest regardless of time difference (false,
     default) */
 
-  double proximity_th{std::numeric_limits<double>::infinity()}; /* (--)
+  double proximity_threshold{std::numeric_limits<double>::infinity()}; /* (--)
     The maximum allowable time difference between a tag closest and the 
     specified tag. If the proximity_flag is true, the lookup_tag function
     returns the data-set with a tag closest in value to the specified tag
@@ -238,10 +239,10 @@ Note:
       }
     }
     
-    if (proximity_flag && tag_delta_min > proximity_th) {
+    if (proximity_flag && tag_delta_min > proximity_threshold) {
       CMLMessage::error( __FILE__,__LINE__,
         "In buffer ", name_,", could not find a tag ",t," within the proximity threshold ",
-        proximity_th,"\n"
+        proximity_threshold,"\n"
         "Cannot identify the desired data set.\n"
         "Returning NULL.\n");
       return nullptr;        
