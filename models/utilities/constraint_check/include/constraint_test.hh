@@ -60,7 +60,17 @@ class ConstraintTest
   void count_violations();
 
 
-  virtual double get_time_limit() {return 0.0;}
+  /* Note -- get_time_limit and get_threshold are needed at the top level
+     because they are called for all constraint-tests that show a violation
+     within a constraint. They are meaningless for constraint-test types that
+     have no time-limit or no single threshold and simply return 0.0 for
+     those classes. They are meaningful for constraint-test types:
+     - {ConstraintTestTimed} and its derivatives, and
+     - {ConstraintTest_Threshold, ConstraintTest_ThresholdTimed}
+     respectively, and are redefined in those specfic classes.*/
+  virtual double get_time_limit() const { return 0.0;}
+  virtual double get_threshold() const { return 0.0;}
+
   void activate() {active = (initialized && enabled);}
 
   bool is_initialized() const {return initialized;}
@@ -96,7 +106,7 @@ class ConstraintTestTimed : public ConstraintTest
   bool use_timer{true}; /* (--)
     Allows a ConstrainTestTimed to be treated as a ConstraintTest,
     circumventing the timing aspect.*/
-  double time_limit{0.0}; /* (--)
+  double time_limit{0.0}; /* (s)
     The duration for which a domain violation may exist before triggering a
     test violation. Not used in all cases.*/
   double gap_time_limit{0.0}; /* (s)
@@ -128,7 +138,7 @@ class ConstraintTestTimed : public ConstraintTest
   ConstraintTestTimed() = default;
   ~ConstraintTestTimed() override = default;
 
-  double get_time_limit() override {return time_limit;}
+  double get_time_limit() const override {return time_limit;}
   void initialize_gap_time();
   void update_timer(double delta_time);
 };
