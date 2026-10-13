@@ -70,7 +70,8 @@ CompoundEventsManager::update()
 {
   if (!enabled) {return;}
   // Iterate through managed triggers and unlock them for the current sim cycle
-  // (meant to be executed before a trigger is updated, where it will then be locked)
+  // (meant to be executed before a trigger is updated, where it will then be
+  // locked)
   for ( WatchValuesBaseCore * trigger : managed_triggers) {
     trigger->locked = false;
   }
@@ -110,10 +111,15 @@ add_trigger
 Purpose:
   Adds a trigger to the list of managed_triggers, which will enable locking
   and unlocking of the trigger.
+
+  FIXME Turner 2026/07
+  It is not clear why this method takes a pointer rather than a reference.
 *****************************************************************************/
 void
 CompoundEventsManager::add_trigger(WatchValuesBaseCore* new_trigger)
 {
+  if (new_trigger == nullptr) {return;}
+
   managed_triggers.push_back( new_trigger);
   new_trigger->externally_managed = true;
 }

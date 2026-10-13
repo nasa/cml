@@ -49,6 +49,7 @@ class EventTriggerSet : public WatchValuesSet
 
   void populate_conditional_reference_trigger_list();
   void update_conditional_trigger_references();
+  void force_multi_shot_for_managed_values();
   WatchValuesBaseCore * find_trigger( const std::string& trigger_name_in);
 };
 #endif
