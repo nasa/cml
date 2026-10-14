@@ -464,7 +464,7 @@ Linear Algebra Section
   // zero vector: zeroes the specified vector:
   template <size_t N>
   static void zero_vector( std::array<double, N>& vec) {
-    std::fill(vec.begin(), vec.end(), 0.0);
+    vec.fill(0.0);
   }
   template <size_t N>
   static void zero_vector( double (&vec)[N]) {
