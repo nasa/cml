@@ -267,7 +267,7 @@ ManeuverModel::compute_eigen_rot()
 
     // Generate randomized values about our desired target state to simulate uncertainty in sim truth
     std::mt19937 generator;
-    generator.seed( randSeed );
+    generator.seed(static_cast<decltype(generator)::result_type>(randSeed));
     std::uniform_real_distribution<double> rand(-1.0, 1.0);
     // Add randomized noise to target Euler angle
     eulerTarget *= (1 + rand(generator) * eulerTolerance);
