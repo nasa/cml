@@ -354,39 +354,71 @@ TEST(MathUtils, MatrixAlgebra) {
 TEST(MathUtils, MatrixOperations) {
     // Transpose
     {
-        const double input[2][3] {
+        // Square matrix.
+        const double input1[2][2] {
+            {1.0, 2.0},
+            {4.0, 5.0}
+        };
+        double output1[2][2] {};
+        const double expected1[2][2] {
+            {1.0, 4.0},
+            {2.0, 5.0}
+        };
+        MathUtils::matrix_trans(input1, output1);
+        test_matrices_equal(output1, expected1);
+
+        // Non-square matrix.
+        const double input2[2][3] {
             {1.0, 2.0, 3.0},
             {4.0, 5.0, 6.0}
         };
-        double output[3][2] {};
-        const double expected[3][2] {
+        double output2[3][2] {};
+        const double expected2[3][2] {
             {1.0, 4.0},
             {2.0, 5.0},
             {3.0, 6.0}
         };
-        MathUtils::matrix_trans(input, output);
-        test_matrices_equal(output, expected);
+        MathUtils::matrix_trans(input2, output2);
+        test_matrices_equal(output2, expected2);
     }
 
     // Multiplication: L * R
     {
-        const double lhs[3][2] {
+        // Square matrices.
+        const double lhs1[2][2] {
+            {-1.0, 3.0},
+            {-5.0, -6.0}
+        };
+        const double rhs1[2][2] {
+            {4.0, 2.5},
+            {-3.0, -1.0}
+        };
+        double output1[2][2] {};
+        const double expected1[2][2] {
+            {-13.0, -5.5},
+            {-2.0, -6.5}
+        };
+        MathUtils::matrix_mult(lhs1, rhs1, output1);
+        test_matrices_equal(output1, expected1);
+
+        // Non-square matrices.
+        const double lhs2[3][2] {
             { 1.0, -2.0},
             {-3.0,  0.0},
             { 5.0,  3.0}
         };
-        const double rhs[2][3] {
+        const double rhs2[2][3] {
             {7.0, -3.0, 2.0},
             {-4.0, -10.0, 0.0}
         };
-        double output[3][3] {};
-        const double expected[3][3] {
+        double output2[3][3] {};
+        const double expected2[3][3] {
             {15.0, 17.0, 2.0},
             {-21.0, 9.0, -6.0},
             {23.0, -45.0, 10.0}
         };
-        MathUtils::matrix_mult(lhs, rhs, output);
-        test_matrices_equal(output, expected);
+        MathUtils::matrix_mult(lhs2, rhs2, output2);
+        test_matrices_equal(output2, expected2);
     }
 
     // Multiplication: L' * R
