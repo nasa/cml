@@ -54,6 +54,7 @@ class StateInitialize : public jeod::DynBodyInit
     ICOPT_REL_VEL_GAM_AZ,    // deprecated
     OrbitalElements,
     EulerInertialVelvec_YPR,
+    EulerInertialLVLH_YPR,
     EulerPfixVelvec_YPR,     // deprecated
     SunPointing_YPR,
     SunPointingEcliptic_PYR,
@@ -88,6 +89,7 @@ class StateInitialize : public jeod::DynBodyInit
     RITS_None,
     RITS_Inertial,
     RITS_VelPos,
+    RITS_LVLH,
     RITS_PfixRef,
     RITS_SolarPosPos,
     RITS_SolarPosEclipticPole

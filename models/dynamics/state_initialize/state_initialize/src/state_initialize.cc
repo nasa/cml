@@ -298,6 +298,7 @@ StateInitialize::select_position_initializer()
    case InertialSpeedGammaAzimuth:
    case PfixSpeedGammaAzimuth:
    case EulerInertialVelvec_YPR:
+   case EulerInertialLVLH_YPR:
    case SunPointing_YPR:
    case SunPointingEcliptic_PYR:
    case PfixUpCompAzimuth_YPR:
@@ -426,6 +427,7 @@ StateInitialize::select_velocity_initializer()
 
    case ICOPT_R_INERTIAL:
    case EulerInertialVelvec_YPR:
+   case EulerInertialLVLH_YPR:
    case SunPointing_YPR:
    case SunPointingEcliptic_PYR:
    case PfixUpCompAzimuth_YPR:
@@ -464,6 +466,7 @@ StateInitialize::select_attitude_initializer()
   // First pass for E_reference_body
   switch (attitude_input_data_type) {
    case EulerInertialVelvec_YPR:
+   case EulerInertialLVLH_YPR:
    case SunPointing_YPR:
    case PfixUpCompAzimuth:
    case PfixUpCompAzimuth_YPR:
@@ -556,6 +559,10 @@ StateInitialize::select_attitude_initializer()
    case EulerInertialVelvec_YPR:
     populate_rot_init_transform_source = RITS_VelPos;
     z_axis_points_up = true;
+    break;
+
+   case EulerInertialLVLH_YPR:
+    populate_rot_init_transform_source = RITS_LVLH;
     break;
 
    case SunPointing_YPR:
@@ -852,6 +859,7 @@ StateInitialize::select_att_rate_initializer()
    case PfixSpeedGammaAzimuth:
    case OrbitalElements:
    case EulerInertialVelvec_YPR:
+   case EulerInertialLVLH_YPR:
    case SunPointing_YPR:
    case SunPointingEcliptic_PYR:
    case EulerBoostRef_YPR:
@@ -1164,6 +1172,11 @@ StateInitialize::generate_rot_init_values(
                                                trans_init.position,
                                                T_inrtl_reference);
     }
+    break;
+   case RITS_LVLH: // Velocity and position:
+    MathUtils::generate_inertial_to_lvlh ( trans_init.position,
+                                           trans_init.velocity,
+                                           T_inrtl_reference);
     break;
    case RITS_PfixRef: // Reference is known relative to Pfix
     jeod::Matrix3x3::product( T_pfix_reference,
