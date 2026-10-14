@@ -132,7 +132,7 @@ Purpose: Converts inputs and initializes the perturbed state.
 void PerturbModel::initialize() {
     if (initialized) {return;}
 
-    generator.seed( randSeed );
+    generator.seed(static_cast<decltype(generator)::result_type>(randSeed));
     // Assign the initial rotational elements of the prescribed deadbanding[ii] attitude
     for (unsigned int ii = 0; ii < 3; ++ii) {
         // Protect against negative user inputs
