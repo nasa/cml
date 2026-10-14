@@ -62,23 +62,27 @@ TEST(MathUtils, UnitVector) {
     using testing::Pointwise;
 
     // Unit vector calculation. Magnitude is 11.
-    const std::array<double, 4> vec4 {-4.0, 4.0, 5.0, -8.0};
-    const double c_vec4[4] {-4.0, 4.0, 5.0, -8.0};
-    const std::array<double, 4> expected {
-        -4.0 / 11.0, // -0.3636363636363636
-        4.0 / 11.0,  //  0.3636363636363636
-        5.0 / 11.0,  //  0.4545454545454545
-        -8.0 / 11.0  // -0.7272727272727273
-    };
-    EXPECT_THAT(MathUtils::unit_vector(vec4), Pointwise(DoubleNear(tolerance), expected));
-    EXPECT_THAT(MathUtils::unit_vector(c_vec4), Pointwise(DoubleNear(tolerance), expected));
+    {
+        const std::array<double, 4> vec4 {-4.0, 4.0, 5.0, -8.0};
+        const double c_vec4[4] {-4.0, 4.0, 5.0, -8.0};
+        const std::array<double, 4> expected {
+            -4.0 / 11.0, // -0.3636363636363636
+            4.0 / 11.0,  //  0.3636363636363636
+            5.0 / 11.0,  //  0.4545454545454545
+            -8.0 / 11.0  // -0.7272727272727273
+        };
+        EXPECT_THAT(MathUtils::unit_vector(vec4), Pointwise(DoubleNear(tolerance), expected));
+        EXPECT_THAT(MathUtils::unit_vector(c_vec4), Pointwise(DoubleNear(tolerance), expected));
+    }
 
     // Unit vector of a vector with magnitude zero.
-    const std::array<double, 10> vec10 {};
-    const double c_vec10[10] {};
-    const std::array<double, 10> zero {};
-    EXPECT_THAT(MathUtils::unit_vector(vec10), Pointwise(Eq(), zero));
-    EXPECT_THAT(MathUtils::unit_vector(c_vec10), Pointwise(Eq(), zero));
+    {
+        const std::array<double, 4> vec4 {};
+        const double c_vec4[4] {};
+        const std::array<double, 4> zero {};
+        EXPECT_THAT(MathUtils::unit_vector(vec4), Pointwise(Eq(), zero));
+        EXPECT_THAT(MathUtils::unit_vector(c_vec4), Pointwise(Eq(), zero));
+    }
 }
 
 // Test zeroing vectors.
@@ -86,14 +90,29 @@ TEST(MathUtils, ZeroVector) {
     using testing::Eq;
     using testing::Pointwise;
 
-    std::array<double, 4> arr {1.0, 2.0, 3.33333, -4.4};
-    double c_arr[4] {1.0, 2.0, 3.33333, -4.4};
-    const std::array<double, 4> zero {};
+    // Size 3
+    {
+        std::array<double, 3> arr {1.0, 2.0, 3.33333};
+        double c_arr[3] {1.0, 2.0, 3.33333};
+        const std::array<double, 3> zero {};
 
-    MathUtils::zero_vector(arr);
-    MathUtils::zero_vector(c_arr);
-    EXPECT_THAT(MathUtils::unit_vector(arr), Pointwise(Eq(), zero));
-    EXPECT_THAT(MathUtils::unit_vector(c_arr), Pointwise(Eq(), zero));
+        MathUtils::zero_vector(arr);
+        MathUtils::zero_vector(c_arr);
+        EXPECT_THAT(MathUtils::unit_vector(arr), Pointwise(Eq(), zero));
+        EXPECT_THAT(MathUtils::unit_vector(c_arr), Pointwise(Eq(), zero));
+    }
+
+    // Size 4
+    {
+        std::array<double, 4> arr {1.0, 2.0, 3.33333, -4.4};
+        double c_arr[4] {1.0, 2.0, 3.33333, -4.4};
+        const std::array<double, 4> zero {};
+
+        MathUtils::zero_vector(arr);
+        MathUtils::zero_vector(c_arr);
+        EXPECT_THAT(MathUtils::unit_vector(arr), Pointwise(Eq(), zero));
+        EXPECT_THAT(MathUtils::unit_vector(c_arr), Pointwise(Eq(), zero));
+    }
 }
 
 // Test the element-wise square root functions.
@@ -251,14 +270,25 @@ TEST(MathUtils, MatrixCopyOperations) {
 TEST(MathUtils, MatrixAlgebra) {
     // Zero matrix
     {
-        double input[3][2] {
+        // Square matrix
+        double input_square[3][3] {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0},
+            {7.0, 8.0, 9.0}
+        };
+        const double zeros_square[3][3] {};
+        MathUtils::zero_matrix(input_square);
+        test_matrices_equal(input_square, zeros_square);
+
+        // Non-square matrix
+        double input_nonsquare[3][2] {
             {1.0, 2.0},
             {3.0, 4.0},
             {5.0, 6.0}
         };
-        const double zeros[3][2] {};
-        MathUtils::zero_matrix(input);
-        test_matrices_equal(input, zeros);
+        const double zeros_nonsquare[3][2] {};
+        MathUtils::zero_matrix(input_nonsquare);
+        test_matrices_equal(input_nonsquare, zeros_nonsquare);
     }
 
     // Increment

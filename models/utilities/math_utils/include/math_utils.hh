@@ -17,11 +17,14 @@
 #ifndef CML_MATH_UTILS_HH
 #define CML_MATH_UTILS_HH
 
+#include <algorithm>
 #include <array>
 #include <vector>
 #include <string>
 #include <list>
 #include <cstring>
+#include <iterator>
+#include <type_traits>
 
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -227,13 +230,15 @@ public:
     // Avoiding using a difference (e.g. val1 - val2) so as to avoid
     // complication of differences evaluating to a negative value and
     // wrapping on an unsigned type.
-    if (tol < 0) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid arguments\n",
-        "Testing whether two values are within an absolute tolerance\n"
-        "is not well-defined when the tolerance is negative.\n"
-        "Returning false.\n");
-      return false;
+    if constexpr (std::is_signed_v<T>) {
+      if (tol < 0) {
+        CMLMessage::error(
+          __FILE__,__LINE__,"Invalid arguments\n",
+          "Testing whether two values are within an absolute tolerance\n"
+          "is not well-defined when the tolerance is negative.\n"
+          "Returning false.\n");
+        return false;
+      }
     }
     return ((val2 > val1) ?
                 val1 + tol >= val2 : 
@@ -246,13 +251,15 @@ public:
   {
     // still want to identify as false on a negative tolerance, but fully
     // evaluate a positive tolerance about a negative value.
-    if (tol < 0) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid arguments\n",
-        "Testing whether two values are within a relative tolerance\n"
-        "is not well-defined when the tolerance is negative.\n"
-        "Returning false.\n");
-      return false;
+    if constexpr (std::is_signed_v<T>) {
+      if (tol < 0) {
+        CMLMessage::error(
+          __FILE__,__LINE__,"Invalid arguments\n",
+          "Testing whether two values are within a relative tolerance\n"
+          "is not well-defined when the tolerance is negative.\n"
+          "Returning false.\n");
+        return false;
+      }
     }
     return is_within_abs_tolerance( value, expected,
                                       static_cast<T>(tol*std::fabs(expected)));
@@ -457,11 +464,11 @@ Linear Algebra Section
   // zero vector: zeroes the specified vector:
   template <size_t N>
   static void zero_vector( std::array<double, N>& vec) {
-    for (size_t ii = 0; ii < N; ii++) { vec[ii] = 0.0;}
+    std::fill(vec.begin(), vec.end(), 0.0);
   }
   template <size_t N>
   static void zero_vector( double (&vec)[N]) {
-    for (size_t ii = 0; ii < N; ii++) { vec[ii] = 0.0;}
+    std::fill(std::begin(vec), std::end(vec), 0.0);
   }
 
   /* TODO Hirad Mirhashemi 2025/10.

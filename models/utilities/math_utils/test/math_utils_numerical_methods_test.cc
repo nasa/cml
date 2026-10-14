@@ -42,6 +42,19 @@ TEST(MathUtils, IsEqual) {
     EXPECT_FALSE(MathUtils::is_equal(3.45f, 3.56f));
 }
 
+// Test the is_within_range function. Note that this function is marked for
+// deprecation soon and this test can be removed alongside it.
+TEST(MathUtils, IsWithinRange) {
+    using testing::_;
+    using testing::HasSubstr;
+
+    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+
+    EXPECT_CALL(cml_message_mock,
+        publish(CMLMessage::Inform, _, _, HasSubstr("Deprecated method")));
+    EXPECT_TRUE(MathUtils::is_within_range(3.45, 3.46, 0.01));
+}
+
 // Test the has_changed_from function.
 TEST(MathUtils, HasChangedFrom) {
     EXPECT_TRUE(MathUtils::has_changed_from(3.45, 4.56));
@@ -78,8 +91,10 @@ TEST(MathUtils, IsWithinAbsoluteTolerance) {
 
     // A negative absolute tolerance will emit an error.
     EXPECT_CALL(cml_message_mock,
-        publish(CMLMessage::Error, _, _, HasSubstr("not well-defined when the tolerance is negative"))).Times(1);
+        publish(CMLMessage::Error, _, _, HasSubstr("not well-defined when the tolerance is negative"))).Times(3);
+    EXPECT_FALSE(MathUtils::is_within_abs_tolerance(-2.0, -2.01, -1.0));
     EXPECT_FALSE(MathUtils::is_within_abs_tolerance(-2.0f, -2.01f, -1.0f));
+    EXPECT_FALSE(MathUtils::is_within_abs_tolerance(-2, -3, -3));
 }
 
 // Test the relative tolerance comparison function.
@@ -107,8 +122,10 @@ TEST(MathUtils, IsWithinRelativeTolerance) {
 
     // A negative relative tolerance will emit an error.
     EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("not well-defined when the tolerance is negative"))).Times(1);
+            publish(CMLMessage::Error, _, _, HasSubstr("not well-defined when the tolerance is negative"))).Times(3);
+    EXPECT_FALSE(MathUtils::is_within_rel_tolerance(-2.0, -2.01, -1.0));
     EXPECT_FALSE(MathUtils::is_within_rel_tolerance(-2.0f, -2.01f, -1.0));
+    EXPECT_FALSE(MathUtils::is_within_rel_tolerance(-2, -3, -3.0));
 }
 
 // Test the function which returns the sign of the input value.
