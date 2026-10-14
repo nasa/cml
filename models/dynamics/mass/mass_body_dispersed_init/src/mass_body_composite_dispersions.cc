@@ -22,6 +22,7 @@ PROGRAMMERS:
 #include "cml/models/dynamics/mass/mass_body_distribute_comp_to_core/include/mass_body_distribute_comp_to_core.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/dynamics/body_action/include/body_action.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/mass/include/mass.hh"
 #include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
@@ -113,84 +114,120 @@ Purpose:
 void
 MassBodyCompositeDispersions::update_internal()
 {
+  /* If the specified properties are for a sub-tree, we need to:
+       - detach that part of the tree that is not included
+       - apply the composite-to-core modifier
+       - re-attach the sub-tree.
+     If the specified properties are for the entire tree (below the
+     target-body), we only need to apply the composite-to-core modifier.*/
 
-  // If the specified properties are for a sub-tree, we need to:
-  //   - detach that part of the tree that is not included
-  //   - apply the composite-to-core modifier
-  //   - re-attach the sub-tree.
-  // If the specified properties are for the entire tree (below the
-  // target-body), we only need to apply the composite-to-core modifier.
-
-  // If no detach-point has been specified, just apply the modifier.
-  // If the detach-point has been specified and is superior to the target-body
-  // (so the sub-tree below the target-body would be unaffected by
-  // detaching at the detach-point), or if the detach_sub_tree is set as a
-  // different mass tree from the target-body then,
-  // also just apply the modifier:
-  if (detach_sub_tree == nullptr || !detach_sub_tree->is_progeny_of( target_body)) {
+  // If no detach-point has been specified, just apply the modifier:
+  if ( detach_sub_tree == nullptr) {
     comp_to_core_updates();
+    return;
   }
-  // If the detach-point is defined, and is between the adjustable-body and
-  // target-body so the detach process will take the adjustable-body with
-  // it, drop an error message and just apply the modifier.
-  else if ( adjustable_body->is_progeny_of( *detach_sub_tree)) {
-    CMLMessage::error(
-      __FILE__,__LINE__,"Invalid configuration.\n",
+  /* Else:
+     If the detach-point has been specified and is superior to the target-body
+     (so the sub-tree below the target-body would be unaffected by
+     detaching at the detach-point), or if the detach_sub_tree is set as a
+     different mass tree from the target-body then,
+     similarly just apply the modifier:*/
+  if (!detach_sub_tree->is_progeny_of( target_body)) {
+    comp_to_core_updates();
+    return;
+  }
+  /* Else:
+     If the detach-point is defined, and is between the adjustable-body and
+     target-body so the detach process will take the adjustable-body with
+     it, drop an error message and just apply the modifier.*/
+  if ( adjustable_body->is_progeny_of( *detach_sub_tree)) {
+    CMLMessage::error( __FILE__,__LINE__,
+      "Invalid configuration.\n"
       "The adjustable-body is a component of the sub-tree being detached.\n"
       "That would make it inaccessible to the target-body.\n"
       "This is an invalid configuration.  Continuing with the\n"
       "composite-to-core assignment without detaching the sub-tree.\n");
     comp_to_core_updates();
   }
-  // If the detach-point is defined AND
-  // its removal will affect the composite-properties of the target-body AND
-  // its removal will leave the target and adjustable bodies connected,
-  // then setup to remove it.
-  else {
-    // Need to find the relative position and orientation of the detaching
-    // body to allow us to reattach it.
-    auto * parent_body = const_cast<jeod::MassBody*>
-                                       (detach_sub_tree->get_parent_body());
-    // Unreachable, safety net:
-    // detach_sub_tree cannot be root because it must be subordinate to
-    // target-body, so the parent must exist,
-    // However, parent_body is a pointer so lets check:
-    if (parent_body == nullptr) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Unknown Error.\n",
-        "The detach-sub-tree body does not have a parent body.\n"
-        "There is nothing to detach it from.\n");
-      comp_to_core_updates();
+
+  /* Else:
+     If the detach-point is defined AND
+     its removal will affect the composite-properties of the target-body AND
+     its removal will leave the target and adjustable bodies connected,
+     then setup to remove it.*/
+
+  // Need to find the relative position and orientation of the detaching
+  // body to allow us to reattach it.
+  auto * parent_mass_body = const_cast<jeod::MassBody*>
+                                     (detach_sub_tree->get_parent_body());
+  /* Unreachable, safety net:
+     detach_sub_tree cannot be root because it must be subordinate to
+     target-body, so the parent must exist,
+     However, parent_body is a pointer so lets check:*/
+  if (parent_mass_body == nullptr) {
+    CMLMessage::error( __FILE__,__LINE__,
+      "The detach-sub-tree body does not have a parent body.\n"
+      "There is nothing to detach it from.\n");
+    comp_to_core_updates();
+    return;
+  }
+
+  /* Need to know whether each Mass-body is a component of a DynBody to
+     make sure the frames get connected properly when we reattach.*/
+  jeod::DynBody * parent_dyn_body = parent_mass_body->dyn_owner;
+  jeod::DynBody * detach_dyn_body = detach_sub_tree->dyn_owner;
+
+  // store the relative state to support re-attach:
+  double rel_pos[3]; // position of struc frame wrt parent's struc frame.
+  jeod::Vector3::copy( detach_sub_tree->structure_point.position,
+                       rel_pos);
+  double T_parent_this[3][3]; // relative orientation
+  jeod::Matrix3x3::copy( detach_sub_tree->structure_point.T_parent_this,
+                         T_parent_this);
+
+  // Attempt the detach.
+  if (!detach_sub_tree->detach()) {
+    // If it failed, drop an error message and apply the modifier anyway.
+    // Probably unreachable; it is not clear how a simple detach could fail,
+    // so this is a safety net; don't want to be attaching if detach failed.
+    CMLMessage::error( __FILE__,__LINE__,
+      "The process to detach the detach-sub-tree from the main tree "
+      "failed.\n"
+      "Composite-to-core modifier being applied to the main tree without\n"
+      "removal of the specified sub-tree.\n");
+    comp_to_core_updates();
+    return;
+  }
+
+  // Detach succeeded. Apply the modifier and reattach.
+  comp_to_core_updates();
+
+  bool attached = false;
+  if ( parent_dyn_body != nullptr) {
+    if ( detach_dyn_body != nullptr) {
+      attached = parent_dyn_body->attach_child( rel_pos,
+                                                T_parent_this,
+                                                *detach_dyn_body);
     }
     else {
-      // store the relative state to support re-attach:
-      double rel_pos[3]; // position of struc frame wrt parent's struc frame.
-      jeod::Vector3::copy( detach_sub_tree->structure_point.position,
-                     rel_pos);
-      double T_parent_this[3][3]; // relative orientation
-      jeod::Matrix3x3::copy( detach_sub_tree->structure_point.T_parent_this,
-                       T_parent_this);
-      // Attempt the detach.
-      if (!detach_sub_tree->detach()) {
-        // If it failed, drop an error message and apply the modifier anyway.
-        // Probably unreachable; it is not clear how a simple detach could fail,
-        // so this is a safety net; don't want to be attaching if detach failed.
-        CMLMessage::error(
-          __FILE__,__LINE__,"Mass Tree Error.\n",
-          "The process to detach the detach-sub-tree from the main tree "
-          "failed.\n"
-          "Composite-to-core modifier being applied to the main tree without\n"
-          "removal of the specified sub-tree.\n");
-        comp_to_core_updates();
-      }
-      else {
-        // Detach succeeded. Apply the modifier and reattach.
-        comp_to_core_updates();
-        detach_sub_tree->attach_to( rel_pos,
-                                    T_parent_this,
-                                    *parent_body);
-      }
+      attached = parent_dyn_body->add_mass_body( rel_pos,
+                                                 T_parent_this,
+                                                 *detach_sub_tree);
     }
+  }
+  else {
+    attached = detach_sub_tree->attach_to( rel_pos,
+                                           T_parent_this,
+                                           *parent_mass_body);
+  }
+  if (!attached) {
+    CMLMessage::error( __FILE__,__LINE__,
+      "The sub-tree ",detach_sub_tree->name.get_name()," was detached from ",
+      parent_mass_body->name.get_name(), "\n"
+      "to set the core-mass-properties of ",target_body.name.get_name(),"\n"
+      "from its composite-properties without ",detach_sub_tree->name.get_name(),
+      "present.\nThe attempt to re-attach ", detach_sub_tree->name.get_name(),
+      "failed.\n");
   }
 }
 
