@@ -8,8 +8,8 @@ drg.freq = trick.sim_services.DR_Always
 trick.add_data_record_group(drg, trick.DR_Buffer)
 
 for ii in range(4):
-    drg.add_variable(f"test.prox_counter.target_data[{ii}].value")
-    drg.add_variable(f"test.prox_counter.target_data[{ii}].count")
+    drg.add_variable(f"test.prox_counter.bin_data[{ii}].value")
+    drg.add_variable(f"test.prox_counter.bin_data[{ii}].count")
 for ii in range(4):
-    drg.add_variable(f"test.prox_counter_vec.target_data[{ii}].value")
-    drg.add_variable(f"test.prox_counter_vec.target_data[{ii}].count")
+    drg.add_variable(f"test.prox_counter_vec.bin_data[{ii}].value")
+    drg.add_variable(f"test.prox_counter_vec.bin_data[{ii}].count")
