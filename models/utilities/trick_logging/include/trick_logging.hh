@@ -102,6 +102,8 @@ class TrickLogging {
     }
     /***************************************************************************/
     void log_now (Trick::DataRecordGroup & drg) {
+      Trick::DR_Freq freq_prev = drg.freq;
+      drg.set_freq(Trick::DR_Freq::DR_Always);
       if (drg.record) {
         drg.data_record(exec_get_sim_time());
       }
@@ -111,6 +113,7 @@ class TrickLogging {
         drg.write_data(true);
         drg.disable();
       }
+      drg.set_freq(freq_prev);
     }
 
 

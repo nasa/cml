@@ -172,6 +172,7 @@ class EventActionAdjustLoggingGroup : public EventActionBase {
       else {drg->disable();}
       drg->set_cycle(log_cycle);
       logging.reset_next_call_time(*drg);
+      if (log_now) {logging.log_now(*drg);}
     }
   }
 };
