@@ -144,7 +144,7 @@ ManeuverModel::update() {
         else {drive_to_zero();}
     } else {
         // If not smoothing, set rate to its maximum magnitude
-        if (ang_vel_mag != mnvrRateMax) {ang_vel_mag = mnvrRateMax;}
+        ang_vel_mag = mnvrRateMax;
         if (currentEuler >= eulerTarget) {
             ang_vel_mag = targetRate;
             deactivate();}
