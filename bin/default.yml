@@ -1,3 +1,7 @@
+# This file contains the full list of unit sims, runs, and verification data for CML models.
+# It's parsed by the test.py script at runtime. This file can be used as a template for
+# creating custom YAML files while define a different set of tests, runs, etc.
+#
 # Expected format copied from TrickWorkflow Documentation shown below:
 # SIM_abc:               <-- required unique name for sim of interest, must start with SIM
 #   path:                <-- required SIM path relative to project top level
