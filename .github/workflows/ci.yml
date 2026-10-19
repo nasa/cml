@@ -165,6 +165,7 @@ jobs:
           gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
             --xml-pretty --exclude ${TRICK_HOME}/ --exclude ${JEOD_HOME}/ \
             --exclude '.*/test/.*' --exclude utility/mocks \
+            --merge-mode-functions=merge-use-line-max \
             --filter '^models/.*' -o coverage.xml
 
       - name: Save coverage report
