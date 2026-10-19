@@ -170,7 +170,7 @@ class EventActionAdjustLoggingGroup : public EventActionBase {
     if (drg != nullptr) {
       if (enable_group) {
         drg->enable();
-        if (log_now) {
+        if (log_now && drg->freq != Trick::DR_Freq::DR_Always) {
           logging.log_now(*drg);
         }
       }
