@@ -1,0 +1,581 @@
+\documentclass{report}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{subcaption}
+
+\usepackage{cml}
+
+\newcommand{\ModelName}{Finite Difference}
+\newcommand{\ModelAuthor}{Liam Desai}
+\newcommand{\ModelAffiliation}{Odyssey Space Research}
+\newcommand{\ModelDate}{August 2026}
+
+\begin{document}
+\titlePage
+\thispagestyle{empty}
+\pagenumbering{romana}
+\tableofcontents % Print table of contents
+\vfill
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\ \hline \hline
+1 & August 2026 & Liam Desai & Initial Version \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\chapter{Introduction} % Make a chapter heading
+\pagenumbering{arabic} % Start text with arabic 1
+\par The finite difference model provides classes to estimate first and second derivatives of scalars and vectors and the first derivative of a matrix using backwards differencing. 
+The methods used have second order accuracy. That is, if the time step used is reduced by a factor of 2, the error will reduce by a factor of 4. It is meant to operate on a range of data, and not just a single point.
+It contains the following classes: \begin{itemize}
+    \item \verb|ScalarFirstDerivative| is the simplest finite difference class. It estimates a first derivative of a scalar set using its class method compute.
+    \item \verb|ScalarSecondDerivative| is the class used to estimate the second derivative of a scalar set using its class method compute.
+    \item \verb|Vector3FirstDerivative| is the class used to estimate the first derivative of a vector set using its class method compute.
+    \item \verb|Vector3SecondDerivative| is the class used to estimate the second derivative of a vector set using its class method compute.
+    \item \verb|Matrix3x3FirstDerivative| is the class used to estimate the first derivative of a matrix set using its class method compute.
+\end{itemize}
+
+\chapter{Model Specification}
+\section{Code Structure}
+\par The finite difference model contains five classes, which were summarized in the introduction. These classes are all contained in one source file and can be individually instantiated. None of these classes inheret from external classes or each other. In addition to the following documentation, the source code has extensive and detailed comments.
+
+\subsection{ScalarFirstDerivative}
+\subsubsection{Members}
+
+\begin{center}
+\begin{longtable}{|p{2.75cm}|p{2.8cm}|p{7.1cm}|l|} \hline
+\textbf{Type} & \textbf{Name} & \textbf{Purpose} & \textbf{Protection} \\ 
+\hline  
+int & pass\_count & Number of times the compute method has been called & private \\ 
+\hline
+double & value\_im1 & Value at i minus 1 & private \\ 
+\hline
+double & time\_im1 & Time at i minus 1 & private \\ 
+\hline
+double & value\_im2 & Value at i minus 2 & private \\ 
+\hline
+double & time\_im2 & Time at i minus 2 & private \\
+\hline 
+    
+\end{longtable}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{longtable}{|p{3cm}|p{10cm}|l|} \hline
+\textbf{Name} & \textbf{Purpose} & \textbf{Protection} \\
+\hline
+\endhead
+compute & Estimate first order derivatives for a set of scalars & public \\
+\hline
+\end{longtable}
+\end{center}
+
+\subsection{Vector3FirstDerivative}
+\subsubsection{Members}
+\begin{center}
+\begin{longtable}{|p{2.75cm}|p{2.8cm}|p{7.1cm}|l|} \hline
+\textbf{Type} & \textbf{Name} & \textbf{Purpose} & \textbf{Protection} \\
+\hline
+\endhead
+ScalarFirst-\newline Derivative[3] & scalar\_first-\newline\_derivative & an array that holds 3 instances of ScalarFirstDerivative & private \\ 
+\hline
+\end{longtable}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{longtable}{|p{3cm}|p{10cm}|l|} \hline
+\textbf{Name} & \textbf{Purpose} & \textbf{Protection} \\
+\hline
+\endhead
+compute & Estimate first order derivatives for a set of vectors & public \\
+\hline    
+\end{longtable}
+\end{center}
+
+\subsection{Matrix3x3FirstDerrivative}
+\subsubsection{Members}
+\begin{center}
+\begin{longtable}{|p{2.75cm}|p{2.8cm}|p{7.1cm}|l|} \hline
+\textbf{Type} & \textbf{Name} & \textbf{Purpose} & \textbf{Protection} \\
+\hline
+\endhead
+ScalarFirst-\newline Derivative[3][3] & scalar\_first-\newline\_derivative & an array that holds 9 instances of ScalarFirstDerivative & private \\ 
+\hline
+\end{longtable}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{longtable}{|p{3cm}|p{10cm}|l|} \hline
+\textbf{Name} & \textbf{Purpose} & \textbf{Protection} \\
+\hline
+\endhead
+compute & Estimate first order derivatives for a set of matrices & public \\
+\hline    
+\end{longtable}
+\end{center}
+
+\subsection{ScalarSecondDerivative}
+\subsubsection{Members}
+
+\begin{center}
+\begin{longtable}{|p{2.75cm}|p{2.8cm}|p{7.1cm}|l|} \hline
+\textbf{Type} & \textbf{Name} & \textbf{Purpose} & \textbf{Protection} \\ 
+\hline  
+int & pass\_count & Number of times the compute method has been called & private \\ 
+\hline
+double & value\_im1 & Value at i minus 1 & private \\ 
+\hline
+double & time\_im1 & Time at i minus 1 & private \\ 
+\hline
+double & value\_im2 & Value at i minus 2 & private \\ 
+\hline
+double & time\_im2 & Time at i minus 2 & private \\
+\hline 
+double & value\_im3 & Value at i minus 3 & private \\
+\hline
+double & time\_im3 & Time at i minus 3 & private \\
+\hline
+    
+\end{longtable}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{longtable}{|p{3cm}|p{10cm}|l|} \hline
+\textbf{Name} & \textbf{Purpose} & \textbf{Protection} \\
+\hline
+\endhead
+compute & Estimate second order derivatives for a set of scalars & public \\
+\hline
+\end{longtable}
+\end{center}
+
+\subsection{Vector3FirstDerivative}
+\subsubsection{Members}
+\begin{center}
+\begin{longtable}{|p{2.75cm}|p{2.8cm}|p{7.1cm}|l|} \hline
+\textbf{Type} & \textbf{Name} & \textbf{Purpose} & \textbf{Protection} \\
+\hline
+\endhead
+ScalarSecond-\newline Derivative[3] & scalar\_second-\newline\_derivative & an array that holds 3 instances of ScalarSecondDerivative & private \\ 
+\hline
+\end{longtable}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{longtable}{|p{3cm}|p{10cm}|l|} \hline
+\textbf{Name} & \textbf{Purpose} & \textbf{Protection} \\
+\hline
+\endhead
+compute & Estimate second order derivatives for a set of vectors & public \\
+\hline    
+\end{longtable}
+\end{center}
+
+\section{Mathematical Formulation}
+The logic for both the first and second derivate is derived using Taylor Series. Backwards difference requires ``looking backward'' to previous values to estimate a derivative at a given value.
+This is also one of the limitations for the backwards difference method. Since a first derivative estimate needs to have two previous values, and a second derivative estimate needs to have three,
+it is not possible to estimate the first two derivatives and first three second derivatives for any given set, and likewise, there must be at least three values in a set to estimate a first derivative
+and at least four values to estimate the second derivative.
+
+It is important to note that the finite difference model is intended to be used on a range of data, and not an individual value. This is because of the need to have knowledge of several 
+previous values. Hence, the first two values for the first derivative and the first three values will always be zero (or a vector or matrix of zeroes).
+$$ f(x)=\sum^{\infty}_{n=0} \frac{f^{(n)}(a)}{n!} $$
+Since the vector and matrix classes are essentially arrays of scalars, only the formulation for scalars is needed.
+\subsection{First Derivative}
+Expanding the Taylor Series yields the following expression:
+$$ f(x)=f(a)+(x-a)f^{(1)}(a)+\frac{(x-a)^2}{2}f^{(2)}(a)+\frac{(x-a)^3}{6}f^{(3)}(a)+...$$
+
+With some substitutions, the following expressions for $ i-1 $ and $ i-2 $ backwards values can be derived:
+$$ u_{i-1} = u_{i}+(t_{i-1}-t_{i})(\frac{\delta u}{\delta t})_i+\frac{(t_{i-1}-t_{i})^2}{2}(\frac{\delta^{2} u}{\delta t^2})_i+\frac{(t_{i-1}-t_{i})^3}{6}(\frac{\delta^{3} u}{\delta t^3})_i + ...$$
+$$ u_{i-2} = u_{i}+(t_{i-2}-t_{i})(\frac{\delta u}{\delta t})_i+\frac{(t_{i-2}-t_{i})^2}{2}(\frac{\delta^{2} u}{\delta t^2})_i+\frac{(t_{i-2}-t_{i})^3}{6}(\frac{\delta^{3} u}{\delta t^3})_i + ...$$
+Where $ u $ represents a known value and $ a $ and $ x $ are substituted for the time at the current point and the time at some backward point, respectively.
+Further substition yields
+$$ u_{i-1} = u_{i}-\Delta t_1(\frac{\delta u}{\delta t})_i+\frac{\Delta t^{2}_{1}}{2}(\frac{\delta^{2} u}{\delta t^2})_i-\frac{\Delta t^{3}_{1}}{6}(\frac{\delta^{3} u}{\delta t^3})_i +...$$
+$$ u_{i-2} = u_{i}-\Delta t_2(\frac{\delta u}{\delta t})_i+\frac{\Delta t^{2}_{2}}{2}(\frac{\delta^{2} u}{\delta t^2})_i-\frac{\Delta t^{3}_{2}}{6}(\frac{\delta^{3} u}{\delta t^3})_i +...$$
+
+where
+$$ \Delta t_1 = t_i - t_{i-1} $$
+$$ \Delta t_2 = t_i - t_{i-2} $$
+
+The two equations can be rearranged to solve for the second derivative term. Dropping higher order terms and then setting them equal to each other yields
+$$ \frac{u_{i-1}}{\Delta t_{1}^{2}} - \frac{u_i}{\Delta t_{1}^{2}} + \frac{1}{\Delta t_1}(\frac{\delta u}{\delta t})_i + \frac{\Delta t_1}{6}(\frac{\delta^3 u}{\delta t^3})_i = 
+\frac{u_{i-2}}{\Delta t_{2}^{2}} - \frac{u_i}{\Delta t_{2}^{2}} + \frac{1}{\Delta t_2}(\frac{\delta u}{\delta t})_i + \frac{\Delta t_2}{6}(\frac{\delta^3 u}{\delta t^3})_i $$
+
+Finally, solving for the first derivative yields
+$$ (\frac{\delta u}{\delta t})_i = \frac{\Delta t_1 + \Delta t_2}{\Delta t_1\Delta t_2}u_i + \frac{\Delta t_2}{\Delta t_1(\Delta t_1-\Delta t_2)}u_{i-1} 
+- \frac{\Delta t_1}{\Delta t_2(\Delta t_1-\Delta t_2)}u_{i-2} $$
+
+Where the third derivative term can be dropped and represents the leading error term
+$$ \frac{\Delta t_1\Delta t_2}{6}(\frac{\delta^3 u}{\delta t^3})_i $$
+
+\subsection{Second Derivative}
+The derivation of the second derivative is very simialar to that of the first. An additional backwards term is needed.
+$$ u_{i-1} = u_{i}+(t_{i-1}-t_{i})(\frac{\delta u}{\delta t})_i+\frac{(t_{i-1}-t_{i})^2}{2}(\frac{\delta^{2} u}{\delta t^2})_i+\frac{(t_{i-1}-t_{i})^3}{6}(\frac{\delta^{3} u}{\delta t^3})_i+\frac{(t_{i-1}-t_{i})^4}{24}(\frac{\delta^{4} u}{\delta t^4})_i+...$$
+$$ u_{i-2} = u_{i}+(t_{i-2}-t_{i})(\frac{\delta u}{\delta t})_i+\frac{(t_{i-2}-t_{i})^2}{2}(\frac{\delta^{2} u}{\delta t^2})_i+\frac{(t_{i-2}-t_{i})^3}{6}(\frac{\delta^{3} u}{\delta t^3})_i+\frac{(t_{i-2}-t_{i})^4}{24}(\frac{\delta^{4} u}{\delta t^4})_i+...$$
+$$ u_{i-3} = u_{i}+(t_{i-3}-t_{i})(\frac{\delta u}{\delta t})_i+\frac{(t_{i-3}-t_{i})^2}{2}(\frac{\delta^{2} u}{\delta t^2})_i+\frac{(t_{i-3}-t_{i})^3}{6}(\frac{\delta^{3} u}{\delta t^3})_i+\frac{(t_{i-3}-t_{i})^4}{24}(\frac{\delta^{4} u}{\delta t^4})_i+...$$
+Further substition yields
+$$ u_{i-1} = u_{i}-\Delta t_1(\frac{\delta u}{\delta t})_i+\frac{\Delta t^{2}_{1}}{2}(\frac{\delta^{2} u}{\delta t^2})_i-\frac{\Delta t^{3}_{1}}{6}(\frac{\delta^{3} u}{\delta t^3})_i +\frac{\Delta t^{4}_{1}}{24}(\frac{\delta^{4} u}{\delta t^4})_i...$$
+$$ u_{i-2} = u_{i}-\Delta t_2(\frac{\delta u}{\delta t})_i+\frac{\Delta t^{2}_{2}}{2}(\frac{\delta^{2} u}{\delta t^2})_i-\frac{\Delta t^{3}_{2}}{6}(\frac{\delta^{3} u}{\delta t^3})_i +\frac{\Delta t^{4}_{2}}{24}(\frac{\delta^{4} u}{\delta t^4})_i...$$
+$$ u_{i-3} = u_{i}-\Delta t_3(\frac{\delta u}{\delta t})_i+\frac{\Delta t^{2}_{3}}{2}(\frac{\delta^{2} u}{\delta t^2})_i-\frac{\Delta t^{3}_{3}}{6}(\frac{\delta^{3} u}{\delta t^3})_i +\frac{\Delta t^{4}_{3}}{24}(\frac{\delta^{4} u}{\delta t^4})_i...$$
+
+where
+$$ \Delta t_1 = t_i - t_{i-1} $$
+$$ \Delta t_2 = t_i - t_{i-2} $$
+$$ \Delta t_3 = t_i - t_{i-3} $$
+The first two equations can be rewritten to eliminate the first derivative term
+$$ \frac{-u_{i-1}}{\Delta t_1}+\frac{u_i}{\Delta t_1}+\frac{\Delta t_{1}}{2}(\frac{\delta^{2} u}{\delta t^2})_i-\frac{\Delta t^{2}_{1}}{6}(\frac{\delta^{3} u}{\delta t^3})_i+\frac{\Delta t^{4}_{1}}{24}(\frac{\delta^{4} u}{\delta t^4})_i = 
+\frac{-u_{i-2}}{\Delta t_2}+\frac{u_i}{\Delta t_2}+\frac{\Delta t_{2}}{2}(\frac{\delta^{2} u}{\delta t^2})_i-\frac{\Delta t^{2}_{2}}{6}(\frac{\delta^{3} u}{\delta t^3})_i+\frac{\Delta t^{4}_{2}}{24}(\frac{\delta^{4} u}{\delta t^4})_i $$
+
+The second and third equations can be rewritten in a similar fashion
+$$ \frac{-u_{i-3}}{\Delta t_3}+\frac{u_i}{\Delta t_3}+\frac{\Delta t_{3}}{2}(\frac{\delta^{2} u}{\delta t^2})_i-\frac{\Delta t^{2}_{3}}{6}(\frac{\delta^{3} u}{\delta t^3})_i+\frac{\Delta t^{4}_{3}}{24}(\frac{\delta^{4} u}{\delta t^4})_i = 
+\frac{-u_{i-2}}{\Delta t_2}+\frac{u_i}{\Delta t_2}+\frac{\Delta t_{2}}{2}(\frac{\delta^{2} u}{\delta t^2})_i-\frac{\Delta t^{2}_{2}}{6}(\frac{\delta^{3} u}{\delta t^3})_i+\frac{\Delta t^{4}_{2}}{24}(\frac{\delta^{4} u}{\delta t^4})_i $$
+
+These two resulting equations can further be rewritten to eliminate the third derivative term
+$$ \frac{6}{(\Delta t_2 + \Delta t_1)(\Delta t_1 \Delta t_2)}u_i + \frac{6}{\Delta t_1(\Delta t_{2}^{2}-\Delta t_{1}^{2})}u_{i-1} - \frac{6}{\Delta t_2(\Delta t_{2}^{2}-\Delta t_{1}^{2})}u_{i-1}+ \frac{3}{\Delta t_{2}^{2}+\Delta t_{2}\Delta t_{1} + \Delta t_{1}^{2}}(\frac{\delta^{2} u}{\delta t^2}) + error_1 = $$ 
+$$ \frac{6}{(\Delta t_2 + \Delta t_3)(\Delta t_3 \Delta t_2)}u_i + \frac{6}{\Delta t_3(\Delta t_{2}^{2}-\Delta t_{3}^{2})}u_{i-1} - \frac{6}{\Delta t_2(\Delta t_{2}^{2}-\Delta t_{3}^{2})}u_{i-1}+ \frac{3}{\Delta t_{2}^{2}+\Delta t_{2}\Delta t_{3} + \Delta t_{3}^{2}}(\frac{\delta^{2} u}{\delta t^2}) + error_2 $$
+Where 
+$$ error_1 = \frac{\Delta t_{2}^{2}+\Delta t_{2}\Delta t_{1} + \Delta t_{1}^{2}}{4(\Delta t_2 +\Delta t_1)}(\frac{\delta^{4} u}{\delta t^4}) $$
+$$ error_2 = \frac{\Delta t_{2}^{2}+\Delta t_{2}\Delta t_{3} + \Delta t_{3}^{2}}{4(\Delta t_2 +\Delta t_3)}(\frac{\delta^{4} u}{\delta t^4}) $$
+
+Solving for the second derivative yields
+$$ (\frac{\delta^2 u}{\delta t^2})_i = \frac{2(\Delta t_2+\Delta t_3)}{\Delta t_1 \Delta t_2 (\Delta t_3 - \Delta t_1)}u_i $$
+$$ -\frac{2(\Delta t_1+\Delta t_2)}{\Delta t_2 \Delta t_3 (\Delta t_3 - \Delta t_1)}u_i $$
+$$ +\frac{2(\Delta t_2+\Delta t_3)}{\Delta t_1 (\Delta t_1 - \Delta t_2) (\Delta t_3 - \Delta t_1)}u_{i-1} $$
+$$ +\frac{2(\Delta t_1+\Delta t_3)}{\Delta t_2 (\Delta t_1 - \Delta t_2) (\Delta t_2 - \Delta t_3)}u_{i-2} $$
+$$ +\frac{2(\Delta t_1+\Delta t_2)}{\Delta t_3 (\Delta t_2 - \Delta t_3) (\Delta t_3 - \Delta t_1)}u_{i-3}  $$
+With the leading error term of 
+$$\frac{(\Delta t_1+\Delta t_2)(\Delta t^{2}_{3}+\Delta t_3\Delta t_4+\Delta t^{2}_{4})-(\Delta t_3+\Delta t_4)(\Delta t^{2}_{1}+\Delta t_1\Delta t_2+\Delta t^{2}_{2})}{12(\Delta t_3+\Delta t_4-\Delta t_1-\Delta t_2)}(\frac{\delta^4u}{\delta t^4})_i$$
+
+\chapter{User's Guide}
+As described in the Introduction, the finite difference module compromises five different models. However, the initialization of and usage of each model is essentially identical. Finite difference is designed to be used within a scheduled job within the Trick framework. Each class contains its own member compute method that must be called to 
+\section{ScalarFirstDerivative}
+\subsection{Instantiation}
+The \verb|ScalarFirstDerivative| constructor does not have any arguments. The compute method however does take three arguments: first, it takes a value, second it takes the simulation time, and finally it takes a reference to the derivative value. Within the scheduled job, an auxillary variable to update the time is needed.
+
+\begin{code}
+class DerivativeObject : public Trick::SimObject{
+    double value;
+    double t; 
+    double dt;
+    double derivative;
+    ScalarFirstDerivative scalar_first_derivative;
+
+    ...
+        (.1, "scheduled") derivative_estimation();
+    
+    ...
+
+    derivative_estimation(){
+        t +=dt;
+        scalar_first_derivative.compute(value, t, derivative);
+    }
+    DerivativeObject derivative_object;
+}
+\end{code}
+
+\section{ScalarSecondDerivative}
+\subsection{Instantiation}
+Instantiation of \verb|ScalarSecondDerivative| is exactly the same as for \verb|ScalarFirstDerivative|.
+
+\begin{code}
+class DerivativeObject : public Trick::SimObject{
+    double value;
+    double t; 
+    double dt;
+    double derivative;
+    ScalarSecondDerivative scalar_second_derivative;
+
+    ...
+        (.1, "scheduled") derivative_estimation();
+    
+    ...
+
+    derivative_estimation(){
+        t +=dt;
+        scalar_second_derivative.compute(value, t, derivative);
+    }
+    DerivativeObject derivative_object;
+}
+\end{code}
+\section{Vector3FirstDerivative}
+\subsection{Instantiation}
+Instantiation of \verb|Vector3FirstDerivative| is nearly the same as the scalar classes. The only difference is a reference of a three element array of values and a reference of a three element array of derivatives are passed as arguments to the compute method.
+
+\begin{code}
+class DerivativeObject : public Trick::SimObject{
+    double value[3];
+    double t; 
+    double dt;
+    double derivative[3];
+    Vector3FirstDerivative vector_3_first_derivative;
+
+    ...
+        (.1, "scheduled") derivative_estimation();
+    
+    ...
+
+    derivative_estimation(){
+        t +=dt;
+        vector_3_first_derivative.compute(value, t, derivative);
+    }
+    DerivativeObject derivative_object;
+}
+\end{code}
+\section{Vector3SecondDerivative}
+\subsection{Instantiation}
+Instantiation of \verb|Vector3SecondDerivative| is exactly the same as for \verb|Vector3FirstDerivative|.
+
+\begin{code}
+class DerivativeObject : public Trick::SimObject{
+    double value[3];
+    double t; 
+    double dt;
+    double derivative[3];
+    Vector3SecondDerivative vector_3_second_derivative;
+
+    ...
+        (.1, "scheduled") derivative_estimation();
+    
+    ...
+
+    derivative_estimation(){
+        t +=dt;
+        vector_3_second_derivative.compute(value, t, derivative);
+    }
+    DerivativeObject derivative_object;
+}
+\end{code}
+\section{Matrix3x3FirstDerrivative}
+\subsection{Instantiation}
+Instantiation of \verb|Matrix3x3FirstDerivative| is nearly the same as the vector classes. The only difference is a reference of a three by three element array of values and a reference of a three by three element array of derivatives are passed as arguments to the compute method.
+
+\begin{code}
+class DerivativeObject : public Trick::SimObject{
+    double value[3][3];
+    double t; 
+    double dt;
+    double derivative[3][3];
+    Matrix3x3FirstDerivative matrix_3x3_second_derivative;
+
+    ...
+        (.1, "scheduled") derivative_estimation();
+    
+    ...
+
+    derivative_estimation(){
+        t +=dt;
+        matrix_3x3_second_derivative.compute(value, t, derivative);
+    }
+    DerivativeObject derivative_object;
+}
+\end{code}
+
+\chapter{Verification and Validation}
+Verification was done by comparing the results from the \verb|finite_difference| model to other implementations. Specifically, it was verified against the \verb|MathUtils::compute_backwards_difference| model and a similar python implementation.
+The verification test suite is grouped into two Trick simulations, with each simulation having distinct run scenarios. Validation was done by comparing analytical results to the model output.
+
+\section{MathUtils Verification}
+Only \verb|*FirstDerivative| class data is plotted against \verb|MathUtils| since \verb|MathUtils| does not provide a second derivative method. The run scenarios that compare the finite\_difference results to Mathutils\:\:compute\_backwards\_difference, \textbf{SIM\_math\_utils\_comparison}, are as follows:
+\begin{itemize}
+\item RUN\_not\_nice\_poly (see \ref{sec:mathutils1})
+\item RUN\_not\_nice\_poly\_vardt (see \ref{subsec:mathutils2})
+\item RUN\_polynomial (see \ref{sec:mathutils3})
+\item RUN\_polynomial\_halfstep (see \ref{sec:mathutils4})
+\item RUN\_polynomial\_vardt (see \ref{subsec:mathutils5})
+\item RUN\_polynomial\_vardt\_0.03 (see \ref{sec:mathutils6})
+\item RUN\_sine (see \ref{sec:mathutils7})
+\item RUN\_sine\_halfstep (see \ref{sec:mathutils8})
+\item RUN\_sine\_vardt (see \ref{sec:mathutils9})
+\item RUN\_sine\_vardt\_0.01 (see \ref{sec:mathutils10})
+\end{itemize}
+\subsection{Not Nice Poly}\label{sec:mathutils1}
+This tests a polynomial with widely different coefficients. To test this, \verb|use_polynomials| is set to True and \verb|nice_polynomial| is set to False. The polynomial used is $f(x)=-1234x^4+100x^3+0.02x^2+210x-20$. The default time step of 1 second is used. As expected, the \verb|MathUtils::compute_backwards_difference()| method
+outperforms the \verb|finite_difference| model for a constant time step when higher orders are enabled.   
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=0.45\linewidth]{Images/RUN_not_nice_poly}
+    \caption{Constant Time Step}
+\end{figure}
+
+\subsection{Not Nice Poly Vardt}\label{subsec:mathutils2}
+This tests a polynomial with widely different coefficients. To test this, \verb|use_polynomials| is set to True, \verb|nice_polynomial| is set to False, and \verb|vary_dt| is set to true. The polynomial used is $f(x)=-1234x^4+100x^3+0.02x^2+210x-20$. A cyclic dt multiplier of [1-5] is used. As expected, the \verb|finite_difference|
+method outperforms the \verb|MathUtils::compute_backwards_difference()| model for a constant time step.
+ 
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=0.45\linewidth]{Images/RUN_not_nice_poly_vardt.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+\subsection{Polynomial}\label{sec:mathutils3}
+This tests a polynomial coefficients not larger than 8. To test this, \verb|use_polynomials| is set to True. The polynomial used is $f(x)=2x^4+x^3+x^2+x+1$. The default time step of 1 second is used. As expected, the \verb|MathUtils::compute_backwards_difference()| method
+outperforms the \verb|finite_difference| model for a constant time step when higher orders are enabled.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=0.45\linewidth]{Images/RUN_polynomial.png}
+    \caption{Constant Time Step}
+\end{figure}
+
+\subsection{Polynomial Halfstep}\label{sec:mathutils4}
+This tests a polynomial coefficients not larger than 8. To test this, \verb|use_polynomials| is set to True and \verb|dt| is set to .5. The polynomial used is $f(x)=2x^4+x^3+x^2+x+1$. The time step of .5 second is used. As expected, the \verb|MathUtils::compute_backwards_difference()| method
+outperforms the \verb|finite_difference| model for a constant time step when higher orders are enabled.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=0.45\linewidth]{Images/RUN_polynomial_halfstep.png}
+    \caption{Constant Time Step}
+\end{figure}
+
+\subsection{Polynomial Vardt}\label{subsec:mathutils5}
+This tests a polynomial coefficients not larger than 8. To test this, \verb|use_polynomials| is set to True and \verb|dt| is set to .3, and \verb|vary_dt| is set to True. The polynomial used is $f(x)=2x^4+x^3+x^2+x+1$. A cyclic dt multiplier of [1-5] is used, starting with a time step of .3. As expected, as expected, a larger time step yields a larger error.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=0.45\linewidth]{Images/RUN_polynomial_vardt.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+\subsection{Polynomial Vardt 0.03}\label{sec:mathutils6}
+This tests a polynomial coefficients not larger than 8. To test this, \verb|use_polynomials| is set to True and \verb|dt| is set to .03, and \verb|vary_dt| is set to True. The polynomial used is $f(x)=2x^4+x^3+x^2+x+1$. 
+A cyclic dt multiplier of [1-5] is used, starting with a time step of .03. As expected, as expected, a larger time step yields a larger error.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=0.45\linewidth]{Images/RUN_polynomial_vardt_0.03.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+\subsection{Sine}\label{sec:mathutils7}
+This tests the model's ability to estimate sine based function. The \verb|sin()| method is used. To test this, \verb|dt| is set to .3 and \verb|time| is -0.9. The time step of .3 is used. As expected, the \verb|MathUtils::compute_backwards_difference()| method
+outperforms the \verb|finite_difference| model for a constant time step when higher orders are enabled.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=0.45\linewidth]{Images/RUN_sine.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+\subsection{Sine Halfstep}\label{sec:mathutils8}
+This test is simialar to the previous one except it uses a smaller time step. The \verb|sin()| method is used. To test this, \verb|dt| is set to .3 and \verb|time| is -0.45. The time step of .15 is used. As expected, the \verb|MathUtils::compute_backwards_difference()| method
+outperforms the \verb|finite_difference| model for a constant time step when higher orders are enabled.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=0.45\linewidth]{Images/RUN_sine_halfstep.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+\subsection{Sine Vardt}\label{sec:mathutils9}
+This tests the sine function with a variable time step. To test this, \verb|time| is set to -0.3 and \verb|dt| is set to .1, and \verb|vary_dt| is set to True. 
+A cyclic dt multiplier of [1-5] is used, starting with a time step of .1. As expected, a larger time step yields a larger error.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=0.45\linewidth]{Images/RUN_sine_vardt.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+\subsection{Sine Vardt 0.01}\label{sec:mathutils10}
+This tests the sine function with an even smaller variable time step. To test this, \verb|time| is set to -0.03 and \verb|dt| is set to .01, and \verb|vary_dt| is set to True. 
+A cyclic dt multiplier of [1-5] is used, starting with a time step of .01. As expected, as expected, a larger time step yields a larger error.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=0.45\linewidth]{Images/RUN_sine_vardt_0.01.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+
+\section{Python Implementation Verification}
+The run scenarios that compare finite\_difference results to a python implementation, \textbf{SIM\_verif}, are as follows:
+\begin{itemize}
+\item FAIL\_divide\_by\_zero\_fd (see \ref{subsec:verif1})
+\item FAIL\_divide\_by\_zero\_sd (see \ref{subsec:verif2})
+\item FAIL\_overflow\_fd (see \ref{subsec:verif3})
+\item FAIL\_overflow\_sd (see \ref{subsec:verif4})
+\item RUN\_scalar (see \ref{subsec:verif5})
+\item RUN\_matrix (see \ref{subsec:verif6})
+\item RUN\_vector (see \ref{subsec:verif7})
+\end{itemize}
+\subsection{Divide by Zero fd}\label{subsec:verif1}
+This test demonstrates that divide by zero protections exists for the first scalar derivative.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=\linewidth]{Images/FAIL_divide_by_zero.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+\subsection{Divide by Zero sd}\label{subsec:verif2}
+This test demonstrates that divide by zero protections exists for the second scalar derivative.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=\linewidth]{Images/FAIL_divide_by_zero.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+\subsection{Overflow fd}\label{subsec:verif3}
+This test demonstrates that overflow errors are handled. It does this after the first valid \verb|compute| call by jumping time by an extreme value ie. 1.0e16, on the next
+\verb|compute()| call to elicit an "overflow" fatal error from the model.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=\linewidth]{Images/FAIL_overflow_fd.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+\subsection{Overflow sd}\label{subsec:verif4}
+This test demonstrates that overflow errors are handled. It does this after the first valid \verb|compute| call by jumping time by an extreme value ie. 1.0e16, on the next
+\verb|compute()| call to elicit an "overflow" fatal error from the model.
+
+\begin{figure}[ht!]
+    \centering
+        \includegraphics[width=\linewidth]{Images/FAIL_overflow_sd.png}
+    \caption{Variable Time Step}
+\end{figure}
+
+\subsection{Scalar}\label{subsec:verif5}
+This test compares the \verb|finite_difference| scalar class against a python implementation. Results from \verb|finite_difference| are compared to the python results using
+\verb|assertALmostEqual()|, which rounds both values to 7 decimal places and checks if they are equal. For both first and second derivatives, the test checks that the model
+correctly returns a good return code and valid derivative on the expected call (third for first derivative and fourth for second derivative). It also performs a 10 second loop
+to check that error reduces quadratically.It also checks various time steps in linear and non liner time progressions for forward and backward time progressions, before finally
+checking tester generated functions. Results were as expected.
+\subsection{Matrix}\label{subsec:verif6}
+This test is very similar to the scalar test. Results were compared with \verb|assertALmostEqual()|. Three user defined functions are put into a 3x3 array and tested against different time scales (dt=0.1,0.01,0.001,0.0001).
+All results were as expected.
+\subsection{Vector}\label{subsec:verif7}
+This test is very simialr to the vector test. Three user defined functions are put into a [3] array and tested agaisnt different time scales (dt=0.1,0.01,0.001,0.0001). This is done for both the first and second derivative methods.
+All results were as expected.
+\section{Analytical Validation}
+
+Four differentiable and double differentiable functions of various complexity were chosen to validate the \verb|finite_difference| model. The functions are as follows:
+$$ f(x) = t^2 $$
+$$ f(x) = 4t^3+5t $$
+$$ f(x) = sin(t) $$
+$$ f(x) = sin(\frac{t^2}{3}) $$
+
+Using the Trick interface, these functions, their derivatives, and their second derivatives were evaluated analytically from [0,10] seconds with a time step of .1 seconds. 
+The first and second derivatives were also estimated using the finite difference classes. The results of both the analytical evaluations and numerical estimations were stored
+in a .csv file for further analysis. Vectors and matrices were made up of of different combinations of the functions, and as a result the vector and matrix .csvs are made up of
+different combinations of the functions, their derivatives, and their second derivatives.
+
+Upon initial analysis, results are reasonable for finite difference estimates and analytical calculations differ by a reasonable ammount. For certain values of the second derivative
+for the fourth value, there was more noteable variation. However, decreasing the time step to .01 and rerunning the case yielded much closer results. It is important to note that numerical
+methods are approximations, and not exact calculations, so some level of error is expected.
+
+\end{document}
+
