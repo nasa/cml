@@ -29,7 +29,7 @@ TEST(MathUtils, CholeskyDecompositionNullPointers) {
     testing::StrictMock<CMLMessage::Mock> cml_message_mock;
 
     constexpr unsigned int dimension = 10;
-    const double in_array[dimension][dimension] {};
+    constexpr double in_array[dimension][dimension] {};
     double out_array[dimension][dimension] {};
 
     // Null input array.
@@ -49,7 +49,7 @@ TEST(MathUtils, CholeskyDecomposition3x3) {
     testing::StrictMock<CMLMessage::Mock> cml_message_mock;
 
     constexpr unsigned int dimension = 3;
-    const double in_array[dimension][dimension] {
+    constexpr double in_array[dimension][dimension] {
         {1.0, 0.0, 1.0},
         {0.0, 2.0, 0.0},
         {1.0, 0.0, 3.0}
@@ -78,7 +78,7 @@ TEST(MathUtils, CholeskyDecompositionSubmatrix) {
     {
         // Values outside the upper 3x3 region shouldn't have any effect on the output.
         constexpr unsigned int dimension = 10;
-        const double in_array[dimension][dimension] {
+        constexpr double in_array[dimension][dimension] {
             {1.0, 0.0, 1.0, 100.0},
             {0.0, 2.0, 0.0, 200.0},
             {1.0, 0.0, 3.0, 300.0},
@@ -100,7 +100,7 @@ TEST(MathUtils, CholeskyDecompositionSubmatrix) {
     // Attempt to decompose a submatrix that's larger than the input matrix.
     {
         constexpr unsigned int dimension = 5;
-        const double in_array[dimension][dimension] {};
+        constexpr double in_array[dimension][dimension] {};
         double out_array[dimension][dimension] {};
 
         EXPECT_CALL(cml_message_mock,
@@ -120,7 +120,7 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
     // Asymmetric matrix.
     {
         constexpr unsigned int dimension = 3;
-        const double in_array[dimension][dimension] {
+        constexpr double in_array[dimension][dimension] {
             {1.0, -5000.0, 200.0},
             {0.0, 2.0, 4444.0},
             {1.0, 0.0, 3.0}
@@ -145,7 +145,7 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
     // Negative determinant.
     {
         constexpr unsigned int dimension = 3;
-        const double in_array[dimension][dimension] {
+        constexpr double in_array[dimension][dimension] {
             {1.0, 0.0, 1.0},
             {0.0, 2.0, 0.0},
             {1.0, 0.0, 0.0}
@@ -162,7 +162,7 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
     // Zero determinant.
     {
         constexpr unsigned int dimension = 3;
-        const double in_array[dimension][dimension] {
+        constexpr double in_array[dimension][dimension] {
             {0.0, 0.0, 1.0},
             {0.0, 2.0, 0.0},
             {1.0, 0.0, 3.0}
@@ -170,8 +170,7 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
         double out_array[dimension][dimension] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Error, _, _,
-                HasSubstr("A negative eigen-value exists\n")));
+            publish(CMLMessage::Error, _, _, HasSubstr("A negative eigen-value exists\n")));
         const bool success = MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
         EXPECT_FALSE(success);
     }
@@ -179,7 +178,7 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
     // Ambiguous solution due to determinant of zero.
     {
         constexpr unsigned int dimension = 10;
-        const double in_array[dimension][dimension] {
+        constexpr double in_array[dimension][dimension] {
             { 1.6641,   3.50751,  0.74175,  0,  1.73118,   2.64321,   0.73788,   1.67184,   0.84108,   1.24485  },
             { 3.50751,  8.013905, 3.187493, 0,  4.57795,   7.662583,  2.00364,   3.573468,  2.857864,  4.637963 },
             { 0.74175,  3.187493, 4.82635,  0,  3.773771,  7.531023,  2.654479,  1.877517,  3.946451,  6.775963 },
@@ -192,7 +191,7 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
             { 1.24485,  4.637963, 6.775963, 0,  9.055285,  16.304499, 10.169399, 14.139477, 17.506381, 27.0338  }
         };
         double out_array[dimension][dimension] {};
-        const double expected[dimension][dimension] {
+        constexpr double expected[dimension][dimension] {
             { 1.29,  0,     0,     0, 0,                 0,                   0,                  0,                  0,                 0                 },
             { 2.719, 0.788, 0,     0, 0,                 0,                   0,                  0,                  0,                 0                 },
             { 0.575, 2.061, 0.498, 0, 0,                 0,                   0,                  0,                  0,                 0                 },
@@ -223,12 +222,12 @@ TEST(MathUtils, MatrixInversionUsingCholeskyDecomp) {
 
     // Valid case.
     {
-        const double input[3][3] {
+        constexpr double input[3][3] {
             {1.0, 1.0, 1.0},
             {1.0, 2.0, 2.0},
             {1.0, 2.0, 3.0}
         };
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {2.0, -1.0, 0.0},
             {-1.0, 2.0, -1.0},
             {0.0, -1.0, 1.0}
@@ -242,7 +241,7 @@ TEST(MathUtils, MatrixInversionUsingCholeskyDecomp) {
 
     // Cholesky decomposition failed.
     {
-        const double input[2][2] {
+        constexpr double input[2][2] {
             {0.0, 1.0},
             {1.0, 0.0}
         };
@@ -264,7 +263,7 @@ TEST(MathUtils, MatrixInversionUsingCholeskyDecomp) {
         test_matrices_equal(output, original_output);
 
         // Warn on error. Output location is filled with zeros.
-        const double zeros[2][2] {};
+        constexpr double zeros[2][2] {};
         EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, HasSubstr("Decomposition failed")));
         EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, HasSubstr("Matrix Inverse failed")));
         EXPECT_FALSE(MathUtils::matrix_inv_using_cholesky(input, output, false));

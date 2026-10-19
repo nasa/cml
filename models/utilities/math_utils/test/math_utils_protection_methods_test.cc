@@ -16,9 +16,10 @@ TEST(MathUtils, DivideProtected) {
     using testing::_;
     using testing::HasSubstr;
 
+    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+
     // Double-precision values.
     {
-        CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Warning, _, _, HasSubstr("Divided by zero or overflow"))).Times(1);
         EXPECT_CALL(cml_message_mock,
@@ -33,7 +34,6 @@ TEST(MathUtils, DivideProtected) {
 
     // Single-precision values.
     {
-        CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Warning, _, _, HasSubstr("Divided by zero or overflow"))).Times(1);
         EXPECT_CALL(cml_message_mock,
@@ -53,7 +53,7 @@ TEST(MathUtils, AcosProtected) {
     ASSERT_NEAR(MathUtils::acos_protected(1.1), 0.0, double_tolerance);
 
     ASSERT_NEAR(MathUtils::acos_protected(0.877582561890373f), 0.5f, float_tolerance);
-    ASSERT_NEAR(MathUtils::acos_protected(-1.1f), static_cast<float>(M_PI), float_tolerance);
+    ASSERT_NEAR(MathUtils::acos_protected(-1.1f), M_PI, float_tolerance);
     ASSERT_NEAR(MathUtils::acos_protected(1.1f), 0.0f, float_tolerance);
 }
 
@@ -64,8 +64,8 @@ TEST(MathUtils, AsinProtected) {
     ASSERT_NEAR(MathUtils::asin_protected(1.1), M_PI_2, double_tolerance);
 
     ASSERT_NEAR(MathUtils::asin_protected(0.479425538604203f), 0.5f, float_tolerance);
-    ASSERT_NEAR(MathUtils::asin_protected(-1.1f),  static_cast<float>(-M_PI_2), float_tolerance);
-    ASSERT_NEAR(MathUtils::asin_protected(1.1f),  static_cast<float>(M_PI_2), float_tolerance);
+    ASSERT_NEAR(MathUtils::asin_protected(-1.1f), -M_PI_2, float_tolerance);
+    ASSERT_NEAR(MathUtils::asin_protected(1.1f), M_PI_2, float_tolerance);
 }
 
 // Test the protected square root function.
@@ -73,7 +73,7 @@ TEST(MathUtils, SqrtProtected) {
     using testing::_;
     using testing::HasSubstr;
 
-    CMLMessage::Mock cml_message_mock;
+    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
 
     // Square root of a positive number yields the same result.
     ASSERT_NEAR(MathUtils::sqrt_protected(0.0), 0.0, double_tolerance);
@@ -96,9 +96,10 @@ TEST(MathUtils, LogProtected) {
     using testing::_;
     using testing::HasSubstr;
 
+    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+
     // Double-precision values.
     {
-        CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Warning, _, _, HasSubstr("Log of negative number"))).Times(1);
         EXPECT_CALL(cml_message_mock,
@@ -114,7 +115,6 @@ TEST(MathUtils, LogProtected) {
 
     // Single-precision values.
     {
-        CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Warning, _, _, HasSubstr("Log of negative number"))).Times(1);
         EXPECT_CALL(cml_message_mock,
@@ -134,9 +134,10 @@ TEST(MathUtils, Log10Protected) {
     using testing::_;
     using testing::HasSubstr;
 
+    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+
     // Double precision values.
     {
-        CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Warning, _, _, HasSubstr("Log of negative number"))).Times(1);
         EXPECT_CALL(cml_message_mock,
@@ -152,6 +153,11 @@ TEST(MathUtils, Log10Protected) {
 
     // Single precision values.
     {
+        EXPECT_CALL(cml_message_mock,
+            publish(CMLMessage::Warning, _, _, HasSubstr("Log of negative number"))).Times(1);
+        EXPECT_CALL(cml_message_mock,
+            publish(CMLMessage::Fail, _, _, HasSubstr("Log of negative number"))).Times(1);
+
         ASSERT_NEAR(MathUtils::log10_protected(1.0f), 0.0f, float_tolerance);
         ASSERT_NEAR(MathUtils::log10_protected(10.0f), 1.0f, float_tolerance);
         ASSERT_NEAR(MathUtils::log10_protected(1.0e-38f), -38.0f, float_tolerance);

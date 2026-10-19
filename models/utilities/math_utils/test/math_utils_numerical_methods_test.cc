@@ -206,23 +206,30 @@ TEST(MathUtils, BackwardDifference) {
         publish(CMLMessage::Error, _, _, HasSubstr("there is no history for this variable")));
     EXPECT_EQ(MathUtils::compute_backward_difference(history), 0.0);
 
+    // History = [436]
     history.push_back(436.0);
     EXPECT_EQ(MathUtils::compute_backward_difference(history), 0.0);
 
+    // History = [436, 217]
     history.push_back(217.0);
     EXPECT_NEAR(MathUtils::compute_backward_difference(history), 219.0, tolerance);
 
+    // History = [436, 217, 88]
     history.push_back(88.0);
     EXPECT_NEAR(MathUtils::compute_backward_difference(history), 264.0, tolerance);
 
+    // History = [436, 217, 88, 25]
     history.push_back(25.0);
     EXPECT_NEAR(MathUtils::compute_backward_difference(history), 272.0, tolerance);
 
-    history.push_back(4.0);
-    EXPECT_NEAR(MathUtils::compute_backward_difference(history), 272.0, tolerance);
+    // History = [436, 217, 88, 25, -4]
+    history.push_back(-4.0);
+    EXPECT_NEAR(MathUtils::compute_backward_difference(history), 270.0, tolerance);
 
+    // History = [436, 217, 88, 25, -4, 999999]
+    // History is too long so the final large number will have no effect.
     history.push_back(999999.0);
-    EXPECT_NEAR(MathUtils::compute_backward_difference(history), 272.0, tolerance);
+    EXPECT_NEAR(MathUtils::compute_backward_difference(history), 270.0, tolerance);
 }
 
 // Test the unit vector derivative function.
@@ -241,8 +248,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 1
     {
-        const double vector[3] {};
-        const double derivative[3] {};
+        constexpr double vector[3] {};
+        constexpr double derivative[3] {};
 
         EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Error, _, _, HasSubstr("A unit vector is not defined for a zero vector")));
@@ -252,8 +259,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 2
     {
-        const double vector[3] {};
-        const double derivative[3] {3.0, 4.0, 0.0};
+        constexpr double vector[3] {};
+        constexpr double derivative[3] {3.0, 4.0, 0.0};
 
         EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Error, _, _, HasSubstr("A unit vector is not defined for a zero vector")));
@@ -263,8 +270,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 3
     {
-        const double vector[3] {0.0, 0.0, 1.0};
-        const double derivative[3] {0.0, 0.0, 1.0};
+        constexpr double vector[3] {0.0, 0.0, 1.0};
+        constexpr double derivative[3] {0.0, 0.0, 1.0};
 
         MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         EXPECT_THAT(unit_vector_derivative, Pointwise(DoubleNear(tolerance), {0.0, 0.0, 0.0}));
@@ -272,8 +279,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 4
     {
-        const double vector[3] {0.0, 0.0, 1.0};
-        const double derivative[3] {0.0, 1.0, 0.0};
+        constexpr double vector[3] {0.0, 0.0, 1.0};
+        constexpr double derivative[3] {0.0, 1.0, 0.0};
 
         MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         EXPECT_THAT(unit_vector_derivative, Pointwise(DoubleNear(tolerance), {0.0, 1.0, 0.0}));
@@ -281,8 +288,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 5
     {
-        const double vector[3] {0.0, 0.0, 1.0};
-        const double derivative[3] {0.0, 5.0, 0.0};
+        constexpr double vector[3] {0.0, 0.0, 1.0};
+        constexpr double derivative[3] {0.0, 5.0, 0.0};
 
         MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         EXPECT_THAT(unit_vector_derivative, Pointwise(DoubleNear(tolerance), {0.0, 5.0, 0.0}));
@@ -290,8 +297,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 6
     {
-        const double vector[3] {0.0, 0.0, 5.0};
-        const double derivative[3] {0.0, 5.0, 0.0};
+        constexpr double vector[3] {0.0, 0.0, 5.0};
+        constexpr double derivative[3] {0.0, 5.0, 0.0};
 
         MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         EXPECT_THAT(unit_vector_derivative, Pointwise(DoubleNear(tolerance), {0.0, 1.0, 0.0}));
@@ -299,8 +306,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 7
     {
-        const double vector[3] {1.0, 1.0, 0.0};
-        const double derivative[3] {0.0, 0.0, 2.0};
+        constexpr double vector[3] {1.0, 1.0, 0.0};
+        constexpr double derivative[3] {0.0, 0.0, 2.0};
 
         MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         EXPECT_THAT(unit_vector_derivative, Pointwise(DoubleNear(tolerance), {0.0, 0.0, std::sqrt(2.0)}));
@@ -308,8 +315,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 8
     {
-        const double vector[3] {1.0, 1.0, 0.0};
-        const double derivative[3] {0.0, 2.0, 2.0};
+        constexpr double vector[3] {1.0, 1.0, 0.0};
+        constexpr double derivative[3] {0.0, 2.0, 2.0};
 
         MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         const double inv_sqrt2 = 1.0 / std::sqrt(2.0);
@@ -318,8 +325,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 9
     {
-        const double vector[3] {1.0, 2.0, 3.0};
-        const double derivative[3] {3.0, 2.0, 1.0};
+        constexpr double vector[3] {1.0, 2.0, 3.0};
+        constexpr double derivative[3] {3.0, 2.0, 1.0};
 
         MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         const double factor = 2.0 * std::sqrt(2.0) / (7.0 * std::sqrt(7.0));
@@ -328,8 +335,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 10
     {
-        const double vector[3] {1.0, 2.0, 3.0};
-        const double derivative[3] {6.0, 4.0, 2.0};
+        constexpr double vector[3] {1.0, 2.0, 3.0};
+        constexpr double derivative[3] {6.0, 4.0, 2.0};
 
         MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         const double factor = 4.0 * std::sqrt(2.0) / (7.0 * std::sqrt(7.0));
@@ -338,8 +345,8 @@ TEST(MathUtils, UnitVectorDerivative) {
 
     // Case 11
     {
-        const double vector[3] {4.0, 8.0, 12.0};
-        const double derivative[3] {6.0, 4.0, 2.0};
+        constexpr double vector[3] {4.0, 8.0, 12.0};
+        constexpr double derivative[3] {6.0, 4.0, 2.0};
 
         MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         const double factor = std::sqrt(2.0) / (7.0 * std::sqrt(7.0));

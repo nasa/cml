@@ -2,6 +2,7 @@
 #include "mocks/cml/cml_message_mock.hh"
 
 #include <array>
+#include <cstddef>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -25,8 +26,8 @@ TEST(MathUtils, VectorAlgebra) {
     using testing::DoubleNear;
     using testing::Pointwise;
 
-    const double lhs[5] {1.0, 2.0, 3.0, 4.0, 5.0};
-    const double rhs[5] {-3.0, 6.0, 0.0, 2.0, -1.0};
+    constexpr double lhs[5] {1.0, 2.0, 3.0, 4.0, 5.0};
+    constexpr double rhs[5] {-3.0, 6.0, 0.0, 2.0, -1.0};
     const std::array<double, 5> diff = MathUtils::diff(lhs, rhs);
     const std::array<double, 5> sum = MathUtils::sum(lhs, rhs);
 
@@ -37,16 +38,16 @@ TEST(MathUtils, VectorAlgebra) {
 // Test vector magnitude functions.
 TEST(MathUtils, VectorMagnitude) {
     // Test the Pythagorean quintuple, [1, 2, 8, 10, 13].
-    const std::array<double, 4> arr4 {-1.0, 2.0, -8.0, -10.0};
-    const double c_arr4[4] {-1.0, 2.0, -8.0, -10.0};
+    constexpr std::array<double, 4> arr4 {-1.0, 2.0, -8.0, -10.0};
+    constexpr double c_arr4[4] {-1.0, 2.0, -8.0, -10.0};
     EXPECT_NEAR(MathUtils::vec_mag_sq(arr4), 169.0, tolerance);
     EXPECT_NEAR(MathUtils::vec_mag_sq(c_arr4), 169.0, tolerance);
     EXPECT_NEAR(MathUtils::vec_mag(arr4), 13.0, tolerance);
     EXPECT_NEAR(MathUtils::vec_mag(c_arr4), 13.0, tolerance);
 
     // Magnitude of vector components using the Euler brick [44, 117, 240].
-    const std::array<double, 3> arr3 {44.0, 117.0, 240.0};
-    const double c_arr3[3] {44.0, 117.0, 240.0};
+    constexpr std::array<double, 3> arr3 {44.0, 117.0, 240.0};
+    constexpr double c_arr3[3] {44.0, 117.0, 240.0};
     EXPECT_NEAR(MathUtils::vec_mag_xy(arr3), 125.0, tolerance);
     EXPECT_NEAR(MathUtils::vec_mag_xy(c_arr3), 125.0, tolerance);
     EXPECT_NEAR(MathUtils::vec_mag_xz(arr3), 244.0, tolerance);
@@ -63,9 +64,9 @@ TEST(MathUtils, UnitVector) {
 
     // Unit vector calculation. Magnitude is 11.
     {
-        const std::array<double, 4> vec4 {-4.0, 4.0, 5.0, -8.0};
-        const double c_vec4[4] {-4.0, 4.0, 5.0, -8.0};
-        const std::array<double, 4> expected {
+        constexpr std::array<double, 4> vec4 {-4.0, 4.0, 5.0, -8.0};
+        constexpr double c_vec4[4] {-4.0, 4.0, 5.0, -8.0};
+        constexpr std::array<double, 4> expected {
             -4.0 / 11.0, // -0.3636363636363636
             4.0 / 11.0,  //  0.3636363636363636
             5.0 / 11.0,  //  0.4545454545454545
@@ -77,9 +78,9 @@ TEST(MathUtils, UnitVector) {
 
     // Unit vector of a vector with magnitude zero.
     {
-        const std::array<double, 4> vec4 {};
-        const double c_vec4[4] {};
-        const std::array<double, 4> zero {};
+        constexpr std::array<double, 4> vec4 {};
+        constexpr double c_vec4[4] {};
+        constexpr std::array<double, 4> zero {};
         EXPECT_THAT(MathUtils::unit_vector(vec4), Pointwise(Eq(), zero));
         EXPECT_THAT(MathUtils::unit_vector(c_vec4), Pointwise(Eq(), zero));
     }
@@ -94,7 +95,7 @@ TEST(MathUtils, ZeroVector) {
     {
         std::array<double, 3> arr {1.0, 2.0, 3.33333};
         double c_arr[3] {1.0, 2.0, 3.33333};
-        const std::array<double, 3> zero {};
+        constexpr std::array<double, 3> zero {};
 
         MathUtils::zero_vector(arr);
         MathUtils::zero_vector(c_arr);
@@ -106,7 +107,7 @@ TEST(MathUtils, ZeroVector) {
     {
         std::array<double, 4> arr {1.0, 2.0, 3.33333, -4.4};
         double c_arr[4] {1.0, 2.0, 3.33333, -4.4};
-        const std::array<double, 4> zero {};
+        constexpr std::array<double, 4> zero {};
 
         MathUtils::zero_vector(arr);
         MathUtils::zero_vector(c_arr);
@@ -120,9 +121,9 @@ TEST(MathUtils, VectorElementWiseSquareRoot) {
     using testing::DoubleNear;
     using testing::Pointwise;
 
-    const std::array<double, 4> arr {4.0, 1.0, 16.0, 25.0};
-    const double c_arr[4] {4.0, 1.0, 16.0, 25.0};
-    const std::array<double, 4> expected {2.0, 1.0, 4.0, 5.0};
+    constexpr std::array<double, 4> arr {4.0, 1.0, 16.0, 25.0};
+    constexpr double c_arr[4] {4.0, 1.0, 16.0, 25.0};
+    constexpr std::array<double, 4> expected {2.0, 1.0, 4.0, 5.0};
     EXPECT_THAT(MathUtils::vector_elementwise_sqrt(arr), Pointwise(DoubleNear(tolerance), expected));
     EXPECT_THAT(MathUtils::vector_elementwise_sqrt(c_arr), Pointwise(DoubleNear(tolerance), expected));
 
@@ -136,12 +137,12 @@ TEST(MathUtils, VectorCrossProduct) {
     using testing::DoubleNear;
     using testing::Pointwise;
 
-    const std::array<double, 3> arr1 {-3.0, 2.5, 1.0};
-    const std::array<double, 3> arr2 {7.0, 0.0, -3.5};
-    const double c_arr1[3] {arr1[0], arr1[1], arr1[2]};
-    const double c_arr2[3] {arr2[0], arr2[1], arr2[2]};
+    constexpr std::array<double, 3> arr1 {-3.0, 2.5, 1.0};
+    constexpr std::array<double, 3> arr2 {7.0, 0.0, -3.5};
+    constexpr double c_arr1[3] {arr1[0], arr1[1], arr1[2]};
+    constexpr double c_arr2[3] {arr2[0], arr2[1], arr2[2]};
 
-    const std::array<double, 3> arr1_cross_arr2 {-8.75, -3.5, -17.5};
+    constexpr std::array<double, 3> arr1_cross_arr2 {-8.75, -3.5, -17.5};
     EXPECT_THAT(MathUtils::vector_cross_product(arr1, arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
     EXPECT_THAT(MathUtils::vector_cross_product(c_arr1, arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
     EXPECT_THAT(MathUtils::vector_cross_product(arr1, c_arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
@@ -150,10 +151,10 @@ TEST(MathUtils, VectorCrossProduct) {
 
 // Test the scalar product functions.
 TEST(MathUtils, VectorScalarProduct) {
-    const std::array<double, 4> lhs {5.0, -3.0, 2.0, 6.0};
-    const std::array<double, 4> rhs {-3.0, 1.0, 4.0, -2.0};
-    const double c_lhs[4] {lhs[0], lhs[1], lhs[2], lhs[3]};
-    const double c_rhs[4] {rhs[0], rhs[1], rhs[2], rhs[3]};
+    constexpr std::array<double, 4> lhs {5.0, -3.0, 2.0, 6.0};
+    constexpr std::array<double, 4> rhs {-3.0, 1.0, 4.0, -2.0};
+    constexpr double c_lhs[4] {lhs[0], lhs[1], lhs[2], lhs[3]};
+    constexpr double c_rhs[4] {rhs[0], rhs[1], rhs[2], rhs[3]};
 
     ASSERT_NEAR(MathUtils::vector_scalar_product(lhs, rhs), -22.0, tolerance);
     ASSERT_NEAR(MathUtils::vector_scalar_product(c_lhs, rhs), -22.0, tolerance);
@@ -165,20 +166,20 @@ TEST(MathUtils, VectorScalarProduct) {
     ASSERT_NEAR(output, -22.0, tolerance);
 }
 
-// Test the functions which swap a vector/matrix between a 1D vector and 2D matrix.
+// Test the functions which converts a vector/matrix between 1D vector and 2D matrix representations.
 TEST(MathUtils, ConvertBetweenOneDimensionalVectorAndMatrix) {
     using testing::DoubleNear;
     using testing::Pointwise;
 
     // Set up the following matrix as a column-major and row-major vector:
-    const double expected[4][3] {
+    constexpr double expected[4][3] {
        { 1.0, -2.0,  3.0},
        {-4.0,  5.5,  6.0},
        {-7.0, -8.0,  9.0},
        { 0.0, 10.0, -1.0}
     };
-    const double col_major_vec[12] {1.0, -4.0, -7.0, 0.0, -2.0, 5.5, -8.0, 10.0, 3.0, 6.0, 9.0, -1.0};
-    const double row_major_vec[12] {1.0, -2.0, 3.0, -4.0, 5.5, 6.0, -7.0, -8.0, 9.0, 0.0, 10.0, -1.0};
+    constexpr double col_major_vec[12] {1.0, -4.0, -7.0, 0.0, -2.0, 5.5, -8.0, 10.0, 3.0, 6.0, 9.0, -1.0};
+    constexpr double row_major_vec[12] {1.0, -2.0, 3.0, -4.0, 5.5, 6.0, -7.0, -8.0, 9.0, 0.0, 10.0, -1.0};
 
     double col_major_output[4][3] {};
     double row_major_output[4][3] {};
@@ -195,7 +196,7 @@ TEST(MathUtils, MatrixCopyOperations) {
 
     testing::StrictMock<CMLMessage::Mock> cml_message_mock;
 
-    const double input[3][4] {
+    constexpr double input[3][4] {
         {1.0, 2.0, 3.0, 4.0},
         {5.0, 6.0, 7.0, 8.0},
         {9.0, 10.0, 11.0, 12.0}
@@ -212,7 +213,7 @@ TEST(MathUtils, MatrixCopyOperations) {
     {
         // Valid case.
         double output[2][2] {};
-        const double expected1[2][2] {
+        constexpr double expected1[2][2] {
             {6.0, 7.0},
             {10.0, 11.0}
         };
@@ -220,7 +221,7 @@ TEST(MathUtils, MatrixCopyOperations) {
         test_matrices_equal(output, expected1);
 
         // Invalid case.
-        const double expected2[2][2] {
+        constexpr double expected2[2][2] {
             {8.0, 0.0},
             {12.0, 0.0}
         };
@@ -238,7 +239,7 @@ TEST(MathUtils, MatrixCopyOperations) {
             {1100.0, 1200.0, 1300.0, 1400.0, 1500.0},
             {1600.0, 1700.0, 1800.0, 1900.0, 2000.0}
         };
-        const double expected1[4][5] {
+        constexpr double expected1[4][5] {
             {100.0, 1.0, 2.0, 3.0, 4.0},
             {600.0, 5.0, 6.0, 7.0, 8.0},
             {1100.0, 9.0, 10.0, 11.0, 12.0},
@@ -254,7 +255,7 @@ TEST(MathUtils, MatrixCopyOperations) {
             {1100.0, 1200.0, 1300.0, 1400.0, 1500.0},
             {1600.0, 1700.0, 1800.0, 1900.0, 2000.0}
         };
-        const double expected2[4][5] {
+        constexpr double expected2[4][5] {
             {100.0, 200.0, 300.0, 400.0, 500.0},
             {600.0, 700.0, 800.0, 900.0, 1000.0},
             {1100.0, 1200.0, 1300.0, 1.0, 2.0},
@@ -276,7 +277,7 @@ TEST(MathUtils, MatrixAlgebra) {
             {4.0, 5.0, 6.0},
             {7.0, 8.0, 9.0}
         };
-        const double zeros_square[3][3] {};
+        constexpr double zeros_square[3][3] {};
         MathUtils::zero_matrix(input_square);
         test_matrices_equal(input_square, zeros_square);
 
@@ -286,7 +287,7 @@ TEST(MathUtils, MatrixAlgebra) {
             {3.0, 4.0},
             {5.0, 6.0}
         };
-        const double zeros_nonsquare[3][2] {};
+        constexpr double zeros_nonsquare[3][2] {};
         MathUtils::zero_matrix(input_nonsquare);
         test_matrices_equal(input_nonsquare, zeros_nonsquare);
     }
@@ -298,12 +299,12 @@ TEST(MathUtils, MatrixAlgebra) {
             {3.0, 4.0},
             {5.0, 6.0}
         };
-        const double increment[3][2] {
+        constexpr double increment[3][2] {
             {-1.0, 5.0},
             {2.0, -3.0},
             {0.0, 10.0}
         };
-        const double expected[3][2] {
+        constexpr double expected[3][2] {
             {0.0, 7.0},
             {5.0, 1.0},
             {5.0, 16.0}
@@ -319,12 +320,12 @@ TEST(MathUtils, MatrixAlgebra) {
             {3.0, 4.0},
             {5.0, 6.0}
         };
-        const double decrement[3][2] {
+        constexpr double decrement[3][2] {
             {-1.0, 5.0},
             {2.0, -3.0},
             {0.0, 10.0}
         };
-        const double expected[3][2] {
+        constexpr double expected[3][2] {
             {2.0, -3.0},
             {1.0, 7.0},
             {5.0, -4.0}
@@ -340,7 +341,7 @@ TEST(MathUtils, MatrixAlgebra) {
             {-0.5, 0.0},
             {-10.0, -11.0}
         };
-        const double expected[3][2] {
+        constexpr double expected[3][2] {
             {2.0, 4.0},
             {-1.0, 0.0},
             {-20.0, -22.0}
@@ -350,51 +351,55 @@ TEST(MathUtils, MatrixAlgebra) {
     }
 }
 
-// Test the various matrix multiplication and miscellaneous functions.
-TEST(MathUtils, MatrixOperations) {
-    // Transpose
+// Test the matrix transpose function.
+TEST(MathUtils, MatrixTranspose) {
+    // Square matrix.
     {
-        // Square matrix.
-        const double input1[2][2] {
+        constexpr double input[2][2] {
             {1.0, 2.0},
             {4.0, 5.0}
         };
-        double output1[2][2] {};
-        const double expected1[2][2] {
+        double output[2][2] {};
+        constexpr double expected[2][2] {
             {1.0, 4.0},
             {2.0, 5.0}
         };
-        MathUtils::matrix_trans(input1, output1);
-        test_matrices_equal(output1, expected1);
+        MathUtils::matrix_trans(input, output);
+        test_matrices_equal(output, expected);
+    }
 
-        // Non-square matrix.
-        const double input2[2][3] {
+    // Non-square matrix.
+    {
+        constexpr double input[2][3] {
             {1.0, 2.0, 3.0},
             {4.0, 5.0, 6.0}
         };
-        double output2[3][2] {};
-        const double expected2[3][2] {
+        double output[3][2] {};
+        constexpr double expected[3][2] {
             {1.0, 4.0},
             {2.0, 5.0},
             {3.0, 6.0}
         };
-        MathUtils::matrix_trans(input2, output2);
-        test_matrices_equal(output2, expected2);
+        MathUtils::matrix_trans(input, output);
+        test_matrices_equal(output, expected);
     }
+}
 
-    // Multiplication: L * R
+// Test the various matrix multiplication functions.
+TEST(MathUtils, MatrixMultiplication) {
+    // L * R
     {
         // Square matrices.
-        const double lhs1[2][2] {
+        constexpr double lhs1[2][2] {
             {-1.0, 3.0},
             {-5.0, -6.0}
         };
-        const double rhs1[2][2] {
+        constexpr double rhs1[2][2] {
             {4.0, 2.5},
             {-3.0, -1.0}
         };
         double output1[2][2] {};
-        const double expected1[2][2] {
+        constexpr double expected1[2][2] {
             {-13.0, -5.5},
             {-2.0, -6.5}
         };
@@ -402,17 +407,17 @@ TEST(MathUtils, MatrixOperations) {
         test_matrices_equal(output1, expected1);
 
         // Non-square matrices.
-        const double lhs2[3][2] {
+        constexpr double lhs2[3][2] {
             { 1.0, -2.0},
             {-3.0,  0.0},
             { 5.0,  3.0}
         };
-        const double rhs2[2][3] {
+        constexpr double rhs2[2][3] {
             {7.0, -3.0, 2.0},
             {-4.0, -10.0, 0.0}
         };
         double output2[3][3] {};
-        const double expected2[3][3] {
+        constexpr double expected2[3][3] {
             {15.0, 17.0, 2.0},
             {-21.0, 9.0, -6.0},
             {23.0, -45.0, 10.0}
@@ -421,18 +426,18 @@ TEST(MathUtils, MatrixOperations) {
         test_matrices_equal(output2, expected2);
     }
 
-    // Multiplication: L' * R
+    // L' * R
     {
-        const double lhs[2][3] {
+        constexpr double lhs[2][3] {
             {1.0, -3.0, 5.0},
             {-2.0, 0.0, 3.0}
         };
-        const double rhs[2][3] {
+        constexpr double rhs[2][3] {
             {7.0, -3.0, 2.0},
             {-4.0, -10.0, 0.0}
         };
         double output[3][3] {};
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {15.0, 17.0, 2.0},
             {-21.0, 9.0, -6.0},
             {23.0, -45.0, 10.0}
@@ -441,20 +446,20 @@ TEST(MathUtils, MatrixOperations) {
         test_matrices_equal(output, expected);
     }
 
-    // Multiplication: L * R'
+    // L * R'
     {
-        const double lhs[3][2] {
+        constexpr double lhs[3][2] {
             { 1.0, -2.0},
             {-3.0,  0.0},
             { 5.0,  3.0}
         };
-        const double rhs[3][2] {
+        constexpr double rhs[3][2] {
             {7.0, -4.0},
             {-3.0, -10.0},
             {2.0, 0.0}
         };
         double output[3][3] {};
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {15.0, 17.0, 2.0},
             {-21.0, 9.0, -6.0},
             {23.0, -45.0, 10.0}
@@ -463,58 +468,56 @@ TEST(MathUtils, MatrixOperations) {
         test_matrices_equal(output, expected);
     }
 
-    // Multiplication: L' * R'
+    // L' * R'
     {
-        const double lhs[3][2] {
+        constexpr double lhs[3][2] {
             { 1.0, -2.0},
             {-3.0,  0.0},
             { 5.0,  3.0}
         };
-        const double rhs[2][3] {
+        constexpr double rhs[2][3] {
             {7.0, -3.0, 2.0},
             {-4.0, -10.0, 0.0}
         };
         double output[2][2] {};
-        const double expected[2][2] {
+        constexpr double expected[2][2] {
             {26.0, 26.0},
             {-8.0, 8.0}
         };
         MathUtils::matrix_mult_trans_trans(lhs, rhs, output);
         test_matrices_equal(output, expected);
     }
+}
 
-    // Matrix transformations.
-    {
-        const double mat[3][3] {
-            {1.0, -3.0, 2.0},
-            {0.0, 4.0, 5.0},
-            {-1.0, -2.0, 6.0}
-        };
-        const double trans[3][3] {
-            {0.0, 1.0, 0.0},
-            {-1.0, 0.0, 0.0},
-            {0.0, 0.0, 1.0}
-        };
-        const double transformation_expected[3][3] {
-            {4.0, 0.0, 5.0},
-            {3.0, 1.0, -2.0},
-            {-2.0, 1.0, 6.0}
-        };
-        const double inverse_transform_expected[3][3] {
-            {4.0, 0.0, -5.0},
-            {3.0, 1.0, 2.0},
-            {2.0, -1.0, 6.0}
-        };
-        double output[3][3] {};
+// Test the matrix transformation and inverse transformation functions.
+TEST(MathUtils, MatrixTransformation) {
+    constexpr double mat[3][3] {
+        {1.0, -3.0, 2.0},
+        {0.0, 4.0, 5.0},
+        {-1.0, -2.0, 6.0}
+    };
+    constexpr double trans[3][3] {
+        {0.0, 1.0, 0.0},
+        {-1.0, 0.0, 0.0},
+        {0.0, 0.0, 1.0}
+    };
+    constexpr double transformation_expected[3][3] {
+        {4.0, 0.0, 5.0},
+        {3.0, 1.0, -2.0},
+        {-2.0, 1.0, 6.0}
+    };
+    constexpr double inverse_transform_expected[3][3] {
+        {4.0, 0.0, -5.0},
+        {3.0, 1.0, 2.0},
+        {2.0, -1.0, 6.0}
+    };
+    double output[3][3] {};
 
-        MathUtils::matrix_transformation(trans, mat, output);
-        test_matrices_equal(output, transformation_expected);
+    MathUtils::matrix_transformation(trans, mat, output);
+    test_matrices_equal(output, transformation_expected);
 
-        MathUtils::matrix_inverse_transformation(trans, mat, output);
-        test_matrices_equal(output, inverse_transform_expected);
-    }
-
-    // Matrix inverse transformation.
+    MathUtils::matrix_inverse_transformation(trans, mat, output);
+    test_matrices_equal(output, inverse_transform_expected);
 }
 
 // Test the function which generates a correlation matrix from a square covariance matrix.
@@ -526,13 +529,13 @@ TEST(MathUtils, CorrelationMatrix) {
 
     // Ordinary covariance matrix.
     {
-        const double covariance[3][3] {
+        constexpr double covariance[3][3] {
             {4.0, 100.0, 100.0},
             {2.0, 3.0, 100.0},
             {0.6, 0.9, 2.0}
         };
         double output[3][3] {};
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {1.0, 0.5773502691896258, 0.2121320343559642},
             {0.5773502691896258, 1.0, 0.3674234614174767},
             {0.2121320343559642, 0.3674234614174767, 1.0}
@@ -545,13 +548,13 @@ TEST(MathUtils, CorrelationMatrix) {
 
     // Positive variances and negative covariances.
     {
-        const double covariance[3][3] {
+        constexpr double covariance[3][3] {
             {4.0, 100.0, 100.0},
             {-1.2, 3.0, 100.0},
             {0.6, -0.9, 2.5}
         };
         double output[3][3] {};
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {1.0, -0.3464101615137755, 0.1897366596101027},
             {-0.3464101615137755, 1.0, -0.3286335345030997},
             {0.1897366596101027, -0.3286335345030997, 1.0}
@@ -564,13 +567,13 @@ TEST(MathUtils, CorrelationMatrix) {
 
     // Negative variances.
     {
-        const double covariance[3][3] {
+        constexpr double covariance[3][3] {
             {-1.0, 100.0, 100.0},
             {0.0, -2.0, 100.0},
             {0.0, 0.0, -3.0}
         };
         double output[3][3] {};
-        const double expected[3][3] {};
+        constexpr double expected[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Error, _, _, HasSubstr("a diagonal element is negative")));
@@ -581,13 +584,13 @@ TEST(MathUtils, CorrelationMatrix) {
 
     // Only positive variances.
     {
-        const double covariance[3][3] {
+        constexpr double covariance[3][3] {
             {1.0, 100.0, 100.0},
             {0.0, 2.0, 100.0},
             {0.0, 0.0, 3.0}
         };
         double output[3][3] {};
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {1.0, 0.0, 0.0},
             {0.0, 1.0, 0.0},
             {0.0, 0.0, 1.0}
@@ -600,13 +603,13 @@ TEST(MathUtils, CorrelationMatrix) {
 
     // Zero variance and non-zero covariance in row.
     {
-        const double covariance[3][3] {
+        constexpr double covariance[3][3] {
             {1.0, 100.0, 100.0},
             {1.0, 0.0, 100.0},
             {0.0, 0.0, 1.0}
         };
         double output[3][3] {};
-        const double expected[3][3] {};
+        constexpr double expected[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
@@ -617,13 +620,13 @@ TEST(MathUtils, CorrelationMatrix) {
 
     // Zero variance and non-zero covariance in column.
     {
-        const double covariance[3][3] {
+        constexpr double covariance[3][3] {
             {1.0, 100.0, 100.0},
             {0.0, 0.0, 100.0},
             {0.0, 1.0, 1.0}
         };
         double output[3][3] {};
-        const double expected[3][3] {};
+        constexpr double expected[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
@@ -634,13 +637,13 @@ TEST(MathUtils, CorrelationMatrix) {
 
     // Zero variance and zero respective covariance.
     {
-        const double covariance[3][3] {
+        constexpr double covariance[3][3] {
             {0.0, 100.0, 100.0},
             {0.0, 1.0, 100.0},
             {0.0, 1.0, 1.0}
         };
         double output[3][3] {};
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {1.0, 0.0, 0.0},
             {0.0, 1.0, 1.0},
             {0.0, 1.0, 1.0}
@@ -655,13 +658,13 @@ TEST(MathUtils, CorrelationMatrix) {
 
     // All zero variance and covariances.
     {
-        const double covariance[3][3] {
+        constexpr double covariance[3][3] {
             {0.0, 100.0, 100.0},
             {0.0, 0.0, 100.0},
             {0.0, 0.0, 0.0}
         };
         double output[3][3] {};
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {1.0, 0.0, 0.0},
             {0.0, 1.0, 0.0},
             {0.0, 0.0, 1.0}
@@ -673,34 +676,34 @@ TEST(MathUtils, CorrelationMatrix) {
         EXPECT_TRUE(success);
         test_matrices_equal(output, expected);
     }
+}
 
-    // Transform PV matrix.
-    {
-        const double transform[3][3] {
-            {0.0, 1.0, 0.0},
-            {-1.0, 0.0, 0.0},
-            {0.0, 0.0, 1.0}
-        };
-        const double pv_matrix[6][6] {
-            {1.0, 2.0, 3.0, 4.0, 5.0, 6.0},
-            {-2.0, 3.0, -4.0, 5.0, 6.0, 7.0},
-            {0.5, 0.25, 0.1625, -1.0, -0.5, -0.6},
-            {4.0, 2.0, 3.0, 1.0, 5.0, 9.0},
-            {10.0, -11.0, 0.1, 0.4, 0.5, -0.6},
-            {-5.0, -8.0, -20.0, 3.0, 5.0, 2.0}
-        };
-        const double expected[6][6] {
-            { 3.0,   2.0,  -4.0,     6.0, -5.0,  7.0},
-            {-2.0,   1.0,  -3.0,    -5.0,  4.0, -6.0},
-            { 0.25, -0.5,   0.1625, -0.5,  1.0, -0.6},
-            {-11.0, -10.0,  0.1,     0.5, -0.4, -0.6},
-            {-2.0,   4.0,  -3.0,    -5.0,  1.0, -9.0},
-            {-8.0,   5.0, -20.0,     5.0, -3.0,  2.0}
-        };
-        double output[6][6];
-        MathUtils::transform_pv_matrix(transform, pv_matrix, output);
-        test_matrices_equal(output, expected);
-    }
+// Test the 6x6 position/velocity matrix transformation function.
+TEST(MathUtils, TransformPvMatrix) {
+    constexpr double transform[3][3] {
+        {0.0, 1.0, 0.0},
+        {-1.0, 0.0, 0.0},
+        {0.0, 0.0, 1.0}
+    };
+    constexpr double pv_matrix[6][6] {
+        {1.0, 2.0, 3.0, 4.0, 5.0, 6.0},
+        {-2.0, 3.0, -4.0, 5.0, 6.0, 7.0},
+        {0.5, 0.25, 0.1625, -1.0, -0.5, -0.6},
+        {4.0, 2.0, 3.0, 1.0, 5.0, 9.0},
+        {10.0, -11.0, 0.1, 0.4, 0.5, -0.6},
+        {-5.0, -8.0, -20.0, 3.0, 5.0, 2.0}
+    };
+    constexpr double expected[6][6] {
+        { 3.0,   2.0,  -4.0,     6.0, -5.0,  7.0},
+        {-2.0,   1.0,  -3.0,    -5.0,  4.0, -6.0},
+        { 0.25, -0.5,   0.1625, -0.5,  1.0, -0.6},
+        {-11.0, -10.0,  0.1,     0.5, -0.4, -0.6},
+        {-2.0,   4.0,  -3.0,    -5.0,  1.0, -9.0},
+        {-8.0,   5.0, -20.0,     5.0, -3.0,  2.0}
+    };
+    double output[6][6];
+    MathUtils::transform_pv_matrix(transform, pv_matrix, output);
+    test_matrices_equal(output, expected);
 }
 
 }

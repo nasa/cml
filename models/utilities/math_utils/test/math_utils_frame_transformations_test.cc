@@ -57,8 +57,8 @@ TEST(MathUtils, GenerateInertialToLvlh) {
 
     // Null pointer cases.
     {
-        const double position[3] {};
-        const double velocity[3] {};
+        constexpr double position[3] {};
+        constexpr double velocity[3] {};
         double T_inrtl_lvlh[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
@@ -200,8 +200,8 @@ TEST(MathUtils, GenerateInertialToUvw) {
 
     // Null pointer cases.
     {
-        const double position[3] {};
-        const double velocity[3] {};
+        constexpr double position[3] {};
+        constexpr double velocity[3] {};
         double T_inrtl_uvw[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
@@ -237,7 +237,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
     {
         const double (&position)[3] = vector1_test_cases[1];
         const double (&velocity)[3] = vector2_test_cases[1];
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {0.894427190999916,  0.447213595499958, 0.0},
             {-0.447213595499958, 0.894427190999916, 0.0},
             {0.0,                0.0,               1.0}
@@ -267,7 +267,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
     {
         const double (&position)[3] = vector1_test_cases[3];
         const double (&velocity)[3] = vector2_test_cases[3];
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {0.0, 0.0,  1.0},
             {0.0, -1.0, 0.0},
             {1.0, 0.0,  0.0}
@@ -284,7 +284,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
     {
         const double (&position)[3] = vector1_test_cases[4];
         const double (&velocity)[3] = vector2_test_cases[4];
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {0.5345224838248488,  0.2672612419124244,  0.8017837257372732},
             {-0.2468853599393471, 0.95668076976497,    -0.1543033499620919},
             {-0.8082903768654761, -0.1154700538379252, 0.5773502691896257}
@@ -299,7 +299,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
     {
         const double (&position)[3] = vector1_test_cases[5];
         const double (&velocity)[3] = vector2_test_cases[5];
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {0.5345224838248488,   0.2672612419124244, 0.8017837257372732},
             {-0.447213595499958,   0.894427190999916,  0.0},
             {-0.7171371656006362, -0.3585685828003181, 0.5976143046671969}
@@ -316,7 +316,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
     {
         const double (&position)[3] = vector1_test_cases[6];
         const double (&velocity)[3] = vector2_test_cases[6];
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {0.0, 0.0,  1.0},
             {0.0, -1.0, 0.0},
             {1.0, 0.0,  0.0}
@@ -339,8 +339,8 @@ TEST(MathUtils, GenerateInertialToReference) {
 
     // Null pointer cases.
     {
-        const double x_axis_inertial[3] {};
-        const double position[3] {};
+        constexpr double x_axis_inertial[3] {};
+        constexpr double position[3] {};
         double T_inrtl_reference[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
@@ -415,7 +415,7 @@ TEST(MathUtils, GenerateInertialToReference) {
     {
         const double (&x_axis_inertial)[3] = vector1_test_cases[4];
         const double (&position)[3] = vector2_test_cases[4];
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {0.5345224838248488,   0.2672612419124244, 0.8017837257372732},
             {-0.8082903768654761, -0.1154700538379251, 0.5773502691896257},
             {0.246885359939347,   -0.95668076976497,   0.1543033499620919}
@@ -430,7 +430,7 @@ TEST(MathUtils, GenerateInertialToReference) {
     {
         const double (&x_axis_inertial)[3] = vector1_test_cases[5];
         const double (&position)[3] = vector2_test_cases[5];
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {0.5345224838248488,  0.2672612419124244, 0.8017837257372732},
             {0.4472135954999579, -0.8944271909999159, 0.0},
             {0.7171371656006362,  0.3585685828003181, -0.5976143046671968}
@@ -445,7 +445,7 @@ TEST(MathUtils, GenerateInertialToReference) {
     {
         const double (&x_axis_inertial)[3] = vector1_test_cases[6];
         const double (&position)[3] = vector2_test_cases[6];
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {0.0,  0.0, 1.0},
             {0.0,  1.0, 0.0},
             {-1.0, 0.0, 0.0}
@@ -520,7 +520,7 @@ TEST(MathUtils, GenerateInertialToVnc) {
     {
         const double (&position)[3] = vector1_test_cases[4];
         const double (&velocity)[3] = vector2_test_cases[4];
-        const double expected[3][3] {
+        constexpr double expected[3][3] {
             {0.2672612419124243,  0.8017837257372731,  0.5345224838248487},
             {-0.8082903768654761, -0.1154700538379252, 0.5773502691896257},
             {0.5246313898711126,  -0.5863527298559493, 0.6172133998483676}
@@ -567,7 +567,7 @@ TEST(MathUtils, GenerateTransPfixToEnu) {
 
     // Null pointer cases.
     {
-        const double position_pfix[3] {};
+        constexpr double position_pfix[3] {};
         double T_pfix_enu[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
@@ -583,7 +583,7 @@ TEST(MathUtils, GenerateTransPfixToEnu) {
     // Case 1
     {
         const double (&position_pfix)[3] = vector1_test_cases[0];
-        const double expected[3][3] = {};
+        constexpr double expected[3][3] = {};
         double T_pfix_enu[3][3] {};
 
         MathUtils::generate_T_pfix_to_enu(position_pfix, T_pfix_enu);
@@ -593,7 +593,7 @@ TEST(MathUtils, GenerateTransPfixToEnu) {
     // Case 2
     {
         const double (&position_pfix)[3] = vector1_test_cases[1];
-        const double expected[3][3] = {
+        constexpr double expected[3][3] = {
             {-0.447213595499958, 0.894427190999916, 0.0},
             {0.0,                0.0,               1.0},
             {0.894427190999916,  0.447213595499958, 0.0}
@@ -607,7 +607,7 @@ TEST(MathUtils, GenerateTransPfixToEnu) {
     // Case 3
     {
         const double (&position_pfix)[3] = vector1_test_cases[2];
-        const double expected[3][3] = {
+        constexpr double expected[3][3] = {
             {0.0, 1.0, 0.0},
             {0.0, 0.0, 1.0},
             {1.0, 0.0, 0.0}
@@ -633,7 +633,7 @@ TEST(MathUtils, GenerateTransPfixToEnu) {
     // Case 5
     {
         const double (&position_pfix)[3] = vector1_test_cases[4];
-        const double expected[3][3] = {
+        constexpr double expected[3][3] = {
             {-0.4472135954999579, 0.8944271909999159,  0.0},
             {-0.7171371656006362, -0.3585685828003181, 0.5976143046671968},
             {0.5345224838248488,  0.2672612419124244,  0.8017837257372732}
@@ -647,7 +647,7 @@ TEST(MathUtils, GenerateTransPfixToEnu) {
     // Case 6
     {
         const double (&position_pfix)[3] = vector1_test_cases[5];
-        const double expected[3][3] = {
+        constexpr double expected[3][3] = {
             {-0.4472135954999579, 0.8944271909999159,  0.0},
             {-0.7171371656006362, -0.3585685828003181, 0.5976143046671968},
             {0.5345224838248488,  0.2672612419124244,  0.8017837257372732}
@@ -679,6 +679,7 @@ TEST(MathUtils, GenerateQuatEnuToPfix) {
     testing::StrictMock<CMLMessage::Mock> cml_message_mock;
 
     jeod::Quaternion q_enu_to_pfix;
+    const double sqrt2_2 = 0.5 * std::sqrt(2.0);
 
     // Case 1
     MathUtils::generate_Q_enu_to_pfix(0.0, 0.0, q_enu_to_pfix);
@@ -688,43 +689,43 @@ TEST(MathUtils, GenerateQuatEnuToPfix) {
     EXPECT_NEAR(q_enu_to_pfix.vector[2], 0.5, tolerance);
 
     // Case 2
-    MathUtils::generate_Q_enu_to_pfix(1.570796, 0.0, q_enu_to_pfix);
-    EXPECT_NEAR(q_enu_to_pfix.scalar, 1.15539443734658e-07, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[0], 1.15539443734658e-07, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[1], 0.7071067811865381, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[2], 0.7071067811865381, tolerance);
+    MathUtils::generate_Q_enu_to_pfix(M_PI_2, 0.0, q_enu_to_pfix);
+    EXPECT_NEAR(q_enu_to_pfix.scalar, 0.0, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[0], 0.0, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[1], sqrt2_2, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[2], sqrt2_2, tolerance);
 
     // Case 3
-    MathUtils::generate_Q_enu_to_pfix(0.0, 1.570796, q_enu_to_pfix);
-    EXPECT_NEAR(q_enu_to_pfix.scalar, 0.7071067811865381, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[0], 1.15539443734658e-07, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[1], 1.15539443734658e-07, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[2], 0.7071067811865381, tolerance);
+    MathUtils::generate_Q_enu_to_pfix(0.0, M_PI_2, q_enu_to_pfix);
+    EXPECT_NEAR(q_enu_to_pfix.scalar, sqrt2_2, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[0], 0.0, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[1], 0.0, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[2], sqrt2_2, tolerance);
 
     // Case 4
-    MathUtils::generate_Q_enu_to_pfix(1.570796, 1.570796, q_enu_to_pfix);
-    EXPECT_NEAR(q_enu_to_pfix.scalar, 1.633974483494782e-07, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[0], 2.670086374223501e-14, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[1], 1.633974483494782e-07, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[2], 0.9999999999999732, tolerance);
+    MathUtils::generate_Q_enu_to_pfix(M_PI_2, M_PI_2, q_enu_to_pfix);
+    EXPECT_NEAR(q_enu_to_pfix.scalar, 0.0, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[0], 0.0, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[1], 0.0, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[2], 1.0, tolerance);
 
     // Case 5
     EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Warning, _, _, HasSubstr("Latitude too large")));
-    MathUtils::generate_Q_enu_to_pfix(1.570796, 1.570797, q_enu_to_pfix);
-    EXPECT_NEAR(q_enu_to_pfix.scalar, -0.9999999999999302, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[0], -3.366025517481663e-07, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[1], 5.498379529456088e-14, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[2], 1.633974485437673e-07, tolerance);
+    MathUtils::generate_Q_enu_to_pfix(M_PI_2, 1.570797, q_enu_to_pfix);
+    EXPECT_NEAR(q_enu_to_pfix.scalar, -0.99999999999994338, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[0], -3.3660255174816628e-07, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[1], 0.0, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[2], 0.0, tolerance);
 
     // Case 6
     EXPECT_CALL(cml_message_mock,
             publish(CMLMessage::Warning, _, _, HasSubstr("Latitude too small")));
-    MathUtils::generate_Q_enu_to_pfix(1.570796, -1.570797, q_enu_to_pfix);
-    EXPECT_NEAR(q_enu_to_pfix.scalar, -3.366025517204108e-07, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[0], -0.9999999999999302, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[1], 1.633974485715228e-07, tolerance);
-    EXPECT_NEAR(q_enu_to_pfix.vector[2], 5.498379529456088e-14, tolerance);
+    MathUtils::generate_Q_enu_to_pfix(M_PI_2, -1.570797, q_enu_to_pfix);
+    EXPECT_NEAR(q_enu_to_pfix.scalar, -3.3660255174816628e-07, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[0], -0.99999999999994338, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[1], 0.0, tolerance);
+    EXPECT_NEAR(q_enu_to_pfix.vector[2], 0.0, tolerance);
 
     // Case 7
     MathUtils::generate_Q_enu_to_pfix(0.523599, 0.0, q_enu_to_pfix);

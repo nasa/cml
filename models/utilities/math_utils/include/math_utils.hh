@@ -418,6 +418,7 @@ Linear Algebra Section
     return sqrt_protected(vec_mag_sq(vec));
   }
 
+  // TODO Nino Tarantino 10/19/26: these should all use std::hypot.
   static double vec_mag_xy( const double (&vec)[3]) {
     return sqrt_protected( vec[0]*vec[0] + vec[1]*vec[1] );
   }

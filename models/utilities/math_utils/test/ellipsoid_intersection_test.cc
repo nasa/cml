@@ -16,8 +16,8 @@ TEST(EllipsoidIntersection, Update) {
 
     // Case 1
     {
-        const double source_point[3] {5.0, 0.0, 0.0};
-        const double target_point[3] {-5.0, 0.0, 0.0};
+        constexpr double source_point[3] {5.0, 0.0, 0.0};
+        constexpr double target_point[3] {-5.0, 0.0, 0.0};
 
         EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update();
@@ -30,8 +30,8 @@ TEST(EllipsoidIntersection, Update) {
 
     // Case 2
     {
-        const double source_point[3] {0.0, 5.0, 0.0};
-        const double target_point[3] {0.0, -5.0, 0.0};
+        constexpr double source_point[3] {0.0, 5.0, 0.0};
+        constexpr double target_point[3] {0.0, -5.0, 0.0};
 
         EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update();
@@ -44,8 +44,8 @@ TEST(EllipsoidIntersection, Update) {
 
     // Case 3
     {
-        const double source_point[3] {0.0, 0.0, 5.0};
-        const double target_point[3] {0.0, 0.0, -5.0};
+        constexpr double source_point[3] {0.0, 0.0, 5.0};
+        constexpr double target_point[3] {0.0, 0.0, -5.0};
 
         EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update();
@@ -58,8 +58,8 @@ TEST(EllipsoidIntersection, Update) {
 
     // Case 4
     {
-        const double source_point[3] {-1.0, 0.0, 4.0};
-        const double target_point[3] {1.0, 0.0, 4.0};
+        constexpr double source_point[3] {-1.0, 0.0, 4.0};
+        constexpr double target_point[3] {1.0, 0.0, 4.0};
 
         EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update();
@@ -72,8 +72,8 @@ TEST(EllipsoidIntersection, Update) {
 
     // Case 5
     {
-        const double source_point[3] {1.0, 1.0, 1.0};
-        const double target_point[3] {0.0, 0.0, 1.0};
+        constexpr double source_point[3] {1.0, 1.0, 1.0};
+        constexpr double target_point[3] {0.0, 0.0, 1.0};
 
         EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update();
@@ -86,8 +86,8 @@ TEST(EllipsoidIntersection, Update) {
 
     // Case 6
     {
-        const double source_point[3] {1.5, 2.5, 0.0};
-        const double target_point[3] {1.5, 2.5, 1.0};
+        constexpr double source_point[3] {1.5, 2.5, 0.0};
+        constexpr double target_point[3] {1.5, 2.5, 1.0};
 
         EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update(false);
