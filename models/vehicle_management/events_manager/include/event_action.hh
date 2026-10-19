@@ -168,7 +168,12 @@ class EventActionAdjustLoggingGroup : public EventActionBase {
   {
     Trick::DataRecordGroup * drg = logging.get_group( group_name_);
     if (drg != nullptr) {
-      if (enable_group) {drg->enable();}
+      if (enable_group) {
+        drg->enable();
+        if (log_now && drg->freq != Trick::DR_Freq::DR_Always) {
+          logging.log_now(*drg);
+        }
+      }
       else {drg->disable();}
       drg->set_cycle(log_cycle);
       logging.reset_next_call_time(*drg);
