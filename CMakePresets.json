@@ -107,11 +107,18 @@
             "name": "default",
             "configurePreset": "dev",
             "output": {
-                "outputOnFailure": true
+                "outputOnFailure": true,
+                "shortProgress": true
             },
             "execution": {
                 "noTestsAction": "error",
-                "stopOnFailure": true,
+                "stopOnFailure": true
+            }
+        },
+        {
+            "name": "verbose",
+            "inherits": "default",
+            "output": {
                 "verbosity": "verbose"
             }
         }

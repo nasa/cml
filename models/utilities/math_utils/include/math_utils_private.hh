@@ -185,8 +185,8 @@ class MathUtilsPrivate {
           "Log of negative number.\n",
           "The log of ", val, " is undefined,\n"
           "and the result is set as ", failed_val, ".");
-        res = failed_val;
       }
+      res = failed_val;
     }
 
     feenableexcept(fe_prev); // restore the previous settings of fp exceptions

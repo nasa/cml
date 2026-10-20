@@ -112,5 +112,13 @@ add_cml_tests(
         cml_message/test/cml_message_test.cc
         double_to_words/test/convert_double_to_words_test.cc
         env_utils/test/env_utils_test.cc
+        math_utils/test/ellipsoid_intersection_test.cc
+        math_utils/test/math_utils_cholesky_decomposition_test.cc
+        math_utils/test/math_utils_frame_transformations_test.cc
+        math_utils/test/math_utils_linear_algebra_test.cc
+        math_utils/test/math_utils_numerical_methods_test.cc
+        math_utils/test/math_utils_protection_methods_test.cc
+        math_utils/test/quadratic_solver_test.cc
+        math_utils/test/std_array_ops_test.cc
         table_interp_cpp/test/table_independent_variable_test.cc
 )
