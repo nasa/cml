@@ -59,11 +59,7 @@ class ConstraintTest_ThresholdTimed : public ConstraintTestTimed
   /***************************************************************************
   * Constructor/Destructor
   ***************************************************************************/
-  ConstraintTest_ThresholdTimed()
-    :
-    ConstraintTestTimed(),
-    threshold()
-  {}
+  ConstraintTest_ThresholdTimed() = default;
   ~ConstraintTest_ThresholdTimed() override = default;
 
   /***************************************************************************
@@ -251,11 +247,7 @@ class ConstraintTest_ValSetTimed : public ConstraintTestTimed
   /***************************************************************************
   * Constructor/Destructor
   ***************************************************************************/
-  ConstraintTest_ValSetTimed()
-    :
-    ConstraintTestTimed(),
-    values()
-  {}
+  ConstraintTest_ValSetTimed() = default;
   ~ConstraintTest_ValSetTimed() override = default;
 
   /***************************************************************************

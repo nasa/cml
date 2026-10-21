@@ -109,6 +109,8 @@ add_cml_tests(
         utilities
 
     SOURCES
+        constraint_check/test/constraint_test_instant_violation_test.cc
+        constraint_check/test/constraint_test_timed_violation_test.cc
         cml_message/test/cml_message_test.cc
         double_to_words/test/convert_double_to_words_test.cc
         env_utils/test/env_utils_test.cc
