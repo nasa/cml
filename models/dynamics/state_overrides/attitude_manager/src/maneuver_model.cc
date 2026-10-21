@@ -10,15 +10,20 @@ ASSUMPTIONS:
 PROGRAMMERS:
  ((Alexandre Masset) (OSR) (10/25)     (Initial Implementation))
 ***************************************************************************************************/
+#include <algorithm> // std::max
 #include <cmath> // std::abs()
 #include <random> // std::mt19937
 
 // JEOD headers
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh" // jeod::DynBody
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh" // Quaternion
 
 // CML headers
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+// Local headers
 #include "../include/maneuver_model.hh"
 
 ManeuverModel::ManeuverModel( const double & timestep_in,
@@ -27,27 +32,9 @@ ManeuverModel::ManeuverModel( const double & timestep_in,
                             double (& w_BodyToRef_Body_out)[3])
     :
     body( body_in),
-    initialized( false),
-    active( false),
     timeStep( timestep_in),
     mnvrRate( w_BodyToRef_Body_out),
-    mnvrRateMax( 0.0),
-    mnvrAccel( 0.0),
-    mnvrRateUnit{ 0.0, 0.0, 0.0},
-    eulerTarget( 0.0),
-    currentEuler( 0.0),
-    ang_vel_mag{ 0.0},
-    quatTargetNominalWrtRef(),
-    maneuvering( false),
-    switchThreshold( 0.0),
-    quatBodyWrtRef( quatBodyWrtRef_out),
-    smoothing( false),
-    targetRate( 0.0),
-    mnvrRateMaxInput( 0.0),
-    mnvrAccelInput( 0.0),
-    randSeed( 0),
-    rateTolerance( 0.0),
-    eulerTolerance( 0.0)
+    quatBodyWrtRef( quatBodyWrtRef_out)
     {}
 
 /***************************************************************************************************
@@ -274,9 +261,9 @@ ManeuverModel::compute_eigen_rot()
 
     // Compute noise on maneuver axis
     double scratch[3];
-    for (size_t ii=0; ii<3; ii++) {
+    for (double & component : scratch) {
         // Generate a different value for each rate component
-        scratch[ii] = rand(generator) * rateTolerance * mnvrRateMax;
+        component = rand(generator) * rateTolerance * mnvrRateMax;
     }
     // Generate a random noise eps added to the targeted angular rate magnitude at the end of the maneuver
     // The maximum maneuver rate is used as a reference to compute that error 

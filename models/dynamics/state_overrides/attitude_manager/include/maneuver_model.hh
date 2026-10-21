@@ -34,61 +34,60 @@ class ManeuverModel {
 protected:
     jeod::DynBody & body; /* (--) 
         Perturbing vehicle body sim object */
-    bool initialized; /* (--) 
+    bool initialized{ false}; /* (--) 
         Flag; if the model has been initialized. */
-    bool active; /* (--) 
+    bool active{ false}; /* (--) 
         Flag; if the model is currently active (updated). */
     const double & timeStep; /* (s) 
         Time step of the model. Provided by the attitude manager. */
     double (&mnvrRate)[3]; /* (rad/s) 
         Maneuver rate. It corresponds to the angular velocity of the body frame with respect to 
         the given reference frame Ref, expressed in thebody reference frame. */
-    double mnvrRateMax; /* (rad/s) 
+    double mnvrRateMax{ 0.0}; /* (rad/s) 
         Protected version of the maximum maneuver rate (in magnitude). */
-    double mnvrAccel; /* (rad/s2) 
+    double mnvrAccel{ 0.0}; /* (rad/s2) 
         Protected version of the maneuver acceleration (in magnitude). */
-    double mnvrRateUnit[3]; /* (--) 
+    double mnvrRateUnit[3]{ 0.0, 0.0, 0.0}; /* (--) 
         Protected version of the maneuver rate unit vector. */
-    double eulerTarget; /* (rad) 
+    double eulerTarget{ 0.0}; /* (rad) 
         Computed Euler angle between the initial attitude quaternion and the 
         desired attitude quaternion. */
-    double currentEuler; /* (rad) 
+    double currentEuler{ 0.0}; /* (rad) 
         Current Euler angle between the current attitude quaternion and the 
         desired attitude quaternion. */
-    double ang_vel_mag; /* (rad/s) 
+    double ang_vel_mag{ 0.0}; /* (rad/s) 
         Protected angular rate magnitude used during maneuver. */
     jeod::Quaternion quatTargetNominalWrtRef; /* (--) 
         Desired attitude quaternion. It represents an attitude from the nominal body frame to 
         the given reference frame Ref. "Nominal" refers here to the body frame with no perturbation. */
-    bool maneuvering; /* (--) 
+    bool maneuvering{ false}; /* (--) 
         Flag; ready to maneuver to desired target. Used if smoothing to know the model needs to drive 
         the rates to zero before starting the maneuver to target. */
-    double switchThreshold; /* (rad) 
+    double switchThreshold{ 0.0}; /* (rad) 
         During maneuver, angle at which the vehicle shall start decelerating to reach desired attitude
         Euler angle. Only updated if smoothing. */
     jeod::Quaternion & quatBodyWrtRef; /* (--) 
         Computed attitude quaternion from the body frame to the reference frame Ref.
         Used in the attitude manager to update the vehicle attitude. */
-    bool smoothing; /* (--) 
+    bool smoothing{ false}; /* (--) 
         Flag; If smoothing the maneuver rate. */
-    double targetRate; /* (rad/s) 
+    double targetRate{ 0.0}; /* (rad/s) 
         Target rate desired at the end of the maneuver. This is a randomized value generated based on
         the user-defined tolerance that will be added to the angular rate magnitude. */
 
 /***************************************************************************************************
 Input file settings:
 ***************************************************************************************************/
-public:
-    double mnvrRateMaxInput; /* (rad/s) 
+    double mnvrRateMaxInput{ 0.0}; /* (rad/s) 
         Input variable for the maximum maneuver rate (in magnitude) */
-    double mnvrAccelInput; /* (rad/s^2) 
+    double mnvrAccelInput{ 0.0}; /* (rad/s^2) 
         Input variable for the maneuver acceleration (in magnitude) if smoothing */
-    int randSeed; /* (--)
+    int randSeed{ 0}; /* (--)
         Randomization seed to generate noise about final target state */
-    double rateTolerance; /* (--) 
+    double rateTolerance{ 0.0}; /* (--) 
         Dimensionless rate error, added to maneuver axis and final target attitude rate.
         Example: 0.1 is equivalent to adding noise in a +/- 10% range of the maximum maneuver rate */
-    double eulerTolerance; /* (--) 
+    double eulerTolerance{ 0.0}; /* (--) 
         Dimensionless angle error, added to targeted Euler angle 
         Example: 0.1 is equivalent to adding noise in a +/- 10% range around the initial target */
 
@@ -98,9 +97,12 @@ Constructor/Destructor
 public:
     // Constructor
     ManeuverModel( const double & timestep_in,
-                  jeod::DynBody & body,
+                  jeod::DynBody & body_in,
                   jeod::Quaternion & quatBodyWrtRef_out,
                   double (& w_BodyToRef_Body_out)[3]);
+
+    ManeuverModel(const ManeuverModel& rhs) = delete;
+    ManeuverModel & operator =(const ManeuverModel& rhs) = delete;
                   
     void initialize();
     void update();
@@ -110,11 +112,11 @@ public:
     void compute_eigen_rot();
 
     void deactivate()            { active = false; maneuvering = false;}
-    inline bool is_active()             { return active;}
     void set_smoothing(bool flag_in);
     
+    bool is_active() const            { return active;}
     //Destructor
-    ~ManeuverModel() {}
+    ~ManeuverModel() = default;
 
 protected:
     void compute_smoothed_rate();
@@ -123,7 +125,5 @@ protected:
 
 private:
     // Not implemented:
-    ManeuverModel(const ManeuverModel& rhs);
-    ManeuverModel & operator =(const ManeuverModel& rhs);
 };
 #endif

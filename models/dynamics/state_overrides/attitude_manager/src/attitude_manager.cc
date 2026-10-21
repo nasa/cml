@@ -14,10 +14,16 @@ ASSUMPTIONS:
 PROGRAMMERS:
  ((Alexandre Masset) (OSR) (10/25)     (Initial Implementation))
 ***************************************************************************************************/
+// JEOD headers
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh" // jeod::DynBody
+#include "jeod/models/utils/math/include/vector3.hh"
 
-//CML headers
+// CML headers
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh" // SubscriptionBase
 
+// Local headers
 #include "../include/attitude_manager.hh"
 
 
@@ -29,14 +35,6 @@ AttitudeManager::AttitudeManager( const double      & time_in,
     :
     dynamicTime( time_in),
     body( body_in),
-    quatBodyWrtRef(),
-    dynamicTimePrevious( 0.0),
-    timeStep( 0.0),
-    RefWrtInertialFrameState(nullptr),
-    w_BodyWrtRef_Body{ 0.0, 0.0, 0.0},
-    w_RefWrtInertial_Body{ 0.0, 0.0, 0.0},
-    config( ATT_MNGR_CONF::NONE),
-    rotational_dynamics_prev( false),
     perturbation( 
         timeStep, 
         body, 
@@ -66,7 +64,7 @@ AttitudeManager::activate()
     body.rotational_dynamics = false;
 
     // Compute at activation current attitude wrt Ref
-    if (RefWrtInertialFrameState) {
+    if (RefWrtInertialFrameState != nullptr) {
         // q_BR = q_BI * q_RI^(-1)
         body.composite_body.state.rot.Q_parent_this.multiply_conjugate( 
             RefWrtInertialFrameState->rot.Q_parent_this, 
@@ -362,7 +360,7 @@ AttitudeManager::update_attitude()
 {
     // Compute dq attitude quaternion with current body angular rate
     jeod::Quaternion delta_quat;
-    double delta_angle = jeod::Vector3::vmag(w_BodyWrtRef_Body) * timeStep ;
+    const double delta_angle = jeod::Vector3::vmag(w_BodyWrtRef_Body) * timeStep ;
     double rate_axis[3];
     jeod::Vector3::normalize(w_BodyWrtRef_Body, rate_axis);
     delta_quat.left_quat_from_eigen_rotation( delta_angle,
@@ -375,7 +373,7 @@ AttitudeManager::update_attitude()
     perturbations or maneuvers).
     If not NULL: set q_BI = q_BR * q_RI.
     Else, assume q_BI = q_BR */
-    if (RefWrtInertialFrameState) {
+    if (RefWrtInertialFrameState != nullptr) {
         quatBodyWrtRef.multiply( 
             RefWrtInertialFrameState->rot.Q_parent_this, 
             body.composite_body.state.rot.Q_parent_this);
@@ -407,7 +405,7 @@ AttitudeManager::update_ang_vel()
     The vehicle attitude is fixed with respect to this reference frame (aside
     perturbations or maneuvers).
     Set w_RI_R*/
-    if (RefWrtInertialFrameState) {
+    if (RefWrtInertialFrameState != nullptr) {
         quatBodyWrtRef.left_quat_transform( 
             RefWrtInertialFrameState->rot.ang_vel_this, // w_RefWrtInertial_Ref
             w_RefWrtInertial_Body);

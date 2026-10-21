@@ -26,10 +26,11 @@ PROGRAMMERS:
 #include "jeod/models/utils/quaternion/include/quat.hh" // Quaternion
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh" // RefFrameState
 
-//CML headers
+// CML headers
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh" // SubscriptionBase
 #include "cml/models/utilities/cml_message/include/cml_message.hh" // Publishing messages
 
+// Local headers
 #include "maneuver_model.hh"
 #include "perturb_model.hh"
 
@@ -58,21 +59,21 @@ protected:
         Perturbed vehicle body reference */
     jeod::Quaternion quatBodyWrtRef; /* (--)
         Attitude quaternion of a provided Reference Frame to the body frame.*/
-    double dynamicTimePrevious; /* (s) 
+    double dynamicTimePrevious{ 0.0}; /* (s) 
         Previous simulation time. Used to calculate the simulation time step of this model. */
-    double timeStep; /* (s) 
+    double timeStep{ 0.0}; /* (s) 
         Computed delta-time since the previous call, accessed by perturbation and maneuver submodels */
-    jeod::RefFrameState * RefWrtInertialFrameState; /* (--) 
+    jeod::RefFrameState * RefWrtInertialFrameState{ nullptr}; /* (--) 
         Pointer to a reference frame state. Used if the vehicle is fixed to a specific reference 
         frame (ex. S-LVLH). If NULL, default to inertial */
-    double w_BodyWrtRef_Body[3]; /* (rad/s) 
+    double w_BodyWrtRef_Body[3]{ 0.0, 0.0, 0.0}; /* (rad/s) 
         Angular velocity of body frame wrt a given reference frame expressed in the body frame.*/
-    double w_RefWrtInertial_Body[3]; /* (rad/s) 
+    double w_RefWrtInertial_Body[3]{ 0.0, 0.0, 0.0}; /* (rad/s) 
         Angular velocity of a given reference frame wrt the Inertial frame expressed in the
         the Body frame.*/
-    ATT_MNGR_CONF config; /* (--) 
+    ATT_MNGR_CONF config{ ATT_MNGR_CONF::NONE}; /* (--) 
         Enumeration to track the attitude manager subscribed submodels. */
-    bool rotational_dynamics_prev; /* (--) 
+    bool rotational_dynamics_prev{ false}; /* (--) 
         Flag to store previous value of body.rotational_dynamics before this model was activated.
         Resumes previous state when the model is deactivated.*/
 
@@ -81,15 +82,15 @@ public:
         Pertubation model instance */
     ManeuverModel maneuver; /* (--)
         Maneuver model instance */
-
-
 /***************************************************************************************************
 Methods
 ***************************************************************************************************/
-public:
     // Constructor
     AttitudeManager( const double & time_in,
                   jeod::DynBody & body_in);
+
+    AttitudeManager(const AttitudeManager& rhs) = delete;
+    AttitudeManager & operator =(const AttitudeManager& rhs) = delete;
 
     void initialize() override;
     void update();
@@ -101,17 +102,12 @@ public:
     void set_ref_frame_state( jeod::RefFrameState * ref_frame_state);
 
     //Destructor
-    ~AttitudeManager() override {}
+    ~AttitudeManager() override = default;
 
 protected:
     void update_attitude();
     void update_ang_vel();
     void activate() override;
     void deactivate() override;
-
-private:
-    // Not implemented:
-    AttitudeManager(const AttitudeManager& rhs);
-    AttitudeManager & operator =(const AttitudeManager& rhs);
 };
 #endif

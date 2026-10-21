@@ -26,11 +26,19 @@ Programmers:
     a vehicle deadband (free-drift) limit, ie. the minimum free drift rate the vehicle can have while 
     remaining in a minimum attitude deadband area.
 */
+#include <cmath> // std::abs
+#include <cstddef> // size_t
+
 // JEOD headers
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh" // jeod::DynBody
+#include "jeod/models/dynamics/mass/include/mass_point.hh" // jeod::MassPoint
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh" // jeod::Orientation
+#include "jeod/models/utils/quaternion/include/quat.hh" // jeod::Quaternion
 
 // CML headers
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 // Local headers
@@ -42,35 +50,9 @@ PerturbModel::PerturbModel( const double & timestep_in,
                             jeod::Quaternion & quatBodyWrtRef_out,
                             double (& w_BodyToRef_Body_out)[3]):
     body( body_in),
-    initialized( false),
-    randomRates( false),
-    portName(),
-    driftDeadbandInput{ 1.0, 1.0, 1.0},
-    randSeed( 1),
-    initPhase{ 0.0, 0.0, 0.0},
-    maxDeltaLatVelDPInput{ 1.0, 1.0, 1.0},
-    driftRateMaxInput{ 1.0, 1.0, 1.0},
-    deadbandAccelInput{ 0.01, 0.01, 0.01},
-    active( false),
     quatBodyWrtRef( quatBodyWrtRef_out),
-    prescribedAng{ 0.0, 0.0, 0.0},
     driftRate( w_BodyToRef_Body_out),
-    momentArmDP{0.0, 0.0, 0.0},
-    T_DP_BODY(),
-    deltaLatVelDP{ 0.0, 0.0, 0.0},
-    driftRateIn{ 0.0, 0.0, 0.0},
-    driftRateOut{ 0.0, 0.0, 0.0},
-    driftDeadband{ 0.0, 0.0, 0.0},
-    maxDeltaLatVelDP{ 0.0, 0.0, 0.0},
-    driftRateMax{ 0.0, 0.0, 0.0},
-    smoothing( false),
-    enforceLatVel( false),
-    deadbandAccel{ 0.0, 0.0, 0.0},
-    accelRegion{ 0.0, 0.0, 0.0},
-    accelInput{ 0.0, 0.0, 0.0},
-    generator(),
     timeStep( timestep_in),
-    driftRateInSign{0,0,0},
     random_non_negative_number(0.0, 1.0) {
 }
 
@@ -95,7 +77,7 @@ void PerturbModel::activate() {
     for (size_t ii=0; ii<3; ++ii) {
         // Initialize driftRate variables
         // Provides a random value between 0 and 1 if we are using random-rates and a fixed value of 1 otherwise.
-        double rate_coef = 1 + (random_non_negative_number(generator) - 1) * randomRates;
+        const double rate_coef = 1 + (random_non_negative_number(generator) - 1) * static_cast<double>(randomRates);
 
         driftRateInSign[ii] = MathUtils::sign(driftRate[ii]);
         // Using last drift rate value
@@ -217,7 +199,7 @@ PerturbModel::compute_acceleration()
                 -> rate_coef = random_non_negative_number(generator) 
             Else (randomRates = false):
                 -> rate_coef = 1.0 */
-            double rate_coef = 1 + (random_non_negative_number(generator) - 1) * randomRates;
+            const double rate_coef = 1 + (random_non_negative_number(generator) - 1) * static_cast<double>(randomRates);
             // Compute desired drift rate to move away from the next deadband limit
             driftRateOut[ii] = -rate_coef * driftRateInSign[ii] * driftRateMax[ii];
 
@@ -257,7 +239,7 @@ PerturbModel::compute_drift_rate()
                 -> rate_coef = random_non_negative_number(generator) 
             Else (randomRates = false):
                 -> rate_coef = 1.0 */
-            double rate_coef = 1 + (random_non_negative_number(generator) - 1) * randomRates;
+            const double rate_coef = 1 + (random_non_negative_number(generator) - 1) * static_cast<double>(randomRates);
             /* Compute next driftRate after current phase: 
                 w_out = (opposite sign to current driftRateIn) * driftRateMax */
             driftRateOut[ii] = -driftRateInSign[ii] * rate_coef * driftRateMax[ii];
@@ -342,7 +324,7 @@ meet predefined requirements defined in DP frame. If not, scale down the maximum
 void PerturbModel::lat_vel_check() {
     const jeod::MassPoint * mass_point = body.mass.find_mass_point(portName);
     // Checks whether the provided docking port frame exists or not.
-    if (mass_point) {
+    if (mass_point != nullptr) {
     mass_point->compute_relative_state(body.mass.structure_point,DP_wrt_STR);
         // Generate the transformation matrices between the vehicle Body and Docking Port frames
         jeod::Matrix3x3::product_right_transpose( body.mass.composite_properties.T_parent_this,

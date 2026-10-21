@@ -29,13 +29,13 @@ PROGRAMMERS:
 #include<string>
 #include<random>
 
-// CML headers
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-
 // JEOD headers
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh" // jeod::DynBody
 #include "jeod/models/dynamics/mass/include/mass_point_state.hh" // MassPointState
 #include "jeod/models/utils/quaternion/include/quat.hh" // Quaternion
+
+// CML headers
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /***************************************************************************************************
 PerturbModel: Model which applies perturbations to the current state of a simulation vehicle; has
@@ -47,78 +47,78 @@ External models references (required):
 ***************************************************************************************************/
 protected:
     jeod::DynBody & body; /* (--) Perturbing vehicle body sim object */
-    bool initialized; /* (--) Flag when model has been initialized */
+    bool initialized{ false}; /* (--) Flag when model has been initialized */
 
     /***************************************************************************************************
 Input file settings:
     NOTE: All rotational inputs are RPY and translational inputs are XYZ
 ***************************************************************************************************/
 public:
-    bool randomRates; /* (--) 
+    bool randomRates{ false}; /* (--) 
         Choice to randomize the new angular rate after each deadband transition */
     std::string portName; /* (--) 
         Name of vehicle mass point driving the lateral velocity requirements */
-    double driftDeadbandInput[3]; /* (rad) 
+    double driftDeadbandInput[3]{ 1.0, 1.0, 1.0}; /* (rad) 
         Deadband within which the Body frame will oscillate */
-    int randSeed; /* (--) 
+    int randSeed{ 1}; /* (--) 
         Seed value for srand() used in all randomizations; if using same seed and initial conditions
         between two randomized runs, the resulting prescribed motion will be the same; varying seed 
         to be utilized by Monte Carlo capability to achieve varying prescribed rotations */
-    double initPhase[3]; /* (rad) 
+    double initPhase[3]{ 0.0, 0.0, 0.0}; /* (rad) 
         Initial perturbed angular phase */
-    double maxDeltaLatVelDPInput[3]; /* (m/s)
+    double maxDeltaLatVelDPInput[3]{ 1.0, 1.0, 1.0}; /* (m/s)
         Maximum lateral velocity change of docking port for deadband transition; difference in 
         docking port lateral velocity approaching and leaving deadband limits are enforced to be 
         less than this value; limits expressed in the Docking Port frame; not utilized if not enforceLatVel */
-    double driftRateMaxInput[3]; /* (rad/s) 
+    double driftRateMaxInput[3]{ 1.0, 1.0, 1.0}; /* (rad/s) 
         Limit on Body frame rotation rate when inside deadbands */
-    double deadbandAccelInput[3]; /* (rad/s2) 
+    double deadbandAccelInput[3]{ 0.01, 0.01, 0.01}; /* (rad/s2) 
         Constant angular acceleration when smoothing deadband transitions; not utilized if not smoothing */
 
 /***************************************************************************************************
 Model specific variables:
 ***************************************************************************************************/
 protected:
-    bool active; /* (--) 
+    bool active{ false}; /* (--) 
         Flag; if submodel is active */
     jeod::Quaternion & quatBodyWrtRef; /* (--)
         Reference to attitude quaternion from Ref to Body frame updated for use in the 
         attitude manager model*/
-    double prescribedAng[3];/* (rad)
+    double prescribedAng[3]{ 0.0, 0.0, 0.0};/* (rad)
         Current presribed vehicle attitude angles (RPY) with respect to current simulation vehicle attitude */
     double (& driftRate)[3]; /* (rad/s)
         Current Euler angle rotation rate which is utilized to propagate the prescribed angle in the 
         current model call; updates to vehicle rotation rates occur after prescribed angles are applied
         so they do not result in additional vehicle rotations as vehicle state is propagated.  */
-    double momentArmDP[3]; /* (m)
+    double momentArmDP[3]{0.0, 0.0, 0.0}; /* (m)
         Moment arm between Body frame and Docking Port frame specified in Docking Port frame */
-    double T_DP_BODY[3][3]; /* (--)
+    double T_DP_BODY[3][3]{}; /* (--)
         Simulation provided transformation matrix from Docking Port to Body frame */
-    double deltaLatVelDP[3]; /* (m/s)
+    double deltaLatVelDP[3]{ 0.0, 0.0, 0.0}; /* (m/s)
         Difference in lateral velocity of the Docking Port frame at the next deadband transition */
-    double driftRateIn[3]; /* (rad/s)
+    double driftRateIn[3]{ 0.0, 0.0, 0.0}; /* (rad/s)
         Free drift rate that takes the vehicle to the incoming deadband limit. 
         It corresponds to the desired free drift rate during a deadbanding phase. */
-    double driftRateOut[3]; /* (rad/s)
+    double driftRateOut[3]{ 0.0, 0.0, 0.0}; /* (rad/s)
         Free drift rate that will take the vehicle outward from the current deadband limit. 
         It corresponds to the next desired free drift rate for the next deadbanding phase. */
     jeod::MassPointState DP_wrt_STR; /* (--)
         Docking Port frame information with respect to the Stuctural frame */
-    double driftDeadband[3]; /* (rad)
+    double driftDeadband[3]{ 0.0, 0.0, 0.0}; /* (rad)
         Protected version of driftDeadbandInput ensuring it is positive */
-    double maxDeltaLatVelDP[3]; /* (m/s)
+    double maxDeltaLatVelDP[3]{ 0.0, 0.0, 0.0}; /* (m/s)
         Protected version of maxDeltaLatVelDPInput ensuring it is positive */
-    double driftRateMax[3]; /* (rad/s)
+    double driftRateMax[3]{ 0.0, 0.0, 0.0}; /* (rad/s)
         Protected version of driftRateMaxInput ensuring it is positive */
-    bool smoothing; /* (--) 
+    bool smoothing{ false}; /* (--) 
         Protected; Choice to apply smoothing during deadband */
-    bool enforceLatVel; /* (--)
+    bool enforceLatVel{ false}; /* (--)
         Protected; Choice to enforce the lateral velocity velocity requirements of latVelDPMax */
-    double deadbandAccel[3]; /* (rad/s2)
+    double deadbandAccel[3]{ 0.0, 0.0, 0.0}; /* (rad/s2)
         Protected version of deadbandAccelInput ensuring it is positive */
-    double accelRegion[3]; /* (rad)
+    double accelRegion[3]{ 0.0, 0.0, 0.0}; /* (rad)
         Angular switch when the vehicle should accelerate/decelerate */
-    double accelInput[3]; /* (rad/s2)
+    double accelInput[3]{ 0.0, 0.0, 0.0}; /* (rad/s2)
         Acceleration input to update driftRate */
     std::mt19937 generator; /* (--)
         Random Engine Generator using Mersenne-Twister */
@@ -126,7 +126,7 @@ protected:
         Time step of the model. Provived by the attitude manager. */
     /* TODO A.Masset 26/03: 
         The flags below could be changed to an enumeration if one wants to add more drift modes */
-    int driftRateInSign[3]; /* (--)
+    int driftRateInSign[3]{0,0,0}; /* (--)
         Array of driftRateIn components signs */
 
 private:
@@ -141,11 +141,14 @@ Constructor/Destructor
 public:
     // Constructor
     PerturbModel( const double & timestep_in,
-                  jeod::DynBody & body,
+                  jeod::DynBody & body_in,
                   jeod::Quaternion & quatBodyWrtRef_out,
                   double (& w_BodyToRef_Body_out)[3]);
+    
+    PerturbModel(const PerturbModel& rhs) = delete;
+    PerturbModel & operator =(const PerturbModel& rhs) = delete;
     //Destructor
-    ~PerturbModel(void) {}
+    ~PerturbModel() = default;
     void initialize();
     void update();
 
@@ -162,10 +165,5 @@ protected:
     void compute_drift_rate();
     void lat_vel_check();
     void generate_moment_arms();
-
-private:
-    // Not implemented:
-    PerturbModel(const PerturbModel& rhs);
-    PerturbModel & operator =(const PerturbModel& rhs);
 };
 #endif
