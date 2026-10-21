@@ -210,12 +210,47 @@ CML_BinCounter::insert(double value)
   // Consider only values below upper edge and only if model passed sanity
   // check.
   if (bins_ready && value <= bins[nbin-1].bin_ceil) {
-    for (int ii = static_cast<int>(nbin) - 1; ii >= 0; ii--) {
-      const auto bin_index = static_cast<size_t>(ii);
-      if (value >= bins[bin_index].bin_floor) {
-        bins[bin_index].count++;
+    //ii-- is a post decrement. tests ii > 0, then decrements.
+    //so index ii runs from nbin - 1 to 0.
+    for (auto bin = bins.rbegin(), end = bins.rend(); bin != end; ++bin) {
+      if (value >= bin->bin_floor) {
+        bin->count++;
         return;
       }
     }
+  }
+}
+
+
+/*****************************************************************************
+Method: apply_tolerance
+Purpose:
+  Modifies the specified bin edges, shifting them down slightly.
+  The lower bin edge behaves as a closed end, so a value is in the bin if it
+  is >= lower_edge. To allow for numerical rounding / truncation, it may be
+  desirable in some circumstances to extend that boundary.
+  For example, if the boundaries are set at {0, 1, 2} then a value of 0.9999999
+  would be binned into the lower bin. It may be desirable to include values
+  arbitrarily close to 1.0 into the upper bin and doing so requires lowering
+  the bin edge to accommodate that desired allowance.
+*****************************************************************************/
+void
+CML_BinCounter::apply_tolerance(double tol)
+{
+  if (!bins_ready) {
+    CMLMessage::error( __FILE__,__LINE__,
+      "Cannot apply bin tolerance, bins not ready\n");
+    return;
+  }
+
+  for (size_t ii = 0; ii + 1 < nbin; ++ii) {
+    const double shifted_boundary = bins[ii].bin_ceil - tol;
+    bins[ii].bin_ceil = shifted_boundary;
+    bins[ii+1].bin_floor = shifted_boundary;
+  }
+
+  if (bins[0].bin_floor != std::numeric_limits<double>::lowest()) {
+    bins[0].bin_floor -= tol;
+    bins[nbin - 1].bin_ceil -= tol;
   }
 }
