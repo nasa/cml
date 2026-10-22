@@ -54,15 +54,15 @@ Notes:
   executing with the possibility of having multiple tests is negligible and
   simplifies the overall design.
 *****************************************************************************/
-template<typename T, size_t NumThresholds>
+template<typename DataType, std::size_t NumThresholds>
 class ThresholdInstantConstraint : public Constraint
 {
  protected:
-  const T & variable; /* (--)
+  const DataType & variable; /* (--)
     The variable being monitored for violation of the
     constraints. */
  public:
-  ConstraintTest_Threshold<T> tests[NumThresholds]; /* (--)
+  ConstraintTest_Threshold<DataType> tests[NumThresholds]; /* (--)
     The single Constraint-test for this constraint.
     Note -- cannot use a std::array here because Trick's checkpoint-restart
     prevents use of STL-arrays of templated instances.*/
@@ -71,15 +71,13 @@ class ThresholdInstantConstraint : public Constraint
   /*******************************************************************
   Constructor / Destructor
   ********************************************************************/
-  explicit ThresholdInstantConstraint (const T & var)
+  explicit ThresholdInstantConstraint (const DataType & var)
     :
-    Constraint(),
-    variable(var),
-    tests()
+    variable(var)
   {
     register_tests(tests);
   }
-  ThresholdInstantConstraint (const T & var,
+  ThresholdInstantConstraint (const DataType & var,
                               ConstraintSet & set)
     :
     ThresholdInstantConstraint (var)
@@ -141,17 +139,17 @@ Notes:
   base classes to SWIG.
   It is simpler to duplicate some content.
 *****************************************************************************/
-template<typename T, size_t NumThresholds>
+template<typename DataType, std::size_t NumThresholds>
 class ThresholdTimedConstraint : public Constraint
 {
  protected:
-  const T & variable; /* (--)
+  const DataType & variable; /* (--)
     The variable being monitored for violation of the
     constraints. */
   const double & delta_time; /* (s)
     Reference to the time-elapsed between calls to update this constraint.*/
  public:
-  ConstraintTest_ThresholdTimed<T> tests[NumThresholds]; /* (--)
+  ConstraintTest_ThresholdTimed<DataType> tests[NumThresholds]; /* (--)
     The single Constraint-test for this constraint.
     Note -- cannot use a std::array here because Trick's checkpoint-restart
     prevents use of STL-arrays of templated instances.*/
@@ -160,18 +158,16 @@ class ThresholdTimedConstraint : public Constraint
   /*******************************************************************
   Constructor / Destructor
   ********************************************************************/
-  ThresholdTimedConstraint (const T & variable_,
+  ThresholdTimedConstraint (const DataType & variable_,
                             const double & delta_time_)
     :
-    Constraint(),
     variable(variable_),
-    delta_time(delta_time_),
-    tests()
+    delta_time(delta_time_)
   {
     register_tests(tests);
   }
   /********************************************************************/
-  ThresholdTimedConstraint (const T & variable_,
+  ThresholdTimedConstraint (const DataType & variable_,
                             const double & delta_time_,
                             ConstraintSet & set)
     :
@@ -223,18 +219,18 @@ Notes:
   base classes to SWIG.
   It is simpler to duplicate some content.
 *****************************************************************************/
-template<typename T, size_t NumSpecs, size_t NumTests>
+template<typename DataType, std::size_t NumSpecs, std::size_t NumTests>
 class ThresholdTimedConstraintSpecData : public Constraint
 {
  protected:
-  const T & variable; /* (--)
+  const DataType & variable; /* (--)
     The variable being monitored for violation of the
     constraints. */
   const double & delta_time; /* (s)
     Reference to the time-elapsed between calls to update this constraint.*/
-  const size_t num_specs_available; /* (--)
+  static constexpr std::size_t num_specs_available {NumSpecs}; /* (--)
     Number of specifications available, as set at construction.*/
-  size_t num_specs; /* (--)
+  std::size_t num_specs {num_specs_available}; /* (--)
     Number of specifications to be used.
     Note -- the separation of num_specs from num_specs_available supports
     the use of a subset of the available specifications for generating the
@@ -242,7 +238,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
     num_specs and num_specs_available are initialized to the same value and
     num_specs can be modified via set_num_specs prior to initialization.*/
  public:
-  ConstraintTest_ThresholdTimed<T> tests[NumTests]; /* (--)
+  ConstraintTest_ThresholdTimed<DataType> tests[NumTests]; /* (--)
     The set of Constraint-tests for this constraint.
     Each test has a threshold value and a duration that, if the
     reference variable crosses the threshold for longer than
@@ -252,23 +248,23 @@ class ThresholdTimedConstraintSpecData : public Constraint
 
 
   // Configurations:
-  bool recover_quiet_violation; /* (--)
+  bool recover_quiet_violation {false}; /* (--)
     Flag that is copied to each test if populate_tests_from_arrays to
     indicate that quiet test-violations can be reset.*/
-  bool populate_tests_from_arrays; /* (--)
+  bool populate_tests_from_arrays {true}; /* (--)
     Flag indicating whether the test values should be populated directly by
     the user or indirectly by populating arrays and copying those data to the
     test data. If this option is set to false, the class becomes functionally
     equivalent to ThresholdTimedConstraintS.
     Default: true */
-  T threshold_spec[NumSpecs]; /* (--)
+  DataType threshold_spec[num_specs_available] {}; /* (--)
     Set of specified values for the thresholds of tests.
     If populate_tests_from_arrays, these values are used to populate the
     threshold values in the constraint-tests.
     If (NumSpecs == NumTests), these threshold_spec values are copied
     directly; otherwise, they will be interpolated to generate the threshold
     values covering the same domain but in a different number of steps. */
-  double time_spec[NumSpecs];  /* (s)
+  double time_spec[num_specs_available] {};  /* (s)
     Set of specified values for the associated duration before a
     numerical violation of the threshold becomes an actual violation of the
     constraint-test.
@@ -277,14 +273,14 @@ class ThresholdTimedConstraintSpecData : public Constraint
     If (NumSpecs == NumTests), these time_spec values are copied
     directly; Otherwise, they will be interpolated to generate the time_limit
     values covering the same range but in a different number of steps. */
-  bool use_linear_interpolation; /* (--)
+  bool use_linear_interpolation {true}; /* (--)
     Flag used only when interpolating time_limit values from time_spec
     values. Flag indicates whether the interpolation should be linear or
     logarithmic.
     Default: true (linear).*/
 
   // Outputs:
-  T test_violation_value; /* (--)
+  DataType test_violation_value {}; /* (--)
     The threshold value of (one of) the test that resulted in a violation.
     If multiple tests result in a violation, the value recorded here is that
     of the lowest indexed test.*/
@@ -292,24 +288,15 @@ class ThresholdTimedConstraintSpecData : public Constraint
   /*******************************************************************
   Constructor / Destructor
   ********************************************************************/
-  ThresholdTimedConstraintSpecData (const T & variable_,
+  ThresholdTimedConstraintSpecData (const DataType & variable_,
                                     const double & delta_time_)
     :
-    Constraint(),
     variable(variable_),
-    delta_time(delta_time_),
-    num_specs_available( NumSpecs),
-    num_specs( NumSpecs),
-    recover_quiet_violation(false),
-    populate_tests_from_arrays(true),
-    threshold_spec(),
-    time_spec(),
-    use_linear_interpolation(true),
-    test_violation_value()
+    delta_time(delta_time_)
   {
     register_tests(tests);
   }
-  ThresholdTimedConstraintSpecData (const T & variable_,
+  ThresholdTimedConstraintSpecData (const DataType & variable_,
                                     const double & delta_time_,
                                     ConstraintSet & set)
     :
@@ -328,7 +315,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
   Purpose:
     Sets the number of specification values.
   ***************************************************************************/
-  void set_num_specs( size_t val)
+  void set_num_specs( std::size_t val)
   {
     if ( !initialized &&
          val <= num_specs_available) {
@@ -382,7 +369,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
       /* if num-bins and num-specs are equal, just copy the spec values to
        * the tests.*/
       if (test_list.size() == num_specs) {
-        for (size_t ii = 0; ii < num_specs; ++ii) {
+        for (std::size_t ii = 0; ii < num_specs; ++ii) {
           tests[ii].threshold = threshold_spec[ii];
           tests[ii].time_limit = time_spec[ii];
         }
@@ -391,7 +378,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
        * If interpolation fails, initialization fails.*/
       else if (!interpolate_values()) {return;}
 
-      for (ConstraintTest_ThresholdTimed<T> & test : tests) {
+      for (ConstraintTest_ThresholdTimed<DataType> & test : tests) {
         test.recover_quiet_violation = recover_quiet_violation;
       }
     }
@@ -441,8 +428,8 @@ class ThresholdTimedConstraintSpecData : public Constraint
      * - use indices 0 and 1 to specify whether the data is increasing or
      *   decreasing and then check all other adjacent specified values. Check
      *   0->1 again to confirm they are not the same value */
-    int parameter_direction = (threshold_spec[1] > threshold_spec[0])? 1 : -1;
-    for (size_t ii = 1; ii < num_specs; ++ii) {
+    const int parameter_direction = (threshold_spec[1] > threshold_spec[0])? 1 : -1;
+    for (std::size_t ii = 1; ii < num_specs; ++ii) {
       if (parameter_direction * (threshold_spec[ii] - threshold_spec[ii-1])
                                                                      <= 0.0) {
         CMLMessage::error( __FILE__,__LINE__,
@@ -465,7 +452,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
      *         arithmetic if the constraint variable is an integer datatype.*/
     double threshold_resolution =
          (threshold_spec[num_specs-1] - threshold_spec[0])*1.0 / (test_list.size()-1);
-    for (size_t ii = 1; ii <= test_list.size()-2; ++ii) {
+    for (std::size_t ii = 1; ii <= test_list.size()-2; ++ii) {
       tests[ii].threshold = threshold_spec[0] + static_cast<double>(ii) * threshold_resolution;
     }
 
@@ -503,10 +490,10 @@ class ThresholdTimedConstraintSpecData : public Constraint
           (num_specs-1) and fraction 0 by definition.
         - The first and last test values have already been assigned.
         - The highest value of any other mapped-index is num_specs-2.*/
-    size_t mapped_ix[NumTests-1] {};
+    std::size_t mapped_ix[NumTests-1] {};
     mapped_ix[0] = 0; // unused spacer, we already have values for test-0.
-    size_t spec_ix=0;
-    for (size_t test_ix = 1; test_ix <= test_list.size()-2; ++test_ix) {
+    std::size_t spec_ix=0;
+    for (std::size_t test_ix = 1; test_ix <= test_list.size()-2; ++test_ix) {
       while( (spec_ix < num_specs-2) &&
              ((parameter_direction * tests[test_ix].threshold) >
               (parameter_direction * threshold_spec[spec_ix+1]))) {
@@ -524,8 +511,8 @@ class ThresholdTimedConstraintSpecData : public Constraint
          - subscript 0 references the spec value at the mapped-index,
          - subscript 1 references the next spec value after the mapped-index,
          - the non-subscripted values are the test values.*/
-      for (size_t test_ix = 1; test_ix <= test_list.size()-2; ++test_ix) {
-        const size_t map_ix = mapped_ix[test_ix];
+      for (std::size_t test_ix = 1; test_ix <= test_list.size()-2; ++test_ix) {
+        const std::size_t map_ix = mapped_ix[test_ix];
         const double frac = (tests[test_ix].threshold - threshold_spec[map_ix]) /
                             (threshold_spec[map_ix+1] -  threshold_spec[map_ix]);
         tests[test_ix].time_limit = time_spec[map_ix] +
@@ -572,8 +559,8 @@ class ThresholdTimedConstraintSpecData : public Constraint
         log_threshold_ratios[spec_ix] = std::log10( threshold_spec[spec_ix+1] /
                                                     threshold_spec[spec_ix]);
       }
-      for (size_t test_ix = 1; test_ix <= test_list.size()-2; ++test_ix) {
-        const size_t map_ix = mapped_ix[test_ix];
+      for (std::size_t test_ix = 1; test_ix <= test_list.size()-2; ++test_ix) {
+        const std::size_t map_ix = mapped_ix[test_ix];
         // Note -- div-0 protected: log_param_ratios=0 would require two
         // adjacent entries in threshold_spec to be equal. That is protected
         // against by ensuring that threshold_spec must be monotonic.

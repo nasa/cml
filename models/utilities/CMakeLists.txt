@@ -110,6 +110,7 @@ add_cml_tests(
 
     SOURCES
         constraint_check/test/constraint_class_test.cc
+        constraint_check/test/constraint_set_test.cc
         constraint_check/test/constraint_test_instant_violation_test.cc
         constraint_check/test/constraint_test_timed_violation_test.cc
         cml_message/test/cml_message_test.cc
