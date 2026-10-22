@@ -53,7 +53,7 @@ class IntervalInstantConstraint : public Constraint
   ********************************************************************/
   explicit IntervalInstantConstraint (const T & var)
     :
-    Constraint(NumIntervals),
+    Constraint(),
     variable(var),
     tests()
   {
@@ -83,7 +83,7 @@ class IntervalInstantConstraint : public Constraint
      * - INSIDE ALL intervals,
      * there's probably something wrong.*/
     if (initialized &&
-        (num_tests > 1) &&
+        (test_list.size() > 1) &&
         (violate_on_any_test ==
              (tests[0].get_violation_condition() == ConstraintEnum::Out))) {
       CMLMessage::warn( __FILE__,__LINE__,
@@ -147,7 +147,7 @@ class IntervalTimedConstraint : public Constraint
   IntervalTimedConstraint (const T & variable_,
                            const double & delta_time_)
     :
-    Constraint(NumIntervals),
+    Constraint(),
     variable(variable_),
     delta_time(delta_time_),
     tests()
@@ -181,7 +181,7 @@ class IntervalTimedConstraint : public Constraint
      * - INSIDE ALL intervals,
      * there's probably something wrong.*/
     if (initialized &&
-        (num_tests > 1) &&
+        (test_list.size() > 1) &&
         (violate_on_any_test ==
              (tests[0].get_violation_condition() == ConstraintEnum::Out))) {
       CMLMessage::warn( __FILE__,__LINE__,

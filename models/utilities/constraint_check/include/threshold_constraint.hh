@@ -73,7 +73,7 @@ class ThresholdInstantConstraint : public Constraint
   ********************************************************************/
   explicit ThresholdInstantConstraint (const T & var)
     :
-    Constraint(NumThresholds),
+    Constraint(),
     variable(var),
     tests()
   {
@@ -163,7 +163,7 @@ class ThresholdTimedConstraint : public Constraint
   ThresholdTimedConstraint (const T & variable_,
                             const double & delta_time_)
     :
-    Constraint(NumThresholds),
+    Constraint(),
     variable(variable_),
     delta_time(delta_time_),
     tests()
@@ -295,7 +295,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
   ThresholdTimedConstraintSpecData (const T & variable_,
                                     const double & delta_time_)
     :
-    Constraint(NumTests),
+    Constraint(),
     variable(variable_),
     delta_time(delta_time_),
     num_specs_available( NumSpecs),
@@ -355,13 +355,13 @@ class ThresholdTimedConstraintSpecData : public Constraint
   ***************************************************************************/
   void initialize() override
   {
-    if (num_specs == 0 || num_tests == 0) {
+    if (num_specs == 0 || test_list.size() == 0) {
       CMLMessage::error( __FILE__,__LINE__,
         "Cannot initialize a constraint with number of specifications\n"
         "or number of bins assigned to 0.\nInitialization failed.\n");
       return;
     }
-    if (num_specs == 1 && num_tests > 1) {
+    if (num_specs == 1 && test_list.size() > 1) {
       CMLMessage::error( __FILE__,__LINE__,
         "Cannot create multiple test points (bins) for a constraint defined\n"
         "with a single specification. Re-configure to require only a single\n"
@@ -369,10 +369,10 @@ class ThresholdTimedConstraintSpecData : public Constraint
         "support interpolation.\nInitialization failed.\n");
       return;
     }
-    if (num_tests == 1 && num_specs > 1) {
+    if (test_list.size() == 1 && num_specs > 1) {
       CMLMessage::warn( __FILE__,__LINE__,
         "A constraint was configured to use a single test point\n"
-        "(num_tests = 1) but with mutiple specification points.\n"
+        "(test_list.size() = 1) but with mutiple specification points.\n"
         "Only the first specification point will be used as the single "
         "test point.\n");
     }
@@ -381,7 +381,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
     if (populate_tests_from_arrays) {
       /* if num-bins and num-specs are equal, just copy the spec values to
        * the tests.*/
-      if (num_tests == num_specs) {
+      if (test_list.size() == num_specs) {
         for (size_t ii = 0; ii < num_specs; ++ii) {
           tests[ii].threshold = threshold_spec[ii];
           tests[ii].time_limit = time_spec[ii];
@@ -416,20 +416,20 @@ class ThresholdTimedConstraintSpecData : public Constraint
     tests[0].threshold  = threshold_spec[0];
     tests[0].time_limit = time_spec[0];
 
-    /* If there is only 1 constraint-test (i.e. num_tests=1),
+    /* If there is only 1 constraint-test (i.e. test_list.size()=1),
      * the one assignment is sufficient. */
-    if (num_tests == 1) { return true;}
+    if (test_list.size() == 1) { return true;}
     /* If there are only 2 constraint-tests, we use the last spec value for
      * the second test and are done without interpolating.*/
-    if (num_tests == 2) {
+    if (test_list.size() == 2) {
       tests[1].threshold  = threshold_spec[num_specs-1];
       tests[1].time_limit = time_spec[num_specs-1];
       return true;
     }
 
-    /* Otherwise (num_tests > 2):
+    /* Otherwise (test_list.size() > 2):
      *    Aside: therefore num_specs > 1; if num_specs==0 or num_specs==1
-                 and num_tests>1, the initialize() method would have already
+                 and test_list.size()>1, the initialize() method would have already
                  failed out.)
      * we will interpolate between the spec values to get the test values.
      * First, if there are more than 2 spec-threshold values (num_specs>2),
@@ -456,16 +456,16 @@ class ThresholdTimedConstraintSpecData : public Constraint
 
 
     // Copy the last spec-data set to the last test-data set.
-    tests[num_tests-1].threshold  = threshold_spec[num_specs-1];
-    tests[num_tests-1].time_limit = time_spec[num_specs-1];
+    tests[test_list.size()-1].threshold  = threshold_spec[num_specs-1];
+    tests[test_list.size()-1].time_limit = time_spec[num_specs-1];
 
     /* Make the test threshold values equally spaced between the
      * first and last spec threshold values.
      * Note -- using double datatype here to avoid problems with integer
      *         arithmetic if the constraint variable is an integer datatype.*/
     double threshold_resolution =
-         (threshold_spec[num_specs-1] - threshold_spec[0])*1.0 / (num_tests-1);
-    for (size_t ii = 1; ii <= num_tests-2; ++ii) {
+         (threshold_spec[num_specs-1] - threshold_spec[0])*1.0 / (test_list.size()-1);
+    for (size_t ii = 1; ii <= test_list.size()-2; ++ii) {
       tests[ii].threshold = threshold_spec[0] + static_cast<double>(ii) * threshold_resolution;
     }
 
@@ -490,7 +490,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
      * the data set is decreasing, its negative values are increasing.
 
      * We have three indices, so this can get confusing:
-     * - the test-index [0,num_tests-1] identifies which test is being
+     * - the test-index [0,test_list.size()-1] identifies which test is being
      *   addressed.
      * - the spec-index [0,num_specs-1] identifies which of the values from
      *   the spec arrays is being accessed.
@@ -499,14 +499,14 @@ class ThresholdTimedConstraintSpecData : public Constraint
 
      * Notes:
         - The first test (at index 0) will have spec-index 0 and fraction 0;
-        - The last test (at index num_tests-1) will have spec-index
+        - The last test (at index test_list.size()-1) will have spec-index
           (num_specs-1) and fraction 0 by definition.
         - The first and last test values have already been assigned.
         - The highest value of any other mapped-index is num_specs-2.*/
     size_t mapped_ix[NumTests-1] {};
     mapped_ix[0] = 0; // unused spacer, we already have values for test-0.
     size_t spec_ix=0;
-    for (size_t test_ix = 1; test_ix <= num_tests-2; ++test_ix) {
+    for (size_t test_ix = 1; test_ix <= test_list.size()-2; ++test_ix) {
       while( (spec_ix < num_specs-2) &&
              ((parameter_direction * tests[test_ix].threshold) >
               (parameter_direction * threshold_spec[spec_ix+1]))) {
@@ -524,7 +524,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
          - subscript 0 references the spec value at the mapped-index,
          - subscript 1 references the next spec value after the mapped-index,
          - the non-subscripted values are the test values.*/
-      for (size_t test_ix = 1; test_ix <= num_tests-2; ++test_ix) {
+      for (size_t test_ix = 1; test_ix <= test_list.size()-2; ++test_ix) {
         const size_t map_ix = mapped_ix[test_ix];
         const double frac = (tests[test_ix].threshold - threshold_spec[map_ix]) /
                             (threshold_spec[map_ix+1] -  threshold_spec[map_ix]);
@@ -572,7 +572,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
         log_threshold_ratios[spec_ix] = std::log10( threshold_spec[spec_ix+1] /
                                                     threshold_spec[spec_ix]);
       }
-      for (size_t test_ix = 1; test_ix <= num_tests-2; ++test_ix) {
+      for (size_t test_ix = 1; test_ix <= test_list.size()-2; ++test_ix) {
         const size_t map_ix = mapped_ix[test_ix];
         // Note -- div-0 protected: log_param_ratios=0 would require two
         // adjacent entries in threshold_spec to be equal. That is protected
