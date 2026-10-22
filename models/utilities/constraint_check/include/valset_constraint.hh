@@ -45,7 +45,7 @@ Purpose:
   The tests used in this constraint are set to be marked as violated
   immediately upon the variable violating the specified interval bounds.
 *****************************************************************************/
-template<typename T, size_t NumValSets>
+template<typename T, std::size_t NumValSets>
 class ValSetInstantConstraint : public Constraint
 {
  protected:
@@ -64,9 +64,7 @@ class ValSetInstantConstraint : public Constraint
   ********************************************************************/
   explicit ValSetInstantConstraint (const T & var)
     :
-    Constraint(NumValSets),
-    variable(var),
-    tests()
+    variable(var)
   {
     register_tests(tests);
   }
@@ -86,7 +84,7 @@ class ValSetInstantConstraint : public Constraint
      * - INSIDE ALL intervals,
      * there's probably something wrong.*/
     if (initialized &&
-        (num_tests > 1) &&
+        (test_list.size() > 1) &&
         (violate_on_any_test ==
              (tests[0].violation_condition == ConstraintEnum::Out))) {
       CMLMessage::warn( __FILE__,__LINE__,
@@ -128,7 +126,7 @@ Purpose:
   when the variable persistently violates the specified interval bounds for
   an assigned period of time.
 *****************************************************************************/
-template<typename T, size_t NumValSets>
+template<typename T, std::size_t NumValSets>
 class ValSetTimedConstraint : public Constraint
 {
  protected:
@@ -150,10 +148,8 @@ class ValSetTimedConstraint : public Constraint
   ValSetTimedConstraint (const T & variable_,
                          const double & delta_time_)
     :
-    Constraint(NumValSets),
     variable(variable_),
-    delta_time(delta_time_),
-    tests()
+    delta_time(delta_time_)
   {
     register_tests(tests);
   }
@@ -184,7 +180,7 @@ class ValSetTimedConstraint : public Constraint
      * - INSIDE ALL intervals,
      * there's probably something wrong.*/
     if (initialized &&
-        (num_tests > 1) &&
+        (test_list.size() > 1) &&
         (violate_on_any_test ==
              (tests[0].get_violation_condition() == ConstraintEnum::Out))) {
       CMLMessage::warn( __FILE__,__LINE__,

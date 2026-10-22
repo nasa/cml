@@ -7,32 +7,17 @@ LIBRARY DEPENDENCIES:
   ((cml/models/utilities/cml_message/src/cml_message.cc))
 
 PROGRAMMERS:
- (((Gary Turner) (OSR) (Jun 2023) (ANTARES)
-   (New, based on GNC_PAR grok_duration_check and grok-violation models))
+ (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )
 *******************************************************************************/
-
 #include "../include/constraint.hh"
 #include "../include/constraint_enum.hh"
 #include "../include/constraint_test.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <algorithm>
-#include <cstddef>
+#include <iterator>
 
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-Constraint::Constraint( size_t num_tests_)
-  :
-  num_tests(num_tests_)
-{}
-
-/*****************************************************************************
-Name: initialize
-Purpose:
-  Default sanity checks
-*****************************************************************************/
+// Verify that the model was configured correctly
 void
 Constraint::initialize()
 {
@@ -59,53 +44,39 @@ Constraint::initialize()
   initialized = true;
 }
 
-/*****************************************************************************
-Name: post_update
-Purpose:
-  Runs after the constraint-tests have been evaluated. Uses the status of
-  the ocnstraint-tests to set the status of the constraint.
-*****************************************************************************/
+// Determine the overall violation status of the constraint based on the violation
+// status of its constituent constraint-tests
 void
 Constraint::post_update()
 {
   bool new_violation_status = false; // local temporary measure of constraint status
-  // If configured with "Any", trip on the first test that is violated;
-  // record its index.
+  auto constraint_violated = [](const ConstraintTest* test) {return test->get_violation();};
+
   if (violate_on_any_test) {
-    // Step through by index because we want to record which test violated.
-    for (size_t ii = 0; ii < num_tests; ii++) {
-      if (test_list[ii]->get_violation()) {
-        test_violated_index = ii;
-        test_violated_time_limit = test_list[ii]->get_time_limit();
-        test_violated_threshold = test_list[ii]->get_threshold();
-        new_violation_status = true;
-        /* increment the count if this violation is not a holdover from the
-           previous cycle (violated is the copy held over from the previous
-           cycle). */
-        violation_count += static_cast<int>(!violated);
-        break;
-      }
+    // If configured with "Any", trip on the first test that is violated;
+    // record its index.
+    const auto failed_test = std::find_if(test_list.begin(), test_list.end(), constraint_violated);
+    if (failed_test != test_list.end()) {
+      test_violated_index = std::distance(test_list.begin(), failed_test);
+      test_violated_time_limit = (*failed_test)->get_time_limit();
+      test_violated_threshold = (*failed_test)->get_threshold();
+      new_violation_status = true;
     }
   }
-
-  // If configured with "All", require all test violations to trip the
-  // constraint violation. Start with an assumption that there is a
-  // violation, and correct that assumption as necessary:
   else {
-    new_violation_status = std::all_of(test_list.begin(), test_list.end(),
-      [](const auto& test) {return test->get_violation();});
-    /* increment the count if this violation is not a holdover from the
-       previous cycle (violated is the copy held over from the previous
-       cycle). */
-    violation_count += static_cast<int>(new_violation_status && !violated);
+    // If configured with "All", require all test violations to trip the
+    // constraint violation.
+    new_violation_status = std::all_of(test_list.begin(), test_list.end(), constraint_violated);
+  }
+
+  // Increment the count if this violation is not a holdover from the previous cycle.
+  if (new_violation_status && !violated) {
+    ++violation_count;
   }
   violated = new_violation_status;
 }
 
-/*****************************************************************************
-Name: activate
-Purpose: Activates the constraint and all of its enabled constraint-tests
-*****************************************************************************/
+// Activate the constraint and all of its enabled constraint-tests
 void
 Constraint::activate()
 {

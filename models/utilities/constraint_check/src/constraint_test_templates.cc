@@ -4,35 +4,31 @@ PURPOSE:
    (Provides the template specializations of the method query_equals)
 
 PROGRAMMERS:
- (((Gary Turner) (OSR) (Jun 2023) (ANTARES)
-   (New, based on GNC_PAR grok_duration_check and grok-violation models))
+ (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )
 *******************************************************************************/
 
 #include "../include/constraint_test_templates.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
-/*****************************************************************************
-Template specializations
-Purpose:
-  The default query_equals method tests whether variable == threshold.
-  This is a bad idea for floating-point variables (float, double), so the
-  query_equals method is specialized for the double and float versions of the
-  ConstraintTest_Threshold class-template such that variable is equal to
-  threshold if they are within equality_threshold of each other.
-*****************************************************************************/
+/**
+ * Template specialization for checking the equality of `double`s
+ */
 template<>
 bool ConstraintTest_Threshold<double>::query_equals( double variable) const
 {
-  return (MathUtils::is_within_abs_tolerance( variable,
-                                              threshold,
-                                              equality_threshold));
+  return MathUtils::is_within_abs_tolerance( variable,
+                                             threshold,
+                                             equality_threshold);
 }
 
+/**
+ * Template specialization for checking the equality of `float`s
+ */
 template<>
 bool ConstraintTest_Threshold<float>::query_equals( float variable) const
 {
-  return (MathUtils::is_within_abs_tolerance( static_cast<double>(variable),
-                                              static_cast<double>(threshold),
-                                              equality_threshold));
+  return MathUtils::is_within_abs_tolerance( static_cast<double>(variable),
+                                             static_cast<double>(threshold),
+                                             equality_threshold);
 }

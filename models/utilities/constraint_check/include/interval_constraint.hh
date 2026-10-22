@@ -34,15 +34,15 @@ Purpose:
   The tests used in this constraint are set to be marked as violated
   immediately upon the variable violating the specified interval bounds.
 *****************************************************************************/
-template<typename T, size_t NumIntervals>
+template<typename DataType, size_t NumIntervals>
 class IntervalInstantConstraint : public Constraint
 {
  protected:
-  const T & variable; /* (--)
+  const DataType & variable; /* (--)
     The variable being monitored for violation of the
     constraints. */
  public:
-  ConstraintTest_Interval<T> tests[NumIntervals]; /* (--)
+  ConstraintTest_Interval<DataType> tests[NumIntervals]; /* (--)
     The single Constraint-test for this constraint.
     Note -- cannot use a std::array here because Trick's checkpoint-restart
     prevents use of STL-arrays of templated instances.*/
@@ -51,23 +51,20 @@ class IntervalInstantConstraint : public Constraint
   /*******************************************************************
   Constructor / Destructor
   ********************************************************************/
-  explicit IntervalInstantConstraint (const T & var)
+  explicit IntervalInstantConstraint (const DataType & var)
     :
-    Constraint(NumIntervals),
-    variable(var),
-    tests()
+    variable(var)
   {
     register_tests(tests);
   }
   /*******************************************************************/
-  IntervalInstantConstraint (const T & var,
+  IntervalInstantConstraint (const DataType & var,
                              ConstraintSet & set)
     :
     IntervalInstantConstraint(var)
   {
     set.constraints.push_back(this);
   }
-  ~IntervalInstantConstraint() override = default;
   IntervalInstantConstraint( const IntervalInstantConstraint &) = delete;
   IntervalInstantConstraint & operator=( const IntervalInstantConstraint &) = delete;
 
@@ -83,7 +80,7 @@ class IntervalInstantConstraint : public Constraint
      * - INSIDE ALL intervals,
      * there's probably something wrong.*/
     if (initialized &&
-        (num_tests > 1) &&
+        (test_list.size() > 1) &&
         (violate_on_any_test ==
              (tests[0].get_violation_condition() == ConstraintEnum::Out))) {
       CMLMessage::warn( __FILE__,__LINE__,
@@ -125,17 +122,17 @@ Purpose:
   when the variable persistently violates the specified interval bounds for
   an assigned period of time.
 *****************************************************************************/
-template<typename T, size_t NumIntervals>
+template<typename DataType, size_t NumIntervals>
 class IntervalTimedConstraint : public Constraint
 {
  protected:
-  const T & variable; /* (--)
+  const DataType & variable; /* (--)
     The variable being monitored for violation of the
     constraints. */
   const double & delta_time; /* (s)
     Reference to the time-elapsed between calls to update this constraint.*/
  public:
-  ConstraintTest_IntervalTimed<T> tests[NumIntervals]; /* (--)
+  ConstraintTest_IntervalTimed<DataType> tests[NumIntervals]; /* (--)
     The single Constraint-test for this constraint.
     Note -- cannot use a std::array here because Trick's checkpoint-restart
     prevents use of STL-arrays of templated instances.*/
@@ -144,18 +141,16 @@ class IntervalTimedConstraint : public Constraint
   /*******************************************************************
   Constructor / Destructor
   ********************************************************************/
-  IntervalTimedConstraint (const T & variable_,
+  IntervalTimedConstraint (const DataType & variable_,
                            const double & delta_time_)
     :
-    Constraint(NumIntervals),
     variable(variable_),
-    delta_time(delta_time_),
-    tests()
+    delta_time(delta_time_)
   {
     register_tests(tests);
   }
   /*******************************************************************/
-  IntervalTimedConstraint (const T & variable_,
+  IntervalTimedConstraint (const DataType & variable_,
                            const double & delta_time_,
                            ConstraintSet & set)
     :
@@ -181,7 +176,7 @@ class IntervalTimedConstraint : public Constraint
      * - INSIDE ALL intervals,
      * there's probably something wrong.*/
     if (initialized &&
-        (num_tests > 1) &&
+        (test_list.size() > 1) &&
         (violate_on_any_test ==
              (tests[0].get_violation_condition() == ConstraintEnum::Out))) {
       CMLMessage::warn( __FILE__,__LINE__,
