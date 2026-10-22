@@ -5,6 +5,15 @@
 
 namespace {
 
+// Test the getter methods for the base ConstraintTest class.
+TEST(ConstraintTest, Getters) {
+    // Note that we need to use a concrete implementation here since ConstraintTest
+    // is pure virtual.
+    const ConstraintTest_Interval<int> article;
+    EXPECT_EQ(article.get_time_limit(), 0.0);
+    EXPECT_EQ(article.get_threshold(), 0.0);
+}
+
 // Test that no violation is reported if the model is inactive.
 TEST(ConstraintTestThreshold, Inactive) {
     ConstraintTest_Threshold<int> article;
@@ -43,6 +52,10 @@ TEST(ConstraintTestThreshold, TestViolation) {
     double_test.set_violation_condition(ConstraintEnum::EQ);
     float_test.threshold = 3.0f;
     float_test.set_violation_condition(ConstraintEnum::EQ);
+
+    EXPECT_EQ(int_test.get_threshold(), 3);
+    EXPECT_EQ(double_test.get_threshold(), 3.0);
+    EXPECT_EQ(float_test.get_threshold(), 3.0f);
 
     int_test.initialize();
     double_test.initialize();

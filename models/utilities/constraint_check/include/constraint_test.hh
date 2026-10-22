@@ -66,11 +66,6 @@ class ConstraintTest
    */
   virtual bool initialize() = 0;
 
-  /**
-   * Update the counter tracking the number of unique violations
-   */
-  void count_violations();
-
   /* Note -- get_time_limit and get_threshold are needed at the top level
      because they are called for all constraint-tests that show a violation
      within a constraint. They are meaningless for constraint-test types that
@@ -131,6 +126,11 @@ class ConstraintTest
 
  protected:
   /**
+   * Update the counter tracking the number of unique violations
+   */
+  void count_violations();
+
+  /**
    * Check that the model configuration is valid for a threshold-based constraint test
    */
   void initialize_threshold();
@@ -175,7 +175,7 @@ class ConstraintTestTimed : public ConstraintTest
  protected:
   bool numerical_violation{false}; /**< (--)
     An interim violation-flag. This identifies whether the numerical
-    comparison test indicates a violation.
+    comparison test indicates a violation this cycle.
     The inherited violation flag is repurposed to represent a numerical
     violation with sufficient persistence. */
   bool existing_numerical_violation{false}; /**< (--)

@@ -5,11 +5,13 @@ PURPOSE:
     a domain specification and duration constraint.)
 
 LIBRARY DEPENDENCY:
-  ((../src/constraint_test_timed_templates.cc)
+  (
+   (../src/constraint_test_timed_templates.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc)
+  )
 
 PROGRAMMERS:
- (((Gary Turner) (OSR) (Jun 2023) (ANTARES)
-   (New, based on GNC_PAR grok_duration_check and grok-violation models))
+ (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )
 *******************************************************************************/
 #ifndef CML_CONSTRAINT_TEST_TIMED_TEMPLATES_HH
@@ -21,6 +23,7 @@ PROGRAMMERS:
 #include "constraint_enum.hh"
 #include "constraint_test.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 /*****************************************************************************
 Notes:
@@ -30,42 +33,43 @@ Notes:
    ConstraintTest and ConstraintTestTimed. Inheritance from these two
    classes into the constraint-test template-classes has to be duplicated to
    avoid complications of inheriting from a class-template (which Trick-SWIG
-   does not suppoort well). Consequently, there is significant ismilarity
+   does not support well). Consequently, there is significant similarity
    between this file and constraint_test_templates.hh (which defines
    the class-templates inheriting from ConstraintTest).
- - By settting the flag "use_timer" to false, the class-templates defined
+ - By setting the flag "use_timer" to false, the class-templates defined
    herein will function identically to those found in
    constraint_test_templates.hh, making those somewhat redundant. However,
-   these templates carry significant additional overhead so  it was decided
+   these templates carry significant additional overhead so it was decided
    to keep both timed and non-timed constraint-tests defined to provide a
    low-overhead implementation for situations in which timing is not needed.
 *****************************************************************************/
 
-
-/*****************************************************************************
-Name: ConstraintTest_ThresholdTimed
-Purpose:
-  A constraint test evaluating the variable against a threshold
-  with violation occurring when the threshold has been exceeded for a
-  specified interval of time.
-*****************************************************************************/
-template <typename T>
+/**
+ * A constraint test which evaluates a variable against a threshold value
+ * over a period of time
+ *
+ * Configured by selecting the specific comparison behavior from @ref ConstraintEnum,
+ * such as greater-than, less-than, equal-to, etc.
+ *
+ * @tparam DataType The data type of the threshold
+ */
+template <typename DataType>
 class ConstraintTest_ThresholdTimed : public ConstraintTestTimed
 {
  public:
-  T threshold; /* (--)
-    The threshold value that, if crossed, will trigger a domain violation.*/
+  DataType threshold {}; /**< (--)
+    The threshold value that, if crossed, will trigger a domain violation. */
 
-  /***************************************************************************
-  * Constructor/Destructor
-  ***************************************************************************/
+  /**
+   * Constructor
+   */
   ConstraintTest_ThresholdTimed() = default;
-  ~ConstraintTest_ThresholdTimed() override = default;
 
-  /***************************************************************************
-  * Name: initialize
-  * Purpose: checks for configuration.
-  ***************************************************************************/
+  /**
+   * Verify that the model has been configured correctly
+   *
+   * @return Always `true`
+   */
   bool initialize() override
   {
     initialize_threshold();
@@ -73,11 +77,18 @@ class ConstraintTest_ThresholdTimed : public ConstraintTestTimed
     return true;
   }
 
-  /****************************************************************************
-  * test_violation
-  * Purpose: evaluates for violation of the constraint.
-  ****************************************************************************/
-  bool test_violation (T variable,
+  /**
+   * Evaluate whether the constraint has been violated
+   *
+   * @param variable[in] The value being tested
+   * @param delta_time[in] Simulation job execution period
+   *
+   * @return `true` if the constraint was violated
+   *
+   * @note If the model is not @ref active, always returns `false` even if the constraint
+   *       is technically violated.
+   */
+  bool test_violation (DataType variable,
                        double delta_time)
   {
     if (!active) { return false;}
@@ -101,6 +112,9 @@ class ConstraintTest_ThresholdTimed : public ConstraintTestTimed
     case ConstraintEnum::LE:
       numerical_violation = (variable <= threshold);
       break;
+    case ConstraintEnum::In:
+    case ConstraintEnum::Out:
+    case ConstraintEnum::Undefined:
     default:
       CMLMessage::error( __FILE__,__LINE__,
         "Invalid setting of numerical_violation_condition: ",
@@ -112,28 +126,29 @@ class ConstraintTest_ThresholdTimed : public ConstraintTestTimed
     } else {
       violation = numerical_violation;
     }
+    count_violations();
     return violation;
   }
 
-    /****************************************************************************
-  * get_threshold
-  * Purpose: Returns the threshold, cast to double, for logging purposes.
-  ****************************************************************************/
+  /**
+   * Return the threshold being tested against
+   *
+   * @return @ref threshold casted to `double`
+   * @pre The data type of @ref threshold must be convertible to `double`
+   */
   double get_threshold() const override
   {
     return static_cast<double>(threshold);
   }
 
-  /****************************************************************************
-  * query_equals
-  * Purpose: evaluates (variable == threshold)
-  * Note: This method is specialized for datatypes float and double to avoid
-  *       testing exact equality of two floating-point numbers.
-  *       Template specializations have to go into a src file or Trick gets
-  *       confused.
-  ****************************************************************************/
  private:
-  bool query_equals( T variable) const
+  /**
+   * @return `true` if variable is equal to the @ref threshold
+   * @note This method is specialized for floating-point types. Rather than doing a
+   *       direct equality check, @ref equality_threshold is used to compare that
+   *       the values are close enough.
+   */
+  bool query_equals( DataType variable) const
   {
     return variable == threshold;
   }
@@ -142,47 +157,51 @@ class ConstraintTest_ThresholdTimed : public ConstraintTestTimed
 template<> bool ConstraintTest_ThresholdTimed<double>::query_equals(double variable) const;
 template<> bool ConstraintTest_ThresholdTimed<float>::query_equals(float variable) const;
 
-
-/*****************************************************************************
-Name: ConstraintTest_IntervalTimed
-Purpose:
-  Evaluates the variable for being within (or without) a specified interval.
-  with violation occurring when the threshold has been exceeded for a
-  specified interval of time.
-*****************************************************************************/
-template <typename T>
+/**
+ * A constraint test which evaluates whether a value is contained within an interval
+ * over a period of time
+ *
+ * Configured by selecting the specific comparison behavior from
+ * @ref ConstraintEnum::IntervalBounds, such as a closed-closed interval, closed-open
+ * interval, etc.
+ *
+ * @tparam DataType The data type of the interval
+ */
+template <typename DataType>
 class ConstraintTest_IntervalTimed : public ConstraintTestTimed
 {
  public:
-  T lower_bound {0}; /* (--)
-    The threshold value that, if crossed, will trigger a domain violation.*/
-  T upper_bound {0}; /* (--)
-  */
-  ConstraintEnum::IntervalBounds interval_bounds{ConstraintEnum::ClosedClosed};
+  DataType lower_bound {0}; /**< (--)
+    The lower bound of the interval that, if crossed, will trigger a domain
+    violation. */
+  DataType upper_bound {0}; /**< (--)
+    The upper bound of the interval that, if crossed, will trigger a domain
+    violation. */
+  ConstraintEnum::IntervalBounds interval_bounds{ConstraintEnum::ClosedClosed}; /**<
+    Option for how to treat a value at the edges of the interval. */
 
-  /***************************************************************************
-  * Constructor/Destructor
-  ***************************************************************************/
+  /**
+   * Constructor
+   */
   ConstraintTest_IntervalTimed() = default;
-  ~ConstraintTest_IntervalTimed() override = default;
 
-  /***************************************************************************
-  * Name: initialize
-  * Purpose: checks for configuration.
-  ***************************************************************************/
+  /**
+   * Verify that the model has been configured correctly
+   *
+   * If the @ref upper_bound and @ref lower_bound are within the @ref equality_threshold
+   * (i.e., too close together), the model is not configured properly.
+   *
+   * @return `true` if the configuration is valid
+   */
   bool initialize() override
   {
-    /* Note: cannot genericize the upper/lower bounds checks because they
-     * require the templated data types.*/
     if (upper_bound < lower_bound) {
-      T temporary = upper_bound;
-      upper_bound = lower_bound;
-      lower_bound = temporary;
+      std::swap(upper_bound, lower_bound);
     }
 
-    if (upper_bound == lower_bound) {
+    if (MathUtils::is_within_abs_tolerance(upper_bound, lower_bound, static_cast<DataType>(equality_threshold))) {
       CMLMessage::error( __FILE__,__LINE__,
-        "Cannot initialize an interval constraint-test with a \n"
+        "Cannot initialize an interval constraint-test with a\n"
         "zero-width interval. Bounds are set to:\n",
         lower_bound," and ",upper_bound,".\n"
         "Initialization failed.\n");
@@ -193,16 +212,28 @@ class ConstraintTest_IntervalTimed : public ConstraintTestTimed
     return true;
   }
 
-  /****************************************************************************
-  * test_violation
-  * Purpose: evaluates for violation of the constraint.
-  ****************************************************************************/
-  bool test_violation (T variable,
+  /**
+   * Evaluate whether the constraint has been violated
+   *
+   * Checks for whether @ref variable is included within the specified upper and lower
+   * bounds. This check is combined with the configuration for what determines a violation
+   * (i.e., whether being inside or outside the interval constitutes a violation) to
+   * determine the violation status.
+   *
+   * @param variable[in] The value being tested
+   * @param delta_time[in] Simulation job execution period
+   *
+   * @return `true` if the constraint was violated
+   *
+   * @note If the model is not @ref active, always returns `false` even if the constraint
+   *       is technically violated.
+   */
+  bool test_violation (DataType variable,
                        double delta_time)
   {
     if (!active) { return false;}
 
-    bool in_interval;
+    bool in_interval = false;
     switch (interval_bounds) {
     case ConstraintEnum::ClosedClosed:
       in_interval = (variable >= lower_bound) && (variable <= upper_bound);
@@ -225,40 +256,42 @@ class ConstraintTest_IntervalTimed : public ConstraintTestTimed
     } else {
       violation = (in_interval == (violation_condition == ConstraintEnum::In));
     }
+    count_violations();
     return violation;
   }
 };
 
-
-/*****************************************************************************
-Name: ConstraintTest_ValSetTimed
-Purpose:
-  Evaluates the variable against a set of allowable (or non-allowable) values
-  with violation occurring when the threshold has been exceeded for a
-  specified interval of time.
-*****************************************************************************/
-template <typename T>
+/**
+ * A constraint test which evaluates whether a value is contained within a set of
+ * predetermined values over a period of time
+ *
+ * @tparam DataType The data type of the set of values to test against
+ */
+template <typename DataType>
 class ConstraintTest_ValSetTimed : public ConstraintTestTimed
 {
  public:
-  std::list<T> values; /* (--)
-    The */
+  std::list<DataType> values; /**< (--)
+    The values against which the variable under test is compared against. */
 
-  /***************************************************************************
-  * Constructor/Destructor
-  ***************************************************************************/
+  /**
+   * Constructor
+   */
   ConstraintTest_ValSetTimed() = default;
-  ~ConstraintTest_ValSetTimed() override = default;
 
-  /***************************************************************************
-  * Name: initialize
-  * Purpose: checks for configuration.
-  ***************************************************************************/
+  /**
+   * Verify that the model has been configured correctly
+   *
+   * If no values have been defined to test against in @ref values, the configuration
+   * is invalid.
+   *
+   * @return `true` if the configuration is valid
+   */
   bool initialize() override
   {
     if (values.empty()) {
       CMLMessage::error( __FILE__,__LINE__,
-        "Cannot initialize a value-set constraint-test with an empty \n"
+        "Cannot initialize a value-set constraint-test with an empty\n"
         "set of values to test against.\nInitialization failed.\n");
       return false;
     }
@@ -267,26 +300,32 @@ class ConstraintTest_ValSetTimed : public ConstraintTestTimed
     return true;
   }
 
-  /****************************************************************************
-  * test_violation
-  * Purpose:
-  *   evaluates for violation of the constraint. Checks for whether the
-  *   variable (provided in the argument) value is equal to one of the values
-  *   in the "values" list. The result of this test is combined with the
-  *   configuration for what constitutes a violation (i.e. violation if it is
-  *   in the list vs. violation if it is not) to determine whether the
-  *   provided values constitutes a violation.
-  ****************************************************************************/
-  bool test_violation (T variable,
+  /**
+   * Evaluate whether the constraint has been violated
+   *
+   * Checks for whether variable is equal to one of the values in @ref values. The
+   * result of this test is combined with the configuration for what constitutes a
+   * violation (i.e., violation if the value is contained in the list or if the
+   * value is not contained in the list) to determine the violation status.
+   *
+   * @param variable[in] The value being tested
+   * @param delta_time[in] Simulation job execution period
+   *
+   * @return `true` if the constraint was violated
+   *
+   * @note If the model is not @ref active, always returns `false` even if the constraint
+   *       is technically violated.
+   */
+  bool test_violation (DataType variable,
                        double delta_time)
   {
     if (!active) { return false;}
 
-    /* Check each of the "values" list elements until a match is found using
-     * any_of. If no match is found, in_set is set to false.*/
-    bool in_set =
+    // TODO Nino Tarantino 10/21/26: should use query_equals like ConstraintTest_Threshold
+    // for floating point types.
+    const bool in_set =
       std::any_of( values.begin(), values.end(),
-        [variable](const T & val_) {return (variable == val_);});
+        [variable](const DataType & val_) {return (variable == val_);});
 
     if (use_timer) {
       numerical_violation =
@@ -295,6 +334,7 @@ class ConstraintTest_ValSetTimed : public ConstraintTestTimed
     } else {
       violation = (in_set == (violation_condition == ConstraintEnum::In));
     }
+    count_violations();
     return violation;
   }
 };

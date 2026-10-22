@@ -50,7 +50,7 @@ template <typename DataType>
 class ConstraintTest_Threshold : public ConstraintTest
 {
  public:
-  DataType threshold; /**< (--)
+  DataType threshold {}; /**< (--)
     The threshold value that, if crossed, will trigger a domain violation. */
 
   /**
@@ -59,10 +59,10 @@ class ConstraintTest_Threshold : public ConstraintTest
   ConstraintTest_Threshold() = default;
 
   /**
-  * Verify that the model has been configured correctly
-  *
-  * @return Always `true`
-  */
+   * Verify that the model has been configured correctly
+   *
+   * @return Always `true`
+   */
   bool initialize() override
   {
     initialize_threshold();
@@ -72,6 +72,7 @@ class ConstraintTest_Threshold : public ConstraintTest
   /**
    * Evaluate whether the constraint has been violated
    *
+   * @param variable[in] The value being tested
    * @return `true` if the constraint was violated
    *
    * @note If the model is not @ref active, always returns `false` even if the constraint
@@ -109,6 +110,7 @@ class ConstraintTest_Threshold : public ConstraintTest
         violation_condition,"\nDeactivating condition test.\n");
       active = false;
     }
+    count_violations();
     return violation;
   }
 
@@ -182,7 +184,7 @@ class ConstraintTest_Interval : public ConstraintTest
 
     if (MathUtils::is_within_abs_tolerance(upper_bound, lower_bound, static_cast<DataType>(equality_threshold))) {
       CMLMessage::error( __FILE__,__LINE__,
-        "Cannot initialize an interval constraint-test with a \n"
+        "Cannot initialize an interval constraint-test with a\n"
         "zero-width interval. Bounds are set to:\n",
         lower_bound," and ",upper_bound," with equality threshold\n",
         equality_threshold,". Initialization failed.\n");
@@ -199,6 +201,8 @@ class ConstraintTest_Interval : public ConstraintTest
    * bounds. This check is combined with the configuration for what determines a violation
    * (i.e., whether being inside or outside the interval constitutes a violation) to
    * determine the violation status.
+   *
+   * @param variable[in] The value being tested
    *
    * @return `true` if the constraint was violated
    *
@@ -225,6 +229,7 @@ class ConstraintTest_Interval : public ConstraintTest
       break;
     }
     violation = (in_interval == (violation_condition == ConstraintEnum::In));
+    count_violations();
     return violation;
   }
 };
@@ -275,6 +280,8 @@ class ConstraintTest_ValSet : public ConstraintTest
    * violation (i.e., violation if the value is contained in the list or if the
    * value is not contained in the list) to determine the violation status.
    *
+   * @param variable[in] The value being tested
+   *
    * @return `true` if the constraint was violated
    *
    * @note If the model is not @ref active, always returns `false` even if the constraint
@@ -291,6 +298,7 @@ class ConstraintTest_ValSet : public ConstraintTest
         [&variable](const DataType & val_) {return (variable == val_);});
 
     violation = (in_set == (violation_condition == ConstraintEnum::In));
+    count_violations();
     return violation;
   }
 };
