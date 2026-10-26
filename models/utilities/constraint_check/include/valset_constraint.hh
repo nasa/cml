@@ -3,9 +3,13 @@
 PURPOSE:
    (Define constraints for checking against sim variables)
 
+LIBRARY DEPENDENCY:
+   (
+    (cml/models/utilities/cml_message/src/cml_message.cc)
+   )
+
 PROGRAMMERS:
- (((Gary Turner) (OSR) (Jun 2023) (ANTARES)
-   (New, based on GNC_PAR grok_duration_check and grok-violation models))
+ (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )
 *******************************************************************************/
 #ifndef CML_VALSET_CONSTRAINT_HH
@@ -32,50 +36,59 @@ PROGRAMMERS:
  *      templated away, these three files can be merged.
 */
 
-/*****************************************************************************
-Name: ValSetInstantConstraint
-Purpose:
-  Uses the interval constraint tests, which are violated when the variable
-  is either within or without a specified interval.
-  Combining these tests typically results in a constraint violation when
-  the variable is either:
-  - within any of a set of forbidden intervals, or
-  - without all of a set of permissible intervals
-
-  The tests used in this constraint are set to be marked as violated
-  immediately upon the variable violating the specified interval bounds.
-*****************************************************************************/
-template<typename T, std::size_t NumValSets>
+/**
+ * Uses the interval constraint tests, which are violated when the variable
+ * is either within or without a specified interval
+ *
+ * Combining these tests typically results in a constraint violation when
+ * the variable is either:
+ * - within any of a set of forbidden intervals, or
+ * - without all of a set of permissible intervals
+ *
+ * The tests used in this constraint are set to be marked as violated
+ * immediately upon the variable violating the specified interval bounds.
+ *
+ * @tparam DataType Data type of the variable being monitored
+ * @tparam NumValSets Number of value-set constraint tests which constitute
+ *                    this constraint
+ */
+template<typename DataType, std::size_t NumValSets>
 class ValSetInstantConstraint : public Constraint
 {
  protected:
-  const T & variable; /* (--)
-    The variable being monitored for violation of the
-    constraints. */
+  const DataType & variable; /**< (--)
+    The variable being monitored for violation of the constraints. */
  public:
-  ConstraintTest_ValSet<T> tests[NumValSets]; /* (--)
+  ConstraintTest_ValSet<DataType> tests[NumValSets]; /**< (--)
     The single Constraint-test for this constraint.
     Note -- cannot use a std::array here because Trick's checkpoint-restart
-    prevents use of STL-arrays of templated instances.*/
+    prevents use of STL-arrays of templated instances. */
 
-
-  /*******************************************************************
-  Constructor / Destructor
-  ********************************************************************/
-  explicit ValSetInstantConstraint (const T & var)
+  /**
+   * Construct the constraint and register its tests with the base class
+   *
+   * @param var[in] Reference to the variable being monitored
+   */
+  explicit ValSetInstantConstraint (const DataType & var)
     :
     variable(var)
   {
     register_tests(tests);
   }
-  ~ValSetInstantConstraint() override = default;
+
+  /**
+   * Copy constructor deleted
+   */
   ValSetInstantConstraint( const ValSetInstantConstraint &) = delete;
+
+  /**
+   * Copy assignment operator deleted
+   */
   ValSetInstantConstraint & operator=( const ValSetInstantConstraint &) = delete;
 
-  /***************************************************************************
-  * Name: initialize
-  * Purpose: sanity checks
-  ***************************************************************************/
+  /**
+   * Perform sanity checks
+   */
   void initialize() override
   {
     Constraint::initialize();
@@ -86,7 +99,7 @@ class ValSetInstantConstraint : public Constraint
     if (initialized &&
         (test_list.size() > 1) &&
         (violate_on_any_test ==
-             (tests[0].violation_condition == ConstraintEnum::Out))) {
+             (tests[0].get_violation_condition() == ConstraintEnum::Out))) {
       CMLMessage::warn( __FILE__,__LINE__,
         "Possible mismatch on constraint ",name,
         "\nbetween the violate_on_any_test flag (", violate_on_any_test,
@@ -94,10 +107,10 @@ class ValSetInstantConstraint : public Constraint
         ").\nCheck configuration.");
     }
   }
-  /***************************************************************************
-  * Name: update
-  * Purpose: Main executable of this constraint.
-  ***************************************************************************/
+
+  /**
+   * Check each constituent constraint-test for violations
+   */
   void update() override
   {
     if (!active) {return;}
@@ -109,43 +122,47 @@ class ValSetInstantConstraint : public Constraint
   }
 };
 
-
-
-
-/*****************************************************************************
-Name: ValSetTimedConstraint
-Purpose:
-  Uses the interval constraint tests, which are violated when the variable
-  is either within or without a specified interval.
-  Combining these tests typically results in a constraint violation when
-  the variable is either:
-  - within any of a set of forbidden intervals, or
-  - without all of a set of permissible intervals
-
-  The tests used in this constraint are set to be marked as violated
-  when the variable persistently violates the specified interval bounds for
-  an assigned period of time.
-*****************************************************************************/
-template<typename T, std::size_t NumValSets>
+/**
+ * Uses the interval constraint tests, which are violated when the variable
+ * is either within or without a specified interval
+ *
+ * Combining these tests typically results in a constraint violation when
+ * the variable is either:
+ * - within any of a set of forbidden intervals, or
+ * - without all of a set of permissible intervals
+ *
+ * The tests used in this constraint are set to be marked as violated
+ * when the variable persistently violates the specified interval bounds for
+ * an assigned period of time.
+ *
+ * @tparam DataType Data type of the variable being monitored
+ * @tparam NumValSets Number of value-set constraint tests which constitute
+ *                    this constraint
+ */
+template<typename DataType, std::size_t NumValSets>
 class ValSetTimedConstraint : public Constraint
 {
  protected:
-  const T & variable; /* (--)
-    The variable being monitored for violation of the
-    constraints. */
-  const double & delta_time; /* (s)
-    Reference to the time-elapsed between calls to update this constraint.*/
+  const DataType & variable; /**< (--)
+    The variable being monitored for violation of the constraints. */
+  const double & delta_time; /**< (s)
+    Reference to the time-elapsed between calls to update this constraint. */
  public:
-  ConstraintTest_ValSetTimed<T> tests[NumValSets]; /* (--)
+  ConstraintTest_ValSetTimed<DataType> tests[NumValSets]; /**< (--)
     The single Constraint-test for this constraint.
     Note -- cannot use a std::array here because Trick's checkpoint-restart
-    prevents use of STL-arrays of templated instances.*/
+    prevents use of STL-arrays of templated instances. */
 
-
-  /*******************************************************************
-  Constructor / Destructor
-  ********************************************************************/
-  ValSetTimedConstraint (const T & variable_,
+  /**
+   * Construct the constraint and register its tests with the base class
+   *
+   * @param variable_[in] Reference to the variable being monitored
+   * @param delta_time_[in] Reference to the update period of this model
+   *
+   * @warning The lifetime of @ref delta_time_ must be at least as long as
+   *          this object. A reference to it is stored internally.
+   */
+  ValSetTimedConstraint (const DataType & variable_,
                          const double & delta_time_)
     :
     variable(variable_),
@@ -153,8 +170,19 @@ class ValSetTimedConstraint : public Constraint
   {
     register_tests(tests);
   }
-  /*******************************************************************/
-  ValSetTimedConstraint (const T & variable_,
+
+  /**
+   * Construct the constraint, register its tests with the base class, and register
+   * the constraint with a constraint-set
+   *
+   * @param variable_[in] Reference to the variable being monitored
+   * @param delta_time_[in] Reference to the update period of this class
+   * @param set[out] Constraint set which manages this constraint
+   *
+   * @warning The lifetime of @ref delta_time_ must be at least as long as
+   *          this object. A reference to it is stored internally.
+   */
+  ValSetTimedConstraint (const DataType & variable_,
                          const double & delta_time_,
                          ConstraintSet & set)
     :
@@ -164,8 +192,14 @@ class ValSetTimedConstraint : public Constraint
     set.constraints.push_back(this);
   }
 
-  ~ValSetTimedConstraint() override = default;
+  /**
+   * Copy constructor deleted
+   */
   ValSetTimedConstraint( const ValSetTimedConstraint &) = delete;
+
+  /**
+   * Copy assignment operator deleted
+   */
   ValSetTimedConstraint & operator=( const ValSetTimedConstraint &) = delete;
 
   /***************************************************************************
@@ -190,10 +224,10 @@ class ValSetTimedConstraint : public Constraint
         ").\nCheck configuration.");
     }
   }
-  /***************************************************************************
-  * Name: update
-  * Purpose: Main executable of this constraint.
-  ***************************************************************************/
+
+  /**
+   * Check each constituent constraint-test for violations
+   */
   void update() override
   {
     if (!active) {return;}
