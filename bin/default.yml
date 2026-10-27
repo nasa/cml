@@ -1359,6 +1359,15 @@ SIM_gust_gust:
       compare:
       - models/environment/atmos/gust/verif/SIM_gust/RUN_6_change_direction/log_verif.csv
         vs. models/environment/atmos/gust/verif/SIM_gust/verif_data/RUN_6_change_direction/log_verif.csv
+SIM_iir_filter_utils_math_utils:
+  model_dir: models/utilities/math_utils
+  path: models/utilities/math_utils/verif/SIM_iir_filter_utils
+  build_args: CML_OFFLINE_BUILD=1
+  runs:
+    RUN_user_defined/input.py:
+      compare:
+      - models/utilities/math_utils/verif/SIM_iir_filter_utils/RUN_user_defined/log_iir_filter_test.csv
+        vs. models/utilities/math_utils/verif/SIM_iir_filter_utils/verif_data/RUN_user_defined/log_iir_filter_test.csv
 SIM_initial_propagation_state_initialize:
   model_dir: models/dynamics/state_initialize/state_initialize
   path: models/dynamics/state_initialize/state_initialize/verif/SIM_initial_propagation
@@ -1889,6 +1898,35 @@ SIM_planet_rel_extended_planetary_derived_state:
         vs. models/dynamics/state_descriptors/extended_planetary_derived_state/verif/SIM_planet_rel/verif_data/RUN_warning_check/log_control_flags.csv
       - models/dynamics/state_descriptors/extended_planetary_derived_state/verif/SIM_planet_rel/RUN_warning_check/log_hang_roll.csv
         vs. models/dynamics/state_descriptors/extended_planetary_derived_state/verif/SIM_planet_rel/verif_data/RUN_warning_check/log_hang_roll.csv
+SIM_poly_spline_math_utils:
+  model_dir: models/utilities/math_utils
+  path: models/utilities/math_utils/verif/SIM_poly_spline
+  build_args: CML_OFFLINE_BUILD=1
+  runs:
+    RUN_cubic_clamped/input.py:
+      compare:
+      - models/utilities/math_utils/verif/SIM_poly_spline/RUN_cubic_clamped/log_spline_output.csv
+        vs. models/utilities/math_utils/verif/SIM_poly_spline/verif_data/RUN_cubic_clamped/log_spline_output.csv
+    RUN_cubic_natural/input.py:
+      compare:
+      - models/utilities/math_utils/verif/SIM_poly_spline/RUN_cubic_natural/log_spline_output.csv
+        vs. models/utilities/math_utils/verif/SIM_poly_spline/verif_data/RUN_cubic_natural/log_spline_output.csv
+    RUN_cubic_not_a_knot/input.py:
+      compare:
+      - models/utilities/math_utils/verif/SIM_poly_spline/RUN_cubic_not_a_knot/log_spline_output.csv
+        vs. models/utilities/math_utils/verif/SIM_poly_spline/verif_data/RUN_cubic_not_a_knot/log_spline_output.csv
+    RUN_linear/input.py:
+      compare:
+      - models/utilities/math_utils/verif/SIM_poly_spline/RUN_linear/log_spline_output.csv
+        vs. models/utilities/math_utils/verif/SIM_poly_spline/verif_data/RUN_linear/log_spline_output.csv
+    RUN_quadratic_first_linear/input.py:
+      compare:
+      - models/utilities/math_utils/verif/SIM_poly_spline/RUN_quadratic_first_linear/log_spline_output.csv
+        vs. models/utilities/math_utils/verif/SIM_poly_spline/verif_data/RUN_quadratic_first_linear/log_spline_output.csv
+    RUN_quadratic_natural/input.py:
+      compare:
+      - models/utilities/math_utils/verif/SIM_poly_spline/RUN_quadratic_natural/log_spline_output.csv
+        vs. models/utilities/math_utils/verif/SIM_poly_spline/verif_data/RUN_quadratic_natural/log_spline_output.csv
 SIM_polygon_polygon_enclosure:
   model_dir: models/utilities/polygon_enclosure
   path: models/utilities/polygon_enclosure/verif/SIM_polygon

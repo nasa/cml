@@ -1,0 +1,120 @@
+/******************************************************************************
+PURPOSE:
+  (Test the capabilities of IIRFilter)
+
+AUTHOR:
+  ((Jonathan Jermstad) (OSR) (Apr 2026) (Initial Version))
+******************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "../../include/iir_filter.hh"
+
+class UnitSimObject : public Trick::SimObject {
+
+public:
+
+  // ---------------------------------------------------------------------------
+  // Filter under test
+  // ---------------------------------------------------------------------------
+  IIRFilter filter;
+
+  // ---------------------------------------------------------------------------
+  // Input/Output data
+  // ---------------------------------------------------------------------------
+  static const int MAX_DATA = 100000;
+
+  double x_data[MAX_DATA];     // x values (uniform spacing assumed)
+  double y_input[MAX_DATA];    // Input y values
+  double y_output[MAX_DATA];   // Filtered y values
+  int    data_length;          // Number of data points
+
+  // ---------------------------------------------------------------------------
+  // Current point (for iterative logging)
+  // ---------------------------------------------------------------------------
+  int    current_index;
+  double current_x;
+  double current_y_in;
+  double current_y_out;
+  bool   done;
+
+  UnitSimObject()
+  {
+    ("default_data") set_defaults();
+    ("initialization") apply_filter();
+    ("initialization") reset();
+    (1.0, "scheduled") next();
+  }
+
+  void set_defaults()
+  {
+    data_length   = 0;
+    current_index = 0;
+    current_x     = 0.0;
+    current_y_in  = 0.0;
+    current_y_out = 0.0;
+    done          = false;
+  }
+
+  /**************************************************************************
+   * apply_filter
+   **************************************************************************/
+  void apply_filter()
+  {
+    if (data_length < 2) {
+      return;
+    }
+
+    std::vector<double> in_vec(y_input, y_input + data_length);
+    std::vector<double> out_vec;
+
+    filter.design_and_apply_lowpass(in_vec, out_vec);
+
+    for (size_t i = 0; i < out_vec.size() && i < MAX_DATA; ++i) {
+      y_output[i] = out_vec[i];
+    }
+  }
+
+  /**************************************************************************
+   * reset
+   **************************************************************************/
+  void reset()
+  {
+    current_index = 0;
+    done = false;
+    update();
+  }
+
+  /**************************************************************************
+   * next
+   **************************************************************************/
+  void next()
+  {
+    if (done) {
+      return;
+    }
+
+    update();
+
+    current_index++;
+    if (current_index >= data_length) {
+      done = true;
+    }
+  }
+
+  /**************************************************************************
+   * update
+   **************************************************************************/
+  void update()
+  {
+    if (current_index < data_length) {
+      current_x     = x_data[current_index];
+      current_y_in  = y_input[current_index];
+      current_y_out = y_output[current_index];
+    }
+  }
+
+};
+
+UnitSimObject test;

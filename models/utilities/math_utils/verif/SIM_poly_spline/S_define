@@ -1,0 +1,144 @@
+/******************************************************************************
+PURPOSE:
+  (Test the capabilities of PolySpline)
+
+AUTHOR:
+  ((Jonathan Jermstad) (OSR) (Apr 2026) (Initial Version))
+******************************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+##include "../../include/poly_spline.hh"
+
+class UnitSimObject : public Trick::SimObject {
+
+public:
+
+  // ---------------------------------------------------------------------------
+  // Input data (set by user or generated)
+  // ---------------------------------------------------------------------------
+  static const int MAX_DATA = 10000;
+
+  double x_input[MAX_DATA];    // Input x values
+  double y_input[MAX_DATA];    // Input y values
+  int    input_length;         // Number of input points
+
+  // ---------------------------------------------------------------------------
+  // Spline configuration
+  // ---------------------------------------------------------------------------
+  int spline_order;            // 1=linear, 2=quadratic, 3=cubic
+
+  PolySplineConfig spline_config;  // Boundary condition and derivative settings
+
+  // ---------------------------------------------------------------------------
+  // Extrapolation configuration
+  // ---------------------------------------------------------------------------
+  PolyExtrapConfig extrap_config;  // Extrapolation mode and fill values
+
+  // ---------------------------------------------------------------------------
+  // Current point (user sets current_x, spline evaluates y, dy, d2y)
+  // ---------------------------------------------------------------------------
+  double current_x;            // Current x value (set by user or scheduled job)
+  double current_y;            // Current y value (evaluated from spline)
+  double current_dy;           // Current first derivative
+  double current_d2y;          // Current second derivative
+
+  // ---------------------------------------------------------------------------
+  // Stored coefficients for evaluation
+  // ---------------------------------------------------------------------------
+  PolyCoeffs coeffs;
+
+  UnitSimObject()
+  {
+    ("default_data")    set_defaults();
+    ("initialization")  compute_spline();
+    (1.0, "scheduled")  evaluate();
+  }
+
+  void set_defaults()
+  {
+    input_length = 0;
+
+    spline_order = 3;    // Default to cubic
+
+    // spline_config defaults are set by PolySplineConfig constructor:
+    //   bc          = NOT_A_KNOT
+    //   left_deriv  = 0.0
+    //   right_deriv = 0.0
+
+    // extrap_config defaults are set by PolyExtrapConfig constructor:
+    //   below            = EXTRAPOLATE
+    //   above            = EXTRAPOLATE
+    //   fill_value_below = 0.0
+    //   fill_value_above = 0.0
+
+    current_x   = -1.0;
+    current_y   =  0.0;
+    current_dy  =  0.0;
+    current_d2y =  0.0;
+  }
+
+  /**************************************************************************
+   * get_order
+   *
+   * Convert integer spline_order to PolyCoeffs::Order enum.
+   **************************************************************************/
+  PolyCoeffs::Order get_order()
+  {
+    switch (spline_order) {
+      case 1:  return PolyCoeffs::Order::LINEAR;
+      case 2:  return PolyCoeffs::Order::QUADRATIC;
+      case 3:
+      default: return PolyCoeffs::Order::CUBIC;
+    }
+  }
+
+  /**************************************************************************
+   * compute_spline
+   *
+   * Compute spline coefficients from input data.
+   * Called once at initialization.
+   **************************************************************************/
+  void compute_spline()
+  {
+    // Minimum points required depends on spline order
+    int min_points = spline_order + 1;
+    if (spline_order == 3
+        && spline_config.bc == PolySplineConfig::BoundaryCondition::NOT_A_KNOT) {
+      min_points = 4;  // Not-a-knot requires 4 points
+    }
+
+    if (input_length < min_points) {
+      return;
+    }
+
+    // Copy input to vectors
+    std::vector<double> x_in(x_input, x_input + input_length);
+    std::vector<double> y_in(y_input, y_input + input_length);
+
+    PolySpline::compute_coeffs(x_in, y_in, get_order(), coeffs, spline_config);
+  }
+
+  /**************************************************************************
+   * evaluate
+   *
+   * Evaluate spline at current_x, updating current_y, current_dy, current_d2y.
+   * Called each scheduled cycle.
+   **************************************************************************/
+  void evaluate()
+  {
+    if (!coeffs.valid) {
+      return;
+    }
+
+    current_x += 1;
+
+    PolySpline::evaluate(coeffs, current_x, current_y,  extrap_config);
+    PolySpline::evaluate_derivative(coeffs, current_x, current_dy,  1, extrap_config);
+    PolySpline::evaluate_derivative(coeffs, current_x, current_d2y, 2, extrap_config);
+  }
+
+};
+
+UnitSimObject test;

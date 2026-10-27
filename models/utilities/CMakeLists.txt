@@ -40,8 +40,10 @@ add_cml_library(
         fault_management/include/trigger_group.hh
         fault_management/include/untyped_variable.hh
         math_utils/include/ellipsoid_intersection.hh
+        math_utils/include/iir_filter.hh
         math_utils/include/math_utils.hh
         math_utils/include/math_utils_private.hh
+        math_utils/include/poly_spline.hh
         math_utils/include/quadratic_solver.hh
         math_utils/include/std_array_ops.hh
         polygon_enclosure/include/polygon_enclosure.hh
@@ -84,7 +86,9 @@ add_cml_library(
         fault_management/src/independent_variable.cc
         fault_management/src/rand_number.cc
         fault_management/src/trigger_group.cc
+        math_utils/src/iir_filter.cc
         math_utils/src/math_utils.cc
+        math_utils/src/poly_spline.cc
         math_utils/src/quadratic_solver.cc
         subscriptions/src/subscriptions.cc
         table_interp_cpp/src/abstract_table_lookup.cc
