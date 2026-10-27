@@ -6,7 +6,6 @@ PURPOSE:
 
 LIBRARY DEPENDENCY:
   (
-   (../src/constraint_test_templates.cc)
    (cml/models/utilities/cml_message/src/cml_message.cc)
   )
 
@@ -22,6 +21,7 @@ PROGRAMMERS:
 
 #include "constraint_enum.hh"
 #include "constraint_test.hh"
+#include "constraint_util.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
@@ -82,34 +82,8 @@ class ConstraintTest_Threshold : public ConstraintTest
   {
     if (!active) { return false;}
 
-    switch (violation_condition) {
-    case ConstraintEnum::EQ:
-      violation = query_equals(variable);
-      break;
-    case ConstraintEnum::NEQ:
-      violation = !query_equals(variable);
-      break;
-    case ConstraintEnum::GT:
-      violation = (variable >  threshold);
-      break;
-    case ConstraintEnum::GE:
-      violation = (variable >= threshold);
-      break;
-    case ConstraintEnum::LT:
-      violation = (variable <  threshold);
-      break;
-    case ConstraintEnum::LE:
-      violation = (variable <= threshold);
-      break;
-    case ConstraintEnum::In:
-    case ConstraintEnum::Out:
-    case ConstraintEnum::Undefined:
-    default:
-      CMLMessage::error( __FILE__,__LINE__,
-        "Invalid setting of numerical_violation_condition: ",
-        violation_condition,"\nDeactivating condition test.\n");
-      active = false;
-    }
+    violation = test_threshold_violation(
+      variable, threshold, violation_condition, equality_threshold);
     count_violations();
     return violation;
   }
@@ -124,22 +98,7 @@ class ConstraintTest_Threshold : public ConstraintTest
   {
     return static_cast<double>(threshold);
   }
-
- private:
-  /**
-   * @return `true` if variable is equal to the @ref threshold
-   * @note This method is specialized for floating-point types. Rather than doing a
-   *       direct equality check, @ref equality_threshold is used to compare that
-   *       the values are close enough.
-   */
-  bool query_equals( DataType variable) const
-  {
-    return variable == threshold;
-  }
 };
-// Forward declaration of template specializations:
-template<> bool ConstraintTest_Threshold<double>::query_equals(double variable) const;
-template<> bool ConstraintTest_Threshold<float>::query_equals(float variable) const;
 
 /**
  * A constraint test which evaluates whether a value is contained within an interval
@@ -213,21 +172,8 @@ class ConstraintTest_Interval : public ConstraintTest
   {
     if (!active) { return false;}
 
-    bool in_interval = false;
-    switch (interval_bounds) {
-    case ConstraintEnum::ClosedClosed:
-      in_interval = (variable >= lower_bound) && (variable <= upper_bound);
-      break;
-    case ConstraintEnum::ClosedOpen:
-      in_interval = (variable >= lower_bound) && (variable < upper_bound);
-      break;
-    case ConstraintEnum::OpenClosed:
-      in_interval = (variable > lower_bound) && (variable <= upper_bound);
-      break;
-    case ConstraintEnum::OpenOpen:
-      in_interval = (variable > lower_bound) && (variable < upper_bound);
-      break;
-    }
+    const bool in_interval = test_interval_violation(
+      variable, lower_bound, upper_bound, interval_bounds);
     violation = (in_interval == (violation_condition == ConstraintEnum::In));
     count_violations();
     return violation;
@@ -291,11 +237,9 @@ class ConstraintTest_ValSet : public ConstraintTest
   {
     if (!active) { return false;}
 
-    // TODO Nino Tarantino 10/21/26: should use query_equals like ConstraintTest_Threshold
-    // for floating point types.
     const bool in_set =
       std::any_of( values.begin(), values.end(),
-        [&variable](const DataType & val_) {return (variable == val_);});
+        [&](const DataType & val_) {return query_equals(variable, val_, equality_threshold);});
 
     violation = (in_set == (violation_condition == ConstraintEnum::In));
     count_violations();

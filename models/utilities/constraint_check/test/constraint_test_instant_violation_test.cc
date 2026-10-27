@@ -1,4 +1,5 @@
 #include "../include/constraint_test_templates.hh"
+#include "../include/constraint_util.hh"
 #include "mocks/cml/cml_message_mock.hh"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -37,6 +38,9 @@ TEST(ConstraintTestThreshold, Inactive) {
 
 // Test the violation determination logic for instantaneous threshold constraints.
 TEST(ConstraintTestThreshold, TestViolation) {
+    using testing::_;
+    using testing::HasSubstr;
+
     // Testing nominal behavior only. No messages should be emitted.
     testing::StrictMock<CMLMessage::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
@@ -135,6 +139,17 @@ TEST(ConstraintTestThreshold, TestViolation) {
     EXPECT_TRUE(int_test.test_violation(-2));
     EXPECT_TRUE(double_test.test_violation(-2.0));
     EXPECT_TRUE(float_test.test_violation(-2.0f));
+
+    // Directly call the underlying utility function to get coverage of the case
+    // where an invalid comparison operator is chosen. Ordinarily this is impossible
+    // to hit in the ConstraintTest_Threshold interface since the set_violation_condition
+    // calls initialize(), which then rejects the invalid violation condition option.
+    EXPECT_CALL(cml_message_mock,
+        publish(CMLMessage::Error, _, _,
+            HasSubstr("Invalid setting of numerical_violation_condition"))).Times(3);
+    EXPECT_FALSE(test_threshold_violation(1, 1, ConstraintEnum::In));
+    EXPECT_FALSE(test_threshold_violation(1.0, 1.0, ConstraintEnum::In));
+    EXPECT_FALSE(test_threshold_violation(1.0f, 1.0f, ConstraintEnum::In));
 }
 
 // Test that the model emits an error message when configured improperly.

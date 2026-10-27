@@ -126,6 +126,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/constraint_check/include/constraint_test.hh"
 #include "cml/models/utilities/constraint_check/include/constraint_test_templates.hh"
 #include "cml/models/utilities/constraint_check/include/constraint_test_timed_templates.hh"
+#include "cml/models/utilities/constraint_check/include/constraint_util.hh"
 #include "cml/models/utilities/constraint_check/include/interval_constraint.hh"
 #include "cml/models/utilities/constraint_check/include/threshold_constraint.hh"
 #include "cml/models/utilities/constraint_check/include/valset_constraint.hh"
