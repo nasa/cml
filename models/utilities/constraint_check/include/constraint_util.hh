@@ -23,9 +23,9 @@ PROGRAMMERS:
  * Generic equality check
  *
  * @tparam DataType Data types being compared
- * @param lhs[in] First value to compare
- * @param rhs[in] Second value to compare
- * @param equality_threshold[in] Comparison tolerance for floating point types
+ * @param[in] lhs First value to compare
+ * @param[in] rhs Second value to compare
+ * @param[in] equality_threshold Comparison tolerance for floating point types
  * @return `true` if the two values compare equal
  */
 template <typename DataType>
@@ -62,10 +62,10 @@ inline bool query_equals<float>(
  * Common logic for testing domain violations of a value against a specified threshold
  *
  * @tparam DataType Data types being compared
- * @param variable[in] The value being checked
- * @param threshold[in] The threshold being checked against
- * @param violation_condition[in] Comparison operator used
- * @param equality_threshold[in] Equality comparison tolerance for floating point types
+ * @param[in] variable The value being checked
+ * @param[in] threshold The threshold being checked against
+ * @param[in] violation_condition Comparison operator used
+ * @param[in] equality_threshold Equality comparison tolerance for floating point types
  *
  * @return `true` if the threshold constraint is violated
  */
@@ -114,10 +114,10 @@ bool test_threshold_violation(
  * lower bounds
  *
  * @tparam DataType Data type of the value and interval bounds
- * @param variable[in] Value being checked
- * @param lower_bound[in] Lower bound of the interval
- * @param upper_bound[in] Upper bound of the interval
- * @param endpoint_options[in] How to treat the edges of the interval
+ * @param[in] variable Value being checked
+ * @param[in] lower_bound Lower bound of the interval
+ * @param[in] upper_bound Upper bound of the interval
+ * @param[in] endpoint_options How to treat the edges of the interval
  *
  * @return `true` if the interval contains the value specified
  */

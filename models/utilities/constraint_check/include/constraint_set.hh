@@ -29,7 +29,7 @@ PROGRAMMERS:
  * at the construction of those constraint instances -- have them loaded onto
  * this base-class's constraints list. Additionally, the extended class would
  * provide -- either by calculation or pass-through -- a value to be referenced
- * by this class for the time interval between constraint-checking.
+ * by this class for the time interval between constraint-checking if necessary.
  */
 class ConstraintSet : public SubscriptionBase
 {
@@ -81,14 +81,22 @@ class ConstraintSet : public SubscriptionBase
   void update();
 
   /**
-   * @param constraint[in] Constraint to check
+   * @param[in] constraint Constraint to check
    * @return `true` if the provided constraint is disabled
-   * @pre @constraint cannot be null
+   * @pre @p constraint cannot be null
    */
   static bool constraint_disabled( const Constraint * constraint) {return !constraint->enabled;}
 
   /**
+   * Return a string containing the violated constraints
+   *
    * @return String of comma-separated constraint names which were violated this timestep
+   *
+   * Example:
+   * @code
+   * std::string violations = constraint_set.get_violated_constraints();
+   * // violations == "Constraint 1, Constraint 4"
+   * @endcode
    */
   const std::string & get_violated_constraints() const { return violated_constraints;}
 };

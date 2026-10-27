@@ -20,7 +20,7 @@ PROGRAMMERS:
  * Provides the mechanism for testing some value against some threshold using some
  * specified logical comparison.
  *
- * Multiple constraint tests are combined together to form a constraint.
+ * Multiple constraint tests are combined together to form a @ref Constraint "constraint".
  */
 class ConstraintTest
 {
@@ -28,6 +28,10 @@ class ConstraintTest
   bool enabled{true}; /**< (--)
     Flag indicating that the test is intended to be used by the associated
     constraint. */
+  double equality_threshold{1e-6}; /**< (--)
+    Threshold for evaluating when two values are equal when their data-types
+    are floating-point representations. */
+
  protected:
   bool initialized{false}; /**< (--)
     Flag indicating that the test has been successfully initialized. */
@@ -37,16 +41,13 @@ class ConstraintTest
     The specific violation condition for this test. */
   bool violation{false}; /**<  (--)
     Flag indicating that this test has failed. When used as part of
-    @ref TimedConstraint, this flag means that the value has been outside the
+    @ref ConstraintTestTimed, this flag means that the value has been outside the
     allowable domain for more than the allowable duration. */
   bool prev_violation{false}; /**<  (--)
     Copy of previous value of violation. Used to identify whether a
     violation is "new". */
   unsigned int violation_count{0}; /**<  (1)
     Count of the number of unique violations of this test. */
-  double equality_threshold{1e-6}; /**< (--)
-    Threshold for evaluating when two values are equal when their data-types
-    are floating-point representations. */
 
  public:
   /**
@@ -109,7 +110,7 @@ class ConstraintTest
   /**
    * Set the violation condition to test against
    *
-   * @param cond[in] Violation condition option
+   * @param[in] cond Violation condition option
    */
   void set_violation_condition( ConstraintEnum::ViolationCondition cond);
 
@@ -156,21 +157,21 @@ class ConstraintTestTimed : public ConstraintTest
 {
  public:
   bool use_timer{true}; /**< (--)
-    Allows a @ref ConstrainTestTimed to be treated as a @ref ConstraintTest,
+    Allows a @ref ConstraintTestTimed to be treated as a @ref ConstraintTest,
     circumventing the timing aspect if this is false. */
   double time_limit{0.0}; /**< (s)
     The duration for which a domain violation may exist before triggering a
-    test violation. Not used in all cases. */
+    test violation. */
   double gap_time_limit{0.0}; /**< (s)
     Used if @ref recover_quiet_violation; reset @ref violation_timer to 0 if
-    @ref gap_time > this value. */
+    @ref gap_timer > this value. */
   double time_limit_tolerance{1E-10}; /**< (s)
     Tolerance used when comparing time limits against accumulated simulation
     time. Used to protect against floating point rounding causing a violation to
     be true a simulation cycle too late or too early when running this model at
     certain update periods. */
   bool recover_quiet_violation{false}; /**< (--)
-    If true, the violation timer will be reset after a period of non-violation
+    If true, the violation timer will be reset only after a period of non-violation
     time greater than @ref gap_time_limit. */
  protected:
   bool numerical_violation{false}; /**< (--)
@@ -214,7 +215,7 @@ class ConstraintTestTimed : public ConstraintTest
   /**
    * Update the violation timer
    *
-   * @param delta_time[in] Elapsed time since the last violation check
+   * @param[in] delta_time Elapsed time since the last violation check
    */
   void update_timer(double delta_time);
 };

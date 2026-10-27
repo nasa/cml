@@ -72,7 +72,7 @@ class ConstraintTest_Threshold : public ConstraintTest
   /**
    * Evaluate whether the constraint has been violated
    *
-   * @param variable[in] The value being tested
+   * @param[in] variable The value being tested
    * @return `true` if the constraint was violated
    *
    * @note If the model is not @ref active, always returns `false` even if the constraint
@@ -156,12 +156,12 @@ class ConstraintTest_Interval : public ConstraintTest
   /**
    * Evaluate whether the constraint has been violated
    *
-   * Checks for whether @ref variable is included within the specified upper and lower
+   * Checks for whether @p variable is included within the specified upper and lower
    * bounds. This check is combined with the configuration for what determines a violation
    * (i.e., whether being inside or outside the interval constitutes a violation) to
    * determine the violation status.
    *
-   * @param variable[in] The value being tested
+   * @param[in] variable The value being tested
    *
    * @return `true` if the constraint was violated
    *
@@ -226,7 +226,7 @@ class ConstraintTest_ValSet : public ConstraintTest
    * violation (i.e., violation if the value is contained in the list or if the
    * value is not contained in the list) to determine the violation status.
    *
-   * @param variable[in] The value being tested
+   * @param[in] variable The value being tested
    *
    * @return `true` if the constraint was violated
    *

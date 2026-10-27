@@ -12,12 +12,12 @@ PROGRAMMERS:
 #define CML_CONSTRAINT_ENUM_HH
 
 /**
- * Enumerations used by the Constraint Check model classes
+ * Enumerations used by the %Constraint Check model classes
  */
 struct ConstraintEnum
 {
   /**
-   * Constraint test violation criteria
+   * %Constraint test violation criteria
    *
    * Note that not all options will be valid for the specific constraint type
    * being checked.

@@ -36,7 +36,7 @@ PROGRAMMERS:
  * The tests used in this constraint are set to be marked as violated
  * immediately upon the variable violating the specified interval bounds.
  *
- * @pre @ref NumIntervals cannot be zero.
+ * @pre @p NumIntervals cannot be zero.
  */
 template<typename DataType, std::size_t NumIntervals>
 class IntervalInstantConstraint : public Constraint
@@ -55,7 +55,7 @@ class IntervalInstantConstraint : public Constraint
   /**
    * Construct the constraint and register its tests with the base class
    *
-   * @param var[in] Reference to the variable being monitored
+   * @param[in] var Reference to the variable being monitored
    */
   explicit IntervalInstantConstraint (const DataType & var)
     :
@@ -68,8 +68,8 @@ class IntervalInstantConstraint : public Constraint
    * Construct the constraint, register its tests with the base class, and register
    * the constraint with a constraint-set
    *
-   * @param var[in] Reference to the variable being monitored
-   * @param set[out] Constraint set which manages this constraint
+   * @param[in] var Reference to the variable being monitored
+   * @param[in,out] set Constraint set which manages this constraint
    */
   IntervalInstantConstraint (const DataType & var,
                              ConstraintSet & set)
@@ -138,7 +138,7 @@ class IntervalInstantConstraint : public Constraint
  * when the variable persistently violates the specified interval bounds for
  * an assigned period of time.
  *
- * @pre @ref NumIntervals cannot be zero.
+ * @pre @p NumIntervals cannot be zero.
  */
 template<typename DataType, std::size_t NumIntervals>
 class IntervalTimedConstraint : public Constraint
@@ -160,8 +160,8 @@ class IntervalTimedConstraint : public Constraint
   /**
    * Construct the constraint and register its tests with the base class
    *
-   * @param variable_[in] Reference to the variable being monitored
-   * @param delta_time_[in] Reference to the update period of this model
+   * @param[in] variable_ Reference to the variable being monitored
+   * @param[in] delta_time_ Reference to the update period of this model
    */
   IntervalTimedConstraint (const DataType & variable_,
                            const double & delta_time_)
@@ -176,9 +176,9 @@ class IntervalTimedConstraint : public Constraint
    * Construct the constraint, register its tests with the base class, and register
    * the constraint with a constraint-set
    *
-   * @param variable_[in] Reference to the variable being monitored
-   * @param delta_time_[in] Reference to the update period of this class
-   * @param set[out] Constraint set which manages this constraint
+   * @param[in] variable_ Reference to the variable being monitored
+   * @param[in] delta_time_ Reference to the update period of this class
+   * @param[in,out] set Constraint set which manages this constraint
    */
   IntervalTimedConstraint (const DataType & variable_,
                            const double & delta_time_,

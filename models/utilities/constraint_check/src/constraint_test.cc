@@ -108,11 +108,11 @@ ConstraintTestTimed::initialize_gap_time()
  * @note (#violation = false) will be retained even if there is a
  *       numerical-violation until the persistence check has passed.
  *
- * @note The #violation flag will be set to false automatically if there is no
+ * @note The @ref violation flag will be set to false automatically if there is no
  *       numerical-violation; there is no comparable "retention" of a violated
  *       status for any sort of persistence.
  *
- * @note However, the "existing-numerical-violation" flag does have a
+ * @note The @ref existing_numerical_violation flag does have a
  *       persistence check on it; it will mode down only after the gap-time
  *       requirement has been satisfied. A numerical violation that momentarily
  *       modes back into an acceptable range will not reset the violation-timer

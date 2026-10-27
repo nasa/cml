@@ -55,7 +55,7 @@ PROGRAMMERS:
  *       possibility of having multiple tests is negligible and simplifies the
  *       overall design.
  *
- * @pre @ref NumThresholds cannot be zero.
+ * @pre @p NumThresholds cannot be zero.
  */
 template<typename DataType, std::size_t NumThresholds>
 class ThresholdInstantConstraint : public Constraint
@@ -74,7 +74,7 @@ class ThresholdInstantConstraint : public Constraint
   /**
    * Construct the constraint and register its tests with the base class
    *
-   * @param var[in] Reference to the variable being monitored
+   * @param[in] var Reference to the variable being monitored
    */
   explicit ThresholdInstantConstraint (const DataType & var)
     :
@@ -87,8 +87,8 @@ class ThresholdInstantConstraint : public Constraint
    * Construct the constraint, register its tests with the base class, and register
    * the constraint with a constraint-set
    *
-   * @param var[in] Reference to the variable being monitored
-   * @param set[out] Constraint set which manages this constraint
+   * @param[in] var Reference to the variable being monitored
+   * @param[out] set Constraint set which manages this constraint
    */
   ThresholdInstantConstraint (const DataType & var,
                               ConstraintSet & set)
@@ -152,7 +152,7 @@ class ThresholdInstantConstraint : public Constraint
  *       having to expose all possible base classes to SWIG. It is simpler to
  *       duplicate some content.
  *
- * @pre @ref NumThresholds cannot be zero.
+ * @pre @p NumThresholds cannot be zero.
  */
 template<typename DataType, std::size_t NumThresholds>
 class ThresholdTimedConstraint : public Constraint
@@ -173,8 +173,8 @@ class ThresholdTimedConstraint : public Constraint
   /**
    * Construct the constraint and register its tests with the base class
    *
-   * @param variable_[in] Reference to the variable being monitored
-   * @param delta_time_[in] Reference to the update period of this model
+   * @param[in] variable_ Reference to the variable being monitored
+   * @param[in] delta_time_ Reference to the update period of this model
    */
   ThresholdTimedConstraint (const DataType & variable_,
                             const double & delta_time_)
@@ -189,9 +189,9 @@ class ThresholdTimedConstraint : public Constraint
    * Construct the constraint, register its tests with the base class, and register
    * the constraint with a constraint-set
    *
-   * @param variable_[in] Reference to the variable being monitored
-   * @param delta_time_[in] Reference to the update period of this class
-   * @param set[out] Constraint set which manages this constraint
+   * @param[in] variable_ Reference to the variable being monitored
+   * @param[in] delta_time_ Reference to the update period of this class
+   * @param[in,out] set Constraint set which manages this constraint
    */
   ThresholdTimedConstraint (const DataType & variable_,
                             const double & delta_time_,
@@ -248,12 +248,15 @@ class ThresholdTimedConstraint : public Constraint
  *       having to expose all possible base classes to SWIG. It is simpler to
  *       duplicate some content.
  *
- * @pre @ref NumTests cannot be zero.
+ * @pre @p NumTests cannot be zero.
+ * @pre @p NumSpecs cannot be zero.
  */
 template<typename DataType, std::size_t NumSpecs, std::size_t NumTests>
 class ThresholdTimedConstraintSpecData : public Constraint
 {
   static_assert(NumTests > 0, "A constraint with zero tests is not useful.");
+  static_assert(NumSpecs > 0,
+    "For a timed threshold constraint without specifications, use ThresholdTimedConstraint instead.");
 
  protected:
   const DataType & variable; /**< (--)
@@ -317,8 +320,8 @@ class ThresholdTimedConstraintSpecData : public Constraint
   /**
    * Construct the constraint and register its tests with the base class
    *
-   * @param variable_[in] Reference to the variable being monitored
-   * @param delta_time_[in] Reference to the update period of this model
+   * @param[in] variable_ Reference to the variable being monitored
+   * @param[in] delta_time_ Reference to the update period of this model
    */
   ThresholdTimedConstraintSpecData (const DataType & variable_,
                                     const double & delta_time_)
@@ -333,9 +336,9 @@ class ThresholdTimedConstraintSpecData : public Constraint
    * Construct the constraint, register its tests with the base class, and register
    * the constraint with a constraint-set
    *
-   * @param variable_[in] Reference to the variable being monitored
-   * @param delta_time_[in] Reference to the update period of this class
-   * @param set[out] Constraint set which manages this constraint
+   * @param[in] variable_ Reference to the variable being monitored
+   * @param[in] delta_time_ Reference to the update period of this class
+   * @param[in,out] set Constraint set which manages this constraint
    */
   ThresholdTimedConstraintSpecData (const DataType & variable_,
                                     const double & delta_time_,

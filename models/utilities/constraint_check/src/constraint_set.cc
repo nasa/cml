@@ -12,7 +12,6 @@ PROGRAMMERS:
 #include "../include/constraint_set.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
-
 /**
  * @note If any of the constraints in this set are disabled, calling this function
  *       will make them permanently unavailable for the duration of the simulation.

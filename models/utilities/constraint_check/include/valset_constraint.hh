@@ -52,7 +52,7 @@ PROGRAMMERS:
  * @tparam NumValSets Number of value-set constraint tests which constitute
  *                    this constraint
  *
- * @pre @ref NumValSets cannot be zero.
+ * @pre @p NumValSets cannot be zero.
  */
 template<typename DataType, std::size_t NumValSets>
 class ValSetInstantConstraint : public Constraint
@@ -71,7 +71,7 @@ class ValSetInstantConstraint : public Constraint
   /**
    * Construct the constraint and register its tests with the base class
    *
-   * @param var[in] Reference to the variable being monitored
+   * @param[in] var Reference to the variable being monitored
    */
   explicit ValSetInstantConstraint (const DataType & var)
     :
@@ -143,7 +143,7 @@ class ValSetInstantConstraint : public Constraint
  * @tparam NumValSets Number of value-set constraint tests which constitute
  *                    this constraint
  *
- * @pre @ref NumValSets cannot be zero.
+ * @pre @p NumValSets cannot be zero.
  */
 template<typename DataType, std::size_t NumValSets>
 class ValSetTimedConstraint : public Constraint
@@ -164,10 +164,10 @@ class ValSetTimedConstraint : public Constraint
   /**
    * Construct the constraint and register its tests with the base class
    *
-   * @param variable_[in] Reference to the variable being monitored
-   * @param delta_time_[in] Reference to the update period of this model
+   * @param[in] variable_ Reference to the variable being monitored
+   * @param[in] delta_time_ Reference to the update period of this model
    *
-   * @warning The lifetime of @ref delta_time_ must be at least as long as
+   * @warning The lifetime of @p delta_time_ must be at least as long as
    *          this object. A reference to it is stored internally.
    */
   ValSetTimedConstraint (const DataType & variable_,
@@ -183,11 +183,11 @@ class ValSetTimedConstraint : public Constraint
    * Construct the constraint, register its tests with the base class, and register
    * the constraint with a constraint-set
    *
-   * @param variable_[in] Reference to the variable being monitored
-   * @param delta_time_[in] Reference to the update period of this class
-   * @param set[out] Constraint set which manages this constraint
+   * @param[in] variable_ Reference to the variable being monitored
+   * @param[in] delta_time_ Reference to the update period of this class
+   * @param[in,out] set Constraint set which manages this constraint
    *
-   * @warning The lifetime of @ref delta_time_ must be at least as long as
+   * @warning The lifetime of @p delta_time_ must be at least as long as
    *          this object. A reference to it is stored internally.
    */
   ValSetTimedConstraint (const DataType & variable_,
@@ -210,10 +210,9 @@ class ValSetTimedConstraint : public Constraint
    */
   ValSetTimedConstraint & operator=( const ValSetTimedConstraint &) = delete;
 
-  /***************************************************************************
-  * Name: initialize
-  * Purpose: sanity checks
-  ***************************************************************************/
+  /**
+   * Perform sanity checks
+   */
   void initialize() override
   {
     Constraint::initialize();

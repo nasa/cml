@@ -34,7 +34,7 @@ class Constraint
   ConstraintEnum::ViolationCondition violation_condition{ConstraintEnum::Undefined}; /**< (--)
     The default violation-condition to be applied to all constraint-tests
     within this constraint, unless they are configured separately. */
-  std::string name; /**< (--)
+  std::string name{"Unnamed Constraint"}; /**< (--)
     Name of constraint; optional, used for debugging. */
   bool violated{false}; /**< (--)
     Flag indicating that after evaluating the associated ConstraintTest
@@ -43,7 +43,8 @@ class Constraint
     Count of the number of violations encountered of this constraint. */
   bool violate_on_any_test{true}; /**< (--)
     For constraints with multiple tests, this flag identifies whether the
-    constraint is violated when ANY or ALL tests indicate a violation. */
+    constraint is violated when ANY or ALL tests indicate a violation. User-specified
+    configuration option. */
   bool enabled{true}; /**< (--)
     Flag indicating this constraint is intended to be evaluated.
     Constraints may be disabled, which prevents them from being activated.
@@ -123,11 +124,15 @@ class Constraint
    * Add constraint tests to the internal list of tests which will execute during
    * model updates
    *
+   * Usually, child classes contain a member array of the specific constraint-test
+   * type which they manage and will call this function in their constructor. See
+   * one of this class's children for an example.
+   *
    * @tparam TestType The test type, which must be derived from @ref ConstraintTest
    * @tparam NumTests Size of the array
-   * @param new_tests[in] Tests to register
+   * @param[in] new_tests Tests to register
    *
-   * @warning Pointers to the contents of @ref new_tests are stored internally. That
+   * @warning Pointers to the contents of @p new_tests are stored internally. That
    *          array's lifetime must be at least as long as this object's.
    */
   template <typename TestType, std::size_t NumTests>

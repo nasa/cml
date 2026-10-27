@@ -27,7 +27,7 @@ Introduction
 The constraint check model provides a generic capability to test the values of specified variables
 against threshold values to evaluate whether constraints have been violated.
 
-The mode con be configured to support various levels of complexity. For example:
+The model can be configured to support various levels of complexity. For example:
 
 - A constraint requires that the variable, :math:`x`, not exceed some ceiling, :math:`y`; the constraint is
   violated immediately upon encountering a value :math:`x > y`
@@ -40,7 +40,7 @@ The mode con be configured to support various levels of complexity. For example:
 - A constraint requires that the value *x* not be smaller than some set of values :math:`y_{1}`, :math:`y_{2}`,
   :math:`y_{3}` for more time than allowed, with each :math:`y_{i}` value having a corresponding duration
   :math:`t_{i}`. The constraint is violated if
-  :math:`{({{x < y_{1}}\mspace{9mu}\mathit{for}\mspace{9mu}\Delta{t > t_{1}}})}{\qquad \vee \qquad}{({{x < y_{2}}\mspace{9mu}\mathit{for}\mspace{9mu}\Delta{t > t_{2}}})}{\qquad \vee \qquad}{({{x < y_{3}}\mspace{9mu}\mathit{for}\mspace{9mu}\Delta{t > t_{3}}})}`.
+  :math:`{({{x < y_{1}}\mspace{9mu}\mathit{for}\mspace{9mu}\Delta{t > t_{1}}})} \vee {({{x < y_{2}}\mspace{9mu}\mathit{for}\mspace{9mu}\Delta{t > t_{2}}})} \vee {({{x < y_{3}}\mspace{9mu}\mathit{for}\mspace{9mu}\Delta{t > t_{3}}})}`.
 
 
 Requirements
@@ -114,17 +114,22 @@ The two classes :cpp:class:`ConstraintTest` and :cpp:class:`ConstraintTestTimed`
 class-templates, which provide the actual constraint-tests. The class-templates use the data-type of
 the variable as the template parameter.
 
+**Instantaneous constraint-tests**:
+
 1. :cpp:class:`ConstraintTest_Threshold` compares the value of the variable against a single threshold value;
    this template does not have timer support.
 2. :cpp:class:`ConstraintTest_Interval` checks for inclusion of the variable within (or without) an interval
    specified by an upper and lower bound; this template does not have timer support.
 3. :cpp:class:`ConstraintTest_ValSet` checks for the variable matching (or not-matching) with one of a
    discrete set of values; this template does not have timer support.
-4. :cpp:class:`ConstraintTest_ThresholdTimed` compares the value of the variable against a single
+
+**Timed constraint-tests**:
+
+1. :cpp:class:`ConstraintTest_ThresholdTimed` compares the value of the variable against a single
    threshold value; this template does have timer support.
-5. :cpp:class:`ConstraintTest_IntervalTimed` checks for inclusion of the variable within (or without) an
+2. :cpp:class:`ConstraintTest_IntervalTimed` checks for inclusion of the variable within (or without) an
    interval specified by an upper and lower bound; this template does have timer support.
-6. :cpp:class:`ConstraintTest_ValSetTimed` checks for the variable matching (or not-matching) with one of a
+3. :cpp:class:`ConstraintTest_ValSetTimed` checks for the variable matching (or not-matching) with one of a
    discrete set of values; this template does have timer support.
 
 ________________________________________________________
@@ -447,7 +452,7 @@ Configuration
 -------------
 
 ThresholdTimedConstraintSpecData
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The :cpp:class:`ThresholdTimedConstraintSpecData` has two important configuration settings not used by other
 constraints:
