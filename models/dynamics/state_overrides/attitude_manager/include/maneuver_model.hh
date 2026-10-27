@@ -78,6 +78,7 @@ protected:
 /***************************************************************************************************
 Input file settings:
 ***************************************************************************************************/
+public:
     double mnvrRateMaxInput{ 0.0}; /* (rad/s) 
         Input variable for the maximum maneuver rate (in magnitude) */
     double mnvrAccelInput{ 0.0}; /* (rad/s^2) 
@@ -94,7 +95,6 @@ Input file settings:
 /***************************************************************************************************
 Constructor/Destructor
 ***************************************************************************************************/
-public:
     // Constructor
     ManeuverModel( const double & timestep_in,
                   jeod::DynBody & body_in,

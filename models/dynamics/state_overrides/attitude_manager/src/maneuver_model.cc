@@ -12,6 +12,7 @@ PROGRAMMERS:
 ***************************************************************************************************/
 #include <algorithm> // std::max
 #include <cmath> // std::abs()
+#include <iterator> // std::begin, std::end
 #include <random> // std::mt19937
 
 // JEOD headers
@@ -261,12 +262,16 @@ ManeuverModel::compute_eigen_rot()
 
     // Compute noise on maneuver axis
     double scratch[3];
-    for (double & component : scratch) {
-        // Generate a different value for each rate component
-        component = rand(generator) * rateTolerance * mnvrRateMax;
-    }
+    /* Generate a different value for each rate component
+    The lambda function captures 'this' (pointer to the current ManeuverModel) to read
+    the class member variables, and captures the local variables by reference, so the
+    draws advance the original generator. */
+    std::generate(std::begin(scratch), std::end(scratch), 
+                [this, & rand, & generator]() {
+                    return rand(generator) * this->rateTolerance * this->mnvrRateMax;
+                });
     // Generate a random noise eps added to the targeted angular rate magnitude at the end of the maneuver
-    // The maximum maneuver rate is used as a reference to compute that error 
+    // The maximum maneuver rate is used as a reference to compute that error
     targetRate = rand(generator) * rateTolerance * mnvrRateMax;
     // Rescale and normalize new maneuver axis
     jeod::Vector3::scale_incr(mnvrRateUnit, mnvrRateMax, scratch);
