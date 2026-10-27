@@ -51,10 +51,14 @@ PROGRAMMERS:
  * @tparam DataType Data type of the variable being monitored
  * @tparam NumValSets Number of value-set constraint tests which constitute
  *                    this constraint
+ *
+ * @pre @ref NumValSets cannot be zero.
  */
 template<typename DataType, std::size_t NumValSets>
 class ValSetInstantConstraint : public Constraint
 {
+  static_assert(NumValSets > 0, "A constraint with zero tests is not useful.");
+
  protected:
   const DataType & variable; /**< (--)
     The variable being monitored for violation of the constraints. */
@@ -97,7 +101,7 @@ class ValSetInstantConstraint : public Constraint
      * - INSIDE ALL intervals,
      * there's probably something wrong.*/
     if (initialized &&
-        (test_list.size() > 1) &&
+        (NumValSets > 1) &&
         (violate_on_any_test ==
              (tests[0].get_violation_condition() == ConstraintEnum::Out))) {
       CMLMessage::warn( __FILE__,__LINE__,
@@ -138,10 +142,14 @@ class ValSetInstantConstraint : public Constraint
  * @tparam DataType Data type of the variable being monitored
  * @tparam NumValSets Number of value-set constraint tests which constitute
  *                    this constraint
+ *
+ * @pre @ref NumValSets cannot be zero.
  */
 template<typename DataType, std::size_t NumValSets>
 class ValSetTimedConstraint : public Constraint
 {
+  static_assert(NumValSets > 0, "A constraint with zero tests is not useful.");
+
  protected:
   const DataType & variable; /**< (--)
     The variable being monitored for violation of the constraints. */
@@ -214,7 +222,7 @@ class ValSetTimedConstraint : public Constraint
      * - INSIDE ALL intervals,
      * there's probably something wrong.*/
     if (initialized &&
-        (test_list.size() > 1) &&
+        (NumValSets > 1) &&
         (violate_on_any_test ==
              (tests[0].get_violation_condition() == ConstraintEnum::Out))) {
       CMLMessage::warn( __FILE__,__LINE__,

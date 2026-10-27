@@ -1,5 +1,5 @@
-#include "../include/constraint_set.hh"
 #include "../include/constraint_enum.hh"
+#include "../include/constraint_set.hh"
 #include "../include/valset_constraint.hh"
 #include "mocks/cml/cml_message_mock.hh"
 #include <gmock/gmock.h>
@@ -90,7 +90,7 @@ TEST(ValSetInstantConstraint, SuspiciousConfiguration) {
     article.initialize();
 }
 
-// Test a nominal update of the ValSetInstantConstraint
+// Test a nominal update of the ValSetTimedConstraint.
 TEST(ValSetTimedConstraint, Update) {
     // Testing nominal behavior only. No messages should be emitted.
     testing::StrictMock<CMLMessage::Mock> cml_message_mock;
