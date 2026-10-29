@@ -263,9 +263,11 @@ class ThresholdTimedConstraintSpecData : public Constraint
     The variable being monitored for violation of the constraints. */
   const double & delta_time; /**< (s)
     Reference to the time-elapsed between calls to update this constraint. */
+#ifndef SWIG
   static constexpr std::size_t num_specs_available {NumSpecs}; /**< (--)
-    Number of specifications available, as set at construction.*/
-  std::size_t num_specs {num_specs_available}; /**< (--)
+    Number of specifications available, as set at construction. */
+#endif
+  std::size_t num_specs {NumSpecs}; /**< (--)
     Number of specifications to be used.
     Note -- the separation of @ref num_specs from @ref num_specs_available supports
     the use of a subset of the available specifications for generating the
@@ -290,20 +292,20 @@ class ThresholdTimedConstraintSpecData : public Constraint
     the user or indirectly by populating arrays and copying those data to the
     test data. If this option is set to false, the class becomes functionally
     equivalent to @ref ThresholdTimedConstraint. */
-  DataType threshold_spec[num_specs_available] {}; /**< (--)
+  DataType threshold_spec[NumSpecs] {}; /**< (--)
     Set of specified values for the thresholds of tests.
     If @ref populate_tests_from_arrays, these values are used to populate the
     threshold values in the constraint-tests.
-    If (NumSpecs == NumTests), these threshold_spec values are copied
+    If (num_specs == NumTests), these threshold_spec values are copied
     directly; otherwise, they will be interpolated to generate the threshold
     values covering the same domain but in a different number of steps. */
-  double time_spec[num_specs_available] {};  /**< (s)
+  double time_spec[NumSpecs] {};  /**< (s)
     Set of specified values for the associated duration before a
     numerical violation of the threshold becomes an actual violation of the
     constraint-test.
     If populate_tests_from_arrays, these values are used to populate the
     time_limit values in the constraint-tests.
-    If (NumSpecs == NumTests), these time_spec values are copied
+    If (num_specs == NumTests), these time_spec values are copied
     directly; Otherwise, they will be interpolated to generate the time_limit
     values covering the same range but in a different number of steps. */
   bool use_linear_interpolation {true}; /**< (--)

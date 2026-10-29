@@ -119,7 +119,7 @@ class ConstraintTest_Interval : public ConstraintTest
   DataType upper_bound {0}; /**< (--)
     The upper bound of the interval that, if crossed, will trigger a domain
     violation. */
-  ConstraintEnum::IntervalBounds interval_bounds{ConstraintEnum::ClosedClosed}; /**<
+  ConstraintEnum::IntervalBounds interval_bounds{ConstraintEnum::ClosedClosed}; /**< (--)
     Option for how to treat a value at the edges of the interval. */
 
   /**
