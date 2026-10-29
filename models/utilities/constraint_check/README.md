@@ -30,4 +30,4 @@ This model has PRELIMINARY documentation in the docs directory.
 
 ## Verification
 
-This model has PRELIMINARY verification test cases in the verif directory.
+This model has not been verified. Use at your own risk.
