@@ -34,6 +34,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+#include <cstddef>
+
 class AccumulatedAbsoluteDeltas : public SubscriptionBase
 {
  protected:
@@ -48,6 +50,9 @@ class AccumulatedAbsoluteDeltas : public SubscriptionBase
        and old_variable values */
   AccumulatedAbsoluteDeltas(  const double * variable_,
                               const unsigned int size_);
+  template <std::size_t size_>
+  explicit AccumulatedAbsoluteDeltas(const double (&variable_)[size_])
+    : AccumulatedAbsoluteDeltas(variable_, size_) {}
   ~AccumulatedAbsoluteDeltas() override;
   AccumulatedAbsoluteDeltas ( const AccumulatedAbsoluteDeltas &) = delete;
   AccumulatedAbsoluteDeltas & operator= ( const AccumulatedAbsoluteDeltas &) = delete;
