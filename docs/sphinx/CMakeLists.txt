@@ -28,6 +28,7 @@ if (TARGET Doxygen::doxygen AND Sphinx_FOUND)
             models/fhw/index.rst
             models/interactions/index.rst
             models/tools/index.rst
+            models/utilities/constraint-check.rst
             models/utilities/convert-double-to-words.rst
             models/utilities/env-utils.rst
             models/utilities/index.rst

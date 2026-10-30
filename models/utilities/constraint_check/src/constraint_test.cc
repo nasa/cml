@@ -1,5 +1,4 @@
 /*******************************************************************************
-
 PURPOSE:
    (Defines specific constraint tests for checking a sim variable value against
     a domain specification and duration constraint.)
@@ -12,18 +11,14 @@ PROGRAMMERS:
    (New, based on GNC_PAR grok_duration_check and grok-violation models))
  )
 *******************************************************************************/
-
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "../include/constraint_enum.hh"
 #include "../include/constraint_test.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
-/*****************************************************************************
-Name: set_violation_condition
-Purpose:
-  Sets the violation-condition enumeration, with protection for adjusting
-  post-initialization.
-*****************************************************************************/
+/**
+ * @note If the model has already been initialized, it will be re-initialized.
+ */
 void
 ConstraintTest::set_violation_condition(
   ConstraintEnum::ViolationCondition cond)
@@ -35,23 +30,17 @@ ConstraintTest::set_violation_condition(
   }
 }
 
-/*****************************************************************************
-Name: count_violations
-Purpose: Counts the number of unique violations
-*****************************************************************************/
+// Update the counter tracking the number of unique violations
 void
 ConstraintTest::count_violations()
 {
-  if (violation != prev_violation) {
-    violation_count += static_cast<unsigned int>(violation);
-    prev_violation = violation;
+  if (violation && !prev_violation) {
+    ++violation_count;
   }
+  prev_violation = violation;
 }
 
-/***************************************************************************
-Name: initialize_threshold
-Purpose: checks for configuration for threshold-based tests.
-***************************************************************************/
+// Check that the model configuration is valid for a threshold-based constraint test
 void
 ConstraintTest::initialize_threshold()
 {
@@ -68,17 +57,14 @@ ConstraintTest::initialize_threshold()
   initialized = true;
 }
 
-/***************************************************************************
-Name: initialize_interval
-Purpose: checks for configuration for interval-based tests.
-***************************************************************************/
+// Check that the model configuration is valid for an interval-based constraint test
 void
 ConstraintTest::initialize_interval()
 {
   if (violation_condition != ConstraintEnum::In &&
       violation_condition != ConstraintEnum::Out) {
     CMLMessage::error( __FILE__,__LINE__,
-      "Cannot initialize an interval constraint-test with a \n"
+      "Cannot initialize an interval constraint-test with a\n"
       "violation-condition of ",violation_condition,".\n"
       "Defaulting to In:\n"
       "  violation when variable is between lower_bound and upper_bound.\n");
@@ -87,17 +73,14 @@ ConstraintTest::initialize_interval()
   initialized = true;
 }
 
-/***************************************************************************
-Name: initialize_val_set
-Purpose: checks for configuration for val-set-based tests.
-***************************************************************************/
+// Check that the model configuration is valid for a value-set-based constraint test
 void
 ConstraintTest::initialize_val_set()
 {
   if (violation_condition != ConstraintEnum::In &&
       violation_condition != ConstraintEnum::Out) {
     CMLMessage::error( __FILE__,__LINE__,
-      "Cannot initialize a value-set constraint-test with a \n"
+      "Cannot initialize a value-set constraint-test with a\n"
       "violation-condition of ",violation_condition,".\n"
       "Defaulting to In:\n"
       "  violation when variable is one of values in values-list.\n");
@@ -106,12 +89,7 @@ ConstraintTest::initialize_val_set()
   initialized = true;
 }
 
-/*****************************************************************************
-Name: initialize_gap_timer
-Purpose:
-  Sets the gap-time-limit equal to the time-limit if it has not been
-  set independently.
-*****************************************************************************/
+// Set the gap_time_limit equal to the time_limit if it has not been set independently
 void
 ConstraintTestTimed::initialize_gap_time()
 {
@@ -121,39 +99,41 @@ ConstraintTestTimed::initialize_gap_time()
   }
 }
 
-/*****************************************************************************
-Name: update_timer
-Purpose:
-  updates the violation timer
-Notes:
- - a numerical-violation will result in checking the current timestamp
-   against that at the start of the numerical-violation to identify whether
-   the numerical-violation has been persistent for sufficient time. The
-   violation flag is set accordingly.
-   - (violation = false) will be retained even if there is a
-     numerical-violation until the persistence check has passed.
-- The violation flag will be set to false automatically if there is no
-  numerical-violation; there is no comparable "retention" of a violated
-  status for any sort of persistence.
-  - However, the "existing-numerical-violation" flag does have a persistence
-    check on it; it will mode down only after the gap-time requirement has
-    been satisfied. A numerical violation that momentarily modes back into
-    an acceptable range will not reset the violation-timer until this
-    gap-time reset is reached.
-Example:
-  a constraint violation requires that the numerical-violation be persistent
-  for 3 counts, and cleared after 2 counts of numerical-satisfaction.
-  t: numerical-violation  violation:   notes
-  1:       present,        no      lack of persistence.
-  2:       present,        no      lack of persistence.
-  3:       present,        yes     3x persistent
-  4:       present,        yes     >3x persistent
-  5:       absent,         no      persistence timer not reset
-  6:       present,        yes     >3x persistence (retained)
-  7:       absent,         no      persistence timer not reset
-  8:       absent,         no      persistence timer reset
-  9:       present,        no      lack of persistence.
-*****************************************************************************/
+/**
+ * @details A numerical-violation will result in checking the current timestamp
+ *          against that at the start of the numerical-violation to identify whether
+ *          the numerical-violation has been persistent for sufficient time. The
+ *          violation flag is set accordingly.
+ *
+ * @note (#violation = false) will be retained even if there is a
+ *       numerical-violation until the persistence check has passed.
+ *
+ * @note The @ref violation flag will be set to false automatically if there is no
+ *       numerical-violation; there is no comparable "retention" of a violated
+ *       status for any sort of persistence.
+ *
+ * @note The @ref existing_numerical_violation flag does have a
+ *       persistence check on it; it will mode down only after the gap-time
+ *       requirement has been satisfied. A numerical violation that momentarily
+ *       modes back into an acceptable range will not reset the violation-timer
+ *       until this gap-time reset is reached.
+ *
+ * Example:
+ * A constraint violation requires that the numerical-violation be persistent
+ * for 3 counts, and cleared after 2 counts of numerical-satisfaction.
+ *
+ * | t | numerical-violation | violation | notes                            |
+ * |---|---------------------|-----------|----------------------------------|
+ * | 1 | present             | no        | lack of persistence              |
+ * | 2 | present             | no        | lack of persistence              |
+ * | 3 | present             | yes       | 3x persistent                    |
+ * | 4 | present             | yes       | >3x persistent                   |
+ * | 5 | absent              | no        | persistence timer not reset      |
+ * | 6 | present             | yes       | >3x persistence (retained)       |
+ * | 7 | absent              | no        | persistence timer not reset      |
+ * | 8 | absent              | no        | persistence timer reset          |
+ * | 9 | present             | no        | lack of persistence              |
+ */
 void
 ConstraintTestTimed::update_timer( double delta_time)
 {
@@ -174,7 +154,7 @@ ConstraintTestTimed::update_timer( double delta_time)
       accumulated_violation_timer += delta_time;
     }
 
-    violation = (violation_timer >= (time_limit - 1E-10));
+    violation = (violation_timer >= (time_limit - time_limit_tolerance));
   }
 
   else {
@@ -195,7 +175,7 @@ ConstraintTestTimed::update_timer( double delta_time)
 
       /* if violation has been stopped long enough, reset the violation-
          persistence timer by resetting the existing_numerical_violation flag.*/
-      if (gap_timer > (gap_time_limit - 1E-10)) {
+      if (gap_timer > (gap_time_limit - time_limit_tolerance)) {
         existing_numerical_violation = false;
         checking_gap_timer = false;
         violation_timer = 0.0;

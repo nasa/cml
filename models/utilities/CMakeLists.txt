@@ -17,6 +17,7 @@ add_cml_library(
         constraint_check/include/constraint_test.hh
         constraint_check/include/constraint_test_templates.hh
         constraint_check/include/constraint_test_timed_templates.hh
+        constraint_check/include/constraint_util.hh
         constraint_check/include/interval_constraint.hh
         constraint_check/include/threshold_constraint.hh
         constraint_check/include/valset_constraint.hh
@@ -71,8 +72,6 @@ add_cml_library(
         constraint_check/src/constraint.cc
         constraint_check/src/constraint_set.cc
         constraint_check/src/constraint_test.cc
-        constraint_check/src/constraint_test_templates.cc
-        constraint_check/src/constraint_test_timed_templates.cc
         double_to_words/src/convert_double_to_uint_words.cc
         env_utils/src/env_utils.cc
         fault_arch/src/sSensorFaults.cc
@@ -109,6 +108,12 @@ add_cml_tests(
         utilities
 
     SOURCES
+        constraint_check/test/constraint_class_test.cc
+        constraint_check/test/constraint_set_test.cc
+        constraint_check/test/constraint_test_instant_violation_test.cc
+        constraint_check/test/constraint_test_timed_violation_test.cc
+        constraint_check/test/threshold_constraint_test.cc
+        constraint_check/test/valset_constraint_test.cc
         cml_message/test/cml_message_test.cc
         double_to_words/test/convert_double_to_words_test.cc
         env_utils/test/env_utils_test.cc

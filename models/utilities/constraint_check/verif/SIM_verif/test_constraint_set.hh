@@ -11,9 +11,12 @@ PROGRAMMERS:
 #ifndef CML_TEST_CONSTRAINT_SET_HH
 #define CML_TEST_CONSTRAINT_SET_HH
 
+#include "../../include/constraint_enum.hh"
 #include "../../include/constraint_set.hh"
-#include "../../include/threshold_constraint.hh"
+#include "../../include/constraint_test_templates.hh"
+#include "../../include/constraint_test_timed_templates.hh"
 #include "../../include/interval_constraint.hh"
+#include "../../include/threshold_constraint.hh"
 
 // This dummy struct is required to force Trick ICG to generate attributes for
 // template members of template types when we Trickify CML. We don't actually
@@ -33,7 +36,7 @@ struct TestConstraintTypes
 class TestConstraintSet
 {
  public:
-  ConstraintSet                  set;
+  ConstraintSet                                   set;
   ThresholdTimedConstraint<double, 4>             threshold_x4t;
   ThresholdInstantConstraint<double, 4>           threshold_x4i;
 
@@ -55,7 +58,6 @@ class TestConstraintSet
                      const double& var_x_neg,
                      const int&    var_i)
     :
-    set(),
     threshold_x4t(     var_x,     delta_time,  set),
     threshold_x4i(     var_x,     set),
     threshold_i4t(     var_i,     delta_time,  set),
@@ -68,7 +70,6 @@ class TestConstraintSet
     interval_x2t_neg(  var_x_neg, delta_time,  set),
     interval_i2t(      var_i,     delta_time,  set),
     interval_x2i(      var_x,     set)
-
   {
     threshold_x4t.tests[0].threshold = 10.0;
     threshold_x4t.tests[1].threshold = 20.0;
@@ -149,6 +150,7 @@ class TestConstraintSet
     threshold_x5s.time_spec[3] = 0.1;
     threshold_x5s.violation_condition = ConstraintEnum::GT;
     threshold_x5s.name = "x5s";
+    threshold_x5s.use_linear_interpolation = false;
 
     interval_x2t.tests[0].lower_bound = 10.0;
     interval_x2t.tests[0].upper_bound = 20.0;
@@ -185,14 +187,8 @@ class TestConstraintSet
     interval_x2i.name = "x2i";
   }
 
-  void run_4_config()
-  {
-    threshold_x4t.tests[0].use_timer = false;
-  }
-
- private: // not implemented; not copyable
-  TestConstraintSet( const TestConstraintSet&);
-  TestConstraintSet & operator=( const TestConstraintSet&);
+  TestConstraintSet( const TestConstraintSet&) = delete;
+  TestConstraintSet & operator=( const TestConstraintSet&) = delete;
 };
 
 #endif

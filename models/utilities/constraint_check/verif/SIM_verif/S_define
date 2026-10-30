@@ -49,9 +49,9 @@ class VerifUnitSimObject: public Trick::SimObject {
   {
     std::cout << constraints.set.get_violated_constraints() << "\n**\n";
   }
-  private:
-    VerifUnitSimObject (const VerifUnitSimObject&);
-    VerifUnitSimObject & operator = (const VerifUnitSimObject&);
+
+  VerifUnitSimObject (const VerifUnitSimObject&) = delete;
+  VerifUnitSimObject & operator = (const VerifUnitSimObject&) = delete;
 
 };
 VerifUnitSimObject test;

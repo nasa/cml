@@ -10,6 +10,7 @@ really fit under other model categories.
     :name: utilities-models
     :titlesonly:
 
+    constraint-check.rst
     convert-double-to-words.rst
     env-utils.rst
     subscriptions.rst
