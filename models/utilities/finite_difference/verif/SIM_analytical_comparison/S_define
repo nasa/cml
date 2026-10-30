@@ -1,0 +1,301 @@
+//===========================TRICK HEADER=====================
+// PURPOSE:
+//=============================================================================
+// This simulation provides validation for the finite_difference model
+// by comparing its results to several analyitical functions.
+//=============================================================================
+
+ // Include the default system classes:
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+//Include the header for finite difference model
+##include "../../include/finite_difference.hh"
+##include "cml/models/utilities/math_utils/include/math_utils.hh"
+
+##include <cmath>
+
+
+class TestSimObject : public Trick::SimObject{
+    public:
+
+    //Variables
+    double t = -0.1; //Start time
+    double dt = 0.1; // Increment
+
+    
+    char scalar_option;
+    char vector_option;
+    char matrix_option;
+
+    //Scalar variables
+    double f; //Function
+    double d1; //First derivative analytical
+    double d2; //Second derivative analytical
+    double d1_f; //First derivative Finite difference
+    double d2_f; //Second derivative Finite difference
+
+    ScalarFirstDerivative sfd;
+    ScalarSecondDerivative ssd;
+
+    //Vector variabvles
+    double scalar_vec[3]; //Vector of analytical functions
+    double an_deriv_vec[3]; //Vector of analytical first derivatives
+    double num_deriv_vec[3]; //Vector of numerical first derivatives
+    double an_deriv2_vec[3]; //Vector of analytical second derivatives
+    double num_deriv2_vec[3]; //Vector of numerical second derivatives
+    
+    Vector3FirstDerivative vfd;
+    Vector3SecondDerivative vsd;
+
+    //Matrix variables
+    double scalar_mat[3][3];
+    double an_deriv_mat[3][3];
+    double num_deriv_mat[3][3];
+
+    Matrix3x3FirstDerivative mfd;
+
+    TestSimObject(){
+        (0.1, "scheduled") run_test();
+    }
+
+    //First function, derivative, and second derivative
+    double f_a(double time){
+        return pow(time, 2);
+    }
+    double d_1_a(double time){
+        return 2 * time;
+    }
+    double d_2_a(){
+        return 2;
+    }
+
+    //Second function, derivative, and second derivative
+    double f_b(double time){
+        return 4*pow(time, 3) + 5*time;
+    }
+    double d_1_b(double time){
+        return 12*pow(time, 2) + 5;
+    }
+    double d_2_b(double time){
+        return 24*time;
+    }
+
+    //Third function, derivative, and second derivative
+    double f_c(double time){
+        return sin(time);
+    }
+    double d_1_c(double time){
+        return cos(time);
+    }
+    double d_2_c(double time){
+        return -sin(time);
+    }
+
+    //Fourth functionh, derivative, and second derivative
+    double f_d(double time){
+        return sin((pow(time, 2)/3));
+    }
+    double d_1_d(double time){
+        return cos(pow(time,2)/3)*(2*time)/3;
+    }
+    double d_2_d(double time){
+        return -(4.0/9.0)*pow(time, 2)*sin(pow(time, 2)/3.0)+ (2.0/3.0)*cos(pow(time,2)/3.0);
+    }
+
+
+    void run_test()
+    {
+
+        t += dt;
+
+        // Scalar calculations
+        if (tolower(scalar_option) == 'a'){
+            // f(t) = t^2
+            f = f_a(t); //Function
+            d1 = d_1_a(t); //Analytical derivative
+            d2 = d_2_a(); //Analytical second derivative
+            sfd.compute(f, t, d1_f); //Numerical derivative
+            ssd.compute(f, t, d2_f); //Analytical first derivative
+        }
+
+        if (tolower(scalar_option) == 'b'){
+            // f(t) = 4t^3 + 5t
+            f = f_b(t); //Function
+            d1 = d_1_b(t); //Analytical derivative
+            d2 = d_2_b(t); //Analytical second derivative
+            sfd.compute(f, t, d1_f); //Numerical derivative
+            ssd.compute(f, t, d2_f); //Analytical second derivative
+        }
+
+        if (tolower(scalar_option) == 'c'){
+            // f(t) = sin(t)
+            f = f_c(t); //Function
+            d1 = d_1_c(t); //Analytical derivative
+            d2 = d_2_c(t); //Analytical second derivative
+            sfd.compute(f, t, d1_f); //Numerical derivative
+            ssd.compute(f, t, d2_f); //Numerical second derivative
+        }
+
+        if (tolower(scalar_option) == 'd'){
+            //f(t) = sin((t^2)/3)
+            f = f_d(t); //Function
+            d1 = d_1_d(t); //Analytical derivative
+            d2 = d_2_d(t); //Analytical second derivative
+            sfd.compute(f, t, d1_f); //Analytical first derivative
+            ssd.compute(f, t, d2_f); //Analytical second derivative
+        }
+
+        
+        // Vector calculations
+        if (tolower(vector_option) == 'a'){
+            //First Vector
+            scalar_vec[0] = f_a(t);
+            scalar_vec[1] = f_b(t);
+            scalar_vec[2] = f_c(t);
+
+            // Analytical derivative vector
+            an_deriv_vec[0] = d_1_a(t);
+            an_deriv_vec[1] = d_1_b(t);
+            an_deriv_vec[2] = d_1_c(t);
+
+            //Numerical first derivative
+            vfd.compute(scalar_vec, t, num_deriv_vec);
+
+            // Analytical second derivative
+            an_deriv2_vec[0] = d_2_a();
+            an_deriv2_vec[1] = d_2_b(t);
+            an_deriv2_vec[2] = d_2_c(t);
+
+            // Numerical second derivative
+            vsd.compute(scalar_vec, t, num_deriv2_vec);
+        }
+
+        if (tolower(vector_option) == 'b'){
+            //Second Vector
+            scalar_vec[0] = f_b(t);
+            scalar_vec[1] = f_c(t);
+            scalar_vec[2] = f_d(t);
+
+            // Analytical derivative vector
+            an_deriv_vec[0] = d_1_b(t);
+            an_deriv_vec[1] = d_1_c(t);
+            an_deriv_vec[2] = d_1_d(t);
+
+            //Numerical first derivative
+            vfd.compute(scalar_vec, t, num_deriv_vec);
+
+            // Analytical second derivative
+            an_deriv2_vec[0] = d_2_b(t);
+            an_deriv2_vec[1] = d_2_c(t);
+            an_deriv2_vec[2] = d_2_d(t);        
+
+            // Numerical second derivative
+            vsd.compute(scalar_vec, t, num_deriv2_vec);
+        }
+
+        if (tolower(vector_option) == 'c'){
+            //Third Vector
+            scalar_vec[0] = f_c(t);
+            scalar_vec[1] = f_d(t);
+            scalar_vec[2] = f_a(t);
+
+            // Analytical derivative vector
+            an_deriv_vec[0] = d_1_c(t);
+            an_deriv_vec[1] = d_1_d(t);
+            an_deriv_vec[2] = d_1_a(t);
+
+            //Numerical first derivative
+            vfd.compute(scalar_vec, t, num_deriv_vec);
+
+            // Analytical second derivative
+            an_deriv2_vec[0] = d_2_c(t);
+            an_deriv2_vec[1] = d_2_d(t);
+            an_deriv2_vec[2] = d_2_a();        
+
+            // Numerical second derivative
+            vsd.compute(scalar_vec, t, num_deriv2_vec);
+        }
+        
+        if (tolower(vector_option) == 'd'){
+            //Fourth Vector
+            scalar_vec[0] = f_d(t);
+            scalar_vec[1] = f_a(t);
+            scalar_vec[2] = f_b(t);
+
+            // Analytical derivative vector
+            an_deriv_vec[0] = d_1_d(t);
+            an_deriv_vec[1] = d_1_a(t);
+            an_deriv_vec[2] = d_1_b(t);
+
+            //Numerical first derivative
+            vfd.compute(scalar_vec, t, num_deriv_vec);
+
+            // Analytical second derivative
+            an_deriv2_vec[0] = d_2_d(t);
+            an_deriv2_vec[1] = d_2_a();
+            an_deriv2_vec[2] = d_2_b(t);        
+
+            // Numerical second derivative
+            vsd.compute(scalar_vec, t, num_deriv2_vec);
+        }
+
+
+
+        //Matrix calculations
+        if (tolower(matrix_option) == 'a'){
+        //First matrix
+        scalar_mat[0][0] = f_a(t); scalar_mat[0][1] = f_b(t); scalar_mat[0][2] = f_c(t);
+        scalar_mat[1][0] = f_d(t); scalar_mat[1][1] = f_a(t); scalar_mat[1][2] = f_b(t);
+        scalar_mat[2][0] = f_c(t); scalar_mat[2][1] = f_d(t); scalar_mat[2][2] = f_a(t);
+
+        an_deriv_mat[0][0] = d_1_a(t); an_deriv_mat[0][1] = d_1_b(t); an_deriv_mat[0][2] = d_1_c(t);
+        an_deriv_mat[1][0] = d_1_d(t); an_deriv_mat[1][1] = d_1_a(t); an_deriv_mat[1][2] = d_1_b(t);
+        an_deriv_mat[2][0] = d_1_c(t); an_deriv_mat[2][1] = d_1_d(t); an_deriv_mat[2][2] = d_1_a(t);
+
+        mfd.compute(scalar_mat, t, num_deriv_mat);
+        }
+        
+        if (tolower(matrix_option) == 'b'){
+            //Second matrix
+            scalar_mat[0][0] = f_b(t); scalar_mat[0][1] = f_c(t); scalar_mat[0][2] = f_d(t);
+            scalar_mat[1][0] = f_a(t); scalar_mat[1][1] = f_b(t); scalar_mat[1][2] = f_c(t);
+            scalar_mat[2][0] = f_d(t); scalar_mat[2][1] = f_a(t); scalar_mat[2][2] = f_b(t);
+
+            an_deriv_mat[0][0] = d_1_b(t); an_deriv_mat[0][1] = d_1_c(t); an_deriv_mat[0][2] = d_1_d(t);
+            an_deriv_mat[1][0] = d_1_a(t); an_deriv_mat[1][1] = d_1_b(t); an_deriv_mat[1][2] = d_1_c(t);
+            an_deriv_mat[2][0] = d_1_d(t); an_deriv_mat[2][1] = d_1_a(t); an_deriv_mat[2][2] = d_1_b(t);
+
+            mfd.compute(scalar_mat, t, num_deriv_mat);
+        }
+
+        if (tolower(matrix_option) == 'c'){
+            //Third matrix
+            scalar_mat[0][0] = f_c(t); scalar_mat[0][1] = f_d(t); scalar_mat[0][2] = f_a(t);
+            scalar_mat[1][0] = f_b(t); scalar_mat[1][1] = f_c(t); scalar_mat[1][2] = f_d(t);
+            scalar_mat[2][0] = f_a(t); scalar_mat[2][1] = f_b(t); scalar_mat[2][2] = f_c(t);
+
+            an_deriv_mat[0][0] = d_1_c(t); an_deriv_mat[0][1] = d_1_d(t); an_deriv_mat[0][2] = d_1_a(t);
+            an_deriv_mat[1][0] = d_1_b(t); an_deriv_mat[1][1] = d_1_c(t); an_deriv_mat[1][2] = d_1_d(t);
+            an_deriv_mat[2][0] = d_1_a(t); an_deriv_mat[2][1] = d_1_b(t); an_deriv_mat[2][2] = d_1_c(t);
+
+            mfd.compute(scalar_mat, t, num_deriv_mat);    
+        }
+
+        if (tolower(matrix_option) == 'd'){
+            //Fourth matrix
+            scalar_mat[0][0] = f_d(t); scalar_mat[0][1] = f_a(t); scalar_mat[0][2] = f_b(t);
+            scalar_mat[1][0] = f_c(t); scalar_mat[1][1] = f_d(t); scalar_mat[1][2] = f_a(t);
+            scalar_mat[2][0] = f_b(t); scalar_mat[2][1] = f_c(t); scalar_mat[2][2] = f_d(t);
+
+            an_deriv_mat[0][0] = d_1_d(t); an_deriv_mat[0][1] = d_1_a(t); an_deriv_mat[0][2] = d_1_b(t);
+            an_deriv_mat[1][0] = d_1_c(t); an_deriv_mat[1][1] = d_1_d(t); an_deriv_mat[1][2] = d_1_a(t);
+            an_deriv_mat[2][0] = d_1_b(t); an_deriv_mat[2][1] = d_1_c(t); an_deriv_mat[2][2] = d_1_d(t);
+
+            mfd.compute(scalar_mat, t, num_deriv_mat); 
+        }
+    }
+
+}
+
+TestSimObject fd_obj;

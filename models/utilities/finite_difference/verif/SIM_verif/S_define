@@ -1,0 +1,61 @@
+/**************************** Trick Header ************************************
+PURPOSE:
+    (FiniteDifference Verif Sim, meant to verify the model is written correctly
+     by comparing it to a python implementation)
+PROGAMMERS:
+   (((Tony Varesic) (OSR) (Apr 2021) (wrote to expand scalar testing, added
+                                      vector3 and matrix3x3 interfaces)))
+******************************************************************************/
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+/*************************************************************
+ FiniteDifference Objects
+*************************************************************/
+
+##include "../../include/finite_difference.hh"
+##include "cml/models/utilities/math_utils/include/math_utils.hh"
+##include <list>
+
+class FiniteDifferenceObject : public Trick::SimObject {
+
+ public:
+  // input data
+  double             in_vec3[3];
+  double             in_mat3x3[3][3];
+  // output data
+  double             out_vec3[3];
+  double             out_mat3x3[3][3];
+
+  ScalarFirstDerivative scalar_fd;
+  ScalarSecondDerivative scalar_sd;
+  Matrix3x3FirstDerivative matrix_fd;
+  Vector3FirstDerivative vector_fd;
+  Vector3SecondDerivative vector_sd;
+
+ public:
+  FiniteDifferenceObject(){};
+  // wrapper functions to vector3 datatypes
+  bool vector3_first_derivative_compute(Vector3FirstDerivative &vfd, const double time)
+  {
+    return vfd.compute(in_vec3, time, out_vec3);
+  }
+
+  bool vector3_second_derivative_compute(Vector3SecondDerivative &vsd, const double time)
+  {
+    return vsd.compute(in_vec3, time, out_vec3);
+  }
+
+  // wrapper function to matrix3x3 datatype
+  bool matrix3x3_first_derivative_compute(Matrix3x3FirstDerivative &mfd, const double time)
+  {
+    return mfd.compute(in_mat3x3, time, out_mat3x3);
+  }
+
+ private:
+
+  FiniteDifferenceObject (const FiniteDifferenceObject&);
+  FiniteDifferenceObject & operator = (const FiniteDifferenceObject&);
+};
+
+FiniteDifferenceObject fd_obj;
