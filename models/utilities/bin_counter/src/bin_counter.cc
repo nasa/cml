@@ -251,6 +251,5 @@ CML_BinCounter::apply_tolerance(double tol)
 
   if (bins[0].bin_floor != std::numeric_limits<double>::lowest()) {
     bins[0].bin_floor -= tol;
-    bins[nbin - 1].bin_ceil -= tol;
   }
 }

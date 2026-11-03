@@ -160,6 +160,13 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
   limit_b_dbl = 1.0;
   bin_counter_vec.set_data( limit_a_dbl, limit_b_dbl, num_bins, closed_end);
 
+  std::cout << "\n"
+"***************************************************************************\n"
+"Error - cannot apply bin tolerance, bins not ready\n"
+"***************************************************************************\n" << std::endl; 
+  
+  bin_counter_vec.apply_tolerance(0.001);
+
 }
 
 

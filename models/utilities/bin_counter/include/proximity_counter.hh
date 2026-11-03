@@ -35,7 +35,6 @@ class CML_ProximityCounter : public CML_BinCounter {
   explicit CML_ProximityCounter(const std::vector<double> & targets_);
   CML_ProximityCounter(const CML_ProximityCounter&) = delete;
   CML_ProximityCounter& operator=(const CML_ProximityCounter&) = delete;
-  using CML_BinCounter::insert;
   void set_data( const std::vector<double> & targets_);
   template <size_t n_targets>
   void set_data( const double (&new_targets)[n_targets])
