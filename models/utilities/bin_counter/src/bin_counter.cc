@@ -210,8 +210,6 @@ CML_BinCounter::insert(double value)
   // Consider only values below upper edge and only if model passed sanity
   // check.
   if (bins_ready && value <= bins[nbin-1].bin_ceil) {
-    //ii-- is a post decrement. tests ii > 0, then decrements.
-    //so index ii runs from nbin - 1 to 0.
     for (auto bin = bins.rbegin(), end = bins.rend(); bin != end; ++bin) {
       if (value >= bin->bin_floor) {
         bin->count++;
