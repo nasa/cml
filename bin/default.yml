@@ -2781,6 +2781,10 @@ SIM_verif_bin_counter:
       compare:
       - models/utilities/bin_counter/verif/SIM_verif/RUN_03_proximity/log_test_data.csv
         vs. models/utilities/bin_counter/verif/SIM_verif/verif_data/RUN_03_proximity/log_test_data.csv
+    RUN_04_tolerance/input.py:
+      compare:
+      - models/utilities/bin_counter/verif/SIM_verif/RUN_04_tolerance/log_test_data.csv
+        vs. models/utilities/bin_counter/verif/SIM_verif/verif_data/RUN_04_tolerance/log_test_data.csv
 SIM_verif_cml_message:
   model_dir: models/utilities/cml_message
   path: models/utilities/cml_message/verif/SIM_verif
