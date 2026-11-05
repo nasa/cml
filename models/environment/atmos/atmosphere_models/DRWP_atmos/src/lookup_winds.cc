@@ -655,6 +655,18 @@ LookupAtmosWinds::compute_average_wind(
 {
   compute_average_wind( table_index, false, min_alt, max_alt);
 }
+
+/****************************************************************************/
+void
+LookupAtmosWinds::compute_average_wind_interp(
+    double min_alt,
+    double max_alt,
+    double step_alt)
+{
+  size_t target_index = (active)? current_index : 0;
+  compute_average_wind_interp( target_index, min_alt, max_alt, step_alt);
+}
+
 /****************************************************************************/
 void
 LookupAtmosWinds::compute_average_wind(
@@ -724,6 +736,63 @@ LookupAtmosWinds::compute_average_wind(
     if (active) {
       update(original_altitude);
     }
+  }
+}
+
+/****************************************************************************/
+void
+LookupAtmosWinds::compute_average_wind_interp(
+    size_t table_index,
+    double min_alt,
+    double max_alt,
+    double step_alt)
+{
+  if (table_index >= number_of_datasets) {
+    CMLMessage::error( __FILE__,__LINE__,
+      "Error computing average wind velocity for profile at index ",
+      table_index, ".\nThis index has not been populated with data.\n"
+      "Aborting computation.\n");
+    return;
+  }
+
+  double original_altitude = altitude;
+  jeod::Vector3::initialize(average_wind);
+  DRWPTableLookup & table_ = TableLookup_array[table_index];
+
+  // Table logic to maintain bounds of operated on
+  // altitude array within available domain
+  double table_end1 = table_.independent->data.front();
+  double table_end2 = table_.independent->data.back();
+  double table_min = std::min(table_end1, table_end2);
+  double table_max = std::max(table_end1, table_end2);
+  double min_alt_ = std::max(table_min, min_alt);
+  double max_alt_ = std::min(table_max, max_alt);
+
+  if (min_alt_ > max_alt_) {
+    CMLMessage::error( __FILE__,__LINE__,
+      "Error computing average wind velocity within specified bounds\n",
+      "No altitude data found in between 'min_alt' (", min_alt,
+      ")\nand 'max_alt' (", max_alt, ") for given DRWP Binary file.");
+    // Leave average at zero-vector
+    return;
+  }
+  size_t num_alts = (max_alt_ - min_alt_) / step_alt + 1;
+  for (size_t alt = 0; alt < num_alts; ++alt) {
+    altitude = min_alt_ + static_cast<double>(alt) * step_alt;
+    table_.update();
+    calculate_wind_mag_dir();
+    jeod::Vector3::incr( wind_velocity_tc,
+                         average_wind);
+  }
+
+  jeod::Vector3::scale( (1.0/num_alts),
+                        average_wind);
+  // We just populated the model's output data with values from an altitude
+  // that is not the current altitude. If the model is currently active, that
+  // might cause some problems with data logging.
+  // Reset model outputs to current table and altitude.
+  if (active) {
+    update(original_altitude);
   }
 }
 
