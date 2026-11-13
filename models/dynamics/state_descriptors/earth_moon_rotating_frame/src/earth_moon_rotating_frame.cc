@@ -3,6 +3,9 @@ Purpose:
   (Define methods for configuring an EphemBasedPointingRefFrame for the
    Earth-Moon system.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   ( ((Gary Turner) (OSR) (Aug 2019) (Antares) (initial))
   )
@@ -10,7 +13,11 @@ Programmers:
 *******************************************************************************/
 
 #include <string>
+#include "cml/models/dynamics/state_descriptors/pointing_ref_frame/include/ephem_based_pointing_ref_frame.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 #include "../include/earth_moon_rotating_frame.hh"
 
@@ -19,11 +26,9 @@ Constructor
 Purpose:  (Construct a EarthMoonRotatingFrame object.)
 *******************************************************************************/
 EarthMoonRotatingFrame::EarthMoonRotatingFrame (
-     jeod::EphemeridesManager & ephem_mgr)
+     jeod::EphemeridesManager & ephem_manager_in)
   :
-  EphemBasedPointingRefFrame(ephem_mgr),
-  orientation(EMB_Moon),
-  reverse_xy(false)
+  EphemBasedPointingRefFrame(ephem_manager_in)
 { }
 
 /*******************************************************************************
@@ -97,7 +102,7 @@ Purpose:(Configures the model)
 *****************************************************************************/
 void
 EarthMoonRotatingFrame::set_orientation(
-     FrameOrientation orient)
+     FrameOrientation new_orientation)
 {
   if (initialized) {
     CMLMessage::error(
@@ -106,7 +111,7 @@ EarthMoonRotatingFrame::set_orientation(
       "configuration.\nModel remains at its current setting.");
     return;
   }
-  orientation = orient;
+  orientation = new_orientation;
 }
 
 

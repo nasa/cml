@@ -23,6 +23,8 @@ Vehicle sim object
 ##include "jeod/models/utils/math/include/matrix3x3.hh"
 ##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
 
+##include "cml/models/utilities/cml_message/include/cml_message.hh" // For use in input files
+
 ##include "../../include/dynamic_mass_body.hh"
 ##include "../../include/dynamic_mass_group.hh"
 ##include "../../include/dynamic_mass_string.hh"

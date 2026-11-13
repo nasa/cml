@@ -18,13 +18,14 @@ PROGRAMMERS:
 #ifndef CML_SEPARATION_STATE_HH
 #define CML_SEPARATION_STATE_HH
 
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "jeod/models/utils/orientation/include/orientation.hh"
 #include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 
 class SeparationState : public SubscriptionBase
@@ -32,7 +33,7 @@ class SeparationState : public SubscriptionBase
  public:
    // The relative state is the state of "subject" relative to and
    // expressed in "source".  "subject" and "source" are protected.
-   bool generate_euler_angles; /* (--)
+   bool generate_euler_angles{true}; /* (--)
        Flag indicating whether it is necessary to compute the Euler angles
        from frame to frame.  Default: True. */
    jeod::RefFrameState  rel_state; /* (--)
@@ -44,34 +45,36 @@ class SeparationState : public SubscriptionBase
        entire object will not be updated. The relative transformation matrix
        and quaternion are in rel_state.rot.T_parent_this and
        rel_state.rot.Q_parent_this, respectively. */
-   double separation_distance; /* (m) magnitude of rel_state.trans.position. */
-   double separation_rate; /* (m/s)
+   double separation_distance{0.0}; /* (m) magnitude of rel_state.trans.position. */
+   double separation_rate{0.0}; /* (m/s)
      Rate at which the separation distance changes.
      The component of the relative velocity along the line
      separating the two points.*/
 
  protected:
-   bool frames_subscribed; /* (--)
+   bool frames_subscribed{false}; /* (--)
        The jeod::DynManager has subscriptions to the necessary frames on account
        of this instance.  Used to determine whether to unsubscribe. */
 
    // The state will be computed between two reference frames.
    // These are identified as "source" and "subject"
-   jeod::RefFrame * source;  /* (--) the root frame of the relative state,
+   jeod::RefFrame * source{nullptr};  /* (--) the root frame of the relative state,
                                      the "from" side of the relation. */
-   jeod::BodyRefFrame * subject;  /* (--) the other of the relative state, the "to"
+   jeod::BodyRefFrame * subject{nullptr};  /* (--) the other of the relative state, the "to"
                                           side of the relation. */
 
  public:
-   SeparationState (void);
-   explicit SeparationState (std::string name);
+   SeparationState ();
+   explicit SeparationState (const std::string & name_);
    ~SeparationState() override = default;
+   SeparationState (const SeparationState&) = delete;
+   SeparationState& operator = (const SeparationState&) = delete;
 
    void initialize( jeod::DynManager & dyn_manager_in,
                     jeod::DynBody & source_body,
                     jeod::DynBody & subject_body,
-                    std::string source_name,
-                    std::string subject_name) // DEPRECATED
+                    const std::string & source_name,
+                    const std::string & subject_name) // DEPRECATED
    { (void)dyn_manager_in;
      initialize(source_body, subject_body, source_name, subject_name);}
 
@@ -86,29 +89,24 @@ class SeparationState : public SubscriptionBase
                     jeod::BodyRefFrame & subject_frame);
    void initialize( jeod::DynBody      & source_body,
                     jeod::BodyRefFrame & subject_frame,
-                    std::string    source_name = "");
+                    const std::string  & source_name = "");
    void initialize( jeod::RefFrame     & source_frame,
                     jeod::DynBody      & subject_body,
-                    std::string    subject_name = "");
+                    const std::string  & subject_name = "");
    void initialize( jeod::DynBody      & source_body,
                     jeod::DynBody      & subject_body,
-                    std::string    source_name = "",
-                    std::string    subject_name = "");
+                    const std::string  & source_name = "",
+                    const std::string  & subject_name = "");
    virtual void update( );
    jeod::RefFrame* get_source() {return source;}
    jeod::BodyRefFrame* get_subject() {return subject;}
 
  protected:
-   jeod::BodyRefFrame *  initialize_find_frame (jeod::DynBody &,
-                                                std::string,
-                                                std::string);
+   jeod::BodyRefFrame *  initialize_find_frame (jeod::DynBody & body,
+                                                const std::string & frame_name,
+                                                const std::string & body_type);
    void activate() override;
    void deactivate() override;
-
- private:
-   // Not implemented:
-   SeparationState (const SeparationState&);
-   SeparationState& operator = (const SeparationState&);
 
 };
 #endif

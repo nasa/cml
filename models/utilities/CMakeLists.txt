@@ -17,12 +17,13 @@ add_cml_library(
         constraint_check/include/constraint_test.hh
         constraint_check/include/constraint_test_templates.hh
         constraint_check/include/constraint_test_timed_templates.hh
+        constraint_check/include/constraint_util.hh
         constraint_check/include/interval_constraint.hh
         constraint_check/include/threshold_constraint.hh
         constraint_check/include/valset_constraint.hh
         convert_string/include/convert_string.hh
         double_to_words/include/convert_double_to_words.hh
-        env_utils/include/env_utils.h
+        env_utils/include/env_utils.hh
         fault_arch/include/sSensorFaults.hh
         fault_management/include/fault.hh
         fault_management/include/fault_bias.hh
@@ -71,9 +72,8 @@ add_cml_library(
         constraint_check/src/constraint.cc
         constraint_check/src/constraint_set.cc
         constraint_check/src/constraint_test.cc
-        constraint_check/src/constraint_test_templates.cc
-        constraint_check/src/constraint_test_timed_templates.cc
         double_to_words/src/convert_double_to_uint_words.cc
+        env_utils/src/env_utils.cc
         fault_arch/src/sSensorFaults.cc
         fault_management/src/fault.cc
         fault_management/src/fault_function.cc
@@ -108,6 +108,22 @@ add_cml_tests(
         utilities
 
     SOURCES
+        constraint_check/test/constraint_class_test.cc
+        constraint_check/test/constraint_set_test.cc
+        constraint_check/test/constraint_test_instant_violation_test.cc
+        constraint_check/test/constraint_test_timed_violation_test.cc
+        constraint_check/test/threshold_constraint_test.cc
+        constraint_check/test/valset_constraint_test.cc
         cml_message/test/cml_message_test.cc
+        double_to_words/test/convert_double_to_words_test.cc
+        env_utils/test/env_utils_test.cc
+        math_utils/test/ellipsoid_intersection_test.cc
+        math_utils/test/math_utils_cholesky_decomposition_test.cc
+        math_utils/test/math_utils_frame_transformations_test.cc
+        math_utils/test/math_utils_linear_algebra_test.cc
+        math_utils/test/math_utils_numerical_methods_test.cc
+        math_utils/test/math_utils_protection_methods_test.cc
+        math_utils/test/quadratic_solver_test.cc
+        math_utils/test/std_array_ops_test.cc
         table_interp_cpp/test/table_independent_variable_test.cc
 )

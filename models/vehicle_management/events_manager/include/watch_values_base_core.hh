@@ -20,7 +20,6 @@ PROGRAMMERS:
 
 #include <list>
 #include <string>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "event_variable_assignment.hh"
@@ -45,47 +44,51 @@ class WatchValuesBaseCore : public SubscriptionBase {
         Decreasing = -1,
         Both = 0,
         Increasing = 1};
-  bool multi_shot; /* (--)
+  bool multi_shot{false}; /* (--)
        Fires at every crossing versus first-crossing only (Default: Off)*/
-  bool relative_to_activation; /* (--)
+  bool relative_to_activation{false}; /* (--)
     Flag indicating whether the reference value is to be interpreted as being
     relative to the variable-value at the time this instance was activated.
     E.g. when watching for variable increasing by some amount, the reference
     value will be made equal to that amount plus the value of variable
     recorded at activation.
     (Default:Off) */
-  bool event_triggered; // (--)  variable matched specified requirement.
-  int  int_event_triggered; // (--) output. Integer version of event_triggered.
+  bool event_triggered{false}; // (--)  variable matched specified requirement.
+  int  int_event_triggered{0}; // (--) output. Integer version of event_triggered.
   std::string message; /* (--)
              Message to send when event is detected and acted upon.*/
-  bool add_self_to_manager_active_list; /* (--)
+  bool add_self_to_manager_active_list{true}; /* (--)
     Flag indicates whether to automatically add this event to the manager's
     monitored list upon event activations.
     Default: true.*/
   std::string name; /* (--)
     Name, primarily for debugging purposes. May be left blank.*/
-  bool locked; /* (--)
-    Boolean used to lock at each cycle, so each WatchValuesBase cannot be 
-    tested more than once per cycle, leading to unintended behavior.*/
-  bool externally_managed; /* (--)
+  bool locked{false}; /* (--)
+    Boolean used to lock at each cycle, so each WatchValuesBase cannot be
+    tested more than once per cycle. Elaborate extension of WatchValuesBaseCore
+    -- such as EventTrigger -- can create false negatives if evaluated
+    multiple times with the same value of the watch-variable.  */
+  bool externally_managed{false}; /* (--)
     Boolean setting that bool "locked" is set to once trigger is evaluated
     true: lock after evaluation
-      (commonly set in CompoundEventsManager::create_trigger())
+      (commonly set when a WatchValue is added to the CompoundEventsManager's
+       managed_triggers list, such as when using create_trigger(...))
     false: do not lock after evaluation, can be evaluated multiple times per
-      logging cycle (default, but overriden by create_trigger())  */
+      logging cycle (default, but overriden by
+      CompoundEventssManager::add_trigger(...))  */
 
 
  protected:
-  Direction direction; // (--) trigger at reference crossing in this direction.
-  double delta_record; // (--) recorded delta between variable and reference.
-  bool relative_to_activation_protected; /* (--)i
+  Direction direction{Undefined}; // (--) trigger at reference crossing in this direction.
+  double delta_record{0.0}; // (--) recorded delta between variable and reference.
+  bool relative_to_activation_protected{false}; /* (--)i
     This is a protected copy of the value of the the relative_to_activation
     flag at activation. relative_to_activation is public to allow it to be
     set easily, but it should not be reverted while a WatchValue is being
     tested, so the value is recorded at activation, and this recorded value
     used during routine updates*/
 
-  std::list<WatchValuesBaseCore *> * active_watches; /* --
+  std::list<WatchValuesBaseCore *> * active_watches{nullptr}; /* --
              pointer to the list in Events Manager.*/
 
   std::list<bool *> ext_bool_on; /* (--)
@@ -112,7 +115,8 @@ class WatchValuesBaseCore : public SubscriptionBase {
  public:
   WatchValuesBaseCore();
   ~WatchValuesBaseCore() override;
-
+  WatchValuesBaseCore (const WatchValuesBaseCore& rhs) = delete;
+  WatchValuesBaseCore& operator = (const WatchValuesBaseCore& rhs) = delete;
 
   virtual void initialize( std::list<WatchValuesBaseCore *> * active_watch_in);
   void set_direction(int arg);
@@ -135,15 +139,11 @@ class WatchValuesBaseCore : public SubscriptionBase {
   }
   void add_action( EventActionBase& action) { actions.push_back(&action);}
 
-  virtual void set_dbl_reference(double) {}
-  virtual void set_delay_offset(double) {}
+  virtual void set_dbl_reference(double ref) {(void)ref;}
+  virtual void set_delay_offset(double ref) {(void)ref;}
 
   virtual bool test_crossing() = 0;
   virtual bool specific_execution(){ return false;}
   virtual void apply_complementary_changes();
-
- private:
-  WatchValuesBaseCore (const WatchValuesBaseCore& rhs);
-  WatchValuesBaseCore& operator = (const WatchValuesBaseCore& rhs);
 };
 #endif

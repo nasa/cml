@@ -12,10 +12,14 @@ PROGRAMMERS:
 #ifndef CML_GRAVITY_FIDELITY_MANAGER_HH
 #define CML_GRAVITY_FIDELITY_MANAGER_HH
 
-#include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "cml/models/utilities/table_interp_cpp/include/simple_table_lookup.hh"
 #include <vector>
+
+namespace jeod {
+class RefFrame;
+class SphericalHarmonicsGravityControls;
+}
 
 class GravityFidelityManager : public SubscriptionBase
 {
@@ -46,25 +50,22 @@ class GravityFidelityManager : public SubscriptionBase
       NOTE - table behavior defaults to using proximity-overrides if the
              independent variable is with 1E-9 of the bin-width of
              one of the calibrated values.*/
-  double distance; /* (m) The distance between the two frames. */
-  double degree_order; /* (--)
+  double distance{0.0}; /* (m) The distance between the two frames. */
+  double degree_order{0.0}; /* (--)
       The desired degree and order of the gravity field.
       This is a "double" type because that is the native type of the
       SimpleTableLookup; the value will be cast to an unsigned int for
       assignment to the gravity model after the table-lookup has populated it.*/
 
  public:
-  GravityFidelityManager(  jeod::SphericalHarmonicsGravityControls & grav_controls,
-                           const jeod::RefFrame                    & source_frame,
-                           const jeod::RefFrame                    & target_frame);
+  GravityFidelityManager(  jeod::SphericalHarmonicsGravityControls & grav_controls_,
+                           const jeod::RefFrame                    & source_frame_,
+                           const jeod::RefFrame                    & target_frame_);
   ~GravityFidelityManager() override = default;
+  GravityFidelityManager (const GravityFidelityManager&) = delete;
+  GravityFidelityManager & operator = (const GravityFidelityManager&) = delete;
 
   void initialize() override;
   void update();
-
- private:
-  // Unimplemented copy constructor and assignment operator
-  GravityFidelityManager (const GravityFidelityManager&);
-  GravityFidelityManager & operator = (const GravityFidelityManager&);
 };
 #endif

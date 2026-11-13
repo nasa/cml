@@ -2,27 +2,29 @@
 Purpose:
   (Define methods for defining and updating the pointing frame.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   ( ((Michael McCarthy, Gary Turner) (OSR) (June 2019) (Antares) (initial))
   )
 
 *******************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/pointing_ref_frame.hh"
 
-/*****************************************************************************
-Constructor
-*****************************************************************************/
+/**
+ * @details Initializes the frame with zero vectors for the position and velocity.
+ *          The angular velocity is set to a unit vector along the z-axis. The
+ *          transformation matrix is initialized as the identity matrix, and the
+ *          attitude quaternion is set to the identity quaternion.
+ */
 PointingRefFrame::PointingRefFrame()
-  :
-  originating_frame(nullptr),
-  target_frame(nullptr),
-  pointing_frame(),
-  target_wrt_originating_state()
 {
   // Initialize the frame's state:
   // The position and velocity will always be 0
@@ -35,13 +37,10 @@ PointingRefFrame::PointingRefFrame()
   pointing_frame.state.rot.Q_parent_this.make_identity();
 }
 
-/*****************************************************************************
-set_originating_frame
-Purpose:(sets the originating_frame pointer)
-*****************************************************************************/
+// Set the Originating Frame pointer
 void
 PointingRefFrame::set_originating_frame(
-    jeod::RefFrame * orig_frame)
+    jeod::RefFrame * originating_frame_in)
 {
   if (active) {
     CMLMessage::error(
@@ -50,23 +49,20 @@ PointingRefFrame::set_originating_frame(
       "frame.\nOriginating-frame remains at its current setting.");
     return;
   }
-  if (orig_frame == nullptr) {
+  if (originating_frame_in == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Attempt to assign the originating-frame of PointingRefFrame ", pointing_frame.get_name(), " to be "
       "NULL.\nThis is not a valid setting.\nAttempt failed.\n");
     return;
   }
-  originating_frame = orig_frame;
+  originating_frame = originating_frame_in;
 }
 
-/*****************************************************************************
-set_target_frame
-Purpose:(sets the target_frame pointer)
-*****************************************************************************/
+// Set the Target Frame pointer
 void
 PointingRefFrame::set_target_frame(
-    jeod::RefFrame * targ_frame)
+    jeod::RefFrame * target_frame_in)
 {
   if (active) {
     CMLMessage::error(
@@ -75,21 +71,21 @@ PointingRefFrame::set_target_frame(
       "frame.\nOriginating-frame remains at its current setting.");
     return;
   }
-  if (targ_frame == nullptr) {
+  if (target_frame_in == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Attempt to assign the target-frame of PointingRefFrame ", pointing_frame.get_name(), " to be "
       "NULL.\nThis is not a valid setting.\nAttempt failed.\n");
     return;
   }
-  target_frame = targ_frame;
+  target_frame = target_frame_in;
 }
 
-/*******************************************************************************
-update
-Purpose:  (Updates the state of the pointing frame, specifically its
-           orientation and angular rate.)
-*******************************************************************************/
+/**
+ * @note Since the Pointing Frame is defined with its origin at co-located with
+ *       the Originating Frame's origin, only the orientation and angular rate
+ *       will change.
+ */
 void
 PointingRefFrame::update()
 {
@@ -106,7 +102,7 @@ PointingRefFrame::update()
   double axis_scratch[3];
 
   // check distance between orig. and target
-  double pos_r = jeod::Vector3::vmag( target_wrt_originating_state.trans.position );
+  const double pos_r = jeod::Vector3::vmag( target_wrt_originating_state.trans.position );
   if (MathUtils::is_near_equal( pos_r, 0.0, 1.0)) {
     // if pos = 0, T = Tprev (= Identity for first update) and ang_vel_this = 0
     CMLMessage::warn(
@@ -208,12 +204,7 @@ PointingRefFrame::update()
   pointing_frame.state.rot.compute_quaternion();
 }
 
-
-/*****************************************************************************
-setup_frames
-Purpose:(run from model activation; common base method for this class and
-         its derivatives.)
-*****************************************************************************/
+// Run from model activation; common base method for this class and its derivatives
 bool
 PointingRefFrame::setup_frames()
 {
@@ -237,10 +228,7 @@ PointingRefFrame::setup_frames()
   return true;
 }
 
-/*****************************************************************************
-activate
-Purpose:(Activates the model when its subscription count rises from 0 to 1)
-*****************************************************************************/
+// Activate the model when its subscription count rises from 0 to 1
 void
 PointingRefFrame::activate()
 {
@@ -278,12 +266,7 @@ PointingRefFrame::activate()
   */
 }
 
-
-
-/*****************************************************************************
-deactivate
-Purpose:(Deactivates the model when its subscription count drops to 0)
-*****************************************************************************/
+// Deactivate the model when its subscription count drops to 0
 void
 PointingRefFrame::deactivate()
 {

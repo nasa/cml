@@ -2,13 +2,25 @@
 PURPOSE:
   (Simple model of a single reaction control system jet.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/utilities/math_utils/src/math_utils.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (Initial object-oriented implementation)))
 **********************************************************************/
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include <algorithm>
+#include <cmath>
 
+#include "../include/rcs_generic.hh"
+#include "../include/rcs_group.hh"
+#include "../include/rcs_prop_pod.hh"
 #include "../include/rcs_jet.hh"
 
 /*****************************************************************************
@@ -23,58 +35,10 @@ RcsJet::RcsJet(
   prop_pod(prop_pod_),
   group(group_),
   time_step( system.time_step),
-
-  isp(0.0),
-  isp_g(0.0),
-  g_at_earth_surface(9.80665),
-
   component_flow_rate( prop_pod.components.size()),
   component_consumption( prop_pod.components.size()),
-  force_hat{0.0, 0.0, 0.0},
-  T_str_to_case{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  force_hat_changed(true),
-  force_cl_with_err(0.0),
-  force_hat_with_err{0.0, 0.0, 0.0},
-  cone_angle_err(0.0),
-  azimuth_angle_err(0.0),
+  sum_component_consumption( prop_pod.components.size())
 
-  force{0.0, 0.0, 0.0},
-  error(No_Errors),
-  location{0.0, 0.0, 0.0},
-  force_cl(0.0),
-  force_mag_std_dev(0.0),
-  force_mag_bias_frac(0.0),
-  direction_error(Vector),
-  force_cl_err(0.0),
-  force_hat_err{0.0, 0.0, 0.0},
-  force_hat_std_dev{0.0, 0.0, 0.0},
-  force_hat_std_mean{0.0, 0.0, 0.0},
-  direction_dispersion(false),
-  cone_angle_disp(0.0),
-  azimuth_angle_disp(0.0),
-  cone_angle_bias(0.0),
-  cone_angle_std_dev(0.0),
-  base_impingement_force{0.0, 0.0, 0.0},
-  base_impingement_torque{0.0, 0.0, 0.0},
-  failure(No_Failure),
-  thrust_factor(0.0),
-  status(Status_Off),
-  on_com_time(0.0),
-  off_com_time(0.0),
-  on_com_time1(0.0),
-  off_com_time1(0.0),
-  time_left_in_trailoff(0.0),
-  delta_time_on(0.0),
-  scaled_force(0.0),
-  total_delay_on(0.0),
-  total_delay_off(0.0),
-  commands(),
-  command(false),
-  nfired(0),
-  sum_time(0.0),
-  torque{0.0, 0.0, 0.0},
-  scaled_impingement_force{0.0, 0.0, 0.0},
-  scaled_impingement_torque{0.0, 0.0, 0.0}
 {
   // Start the command list with an "Off":
   commands.push_back(false);
@@ -204,8 +168,8 @@ RcsJet::compute_component_flow_rates()
     "Specific Impulse = ", isp, " s\nwith g included, velocity = ", isp_g, " m/s\n");
   }
 
-  unsigned int num_prop_components = group.get_num_prop_components();
-  double flow_rate = force_cl / isp_g;
+  const unsigned int num_prop_components = group.get_num_prop_components();
+  const double flow_rate = force_cl / isp_g;
 
   if (num_prop_components == 1) {
     // compute simple fuel flow, all flow on one channel
@@ -255,9 +219,7 @@ RcsJet::update(
   // During build_up and trail_off the force is assumed to have a constant slope */
   delta_time_on = 0.0;
 
-  for (unsigned int ii=0; ii<component_consumption.size(); ii++) {
-     component_consumption.at(ii) = 0.0;
-  }
+  std::fill(component_consumption.begin(), component_consumption.end(), 0.0);
 
   //****************************/
   // Set command
@@ -893,6 +855,12 @@ RcsJet::compute_prop_consumption()
       }
     }
   }
+  
+  // Accumulate component consumption:
+  for (unsigned int ii = 0; ii < component_consumption.size(); ++ii) {
+    sum_component_consumption[ii] += component_consumption[ii];
+    sum_consumption += component_consumption[ii];
+  }
 
   // Add this jet's prop consumption (per component) to the pod
   prop_pod.increment_mass_consumption( component_consumption);
@@ -916,7 +884,7 @@ double
 RcsJet::get_component_consumption(
       unsigned int ix)
 {
-  if (ix > component_consumption.size()) {
+  if (ix >= component_consumption.size()) {
     CMLMessage::error(
       __FILE__,__LINE__,"Request error\n",
       "Cannot extract the index ", ix, " because component_consumption has "
@@ -935,7 +903,7 @@ double
 RcsJet::get_component_flow_rate(
       unsigned int ix)
 {
-  if (ix > component_flow_rate.size()) {
+  if (ix >= component_flow_rate.size()) {
     CMLMessage::error(
       __FILE__,__LINE__,"Request error\n",
       "Cannot extract the index ", ix, " because component_flow_rate has "
@@ -965,7 +933,7 @@ RcsJet::set_component_flow_rate(
     unsigned int component_ix,
     double rate)
 {
-  if (component_ix > component_flow_rate.size()) {
+  if (component_ix >= component_flow_rate.size()) {
     CMLMessage::error(
     __FILE__,__LINE__,"Assignment error\n",
     "Cannot assign a component flow-rate to component index ", component_ix, " because\n"
@@ -1064,7 +1032,7 @@ RcsJet::apply_direction_error()
     // direction towards the y-axis after the y-z plane has been rotated by
     // azimuth-angle.
     double force_case[3];
-    double sin_cone = std::sin(cone_angle_err);
+    const double sin_cone = std::sin(cone_angle_err);
     force_case[0] = std::cos(cone_angle_err);
     force_case[1] = sin_cone * std::cos(azimuth_angle_err);
     force_case[2] = sin_cone * std::sin(azimuth_angle_err);
@@ -1092,7 +1060,7 @@ RcsJet::apply_direction_dispersion()
   // direction towards the y-axis after the y-z plane has been rotated by
   // azimuth-angle.
   double force_case[3];
-  double sin_cone = std::sin(cone_angle_disp);
+  const double sin_cone = std::sin(cone_angle_disp);
   force_case[0] = std::cos(cone_angle_disp);
   force_case[1] = sin_cone * std::cos(azimuth_angle_disp);
   force_case[2] = sin_cone * std::sin(azimuth_angle_disp);

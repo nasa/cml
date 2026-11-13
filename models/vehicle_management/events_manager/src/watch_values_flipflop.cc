@@ -9,10 +9,18 @@ PURPOSE: (
   - one is applied when the boolean state switches from false to true
   - the other is applies when the state switches from true to false.
  )
+
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2026/02) (ANTARES) (initial implementation)))
 *******************************************************************************/
+#include "../include/watch_values_base_core.hh"
 #include "../include/watch_values_flipflop.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstdlib>
+#include <list>
 
 /*****************************************************************************
 Constructor
@@ -20,11 +28,7 @@ Constructor
 WatchValuesFlipFlop::WatchValuesFlipFlop(
   WatchValuesBaseCore & associated_watch_)
   :
-  associated_watch( associated_watch_),
-  state(false),
-  down_disable_models(),
-  down_assignments(),
-  down_actions()
+  associated_watch( associated_watch_)
 {
   multi_shot = true;
   associated_watch.multi_shot = true;
@@ -36,12 +40,7 @@ WatchValuesFlipFlopDelayed::WatchValuesFlipFlopDelayed(
   const double & delay_variable_)
   :
   WatchValuesFlipFlop(associated_watch_),
-  delay_variable( delay_variable_),
-  in_delay(false),
-  baseline_delay_value(0.0),
-  delay_value(0.0),
-  up_delay(0.0),
-  down_delay(0.0)
+  delay_variable( delay_variable_)
 {}
 
 /*****************************************************************************
@@ -84,7 +83,7 @@ Notes:
 bool
 WatchValuesFlipFlop::test_crossing()
 {
-  bool new_state = associated_watch.test_crossing();
+  const bool new_state = associated_watch.test_crossing();
   event_triggered = (new_state != state);
   state = new_state;
   return event_triggered;
@@ -104,7 +103,7 @@ WatchValuesFlipFlopDelayed::test_crossing()
   }
   /* If not in a delay-pattern, test the crossing just as we would for any
    * other event, and if detected, start the delay process.*/
-  bool new_state = associated_watch.test_crossing();
+  const bool new_state = associated_watch.test_crossing();
   // If no change, nothing to do; event is untriggered:
   if (new_state == state) {
     event_triggered = false;
@@ -114,7 +113,7 @@ WatchValuesFlipFlopDelayed::test_crossing()
      in an active delay process).*/
   else {
     baseline_delay_value = delay_variable;
-    delay_value = (new_state)? up_delay : down_delay;
+    delay_value = new_state? up_delay : down_delay;
     /* evaluate the delay; it could be configured to 0.0 in which case the
        delay will be ignored  and the event will trigger just as though it was
        a WatchValuesFlipFlop instance.*/
@@ -223,7 +222,7 @@ WatchValuesFlipFlop::activate()
   state = associated_watch.test_crossing();
 
   if (add_self_to_manager_active_list) {
-    if (!active_watches) {
+    if (active_watches == nullptr) {
       CMLMessage::error( __FILE__,__LINE__,
         "Activating watch with internal instruction to add itself to\n"
         "the active-watch list, but has no access to that list.\n"
@@ -255,7 +254,7 @@ Purpose:
   Returns true if the delay conditions have been satisfied.
 *****************************************************************************/
 bool
-WatchValuesFlipFlopDelayed::evaluate_delay()
+WatchValuesFlipFlopDelayed::evaluate_delay() const
 {
   return (std::abs( delay_variable - baseline_delay_value) >= delay_value);
 }

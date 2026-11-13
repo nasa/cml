@@ -1,6 +1,10 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Disperses the state)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/utilities/math_utils/src/math_utils.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (February 2015) (Antares) (Initial version))
    ((Brenton Caughron) (OSR) (Oct. 2017) (Antares) (IV&V Code Review))
@@ -8,10 +12,15 @@ PROGRAMMERS:
                Trick rand_num, added option for user-input dispersions)))
 ************************************************************************/
 
-#include <cstring>  // memset
-#include <cmath>    // sqrt
-#include "jeod/models/utils/math/include/vector3.hh"    // jeod::Vector3::*
-#include "jeod/models/utils/math/include/matrix3x3.hh"  // jeod::Matrix3x3::*
+#include <cmath>
+#include <random>
+#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameter_set.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "../include/correlated_state_dispersion.hh"
 
@@ -20,33 +29,6 @@ Constructor
 *****************************************************************************/
 CorrelatedStateDispersion::CorrelatedStateDispersion()
   :
-  pv_covar_frame(PV_COVAR_INRTL),
-  corr_option(CORRELATED_PV),
-  corr_att_frame(REFERENCE_FRM),
-  att_rot_defined(PerturbedToTrue),
-  dispersion_distribution(NoDispersion),
-  hold_previous_random_vec(false),
-  max_iterations(2000),
-  sigma_limit(0.0),
-  seed(12345),
-  user_specified_distribution{0.0},
-  covariance{{0.0}},
-  corr_base_frame_name(""),
-  TR_geodetic_altitude_disp(0.0),
-  pos_error{0.0, 0.0, 0.0},
-  vel_error{0.0, 0.0, 0.0},
-  att_error{0.0, 0.0, 0.0},
-  prm_error{0.0, 0.0, 0.0, 0.0, 0.0},
-  r_mag(0.0),
-  declination(0.0),
-  right_asc(0.0),
-  v_mag(0.0),
-  fp_angle(0.0),
-  azimuth(0.0),
-  generator_seeded(false),
-  dimension(6),
-  random_vec{0.0},
-  sqrt_covariance{{0.0}},
   rand_uniform(0.0, 1.0),
   rand_norm(0.0, 1.0)
 {}
@@ -474,7 +456,7 @@ CorrelatedStateDispersion::generate_random_vec()
     // Generate the length of random_vec. The square of the radius follows a
     // chi-squared distribution with <dimension> degrees of freedom.
     double radius_sq = 0.0;
-    double sigma_lim_sq = sigma_limit * sigma_limit;
+    const double sigma_lim_sq = sigma_limit * sigma_limit;
     std::chi_squared_distribution<double> rand_chi2(dimension);
     unsigned int num_iterations = 0;
     do
@@ -494,7 +476,7 @@ CorrelatedStateDispersion::generate_random_vec()
       break;
     }
 
-    double radius = std::sqrt(radius_sq);
+    const double radius = std::sqrt(radius_sq);
     for (unsigned int ii = 0; ii < dimension; ii++) {
       random_vec[ii] *= radius;
     }
@@ -544,7 +526,7 @@ CorrelatedStateDispersion::populate_random_vec_unit()
   for (unsigned int ii = 0; ii < dimension; ii++) {
     radius_sq += random_vec[ii]*random_vec[ii];
   }
-  double radius = std::sqrt(radius_sq);
+  const double radius = std::sqrt(radius_sq);
 
   if (MathUtils::is_near_equal(radius, 0.0)) {
     CMLMessage::error(__FILE__, __LINE__, "Random number generation\n",
@@ -624,9 +606,9 @@ CorrelatedStateDispersion::transform_ra_dec_fp(
     //  representations, so this is adequate.
     double r_unit[3];
     jeod::Vector3::scale( position, (1/r_mag), r_unit);
-    double pos_xy_mag    =  std::sqrt( r_unit[0] * r_unit[0] + r_unit[1] * r_unit[1]);
-    double unit0_xy_div  =  r_unit[0] /pos_xy_mag;
-    double unit1_xy_div  = -r_unit[1] / pos_xy_mag;
+    const double pos_xy_mag    =  std::sqrt( r_unit[0] * r_unit[0] + r_unit[1] * r_unit[1]);
+    const double unit0_xy_div  =  r_unit[0] /pos_xy_mag;
+    const double unit1_xy_div  = -r_unit[1] / pos_xy_mag;
 
     T_inrtl_to_NED[0][0] = -unit0_xy_div * r_unit[2];
     T_inrtl_to_NED[0][1] =  unit1_xy_div * r_unit[2];
@@ -690,7 +672,7 @@ CorrelatedStateDispersion::transform_ra_dec_fp(
 
   // Compute errored Inertial state and output errors
   // xy here refers to inertial {x,y} not to NED {x,y}
-  double r_xy_mag = r_mag     * std::cos(declination);
+  const double r_xy_mag = r_mag * std::cos(declination);
   pos_error[0]    = r_xy_mag  * std::cos(right_asc)   - position[0];
   pos_error[1]    = r_xy_mag  * std::sin(right_asc)   - position[1];
   pos_error[2]    = r_mag     * std::sin(declination) - position[2];
@@ -770,8 +752,8 @@ CorrelatedStateDispersion::transform_TR_param(
   TR_param.pfix_position.update_from_cart(TR_param.pfix_position.cart_coords);
 
   /* Define dispersed geodetic altitude */
-  double TR_geodetic_altitude = TR_param.pfix_position.ellip_coords.altitude
-                              + TR_geodetic_altitude_disp;
+  const double TR_geodetic_altitude = TR_param.pfix_position.ellip_coords.altitude
+                                    + TR_geodetic_altitude_disp;
 
   /* Compute dispersed position and velocity vectors */
   //Note: R_PCPF and V_wrt_PCI_PCPF are being reused here

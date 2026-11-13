@@ -19,7 +19,6 @@ PROGRAMMERS:
 #ifndef CML_TR_STATE_PARAM_HH
 #define CML_TR_STATE_PARAM_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "TR_parameter_ref_frame.hh"
 #include "TR_state_parameter_set.hh"
@@ -46,25 +45,25 @@ class TargetRelative_StateParam : public TR_ParameterSet
 
 
   /* Input parameters */
-  bool    target_is_behind_vehicle;/* (--)
+  bool    target_is_behind_vehicle{false};/* (--)
     Flag to distinguish the ambiguity in the specification of the lateral
     angle.
     Default: false. */
-  double  K_theta;    /* (s/rad) Time-of-flight constant       */
-  double position[3]; /* (m)
+  double  K_theta{0.0};    /* (s/rad) Time-of-flight constant       */
+  double position[3]{}; /* (m)
     The position associated with the TR-parameters. This may be set
     externally and used to compute parameters, or the parameters set
     externally and used to compute this vector.*/
-  double velocity[3]; /* (m/s)
+  double velocity[3]{}; /* (m/s)
     The position associated with the TR-parameters. This may be set
     externally and used to compute parameters, or the parameters set
     externally and used to compute this vector.*/
 
  protected:
   /* Internal variables                                          */
-  double  omega_mag;  /* (rad/s)
+  double  omega_mag{0.0};  /* (rad/s)
     Magnitude of planet rotation vector w.r.t. inertial frame        */
-  double uhat_R[3];   /* (--) Unit position vector  */
+  double uhat_R[3]{1.0, 0.0, 0.0};   /* (--) Unit position vector  */
 
   // TODO @bcaughro: Temporarily going to convert all MathUtils::is_near_equal()
   // calls against zero to compare instead to less than this epsilon
@@ -91,28 +90,28 @@ class TargetRelative_StateParam : public TR_ParameterSet
             postiion vectors
     p-hat = Unit normal to initial position vector lies in the plane toward
             the target position */
-  double biased_target_pos_hat[3]; /* (--)
+  double biased_target_pos_hat[3]{}; /* (--)
     Unit vector in the PCPF frame repesenting the biased-target position
     vector.*/
-  double theta_RngBias; /* (rad)
+  double theta_RngBias{0.0}; /* (rad)
     The angle between the initial position vector and the biased-target
     position vector. */
 
-  double  sin_phi_omega;       /* (--)  Sine of angle between planet rotation
+  double  sin_phi_omega{0.0};       /* (--)  Sine of angle between planet rotation
                                         axis and target position            */
-  double  cos_phi_omega;       /* (--)  Cosine of angle between planet
+  double  cos_phi_omega{0.0};       /* (--)  Cosine of angle between planet
                                         rotation axis and target position    */
-  bool    flag_initialized;    /* (--)
+  bool    flag_initialized{false};    /* (--)
       Model is initialized, planet is non-NULL and all internally generated
       vectors are computed. */
-  bool omega_target_aligned;   /* (--)
+  bool omega_target_aligned{false};   /* (--)
       flag used to indicate when the target vector lies in proximity with
       the omega vector.*/
-  bool k_theta_warning_sent; /* (--)
+  bool k_theta_warning_sent{false}; /* (--)
       flag controlling the broadcast of the warning about k_theta not
       having been set.  This makes the message send only once.
       Default (false). */
-  bool target_is_behind_vehicle_check; /* (--) debugging tool.*/
+  bool target_is_behind_vehicle_check{false}; /* (--) debugging tool.*/
 
  public:
   /* Constructor */
@@ -120,6 +119,10 @@ class TargetRelative_StateParam : public TR_ParameterSet
 
   /* Destructor */
   virtual ~TargetRelative_StateParam() = default;
+
+  /* Deleted copy constructor and copy assignment operator */
+  TargetRelative_StateParam ( const TargetRelative_StateParam&) = delete;
+  TargetRelative_StateParam & operator = ( const TargetRelative_StateParam&) = delete;
 
   /* Public Methods, establishing interfaces defined in the derived classes */
   virtual void initialize( const double R_Ref[3]) = 0;
@@ -133,16 +136,16 @@ class TargetRelative_StateParam : public TR_ParameterSet
                                     double               (&V_wrt_PCI)[3]);
 
   void compute_velocity_from_params();
-  void compute_velocity_from_params( double        Vmag,
-                                     double        gamma,
-                                     double        Lambda,
+  void compute_velocity_from_params( double        Vmag_,
+                                     double        gamma_,
+                                     double        Lambda_,
                                      const double  (&R)[3], // in
                                      double        (&V_wrt_PCI)[3]); // out
-  void compute_velocity_from_params_SWIG( double        Vmag,
-                                          double        gamma,
-                                          double        Lambda,
-                                          const double  R_PCPF[3], // in
-                                          double        V_wrt_PCI_PCPF[3]); // out
+  void compute_velocity_from_params_SWIG( double        Vmag_,
+                                          double        gamma_,
+                                          double        Lambda_,
+                                          const double  R[3], // in
+                                          double        V_wrt_PCI[3]); // out
   double * get_tgt_position() {return Target_Reference_frame.u_hat;}
 
   /* Protected methods, called internally from the out-facing methods in
@@ -153,11 +156,6 @@ class TargetRelative_StateParam : public TR_ParameterSet
                               InputPosAngle input_theta_type = INPUT_THETA_ROT);
 
   bool compute_biased_target();
-
- private:
-  // copy-constructor and operator= made empty to prevent misuse.
-  TargetRelative_StateParam ( const TargetRelative_StateParam&);
-  TargetRelative_StateParam & operator = ( const TargetRelative_StateParam&);
 };
 
 #endif

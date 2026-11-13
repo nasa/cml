@@ -6,8 +6,13 @@ Sim object for gettting the code coverage to 100%
 *****************************************************************************/
 ##include "../../include/simple_table_lookup.hh"
 ##include "../../include/abstract_table_lookup.hh"
+##include "../../include/single_input_table_for_angles.hh"
+##include "../../include/single_input_table_for_quaternions.hh"
+##include "../../include/quaternion_spherical_interpolator.hh"
 ##include "../../include/table_independent_variable.hh"
 ##include "../../include/table_lookup__transpose_data.hh"
+
+##include "jeod/models/utils/quaternion/include/quat.hh"
 
 class CodeCoverageSimObject : public Trick::SimObject {
   public:

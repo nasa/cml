@@ -24,6 +24,7 @@ Programmers:
 namespace jeod {
 class RefFrameTrans;
 class Planet;
+class PlanetFixedPosition;
 }
 
 /*****************************************************************************
@@ -34,34 +35,30 @@ class RangeValues
 {
  public:
   // Range angles
-  double totalrange_angle;      /* (rad) Angle for total range */
-  double crossrange_angle;      /* (rad) Angle for cross-track range component */
-  double downrange_angle;       /* (rad) Angle for down-range component */
+  double totalrange_angle{0.0};      /* (rad) Angle for total range */
+  double crossrange_angle{0.0};      /* (rad) Angle for cross-track range component */
+  double downrange_angle{0.0};       /* (rad) Angle for down-range component */
 
   // Range arc-lengths, using the average of the reference and current radii
-  double cross_range_avg_rad;   /* (m) Cross-track range arc-length
+  double cross_range_avg_rad{0.0};   /* (m) Cross-track range arc-length
                                        using average radius */
-  double down_range_avg_rad;    /* (m) Down-range arc-length using
+  double down_range_avg_rad{0.0};    /* (m) Down-range arc-length using
                                        average radius */
-  double total_range_avg_rad;   /* (m) Total range arc-length using
+  double total_range_avg_rad{0.0};   /* (m) Total range arc-length using
                                        average radius */
 
   // Range arc-lengths, using the reference radius
-  double cross_range_ref_rad;   /* (m) Cross-track range arc-length using
+  double cross_range_ref_rad{0.0};   /* (m) Cross-track range arc-length using
                                        reference radius */
-  double down_range_ref_rad;    /* (m) Down-range arc-length using
+  double down_range_ref_rad{0.0};    /* (m) Down-range arc-length using
                                        reference radius */
-  double total_range_ref_rad;   /* (m) Total range arc-length using
+  double total_range_ref_rad{0.0};   /* (m) Total range arc-length using
                                        reference radius */
 
- public:
-  RangeValues();
+  RangeValues() = default;
   virtual ~RangeValues() = default;
- private:
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  RangeValues(const RangeValues& rhs);
-  RangeValues & operator = (const RangeValues&);
+  RangeValues(const RangeValues& rhs) = delete;
+  RangeValues & operator = (const RangeValues&) = delete;
 };
 
 
@@ -80,49 +77,49 @@ class RangeComputation : public RangeValues,
   PfixReferencePoint reference_data; /* (--) reference data */
 
  protected:
-  double reference_radius;  /* (m)  Radius to the point defined by
-                                    reference_data */
-  double current_radius;    /* (m)  Radius to the current point of interest
-                                    (state member variable) */
-  double average_radius;    /* (m)  Average of the two radii */
+  double reference_radius{0.0};    /* (m)  Radius to the point defined by
+                                           reference_data */
+  double current_radius{0.0};      /* (m)  Radius to the current point of interest
+                                           (state member variable) */
+  double average_radius{0.0};      /* (m)  Average of the two radii */
 
-  bool ref_point_set;       /* (--) Reference point values are set*/
-  bool use_polar_direction; /* (--)
+  bool ref_point_set{false};       /* (--) Reference point values are set*/
+  bool use_polar_direction{false}; /* (--)
        Use lat-lon-azimuth formulation, (rather than Cartesian position
        formulation).  Default: false (use Cartesian) */
-  bool set_direction;       /* (--)
+  bool set_direction{false};       /* (--)
        Flag indicates whether the set_reference_data methods are responsible
        for setting the direction.  This value is assigned at construction, a
        function of the choice of constructor.  Default: false -- do not set.*/
 
-  double ref_sin_lat;     /* (--) Sine of the reference latitude*/
-  double ref_cos_lat;     /* (--) Cosine of the reference latitude*/
-  double origin_sin_lat;  /* (--) Sine of the origin latitude*/
-  double origin_cos_lat;  /* (--) Cosine of the origin latitude*/
-  double target_sin_lat;  /* (--) Sine of the target latitude*/
-  double target_cos_lat;  /* (--) Cosine of the target latitude*/
+  double ref_sin_lat{0.0};     /* (--) Sine of the reference latitude*/
+  double ref_cos_lat{0.0};     /* (--) Cosine of the reference latitude*/
+  double origin_sin_lat{0.0};  /* (--) Sine of the origin latitude*/
+  double origin_cos_lat{0.0};  /* (--) Cosine of the origin latitude*/
+  double target_sin_lat{0.0};  /* (--) Sine of the target latitude*/
+  double target_cos_lat{0.0};  /* (--) Cosine of the target latitude*/
 
-  double origin_sin_azimuth; /* (--) Sine of the origin azimuth angle*/
-  double origin_cos_azimuth; /* (--) Cosine of the origin azimuth angle*/
+  double origin_sin_azimuth{0.0}; /* (--) Sine of the origin azimuth angle*/
+  double origin_cos_azimuth{0.0}; /* (--) Cosine of the origin azimuth angle*/
 
-  double origin_longitude; /* (rad) Longitude of the origin point*/
-  double target_longitude; /* (rad) Longitude of the target point*/
+  double origin_longitude{0.0}; /* (rad) Longitude of the origin point*/
+  double target_longitude{0.0}; /* (rad) Longitude of the target point*/
 
-  double reference_position_unit_pfix[3]; /* (--)
+  double reference_position_unit_pfix[3]{}; /* (--)
       The unit vector in the pfix frame to the reference position. */
-  double origin_position_unit_pfix[3]; /* (--)
+  double origin_position_unit_pfix[3]{}; /* (--)
       The unit vector in the pfix frame to the origin position. */
-  double target_position_unit_pfix[3]; /* (--)
+  double target_position_unit_pfix[3]{}; /* (--)
       The unit vector in the pfix frame to the target position. */
 
-  double origin_direction[3]; /* (--)
+  double origin_direction[3]{}; /* (--)
       The 3-vector specifying the reference direction.
       This does not have to be a unit vector.*/
 
-  double pos_x_pos_unit_pfix[3]; /* (--)
+  double pos_x_pos_unit_pfix[3]{}; /* (--)
       Cross product of the target-position unit vector with the
       origin-position unit vector. */
-  double dir_x_pos_unit_pfix[3]; /* (--)
+  double dir_x_pos_unit_pfix[3]{}; /* (--)
       Cross product of the reference-direction unit vector with the
       origin-position unit vector. */
 
@@ -133,29 +130,25 @@ class RangeComputation : public RangeValues,
  public:
   RangeComputation(const jeod::PlanetFixedPosition & state_in);
   ~RangeComputation() override = default;
+  RangeComputation(const RangeComputation& rhs) = delete;
+  RangeComputation & operator = (const RangeComputation&) = delete;
 
   virtual void initialize( const jeod::Planet & planet_in);
   void set_reference_data_query(); /*
       external call to determine whether there is sufficient data to
       proceed with setting the reference data.*/
   virtual void set_reference_data();
-  void set_reference_data_from_inrtl_state( const jeod::RefFrameTrans & trans_state);
-  void set_reference_data_from_inrtl_state( const double position[3],
-                                            const double direction[3]);
-  void set_reference_data_from_state( const double position[3],
-                                      const double direction[3]);
-  void update();
+  void set_reference_data_from_inrtl_state( const jeod::RefFrameTrans & trans);
+  void set_reference_data_from_inrtl_state( const double position_in[3],
+                                            const double direction_in[3]);
+  void set_reference_data_from_state( const double position_in[3],
+                                      const double direction_in[3]);
+  virtual void update();
 
  protected:
-  virtual void update_using_cartesian( void );
-  virtual void update_using_polar( void);
+  virtual void update_using_cartesian();
+  virtual void update_using_polar();
   virtual void is_abstract() = 0; // Makes this class non-instantiable
-
- private:
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  RangeComputation(const RangeComputation& rhs);
-  RangeComputation & operator = (const RangeComputation&);
 };
 
 #endif

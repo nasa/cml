@@ -6,6 +6,9 @@ PURPOSE:
    - bit-size of each word (e.g. 8-bit, 32-bit)
    - number of words available to represent the double.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2016) (ANTARES) (Initial version, uint only))
    ((Brent Caughron) (OSR) (June 2017) (ANTARES)
@@ -13,14 +16,17 @@ PROGRAMMERS:
    ((Bingquan Wang) (OSR) (Jan 2018) (ANTARES) (migrated to gcc 4.8))
    ((Tony Varesic) (OSR) (May 2021) (ANTARES) (added bit_size check)))
 *******************************************************************************/
-//Local Headers
 #include "../include/convert_double_to_words.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cmath>
+#include <cstdint>
+#include <limits>
+#include <utility>
+#include <vector>
 
-/*******************************************************************************
-Purpose:(Run the class function that calls the variables and creates the
-         words array that is populated with the converted values for
-         the original variable pass in format.)
-*******************************************************************************/
+/**
+ * Instantiates a @ref ConvertDoubleToUintWords class to do the conversion.
+ */
 void convert_double_to_uint_words( double convert_value,
                                    double resolution,
                                    uint32_t *words,
@@ -47,10 +53,9 @@ void convert_double_to_uint_words( double convert_value,
   }
 }
 
-/*******************************************************************************
-Purpose:(Run the class function that calls the variables and creates the
-         words array that is populated with the converted values.)
-*******************************************************************************/
+/**
+ * Instantiates a @ref ConvertDoubleToUintWords class to do the conversion.
+ */
 void convert_double_to_uint_words( double convert_value,
                                    double resolution,
                                    std::vector<uint32_t> &words,
@@ -63,14 +68,11 @@ void convert_double_to_uint_words( double convert_value,
 
   local_conv.update();
 
-  // Copy the class data to the output.
-  words = local_conv.words;
+  // Move the class data to the output.
+  words = std::move(local_conv.words);
 }
 
-/*******************************************************************************
-ConvertDoubleToUintWords
-Purpose:(Defines the class constructor for the object local_conv.)
-*******************************************************************************/
+// Constructor
 ConvertDoubleToUintWords::ConvertDoubleToUintWords( const double & in_convert_value,
                                                     double in_resolution,
                                                     unsigned int in_word_count,
@@ -101,10 +103,14 @@ ConvertDoubleToUintWords::ConvertDoubleToUintWords( const double & in_convert_va
   }
 }
 
-/*******************************************************************************
-Purpose:(Check passed in values to see if they're in acceptable tolerance
-         or to see if they're initialized correctly.)
-*******************************************************************************/
+/**
+ * Checks that:
+ * - The value to convert is at least half of the specified bit-resolution.
+ * - The value to convert is not too large to be representable in the number of
+ *   words specified with the given resolution.
+ * - The separation between words ("resolution") is not finer than the separation
+ *   between adjacent values representable by a double.
+ */
 bool
 ConvertDoubleToUintWords::check_values()
 {
@@ -122,19 +128,19 @@ ConvertDoubleToUintWords::check_values()
   // word_count -- set all words to their max value and leave.
   if (convert_value >= significance.at(word_count) - 0.5*resolution) {
     for (unsigned int ii = 0; ii < word_count; ii++) {
-      words.at(ii) = max_uint_f;
+      words.at(ii) = static_cast<unsigned int>(max_uint_f);
     }
     // If the if statement is tripped write out a message with the inform
     // severity so that it can be viewed as wanted by the user
     CMLMessage::inform(
       __FILE__,__LINE__,"Roundoff warning:\n\n",
-      "inputvalue ", convert_value, " is too large to be represented by words.\n"
+      "input value ", convert_value, " is too large to be represented by words.\n"
       "The output will be the max possible value (", significance.at(word_count)-resolution, ") instead.\n");
     return false;
   }
 
   // Check whether the specified separation between words ("resolution") is
-  // finer than the separation between adjacen double values.  If it is, there
+  // finer than the separation between adjacent double values.  If it is, there
   // will be words that are not available because they will be skipped before
   // reaching the next value available using the double data type.
   //
@@ -143,18 +149,14 @@ ConvertDoubleToUintWords::check_values()
   //   Sign bit: 1 bit
   //   Exponent: 11 bits
   //   Significand precision: 53 bits (52 explicitly stored)
-  // 2^53 = 9,007,199,254,740,992, the largest integer preresentable
+  // 2^53 = 9,007,199,254,740,992, the largest integer representable
   // in 53 bits of binary64
   //
   // Thus the next nearest value to convert_value that can be expressed as a
   // double will be approximately 1 part in 9,007,199,254,740,992 away from
   // the current value.  If that distance is larger than "resolution", then
   // there will be words that fit in the gap that will therefore be unusable.
-  // Rather than using division (and the risk of sub-normal numbers) and writing
-  //     "if (resolution <= convert_value / 9,007,199,254,740,992)",
-  // the test is structured with multiplication:
-  if (convert_value >= (0.900719926*1e16)*resolution) {
-    //error message
+  if (convert_value >= std::ldexp(resolution, std::numeric_limits<double>::digits)) {
     CMLMessage::error(
       __FILE__,__LINE__,"Initialization error:\n\n",
       "Resolution of words is lower than the resolution of double.\n "
@@ -163,18 +165,15 @@ ConvertDoubleToUintWords::check_values()
   return true;
 }
 
-/*******************************************************************************
-compute_significance
-Purpose:(Class function that calculates the significance at each word-array
-         column and is then used in calculations to convert the inputed value
-         into words.)
-*******************************************************************************/
+/**
+ * Automatically called during construction. Used to convert the input value
+ * into words.
+ */
 void
 ConvertDoubleToUintWords::compute_significance()
 {
-
-  // First identify the largest value expressable by an unsigned int
-  max_uint = 2.0*(1UL<<(bit_size-1));
+  // First identify the largest value expressible by an unsigned int
+  max_uint = 2.0*static_cast<double>(1UL<<(bit_size-1));
   max_uint_f = max_uint - 1.0;
 
   // Find the first (i.e. least-significant) zero element of the word-array
@@ -196,26 +195,22 @@ ConvertDoubleToUintWords::compute_significance()
   }
 }
 
-/*******************************************************************************
-Purpose:(Class function that updates the words array with converted
-         variable values.)
-*******************************************************************************/
+// Perform the conversion
 void
 ConvertDoubleToUintWords::update()
 {
-
   if (!check_values()) {
     return;
   }
   // Otherwise, work backward from the most significant uint to the least
-  // Note that the value of the significance of the least-signifiant bit of the
+  // Note that the value of the significance of the least-significant bit of the
   // word that (is / would be) found at index max_index is larger than
   // convert_value, so the max_index word must be zero, and the most
   // significant non-zero word is at max_index -1.
   double remainder = convert_value;
   for (int word_id = static_cast<int>(word_count) - 1; word_id >= 0; word_id--) {
     // Take the whole multiple of the significance of this word
-    const unsigned int word_index = static_cast<unsigned int>(word_id);
+    const auto word_index = static_cast<unsigned int>(word_id);
     words.at(word_index) = static_cast<unsigned int> (remainder /
                                                       significance.at(word_index));
 

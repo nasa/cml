@@ -30,8 +30,6 @@ PROGRAMMERS:
 #ifndef CML_AERO_EXECUTIVE_BASE_HH
 #define CML_AERO_EXECUTIVE_BASE_HH
 
-#include <cstring>  // NULL
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "aero_interface_output.hh"
@@ -54,18 +52,19 @@ public:
   /***************************************************************************/
   // User-specified inputs
   /***************************************************************************/
-  double Aref;    /* (m2)   Current aerodymamic reference area */
-  double Lref;    /* (m)    Current aerodynamic reference length */
+  double Aref{0.0};    /* (m2)   Current aerodymamic reference area */
+  double Lref{0.0};    /* (m)    Current aerodynamic reference length */
 
   // Constructor
   AeroExecutiveBase( AeroInterfaceOutput & output_ref)
     :
-    output( output_ref),
-    Aref(0.0),
-    Lref(0.0)
+    output( output_ref)
   {
     subscribe_name = "AeroExecutiveBase:";
   }
+
+  AeroExecutiveBase (const AeroExecutiveBase &) = delete;
+  AeroExecutiveBase & operator= (const AeroExecutiveBase &) = delete;
 
   void deactivate() override {
     output.zero_everything();
@@ -73,11 +72,5 @@ public:
   }
 
   virtual void update() = 0;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies
-  AeroExecutiveBase (const AeroExecutiveBase &);
-  AeroExecutiveBase & operator= (const AeroExecutiveBase &);
 };
 #endif

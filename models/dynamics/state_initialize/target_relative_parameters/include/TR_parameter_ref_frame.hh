@@ -19,7 +19,6 @@ PROGRAMMERS:
 #define CML_TR_PARAMETER_REF_FRAME_HH
 
 #include <string>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 TR_Parameter_RefFrame
@@ -33,9 +32,9 @@ All vectors are expressed in the planet-centered-planet-fixed (PCPF) frame.
 *****************************************************************************/
 class TR_Parameter_RefFrame {
   public:
-    double u_hat[3]; /* (--) unit-vector defining frame axis.*/
-    double n_hat[3]; /* (--) unit-vector defining frame axis.*/
-    double p_hat[3]; /* (--) unit-vector defining frame axis.*/
+    double u_hat[3]{}; /* (--) unit-vector defining frame axis.*/
+    double n_hat[3]{}; /* (--) unit-vector defining frame axis.*/
+    double p_hat[3]{}; /* (--) unit-vector defining frame axis.*/
 
   protected:
     std::string name; /* (--)
@@ -46,7 +45,7 @@ class TR_Parameter_RefFrame {
 
 
   public:
-    explicit TR_Parameter_RefFrame(std::string name);
+    explicit TR_Parameter_RefFrame(std::string name_);
     virtual ~TR_Parameter_RefFrame() = default;
 
     bool compute_frame( const double vec_A[3],

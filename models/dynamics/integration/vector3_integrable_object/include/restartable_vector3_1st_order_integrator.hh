@@ -13,8 +13,10 @@ PROGRAMMERS:
 #define CML_RESTARTABLE_VECTOR3_1ST_ORDER_INTEGRATOR_HH
 
 #include "er7_utils/integration/core/include/first_order_ode_integrator.hh"
+#include "er7_utils/integration/core/include/integrator_constructor.hh"
+#include "er7_utils/integration/core/include/integrator_result.hh"
+#include "er7_utils/interface/include/config.hh"
 #include "jeod/models/utils/container/include/simple_checkpointable.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/memory/include/jeod_alloc.hh"
 #include "jeod/models/utils/integration/include/restartable_state_integrator_templates.hh"
 
@@ -27,12 +29,18 @@ constructor
 *****************************************************************************/
     RestartableVector3FirstOrderODEIntegrator ()
     :
-    jeod::SimpleCheckpointable(),
-    integrator(nullptr),
     integrator_manager(integrator)
     {
       JEOD_REGISTER_CLASS (RestartableVector3FirstOrderODEIntegrator);
     }
+
+/*****************************************************************************
+copy constructor and copy assignment operator
+*****************************************************************************/
+    RestartableVector3FirstOrderODEIntegrator (
+      const RestartableVector3FirstOrderODEIntegrator &) = delete;
+    RestartableVector3FirstOrderODEIntegrator & operator= (
+      const RestartableVector3FirstOrderODEIntegrator &) = delete;
 
 /*****************************************************************************
 destructor
@@ -123,18 +131,11 @@ Purpose:(Restore the integrator on restart.)
     Pointer to the object that performs integration. The object is created
     managed by the integrator manager.
     */
-    er7_utils::FirstOrderODEIntegrator * integrator; //!< trick_units(--)
+    er7_utils::FirstOrderODEIntegrator * integrator{nullptr}; //!< trick_units(--)
 
     /*
     Object that creates and manages the integrator object.
     */
     jeod::RestartableFirstOrderODEIntegrator<3> integrator_manager; //!< trick_io(**)
-
-
-    // Unimplemented member functions.  Copy constructor, operator =
-    RestartableVector3FirstOrderODEIntegrator (
-      const RestartableVector3FirstOrderODEIntegrator &);
-    RestartableVector3FirstOrderODEIntegrator & operator= (
-      const RestartableVector3FirstOrderODEIntegrator &);
 };
 #endif

@@ -3,6 +3,9 @@
 PURPOSE:
    (Define method to check events for all Compound-event instances)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May       2018) (Initial implementation of event manager))
@@ -16,8 +19,13 @@ PROGRAMMERS:
 *******************************************************************************/
 
 
-/* Model Includes */
+#include "../include/compound_event.hh"
 #include "../include/compound_event_manager.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/vehicle_management/events_manager/include/vehicle_events_manager.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
+#include <algorithm>
+#include <string>
 
 
 /*****************************************************************************
@@ -26,12 +34,7 @@ Constructor / Destructor
 CompoundEventsManager::CompoundEventsManager(
   const double & time_)
   :
-  time(time_),
-  allocated_events(),
-  managed_triggers(),
-  allocated_triggers(),
-  allocated_triggers_(),
-  enabled(true)
+  time(time_)
 {}
 /****************************************************************************/
 CompoundEventsManager::~CompoundEventsManager()
@@ -67,7 +70,8 @@ CompoundEventsManager::update()
 {
   if (!enabled) {return;}
   // Iterate through managed triggers and unlock them for the current sim cycle
-  // (meant to be executed before a trigger is updated, where it will then be locked)
+  // (meant to be executed before a trigger is updated, where it will then be
+  // locked)
   for ( WatchValuesBaseCore * trigger : managed_triggers) {
     trigger->locked = false;
   }
@@ -96,7 +100,7 @@ Purpose:
 CompoundEvent &
 CompoundEventsManager::create_event()
 {
-  CompoundEvent * new_event = new CompoundEvent(time);
+  auto * new_event = new CompoundEvent(time);
   allocated_events.push_back( new_event);
   add_event(*new_event);
   return *new_event;
@@ -107,10 +111,15 @@ add_trigger
 Purpose:
   Adds a trigger to the list of managed_triggers, which will enable locking
   and unlocking of the trigger.
+
+  FIXME Turner 2026/07
+  It is not clear why this method takes a pointer rather than a reference.
 *****************************************************************************/
 void
 CompoundEventsManager::add_trigger(WatchValuesBaseCore* new_trigger)
 {
+  if (new_trigger == nullptr) {return;}
+
   managed_triggers.push_back( new_trigger);
   new_trigger->externally_managed = true;
 }
@@ -121,7 +130,7 @@ Purpose:
   Returns a trigger based on its name.
 *****************************************************************************/
 WatchValuesBaseCore *
-CompoundEventsManager::get_trigger(std::string name)
+CompoundEventsManager::get_trigger(const std::string & name)
 {
   auto it = std::find_if( managed_triggers.begin(), managed_triggers.end(),
                           [name](WatchValuesBaseCore * trigger_) {
@@ -152,11 +161,11 @@ CompoundEventsManager::set_trigger_dbl_reference(
 /****************************************************************************/
 void
 CompoundEventsManager::set_trigger_dbl_reference(
-  std::string name,
+  const std::string & name,
   double ref)
 {
   WatchValuesBaseCore * trigger = CompoundEventsManager::get_trigger(name);
-  if (trigger) {
+  if (trigger != nullptr) {
     CompoundEventsManager::set_trigger_dbl_reference( *trigger,
                                                       ref);
   }
@@ -191,11 +200,11 @@ CompoundEventsManager::set_trigger_delay_offset(
 /****************************************************************************/
 void
 CompoundEventsManager::set_trigger_delay_offset(
-  std::string name,
+  const std::string & name,
   double ref)
 {
   WatchValuesBaseCore * trigger = CompoundEventsManager::get_trigger(name);
-  if (trigger) {
+  if (trigger != nullptr) {
     CompoundEventsManager::set_trigger_delay_offset( *trigger,
                                                      ref);
   }

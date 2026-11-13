@@ -2,17 +2,24 @@
 PURPOSE:
    (Interface for the Simple Winds basic table-driven model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (July 2018) (ANTARES)
        (New implementation))
    )
 ********************************************************************************/
-#include <cmath>           // M_PI, fmod
+#include <cmath>
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include "../include/atmosphere_exec_atmos_base.hh"
+#include "../include/atmosphere_exec_out.hh"
 #include "../include/atmosphere_exec_simple_winds.hh"
 
 
@@ -26,9 +33,6 @@ AtmosphereExec_SimpleLookupWind::AtmosphereExec_SimpleLookupWind(
   :
   AtmosphereExec_AtmosWindsBase(master_output, planet_state_in),
   wind_table(wind_table_in),
-  wind_components_type(Topodetic),
-  altitude_type(Topodetic),
-  altitude_at_prev_update(0.0),
   altitude_ptr(&planet_state.state.ellip_coords.altitude)
 {
   name = "SimpleLookup";
@@ -41,7 +45,9 @@ Purpose:(Makes sure all dependencies are in place before executing)
 void
 AtmosphereExec_SimpleLookupWind::activate()
 {
-  if (active) return; // no action needed
+  if (active) {
+    return; // no action needed
+  }
 
   if (altitude_type == Topocentric) {
     subscribe_to_topocentric_altitude();
@@ -57,7 +63,9 @@ Purpose:(Removes subscriptions)
 void
 AtmosphereExec_SimpleLookupWind::deactivate()
 {
-  if (!active) return; // no action needed.
+  if (!active) {
+    return; // no action needed.
+  }
 
   if (altitude_type == Topocentric ) {
     planet_state.unsubscribe_topocentric_altitude();
@@ -74,7 +82,9 @@ Purpose:(Executes the table lookup, then takes the output from the
 void
 AtmosphereExec_SimpleLookupWind::update_winds()
 {
-  if (!active) return;
+  if (!active) {
+    return;
+  }
 
   // Quick check that update is necessary:
   // NOTE - altitude_ptr is set at construction; it may be reset via
@@ -110,7 +120,7 @@ void
 AtmosphereExec_SimpleLookupWind::set_altitude_type(
     TopoType type)
 {
-  bool tc_before = altitude_type == Topocentric;
+  const bool tc_before = altitude_type == Topocentric;
 
   switch( type) {
   case Topodetic:
@@ -130,7 +140,7 @@ AtmosphereExec_SimpleLookupWind::set_altitude_type(
   }
   altitude_type = type;
 
-  bool tc_after = altitude_type == Topocentric;
+  const bool tc_after = altitude_type == Topocentric;
   if (active) {
     if (tc_before && !tc_after) {
       planet_state.unsubscribe_topocentric_altitude();

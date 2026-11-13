@@ -7,6 +7,10 @@ PURPOSE:
    ORB_INIT, and ICOPT models, and CEV's Corr_State_Init_T and
    State_Init_Exec_T structures and the state_init_exec method.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc)
+   (cml/models/utilities/math_utils/src/math_utils.cc))
+
 REFERENCE:
   (This is a reworking of the following models from old CML:
     cml/models/dynamics/state_init_exec/src/state_init_exec.cpp
@@ -20,18 +24,24 @@ PROGRAMMERS:
    (((Gary Turner) (OSR) (September 2014) (New))
  ******************************************************************************/
 
+#include <algorithm>
+#include <cmath>
+#include <iterator>
+#include <random>
 
-#include <random> // default_random_engine,
-                  // uniform_real_distribution,
-                  // normal_distribution
-
-
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/dynamics/body_action/include/dyn_body_init.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
-#include "jeod/models/utils/memory/include/jeod_alloc.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "jeod/models/dynamics/body_action/include/body_action_messages.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_items.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "../include/state_initialize.hh"
 
@@ -40,79 +50,7 @@ Constructor
 *****************************************************************************/
 StateInitialize::StateInitialize()
   :
-  // public values:
-  position_input_data_type(Unspecified),
-  velocity_input_data_type(Unspecified),
-  attitude_input_data_type(Unspecified),
-  att_rate_input_data_type(Unspecified),
-  orb_elem_init(),
-  trans_init(),
-  rot_init(),
-  ned_rot_init(),
-  correlation(),
-  monte_carlo_dispersion(trans_init),
-  TR_param(),
-  planet_name(),
-  ref_point_altitude(0.0),
-  ref_point_latitude(0.0),
-  ref_point_longitude(0.0),
-  TR_geodetic_altitude(0.0),
-  TR_theta_Rng(0.0),
-  TR_theta_Rot(0.0),
-  TR_phi_Cross(0.0),
-  rot_ref_latitude(0.0),
-  rot_ref_longitude(0.0),
-  rot_ref_azimuth(0.0),
-  speed(0.0),
-  flight_path_angle(0.0),
-  azimuth(0.0),
-  TR_Lambda(0.0),
-  yaw(0.0),
-  roll(0.0),
-  pitch(0.0),
-  angle_of_bank(0.0),
-  angle_of_sideslip(0.0),
-  angle_of_attack(0.0),
-  T_inrtl_body{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  ref_body_sequence_override(jeod::Orientation::NoSequence),
-  roll_rate_body(0.0),
-  pitch_rate_body(0.0),
-  yaw_rate_body(0.0),
-  max_rate_random(0.0),
-  att_random_seed(1),
-  att_rate_random_seed(2),
-  free_stream_velocity{0.0, 0.0, 0.0},
-  // protected values:
-  initialized(false),
-  planet(nullptr),
-  use_orbital_init(false),
-  use_trans_init(true),
-  use_rot_init(true),
-  use_ned_rot_init(false),
-  use_trans_init_passthrough(false),
-  use_rot_init_passthrough(false),
-  use_pfix_frame_trans(false),
-  pfix_ref_point_state_generated(false),
-  use_veh_position_as_reference(false),
-  populate_trans_init_pos_from_pfix(false),
-  populate_trans_init_vel_from_pfix(false),
-  velocity_is_relative_to_inertial(false),
-  requires_free_stream_velocity(false),
-  populate_rot_init_transform_source(RITS_None),
-  z_axis_points_up(false),
-  increment_rot_rate_init_with_pfix(false),
-  pfix_position{0.0, 0.0, 0.0},
-  pfix_velocity{0.0, 0.0, 0.0},
-  omega_cross_r{0.0, 0.0, 0.0},
-  T_pfix_reference{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  T_inrtl_reference{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  T_reference_body{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  E_pfix_reference{0.0, 0.0, 0.0},
-  E_reference_body{0.0, 0.0, 0.0},
-  random_value(0.0),
-  random_unit_vector{0.0, 0.0, 0.0},
-  force_match_trans(false),
-  force_match_rot(false)
+  monte_carlo_dispersion(trans_init)
 {}
 
 
@@ -360,6 +298,7 @@ StateInitialize::select_position_initializer()
    case InertialSpeedGammaAzimuth:
    case PfixSpeedGammaAzimuth:
    case EulerInertialVelvec_YPR:
+   case EulerInertialLVLH_YPR:
    case SunPointing_YPR:
    case SunPointingEcliptic_PYR:
    case PfixUpCompAzimuth_YPR:
@@ -488,6 +427,7 @@ StateInitialize::select_velocity_initializer()
 
    case ICOPT_R_INERTIAL:
    case EulerInertialVelvec_YPR:
+   case EulerInertialLVLH_YPR:
    case SunPointing_YPR:
    case SunPointingEcliptic_PYR:
    case PfixUpCompAzimuth_YPR:
@@ -526,6 +466,7 @@ StateInitialize::select_attitude_initializer()
   // First pass for E_reference_body
   switch (attitude_input_data_type) {
    case EulerInertialVelvec_YPR:
+   case EulerInertialLVLH_YPR:
    case SunPointing_YPR:
    case PfixUpCompAzimuth:
    case PfixUpCompAzimuth_YPR:
@@ -620,6 +561,10 @@ StateInitialize::select_attitude_initializer()
     z_axis_points_up = true;
     break;
 
+   case EulerInertialLVLH_YPR:
+    populate_rot_init_transform_source = RITS_LVLH;
+    break;
+
    case SunPointing_YPR:
    case SunPointingEcliptic_PYR:
     // Need to use the trans-init position to generate the sun-earth
@@ -630,8 +575,7 @@ StateInitialize::select_attitude_initializer()
     //      using a passthrough option and may not have been set at all if
     //      using an orbital-elements specification.
     if( use_trans_init_passthrough &&
-           (!reference_ref_frame_name_inertial.compare(
-                                 trans_init.reference_ref_frame_name))) {
+           (reference_ref_frame_name_inertial == trans_init.reference_ref_frame_name)) {
       CMLMessage::fail (
         __FILE__, __LINE__, "StateInitialization::invalid_configuration\n",
         "Rot init is being configured using the sun-vehicle vector.\n"
@@ -748,8 +692,9 @@ StateInitialize::select_attitude_initializer()
    {
     generate_random(att_random_seed);
     random_value *= M_PI; // Half of the random rotation angle about the x-axis
-    double sinhalf = std::sin(random_value), coshalf = std::cos(random_value);
-    double temp = std::sqrt(2 * (random_unit_vector[0] + 1));
+    const double sinhalf = std::sin(random_value);
+    const double coshalf = std::cos(random_value);
+    const double temp = std::sqrt(2 * (random_unit_vector[0] + 1));
     jeod::Quaternion random_att;
     // random_unit_vector is the new orientation of the x-axis
     if (MathUtils::is_near_equal(temp, 0.0)) { // Avoid dividing by 0
@@ -914,6 +859,7 @@ StateInitialize::select_att_rate_initializer()
    case PfixSpeedGammaAzimuth:
    case OrbitalElements:
    case EulerInertialVelvec_YPR:
+   case EulerInertialLVLH_YPR:
    case SunPointing_YPR:
    case SunPointingEcliptic_PYR:
    case EulerBoostRef_YPR:
@@ -1226,6 +1172,11 @@ StateInitialize::generate_rot_init_values(
                                                trans_init.position,
                                                T_inrtl_reference);
     }
+    break;
+   case RITS_LVLH: // Velocity and position:
+    MathUtils::generate_inertial_to_lvlh ( trans_init.position,
+                                           trans_init.velocity,
+                                           T_inrtl_reference);
     break;
    case RITS_PfixRef: // Reference is known relative to Pfix
     jeod::Matrix3x3::product( T_pfix_reference,
@@ -1587,12 +1538,11 @@ void
 StateInitialize::generate_random(int seed)
 {
   std::default_random_engine generator;
-  generator.seed(static_cast<typename decltype(generator)::result_type>(seed));
+  generator.seed(static_cast<decltype(generator)::result_type>(seed));
   std::normal_distribution<double> rand_norm(0.0, 1.0);
 
-  for (unsigned int ii = 0; ii < 3; ii++) {
-    random_unit_vector[ii] = rand_norm(generator);
-  }
+  std::generate(std::begin(random_unit_vector), std::end(random_unit_vector),
+    [&generator, &rand_norm]{return rand_norm(generator);});
   jeod::Vector3::normalize(random_unit_vector);
 
   std::uniform_real_distribution<double> rand_uniform(0.0, 1.0);
@@ -1645,6 +1595,7 @@ StateInitialize::overwrite_attitude_from_free_stream(
     CMLMessage::fail(
       __FILE__, __LINE__, "Invalid configuration\n",
       "The subject provided must be a valid DynBody.");
+    return;
   }
   dyn_body->set_attitude_matrix(rot_init.orientation.trans,
                                 dyn_body->composite_body);
@@ -1657,7 +1608,7 @@ Purpose:( Some options must be consistent across pos-vel and across
           att-att-rate.  This ensures that consistency)
 *****************************************************************************/
 void
-StateInitialize::verify_compatibility()
+StateInitialize::verify_compatibility() const
 {
   if ((force_match_trans &&
        (position_input_data_type != velocity_input_data_type))) {

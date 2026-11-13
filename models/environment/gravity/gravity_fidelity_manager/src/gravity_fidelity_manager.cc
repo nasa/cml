@@ -7,9 +7,15 @@ PROGRAMMERS:
    ((Daniel Ghan) (OSR) (April 2020) (Antares) (Made the table internal)))
 **********************************************************************/
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
+#include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 #include "../include/gravity_fidelity_manager.hh"
+
+#include <cmath>
 
 /*****************************************************************************
 Constructor
@@ -21,12 +27,7 @@ GravityFidelityManager::GravityFidelityManager(
   :
   grav_controls(grav_controls_),
   source_frame(source_frame_),
-  target_frame(target_frame_),
-  distance_data(),
-  deg_ord_data(),
-  table(),
-  distance(0.0),
-  degree_order(0.0)
+  target_frame(target_frame_)
 {
   // There are no versions of this model that do not use the table lookup, so
   // go ahead and subscribe it now.
@@ -68,10 +69,9 @@ GravityFidelityManager::update()
 
   // The simple-table-lookup generic capability uses double as the default
   // data type.  Therefore, even though degree and order are unsigned int
-  // types, they must be stored as double.  Add 0.5 to prevent rounding error
-  // (cast rounds down).
+  // types, they must be stored as double.
   grav_controls.degree =
-  grav_controls.order = static_cast<unsigned int> (degree_order+0.5);
+  grav_controls.order = std::lround(degree_order);
 
   grav_controls.spherical = (grav_controls.degree == 0);
 }

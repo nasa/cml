@@ -3,6 +3,9 @@ PURPOSE:
   (This model computes the offset between the WGS-84 ellipsoid and the
    EGM-2008 geoid.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCE:
   (https://earth-info.nga.mil/GandG/wgs84/gravitymod/egm2008/egm08_wgs84.html
    on February 11, 2021.)
@@ -11,8 +14,9 @@ PROGRAMMERS:
   (((Gary Turner) (OSR) (Feb 2021) (Antares) (initial)))
 **********************************************************************/
 
-// Local header:
 #include "../include/egm_2008.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 /*****************************************************************************
 Constructor
@@ -20,8 +24,6 @@ Constructor
 EGM2008_WGS84::EGM2008_WGS84( const double & wgs_84_lat,
                               const double & wgs_84_lon)
   :
-  delta_altitude(0),
-  table_set(),
   egm_table(delta_altitude),
   tiv_lat(wgs_84_lat),
   tiv_lon(wgs_84_lon, TableIndependentVariable::WrapAround)
@@ -35,7 +37,9 @@ Purpose:
 void
 EGM2008_WGS84::initialize()
 {
-  if (!enabled) return;
+  if (!enabled) {
+    return;
+  }
 
   load_data();
   table_set.subscribe();
@@ -61,7 +65,9 @@ Purpose:
 void
 EGM2008_WGS84::update()
 {
-  if (!active) return;
+  if (!active) {
+    return;
+  }
 
   table_set.update();
 }

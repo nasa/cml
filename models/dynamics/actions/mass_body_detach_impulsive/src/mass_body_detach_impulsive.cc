@@ -5,7 +5,8 @@ Purpose:
 Library dependencies:
   ((dynamics/body_action/src/body_action.cc)
    (dynamics/body_action/src/body_action_messages.cc)
-   (dynamics/mass/src/mass_point_state.cc))
+   (dynamics/mass/src/mass_point_state.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc))
 
 Programmers:
   (((Gary Turner) (OSR) (December 2011) (TS21 contribution) (Initial version)))
@@ -13,28 +14,19 @@ Programmers:
 
 *******************************************************************************/
 
-// System includes
-#include <cstddef>
-
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/body_action/include/body_action.hh"
+#include "jeod/models/dynamics/dyn_manager/include/class_declarations.hh"
 #include "jeod/models/dynamics/mass/include/mass.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/mass/include/mass_point.hh"
 #include "jeod/models/dynamics/body_action/include/body_action_messages.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 #include "../include/mass_body_detach_impulsive.hh"
 
-/*******************************************************************************
-Function: MassBodyDetachImpulsive::MassBodyDetachImpulsive
-Purpose: (Construct a MassBodyDetachImpulsive.)
-*******************************************************************************/
-MassBodyDetachImpulsive::MassBodyDetachImpulsive()
-  :
-  impulse_magnitude(0.0),
-  subject_point_name(),
-  parent_point_name(),
-  separation_speed(0.0),
-  sep_speed_spec_by_user(false)
-{}
+#include <string>
 
 /*******************************************************************************
 Function: MassBodyDetachImpulsive::initialize
@@ -79,7 +71,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   // Identify the parent before it gets detached.
   // Have to cast away the const-ness because we will be applying an impulse
   // to the parent.
-  jeod::MassBody * parent = const_cast<jeod::MassBody *>(subject->get_parent_body());
+  auto * parent = const_cast<jeod::MassBody *>(subject->get_parent_body());
   if (parent == nullptr) {
     CMLMessage::error (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
@@ -165,8 +157,8 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
 Purpose:(Applies an impulse at a MassPoint for parent and subject bodies)
 *******************************************************************************/
 void
-MassBodyDetachImpulsive::apply_impulse( jeod::DynBody          & dyn_body,
-                                        std::string  mass_point_name)
+MassBodyDetachImpulsive::apply_impulse( jeod::DynBody     & dyn_body,
+                                        const std::string & mass_point_name)
 {
   const jeod::MassPoint * mass_point = dyn_body.mass.find_mass_point(mass_point_name);
   if (mass_point == nullptr) {

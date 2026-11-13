@@ -1,13 +1,18 @@
 /*******************************TRICK HEADER************************************
 PURPOSE: ()
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2016) (Antares) (New/refactor))
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
 *******************************************************************************/
 
-#include <cstring> // NULL
+#include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 #include "../include/aero_interface_base.hh"
 
@@ -15,15 +20,10 @@ PROGRAMMERS:
 Constructor
 *******************************************************************************/
 AeroInterfaceBase::AeroInterfaceBase( AtmosRelativeState & atmos_rel_state_in,
-                                      const double & geod_alt_in)
+                                      const double & geodetic_altitude_in)
   :
   atmos_rel_state( atmos_rel_state_in),
-  geodetic_altitude( geod_alt_in),
-  executive_ptr(nullptr),
-  disable_aero_moments(false),
-  disable_aero_damping(false),
-  max_atmos_altitude(3.5E6) // This is an arbitrary value; atmosphere turns
-                            // off at altitudes above 3,500 km.
+  geodetic_altitude( geodetic_altitude_in)
 {
   subscribe_name = "AeroInterfaceBase:";
 }

@@ -2,6 +2,10 @@
 PURPOSE:    (To provide a Trick-friendly unit-test framework)
 REFERENCES: (../models-C by Jason Arnold)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/env_utils/src/env_utils.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Jason Arnold) (Titan) (Jul 2005))
    ((Gary Turner) (OSR) (Oct 2016)
@@ -9,42 +13,38 @@ PROGRAMMERS:
     vectors, and lists))
   )
 ***************************************************************************/
-#include <cmath>      // fabs
-#include <cfloat>     // DBL_EPSILON
-#include <algorithm>  // std::max
-#include <iostream>   // std::cout
-#include <sstream>    // std::istringstream
-#include <fstream>    // std::ifstream
-#include <pthread.h>  // for pthreads - sending commands.
-#include <regex>
+#include <cmath>
+#include <cfloat>
+#include <algorithm>
+#include <cstdlib>
+#include <iostream>
+#include <list>
+#include <sstream>
+#include <fstream>
+#include <string>
 
 #include "../include/unit_test.hh"
 
+#include "cml/models/utilities/env_utils/include/env_utils.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
-
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "trick/input_processor_proto.h"
-#include "trick/IPPython.hh"
-
-extern Trick::IPPython* the_pip;
-
 
 /*****************************************************************************
 Constructor
 *****************************************************************************/
 SweepSet::SweepSet(
-            double & variable_in,
+            double & variable_out,
             double start_in,
             double end_in,
             double incr_in)
   :
-  variable(variable_in),
+  variable(variable_out),
   start( start_in),
   end( end_in),
   increment( incr_in),
-  value(start),
-  epsilon(0.0)
+  value(start)
 {
   // epsilon is the threshold around "end" that determines 'close-enough'
   // If adjusting this, the magic number (1.0E-12) should be larger than
@@ -97,44 +97,6 @@ SweepSet::SweepSet(
       static_cast<int>(std::abs((end - start)/increment)));
   }
 }
-/*****************************************************************************
-Copy Constructor
-*****************************************************************************/
-SweepSet::SweepSet(const SweepSet &other) :
-  variable(other.variable),
-  start(other.start),
-  end(other.end),
-  increment(other.increment),
-  value(other.value),
-  epsilon(other.epsilon)
-{}
-/*****************************************************************************
-Assignment Operator
-*****************************************************************************/
-SweepSet& SweepSet::operator = (const SweepSet &other)
-{
-  if (this == &other) return *this;
-  variable = other.variable;
-  start = other.start;
-  end = other.end;
-  increment = other.increment;
-  value = other.value;
-  epsilon = other.epsilon;
-  return *this;
-}
-/****************************************************************************/
-UnitTestFramework::UnitTestFramework()
-  :
-  enabled(true),
-  cycle_data(false),
-  initialized(false),
-  using_sweeps(false),
-  first_sweep(true),
-  sweeps_complete(false),
-  warning_on_sim_end(true),
-  cycle_overruns(0),
-  cycle_overruns_limit(2)
-{}
 
 /*****************************************************************************
 increment_sweep
@@ -150,7 +112,7 @@ bool SweepSet::increment_sweep()
   // the increment.  Note - not the absolute value of the "distance" to go,
   // this must be allowed to go negative if it overshoots, mainly for the
   // first pass after which point that should be protected.
-  double to_go = (increment > 0) ? (end - value) : (value - end);
+  const double to_go = (increment > 0) ? (end - value) : (value - end);
 
   // If within the allowable tolerance of the end-point, tag the sweep as
   // completing and reset the value.
@@ -188,7 +150,7 @@ void UnitTestFramework::add_sweep(
     __FILE__,__LINE__," Invalid input sequence.\n",
     "Sweeps must be added before initialization.\n");
   }
-  sweeps.push_back(SweepSet(variable, start, end, incr));
+  sweeps.emplace_back(variable, start, end, incr);
   using_sweeps = true;
 }
 
@@ -215,7 +177,6 @@ UnitTestFramework::initialize()
     configure_from_definition_file();
   }
   initialized = true;
-  return;
 }
 
 /*****************************************************************************
@@ -239,7 +200,6 @@ UnitTestFramework::update()
   else {
     update_file();
   }
-  return;
 }
 
 /*****************************************************************************
@@ -259,10 +219,8 @@ UnitTestFramework::configure_sweeps()
       "Incompatible methods.  Cannot distinguish which to use."
       "If both are needed, use 2 framework instances.\n");
   }
-  for( std::list<SweepSet>::iterator it = sweeps.begin();
-       it != sweeps.end();
-       ++it) {
-    it->initialize();
+  for(auto & sweep : sweeps) {
+    sweep.initialize();
   }
 }
 
@@ -289,51 +247,6 @@ UnitTestFramework::configure_file_combinations()
 }
 
 /*****************************************************************************
-expand_env_variables
-Purpose: (Replaces environment variable placeholders in the form `${VAR_NAME}`
-          within the input string with their corresponding values from the
-          process environment. The search pattern matches variable names
-          beginning with a letter or underscore, followed by letters, digits,
-          or underscores. If an environment variable is found, its value is
-          inserted into the output string. If a variable is not set, the
-          placeholder is left unchanged, a warning is printed via `CMLMessage::error`,
-          and a runtime exception is thrown. The method preserves any text
-          outside of `${}` sequences unchanged.)
-*****************************************************************************/
-std::string UnitTestFramework::expand_env_variables(const std::string& input) {
-    static const std::regex pattern(R"(\$\{([A-Za-z_][A-Za-z0-9_]*)\})");
-
-    std::string result;
-    std::sregex_iterator begin(input.begin(), input.end(), pattern);
-    std::sregex_iterator end;
-
-    std::size_t last_pos = 0;
-
-    for (auto it = begin; it != end; ++it) {
-        const std::smatch& match = *it;
-        const std::size_t substr_len = static_cast<std::size_t>(match.position()) - last_pos;
-        result.append(input.substr(last_pos, substr_len));  // text before match
-
-        const std::string var_name = match[1].str();
-        const char* env_val = std::getenv(var_name.c_str());
-        if (env_val) 
-        {
-            result.append(env_val);
-        } else 
-        {
-            CMLMessage::error(__FILE__, __LINE__, 
-              "Warning: Environment variable '", var_name, "' is not set. Leaving placeholder unchanged.\n");
-            result.append(match[0].str());  // Keep the original "${VAR}"
-            throw std::runtime_error("Missing environment variable: " + var_name);
-        }
-        last_pos = static_cast<std::size_t>(match.position() + match.length());
-    }
-
-    result.append(input.substr(last_pos));  // remaining text
-    return result;
-}
-
-/*****************************************************************************
 configure_from_definition_file
 Purpose:(Used when the tests are specified in a single file with each row of
          data representing a unique test.)
@@ -350,8 +263,7 @@ UnitTestFramework::configure_from_definition_file()
   }
 
   populate_variable_names();
-  unsigned int num_vars = variables.size();
-
+  const unsigned int num_vars = variables.size();
 
   // parse the data file
   std::ifstream data_file(data_file_name);
@@ -374,7 +286,7 @@ UnitTestFramework::configure_from_definition_file()
       // fill in the title array from the last recorded element to this one
       // with blanks.
       for (unsigned int ii = titles.size(); ii < num_data_sets; ii++) {
-        titles.push_back("");
+        titles.emplace_back("");
       }
       // Add this line (without the !) as the title and go on to the next
       // line
@@ -510,16 +422,14 @@ Purpose:(Produces the list of commands to be sent at runtime)
 void
 UnitTestFramework::process_linked_variables()
 {
-  commands.push_back("");// create 1 empty element
+  commands.emplace_back("");// create 1 empty element
 
-  for( std::list<LinkedVars>::iterator file_it = linked_variables.begin();
-       file_it != linked_variables.end();
-       ++file_it) {
-    std::ifstream data_file( file_it->filename);
+  for(auto & linked_variable : linked_variables) {
+    std::ifstream data_file( linked_variable.filename);
     if (!data_file) {
       CMLMessage::fail(
       __FILE__,__LINE__,"error opening file\n",
-      "Error encountered opening file ", file_it->filename, "\n");
+      "Error encountered opening file ", linked_variable.filename, "\n");
     }
 
     std::string first_command;
@@ -567,12 +477,12 @@ UnitTestFramework::process_linked_variables()
         if (word_count >= 1) {
           CMLMessage::fail(
           __FILE__,__LINE__,"Invalid data\n",
-          "Data file ", file_it->filename, " has multiple words on one line:\n", line, "\n");
+          "Data file ", linked_variable.filename, " has multiple words on one line:\n", line, "\n");
         }
 
         word_count++;
         // Use "word" to make a new command
-        std::string new_command( file_it->variable_name);
+        std::string new_command( linked_variable.variable_name);
         new_command.append( " = " + word + ";");
         if (first_command.empty()) {
           first_command = new_command;
@@ -586,7 +496,7 @@ UnitTestFramework::process_linked_variables()
     data_file.close();
 
     // insert new commands into command list
-    for( std::list<std::string>::iterator comm_it = commands.begin();
+    for( auto comm_it = commands.begin();
          comm_it != commands.end();
          /*increment internally*/ ) {
       comm_it->append( first_command);
@@ -659,14 +569,14 @@ UnitTestFramework::update_sweeps()
   }
 
   bool sweep_complete_ = true;
-  for( std::list<SweepSet>::iterator it = sweeps.begin();
-       it != sweeps.end();
-       ++it)
+  for(auto & sweep : sweeps)
   {
     // increment_sweep returns true if the sweep of that variable is complete
-    sweep_complete_ = it->increment_sweep();
+    sweep_complete_ = sweep.increment_sweep();
     // if this variable is still sweeping, don't need to go on to the next one.
-    if (!sweep_complete_) break;
+    if (!sweep_complete_) {
+      break;
+    }
   }
   // if sweep_complete_ is true at this point, that means that all sweep sets
   // finished on this cycle.  In that case, the whole unit-test is complete,
@@ -699,7 +609,7 @@ UnitTestFramework::update_file()
   // If the user has specified titles in the data file, print them out
   if ( !titles.empty()) {
     if (!titles.front().empty()) {
-      std::cout << titles.front() << std::endl;
+      std::cout << titles.front() << '\n';
     }
     if (cycle_data) {
       titles.push_back(titles.front());
@@ -715,5 +625,4 @@ UnitTestFramework::update_file()
     commands.push_back(commands.front());
   }
   commands.pop_front();
-  return;
 }

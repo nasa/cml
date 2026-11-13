@@ -13,13 +13,18 @@ PURPOSE:
            a BodyRefFrame; this class is for relative state between two
            non-body-frames)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (July 2015) (Antares) (initial version)))
 
 ********************************************************************************/
 
-#include <cstring> // NULL
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 #include "../include/planet_planet_state.hh"
 
@@ -29,10 +34,7 @@ Constructor
 PlanetPlanetState::PlanetPlanetState(
    jeod::DynManager & dyn_mgr_in)
    :
-   from_frame_name(),
-   to_frame_name(),
    position_vector_only(true),
-   state(),
    dyn_manager(dyn_mgr_in),
    from_frame(nullptr),
    to_frame(nullptr),
@@ -46,10 +48,7 @@ PlanetPlanetState::PlanetPlanetState(
    jeod::RefFrame & to_frame_in,
    jeod::RefFrame & from_frame_in)
    :
-   from_frame_name(),
-   to_frame_name(),
    position_vector_only(true),
-   state(),
    dyn_manager(dyn_mgr_in),
    from_frame(&from_frame_in),
    to_frame(&to_frame_in),

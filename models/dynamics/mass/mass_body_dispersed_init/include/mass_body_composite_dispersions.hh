@@ -27,15 +27,12 @@ PROGRAMMERS:
 #ifndef CML_MASS_BODY_COMPOSITE_DISPERSIONS_HH
 #define CML_MASS_BODY_COMPOSITE_DISPERSIONS_HH
 
-// JEOD headers:
-#include "jeod/models/dynamics/mass/include/mass.hh" // jeod::MassBody
-#include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
-#include "jeod/models/dynamics/body_action/include/body_action.hh" // jeod::BodyAction
+#include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
+#include "jeod/models/dynamics/body_action/include/body_action.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
-// Local headers:
-#include "mass_properties_dispersions.hh" // MassPropertiesDispersions
+#include "mass_properties_dispersions.hh"
 
 // Forward declaration
 namespace jeod {
@@ -59,7 +56,7 @@ protected:
     "nominal" and "disperse" properties. */
 
 public:
-  bool fail_if_mass_invalid;         /* (--)
+  bool fail_if_mass_invalid{false};         /* (--)
     Flag determining whether non-physical mass properties (such as
     negative mass) in the adjustable-body should result in sim-termination.
     Default: false (allow non-physical properties). */
@@ -70,14 +67,14 @@ public:
     are computed internally, or dispersion values if computed externally,
     and controls to support options such as equal-distributions on
     different axes.*/
-  jeod::MassBody * adjustable_body; /* (--)
+  jeod::MassBody * adjustable_body{nullptr}; /* (--)
     The body whose core-properties are being modified to meet the
     desired composite-properties of the target-body. This may be the
     target-body or a body subordinate to the target body in the mass-tree
     hierarchy.
     Note -- this is a pointer because it may be modified by the argument to
     the update(...) method. */
-  jeod::MassBody * detach_sub_tree; /* (--)
+  jeod::MassBody * detach_sub_tree{nullptr}; /* (--)
     When evaluating the composite-properties, it may be desirable to
     consider only the composite-properties of some subset of the total
     mass tree. If this pointer is set, the mass tree will be detached at
@@ -89,6 +86,9 @@ public:
 
 
   explicit MassBodyCompositeDispersions (jeod::MassBody & target_body_in);
+  MassBodyCompositeDispersions(const MassBodyCompositeDispersions&) = delete;
+  MassBodyCompositeDispersions & operator = (
+                               const MassBodyCompositeDispersions&) = delete;
   ~MassBodyCompositeDispersions() override = default;
 
   // The apply method is used when the class is functioning as a
@@ -107,15 +107,11 @@ public:
   //   target body because the core-properties of higher bodies do not affect
   //   the composite-properties of lower bodies.
   void update();
-  void update( jeod::MassBody & adjustable);
+  void update( jeod::MassBody & adjustable_body_);
 
 private:
   void update_internal();
   void comp_to_core_updates();
   void process_dispersions();
-
-  MassBodyCompositeDispersions(const MassBodyCompositeDispersions&);
-  MassBodyCompositeDispersions & operator = (
-                               const MassBodyCompositeDispersions&);
 };
 #endif

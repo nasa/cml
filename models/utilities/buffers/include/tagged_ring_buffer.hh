@@ -9,6 +9,7 @@ PURPOSE: (
 
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2023) (ANTARES) (initial))
+   ((Dohyeung Kim) (OSR) (Apr 2026) (Update Proximity Case))
   )
 
 ASSUMPTIONS:
@@ -20,9 +21,14 @@ ASSUMPTIONS:
 #ifndef CML_TAGGED_RING_BUFFER_HH
 #define CML_TAGGED_RING_BUFFER_HH
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "simple_ring_buffer.hh"
 #include <cmath>
+#include <string>
+#include <cstddef>
+#include <vector>
+#include <limits>
 
 /*****************************************************************************
 CMLTaggedRingBufferMember
@@ -43,7 +49,7 @@ struct CMLTaggedRingBufferMember
     :
     tag(),
     data()
-  {};
+  {}
 };
 
 /*****************************************************************************
@@ -56,18 +62,31 @@ template <typename T_Tag, typename T_Data>
 class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >
 {
  public:
-  bool require_exact_tag; /* (--)
+  bool require_exact_tag{false}; /* (--)
     When looking for a data-set with the specified tag, this flag determines
     whether the model looks for the data-set with a tag closest in value to
     the specified tag (false, default), or for a data-set with a tag identical
     to the specified tag (true).*/
 
+  bool proximity_flag{false}; /* (--)
+    When the model looks for the data-set with a tag closest in value to
+    the specified tag (require_exact_tag == false), this flag determines 
+    whether the searched closest data-set is within a certain proximity (true)
+    or simply the absolute closest regardless of time difference (false,
+    default) */
 
-  CMLTaggedRingBuffer( std::string name)
+  double proximity_threshold{std::numeric_limits<double>::infinity()}; /* (--)
+    The maximum allowable time difference between a tag closest and the 
+    specified tag. If the proximity_flag is true, the lookup_tag function
+    returns the data-set with a tag closest in value to the specified tag
+    only if the difference is within this threshold; otherwise, it returns
+    a null pointer with a error message*/
+
+  explicit CMLTaggedRingBuffer( const std::string& name)
     :
-    CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >(name),
-    require_exact_tag(false)
-  {};
+    CMLSimpleRingBuffer<CMLTaggedRingBufferMember<T_Tag, T_Data>>(name)
+  {}
+  
   ~CMLTaggedRingBuffer() override = default;
 
 
@@ -219,6 +238,16 @@ Note:
         tag_delta_min = tag_delta;
       }
     }
+    
+    if (proximity_flag && tag_delta_min > proximity_threshold) {
+      CMLMessage::error( __FILE__,__LINE__,
+        "In buffer ", name_,", could not find a tag ",t," within the proximity threshold ",
+        proximity_threshold,"\n"
+        "Cannot identify the desired data set.\n"
+        "Returning NULL.\n");
+      return nullptr;        
+    }
+    
     // return the data at the index identified with prox_ix.
     return &data_[prox_ix].data;
   }

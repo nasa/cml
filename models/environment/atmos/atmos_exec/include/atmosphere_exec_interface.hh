@@ -24,6 +24,7 @@ PROGRAMMERS:
 
 #include "atmosphere_exec_out.hh"
 #include "atmosphere_exec_atmos_base.hh"
+#include <string>
 
 
 /*****************************************************************************
@@ -48,37 +49,35 @@ class AtmosphereExecInterface : public SubscriptionBase
     // Internal members
     AtmosphereExec_AtmosWindsBase   atmos_none; /* (--)
            Default connection to "no atmosphere" for atmos and winds.*/
-    bool subscribed_planet_state_topo_calcs; /* (--)
+    bool subscribed_planet_state_topo_calcs{false}; /* (--)
            internal flag to record subscriptions to planet-rel-state. */
 
   public:
     AtmosExecOutput   out;             /* (--) Atmos exec outputs */
 
-    AtmosphereExecInterface(const double & dyn_time,
-                            ExtendedPlanetaryDerivedState & planet_state,
-                            const jeod::DynBody  & body);
+    AtmosphereExecInterface(const double & dyn_time_in,
+                            ExtendedPlanetaryDerivedState & planet_state_in,
+                            const jeod::DynBody  & body_in);
     ~AtmosphereExecInterface() override = default;
+    AtmosphereExecInterface (const AtmosphereExecInterface&) = delete;
+    AtmosphereExecInterface & operator = (const AtmosphereExecInterface&) = delete;
 
     void initialize() override;
 
-    std::string get_current_atmos_name() {
+    std::string get_current_atmos_name() const {
         std::string name = "N/A";
-        if (current_atmos) { name = current_atmos->name; }
+        if (current_atmos != nullptr) { name = current_atmos->name; }
         return name;
     }
-    std::string get_current_winds_name() {
+    std::string get_current_winds_name() const {
         std::string name = "N/A";
-        if (current_winds) { name = current_winds->name; }
+        if (current_winds != nullptr) { name = current_winds->name; }
         return name;
     }
 
   protected:
     void activate() override;
     void deactivate() override;
-
-  private:
-    AtmosphereExecInterface (const AtmosphereExecInterface&);
-    AtmosphereExecInterface & operator = (const AtmosphereExecInterface&);
 };
 
 #endif

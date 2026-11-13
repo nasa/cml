@@ -5,30 +5,21 @@ PURPOSE:
    been satisfied.)
 
 PROGRAMMERS:
- (((Gary Turner) (OSR) (Jun 2023) (ANTARES)
-   (New, based on GNC_PAR grok_duration_check and grok-violation models))
+ (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )
 *******************************************************************************/
+#include "../include/constraint.hh"
 #include "../include/constraint_set.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-ConstraintSet::ConstraintSet()
-  :
-  num_violations(0),
-  constraints()
-{}
-
-/*****************************************************************************
-initialize
-Purpose: Initializes the constraint-set and all its constraints
-*****************************************************************************/
+/**
+ * @note If any of the constraints in this set are disabled, calling this function
+ *       will make them permanently unavailable for the duration of the simulation.
+ */
 void
 ConstraintSet::initialize()
 {
-  constraints.remove_if( ConstraintSet::constraint_disabled);
+  constraints.remove_if( constraint_disabled);
 
   for (Constraint * constraint : constraints) {
     constraint->initialize();
@@ -36,11 +27,7 @@ ConstraintSet::initialize()
   SubscriptionBase::initialize();
 }
 
-/*****************************************************************************
-activate
-Purpose:
-  Called at subscription, initializes the time.
-*****************************************************************************/
+// Activate the constraints in this set
 void
 ConstraintSet::activate()
 {
@@ -50,28 +37,22 @@ ConstraintSet::activate()
   SubscriptionBase::activate();
 }
 
-/*****************************************************************************
-update
-Purpose: Checks all constraints.
-*****************************************************************************/
+// Update all constraints and check for violations
 void
 ConstraintSet::update()
 {
   if (!active) {return;}
 
   num_violations = 0;
+  violated_constraints.clear();
   for (Constraint * constraint : constraints) {
     constraint->update();
-    num_violations += constraint->violated;
+    if (constraint->violated) {
+      num_violations++;
+      if (!violated_constraints.empty()) {
+        violated_constraints += ", ";
+      }
+      violated_constraints += constraint->name;
+    }
   }
-}
-
-/*****************************************************************************
-constraint_disabled
-Purpose: returns whether a cosntraint has been disabled.
-*****************************************************************************/
-bool
-ConstraintSet::constraint_disabled( const Constraint * c)
-{
-  return !(c->enabled);
 }

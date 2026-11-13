@@ -3,6 +3,9 @@ PURPOSE:
    (Provide the capability to transform between position/velocity
     vectors and a set of target relative parameters.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (Nov 2023)
@@ -12,11 +15,13 @@ PROGRAMMERS:
 
 *******************************************************************************/
 
-#include <cmath>  /* sin, cos, atan2, abs */
+#include <cmath>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/TR_state_param.hh"
+#include "../include/TR_state_parameter_set.hh"
 
 
 /*****************************************************************************
@@ -24,23 +29,9 @@ Constructor
 *****************************************************************************/
 TargetRelative_StateParam::TargetRelative_StateParam()
   :
-  target_is_behind_vehicle(false),
-  K_theta(0.0),
-  position(),
-  velocity(),
-  omega_mag(0.0),
-  uhat_R{1.0, 0.0, 0.0},
   Target_Reference_frame("Target-Reference frame"),
   Omega_Target_frame("Omega-Target frame"),
-  Position_BiasedTarget_frame("InitialPosition-BiasedTarget frame"),
-  biased_target_pos_hat(),
-  theta_RngBias(0.0),
-  sin_phi_omega(0.0),
-  cos_phi_omega(0.0),
-  flag_initialized(false),
-  omega_target_aligned(false),
-  k_theta_warning_sent(false),
-  target_is_behind_vehicle_check(false)
+  Position_BiasedTarget_frame("InitialPosition-BiasedTarget frame")
 {}
 
 /*****************************************************************************
@@ -179,8 +170,8 @@ TargetRelative_StateParam::compute_velocity_from_params()
   //-----------------------------------------------------
   // Compute sine and cosine of flight-path angles
   //-----------------------------------------------------
-  double sin_gamma    = std::sin(gamma); // Sin of flight path
-  double cos_gamma    = std::cos(gamma); // Cos of flight path
+  const double sin_gamma = std::sin(gamma); // Sin of flight path
+  const double cos_gamma = std::cos(gamma); // Cos of flight path
 
   // Special case - this algorithm will generate the velocity vector based on
   // relative angles between two planes.  In the (extremely unlikely) event
@@ -297,8 +288,8 @@ TargetRelative_StateParam::compute_velocity_from_params()
   Position_Target_frame.compute_frame( Position_BiasedTarget_frame.u_hat,
                                        Target_Reference_frame.u_hat);
 
-  double p_hat_component_of_V = jeod::Vector3::dot( uhat_V,
-                                              Position_Target_frame.p_hat);
+  const double p_hat_component_of_V = jeod::Vector3::dot( uhat_V,
+                                                          Position_Target_frame.p_hat);
   if (std::abs(p_hat_component_of_V) < 1.0E-6) {
     CMLMessage::warn(
       __FILE__,__LINE__,"Ambiguous result\n",
@@ -367,7 +358,7 @@ TargetRelative_StateParam::compute_params_from_vectors()
   }
 
   // generate the unit vector to the initial position.
-  double r_mag = jeod::Vector3::vmag( position );
+  const double r_mag = jeod::Vector3::vmag( position );
   if (MathUtils::is_near_equal( r_mag, 0)) {
     CMLMessage::error( __FILE__,__LINE__,
       "The input position has zero magnitude.\n"
@@ -457,7 +448,7 @@ TargetRelative_StateParam::compute_params_from_vectors()
   //        v-hat dot Nhat = cos(gamma) * sin(H)
 
   // Compute the cosine of flight path angle
-  double cos_gamma = std::cos(gamma);
+  const double cos_gamma = std::cos(gamma);
 
   // Check if uhat_R and uhat_V are aligned.
   // Checking on cos-gamma rather than sin-gamma
@@ -475,7 +466,7 @@ TargetRelative_StateParam::compute_params_from_vectors()
   }
 
   // Compute sine of target heading angle, H
-  double sin_H = MathUtils::divide_protected(
+  const double sin_H = MathUtils::divide_protected(
                                  jeod::Vector3::dot(uhat_V,
                                               Position_BiasedTarget_frame.n_hat),
                                  cos_gamma,
@@ -514,8 +505,8 @@ TargetRelative_StateParam::compute_position_from_params(
   }
 
   // Compute sine and cosine of range angle
-  double sin_theta_Rng = std::sin(theta_Rng);
-  double cos_theta_Rng = std::cos(theta_Rng);
+  const double sin_theta_Rng = std::sin(theta_Rng);
+  const double cos_theta_Rng = std::cos(theta_Rng);
 
   /* Compute sine and cosine of rotation angle
    * This is done in one of several ways, so create the variables, then
@@ -551,7 +542,7 @@ TargetRelative_StateParam::compute_position_from_params(
    * rotation-angle could be non-zero and needs computing. We don't actually
    * need the rotation-angle, only the sine and cosine of it.*/
   else {
-    double sin_phi = std::sin(phi_Cross);
+    const double sin_phi = std::sin(phi_Cross);
     // Compute sin(theta_Rot); theta argument is phi
     // Fail if |sin(phi)| > |sin(range)| (or if both are zero)
     sin_theta_Rot = MathUtils::divide_protected( sin_phi,
@@ -657,12 +648,11 @@ TargetRelative_StateParam::compute_biased_target()
     for ( unsigned int ii = 0 ; ii < 2 ; ii++ ) {
       // Compute the rotation angle of the biased target about the planet
       // rotation axis (theta_omega)
-      double theta_omega = omega_mag * K_theta * theta_RngBias;
+      const double theta_omega = omega_mag * K_theta * theta_RngBias;
 
       /* Compute sine and cosine of theta_omega */
-      double sin_theta_omega = std::sin(theta_omega);
-      double cos_theta_omega = std::cos(theta_omega);
-
+      const double sin_theta_omega = std::sin(theta_omega);
+      const double cos_theta_omega = std::cos(theta_omega);
 
       // Compute rotated target vector
       // Consider the Omega-Target frame
@@ -685,8 +675,8 @@ TargetRelative_StateParam::compute_biased_target()
 
       // update the angle between position vector and biased target vector
       // (theta_RngBias) for next iteration
-      double dot_prod = jeod::Vector3::dot( uhat_R,// Unit position
-                                      biased_target_pos_hat);
+      const double dot_prod = jeod::Vector3::dot( uhat_R,// Unit position
+                                                  biased_target_pos_hat);
       theta_RngBias = MathUtils::acos_protected( dot_prod);
     }
   }

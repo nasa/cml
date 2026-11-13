@@ -40,11 +40,10 @@ PROGRAMMERS:
 #ifndef CML_CONTACT_STATE_OVERRIDE_HH
 #define CML_CONTACT_STATE_OVERRIDE_HH
 
+#include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
-#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class ContactStateOverride : public SubscriptionBase
 {
@@ -57,19 +56,19 @@ class ContactStateOverride : public SubscriptionBase
        location as long as the body's position is computed to be at a
        physically impossible location.*/
 
-  bool contact_detected; /* (--)
+  bool contact_detected {false}; /* (--)
     Flag set to indicate that the contact plane has been broken.*/
 
-  double deactivation_threshold; /* (m)
+  double deactivation_threshold{0.0}; /* (m)
       When the objects are this far apart, this model will deactivate itself. */
-  double contact_normal[3];  /* (--)
+  double contact_normal[3]{};  /* (--)
       Unit vector perpendicular to contact plane, expressed in the
       reference-body's structgure frame.*/
-  double contact_pos_overridestruc_wrt_refstruc[3]; /* (m)
+  double contact_pos_overridestruc_wrt_refstruc[3]{}; /* (m)
       Origin of override structure frame relative to origin of reference
       structure frame, coordinatized in the reference structure frame, when the
       bodies are in contact. Used for state override. */
-  double contact_pos_overridenomcore_wrt_refnomcore[3]; /* (m)
+  double contact_pos_overridenomcore_wrt_refnomcore[3]{}; /* (m)
       Nominal override core position with respect to nominal reference core
       position, coordinatized in the reference structure frame, when the bodies
       are in contact. Used for testing for contact. */
@@ -77,42 +76,44 @@ class ContactStateOverride : public SubscriptionBase
       Left-transformation quaternion from the structural frame of
       reference_body to the structural frame of override_body
       when the bodies are in contact. */
-  double nominal_reference_core_position[3]; /* (m)
+  double nominal_reference_core_position[3]{}; /* (m)
       Location in the reference body used for testing for contact, coordinatized
       in the reference structure frame */
-  double nominal_override_core_position[3]; /* (m)
+  double nominal_override_core_position[3]{}; /* (m)
       Location in the override body used for testing for contact, coordinatized
       in the override structure frame */
-  bool user_set_contact_normal; /* (--)
+  bool user_set_contact_normal{false}; /* (--)
       Set when a user sets the normal direction manually; prevents the user-set
       contact_normal from being overwritten with the automatically-generated
       default value during activation. Default: false */
-  bool user_set_contact_position; /* (--)
+  bool user_set_contact_position{false}; /* (--)
       Set when a user sets the contact position manually; prevents the
       user-defined position from being overwritten with the
       automatically-generated default value during activation.
       Default: false */
-  bool user_set_contact_orientation; /* (--)
+  bool user_set_contact_orientation{false}; /* (--)
       Set when a user sets the contact orientation manually; prevents the
       user-defined orientation from being overwritten with the
       automatically-generated default value during activation.
       Default: false */
-  bool bodies_are_attached; /* (--)
+  bool bodies_are_attached{false}; /* (--)
 		  True if the bodies are in the same mass tree. If so, the state will not be
 		  overridden because the bodies are directly or indirectly attached. */
 
  public:
-  bool self_disabled;  /* (--)
+  bool self_disabled{false};  /* (--)
     Public-accessible flag that gets set when the model has self-deactivated.
     Needed because the model's active flag is protected by inheritance from
     SubscriptionBase.*/
 
   ContactStateOverride(jeod::DynBody& reference_body_in,
                        jeod::DynBody& override_body_in);
+  ContactStateOverride(const ContactStateOverride&) = delete;
+  ContactStateOverride& operator = (const ContactStateOverride&) = delete;
 
   void update();
   void set_contact_normal(double contact_normal_in[3]);
-  void set_contact_position(double contact_position_in[3]);
+  void set_contact_position(double contact_position[3]);
   void set_contact_orientation(double contact_orientation[3][3]);
   void set_contact_orientation_Q(const jeod::Quaternion & contact_orientation);
   void set_deactivation_threshold(double threshold);
@@ -121,14 +122,7 @@ class ContactStateOverride : public SubscriptionBase
   void override_state();
   void override_state_root( jeod::BodyRefFrame& integ_frame,
                             double pos_integ_frame_wrt_override_struc[3],
-                            const jeod::Quaternion & override_struc_to_integ_frame);
-  #ifndef SWIG // SWIG does not like the override keyword.
+                            const jeod::Quaternion & Q_override_struc_to_integ_frame);
   void activate() override;
-  #endif
-
- private:
-  // Make class non-copyable
-  ContactStateOverride(const ContactStateOverride&);
-  ContactStateOverride& operator = (const ContactStateOverride&);
 };
 #endif

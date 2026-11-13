@@ -3,6 +3,9 @@ PURPOSE:
   (Provide the functionality for the  Aero capabilities when the
    lookup table option is used.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 REFERENCE:
   (The CML aero models, written by Jeremy Rea, Jon Berndt, Sara McNamara,
    Sara Blatz, et, al.)
@@ -12,13 +15,19 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
 *******************************************************************************/
 
-#include <cmath>   // sin, cos
-#include <cstring> // NULL
+#include <algorithm>
+#include <cmath>
+#include <string>
+#include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+#include "../include/aero_environment.hh"
+#include "../include/aero_executive_base.hh"
 #include "../include/aero_executive_table.hh"
+#include "../include/aero_interface_output.hh"
+#include "../include/aero_table_set_base.hh"
 
 /*******************************************************************************
 Constructors
@@ -33,39 +42,7 @@ AeroExecutiveTable::AeroExecutiveTable(AeroInterfaceOutput & output_ref,
   T_struc_to_body( T_struc_to_body_in),
   environment( environment_in),
   disable_aero_moments( disable_aero_moments_in),
-  disable_aero_damping( disable_aero_damping_in),
-
-  T_body_to_aero_frame{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  cos_beta(1.0),
-  sin_beta(0.0),
-  cos_alpha(1.0),
-  sin_alpha(0.0),
-  cos_attack(1.0),
-  sin_attack(0.0),
-  cos_roll(1.0),
-  sin_roll(0.0),
-  moment_arm{0.0, 0.0, 0.0},
-
-  T_struc_to_aero_frame{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  data_table_type( AeroTableSetBase::Unspecified),
-  uncertainties_expressed_as_percent(false),
-  uncertainties_are_variable(false),
-  aero_damping_in_table(false),
-  aero_damping_on_diag_in_table( AeroTableSetBase::NotInTable),
-  aero_damping_off_diag_in_table( AeroTableSetBase::NotInTable),
-
-  current_table(nullptr),
-
-  threshold_min_free_stream_vel_mag(1.0), // Arbitrary threshold.
-
-  dispersion_active(false),
-  bias(),
-  uncertainty(),
-  random(),
-  load_all_tables_at_init(false),
-  l_over_v_scale( Lref_over_Vmag),
-  mrc_position(),
-  coefficients()
+  disable_aero_damping( disable_aero_damping_in)
 {}
 
 
@@ -102,15 +79,14 @@ AeroExecutiveTable::change_table( unsigned int new_ix)
       "Request to switch to table at index ", new_ix, ", but there are only ", data_tables_vector.size(), " tables "
       "available.\nRequest failed. Continuing with existing table (", current_table->name, ").\n");
   }
-  return;
 }
 /******************************************************************************/
 void
-AeroExecutiveTable::change_table( std::string new_name)
+AeroExecutiveTable::change_table( const std::string & new_name)
 {
   // Check trivial case - change commanded to current table.
   if (current_table != nullptr) {
-    if (current_table->name.compare(new_name) == 0) {
+    if (current_table->name == new_name) {
       CMLMessage::inform(
         __FILE__,__LINE__,"Redundant request\n",
         "Request to change table to ", new_name, ", but already using that table.\n"
@@ -118,13 +94,11 @@ AeroExecutiveTable::change_table( std::string new_name)
       return; // already on that table.
     }
   }
-  for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
-                                                 it != data_tables_vector.end();
-                                                 ++it) {
-    if ( (*it)->name.compare(new_name) == 0) {
-      configure_new_table(*it);
-      return;
-    }
+  const auto table = std::find_if(data_tables_vector.begin(), data_tables_vector.end(),
+    [&new_name](const AeroTableSetBase* data_table){return data_table->name == new_name;});
+  if (table != data_tables_vector.end()) {
+    configure_new_table(*table);
+    return;
   }
   // if current_table == NULL, the model has not yet been initialized and will
   // fail at initialization if this is not corrected.
@@ -172,11 +146,9 @@ AeroExecutiveTable::add_table( AeroTableSetBase * table)
     return;
   }
 
-  for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
-                                                 it != data_tables_vector.end();
-                                                 ++it) {
+  for (auto & it : data_tables_vector) {
     // Check the addresses for duplicates.
-    if ((*it) == table) {
+    if (it == table) {
       CMLMessage::warn(
         __FILE__,__LINE__,"Duplication of Aero table.\n",
         "An AeroTableSetBase with this address has previously been added.\n"
@@ -184,10 +156,10 @@ AeroExecutiveTable::add_table( AeroTableSetBase * table)
         "Check configuration for possibility of duplicate additions.\n"
         "Continuing with the addition of this table.\n");
     }
-    else if ((*it)->name.compare( table->name) == 0) {
+    else if (it->name == table->name) {
       CMLMessage::warn(
         __FILE__,__LINE__,"Duplication of Aero table.\n",
-        "An AeroTableSetBase with this name (", (*it)->name, ") has previously been added.\n"
+        "An AeroTableSetBase with this name (", it->name, ") has previously been added.\n"
         "Caution should be exercised when switching between tables based\n"
         "on table-name which is now ambiguous.\n");
     }
@@ -250,11 +222,9 @@ AeroExecutiveTable::initialize()
   //      initialize redundant tables.
   //      It is safer and slower to load and initialize at the front-end.
   if (load_all_tables_at_init) {
-    for (std::vector<AeroTableSetBase *>::iterator it = data_tables_vector.begin();
-                                                   it != data_tables_vector.end();
-                                                   ++it) {
-      if (!(*it)->is_initialized()) {
-        (*it)->initialize();
+    for (auto & it : data_tables_vector) {
+      if (!it->is_initialized()) {
+        it->initialize();
       }
     }
   }
@@ -345,6 +315,7 @@ AeroExecutiveTable::configure_new_table( AeroTableSetBase * new_table)
       "it. If this error is reached, something is behaving unexpectedly.\n"
       "Terminating");
       // Exit here!!
+    return;
   }
 
   // Turn off the current table
@@ -523,7 +494,7 @@ AeroExecutiveTable::aero_forces_moments()
   //*****************************************************************
   //   Compute the aerodynamic forces along the body axes
   //*****************************************************************
-  double pA =  environment.get_dynamic_pressure() * Aref;
+  const double pA =  environment.get_dynamic_pressure() * Aref;
   output.force[0] =  coefficients.CX * pA;
   output.force[1] =  coefficients.CY * pA;
   output.force[2] =  coefficients.CZ * pA;
@@ -554,7 +525,7 @@ AeroExecutiveTable::aero_forces_moments()
 
   // Include the effects of rotational aerodynamic damping
   if ( aero_damping_in_table  && !disable_aero_damping) {
-    double fsv_mag = environment.get_free_stream_vel_mag();
+    const double fsv_mag = environment.get_free_stream_vel_mag();
     if (fsv_mag > threshold_min_free_stream_vel_mag) {
       //   If fsv_mag is small, L_over_V is large, the coefficients get large
       //   and thus the torque gets large. Dimensionally, this is correct, and
@@ -564,7 +535,7 @@ AeroExecutiveTable::aero_forces_moments()
       //   Added a safety threshold, set at construction time to prevent this
       //   from blowing up when unexpected winds produce small momentary
       //   free-stream velocities.
-      double L_over_V = Lref / (static_cast<double>(l_over_v_scale) * fsv_mag);
+      const  double L_over_V = Lref / (static_cast<double>(l_over_v_scale) * fsv_mag);
       double body_rate_aero_frm[3];
       jeod::Vector3::transform( T_body_to_aero_frame,
                           environment.get_true_body_rates(),
@@ -584,7 +555,7 @@ AeroExecutiveTable::aero_forces_moments()
                               L_over_V;
     }
   }
-  double pAL = pA *  Lref;
+  const double pAL = pA * Lref;
   /* About the CG */
   output.torque[0] =  coefficients.Cl_cg * pAL;
   output.torque[1] =  coefficients.Cm_cg * pAL;

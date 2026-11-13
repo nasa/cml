@@ -28,19 +28,20 @@ class AtmosphereExec_AtmosBase
   protected:
     AtmosExecOutput & out; /* (--)
           Reference to output class from the master atmos-exec. */
-    bool active; /* (--) internal flag, indicates whether activate has been run*/
+    bool active{false}; /* (--) internal flag, indicates whether activate has been run*/
 
   public:
-    std::string name; /* (--) name of the atmosphere. */
+    std::string name{"NONE"}; /* (--) name of the atmosphere. */
 
     explicit AtmosphereExec_AtmosBase(AtmosExecOutput & master_output)
       :
-      out(master_output),
-      active(false),
-      name("NONE")
+      out(master_output)
     {}
 
     virtual ~AtmosphereExec_AtmosBase() = default;
+
+    AtmosphereExec_AtmosBase (const AtmosphereExec_AtmosBase&) = delete;
+    AtmosphereExec_AtmosBase & operator = (const AtmosphereExec_AtmosBase&) = delete;
 
     virtual void activate(){active = true;}
     virtual void deactivate(){active = false;}
@@ -49,10 +50,6 @@ class AtmosphereExec_AtmosBase
     // models) would need to provide empty corresponding initialize_*() methods.
     virtual bool initialize_atmos() {return false;}
     virtual void update_atmos(){}
-
-  private:
-    AtmosphereExec_AtmosBase (const AtmosphereExec_AtmosBase&);
-    AtmosphereExec_AtmosBase & operator = (const AtmosphereExec_AtmosBase&);
 };
 
 /*******************************************************************************
@@ -73,6 +70,8 @@ class AtmosphereExec_AtmosWindsBase : public AtmosphereExec_AtmosBase
       AtmosphereExec_AtmosBase(master_output),
       planet_state(planet_state_in)
     {}
+    AtmosphereExec_AtmosWindsBase (const AtmosphereExec_AtmosWindsBase&) = delete;
+    AtmosphereExec_AtmosWindsBase & operator = (const AtmosphereExec_AtmosWindsBase&) = delete;
 
     virtual bool initialize_winds() {return false;}
     virtual void update_winds(){}
@@ -85,7 +84,7 @@ class AtmosphereExec_AtmosWindsBase : public AtmosphereExec_AtmosBase
     // re-run the planet-state update if the topocentric altitude was not
     // already subscribed.
     void subscribe_to_topocentric_altitude() {
-      bool already_subscribed = planet_state.is_topocentric_altitude_subscribed();
+      const bool already_subscribed = planet_state.is_topocentric_altitude_subscribed();
       planet_state.subscribe_topocentric_altitude();
       if (!already_subscribed) {
         planet_state.update();
@@ -109,9 +108,5 @@ class AtmosphereExec_AtmosWindsBase : public AtmosphereExec_AtmosBase
                                 out.wind_velocity_eci,
                                 out.wind_velocity_tc);
     }
-
-  private:
-    AtmosphereExec_AtmosWindsBase (const AtmosphereExec_AtmosWindsBase&);
-    AtmosphereExec_AtmosWindsBase & operator = (const AtmosphereExec_AtmosWindsBase&);
 };
 #endif

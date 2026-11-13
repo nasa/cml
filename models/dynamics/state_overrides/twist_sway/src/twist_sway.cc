@@ -2,6 +2,9 @@
 Purpose:
  (Produce wind generated twist and sway motion)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
  (
  ((Rob Gillis) (Emergent) (Dec 2011) (CEV) (Initial version for ground contact model))
@@ -12,12 +15,14 @@ Programmers:
  )
 
 *******************************************************************************/
-#include <cmath> // M_PI, exp, pow
-#include <random> // std::uniform_real_distribution
+#include <cmath>
+#include <iterator>
+#include <list>
+#include <random>
 
-#include "jeod/models/utils/memory/include/jeod_alloc.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 
@@ -26,81 +31,10 @@ Programmers:
 /*****************************************************************************
 Constructors
 *****************************************************************************/
-TwistSwayParams::TwistSwayParams()
-  :
-  RocketHeight(0.0),
-  wind_direction(0.0),
-  tau(0.0),
-  taul(0.0),
-  limit_ln_epsilon(-37.0),
-  Parallel_Motion_Fast(0.0),
-  Normal_Motion_Fast(0.0),
-  Parallel_Motion_Slow(0.0),
-  Normal_Motion_Slow(0.0),
-  Twist_Mag(0.0),
-  delta_T1_max(0.0),
-  delta_T1_min(0.0),
-  delta_T2_max(0.0),
-  delta_T2_min(0.0),
-  mode_freq_high(0.0),
-  mode_freq_low(0.0),
-  decay_const(0.0),
-  seed(0)
-{}
-
-/*****************************************************************************/
-TwistSwayMagnitudes::TwistSwayMagnitudes()
-  :
-  parallel(0.0),
-  normal(0.0),
-  twist(0.0)
-{}
-
-/*****************************************************************************/
 TwistSway::TwistSway(
       const double & external_clock_)
   :
-  perturb_algorithm(GrowHoldDecay),
-  params(),
-  Q_enu_to_ecef(),
-  dp_enu{0.0, 0.0, 0.0},
-  dv_enu{0.0, 0.0, 0.0},
-  Q_enu_to_ts(),
-  w_ts_wrt_enu_in_enu{0.0, 0.0, 0.0},
-  dp_ecef{0.0, 0.0, 0.0},
-  dv_ecef{0.0, 0.0, 0.0},
-  Q_ecef_to_ts(),
-  w_ts_wrt_enu_in_ecef{0.0, 0.0, 0.0},
-
-  external_clock(external_clock_),
-  previous_external_clock(0.0),
-  start_time(0.0),
-  elapsed_time(0.0),
-  end_time(0.0),
-  dt(0.0),
-  T_fast(0.0),
-  T_slow(0.0),
-  Freqw(0.0),
-  decay_mult(0.0),
-  p_factor_fast(0.0),
-  p_factor_slow(0.0),
-  ix_fast_next(0),
-  ix_slow_next(0),
-  fast_list(),
-  slow_list(),
-  fast_mag(),
-  slow_mag(),
-  sway_parallel(0.0),
-  sway_normal(0.0),
-  twist_angle(0.0),
-  prev_sway_parallel(0.0),
-  prev_sway_normal(0.0),
-  prev_dp_up(0.0),
-  prev_twist_sway_angle(),
-  copy_wind_direction(0.0),
-  sin_wind(0.0),
-  cos_wind(1.0),
-  small_angle_warning_sent(false)
+  external_clock(external_clock_)
 {}
 
 /*****************************************************************************
@@ -249,8 +183,8 @@ TwistSway::update()
   //       However, this was the original algorithm. There may have been a good
   //       reason for doing this (but it is undocumented if there was), so I'm
   //       leaving it here for now.
-  double time_remaining = end_time - external_clock;
-  double t_pow_k =  std::pow( time_remaining,
+  const double time_remaining = end_time - external_clock;
+  const double t_pow_k =  std::pow( time_remaining,
                          params.decay_const);
   if (t_pow_k > -params.limit_ln_epsilon) {
     decay_mult = 1.0;
@@ -303,23 +237,21 @@ Purpose:(Adds a new perturbation to the high-frequency or low-frequency list)
 void
 TwistSway::new_fast_perturbation()
 {
-  TwistSwayMagnitudes new_perturb;
-  std::uniform_real_distribution<double> dist( 0,1);
+  auto& new_perturb = fast_list.emplace_front();
+  std::uniform_real_distribution dist( 0.0,1.0);
   new_perturb.parallel = dist(random_generator) * params.Parallel_Motion_Fast;
   new_perturb.normal   = dist(random_generator) * params.Normal_Motion_Fast;
   new_perturb.twist    = dist(random_generator) * params.Twist_Mag;
-  fast_list.push_front( new_perturb);
 }
 /****************************************************************************/
 void
 TwistSway::new_slow_perturbation()
 {
-  TwistSwayMagnitudes new_perturb;
-  std::uniform_real_distribution<double> dist( 0,1);
+  auto& new_perturb = slow_list.emplace_front();
+  std::uniform_real_distribution dist( 0.0,1.0);
   new_perturb.parallel = dist(random_generator) * params.Parallel_Motion_Slow;
   new_perturb.normal   = dist(random_generator) * params.Normal_Motion_Slow;
   new_perturb.twist    = 0.0;
-  slow_list.push_front( new_perturb);
 }
 
 /*****************************************************************************
@@ -358,7 +290,7 @@ TwistSway::check_for_active_perturbations()
   // Only need to check for removal when there are perturbations currently
   // being processed
   if (!fast_list.empty()) {
-    double t_remove = T_fast * (ix_fast_next - fast_list.size()) -
+    double t_remove = T_fast * static_cast<double>(ix_fast_next - fast_list.size()) -
                          params.tau * params.limit_ln_epsilon;
     if (perturb_algorithm == GrowHoldDecay) {
       t_remove += T_fast;
@@ -373,7 +305,7 @@ TwistSway::check_for_active_perturbations()
   // Note - this is almost code duplication except that the time-constant
   // changed from tau to taul.
   if (!slow_list.empty()) {
-    double t_remove = T_slow * (ix_slow_next - slow_list.size()) -
+    double t_remove = T_slow * static_cast<double>(ix_slow_next - slow_list.size()) -
                          params.taul * params.limit_ln_epsilon;
     if (perturb_algorithm == GrowHoldDecay) {
       t_remove += T_slow;
@@ -404,15 +336,11 @@ TwistSway::accumulate_perturbations()
       fast_mag.normal   = fast_list.front().normal   * (1-p_factor);
       fast_mag.twist    = fast_list.front().twist    * (1-p_factor);
       p_factor *= (1 - p_factor_fast);
-      // use an iterator rather than simple whole-list because starting with
-      // element #2.
-      std::list< TwistSwayMagnitudes >::iterator iter;
-      for ( iter = ++fast_list.begin(); // element 2
-            iter != fast_list.end();
-            ++iter) {
-        fast_mag.parallel += (*iter).parallel * p_factor;
-        fast_mag.normal   += (*iter).normal   * p_factor;
-        fast_mag.twist    += (*iter).twist    * p_factor;
+      // Start with element #2.
+      for (auto iter = std::next(fast_list.begin()); iter != fast_list.end(); ++iter) {
+        fast_mag.parallel += iter->parallel * p_factor;
+        fast_mag.normal   += iter->normal   * p_factor;
+        fast_mag.twist    += iter->twist    * p_factor;
         p_factor *=  p_factor_fast;
       }
       break;
@@ -452,14 +380,10 @@ TwistSway::accumulate_perturbations()
       slow_mag.parallel = slow_list.front().parallel * (1-p_factor);
       slow_mag.normal   = slow_list.front().normal   * (1-p_factor);
       p_factor *= (1 - p_factor_slow);
-      // use an iterator rather than simple whole-list because starting with
-      // element #2.
-      std::list< TwistSwayMagnitudes >::iterator iter;
-      for ( iter = ++slow_list.begin(); // element 2
-            iter != slow_list.end();
-            ++iter) {
-        slow_mag.parallel += (*iter).parallel * p_factor;
-        slow_mag.normal   += (*iter).normal   * p_factor;
+      // Start with element #2.
+      for (auto iter = std::next(slow_list.begin()); iter != slow_list.end(); ++iter) {
+        slow_mag.parallel += iter->parallel * p_factor;
+        slow_mag.normal   += iter->normal   * p_factor;
         p_factor *=  p_factor_slow;
       }
       break;
@@ -499,7 +423,7 @@ TwistSway::compute_twist_sway_enu()
   // perturbation. Then further scale by multiplying by decay_mult to scale
   // back the perturbations if we are near the end of the perturbation
   // process.
-  double sin_func = std::sin(2 * M_PI * Freqw * elapsed_time);
+  const double sin_func = std::sin(2 * M_PI * Freqw * elapsed_time);
 
   sway_parallel = (fast_mag.parallel* sin_func + slow_mag.parallel) *decay_mult;
   sway_normal =   (fast_mag.normal* sin_func + slow_mag.normal) * decay_mult;
@@ -520,11 +444,11 @@ TwistSway::compute_twist_sway_enu()
   // The new coordinates are (e, n, u), with magnitude H
   // NOTE - using single letter variable names for generating the
   //        transformation matrix.
-  double H = params.RocketHeight;
-  double e = - cos_wind * sway_normal + sin_wind * sway_parallel;
-  double n =   sin_wind * sway_normal + cos_wind * sway_parallel;
-  double h2 = e*e + n*n; // square of horizontal
-  double u2 = H*H - h2;
+  const double H = params.RocketHeight;
+  const double e = -cos_wind * sway_normal + sin_wind * sway_parallel;
+  const double n = sin_wind * sway_normal + cos_wind * sway_parallel;
+  const double h2 = e*e + n*n; // square of horizontal
+  const double u2 = H*H - h2;
 
   // Magic number (0.2). This value is largely arbitrary, but it corresponds to an
   // angle of about 11 degrees at which point the small angle approximations really
@@ -556,7 +480,7 @@ TwistSway::compute_twist_sway_enu()
       return;
     }
   }
-  double u =  std::sqrt( u2);
+  const double u =  std::sqrt(u2);
 
   // East and North
   dp_enu[0] = e;
@@ -569,9 +493,9 @@ TwistSway::compute_twist_sway_enu()
   // The sway rates are simply generated from the backward difference
   // of the positions
   // Note: dt != 0 verification made at top of update method
-  double rate_up  = (dp_enu[2] - prev_dp_up) / dt;
-  double sway_rate_parallel = (sway_parallel - prev_sway_parallel) / dt;
-  double sway_rate_normal = (sway_normal - prev_sway_normal) / dt;
+  const double rate_up = (dp_enu[2] - prev_dp_up) / dt;
+  const double sway_rate_parallel = (sway_parallel - prev_sway_parallel) / dt;
+  const double sway_rate_normal = (sway_normal - prev_sway_normal) / dt;
 
   // Calculate the wind induced sway rate in North, East, Up frame
   dv_enu[0] = -cos_wind * sway_rate_normal + sin_wind * sway_rate_parallel;
@@ -592,8 +516,9 @@ TwistSway::compute_twist_sway_enu()
   }
 
   // apply the twist:
-  double q_vec[3] =  {0, 0, -std::sin(twist_angle/2)};
-  jeod::Quaternion Q_sway_to_ts( std::cos(twist_angle/2),
+  const double half_twist_angle = 0.5 * twist_angle;
+  const double q_vec[3] =  {0, 0, -std::sin(half_twist_angle)};
+  const jeod::Quaternion Q_sway_to_ts( std::cos(half_twist_angle),
                            q_vec);
 
   Q_sway_to_ts.multiply( Q_enu_to_sway,

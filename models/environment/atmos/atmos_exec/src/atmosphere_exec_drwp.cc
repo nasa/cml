@@ -11,9 +11,13 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include "../include/atmosphere_exec_atmos_base.hh"
 #include "../include/atmosphere_exec_drwp.hh"
+#include "../include/atmosphere_exec_out.hh"
 
 
 /*****************************************************************************
@@ -25,9 +29,7 @@ AtmosphereExec_Drwp::AtmosphereExec_Drwp(
            AtmosExecOutput               & master_output)
   :
   AtmosphereExec_AtmosWindsBase(master_output, planet_state_in),
-  DRWP_atmos(DRWP_atmos_in),
-  initialized(false),
-  altitude_at_prev_update(0.0)
+  DRWP_atmos(DRWP_atmos_in)
 {
   name = "DRWP";
 }
@@ -39,7 +41,9 @@ Purpose:(Activates the model, creates necessary subscriptions)
 void
 AtmosphereExec_Drwp::activate()
 {
-  if (active) return;
+  if (active) {
+    return;
+  }
 
   subscribe_to_topocentric_altitude();
   AtmosphereExec_AtmosBase::activate();

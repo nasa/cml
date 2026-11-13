@@ -42,16 +42,14 @@ class EventTriggerSet : public WatchValuesSet
     WatchValuesSet) that have the necessity of maintaining the reference
     value subject to the condition that the CompoundEvent is triggered. */
 
-  EventTriggerSet();
+  EventTriggerSet() = default;
   ~EventTriggerSet() override;
+  EventTriggerSet( const EventTriggerSet&) = delete;
+  EventTriggerSet& operator=( const EventTriggerSet&) = delete;
 
   void populate_conditional_reference_trigger_list();
   void update_conditional_trigger_references();
+  void force_multi_shot_for_managed_values();
   WatchValuesBaseCore * find_trigger( const std::string& trigger_name_in);
-
-
- private: // not implemented / deleted
-  EventTriggerSet( const EventTriggerSet&);
-  EventTriggerSet& operator=( const EventTriggerSet&);
 };
 #endif

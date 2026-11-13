@@ -25,6 +25,8 @@ class ScalarIntegrableObject : public er7_utils::IntegrableObject {
 public:
   ScalarIntegrableObject( double &value_in,
                           double &derivative_in);
+  ScalarIntegrableObject(const ScalarIntegrableObject &) = delete;
+  ScalarIntegrableObject & operator = (const ScalarIntegrableObject &) = delete;
 
   void create_integrators(
       const er7_utils::IntegratorConstructor &generator,
@@ -45,8 +47,5 @@ private:
 
   double &value;      /* (--) Input value to be integrated. */
   double &derivative; /* (--) Time derivative of the value to be integrated. */
-
-  ScalarIntegrableObject(const ScalarIntegrableObject &);
-  ScalarIntegrableObject & operator = (const ScalarIntegrableObject &);
 };
 #endif

@@ -3,6 +3,9 @@ PURPOSE:
   (To model the force and moments imparted on both parts of a vehicle
    during its separation when a piston thruster or a group of them fires.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
   (See header file)
 
@@ -18,9 +21,14 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (June 2017) (Antares) (IV&V code review clean up)))
 *******************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <algorithm>
+#include <list>
 
+#include "../include/piston_thruster.hh"
 #include "../include/piston_thruster_group.hh"
 
 /*******************************************************************************
@@ -29,11 +37,6 @@ Constructors
 PistonThrusterGroupInputs::PistonThrusterGroupInputs( const double & time_in,
                                                       double & thrust_in)
   :
-  duration(0.0),
-  deltaV(0.0),
-  load_mass(0.0),
-  load_profile(1.0),
-  table_set(),
   load_pct_table( load_profile),
   time_table( time_in),
   thrust_table( thrust_in)
@@ -45,11 +48,6 @@ PistonThrusterGroup::PistonThrusterGroup( const double & time_in)
   :
   input( time_in,
          force_mag),
-  param(),
-  out_A(),
-  out_B(),
-  force_mag(0.0),
-  start_time(0.0),
   time( time_in)
 {
   subscribe_name = "PistonThrusterGroup:";
@@ -70,16 +68,12 @@ PistonThrusterGroup::add_piston_thruster( PistonThruster & new_thruster)
     return;
   }
 
-  for (std::list<PistonThruster *>::iterator it =  piston_thrusters.begin();
-                                             it != piston_thrusters.end();
-                                           ++it) {
-    if ( (*it) == &new_thruster) {
-      CMLMessage::error(
-        __FILE__,__LINE__, "Invalid thruster addition.\n",
-        "Attempted to add a thruster instance that has already been added.\n"
-        "\nAttempt failed.\n");
-      return;
-    }
+  if (std::find(piston_thrusters.begin(), piston_thrusters.end(), &new_thruster) != piston_thrusters.end()) {
+    CMLMessage::error(
+      __FILE__,__LINE__, "Invalid thruster addition.\n",
+      "Attempted to add a thruster instance that has already been added.\n"
+      "\nAttempt failed.\n");
+    return;
   }
 
   piston_thrusters.push_back( &new_thruster);
@@ -100,10 +94,8 @@ PistonThrusterGroup::initialize()
     return;
   }
 
-  for (std::list<PistonThruster *>::iterator it =  piston_thrusters.begin();
-                                             it != piston_thrusters.end();
-                                           ++it) {
-    (*it)->initialize();
+  for (auto & piston_thruster : piston_thrusters) {
+    piston_thruster->initialize();
   }
 
   SubscriptionBase::initialize();
@@ -144,10 +136,8 @@ PistonThrusterGroup::activate()
 
   start_time = time;
   // activate each of the individual thrusters.
-  for (std::list<PistonThruster *>::iterator it =  piston_thrusters.begin();
-                                             it != piston_thrusters.end();
-                                           ++it) {
-    (*it)->subscribe();
+  for (auto & piston_thruster : piston_thrusters) {
+    piston_thruster->subscribe();
   }
   active = true;
   update();
@@ -165,7 +155,7 @@ PistonThrusterGroup::update()
   }
 
   // Compute the elapsed time since the PECs were fired
-  double elapsed_time = time - start_time;
+  const double elapsed_time = time - start_time;
 
   // End if been active too long
   if (elapsed_time > param.max_time){
@@ -201,14 +191,12 @@ PistonThrusterGroup::update()
   jeod::Vector3::initialize( out_B.force);
   jeod::Vector3::initialize( out_B.moment);
 
-  for (std::list<PistonThruster *>::iterator it =  piston_thrusters.begin();
-                                             it != piston_thrusters.end();
-                                           ++it) {
-    (*it)->update(force_mag);
-    jeod::Vector3::incr( (*it)->sideA.out.force , out_A.force  );
-    jeod::Vector3::incr( (*it)->sideA.out.moment, out_A.moment );
-    jeod::Vector3::incr( (*it)->sideB.out.force , out_B.force  );
-    jeod::Vector3::incr( (*it)->sideB.out.moment, out_B.moment );
+  for (auto & piston_thruster : piston_thrusters) {
+    piston_thruster->update(force_mag);
+    jeod::Vector3::incr( piston_thruster->sideA.out.force , out_A.force  );
+    jeod::Vector3::incr( piston_thruster->sideA.out.moment, out_A.moment );
+    jeod::Vector3::incr( piston_thruster->sideB.out.force , out_B.force  );
+    jeod::Vector3::incr( piston_thruster->sideB.out.moment, out_B.moment );
   }
 }
 
@@ -242,10 +230,8 @@ PistonThrusterGroup::deactivate()
   jeod::Vector3::initialize( out_B.force);
   jeod::Vector3::initialize( out_B.moment);
   // deactivate each of the individual thrusters.
-  for (std::list<PistonThruster *>::iterator it =  piston_thrusters.begin();
-                                             it != piston_thrusters.end();
-                                           ++it) {
-    (*it)->unsubscribe();
+  for (auto & piston_thruster : piston_thrusters) {
+    piston_thruster->unsubscribe();
   }
   active = false;
 }

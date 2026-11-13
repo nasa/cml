@@ -20,9 +20,10 @@
 #ifndef CML_SINGLE_INPUT_TABLE_VAR_WITH_DERIV_HH
 #define CML_SINGLE_INPUT_TABLE_VAR_WITH_DERIV_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+#include "cml/models/utilities/table_interp_cpp/include/table_type_defs.hh"
 #include "generic_single_input_table.hh"
+#include <cstddef>
 
 class SingleInputTableVarDeriv : public GenericSingleInputTable
 {
@@ -39,11 +40,11 @@ class SingleInputTableVarDeriv : public GenericSingleInputTable
 #ifdef SWIG
 %mutable;
 #endif
-  bool omit_derivative_vals; /* (--)
+  bool omit_derivative_vals {false}; /* (--)
     Flag indicating whether this dual-data table is to be used to populate
     the first-derivative variables as well as the zeroth-derivative
     variables. Default: false (populate both)*/
-  bool use_linear_interpolation; /* (--)
+  bool use_linear_interpolation {false}; /* (--)
     Flag indicating that simple linear interpolation should be used for
     both the zeroth-derivative and first-derivative (if
     populate_derivative_vals) variables, independent of each other.
@@ -57,21 +58,19 @@ class SingleInputTableVarDeriv : public GenericSingleInputTable
   // derivs will be constructed using the default GenericSingleInputTable
   // constructor; the new constructors provide construction values to derivs.
   using GenericSingleInputTable::GenericSingleInputTable;
-  SingleInputTableVarDeriv();
+  SingleInputTableVarDeriv() = default;
   SingleInputTableVarDeriv( double *dependent_variables,
                             double *dependent_variables_derivs,
                             size_t num_vars);
-  SingleInputTableVarDeriv( double & dependent_var,
-                            double & dependent_var_deriv);
+  SingleInputTableVarDeriv( double & dependent_variable,
+                            double & dependent_variable_derivs);
   SingleInputTableVarDeriv( const DoublePtrVec & dependent_variables,
                             const DoublePtrVec & dependent_variables_deriv);
+  SingleInputTableVarDeriv (const SingleInputTableVarDeriv&) = delete;
+  SingleInputTableVarDeriv& operator = (const SingleInputTableVarDeriv&) = delete;
 
   bool initialize() override;
   protected:
   bool generate_output() override;
- private:
-  // Disable the copy/assignment operators
-  SingleInputTableVarDeriv (const SingleInputTableVarDeriv&);
-  SingleInputTableVarDeriv& operator = (const SingleInputTableVarDeriv&);
 };
 #endif

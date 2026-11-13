@@ -3,12 +3,18 @@ PURPOSE: (Uses JEOD radiation pressure model components to generate an
           illumination fraction without executing the whole radiation
           pressure model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2019) (Antares) (initial)))
 *****************************************************************************/
 
 #include "../include/eclipse_calculator.hh"
-#include "jeod/models/utils/math/include/vector3.hh" // vmag
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 /*****************************************************************************
 Constructor
@@ -20,18 +26,12 @@ EclipseCalculator::EclipseCalculator(
   :
   time(time_),
   dyn_manager(dyn_manager_),
-  vehicle_frame(vehicle_frame_),
-  earth_name{"Earth"},
-  moon_name{"Moon"},
-  sun(),
-  earth(),
-  moon(),
-  illum_factor(1.0)
+  vehicle_frame(vehicle_frame_)
 {
   earth.primary_source_ptr = &sun;
   moon.primary_source_ptr = &sun;
-  earth.name = earth_name;
-  moon.name = moon_name;
+  earth.name = "Earth";
+  moon.name = "Moon";
   earth.active = false;
   moon.active = false;
 }

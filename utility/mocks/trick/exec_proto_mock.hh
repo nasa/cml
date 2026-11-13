@@ -1,8 +1,9 @@
 #ifndef CML_EXEC_PROTO_MOCK_HH
 #define CML_EXEC_PROTO_MOCK_HH
-#include "trick/exec_proto.h"
-
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
+#include "trick/exec_proto.h"
 
 // Mock interface to free functions in Trick's exec_proto.h header
 class ExecProtoMock final {

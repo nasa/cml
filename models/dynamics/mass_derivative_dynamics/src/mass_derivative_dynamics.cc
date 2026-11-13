@@ -6,7 +6,8 @@ PURPOSE: (Models the effect of a rapidly changing mass and inertia tensor.
           will still be handled)
 
 LIBRARY DEPENDENCY:
-   ((cml/models/utilities/math_utils/src/math_utils.cc)
+   ((cml/models/utilities/cml_message/src/cml_message.cc)
+    (cml/models/utilities/math_utils/src/math_utils.cc)
    )
 
 PROGRAMMERS:
@@ -15,11 +16,13 @@ PROGRAMMERS:
 
 #include "../include/mass_derivative_dynamics.hh"
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <cstddef>
 
 
 /*****************************************************************************
@@ -42,40 +45,17 @@ MassDerivativeDynamics::MassDerivativeDynamics(
 MassDerivativeDynamics::MassDerivativeDynamics(
     const double & time,
     const double & propellant_mass_,
-    const double (& inertia_)[3][3],
+    const double (& intrinsic_prop_inertia_)[3][3],
     const double R_propellant_[3],
     const double R_nozzle_[3],
     jeod::DynBody & body_)
   :
   current_time(time),
   propellant_mass(propellant_mass_),
-  intrinsic_prop_inertia(inertia_),
+  intrinsic_prop_inertia(intrinsic_prop_inertia_),
   R_propellant( R_propellant_),
   R_nozzle( R_nozzle_),
-  body( body_),
-
-  mass_order(2),
-  R_propellant_order(2),
-  J_order(2),
-  pseudo_torque{0.0, 0.0, 0.0},
-  pseudo_force{0.0, 0.0, 0.0},
-  pseudo_dv{0.0, 0.0, 0.0},
-  propellant_mass_history(),
-  R_propellant_history(),
-  inertia_history(),
-
-  last_time(0.0),
-  dt (0.0),
-  include_velocity_effect(false),
-  m_dot(0.0),
-  r_nozzle{0.0, 0.0, 0.0},
-  r_propellant{0.0, 0.0, 0.0},
-  R_propellant_dot{0.0, 0.0, 0.0},
-  r_nozzle_skew{{0.0, 0.0, 0.0},{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}},
-  r_propellant_skew{{0.0, 0.0, 0.0},{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}},
-  R_propellant_dot_skew{{0.0, 0.0, 0.0},{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}},
-  torque_mx{{0.0, 0.0, 0.0},{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}},
-  J_dot{{0.0, 0.0, 0.0},{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}}
+  body( body_)
 {
   subscribe_name = "idot_dynamics";
   // R_propellant_history is a 3-array of history data for each component
@@ -372,8 +352,8 @@ void
 MassDerivativeDynamics::compute_J_dot()
 {
   size_t ix = 0;
-  double J_dot_6[6]; // The differences of the 6 unique elements of the
-                     // inertia tensor.
+  double J_dot_6[6] {}; // The differences of the 6 unique elements of the
+                        // inertia tensor.
   // Step through the upper triangle (including diagonals) of the inertia
   // tensor.  Ignore the 3 terms in the lower triangle; they are duplicates.
   for (size_t ii = 0; ii < 3; ++ii) {

@@ -25,6 +25,7 @@ NOTES:
 #define CML_TR_STATE_PARAMETERS_ALT_HH
 
 #include "TR_state_param.hh"
+#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameter_set.hh"
 /*****************************************************************************
 TargetRelative_StateParameter_Alt
 Purpose:
@@ -36,23 +37,28 @@ class TargetRelative_StateParameter_Alt : public TargetRelative_StateParam
 {
  public:
   /* Input parameters */
-  double target_point[3]; /* (m)
+  double target_point[3]{0.0, 0.0, 0.0}; /* (m)
     Location of the target point, expressed in the desired frame. */
-  double omega_planet[3]; /* (rad/s)
+  double omega_planet[3]{0.0, 0.0, 0.0}; /* (rad/s)
     Planetary rotation rate in the desired frame, expressed in the same
     desired frame. */
 
  protected:
   /* Internal variables                                          */
-  double target_r_mag; /* (m)
+  double target_r_mag{0.0}; /* (m)
     Magnitude of the target position vector.*/
 
  public:
   /* Constructor */
-  TargetRelative_StateParameter_Alt();
+  TargetRelative_StateParameter_Alt() = default;
 
   /* Destructor */
   ~TargetRelative_StateParameter_Alt() override = default;
+
+  /* Deleted copy constructor and copy assignment operator */
+  TargetRelative_StateParameter_Alt (const TargetRelative_StateParameter_Alt&) = delete;
+  TargetRelative_StateParameter_Alt & operator = (
+                                 const TargetRelative_StateParameter_Alt&) = delete;
 
   /* Public Methods */
   void initialize( const double R_Ref[3] ) override;
@@ -65,16 +71,10 @@ class TargetRelative_StateParameter_Alt : public TargetRelative_StateParam
 
   void compute_position_from_params( InputPosAngle input_theta_type);
   void compute_position_from_params( double        relative_altitude,
-                                     double        theta_Rng,
-                                     double        theta_Rot_or_Cross,
+                                     double        theta_Rng_,
+                                     double        theta_Rot_OR_phi,
                                      InputPosAngle input_theta_type,
                                      double        (&R)[3]);
-
- private:
-  // copy-constructor and operator= made empty to prevent misuse.
-  TargetRelative_StateParameter_Alt (const TargetRelative_StateParameter_Alt&);
-  TargetRelative_StateParameter_Alt & operator = (
-                                 const TargetRelative_StateParameter_Alt&);
 };
 
 #endif

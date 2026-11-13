@@ -23,7 +23,7 @@ PROGRAMMERS:
 class AeroTableSet: public AeroTableSetBase
 {
 public:
-  AeroTableSet( std::string name_in,
+  AeroTableSet( const std::string & name_in,
                 AeroExecutiveTable & exec_table)
   :
   AeroTableSetBase( name_in,
@@ -35,12 +35,8 @@ public:
     active = false;
     // Add this table to the executive list for later selection:
     exec_table.add_table(this);
-  };
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroTableSet (const AeroTableSet &);
-  AeroTableSet & operator = (const AeroTableSet &);
+  }
+  AeroTableSet (const AeroTableSet &) = delete;
+  AeroTableSet & operator = (const AeroTableSet &) = delete;
 };
 #endif

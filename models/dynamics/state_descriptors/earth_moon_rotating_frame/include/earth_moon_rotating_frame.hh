@@ -18,8 +18,8 @@ Programmers:
 #ifndef CML_EARTH_MOON_ROTATING_FRAME_HH
 #define CML_EARTH_MOON_ROTATING_FRAME_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/dynamics/state_descriptors/pointing_ref_frame/include/ephem_based_pointing_ref_frame.hh"
+#include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
 
 /*****************************************************************************
 EarthMoonRotatingFrame
@@ -39,25 +39,21 @@ class EarthMoonRotatingFrame : public EphemBasedPointingRefFrame {
     Moon__Earth_to_Moon  = 6  // x-axis is from Earth to Moon, origin at Moon.
   };
  protected:
-  FrameOrientation orientation; /* (--)
+  FrameOrientation orientation{EMB_Moon}; /* (--)
        Sets the orientation and origin of the frame.*/
-  bool reverse_xy; /* (--)
+  bool reverse_xy{false}; /* (--)
        Flag indicates the necessity to reverse the x and y-axes to
        support Earth__Moon_to_Earth and Moon__Earth_to_Moon.*/
 
  public:
   // Constructor and destructor
-  explicit EarthMoonRotatingFrame (jeod::EphemeridesManager & ephem_manager);
+  explicit EarthMoonRotatingFrame (jeod::EphemeridesManager & ephem_manager_in);
   ~EarthMoonRotatingFrame() override = default;
+   EarthMoonRotatingFrame (const EarthMoonRotatingFrame&) = delete;
+   EarthMoonRotatingFrame & operator = (const EarthMoonRotatingFrame&) = delete;
 
   void initialize() override;
   void update() override;
-  void set_orientation(FrameOrientation orientation);
-
- // The copy constructor and assignment operator for this class are
- // declared private and are not implemented.
- private:
-   EarthMoonRotatingFrame (const EarthMoonRotatingFrame&);
-   EarthMoonRotatingFrame & operator = (const EarthMoonRotatingFrame&);
+  void set_orientation(FrameOrientation new_orientation);
 };
 #endif

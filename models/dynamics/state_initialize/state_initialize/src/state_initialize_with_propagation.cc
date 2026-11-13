@@ -4,6 +4,9 @@ PURPOSE: (Allows the specification of a known state at a time other than the
           to the desired simulation-start-time and then used to initialize the
           simulation.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
    (( Initial propagation assumes that the primary gravity-body rotates on
       its z-axis, and that 3rd-bodies are static for the duration of the
@@ -39,9 +42,16 @@ PROGRAMMERS:
    )
  ******************************************************************************/
 
-#include <cmath>   // abs
+#include <cmath>
 
+#include "../include/state_initialize.hh"
 #include "../include/state_initialize_with_propagation.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
+#include "jeod/models/environment/gravity/include/gravity_manager.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 /*****************************************************************************
 constructor
@@ -49,15 +59,7 @@ constructor
 StateInitializeWithPropagation::StateInitializeWithPropagation(
     jeod::GravityManager           &  gravity_manager_in)
   :
-  StateInitialize(),
-  gravity_manager( gravity_manager_in),
-  body(nullptr),
-  T_initial_to_current{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  T_inrtl_to_initial_pfix{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-  omega(0.0),
-  propagation_time(0.0),
-  time_step(1.0),
-  apply_dispersions_before_propagation(true)
+  gravity_manager( gravity_manager_in)
 {}
 
 /*****************************************************************************
@@ -214,7 +216,7 @@ void
 StateInitializeWithPropagation::rk4_integration()
 {
   // Adjust the specified step size so that it hits the target perfectly
-  unsigned int num_steps(std::abs( propagation_time / time_step) + 0.5);
+  const unsigned int num_steps(std::lround(std::abs( propagation_time / time_step)));
   time_step = propagation_time / num_steps;
 
 
@@ -228,12 +230,12 @@ StateInitializeWithPropagation::rk4_integration()
   jeod::Vector3::copy( trans_init.velocity, integ_vel);
 
   for (unsigned int ii_step = 0; ii_step < num_steps; ii_step++) {
-    double time_from_env_config = ii_step * time_step - propagation_time;
+    const double time_from_env_config = ii_step * time_step - propagation_time;
     compute_planet_orientation( time_from_env_config);
 
     // initialize the interim velocities
-    for (unsigned int jj = 0; jj< 4; jj++) {
-      jeod::Vector3::copy( integ_vel, interim_pos_dot[jj]);
+    for (auto & element : interim_pos_dot) {
+      jeod::Vector3::copy( integ_vel, element);
     }
 
     // Compute k1 (interim_pos_dot[0], interim_vel_dot[0])
@@ -304,8 +306,8 @@ void
 StateInitializeWithPropagation::compute_planet_orientation(
        double time )
 {
-  double cos_wt = std::cos( omega * time);
-  double sin_wt = std::sin( omega * time);
+  const double cos_wt = std::cos(omega * time);
+  const double sin_wt = std::sin(omega * time);
 
   T_initial_to_current[0][0] = cos_wt;
   T_initial_to_current[0][1] = sin_wt;

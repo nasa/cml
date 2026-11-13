@@ -3,6 +3,9 @@ PURPOSE:
   (Define structure and function prototypes for counting the number of
   times some variable of type double has a value that falls into specified bins
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS:
   (Bin edges are monotonically increasing and bins are numerically adjacent.)
 
@@ -13,19 +16,20 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
+#include <cstddef>
 #include <limits>
+#include <vector>
 #include "../include/bin_counter.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 Constructors
 *****************************************************************************/
 CML_BinCounter::CML_BinCounter()
   :
-  bins(),
   bins_ready(false),
   nbin(),
-  bin_data(nullptr),
-  name()
+  bin_data(nullptr)
 {}
 /****************************************************************************/
 CML_BinCounter::CML_BinCounter(
@@ -68,7 +72,7 @@ CML_BinCounter::set_data(const std::vector<double> & edges,
   bins.clear();
   bins_ready = false;
 
-  size_t n_edges = edges.size();
+  const size_t n_edges = edges.size();
   // Sanity check for number of bins:
   if (n_edges <= 1 && closed_ends) {
     CMLMessage::error( __FILE__,__LINE__,
@@ -165,7 +169,7 @@ CML_BinCounter::set_data( double limit_a,
     bins[0].bin_floor = lower_limit;
     for (size_t ii = 0; ii < nbin-1; ii++) {
       bins[ii].bin_ceil    =
-      bins[ii+1].bin_floor = lower_limit + (ii+1) * interval;
+      bins[ii+1].bin_floor = lower_limit + static_cast<double>(ii+1) * interval;
       bins[ii].count = 0;
     }
     bins[nbin-1].bin_ceil = upper_limit;
@@ -178,7 +182,7 @@ CML_BinCounter::set_data( double limit_a,
     bins[0].bin_floor = std::numeric_limits<double>::lowest();
     for (size_t ii = 0; ii < nbin-1; ii++) {
       bins[ii].bin_ceil =
-      bins[ii+1].bin_floor = lower_limit + ii * interval;
+      bins[ii+1].bin_floor = lower_limit + static_cast<double>(ii) * interval;
       bins[ii].count = 0;
     }
     bins[nbin-1].bin_ceil = std::numeric_limits<double>::max();
@@ -206,12 +210,44 @@ CML_BinCounter::insert(double value)
   // Consider only values below upper edge and only if model passed sanity
   // check.
   if (bins_ready && value <= bins[nbin-1].bin_ceil) {
-    for (int ii = nbin - 1; ii >= 0; ii--) {
-      const size_t bin_index = static_cast<size_t>(ii);
-      if (value >= bins[bin_index].bin_floor) {
-        bins[bin_index].count++;
+    for (auto bin = bins.rbegin(), end = bins.rend(); bin != end; ++bin) {
+      if (value >= bin->bin_floor) {
+        bin->count++;
         return;
       }
     }
+  }
+}
+
+
+/*****************************************************************************
+Method: apply_tolerance
+Purpose:
+  Modifies the specified bin edges, shifting them down slightly.
+  The lower bin edge behaves as a closed end, so a value is in the bin if it
+  is >= lower_edge. To allow for numerical rounding / truncation, it may be
+  desirable in some circumstances to extend that boundary.
+  For example, if the boundaries are set at {0, 1, 2} then a value of 0.9999999
+  would be binned into the lower bin. It may be desirable to include values
+  arbitrarily close to 1.0 into the upper bin and doing so requires lowering
+  the bin edge to accommodate that desired allowance.
+*****************************************************************************/
+void
+CML_BinCounter::apply_tolerance(double tol)
+{
+  if (!bins_ready) {
+    CMLMessage::error( __FILE__,__LINE__,
+      "Cannot apply bin tolerance, bins not ready\n");
+    return;
+  }
+
+  for (size_t ii = 0; ii + 1 < nbin; ++ii) {
+    const double shifted_boundary = bins[ii].bin_ceil - tol;
+    bins[ii].bin_ceil = shifted_boundary;
+    bins[ii+1].bin_floor = shifted_boundary;
+  }
+
+  if (bins[0].bin_floor != std::numeric_limits<double>::lowest()) {
+    bins[0].bin_floor -= tol;
   }
 }

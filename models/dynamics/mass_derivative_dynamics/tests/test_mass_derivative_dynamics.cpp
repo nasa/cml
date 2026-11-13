@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "../include/mass_derivative_dynamics.hh" 
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 
 // Minimal mock classes for dependencies
 class MockDynBody : public jeod::DynBody {

@@ -11,9 +11,7 @@ PROGRAMMERS:
 #ifndef CML_VENT_HH
 #define CML_VENT_HH
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "simple_vent.hh"
 
@@ -22,13 +20,13 @@ class Vent : public SimpleVent {
  protected:
   DynamicMassBody& tank; /* (--) Tank from which mass is depleted */
 
-  double flowrate;       /* (kg/s) Default flowrate */
-  double exhaust_speed;  /* (m/s) Speed of the exhaust plume; this is also the
+  double flowrate{0.0};       /* (kg/s) Default flowrate */
+  double exhaust_speed{0.0};  /* (m/s) Speed of the exhaust plume; this is also the
                                   N*s of impulse imparted per kg vented */
-  double prev_time;      /* (s) Used for calculating delta time */
-  bool flowrate_set;     /* (--) Internal flag indicating that this vent has
+  double prev_time{0.0};      /* (s) Used for calculating delta time */
+  bool flowrate_set{false};     /* (--) Internal flag indicating that this vent has
               knowledge of the rate at which mass should be depeleted */
-  bool exhaust_set;      /* (--) Internal flag indicating that this vent has
+  bool exhaust_set{false};      /* (--) Internal flag indicating that this vent has
               knowledge of the speed at which mass is expelled */
 
 
@@ -36,19 +34,21 @@ class Vent : public SimpleVent {
   Vent(const double& dyn_time_in,
        DynamicMassBody& tank_in);
   ~Vent() override = default;
+  Vent(const Vent&) = delete;
+  Vent& operator= (const Vent&) = delete;
 
   void use_impulse_mode(bool mode = true) override;
   void set_force_magnitude(double force_, bool hold_impulse = false) override;
   void set_force_vector(double force_[3], bool hold_impulse = false) override;
-  void set_flowrate( double flowrate,
+  void set_flowrate( double flowrate_,
                      bool hold_exhaust = true) override;
-  void set_exhaust_speed( double exhaust_speed,
+  void set_exhaust_speed( double exhaust_speed_,
                           bool   hold_flowrate = true) override;
 
-  double get_flowrate() override { return flowrate; }
-  double get_exhaust_speed() override { return exhaust_speed; }
-  bool flowrate_is_set() override { return flowrate_set; }
-  bool exhaust_speed_is_set() override { return exhaust_set; }
+  double get_flowrate() const override { return flowrate; }
+  double get_exhaust_speed() const override { return exhaust_speed; }
+  bool flowrate_is_set() const override { return flowrate_set; }
+  bool exhaust_speed_is_set() const override { return exhaust_set; }
 
   void unset_exhaust_speed() {exhaust_set = false;}
   void unset_flowrate() {flowrate_set = false;}
@@ -66,9 +66,5 @@ class Vent : public SimpleVent {
   void set_exhaust_flowrate_from_force(bool hold_exhaust = true);
   void update_mass_demand() override;
   void stop_venting() override;
-
- private:
-  Vent(const Vent&);
-  Vent& operator= (const Vent&);
 };
 #endif

@@ -18,24 +18,18 @@ Purpose:A POD class providing the 7 target-relative parameters.
 *****************************************************************************/
 class TR_ParameterSet {
  public:
-  double  altitude;  /* (m)     Altitude                                    */
-  double  theta_Rng; /* (rad)   Position range angle from target            */
-  double  theta_Rot; /* (rad)   Position rotation angle about target vector */
-  double  phi_Cross; /* (rad)   Position cross angle                        */
-  double  Vmag;      /* (m/s)   Inertial velocity magnitude                 */
-  double  gamma;     /* (rad)   Inertial topocentric flight path angle      */
-  double  Lambda;    /* (rad)   Inertial lateral angle                      */
+  double  altitude {0.0};  /* (m)     Altitude                                    */
+  double  theta_Rng {0.0}; /* (rad)   Position range angle from target            */
+  double  theta_Rot {0.0}; /* (rad)   Position rotation angle about target vector */
+  double  phi_Cross {0.0}; /* (rad)   Position cross angle                        */
+  double  Vmag {0.0};      /* (m/s)   Inertial velocity magnitude                 */
+  double  gamma {0.0};     /* (rad)   Inertial topocentric flight path angle      */
+  double  Lambda {0.0};    /* (rad)   Inertial lateral angle                      */
 
-  TR_ParameterSet() { zero_params();}
+  TR_ParameterSet() = default;
 
   void zero_params() {
-    altitude  =
-    theta_Rng =
-    theta_Rot =
-    phi_Cross =
-    Vmag      =
-    gamma     =
-    Lambda    = 0.0;
+    *this = TR_ParameterSet{};
   }
 
 };

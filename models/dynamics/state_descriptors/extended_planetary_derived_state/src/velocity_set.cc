@@ -5,6 +5,9 @@ PURPOSE:
     The two intended velocities are inertially- and ECEF- referenced.
     The altitude rates between these two are very close, but not identical.
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS
    ((The velocity is intended to be expressed in the inertial reference frame.)
     (The model expects a reference to a transformation matrix from inertial to
@@ -20,8 +23,7 @@ PROGRAMMERS:
                       (New implementation of PlanetaryDerivedState for Antares)))
  ******************************************************************************/
 
-#include <cmath>  // atan2, sqrt
-#include <cstring> // NULL
+#include <cmath>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -34,14 +36,7 @@ Purpose:(Constructor)
 VelocitySet::VelocitySet(
         const double (&T_inrtl_this_in)[3][3])
    :
-   velocity(),
-   vel_xy(0.0),
-   flight_path(0.0),
-   azimuth(0.0),
-   altitude_rate(0.0),
-   initialized(false),
-   T_inrtl_to_this(T_inrtl_this_in),
-   inrtl_velocity(nullptr)
+   T_inrtl_to_this(T_inrtl_this_in)
 {}
 
 
@@ -64,7 +59,6 @@ VelocitySet::initialize(
   // Else (not already set and target is valid.
   inrtl_velocity = vel_in;
   initialized = true;
-  return;
 }
 
 /*****************************************************************************
@@ -92,5 +86,4 @@ VelocitySet::update()
   flight_path = std::atan2( -velocity[2],
                              vel_xy );
   altitude_rate = -velocity[2];
-  return;
 }

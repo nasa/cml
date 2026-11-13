@@ -2,6 +2,9 @@
    PURPOSE:
    (Provides a generic dynamic mass capability.)
 
+   LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
    ASSUMPTIONS AND LIMITATIONS:
    ((Limitation 1: dyn_mass_init_complete must be called after other
      initialization jobs that modify a DynMass's initial mass properties.)
@@ -25,9 +28,8 @@
      )
 *******************************************************************************/
 
-#include <cmath> //fabs
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
-#include "jeod/models/dynamics/mass/include/mass.hh"
+#include <cmath>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 
@@ -41,15 +43,7 @@ Purpose: (Constructor)
 ********************************************************************************/
 DynamicMassBody::DynamicMassBody()
 :
-  jeod::MassBody(),
-  dynamic_properties(core_properties.mass),
-  nominal_properties(),
-  residual_mass(-1.0),
-  interp_enabled(false),
-  dyn_mass_initialized(false),
-  CM_offset(),
-  dry_mass_revert__consumable_mass(0.0),
-  dry_mass_revert__available(false)
+  dynamic_properties(core_properties.mass)
 {}
 
 /********************************************************************************
@@ -246,7 +240,7 @@ DynamicMassBody::update_mass_internal()
     // scale the original inertia tensor by the ratio
     // between the current and original masses.
     if (nominal_properties.core_mass > 0.0) {
-      double mass_ratio = core_properties.mass / nominal_properties.core_mass;
+      const double mass_ratio = core_properties.mass / nominal_properties.core_mass;
       jeod::Matrix3x3::scale(nominal_properties.inertia,
                        mass_ratio,
                        core_properties.inertia);
@@ -316,9 +310,9 @@ Assumption: (Simply a move of the cg in the structural frame of this body,
 void
 DynamicMassBody::set_initial_position(
        bool overwrite_nominal,
-       const double position_in[3])
+       const double initial_position[3])
 {
-  if (position_in == nullptr) {
+  if (initial_position == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid input.\n",
       "The position array passed in to the set_initial_position method is NULL."
@@ -328,9 +322,9 @@ DynamicMassBody::set_initial_position(
   }
 
   if (overwrite_nominal) {
-    jeod::Vector3::copy(position_in, nominal_properties.position);
+    jeod::Vector3::copy(initial_position, nominal_properties.position);
   }
-  jeod::Vector3::copy(position_in, core_properties.position);
+  jeod::Vector3::copy(initial_position, core_properties.position);
   set_update_flag();
 }
 

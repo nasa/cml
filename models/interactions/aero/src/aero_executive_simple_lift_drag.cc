@@ -1,17 +1,23 @@
 /*******************************TRICK HEADER************************************
 PURPOSE: (Provides a simple non-rotating aerodynamic lift/drag model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Jeremy Rea) (NASA) (March 2025) (Antares) (initial version, based on AeroExecutiveSimple)))
 *******************************************************************************/
 
-#include <cstring>  // NULL
+#include <cmath>
+#include <cstdlib>
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"  // Matrix3x3
+#include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include "../include/aero_executive_base.hh"
 #include "../include/aero_executive_simple_lift_drag.hh"
+#include "../include/aero_interface_output.hh"
 
 /*******************************************************************************
 Constructor:
@@ -27,17 +33,7 @@ AeroExecutiveSimpleLiftDrag::AeroExecutiveSimpleLiftDrag(
   dynamic_pressure( dynamic_pressure_in),
   T_inrtl_traj( T_inrtl_traj_in),
   T_inrtl_struc( T_inrtl_struc_in),
-  mass( mass_in),
-  aero_type( constant_mag),
-  T_traj_wind(),
-  bank_angle(0.0),
-  LoD(0.0),
-  BC(1.0),
-  CL(0.0),
-  CD(0.0),
-  lift_mag(0.0),
-  drag_mag(0.0),
-  bc_epsilon(1E-6)
+  mass( mass_in)
 {
   jeod::Matrix3x3::identity(T_traj_wind);
 }

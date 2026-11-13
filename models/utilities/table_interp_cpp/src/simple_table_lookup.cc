@@ -2,6 +2,9 @@
 PURPOSE:
   (Table lookup model)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2014) (New implementation for C++ models))
    ((Bingquan Wang) (OSR) (Nov 2016) (Fixed the mismatch of new[] and delete))
@@ -12,25 +15,14 @@ PROGRAMMERS:
   )
 *******************************************************************************/
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <vector>
 
+#include "../include/abstract_table_lookup.hh"
 #include "../include/simple_table_lookup.hh"
-
-
-/********************************************************************************
-Method: SimpleTableLookup
-Purpose: (Constructor)
-********************************************************************************/
-SimpleTableLookup::SimpleTableLookup()
-  :
-  AbstractTableLookup(),
-  lookup_method(TableIndependentVariable::Interp),
-  indep_data_loaded(false),
-  dependent_data_loaded(false),
-  data_reloading(false),
-  independent(nullptr),
-  comprehensive_data_reload(false)
-{}
+#include "../include/table_independent_variable.hh"
+#include "../include/table_type_defs.hh"
 
 /*****************************************************************************
 load_independent_data
@@ -41,12 +33,12 @@ Return:(Always returns the value of the independent_data_loaded variable)
 bool
 SimpleTableLookup::load_independent_data(
     const double                               & independent_variable,
-    const double                               * data_in,
+    const double                               * data,
     const size_t                                 num_elements,
-    const TableIndependentVariable::LookupMethod lookup,     //optional
-    const TableIndependentVariable::Continuity   continuity) //optional
+    const TableIndependentVariable::LookupMethod lookup_method_in, //optional
+    const TableIndependentVariable::Continuity   continuity)       //optional
 {
-  if (data_in == nullptr) {
+  if (data == nullptr) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the data source array.\n"
@@ -54,10 +46,10 @@ SimpleTableLookup::load_independent_data(
     return false;
   }
 
-  DoubleVec scratch(data_in, data_in+num_elements);
+  const DoubleVec scratch(data, data+num_elements);
   return load_independent_data( independent_variable,
                                 scratch,
-                                lookup,
+                                lookup_method_in,
                                 continuity);
 }
 /****************************************************************************/
@@ -65,11 +57,11 @@ bool
 SimpleTableLookup::load_independent_data(
     const double                               & independent_variable,
     const DoubleVec                            & data,
-    const TableIndependentVariable::LookupMethod lookup,      //optional
-    const TableIndependentVariable::Continuity   continuity)  //optional
+    const TableIndependentVariable::LookupMethod lookup_method_in, //optional
+    const TableIndependentVariable::Continuity   continuity)       //optional
 {
   // Store its interpretation for application at initialization.
-  lookup_method = lookup;
+  lookup_method = lookup_method_in;
 
   if (!independents.empty()) {
     CMLMessage::warn(
@@ -198,7 +190,7 @@ bool
 SimpleTableLookup::load_dependent_data(
          double       & dependent_var,
          const double * data,
-         const size_t   num_data_points,
+         const size_t   num_data_points_per_variable,
          TableType      type) //optional
 {
   if (data == nullptr) {
@@ -211,11 +203,11 @@ SimpleTableLookup::load_dependent_data(
 
   // create a vector containing a single point being the address of the
   // dependent variable.
-  std::vector<double *> scratch_var(1, &dependent_var);
-  DoubleVec scratch_data(data, data+num_data_points);
+  const std::vector<double *> scratch_var(1, &dependent_var);
+  const DoubleVec scratch_data(data, data+num_data_points_per_variable);
   return load_dependent_data( scratch_var,
                               scratch_data,
-                              num_data_points,
+                              num_data_points_per_variable,
                               type);
 }
 /****************************************************************************/
@@ -227,7 +219,7 @@ SimpleTableLookup::load_dependent_data(
 {
   // create a vector containing a single point being the address of the
   // dependent variable.
-  std::vector<double *> scratch_var(1, &dependent_var);
+  const std::vector<double *> scratch_var(1, &dependent_var);
   return load_dependent_data( scratch_var,
                               data,
                               data.size(),
@@ -260,8 +252,8 @@ SimpleTableLookup::load_dependent_data(
   for (unsigned int ii = 0; ii < num_vars; ++ii) {
     scratch_vars[ii] = dependent_vars + ii;
   }
-  size_t num_data_points = num_data_points_per_variable * num_vars;
-  DoubleVec scratch_data(data, data+num_data_points);
+  const size_t num_data_points = num_data_points_per_variable * num_vars;
+  const DoubleVec scratch_data(data, data+num_data_points);
   return load_dependent_data( scratch_vars,
                               scratch_data,
                               num_data_points_per_variable,
@@ -307,8 +299,8 @@ SimpleTableLookup::load_dependent_data(
       "Data load failed.\n");
     return false;
   }
-  size_t num_data_points = num_data_points_per_variable * dependent_vars.size();
-  DoubleVec scratch_data(data, data+num_data_points);
+  const size_t num_data_points = num_data_points_per_variable * dependent_vars.size();
+  const DoubleVec scratch_data(data, data+num_data_points);
   return load_dependent_data( dependent_vars,
                               scratch_data,
                               num_data_points_per_variable,
@@ -325,7 +317,7 @@ SimpleTableLookup::load_dependent_data(
   // NOTE - ultimately all other options come through this version of
   // load_dependent_data.  The others just massage the inputs until they look
   // like these inputs and then come here anyway.
-  size_t num_deps = dependent_vars.size();
+  const size_t num_deps = dependent_vars.size();
   if (num_deps < 1 || num_data_points_per_variable < 1) {
     CMLMessage::error(
       __FILE__,__LINE__,"Data error:\n",
@@ -336,7 +328,7 @@ SimpleTableLookup::load_dependent_data(
   }
 
   // Check size of data:
-  size_t target_size =  num_deps * num_data_points_per_variable;
+  const size_t target_size =  num_deps * num_data_points_per_variable;
   if (data.size() < target_size) {
     CMLMessage::error(
       __FILE__,__LINE__,"Data error:\n",

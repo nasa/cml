@@ -11,9 +11,11 @@ PROGRAMMERS:
     ((Brent Caughron) (OSR) (July 2017) (Antares) (IV&V model code cleanup))    )
 
 **********************************************************************************/
-#include <cmath> //M_PI, atan2
-#include <limits> //numeric_limits
+#include <cmath>
+#include <limits>
 
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 #include "../include/first_order_hold.hh"
@@ -28,14 +30,6 @@ FirstOrderHold::FirstOrderHold(
      const ExtendedPlanetaryDerivedState & planet_state_in,
      AtmosExecOutput & atmos_output_in)
   :
-  FO_hold(false),
-  FO_init(false),
-  reference_time(0.0),
-  previous_hold_time(0.0),
-  slope_valid_time(0.0),
-  reference_wind(),
-  slope_reference_wind(),
-  slope(),
   dyn_time(dyn_time_in),
   planet_state(planet_state_in),
   out(atmos_output_in)
@@ -52,7 +46,6 @@ FirstOrderHold::activate()
   jeod::Vector3::copy( out.wind_velocity_td,
                  reference_wind);
   FO_init = true;
-  return;
 }
 /*****************************************************************************
 deactivate
@@ -88,9 +81,9 @@ FirstOrderHold::update()
   if(std::fabs(out.atmos_new_time-reference_time) >= 
                std::numeric_limits<double>::min()) {
     // Time since last call to this method:
-    double this_to_now_delta_t    = dyn_time -  previous_hold_time;
+    const double this_to_now_delta_t    = dyn_time -  previous_hold_time;
     // Time between atmos calls:
-    double atmos_to_atmos_delta_t = out.atmos_new_time - reference_time;
+    const double atmos_to_atmos_delta_t = out.atmos_new_time - reference_time;
     // In both of the following cases, record the latest time from the
     //  atmosphere to go with the reference_wind and record the wind from the
     //  previously known atmosphere as the start of the slope.
@@ -148,7 +141,7 @@ FirstOrderHold::update()
   // Else, No atmosphere update since last time here.
   else {
     // Time since last recorded atmos update:
-    double atmos_to_now_delta_t  = dyn_time - reference_time;
+    const double atmos_to_now_delta_t  = dyn_time - reference_time;
     // If the slope is still valid, use it to interpolate between the known
     // points:
     if ( atmos_to_now_delta_t < slope_valid_time) {
@@ -189,5 +182,4 @@ FirstOrderHold::update()
   } else {
     out.wind_angle_blowing_from = out.wind_angle_blowing_to + M_PI;
   }
-  return;
 }

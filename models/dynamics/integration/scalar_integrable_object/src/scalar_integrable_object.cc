@@ -7,6 +7,10 @@ Programmers:
 *******************************************************************************/
 
 #include "../include/scalar_integrable_object.hh"
+#include "er7_utils/integration/core/include/first_order_ode_integrator.hh"
+#include "er7_utils/integration/core/include/integrable_object.hh"
+#include "er7_utils/integration/core/include/integrator_constructor.hh"
+#include "er7_utils/integration/core/include/integrator_result.hh"
 
 /*******************************************************************************
 Constructor

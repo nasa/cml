@@ -14,6 +14,8 @@ PROGRAMMERS:
 
 #include "aero_executive_base.hh"
 
+class AeroInterfaceOutput;
+
 /*******************************************************************************
 AeroExecutiveSimpleLiftDrag
 Purpose:(Provides a simple aerodynamic executive to use with the AeroExec.)
@@ -43,18 +45,18 @@ protected:
   /***************************************************************************/
   // internal values
   /***************************************************************************/
-  AeroType aero_type;          /* (--) Specifies which model to use. */
-  double   T_traj_wind[3][3];  /* (--) Trajectory-to-wind transformation */
+  AeroType aero_type{constant_mag}; /* (--) Specifies which model to use. */
+  double   T_traj_wind[3][3]{};     /* (--) Trajectory-to-wind transformation */
 
 public:
-  double bank_angle;   /* (rad)   Bank angle. */
-  double LoD;          /* (--)    Lift-to-drag ratio. */
-  double BC;           /* (kg/m2) Ballistic Coefficient. */
-  double CL;           /* (--)    Coefficient of lift. */
-  double CD;           /* (--)    Coefficient of drag. */
-  double lift_mag;     /* (N)     Magnitude of lift force. */
-  double drag_mag;     /* (N)     Magnitude of drag force. */
-  double bc_epsilon;   /* (s2/m)
+  double bank_angle{0.0};  /* (rad)   Bank angle. */
+  double LoD{0.0};         /* (--)    Lift-to-drag ratio. */
+  double BC{1.0};          /* (kg/m2) Ballistic Coefficient. */
+  double CL{0.0};          /* (--)    Coefficient of lift. */
+  double CD{0.0};          /* (--)    Coefficient of drag. */
+  double lift_mag{0.0};    /* (N)     Magnitude of lift force. */
+  double drag_mag{0.0};    /* (N)     Magnitude of drag force. */
+  double bc_epsilon{1E-6}; /* (s2/m)
           A test-value for the validity of BC, ensuring that
           (dyn-pressure / BC) < (1/bc_epsilon).
           It is effectively 1/(the largest acceleration for which the
@@ -62,23 +64,18 @@ public:
           maximum acceleration of 1E6 m/s^2. Can be adjusted to accommodate
           extreme cases. */
 
-public:
   AeroExecutiveSimpleLiftDrag( AeroInterfaceOutput & output_ref,
-                       const double & dynamic_pressure,
+                       const double & dynamic_pressure_in,
                        const double (&T_inrtl_traj_in)[3][3],
                        const double (&T_inrtl_struc_in)[3][3],
                        const double & mass_in);
   ~AeroExecutiveSimpleLiftDrag() override = default;
+  AeroExecutiveSimpleLiftDrag (const AeroExecutiveSimpleLiftDrag &) = delete;
+  AeroExecutiveSimpleLiftDrag & operator = (const AeroExecutiveSimpleLiftDrag &) = delete;
 
-  void set_aero_type(AeroType aero_type);
+  void set_aero_type(AeroType aero_type_in);
 
   void initialize() override;
   void update() override;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroExecutiveSimpleLiftDrag (const AeroExecutiveSimpleLiftDrag &);
-  AeroExecutiveSimpleLiftDrag & operator = (const AeroExecutiveSimpleLiftDrag &);
 };
 #endif

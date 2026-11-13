@@ -17,11 +17,11 @@ PROGRAMMERS:
 #ifndef CML_ATMOSPHERE_EXEC_SIMPLE_WINDS_HH
 #define CML_ATMOSPHERE_EXEC_SIMPLE_WINDS_HH
 
-#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "atmosphere_exec_atmos_base.hh"
 #include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
 
-#include "atmosphere_exec_atmos_base.hh"
-
+class AtmosExecOutput;
+class ExtendedPlanetaryDerivedState;
 
 class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
 {
@@ -38,14 +38,14 @@ class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
 
   // Internal working variables
  public:
-  TopoType  wind_components_type; /* (--)
+  TopoType  wind_components_type{Topodetic}; /* (--)
          specification of how to interpret the output data coming from the
          wind-table.  Default: Topodetic. */
  protected:
-  TopoType altitude_type; /* (--)
+  TopoType altitude_type{Topodetic}; /* (--)
          specification of how to interpret the altitude data in the
          wind-table.  Default: Topodetic. */
-  double altitude_at_prev_update; /* (m)
+  double altitude_at_prev_update{0.0}; /* (m)
          altitude at which table was last processed. */
   const double * altitude_ptr; /* (--)
          pointer to the appropriate altitude from planet_state, according to
@@ -54,10 +54,12 @@ class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
   public:
 
     AtmosphereExec_SimpleLookupWind(
-                         SimpleLookupWind              & wind_table,
-                         ExtendedPlanetaryDerivedState & planet_state,
+                         SimpleLookupWind              & wind_table_in,
+                         ExtendedPlanetaryDerivedState & planet_state_in,
                          AtmosExecOutput               & master_output);
     ~AtmosphereExec_SimpleLookupWind() override = default;
+    AtmosphereExec_SimpleLookupWind (const AtmosphereExec_SimpleLookupWind&) = delete;
+    AtmosphereExec_SimpleLookupWind & operator = (const AtmosphereExec_SimpleLookupWind&) = delete;
 
     void activate() override;
     void deactivate() override;
@@ -65,10 +67,6 @@ class AtmosphereExec_SimpleLookupWind : public AtmosphereExec_AtmosWindsBase
                                               return true;}
     void update_winds() override;
 
-    void set_altitude_type(TopoType altitude_);
-
-  private:
-    AtmosphereExec_SimpleLookupWind (const AtmosphereExec_SimpleLookupWind&);
-    AtmosphereExec_SimpleLookupWind & operator = (const AtmosphereExec_SimpleLookupWind&);
+    void set_altitude_type(TopoType type);
 };
 #endif

@@ -18,9 +18,12 @@ NOTES:
      Body B - The object inside the wake
 **********************************************************************/
 
-#include <cmath> //sqrt
-#include <algorithm> //max
+#include <cmath>
+#include <cstddef>
+#include <vector>
+#include "../include/wake_bodies.hh"
 #include "../include/wake_effects.hh"
+#include "../include/wake_params.hh"
 
 /*****************************************************************************
 constructor
@@ -34,15 +37,6 @@ WakePrfModel::WakePrfModel(
                     objectB_in,
                     params_in.prf),
    main_body_diameter(params_in.main_body_diameter),
-   effective_area_sf(0.49), /* values around 0.5 have been found useful;
-                               value of 0.49 is a convenient value to get a
-                               nice round number when taking the square root.*/
-   PRF_mean(1.0),
-   PRF(1.0),
-   unc_factor(0),
-   trail_diameters(0.0),
-   effective_diam(0.0),
-   table_set(),
    indep_mach( "mach", objectA.freestream_mach),
    indep_alpha( "alpha", objectA.total_alpha),
    indep_trail_diam( "trail diam", trail_diameters),
@@ -68,12 +62,13 @@ WakePrfModel::initialize()
   indep_eff_diam.load_data(effective_diam_axis);
 
   // Load dependent data
-  std::vector<size_t> dim_list;
-  dim_list.push_back(1);
-  dim_list.push_back(mach_axis.size());
-  dim_list.push_back(alpha_axis.size());
-  dim_list.push_back(trail_diam_axis.size());
-  dim_list.push_back(effective_diam_axis.size());
+  const std::vector<size_t> dim_list {
+    1,
+    mach_axis.size(),
+    alpha_axis.size(),
+    trail_diam_axis.size(),
+    effective_diam_axis.size()
+  };
   prf_lookup.load_data(prf_table, dim_list);
 
   // Link it all together

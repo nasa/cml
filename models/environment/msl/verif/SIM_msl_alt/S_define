@@ -1,0 +1,64 @@
+/*##############################TRICK HEADER###################################
+PURPOSE:
+  ( Generates the Mean sea model correction across a (lat,lon) domain;
+   results should be compared against an external source for validation.)
+
+AUTHORS:
+  (((Deborah S. Merritt) (NASA) (October 2014))
+  ((R. Borland) (NASA) (Nov. 2019)(Trick 17 C++ update))
+  ((Daniel Ghan) (OSR) (July 2020) (Clean-up for V&V)))
+#######################################################################################*/
+
+// Include the default system classes:
+#include "sim_objects/default_trick_sys.sm"
+
+// Standard headers
+##include <cmath>
+
+// CML headers
+##include "cml/models/tools/unit_test/models/include/unit_test.hh"
+
+// Local headers
+##include "../../include/msl_alt.hh"
+
+class MslUnitSimObject: public Trick::SimObject
+{
+  public:
+  double geodetic_altitude{0.0}; /* (m)   Geodetic altitude      */
+  double geodetic_latitude{0.0}; /* (rad) Geodetic latitude      */
+  double longitude{0.0};         /* (rad) Planet fixed longitude */
+
+  MslAlt            msl_alt;
+  UnitTestFramework framework;
+
+  MslUnitSimObject()
+    :
+    msl_alt(geodetic_altitude,
+            geodetic_latitude,
+            longitude)
+  {
+    msl_alt.subscribe();
+
+    ("initialization")   framework.initialize();
+    (1.0, "environment") framework.update();
+
+    ("initialization")   msl_alt.initialize();
+    (1.0, "environment") msl_alt.update();
+  }
+
+  MslUnitSimObject(const MslUnitSimObject&) = delete;
+  MslUnitSimObject& operator=(const MslUnitSimObject&) = delete;
+
+   void lat_lon_sweep(double lat_step_deg,
+                     double lon_step_deg)
+  {
+    framework.add_sweep(longitude,
+                        0.0,    
+                        M_PI*2, lon_step_deg * M_PI / 180.0);
+    framework.add_sweep(geodetic_latitude,
+                        -M_PI_2, 
+                        M_PI_2, lat_step_deg * M_PI / 180.0);
+  }
+};
+
+MslUnitSimObject msl_unit_test;

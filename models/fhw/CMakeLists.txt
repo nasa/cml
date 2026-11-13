@@ -8,7 +8,6 @@ add_cml_library(
         effectors/rcs_generic/include/Example_RcsAdvanced.hh
         effectors/rcs_generic/include/rcs_build_trail.hh
         effectors/rcs_generic/include/rcs_generic.hh
-        effectors/rcs_generic/include/rcs_generic_classes.hh
         effectors/rcs_generic/include/rcs_group.hh
         effectors/rcs_generic/include/rcs_jet.hh
         effectors/rcs_generic/include/rcs_prop_pod.hh

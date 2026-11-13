@@ -18,8 +18,9 @@ PROGRAMMERS:
 #ifndef CML_BIN_COUNTER_HH
 #define CML_BIN_COUNTER_HH
 
+#include <cstddef>
+#include <string>
 #include <vector>
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************
@@ -27,12 +28,16 @@ CML_BinCounterElement
 Purpose: Contents of each element of the working vector
 *****************************************************************************/
 struct CML_BinCounterElement {
+  double value; /* (--)
+  Target value to be counted, used by proximity counter */
   double bin_floor; /* (--)
     Bin lower bound.*/
   double bin_ceil; /* (--)
     Bin upper bound. */
-  unsigned int count; /* (--)
-    Counter. Incremented when falling in this specific bin. */
+  unsigned int count; /* (1)
+    Counter. Incremented when falling in this specific bin.
+    For Proximity element, incremented when value is the closest one among
+    CML_BinCounterElement vector to the variable. */
 };
 
 /*****************************************************************************
@@ -63,14 +68,17 @@ class CML_BinCounter {
                   unsigned int num_bins,
                   bool closed_ends = true);
   virtual ~CML_BinCounter() = default;
+  CML_BinCounter(const CML_BinCounter&) = delete;
+  CML_BinCounter& operator=(const CML_BinCounter&) = delete;
 
-  void insert(double);
+  void insert(double value);
   void set_data( const std::vector<double> & edges,
                  bool closed_ends = true);
   void set_data( double limit_a,
                  double limit_b,
                  unsigned int num_bins,
-                 bool closed_ends = true);
+                 bool closed_ends = true);           
+  void apply_tolerance(double tol);
   template <size_t n_edges>
   void set_data( const double (&edges)[n_edges],
                  bool closed_ends = true)
@@ -78,9 +86,6 @@ class CML_BinCounter {
     std::vector<double> edges_v( edges, edges+n_edges);
     set_data( edges_v, closed_ends);
   }
-
- private: // not implemented
-  CML_BinCounter(const CML_BinCounter&);
-  CML_BinCounter& operator=(const CML_BinCounter&);
+  size_t get_nbin() const {return nbin;}
 };
 #endif

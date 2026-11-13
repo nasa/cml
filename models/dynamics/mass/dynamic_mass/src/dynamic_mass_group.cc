@@ -2,6 +2,9 @@
 PURPOSE:
    (Dynamic Mass Group methods)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (March 2014)
                        (New implementation of dynamic mass for JEOD 2.x))
@@ -9,29 +12,22 @@ PROGRAMMERS:
                       (Refactor to utilize new CML capabilities))
    )
 *******************************************************************************/
-#include <cstring> // NULL
+#include <algorithm>
+#include <list>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_items.hh"
 
+#include "../include/dynamic_mass_body.hh"
 #include "../include/dynamic_mass_group.hh"
+#include "../include/dynamic_mass_string.hh"
 
 /*******************************************************************************
 Method: DynamicMassGroup
 Purpose: (Constructor)
 *******************************************************************************/
 DynamicMassGroup::DynamicMassGroup()
-:
-  delta_mass_is_redistributed(false),
-  name("unnamed"),
-  countdown_reset(100),
-  flow_warn_msg_shown(false),
-  needs_tree_update(true), // Forces the full update, including strings,
-                           // at initialization
-  total_mass(0.0),
-  total_initial_mass(0.0),
-  total_consumed_mass(0.0),
-  countdown_to_root_test(0),
-  num_dyn_masses(0),
-  root_body_ptr(nullptr)
 {
   subscribe_name = "DynamicMassGroup:";
 }
@@ -62,15 +58,13 @@ void DynamicMassGroup::add_string_to_group(
   }
 
   // check uniqueness to avoid inadvertent double-counting
-  for (auto it = mass_strings.begin(); it != mass_strings.end(); ++it) {
-    if (new_mass_string == *it) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid object addition\n",
-        "Attempt to add a DynamicMassString that is already assigned\n"
-        "to this group (", name, "). \n"
-        "Cannot duplicate a mass-string in a single group.\n");
-      return;
-    }
+  if (std::find(mass_strings.begin(), mass_strings.end(), new_mass_string) != mass_strings.end()) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Invalid object addition\n",
+      "Attempt to add a DynamicMassString that is already assigned\n"
+      "to this group (", name, "). \n"
+      "Cannot duplicate a mass-string in a single group.\n");
+    return;
   }
 
   // new_mass_string is unique in this group, add it.
@@ -83,13 +77,13 @@ void DynamicMassGroup::add_string_to_group(
 
   // Make sure that all of the body elements from this string are added
   // to the group.
-  std::list<DynamicMassBody *> & string_bodies =
+  const std::list<DynamicMassBody *> & string_bodies =
                                          new_mass_string->get_body_collection();
 
-  for (auto it = string_bodies.begin(); it != string_bodies.end(); ++it) {
+  for (const auto & body : string_bodies) {
     // add each mass in the new_mass_string to the group, but don't send an
     // error message on any that have already been added, just skip over them.
-    add_mass_to_group_internal( *it, false);
+    add_mass_to_group_internal( body, false);
   }
 
   // inform the new_mass_string that it has been added:
@@ -137,8 +131,8 @@ void DynamicMassGroup::initialize()
   }
 
   // initialize the strings
-  for (auto it = mass_strings.begin(); it != mass_strings.end(); ++it) {
-    (*it)->initialize();
+  for (auto & mass_string : mass_strings) {
+    mass_string->initialize();
   }
 
   // execute update_group_mass() to obtain initial model outputs
@@ -178,8 +172,8 @@ void DynamicMassGroup::update_group_mass()
 
   // Distribute the mass depletion assigned to a tank-string to the respective
   // tanks.  Zero out the mass depletion assigned to the string.
-  for (auto it = mass_strings.begin(); it != mass_strings.end(); ++it) {
-    (*it)->distribute_mass_consumption();
+  for (auto & mass_string : mass_strings) {
+    mass_string->distribute_mass_consumption();
   }
 
   // Cycle through each body, checking it for any mass-consumed-step values
@@ -189,14 +183,14 @@ void DynamicMassGroup::update_group_mass()
   // then the mass tree needs updating all the way to the root-body. 
   total_mass = 0.0;
   // Update each dynamic mass.
-  for (auto it = dyn_masses.begin(); it != dyn_masses.end(); ++it) {
+  for (auto & dyn_mass : dyn_masses) {
 
     // using a temporary variable here to ensure that update_mass() gets
     // called without possibility of it being blocked by needs_tree_update if
     // put in as a direct component of the OR statement.
-    bool mass_change = (*it)->update_mass();
+    const bool mass_change = dyn_mass->update_mass();
     needs_tree_update = needs_tree_update || mass_change;
-    total_mass += (*it)->core_properties.mass;
+    total_mass += dyn_mass->core_properties.mass;
   }
   total_consumed_mass = total_initial_mass - total_mass;
 
@@ -206,8 +200,8 @@ void DynamicMassGroup::update_group_mass()
   // an update.  So we can start at the root-body and go through the entire
   // tree, updating mass properties on anything that has been marked.
   if (needs_tree_update) {
-    for (auto it = mass_strings.begin(); it != mass_strings.end(); ++it) {
-      (*it)->update();
+    for (auto & mass_string : mass_strings) {
+      mass_string->update();
     }
 
     // Verify that the root-body-of-record is still valid.  This is
@@ -298,10 +292,10 @@ DynamicMassGroup::series_flow(
 
   // Move mass from upstream tank to downstream tank, as long as there is mass
   // available in the upstream tank.
-  double upstream_available = 
+  const double upstream_available =
         dyn_masses[upstream_ix]->dynamic_properties.consumable_mass -
         dyn_masses[upstream_ix]->dynamic_properties.mass_consumed_step;
-  double downstream_demand = 
+  const double downstream_demand =
         dyn_masses[downstream_ix]->dynamic_properties.mass_consumed_step;
 
   if (upstream_available > downstream_demand) {
@@ -414,14 +408,10 @@ Purpose:(Tests whether a specified dynamic-mass-body is in this group.)
 *****************************************************************************/
 bool
 DynamicMassGroup::is_body_in_group(
-   DynamicMassBody * mass_body_query)
+   DynamicMassBody * mass_body_query) const
 {
-  for (unsigned int ii = 0; ii < dyn_masses.size(); ++ii) {
-    if (dyn_masses[ii] == mass_body_query) {
-      return true;
-    }
-  }
-  return false;
+  return std::any_of(dyn_masses.begin(), dyn_masses.end(),
+    [mass_body_query](const auto& element) {return element == mass_body_query;});
 }
   
 /*****************************************************************************
@@ -430,14 +420,10 @@ Purpose:(Tests whether a specified dynamic-mass-string is in this group.)
 *****************************************************************************/
 bool
 DynamicMassGroup::is_string_in_group(
-   DynamicMassString * mass_string_query)
+   DynamicMassString * mass_string_query) const
 {
-  for (auto it = mass_strings.begin(); it != mass_strings.end(); ++it) {
-    if (*it == mass_string_query) {
-      return true;
-    }
-  }
-  return false;
+  return std::any_of(mass_strings.begin(), mass_strings.end(),
+    [mass_string_query](const auto& element) {return element == mass_string_query;});
 }
 
 /*******************************************************************************
@@ -448,7 +434,7 @@ void
 DynamicMassGroup::test_root_body()
 {
   countdown_to_root_test = countdown_reset;
-  if (dyn_masses.size() >=1) {
+  if (!dyn_masses.empty()) {
     // set one root identification for reference
     const jeod::MassBody* first_root = dyn_masses[0]->get_root_body();
 
@@ -503,18 +489,15 @@ DynamicMassGroup::add_mass_to_group_internal(
       "Unsure how to proceed, terminating for safety.\n");
   }
   // check uniqueness to avoid inadvertent double-counting
-  unsigned int num_bodies = dyn_masses.size();
-  for (unsigned int ii = 0; ii < num_bodies; ++ii) {
-    if (mass == dyn_masses[ii]) {
-      if (send_err_msg) {
-        CMLMessage::error(
-          __FILE__,__LINE__,"Invalid object addition\n",
-          "Attempt to add a new DynamicMassBody (", mass->name.get_name(), ") that is already assigned\n"
-          "to this group. \n"
-          "Cannot duplicate a mass-body in a single group.\n");
-      }
-      return;
+  if (std::find(dyn_masses.begin(), dyn_masses.end(), mass) != dyn_masses.end()) {
+    if (send_err_msg) {
+      CMLMessage::error(
+        __FILE__,__LINE__,"Invalid object addition\n",
+        "Attempt to add a new DynamicMassBody (", mass->name.get_name(), ") that is already assigned\n"
+        "to this group. \n"
+        "Cannot duplicate a mass-body in a single group.\n");
     }
+    return;
   }
   // body is unique in this group, add it.
   dyn_masses.push_back(mass);

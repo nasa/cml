@@ -17,14 +17,12 @@ PROGRAMMERS:
 #ifndef CML_EGM_2008_HH
 #define CML_EGM_2008_HH
 
-// CML Dependencies
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
 // JEOD Dependencies
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************
@@ -36,7 +34,7 @@ EGM2008_WGS84
 class EGM2008_WGS84 : public SubscriptionBase
 {
  public:
-  double   delta_altitude; /* (m)
+  double   delta_altitude{0}; /* (m)
       Altitude of EGM2008 Geoid wrt WGS-84 ellipsoid.*/
 
  protected:
@@ -50,14 +48,11 @@ class EGM2008_WGS84 : public SubscriptionBase
   EGM2008_WGS84( const double & wgs_84_lat,
                  const double & wgs_84_lon);
   ~EGM2008_WGS84() override = default;
+  EGM2008_WGS84 (const EGM2008_WGS84&) = delete;
+  EGM2008_WGS84& operator= (const EGM2008_WGS84&) = delete;
 
   void initialize() override;
   void load_data();
   void update();
-
- private:
-  // Copy-constructor and operator= declared private and not implemented.
-  EGM2008_WGS84 (const EGM2008_WGS84&);
-  EGM2008_WGS84& operator= (const EGM2008_WGS84&);
 };
 #endif

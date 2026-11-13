@@ -16,10 +16,11 @@ PROGRAMMERS:
 #define CML_SIMPLE_TABLE_LOOKUP_HH
 
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "abstract_table_lookup.hh"
+#include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "table_independent_variable.hh"
 #include "table_type_defs.hh"
+#include <cstddef>
 
 
 // This class provides the simple, most used lookup case where one independent
@@ -47,19 +48,19 @@ private:
   // The table resides in this base class; even if this gets extended, it still
   // resides here.  So these table-dependent values can be private to this
   // class.
-  TableIndependentVariable::LookupMethod lookup_method; /* (--)
+  TableIndependentVariable::LookupMethod lookup_method{TableIndependentVariable::Interp}; /* (--)
        Specifies the manner in which the independent variable data is to be
        handled.  Defaults to interpolation (Interp).*/
-  bool indep_data_loaded;     /* (--) independent-data-loaded flag */
-  bool dependent_data_loaded; /* (--) dependent-data-loaded flag.*/
-  bool data_reloading; /* (--) in the process of re-loading data post-init. */
+  bool indep_data_loaded{false};     /* (--) independent-data-loaded flag */
+  bool dependent_data_loaded{false}; /* (--) dependent-data-loaded flag.*/
+  bool data_reloading{false}; /* (--) in the process of re-loading data post-init. */
 
 public:
-  TableIndependentVariable * independent; /* (--)
+  TableIndependentVariable * independent{nullptr}; /* (--)
     pointer to the independent variable. Note that this is identical to
     independents[0]; this is the public-facing interface to the element in
     the protected independents vector.*/
-  bool comprehensive_data_reload; /* (--)
+  bool comprehensive_data_reload{false}; /* (--)
     A flag used only if re-loading data post-initialization. This flag
     indicates that both independent and dependent data are being reloaded.
     The re-initialization will be held until both sets have been populated.*/
@@ -69,9 +70,10 @@ public:
   SimpleTableLookup is problematic, and C-style arrays of SimpleTableLookup
   are used instead in models using this class.
   This requires that SimpleTableLookup keep its default constructor form. */
-  SimpleTableLookup();
+  SimpleTableLookup() = default;
   ~SimpleTableLookup() override = default;
-
+  SimpleTableLookup (const SimpleTableLookup&) = delete;
+  SimpleTableLookup& operator = (const SimpleTableLookup&) = delete;
 
   bool load_dependent_data(
            double         & dependent_var,
@@ -109,24 +111,19 @@ public:
            const double  & independent_variable,
            const double  * data,
            const size_t    num_elements,
-           const TableIndependentVariable::LookupMethod lookup_method =
+           const TableIndependentVariable::LookupMethod lookup_method_in =
                                             TableIndependentVariable::Interp,
            const TableIndependentVariable::Continuity   continuity =
                                             TableIndependentVariable::Linear);
   bool load_independent_data(
            const double    & independent_variable,
            const DoubleVec & data,
-           const TableIndependentVariable::LookupMethod lookup_method =
+           const TableIndependentVariable::LookupMethod lookup_method_in =
                                             TableIndependentVariable::Interp,
            const TableIndependentVariable::Continuity   continuity =
                                             TableIndependentVariable::Linear);
 
   void initialize() override;
   GenericMultiInputTable * get_table();
-
-private:
-  // to disable the copy/assignment operators
-  SimpleTableLookup (const SimpleTableLookup&);
-  SimpleTableLookup& operator = (const SimpleTableLookup&);
 };
 #endif

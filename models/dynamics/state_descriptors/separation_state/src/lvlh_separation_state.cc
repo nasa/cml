@@ -4,35 +4,41 @@ PURPOSE:
    (Defines the class that is used for computing relative states between two
    bodies, and expressing that in the LVLH frame of one of them.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2020) (Antares) (new)))
 
 ********************************************************************************/
 
 #include "../include/lvlh_separation_state.hh"
+#include "../include/separation_state.hh"
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
+#include "jeod/models/environment/planet/include/base_planet.hh"
+#include "jeod/models/utils/lvlh_frame/include/lvlh_frame.hh"
+#include <string>
 
 /*****************************************************************************
 Constructor
 *****************************************************************************/
 LvlhSeparationState::LvlhSeparationState()
   :
-  SeparationState(),
-  lvlh(),
   planet_centered_inertial(nullptr),
   lvlh_origin_frame(nullptr),
   lvlh_ref(lvlh),
   using_external_lvlh(false)
 {}
 /****************************************************************************/
-LvlhSeparationState::LvlhSeparationState( jeod::LvlhFrame & lvlh_)
+LvlhSeparationState::LvlhSeparationState( jeod::LvlhFrame & lvlh_frame)
   :
-  SeparationState(),
-  lvlh(),
   planet_centered_inertial(nullptr),
   lvlh_origin_frame(nullptr),
-  lvlh_ref(lvlh_),
+  lvlh_ref(lvlh_frame),
   using_external_lvlh(true)
 {}
 
@@ -47,10 +53,10 @@ LvlhSeparationState::~LvlhSeparationState()
     // that this model has taken over management of.  So if we have
     // unsubscribed everything, we need to give the subscription back to
     // allow LvlhFrame to unsubscribe.
-    if ( planet_centered_inertial) {
+    if ( planet_centered_inertial != nullptr) {
       planet_centered_inertial->subscribe();
     }
-    if (lvlh_origin_frame) {
+    if (lvlh_origin_frame != nullptr) {
       lvlh_origin_frame->subscribe();
     }
   }
@@ -66,12 +72,12 @@ NOTE - in SeparationState, the source-body identification was provided first.
        optional argument.
 *****************************************************************************/
 void
-LvlhSeparationState::initialize( jeod::DynManager & dyn_manager,
-                                 std::string planet_name,
-                                 jeod::DynBody   & subject_body,
-                                 jeod::DynBody   & source_body,
-                                 std::string subject_name,
-                                 std::string source_name)
+LvlhSeparationState::initialize( jeod::DynManager  & dyn_manager,
+                                 const std::string & planet_name,
+                                 jeod::DynBody     & subject_body,
+                                 jeod::DynBody     & source_body,
+                                 const std::string & subject_name,
+                                 const std::string & source_name)
 
 {
   if (!enabled) {
@@ -277,7 +283,7 @@ LvlhSeparationState::update()
   if (!active) {
     return;
   }
-  double timestamp = lvlh_ref.frame.timestamp();
+  const double timestamp = lvlh_ref.frame.timestamp();
   if ( MathUtils::has_changed_from( lvlh_origin_frame->timestamp(),
                                     timestamp)
        ||

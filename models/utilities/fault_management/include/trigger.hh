@@ -12,11 +12,12 @@ PROGRAMMERS:
 #define CML_TRIGGER_HH
 
 #include <string>
-#include <limits> // std::numeric_limits
-#include <cstring> // strcmp
-#include <cmath> // std::abs(), std::fmod(), std::max()
+#include <limits>
+#include <cstring>
+#include <cmath>
+#include <utility>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // check_equal
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 /*******************************************************************************
 TestEqual_Trait
@@ -73,29 +74,25 @@ class TriggerBase {
       else {return Invalid;}
     }
 
-    Operator_enm Operator; /* (--)
+    Operator_enm Operator{Invalid}; /* (--)
       The comparison operator (less-than, equal-to, etc.) */
 
     std::string name; /* (--) The name of this trigger. */
 
   protected:
-    bool trigger_count_limited; /* (--)
+    bool trigger_count_limited{false}; /* (--)
       Flag indicating that the trigger-count is limited.*/
-    unsigned long trigger_count; /* (--)
+    unsigned long trigger_count{0}; /* (--)
       Count of the number of times this Trigger has been queried while
       triggered.*/
-    unsigned long trigger_limit; /* (--)
+    unsigned long trigger_limit{0}; /* (--)
       Maximum value of trigger_count before trigger becomes unavailable.*/
 
   public:
-    TriggerBase()
-      :
-      Operator(Invalid),
-      trigger_count_limited(false),
-      trigger_count(0),
-      trigger_limit(0)
-    {}
+    TriggerBase() = default;
     virtual ~TriggerBase() = default;
+    TriggerBase(const TriggerBase&) = delete;
+    TriggerBase& operator = (const TriggerBase&) = delete;
 
     virtual bool operate() { return compare();}
 
@@ -121,10 +118,6 @@ class TriggerBase {
     virtual bool compare() = 0;
 
     virtual void set_value(double)=0;
-
-  private:
-    TriggerBase(const TriggerBase&);
-    TriggerBase& operator = (const TriggerBase&);
 };
 
 /*******************************************************************************
@@ -142,15 +135,11 @@ class Trigger : public TriggerBase {
     ////    Constructors and destructors    ////
 
     explicit Trigger(const T& var) :
-      value(),
-      variable(var),
-      is_periodic(false),
-      periodic_length(0.0),
-      periodic_period(0.0),
-      initial_periodic_value(0.0),
-      is_first_trigger(true)
+      variable(var)
     {}
     ~Trigger() override = default;
+    Trigger(const Trigger&) = delete;
+    Trigger& operator = (const Trigger&) = delete;
 
     ////    Operations    ////
 
@@ -168,28 +157,25 @@ class Trigger : public TriggerBase {
 
     ////    Attributes    ////
 
-    T value; /* (--) The value to which the trigger variable is compared. */
+    T value {}; /* (--) The value to which the trigger variable is compared. */
 
   private:
     const T& variable; /* (--) The trigger variable. Its value determines when
       the trigger is triggered. */
 
-    bool is_periodic; /* (--)
+    bool is_periodic{false}; /* (--)
       If true, after the trigger is triggered for the first time, it will
       be triggered by periodic values of the trigger variable. This makes the
       most sense if the trigger variable is time. */
-    T periodic_length; /* (--)
+    T periodic_length {0}; /* (--)
       The length of each period during which a periodic trigger is
       triggered. */
-    T periodic_period; /* (--) The length of a periodic trigger's period. */
-    T initial_periodic_value; /* (--)
+    T periodic_period {0}; /* (--) The length of a periodic trigger's period. */
+    T initial_periodic_value {0}; /* (--)
       The value of the trigger variable when a periodic trigger was first
       triggered. */
-    bool is_first_trigger; /* (--)
+    bool is_first_trigger{true}; /* (--)
       True until the trigger has been triggered for the first time. */
-
-    Trigger(const Trigger&);
-    Trigger& operator = (const Trigger&);
 };
 
 /****************************************************************************
@@ -204,6 +190,8 @@ template<> class Trigger<std::string> : public TriggerBase {
 
     explicit Trigger(const std::string& varString) : variable(varString) {}
     ~Trigger() override = default;
+    Trigger(const Trigger&) = delete;
+    Trigger& operator = (const Trigger&) = delete;
 
     ////    Operations    ////
 
@@ -212,10 +200,10 @@ template<> class Trigger<std::string> : public TriggerBase {
 
       switch (Operator) {
         case EQ:
-          success = value.compare(variable) == 0;
+          success = value == variable;
           break;
         case NE:
-          success = value.compare(variable) != 0;
+          success = value != variable;
           break;
         case LT:
         case LE:
@@ -233,30 +221,30 @@ template<> class Trigger<std::string> : public TriggerBase {
     std::string value; /* (--)
       The value to which the trigger string is compared. */
 
-    void set_value( double) override
+    void set_value( double unused) override
       {
+        (void)unused;
         CMLMessage::error(
           __FILE__, __LINE__, "Fault Management Error in Trigger configuration.\n",
           "Arithmetic value assigned to trigger-value in Trigger <", name, ">.\n"
           "Cannot process an arithmetic value into a string.\n"
           "Assignment failed.\n");
       }
-    void set_value( std::string val) { value.assign(val);}
+    void set_value( std::string val) { value = std::move(val);}
   private:
     const std::string& variable; /* (--)
       The trigger string. Its value determines when the trigger is triggered. */
-
-    Trigger(const Trigger&);
-    Trigger& operator = (const Trigger&);
 };
 /****************************************************************************/
 template<> class Trigger<bool> : public TriggerBase {
   public:
     explicit Trigger(const bool& var) : variable(var) {}
     ~Trigger() override = default;
+    Trigger(const Trigger&) = delete;
+    Trigger& operator = (const Trigger&) = delete;
 
     bool compare() override { return (value == variable); }
-    bool value; /* (--)
+    bool value {false}; /* (--)
       The value to which the trigger variable is compared. */
 
     void set_value( double val) override
@@ -275,8 +263,6 @@ template<> class Trigger<bool> : public TriggerBase {
     const bool& variable; /* (--)
       The trigger variable. Its value determines when the trigger is
       triggered. */
-    Trigger(const Trigger&);
-    Trigger& operator = (const Trigger&);
 };
 
 

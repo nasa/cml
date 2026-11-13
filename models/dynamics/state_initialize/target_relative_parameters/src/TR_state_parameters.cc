@@ -3,6 +3,9 @@ PURPOSE:
   (Provide the capability to transform between position/velocity
    vectors and a set of target relative parameters.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (
    ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))
@@ -10,26 +13,14 @@ PROGRAMMERS:
 
 *******************************************************************************/
 
-#include <cmath>  /* abs */
+#include <cmath>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include "../include/TR_state_param.hh"
+#include "../include/TR_state_parameter_set.hh"
 #include "../include/TR_state_parameters.hh"
-
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-TargetRelative_StateParameter::TargetRelative_StateParameter()
-  :
-  TargetRelative_StateParam(),
-  target_point_altitude(0.0),
-  target_point_latitude(0.0),
-  target_point_longitude(0.0),
-  tolerance(1e-08),
-  iter_limit(1000),
-  pfix_position()
-{}
 
 /*****************************************************************************
 initialize
@@ -359,7 +350,7 @@ TargetRelative_StateParameter::compute_position_magnitude()
     pfix_position.update_from_cart(pfix_position.cart_coords);
 
     /* Check for convergence */
-    double deltaR = altitude - pfix_position.ellip_coords.altitude;
+    const double deltaR = altitude - pfix_position.ellip_coords.altitude;
     if ( std::abs(deltaR) < tolerance ) {
       break;
     } else {
@@ -381,5 +372,5 @@ TargetRelative_StateParameter::compute_position_magnitude()
   //-----------------------------------------------------
   // Return position magnitude that gives desired geodetic altitude
   //-----------------------------------------------------
-  return(Rmag);
+  return Rmag;
 }

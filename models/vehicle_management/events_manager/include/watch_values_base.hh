@@ -13,7 +13,7 @@ PROGRAMMERS:
 #ifndef CML_WATCH_VALUES_BASE_HH
 #define CML_WATCH_VALUES_BASE_HH
 
-#include <cmath> // abs
+#include <cmath>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "watch_values_base_core.hh"
@@ -30,14 +30,14 @@ template <typename watchType>
 class WatchValuesBase : public WatchValuesBaseCore {
 
  protected:
-  bool reference_is_variable; /* (--) Reference is a variable, not fixed value.*/
+  bool reference_is_variable{false}; /* (--) Reference is a variable, not fixed value.*/
   const watchType * variable;       /* (--) variable being watched*/
   watchType   reference;      /* (--) fixed value to test against*/
   const watchType * reference_ptr;  /* (--) variable value to test against.*/
   watchType   variable_at_activation; /* (--) *variable at event activation*/
 
  public:
-  bool use_threshold_crossing_trigger; /* (--)
+  bool use_threshold_crossing_trigger{false}; /* (--)
     Flag to indicate whether to treat a variable with a discrete data type
     (e.g. int and related integer types, enumerations, bools) as a
     continuous variable for the purpose of detecting threshold crossings.
@@ -45,25 +45,44 @@ class WatchValuesBase : public WatchValuesBaseCore {
     variables and the event trigger on reaching the target value).*/
   WatchValuesBase()
      :
-     reference_is_variable(false),
      variable(nullptr),
      reference(), // no value; this is of watchType.
      reference_ptr(nullptr),
-     variable_at_activation(),
-     use_threshold_crossing_trigger(false) {}
+     variable_at_activation()
+     {}
   ~WatchValuesBase() override = default;
+  WatchValuesBase (const WatchValuesBase& rhs) = delete;
+  WatchValuesBase& operator = (const WatchValuesBase& rhs) = delete;
 
 /*****************************************************************************
 set_watch
 Purpose:(Sets the variable and the reference against which it will be compared)
+Notes:
+- If the variable passed in is not of type watchType, the compiler would
+  implicitly cast that variable to a temporary storage space of the expected
+  type, and the watch value would monitor that temporary storage space, not
+  the intended variable, for changes. This is a big problem if a user gets the
+  type wrong in setting up their WatchValue, or sets it up correctly and the
+  variable type later changes.
+- To rule that out and explicitly require a type match, we delete set_watch
+  for all types of "var", then implement only the one in which "var" is of
+  type "watchType". Now if the types do not match, the project will not build.
+- When setting the reference by pointer: set_watch( T1&, T2*)
+  T2 must be of type watchType already; everything else is blocked.
+  So we only need to check on the type of var.
 *****************************************************************************/
+  template <typename T>
+  void set_watch (const T& var, watchType ref) = delete;
+  template <typename T1>
+  void set_watch (const T1& var, const watchType * ref) = delete;
+
+  // ************************************************************************
   // ** reference is fixed-value **
   // ************************************************************************
-  void set_watch( const watchType & var, watchType   ref) {
+  void set_watch( const watchType & var, watchType ref) {
     variable = &var;
     reference = ref;
     reference_is_variable = false;
-    return;
   }
   /***************************************************************************/
   //  reference is a variable-value
@@ -78,7 +97,6 @@ Purpose:(Sets the variable and the reference against which it will be compared)
     variable = &var;
     reference_ptr = ref;
     reference_is_variable = true;
-    return;
   }
   /***************************************************************************/
   //     These methods are here for use with primitives only
@@ -97,7 +115,7 @@ Purpose:(Sets the variable and the reference against which it will be compared)
   }
   void set_watch_primitives( const void * var, const void * ref) {
     const watchType * new_ptr = set_watch_primitives_test_ref_var( var,ref);
-    const watchType * new_ref = reinterpret_cast<const watchType *>(ref);
+    const auto * new_ref = reinterpret_cast<const watchType *>(ref);
     set_watch( *new_ptr, new_ref);
   }
   const watchType * set_watch_primitives_test_ref_val( const void * var)
@@ -161,7 +179,6 @@ Purpose:(Sets the reference value.  Used for changing default or previously
 *****************************************************************************/
   void set_reference(watchType ref) {
     reference = ref;
-    return;
   }
 
  void set_dbl_reference(double ref) override {
@@ -219,8 +236,10 @@ Purpose:(Split behavior based on whether the template class variable type
   //         Define discrete-variable behavior
   /***************************************************************************/
   template<typename varType>
-  void test_crossing( const varType*)
+  void test_crossing( const varType* var)
   {
+    (void)var;
+
     // Check for treating discrete variable as a continuous variable:
     if (use_threshold_crossing_trigger) {
       test_crossing_dbl( static_cast<double>(*variable),
@@ -234,13 +253,15 @@ Purpose:(Split behavior based on whether the template class variable type
   /***************************************************************************/
   //         Define continuous-variable behavior
   /***************************************************************************/
-  void test_crossing( const float *)
+  void test_crossing( const float * var)
   {
+    (void)var;
     test_crossing_dbl( *variable, reference);
   }
   /***************************************************************************/
-   void test_crossing(const double *)
+   void test_crossing(const double * var)
   {
+    (void)var;
     test_crossing_dbl( *variable, reference);
   }
   //***************************************************************************
@@ -259,7 +280,7 @@ Purpose:(Split behavior based on whether the template class variable type
       event_triggered = (var_val > ref_val);
     }
     else if (direction == Both) { // Either direction
-      double this_delta =  var_val - ref_val;
+      const double this_delta =  var_val - ref_val;
       event_triggered = (this_delta * delta_record < 0);
 
       if (std::abs(this_delta) > 0.0) {
@@ -277,7 +298,6 @@ Purpose:(Split behavior based on whether the template class variable type
       "larger or smaller than the reference.\n  Deactivating the watch.\n");
       deactivate();
     }
-    return;
   }
 
 
@@ -303,7 +323,7 @@ Assumption: (Both activate() and initialize() must have been called)
     }
     active = true;
     if (add_self_to_manager_active_list) {
-      if (!active_watches) {
+      if (active_watches == nullptr) {
         CMLMessage::error( __FILE__,__LINE__,
           "Activating watch with internal instruction to add itself to\n"
           "the active-watch list, but has no access to that list.\n"
@@ -312,7 +332,6 @@ Assumption: (Both activate() and initialize() must have been called)
         active_watches->push_back(this);
       }
     }
-    return;
   }
 
 /*****************************************************************************
@@ -323,8 +342,9 @@ Purpose:(Internal activation sub-method for case where reference is relative\
 *****************************************************************************/
   // ** bool type **
   // *************************************************************************
-  void set_reference_relative_to_activation(const bool*)
+  void set_reference_relative_to_activation(const bool* var)
   {
+    (void)var;
     if (reference == variable_at_activation) {
         CMLMessage::warn(
           __FILE__,__LINE__,"Possible unintended behavior with bool event\n",
@@ -334,30 +354,39 @@ Purpose:(Internal activation sub-method for case where reference is relative\
           "flipped so that the event will trigger when the watch variable\n "
           "flips value relative to its value at activation.\n");
     }
-    reference = !variable_at_activation;
-    return;
+    reference = static_cast<watchType>(!variable_at_activation);
   }
   /***************************************************************************/
   // int
   /***************************************************************************/
-  void set_reference_relative_to_activation(const int*)
-  { increment_reference();}
+  void set_reference_relative_to_activation(const int* var)
+  {
+    (void)var;
+    increment_reference();
+  }
   /***************************************************************************/
   // double, same behavior as int
   /***************************************************************************/
-  void set_reference_relative_to_activation(const double*)
-  { increment_reference();}
+  void set_reference_relative_to_activation(const double* var)
+  {
+    (void)var;
+    increment_reference();
+  }
   /***************************************************************************/
   // float, same behavior as int
   /***************************************************************************/
-  void set_reference_relative_to_activation(const float*)
-  { increment_reference();}
+  void set_reference_relative_to_activation(const float* var)
+  {
+    (void)var;
+    increment_reference();
+  }
   /***************************************************************************/
   // all other data types
   /***************************************************************************/
   template<typename varType>
-  void set_reference_relative_to_activation(varType*)
+  void set_reference_relative_to_activation(varType* var)
   {
+    (void)var;
     CMLMessage::error (
       __FILE__, __LINE__, "Invalid Event/Watch activation: undefined behavior:\n",
       "A watch was activated with the flag to watch for a value to be\n"
@@ -365,7 +394,6 @@ Purpose:(Internal activation sub-method for case where reference is relative\
       "No method has been provided to modify the current value.\n"
       "Using the originally specified reference value instead.\n");
       relative_to_activation = false;
-    return;
   }
 
 /*****************************************************************************
@@ -380,11 +408,12 @@ Purpose:(Generates the new reference value.)
     }
     // Increment the current value with the intended offset.
     reference += variable_at_activation;
-    return;
   }
-
- private:
-  WatchValuesBase (const WatchValuesBase& rhs);
-  WatchValuesBase& operator = (const WatchValuesBase& rhs);
 };
+
+template <> inline void WatchValuesBase<bool>::set_dbl_reference(double ref)
+{
+  reference = std::fpclassify(ref) != FP_ZERO;
+}
+
 #endif

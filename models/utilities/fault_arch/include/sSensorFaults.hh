@@ -40,7 +40,9 @@ class sSensorFaults : public FaultManager
 {
   public:
     sSensorFaults() = default;
-    virtual ~sSensorFaults() = default;
+    ~sSensorFaults() override = default;
+    sSensorFaults(const sSensorFaults&) = delete;
+    sSensorFaults& operator = (const sSensorFaults&) = delete;
 
     void Injection( sSFault loc);
 
@@ -56,16 +58,11 @@ class sSensorFaults : public FaultManager
                             xmlNodePtr        rand_node,
                             const char*       fault_name) override;
 
-    bool parse_periodic_param( FaultFunctionParameter&  var_param,
+    bool parse_periodic_param( FaultFunctionParameter&  param,
                                xmlNodePtr               function_node,
                                const char*              param_name,
                                xmlNodePtr               ind_var_node,
                                const char*              fault_name,
                                bool                     nom_required) override;
-
-  private:
-    // Make the class non-copyable
-    sSensorFaults(const sSensorFaults&);
-    sSensorFaults& operator = (const sSensorFaults&);
 };
 #endif

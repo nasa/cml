@@ -38,16 +38,16 @@ class STD1976
 {
 public:
    //below using const references for the outputs and also keep compatible with Trick
-   double altitude;                       /* (m)           Geometric input altitude */
-   double kinetic_temperature ;           /* (K)           Kinetic temperature       */
-   double molecular_temperature  ;        /* (K)           Molecular temperature     */
-   double pressure ;                      /* (N/m2)        Pressure                  */
-   double density ;                       /* (kg/m3)       Density                   */
-   double speed_of_sound ;                /* (m/s)         Speed of sound            */
-   double dynamic_viscosity ;             /* (N*s/m2)      Dynamic viscosity         */
-   double molecular_weight ;              /* --            Molecular weight          */
-   double mean_free_path;                 /* (m)           Mean free path            */
-   size_t layer_number ;                  /* --            Layer number               */
+   double altitude {0.0};                       /* (m)           Geometric input altitude */
+   double kinetic_temperature {0.0} ;           /* (K)           Kinetic temperature       */
+   double molecular_temperature {0.0}  ;        /* (K)           Molecular temperature     */
+   double pressure {0.0} ;                      /* (N/m2)        Pressure                  */
+   double density {0.0} ;                       /* (kg/m3)       Density                   */
+   double speed_of_sound {0.0} ;                /* (m/s)         Speed of sound            */
+   double dynamic_viscosity {0.0} ;             /* (N*s/m2)      Dynamic viscosity         */
+   double molecular_weight {0.0} ;              /* --            Molecular weight          */
+   double mean_free_path {0.0};                 /* (m)           Mean free path            */
+   size_t layer_number {0} ;                    /* --            Layer number               */
   
    /** constructor, and initialize the 
    *   state as that at mean sea level.
@@ -55,14 +55,13 @@ public:
    STD1976();
 
    /** destructor */
-   ~STD1976();
+   ~STD1976() = default;
 
    /** compute the atmosphere parameters above at the given geometric height */
    void update(
                 const double &altitude_in /* (m) The given geometric height */
               );
 
-public:
    //use the static variables to define the constants and coefficients since they are class-wise.
    //This will put these data into data segment to avoid using stack.
    static const double min_valid_alt;           /* (m)              Lowest valid altitude for std1976 model */

@@ -10,6 +10,8 @@ PROGRAMMERS:
 #define CML_ATMOS_REL_STATE_TEST_HH
 
 #include "../../include/atmos_relative_state.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
 
 class AtmosRelStateTest : public AtmosRelativeState
@@ -21,16 +23,12 @@ public:
      ExtendedPlanetaryDerivedState & pds_ref,
      AtmosphereExecInterface       & atmos_exec_ref);
    ~AtmosRelStateTest() override = default;
+   AtmosRelStateTest (const AtmosRelStateTest &) = delete;
+   AtmosRelStateTest & operator= (const AtmosRelStateTest &) = delete;
 
    void compute_euler_angles();
 
    double ryp_vector[3];
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies
-  AtmosRelStateTest (const AtmosRelStateTest &);
-  AtmosRelStateTest & operator= (const AtmosRelStateTest &);
 };
 
 

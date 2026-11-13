@@ -15,7 +15,6 @@ Programmers:
 #define CML_PFIX_REFERENCE_POINT_HH
 
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class PfixReferencePoint : public jeod::PlanetFixedPosition
 {
@@ -29,46 +28,42 @@ class PfixReferencePoint : public jeod::PlanetFixedPosition
   };
 
   // INPUT
-  PositionType position_type;   /* (--)  enumeration for specifying position*/
-  PositionType direction_type;  /* (--)  enumeration for specifying direction*/
+  PositionType position_type{undefined};   /* (--)  enumeration for specifying position*/
+  PositionType direction_type{undefined};  /* (--)  enumeration for specifying direction*/
 
-  double latitude;     /* (rad)
+  double latitude{0.0};  /* (rad)
      Latitude of ref point. Distinction between topocentric and topodetic
      is provided by selection of "position_type". */
-  double longitude;    /* (rad)
+  double longitude{0.0}; /* (rad)
      Longitude of ref point. Distinction between topocentric and topodetic
      is provided by selection of "position_type". */
-  double altitude;     /* (m)
+  double altitude{0.0};  /* (m)
      Altitude of ref point. Distinction between topocentric and topodetic
      is provided by selection of "position_type". */
 
 
-  double position[3];  /* (m)
+  double position[3]{}; /* (m)
      Cartesian position vector. Distinction between inertial and
      planet-fixed is provided by selection of "position_type". */
 
-  double azimuth;      /* (rad)
+  double azimuth{0.0}; /* (rad)
        Azimuth for specifying direction, measured from North towards East.
        Use of azimuth requires setting direction_type to be either
        topocentric or topodetic, but topocentric and topodetic azimuths
        are equivalent so either is sufficient.*/
-  double direction[3]; /* (--)
+  double direction[3]{}; /* (--)
        Cartesian vector specifying direction, not necessarily a unit vector.
        Use of this vector to specify direction requires setting
        direction_type to be either inertial or pfix.  Selection of which
        identifies how the values in the vector should be interpreted. */
 
-  PfixReferencePoint();
+  PfixReferencePoint() = default;
   ~PfixReferencePoint() override = default;
+  PfixReferencePoint(const PfixReferencePoint& rhs) = delete;
+  PfixReferencePoint & operator = (const PfixReferencePoint&) = delete;
 
-  void set_point (double & ref_radius, bool & ref_point_set);
-  void set_direction (bool & use_polar, bool & ref_point_set);
-
- private:
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  PfixReferencePoint(const PfixReferencePoint& rhs);
-  PfixReferencePoint & operator = (const PfixReferencePoint&);
+  void set_point (double & reference_radius, bool & ref_point_set);
+  void set_direction (bool & use_polar_direction, bool & ref_point_set);
 };
 
 #endif

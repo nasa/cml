@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
  PURPOSE: (To provide a common location for additional math utilities)
 
+ LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (Sep 2015) (initial version))
     ((Bingquan Wang) (OSR) (Apr 2017) (Fixed the compilation warnig of
@@ -13,19 +16,27 @@
 *******************************************************************************/
 
 #include <algorithm>
+#include <array>
+#include <cassert>
 #include <cmath>
-#include <limits>  // min
-#include <fenv.h>  // fp exception
+#include <cstddef>
+#include <cfenv>
+#include <iterator>
+#include <limits>
+#include <list>
+#include <numeric>
+#include <string>
 #include <vector>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
 
 #include "../include/math_utils.hh"
 
 /*******************************************************************************
 generate_inertial_to_lvlh
-Purpose:( Generates the transfromation matrix from inertial to LVLH given
+Purpose:( Generates the transformation matrix from inertial to LVLH given
           a position and velocity expressed in inertial.
           LVLH is defined as:
           X - completes
@@ -52,12 +63,12 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
       __FILE__,__LINE__,"Invalid arguments\n",
       "The inertial-to-LVLH method cannot function when\n"
       "the input arguments are NULL.\n"
-      "Setting transformation matrix to identitiy.\n");
+      "Setting transformation matrix to identity.\n");
     jeod::Matrix3x3::identity(T_inrtl_lvlh);
     return;
   }
 
-  double pos_mag = jeod::Vector3::vmag(position);
+  const double pos_mag = jeod::Vector3::vmag(position);
 
   if ( pos_mag < std::numeric_limits<double>::min() ) {
     CMLMessage::error (
@@ -80,7 +91,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
   // Which would be defined as (-h/hmag), where h is angular momentum.
   jeod::Vector3::cross(velocity, position, y_unit);
 
-  double y_mag = jeod::Vector3::vmag(y_unit);
+  const double y_mag = jeod::Vector3::vmag(y_unit);
   if ( y_mag >=std::numeric_limits<double>::min() ) {
     jeod::Vector3::scale ( (1/y_mag), y_unit);
     jeod::Vector3::cross( y_unit, z_unit, x_unit );
@@ -129,11 +140,9 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
 
   jeod::Vector3::normalize(x_unit);
 
-  for (unsigned int ii = 0; ii < 3; ++ii) {
-    T_inrtl_lvlh[0][ii] = x_unit[ii];
-    T_inrtl_lvlh[1][ii] = y_unit[ii];
-    T_inrtl_lvlh[2][ii] = z_unit[ii];
-  }
+  jeod::Vector3::copy(x_unit, T_inrtl_lvlh[0]);
+  jeod::Vector3::copy(y_unit, T_inrtl_lvlh[1]);
+  jeod::Vector3::copy(z_unit, T_inrtl_lvlh[2]);
 }
 
 /*******************************************************************************
@@ -165,12 +174,12 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
       __FILE__,__LINE__,"Invalid arguments\n",
       "The inertial-to-UVW method cannot function when\n"
       "the input arguments are NULL.\n"
-      "Setting transformation matrix to identitiy.\n");
+      "Setting transformation matrix to identity.\n");
     jeod::Matrix3x3::identity(T_inrtl_uvw);
     return;
   }
 
-  double pos_mag = jeod::Vector3::vmag(position);
+  const double pos_mag = jeod::Vector3::vmag(position);
 
   if ( pos_mag < std::numeric_limits<double>::min() ) {
     CMLMessage::error (
@@ -188,7 +197,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
   jeod::Vector3::scale(position, (1/pos_mag), u_unit);
 
   jeod::Vector3::cross( position, velocity, w_unit);
-  double w_mag = jeod::Vector3::vmag(w_unit);
+  const double w_mag = jeod::Vector3::vmag(w_unit);
   if ( w_mag >= std::numeric_limits<double>::min() ) {
     jeod::Vector3::scale ( (1/w_mag), w_unit);
     jeod::Vector3::cross( w_unit, u_unit, v_unit );
@@ -239,11 +248,9 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
     jeod::Vector3::normalize( w_unit);
   }
   jeod::Vector3::normalize( v_unit);
-  for (unsigned int ii = 0; ii < 3; ++ii) {
-    T_inrtl_uvw[0][ii] = u_unit[ii];
-    T_inrtl_uvw[1][ii] = v_unit[ii];
-    T_inrtl_uvw[2][ii] = w_unit[ii];
-  }
+  jeod::Vector3::copy(u_unit, T_inrtl_uvw[0]);
+  jeod::Vector3::copy(v_unit, T_inrtl_uvw[1]);
+  jeod::Vector3::copy(w_unit, T_inrtl_uvw[2]);
 }
 
 /*******************************************************************************
@@ -289,7 +296,7 @@ MathUtils::generate_inrtl_to_reference( const double x_axis_inrtl[3],
     return;
   }
 
-  double x_mag = jeod::Vector3::vmag(x_axis_inrtl);
+  const double x_mag = jeod::Vector3::vmag(x_axis_inrtl);
   if (jeod::Vector3::vmag(position) < std::numeric_limits<double>::min() ||
       x_mag < std::numeric_limits<double>::min() ) {
     CMLMessage::error (
@@ -352,11 +359,9 @@ MathUtils::generate_inrtl_to_reference( const double x_axis_inrtl[3],
   // T_inrtl_reference =  [ x0 x1 x2]
   //                    [ [ y0 y1 y2] ]
   //                      [ z0 z1 z2]]
-  for (unsigned int ii = 0; ii < 3; ii++) {
-    T_inrtl_reference[0][ii] = x_unit[ii];
-    T_inrtl_reference[1][ii] = y_unit[ii];
-    T_inrtl_reference[2][ii] = z_unit[ii];
-  }
+  jeod::Vector3::copy(x_unit, T_inrtl_reference[0]);
+  jeod::Vector3::copy(y_unit, T_inrtl_reference[1]);
+  jeod::Vector3::copy(z_unit, T_inrtl_reference[2]);
 }
 
 /*******************************************************************************
@@ -377,7 +382,7 @@ MathUtils::generate_inrtl_to_vnc( const double (&position)[3],
                                   const double (&velocity)[3],
                                   double (&T_inrtl_vnc)[3][3])
 {
-  double vel_mag =  jeod::Vector3::vmag(velocity);
+  const double vel_mag =  jeod::Vector3::vmag(velocity);
   if (jeod::Vector3::vmag(position) < std::numeric_limits<double>::min() ||
       vel_mag                 < std::numeric_limits<double>::min()) {
     CMLMessage::error ( __FILE__, __LINE__,
@@ -399,7 +404,7 @@ MathUtils::generate_inrtl_to_vnc( const double (&position)[3],
                   velocity,
                   y_unit); // not unit vec (yet)
 
-  double y_axis_mag = jeod::Vector3::vmag(y_unit);
+  const double y_axis_mag = jeod::Vector3::vmag(y_unit);
   if ( y_axis_mag  < std::numeric_limits<double>::min()) {
     CMLMessage::error ( __FILE__, __LINE__,
       "Illegal values, VNC ref-frame not definable:\n"
@@ -426,11 +431,9 @@ MathUtils::generate_inrtl_to_vnc( const double (&position)[3],
   // T_inrtl_vnc =  [ x0 x1 x2]
   //              [ [ y0 y1 y2] ]
   //                [ z0 z1 z2]]
-  for (unsigned int ii = 0; ii < 3; ii++) {
-    T_inrtl_vnc[0][ii] = x_unit[ii];
-    T_inrtl_vnc[1][ii] = y_unit[ii];
-    T_inrtl_vnc[2][ii] = z_unit[ii];
-  }
+  jeod::Vector3::copy(x_unit, T_inrtl_vnc[0]);
+  jeod::Vector3::copy(y_unit, T_inrtl_vnc[1]);
+  jeod::Vector3::copy(z_unit, T_inrtl_vnc[2]);
 }
 
 /*****************************************************************************
@@ -471,15 +474,15 @@ MathUtils::generate_T_pfix_to_enu( const double position_pfix[3],
       __FILE__,__LINE__,"Invalid Position\n",
       "Position vector is NULL.\n"
       "Cannot generate the ENU frame.\n"
-      "Setting transformation matrix to identitiy.\n");
+      "Setting transformation matrix to identity.\n");
     jeod::Matrix3x3::identity(T_pfix_to_enu);
     return;
   }
 
   // Create 3-arrays to express the 3 axes of ENU in the ECEF frame
-  double east_hat[3]={0};
-  double north_hat[3]={0};
-  double up_hat[3]={0};
+  double east_hat[3] {};
+  double north_hat[3] {};
+  double up_hat[3] {};
 
   // Up is the position vector, passed in as an argument.  Need to normalize
   // this vector to get a unit-vector.
@@ -493,7 +496,8 @@ MathUtils::generate_T_pfix_to_enu( const double position_pfix[3],
       "Aligning east with pfix +x\n"
       "         north to complete.\n");
     east_hat[0] = 1.0;
-    north_hat[1] = up_hat[2] = (up_hat[2]>0) ? 1.0 : -1.0;
+    up_hat[2] = std::copysign(1.0, up_hat[2]);
+    north_hat[1] = up_hat[2];
   }
   else {
     // East unit-vector is the normalization of (ECEF-z) x (up).
@@ -564,11 +568,10 @@ MathUtils::generate_Q_enu_to_pfix( double longitude,
       longitude += M_PI;
   }
 
-
   jeod::Quaternion Q_enu_to_uen;
-  Q_enu_to_uen.scalar    =
-  Q_enu_to_uen.vector[0] =
-  Q_enu_to_uen.vector[1] =
+  Q_enu_to_uen.scalar    = 0.5;
+  Q_enu_to_uen.vector[0] = 0.5;
+  Q_enu_to_uen.vector[1] = 0.5;
   Q_enu_to_uen.vector[2] = 0.5;
 
   // equatorial East-y frame (equEy) is the rotation of the UEN frame such that
@@ -596,25 +599,24 @@ Purpose:( Evaluates a polynomial y= Sigma a_i x^i given a vector of
 *******************************************************************************/
 double
 MathUtils::polynomial( double x,
-                       std::vector<double> & coeffs,
+                       const std::vector<double> & coeffs,
                        const double failed_val,
                        const bool   failed_flag)
 {
   // Temporary disable fp exceptions, storing the set of
   // previously configured exceptions.
-  const int fe_prev = fedisableexcept(FE_ALL_EXCEPT);
+  std::fenv_t fenv;
+  const int fe_prev = std::feholdexcept(&fenv);
   assert(-1 != fe_prev);  // If -1, there was a failure
 
   double x_to_i = 1.0;
-  double sum = 0.0;
-  for (std::vector< double >::iterator it = coeffs.begin();
-       it != coeffs.end();
-       ++it) {
-    sum += ((*it) * x_to_i);
+  double result = 0.0;
+  for (const double & coeff : coeffs) {
+    result += (coeff * x_to_i);
     x_to_i *= x;
   }
 
-  if (std::isnan(sum) || std::isinf(sum)) {  //chec invalid ops and overflow
+  if (std::isnan(result) || std::isinf(result)) {  //check invalid ops and overflow
     if (failed_flag) {
       CMLMessage::fail(
         __FILE__, __LINE__,"Overflow value detected.\n",
@@ -627,10 +629,10 @@ MathUtils::polynomial( double x,
         "The polynomial sum is overflow,"
         " and the result is set as ", failed_val, ".6e.\n");
     }
-    sum = failed_val;
+    result = failed_val;
   }
-  feenableexcept(fe_prev); // restore the previous settings of fp exceptions
-  return sum;
+  std::fesetenv(&fenv); // restore the previous settings of fp exceptions
+  return result;
 }
 
 /*******************************************************************************
@@ -646,7 +648,7 @@ Purpose:( Effectively takes the square root of a matrix such that
             enough to hold the generated array.)
 *******************************************************************************/
 bool
-MathUtils::cholesky_decomposition ( std::string origin,
+MathUtils::cholesky_decomposition ( const std::string & caller_id,
                                     const double * in_array,
                                     double * out_array,
                                     size_t   dimension_in,
@@ -736,7 +738,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
                                       0.0)) {
         CMLMessage::error(
           __FILE__, __LINE__, "Non-symmetric matrix\n",
-          "Matrix input from ", origin, " is not a symmetric matrix.\n"
+          "Matrix input from ", caller_id, " is not a symmetric matrix.\n"
           "Decomposition will proceed as though it was, but will use only\n"
           "the values on and below the diagonal.\n"
           "Values above the diagonal will be ignored, assumed equal to those "
@@ -745,7 +747,9 @@ MathUtils::cholesky_decomposition ( std::string origin,
         break;
       }
     }
-    if (!is_symmetric) break;
+    if (!is_symmetric) {
+      break;
+    }
   }
 
   // sqrt_mx will be sized to match in_array; its contents will be the
@@ -755,7 +759,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
   // Now process input_mx and generate out_local
   for (size_t ii = 0; ii < sub_mx_size; ii++) {
     // start with the diagonal element
-    double sum = input_mx[ii][ii];
+    double sum_ = input_mx[ii][ii];
     // subtract off the square of the sqrt_matrix elements for all
     // elements to the left of this diagonal element.
     // These have already been computed; all elements to the left of the
@@ -764,21 +768,21 @@ MathUtils::cholesky_decomposition ( std::string origin,
     // for the corresponding diagonal element and all elements below it
     // (i.e. those in the same column).
     for (size_t jj = 0; jj < ii; jj++) {
-      sum -= (sqrt_mx[ii][jj] * sqrt_mx[ii][jj]);
+      sum_ -= (sqrt_mx[ii][jj] * sqrt_mx[ii][jj]);
     }
     // If the sub-matrix of in_array is well-formed, this sum will be >= 0.0
     // Otherwise it cannot be used.
-    if (sum < 0.0){
+    if (sum_ < 0.0){
       CMLMessage::error(
         __FILE__, __LINE__, "Invalid Covariance\n",
-        "Matrix input from ", origin, " is not positive semi-definite.\n"
+        "Matrix input from ", caller_id, " is not positive semi-definite.\n"
         "A negative eigen-value exists, detected in processing col ", ii, "\n"
         "Successful decomposition requires the matrix be positive "
         "semi-definite.\nDecomposition failed.\n");
       return false;
     }
 
-    // if "sum" is equal to zero, we are about to set the sqrt_mx value at
+    // if "sum_" is equal to zero, we are about to set the sqrt_mx value at
     // position [ii][ii] to 0.0.
     // To generate the values below the diagonal element at position [ii][ii],
     // we have to divide by this value ... which means dividing by zero.
@@ -786,23 +790,23 @@ MathUtils::cholesky_decomposition ( std::string origin,
     //   - If f != 0.0, this fails.
     //   - If f == 0.0, the result is ambiguous and we (arbitrarily) decide that
     //     it will have the value 0.0
-    //     (note - this best supports the most common cause of sum = 0.0,
+    //     (note - this best supports the most common cause of sum_ = 0.0,
     //             which is that, for all values jj,
     //             input_mx[jj][ii] = input_mx[ii][jj]  = 0.0)
-    // So if sum = 0.0, we need to evaluate f_jj for all jj > ii
+    // So if sum_ = 0.0, we need to evaluate f_jj for all jj > ii
     //    if f_jj != 0.0, the decomposition fails.
     //    f_jj = input_mx[jj][ii] -
     //           sigma_{kk=0:ii-1} ( sqrt_mx[jj][kk] * sqrt_mx[ii][kk])
-    if (MathUtils::is_near_equal(sum, 0.0)) {
+    if (MathUtils::is_near_equal(sum_, 0.0)) {
       for (unsigned int jj = ii+1; jj < sub_mx_size; jj++) {
-        sum = input_mx[jj][ii];
+        sum_ = input_mx[jj][ii];
         for (unsigned int kk = 0; kk < ii; kk++) {
-          sum -= (sqrt_mx[jj][kk] * sqrt_mx[ii][kk]);
+          sum_ -= (sqrt_mx[jj][kk] * sqrt_mx[ii][kk]);
         }
-        if (!MathUtils::is_near_equal( sum, 0.0)) {
+        if (!MathUtils::is_near_equal( sum_, 0.0)) {
           CMLMessage::error(
             __FILE__, __LINE__, "Invalid Covariance\n",
-            "Matrix input from ", origin, " is not positive semi-definite.\n"
+            "Matrix input from ", caller_id, " is not positive semi-definite.\n"
             "A negative eigen-value exists\n"
             "Successful decomposition requires the matrix be positive "
             "semi-definite.\nDecomposition failed.\n");
@@ -815,7 +819,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
       // constructed with 0.0 everywhere) and move on to the next column.
       CMLMessage::warn(
         __FILE__,__LINE__, "Ambiguous Decomposition\n",
-        "Matrix input from ", origin, ":\n"
+        "Matrix input from ", caller_id, ":\n"
         "Consider the ", ii+1, "x", ii+1, " square sub-matrix taken from the upper left of "
         "the input matrix.\nThis sub-matrix has a determinant "
         "equal to zero (or very close to zero).\n"
@@ -826,7 +830,7 @@ MathUtils::cholesky_decomposition ( std::string origin,
     }
     // else: compute the values for this diagonal element and all elements
     // below it:
-    sqrt_mx[ii][ii] = std::sqrt( sum );
+    sqrt_mx[ii][ii] = std::sqrt( sum_ );
 
     // Now generate the sqrt_cov values for the off-diagonal elements below
     // the current diagonal element (we are still inside the (ii) loop).
@@ -838,20 +842,20 @@ MathUtils::cholesky_decomposition ( std::string origin,
       //  -- the element in row (ii), and
       //  -- the element in this row
       // for every column to the left of the current column.
-      // This is analgous to subtracting off the scalar product of the row(ii)
+      // This is analogous to subtracting off the scalar product of the row(ii)
       // and this row for elements to the left.
       // These values have already been computed because values are computed
       // for all rows as each column is processed, moving to the right.
-      sum = input_mx[jj][ii];
+      sum_ = input_mx[jj][ii];
       for (unsigned int kk = 0; kk < ii; kk++) {
-        sum -= (sqrt_mx[jj][kk] * sqrt_mx[ii][kk]);
+        sum_ -= (sqrt_mx[jj][kk] * sqrt_mx[ii][kk]);
       }
       // All elements in this column are represented by their respective sum
       // scaled by a common value.  That value is equal to the value of the
       // diagonal element at the top of this column (of lower-diagonal
       // elements).  Note that this is true even for the diagonal element
-      // itself, which is the square root of its "sum" value.
-      sqrt_mx[jj][ii] = sum / sqrt_mx[ii][ii];
+      // itself, which is the square root of its "sum_" value.
+      sqrt_mx[jj][ii] = sum_ / sqrt_mx[ii][ii];
     }
   } // processed an array with dimension:  sub_mx_size x sub_mx_size
     // Any other elements remain zero.
@@ -891,24 +895,20 @@ MathUtils::compute_backward_difference( const std::list<double> & history)
     return 0.0;
   }
 
-  static const std::array<std::array<double, 5>, 5> back_diff_coefficients =
+  static constexpr std::array<std::array<double, 5>, 5> back_diff_coefficients =
     {{{     0,     0,    0,    0,     0   },
       {     1,    -1.0,  0,    0,     0   },
       {   1.5,    -2.0,  0.5,  0,     0   },
       {  11.0/6,  -3.0,  1.5, -1.0/3, 0   },
       {  25.0/12, -4.0,  3.0, -4.0/3, 0.25}}};
-  double derivative = 0.0;
-  size_t order = std::min(history.size() - 1, static_cast<size_t>(4));
+  constexpr auto max_order = back_diff_coefficients.size() - 1;
 
-  size_t ii = 0;
-  for (std::list<double>::const_iterator it = history.begin();
-       it != history.end() && ii < 5;
-       ++it) {
+  // Use at most the first 5 items in the history (4th order difference).
+  const auto order = std::min(history.size() - 1, max_order);
+  const auto begin = history.begin();
+  const auto end = std::next(begin, static_cast<std::ptrdiff_t>(order) + 1);
 
-    derivative += (*it) * back_diff_coefficients[order][ii];
-    ++ii;
-  }
-  return derivative;
+  return std::inner_product(begin, end, back_diff_coefficients[order].begin(), 0.0);
 }
 
 
@@ -926,8 +926,8 @@ MathUtils::compute_unit_vector_derivative(
     const double vector_derivative[3],     // input
     double unit_vector_derivative[3])      // output
 {
-  double vdotv = jeod::Vector3::dot( vector,
-                               vector);
+  const double vdotv = jeod::Vector3::dot(vector,
+                                          vector);
   if (is_near_equal( vdotv, 0.0)) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid inputs to method.\n",
@@ -939,16 +939,16 @@ MathUtils::compute_unit_vector_derivative(
                         unit_vector_derivative);
     return;
   }
-  double vdotvd = jeod::Vector3::dot( vector,
-                                vector_derivative);
+  const double vdotvd = jeod::Vector3::dot(vector,
+                                           vector_derivative);
 
   // Not protected by previous test of vdotv != 0.0;
   // if vdotv is small and vdotvd large, large / small could still overflow.
   // So use divide-protected.
-  double vdotvd_over_vdotv = divide_protected( vdotvd,
-                                               vdotv,
-                                               0,
-                                               true);
+  const double vdotvd_over_vdotv = divide_protected( vdotvd,
+                                                     vdotv,
+                                                     0,
+                                                     true);
   double scratch[3];
   jeod::Vector3::scale(  vector,
                   -vdotvd_over_vdotv,
@@ -958,7 +958,7 @@ MathUtils::compute_unit_vector_derivative(
                  scratch);
 
   // Protected by previous verification that vdotv not close to 0.
-  double inv_sqrt_vdotv = 1 / std::sqrt( vdotv);
+  const double inv_sqrt_vdotv = 1 / std::sqrt( vdotv);
 
   // NOTE - not really protected, but failure here would require that scratch be
   //        very large and vdotv very small -- effectively the vector is very
@@ -994,12 +994,12 @@ Purpose:
     Template specialization for bool type
 *****************************************************************************/
 template<>
-bool MathUtils::is_within_abs_tolerance<bool>( bool v1, bool v2, bool tol)
+bool MathUtils::is_within_abs_tolerance<bool>( bool val1, bool val2, bool tol)
 {
-  bool ret = tol || (v1 == v2);
+  const bool ret = tol || (val1 == val2);
   CMLMessage::error( __FILE__, __LINE__,
-    "Testing whether boolean ",v1, " is within boolean ",tol,", of boolean ",
-    v2, " has an ambiguous interpretation.\n"
+    "Testing whether boolean ",val1, " is within boolean ",tol,", of boolean ",
+    val2, " has an ambiguous interpretation.\n"
     "Evaluated to ",ret,"\n");
   return ret;
 }

@@ -2,12 +2,20 @@
 PURPOSE:
    (Methods for the basic solid-rocket motor)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
 ******************************************************************************/
 
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/rocket_motor_basic.hh"
@@ -23,7 +31,7 @@ RocketMotor_Basic::RocketMotor_Basic(
         DynamicMassBodyPropertiesInterface & mass_properties_in,
         const double                       & time_in,
         const double                       * veh_cm_in,
-        bool                                 use_mass_string_in)
+        const bool                           use_mass_string_in)
   :
   mass_group(mass_group_in),
   prop_mass_body(mass_body_in),
@@ -31,25 +39,7 @@ RocketMotor_Basic::RocketMotor_Basic(
   dyn_mass_properties(mass_properties_in),
   time_now(time_in),
   veh_cm(veh_cm_in),
-  dispersions(),
-  commanded(false),
-  force_mass_update(true),
-  motor_can_be_shutdown(false),
-  thrust_magnitude(0.0),
-  thrust_unit_motor{0.0, 0.0, 0.0},
-  position{0.0, 0.0, 0.0},
-  mass_flow_rate(0.0),
-  T_struc_to_motor_frame{{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
-  thrust{0.0, 0.0, 0.0},
-  moment{0.0, 0.0, 0.0},
-  status(Inactive),
-  mass_group_internal(),
-  use_mass_string(use_mass_string_in),
-  dt(0.0),
-  time_last(0.0),
-  command_time(0.0),
-  burnout_time(0.0),
-  thrust_unit_struc{0.0, 0.0, 0.0}
+  use_mass_string(use_mass_string_in)
 {
   if (!use_mass_string) {
     mass_group_internal.add_mass_to_group(prop_mass_body);
@@ -143,12 +133,14 @@ RocketMotor_Basic::initialize()
         "The prop_mass_string pointer has not been set, but the "
         "use_mass_string\nswitch has been set to True\n"
         "This configuration is not supported.\n");
+      return;
     }
     if (prop_mass_string->get_body_collection_size() == 0) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "The specified prop_mass_string has no bodies associated with it.\n"
         "This configuration is not supported.\n");
+      return;
     }
     if (!mass_group.is_string_in_group( prop_mass_string)) {
       mass_group.add_string_to_group(prop_mass_string);
@@ -163,12 +155,14 @@ RocketMotor_Basic::initialize()
         "The prop_mass_body pointer has not been set, but the use_mass_string\n"
         "switch has been set to False, indicating that the model is using a\n"
         "dynamic-mass-body directly.\nThis use-case is not supported.\n");
+      return;
     }
     if (!mass_group.is_body_in_group( prop_mass_body)) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "The specified prop_mass_body is not managed by the specified "
         "mass-group.\nThis configuration is not supported.\n");
+      return;
     }
   }
 
@@ -180,12 +174,13 @@ RocketMotor_Basic::initialize()
       __FILE__,__LINE__,"Invalid Initialization\n",
       "The consumable mass cannot be < 0.\n"
       "Verify the specification of residual mass and core-mass.\n");
+    return;
   }
 
   dispersions.apply_dispersions(position, T_struc_to_motor_frame);
 
   // Calculate thrust direction in structural frame
-  double unit_vec_mag_sq = jeod::Vector3::vmagsq( thrust_unit_motor);
+  const double unit_vec_mag_sq = jeod::Vector3::vmagsq(thrust_unit_motor);
   if (MathUtils::is_near_equal( unit_vec_mag_sq, 0.0)) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid unit vector specification\n",

@@ -1,3 +1,7 @@
+# This file contains the full list of unit sims, runs, and verification data for CML models.
+# It's parsed by the test.py script at runtime. This file can be used as a template for
+# creating custom YAML files while define a different set of tests, runs, etc.
+#
 # Expected format copied from TrickWorkflow Documentation shown below:
 # SIM_abc:               <-- required unique name for sim of interest, must start with SIM
 #   path:                <-- required SIM path relative to project top level
@@ -833,29 +837,6 @@ SIM_color_string_color_string:
   build_args: CML_OFFLINE_BUILD=1
   runs:
     RUN_test/input.py: null
-SIM_convert_double_to_words_comparison_double_to_words:
-  model_dir: models/utilities/double_to_words
-  path: models/utilities/double_to_words/verif/SIM_convert_double_to_words_comparison
-  build_args: CML_OFFLINE_BUILD=1
-  runs:
-    RUN_test/input.py:
-      compare:
-      - models/utilities/double_to_words/verif/SIM_convert_double_to_words_comparison/RUN_test/log_test_data.csv
-        vs. models/utilities/double_to_words/verif/SIM_convert_double_to_words_comparison/verif_data/RUN_test/log_test_data.csv
-SIM_convert_double_to_words_double_to_words:
-  model_dir: models/utilities/double_to_words
-  path: models/utilities/double_to_words/verif/SIM_convert_double_to_words
-  build_args: CML_OFFLINE_BUILD=1
-  runs:
-    ERROR_test/input.py: null
-    RUN_test/input.py:
-      compare:
-      - models/utilities/double_to_words/verif/SIM_convert_double_to_words/RUN_test/log_test_data.csv
-        vs. models/utilities/double_to_words/verif/SIM_convert_double_to_words/verif_data/RUN_test/log_test_data.csv
-    RUN_test_warn/input.py:
-      compare:
-      - models/utilities/double_to_words/verif/SIM_convert_double_to_words/RUN_test_warn/log_test_data.csv
-        vs. models/utilities/double_to_words/verif/SIM_convert_double_to_words/verif_data/RUN_test_warn/log_test_data.csv
 SIM_correlated_state_dispersion_correlated_state_dispersion:
   model_dir: models/dynamics/state_initialize/correlated_state_dispersion
   path: models/dynamics/state_initialize/correlated_state_dispersion/verif/SIM_correlated_state_dispersion
@@ -1566,6 +1547,13 @@ SIM_lookup_simple_lookup_wind:
       compare:
       - models/environment/atmos/atmosphere_models/simple_lookup_wind/verif/SIM_lookup/RUN_windcomponents_zero/log_test_data.csv
         vs. models/environment/atmos/atmosphere_models/simple_lookup_wind/verif/SIM_lookup/verif_data/RUN_windcomponents_zero/log_test_data.csv
+SIM_msl_alt:
+  model_dir: models/environment/msl
+  path: models/environment/msl/verif/SIM_msl_alt
+  build_args: CML_OFFLINE_BUILD=1
+  runs:
+    RUN_example_oceanic_coordinates/input.py:
+    RUN_sweep/input.py:
 SIM_multi_body_composite_dispersion_mass_body_dispersed_init:
   model_dir: models/dynamics/mass/mass_body_dispersed_init
   path: models/dynamics/mass/mass_body_dispersed_init/verif/SIM_multi_body_composite_dispersion
@@ -2793,6 +2781,10 @@ SIM_verif_bin_counter:
       compare:
       - models/utilities/bin_counter/verif/SIM_verif/RUN_03_proximity/log_test_data.csv
         vs. models/utilities/bin_counter/verif/SIM_verif/verif_data/RUN_03_proximity/log_test_data.csv
+    RUN_04_tolerance/input.py:
+      compare:
+      - models/utilities/bin_counter/verif/SIM_verif/RUN_04_tolerance/log_test_data.csv
+        vs. models/utilities/bin_counter/verif/SIM_verif/verif_data/RUN_04_tolerance/log_test_data.csv
 SIM_verif_cml_message:
   model_dir: models/utilities/cml_message
   path: models/utilities/cml_message/verif/SIM_verif
@@ -2854,52 +2846,32 @@ SIM_verif_constraint_check:
   path: models/utilities/constraint_check/verif/SIM_verif
   build_args: CML_OFFLINE_BUILD=1
   runs:
-    RUN_1_constraints/input.py:
+    RUN_test_trick_compatibility/input.py:
       compare:
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_interval_i2t.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_interval_i2t.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_interval_x2i.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_interval_x2i.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_interval_x2t.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_interval_x2t.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_interval_x2t_neg.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_interval_x2t_neg.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_threshold_i4i.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_threshold_i4i.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_threshold_i4t.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_threshold_i4t.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_threshold_x3s.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_threshold_x3s.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_threshold_x3s_neg.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_threshold_x3s_neg.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_threshold_x4i.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_threshold_x4i.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_threshold_x4s.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_threshold_x4s.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_threshold_x4t.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_threshold_x4t.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_1_constraints/log_threshold_x5s.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_1_constraints/log_threshold_x5s.csv
-    RUN_3_interval_outside/input.py:
-      compare:
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_3_interval_outside/log_interval_i2t.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_3_interval_outside/log_interval_i2t.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_3_interval_outside/log_interval_x2i.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_3_interval_outside/log_interval_x2i.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_3_interval_outside/log_interval_x2t.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_3_interval_outside/log_interval_x2t.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_3_interval_outside/log_interval_x2t_neg.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_3_interval_outside/log_interval_x2t_neg.csv
-    RUN_4_use_timer_false/input.py:
-      compare:
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_4_use_timer_false/log_threshold_x4t.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_4_use_timer_false/log_threshold_x4t.csv
-    RUN_5_log_interpolation/input.py:
-      compare:
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_5_log_interpolation/log_threshold_x3s.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_5_log_interpolation/log_threshold_x3s.csv
-      - models/utilities/constraint_check/verif/SIM_verif/RUN_5_log_interpolation/log_threshold_x5s.csv
-        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_5_log_interpolation/log_threshold_x5s.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_interval_i2t.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_interval_i2t.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_interval_x2i.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_interval_x2i.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_interval_x2t.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_interval_x2t.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_interval_x2t_neg.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_interval_x2t_neg.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_threshold_i4i.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_threshold_i4i.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_threshold_i4t.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_threshold_i4t.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_threshold_x3s.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_threshold_x3s.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_threshold_x3s_neg.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_threshold_x3s_neg.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_threshold_x4i.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_threshold_x4i.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_threshold_x4s.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_threshold_x4s.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_threshold_x4t.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_threshold_x4t.csv
+      - models/utilities/constraint_check/verif/SIM_verif/RUN_test_trick_compatibility/log_threshold_x5s.csv
+        vs. models/utilities/constraint_check/verif/SIM_verif/verif_data/RUN_test_trick_compatibility/log_threshold_x5s.csv
 SIM_verif_convert_string:
   model_dir: models/utilities/convert_string
   path: models/utilities/convert_string/verif/SIM_verif
@@ -3023,15 +2995,6 @@ SIM_verif_eclipse_calculator:
       compare:
       - models/environment/eclipse_calculator/verif/SIM_verif/RUN_moon_shadow/log_test_data.csv
         vs. models/environment/eclipse_calculator/verif/SIM_verif/verif_data/RUN_moon_shadow/log_test_data.csv
-SIM_verif_env_utils:
-  model_dir: models/utilities/env_utils
-  path: models/utilities/env_utils/verif/SIM_verif
-  build_args: CML_OFFLINE_BUILD=1
-  runs:
-    RUN_verif/input.py:
-      compare:
-      - models/utilities/env_utils/verif/SIM_verif/RUN_verif/log_test_data.csv vs.
-        models/utilities/env_utils/verif/SIM_verif/verif_data/RUN_verif/log_test_data.csv
 SIM_verif_events_manager:
   model_dir: models/vehicle_management/events_manager
   path: models/vehicle_management/events_manager/verif/SIM_verif

@@ -2,17 +2,21 @@
 PURPOSE:
     (Simple 1 - cosine gust model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
     (((Jon Berndt) (ESCG/Jacobs) (02/08) (ANTARES) (initial version))
      ((Gary Turner) (OSR) (2016) (Antares) (C++))
      ((Brent Caughron) (OSR) (Sept 2017) (Antares) (IV&V code review))
     )
 **********************************************************************************/
-#include <cmath> // std::cos, M_PI
+#include <cmath>
 
-#include "jeod/models/utils/math/include/vector3.hh" // Vector3
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils::*
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/gust.hh"
 
@@ -21,22 +25,7 @@ Constructor
 *****************************************************************************/
 GustModel::GustModel(const double & time_in)
   :
-  time(time_in),
-
-  phase_angle(),
-  dir_unit_vector(),
-  elapsed_time(),
-  start_time(),
-  active(false),
-  period_message_sent(false),
-
-  gust_frame(TD_FRAME),
-  direction{0.0,0.0,0.0},
-  maximum_magnitude(0.0),
-  magnitude(0.0),
-  gust_vector{0.0,0.0,0.0},
-  period(0.0),
-  start(false)
+  time(time_in)
 {}
 
 /*****************************************************************************
@@ -47,7 +36,9 @@ void
 GustModel::activate()
 {
   // Protection against accidentally restarting the start_time
-  if (active) return;
+  if (active) {
+    return;
+  }
   if (period < 0.0 ) {
     if (!period_message_sent) {
       CMLMessage::error ( __FILE__,__LINE__,
@@ -86,9 +77,13 @@ GustModel::update()
 {
 
   if (!active){
-    if (!start) return;
+    if (!start) {
+      return;
+    }
     activate();
-    if (!active) return;
+    if (!active) {
+      return;
+    }
   }
 
   elapsed_time = time - start_time;

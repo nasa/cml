@@ -3,6 +3,9 @@
 PURPOSE:
    (Define checking process for each event managed by event manager)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May       2018) (Initial implementation of event manager))
@@ -16,8 +19,11 @@ PROGRAMMERS:
 *******************************************************************************/
 
 
-/* Model Includes */
 #include "../include/compound_event.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_delay.hh"
+#include <list>
 
 /*****************************************************************************
 Constructor
@@ -26,24 +32,7 @@ CompoundEvent::CompoundEvent(
   const double & time_)
   :
   WatchValuesDelay(time_),
-  time(time_),
-  name(),
-  arming_triggers(),
-  disarming_triggers(),
-  action_triggers(),
-  allow_immediate_actions(false),
-  deactivate_at_disarm(false),
-  arm_trigger_check_period(false),
-  disarm_trigger_check_period(0.0),
-  action_trigger_check_period(0.0),
-  event_has_action_triggers(false),
-  time_triggered(0.0),
-  next_arming_check(0.0),
-  next_disarming_check(0.0),
-  next_action_check(0.0),
-  discrete_time_elapsed(0.0),
-  number_of_times_armed(0),
-  status(Unarmed)
+  time(time_)
 {
   subscribe_name = "CompoundEvent: " + name;
   arming_triggers.subscribe_name = subscribe_name + " : arming_triggers";
@@ -139,11 +128,15 @@ CompoundEvent::test_crossing()
 }
 
 /*****************************************************************************
-test_crossing
+test_crossing_iterative
 Purpose:
-  FIXME Comment Me
+  Sets the status of a CompoundEvent according to the status of its triggers.
+  This method is iterative in that when moving from an Unarmed state to an
+  armed state, it can call itself if the event allows for simultaneous
+  processing of its arming triggers and other triggers (including action and
+  disarming triggers)An iterative call to process the Event's triggers
 *****************************************************************************/
-void 
+void
 CompoundEvent::test_crossing_iterative()
 {
   switch (status) {
@@ -390,6 +383,11 @@ CompoundEvent::activate()
     status = Armed;
     action_triggers.subscribe();
   }
+
+  //Apply multi_shot to triggers where necessary:
+  // * Action triggers with managed references
+  action_triggers.force_multi_shot_for_managed_values();
+
   WatchValuesDelay::activate();
 
   // Identify which of the triggers has a conditional reference value.

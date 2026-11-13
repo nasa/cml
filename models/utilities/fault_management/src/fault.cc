@@ -2,26 +2,18 @@
 PURPOSE:
   (Base class for managing fault injection for a single variable.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
 ############################################################################*/
 
 #include "../include/fault.hh"
+#include "../include/trigger_group.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-Fault::Fault() :
-  enabled(false),
-  is_fire_limited(false),
-  fire_limit(1),
-  initialized(false),
-  was_triggered_last_pass(false),
-  fire_count(0)
-{}
-
+#include <string>
 
 /*******************************************************************************
 initialize
@@ -69,9 +61,9 @@ set_param
 Purpose:(Generic method for setting fault parameters. This base method is
          called if the child class does not recognize the parameter name.)
 *******************************************************************************/
-bool Fault::set_param( std::string param_name,
-                       double,
-                       bool)
+bool Fault::set_param( const std::string& param_name,
+                       [[maybe_unused]] double value,
+                       [[maybe_unused]] bool reset_nominal)
 {
   CMLMessage::error(__FILE__, __LINE__,
     "Fault Management Error\n",
@@ -86,11 +78,14 @@ Purpose:(Determines whether any trigger group is triggered.)
 *******************************************************************************/
 bool Fault::is_triggered() {
   bool is_triggered = false;
-  for (auto tg : trigger_groups) {
-    is_triggered = tg->operate() || is_triggered;
+  for (auto* tg : trigger_groups) {
     // Operate on all trigger groups (even if it has already been determined
     // that one of them is triggered) because periodic triggers should be
     // updated every frame.
+    if (tg->operate()) {
+      // cppcheck-suppress useStlAlgorithm
+      is_triggered = true;
+    }
   }
 
   // If this is a fresh trigger, then reset anything that needs to be reset

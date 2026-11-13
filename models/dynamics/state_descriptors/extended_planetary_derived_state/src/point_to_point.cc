@@ -3,6 +3,9 @@ PURPOSE: (Provides an extension that computes the relative position
           between one or more points fixed to the ground and one or more points
           fixed to a vehicle.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS / LIMITATIONS:
   ((Each instance of PointToPointManager deals with 1 planetary body and 1
     jeod::DynBody.  It can handle multiple points on each body, but cannot handle
@@ -20,7 +23,55 @@ PROGRAMMERS:
 #include "../include/point_to_point.hh"
 
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
+
+#include <algorithm>
+#include <list>
+#include <string>
+#include <utility>
+
+namespace {
+
+/*****************************************************************************
+add_point
+Purpose:
+  Common method for adding a point to a point list.
+*****************************************************************************/
+void add_point(
+    const std::string& pt_name,
+    double pt_pos[3],
+    std::list<PointToPointElement>& element_list,
+    const std::string& list_type)
+{
+  // pt_pos is checked for NULL on the passthrough when creating the new
+  // element.
+  if (pt_name.empty()) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Invalid name specified.\n",
+      "Specified name is empty.\n"
+      "Cannot have an un-named point.\n",
+      pt_name);
+    return;
+  }
+
+  const auto existing_point = std::find_if(element_list.begin(), element_list.end(),
+    [&pt_name](const PointToPointElement& element) {return pt_name == element.name;});
+  if (existing_point != element_list.end()) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Invalid name specified.\n",
+      "Specified name (", pt_name, ") is already registered as a ", list_type, "-point.\n"
+      "Cannot duplicate point names.\n");
+    return;
+  }
+
+  element_list.emplace_back(pt_name, pt_pos);
+}
+
+} // namespace
 
 /*****************************************************************************
 Constructor
@@ -28,6 +79,8 @@ Constructor
 PointToPointElement::PointToPointElement(
     std::string name_,
     double      position_[3])
+  :
+  name(std::move(name_))
 {
   if (position_ == nullptr) {
     CMLMessage::error(
@@ -36,7 +89,6 @@ PointToPointElement::PointToPointElement(
       "Cannot construct a PointToPointElement with a NULL position.\n");
     return;
   }
-  name = name_;
   jeod::Vector3::copy( position_, position);
 }
 /****************************************************************************/
@@ -44,42 +96,15 @@ PointToPointPosition::PointToPointPosition(
     std::string v_name_,
     std::string p_name_)
   :
-  position{0,0,0},
-  v_pos{0,0,0},
-  p_pos{0,0,0},
-  v_name(v_name_),
-  p_name(p_name_)
+  v_name(std::move(v_name_)),
+  p_name(std::move(p_name_))
 {}
 /****************************************************************************/
 PointToPointManager::PointToPointManager(
     const jeod::PlanetFixedPosition & B_wrt_P_in_P_)
   :
-  B_wrt_P_in_P( B_wrt_P_in_P_),
-  dyn_body( nullptr),
-  pfix_frame_rot_state( nullptr)
+  B_wrt_P_in_P( B_wrt_P_in_P_)
 {}
-
-/*****************************************************************************
-Copy-constructors
-*****************************************************************************/
-PointToPointElement::PointToPointElement(
-    const PointToPointElement & orig)
-  :
-  name(orig.name)
-{
-  jeod::Vector3::copy( orig.position, position);
-}
-/****************************************************************************/
-PointToPointPosition::PointToPointPosition(
-    const PointToPointPosition & orig)
-  :
-  v_name( orig.v_name),
-  p_name( orig.p_name)
-{
-  jeod::Vector3::copy( orig.position, position);
-  jeod::Vector3::copy( orig.v_pos, v_pos);
-  jeod::Vector3::copy( orig.p_pos, p_pos);
-}
 
 /*****************************************************************************
 check_names
@@ -89,8 +114,8 @@ Purpose:
 *****************************************************************************/
 bool
 PointToPointPosition::check_names(
-    std::string v_pt_name,
-    std::string p_pt_name)
+    const std::string & v_pt_name,
+    const std::string & p_pt_name) const
 {
   return ((v_pt_name == v_name) && (p_pt_name == p_name));
 }
@@ -171,7 +196,7 @@ Purpose:
 *****************************************************************************/
 void
 PointToPointManager::add_vehicle_point(
-    std::string pt_name,
+    const std::string & pt_name,
     double pt_pos[3])
 {
   add_point( pt_name, pt_pos, vehicle_points, "vehicle");
@@ -184,57 +209,10 @@ Purpose:
 *****************************************************************************/
 void
 PointToPointManager::add_planet_point(
-    std::string pt_name,
+    const std::string & pt_name,
     double pt_pos[3])
 {
   add_point( pt_name, pt_pos, planet_points, "planet");
-}
-/*****************************************************************************
-add_point
-Purpose:
-  Private method implementing the common logic for add_planet_point and
-  add_vehicle_point.
-*****************************************************************************/
-void
-PointToPointManager::add_point(
-  std::string pt_name,
-  double pt_pos[3],
-  std::list<PointToPointElement> & element_list,
-  std::string list_type)
-{
-  // pt_pos is checked for NULL on the passthrough when creating the new
-  // element.
-  if (pt_name.empty()) {
-    CMLMessage::error(
-      __FILE__,__LINE__,"Invalid name specified.\n",
-      "Specified name is empty.\n"
-      "Cannot have an un-named point.\n",
-      pt_name);
-    return;
-  }
-
-  // Note -- here and throughout:
-  // I'm using an iterator rather than "auto it: vehicle_points" to avoid
-  // unnecessary use of the copy constructor.  It's not a big deal either
-  // way here (copy constructor is cheap) but becomes a problem where the
-  // logic needs to assign into the list element which absolutely requires
-  // the use of an iterator rather than a copy.
-  // For consistency, I'm using the same pattern throughout.
-  for (auto it = element_list.begin();
-            it != element_list.end(); ++it) {
-    if ((*it).name == pt_name) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid name specified.\n",
-        "Specified name (", pt_name, ") is already registered as a ", list_type, "-point.\n"
-        "Cannot duplicate point names.\n");
-      return;
-    }
-  }
-
-  PointToPointElement new_pt( pt_name, pt_pos);
-  if (!new_pt.name.empty()) {
-    element_list.push_back(new_pt);
-  }
 }
 
 /*****************************************************************************
@@ -250,41 +228,29 @@ Purpose:
 *****************************************************************************/
 double *
 PointToPointManager::add_relative_position(
-    std::string v_pt_name,
-    std::string p_pt_name)
+    const std::string & v_pt_name,
+    const std::string & p_pt_name)
 {
   // Check for a pre-existing match
-  for (auto it_r = relative_positions.begin();
-            it_r != relative_positions.end(); ++it_r) {
-    if ((*it_r).check_names( v_pt_name, p_pt_name)) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid name specified.\n",
-        "Relative Position instance between ", v_pt_name, " and ", p_pt_name, " is already registered.\n"
-        "Will not add a second instance of the same.\n");
-      // Return the address to the pre-existing instance.
-      return get_relative_position( v_pt_name, p_pt_name);
-    }
+  const auto match = std::find_if(relative_positions.begin(), relative_positions.end(),
+    [&v_pt_name, &p_pt_name](const PointToPointPosition& position) {
+      return position.check_names(v_pt_name, p_pt_name);
+    });
+  if (match != relative_positions.end()) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Invalid name specified.\n",
+      "Relative Position instance between ", v_pt_name, " and ", p_pt_name, " is already registered.\n"
+      "Will not add a second instance of the same.\n");
+    // Return the address to the pre-existing instance.
+    return get_relative_position( v_pt_name, p_pt_name);
   }
 
-  PointToPointPosition new_rel_pos(v_pt_name, p_pt_name);
-  int match = 0;
-  for (auto it_v = vehicle_points.begin();
-            it_v != vehicle_points.end(); ++it_v) {
-    if ((*it_v).name == v_pt_name) {
-      jeod::Vector3::copy( (*it_v).position, new_rel_pos.v_pos);
-      match++;
-      break;
-    }
-  }
-  for (auto it_p = planet_points.begin();
-            it_p != planet_points.end(); ++it_p) {
-    if ((*it_p).name == p_pt_name) {
-      jeod::Vector3::copy( (*it_p).position, new_rel_pos.p_pos);
-      match++;
-      break;
-    }
-  }
-  if (match !=2) {
+  const auto vehicle_point = std::find_if(vehicle_points.begin(), vehicle_points.end(),
+    [&v_pt_name](const PointToPointElement& point) {return point.name == v_pt_name;});
+  const auto planet_point = std::find_if(planet_points.begin(), planet_points.end(),
+    [&p_pt_name](const PointToPointElement& point){return point.name == p_pt_name;});
+
+  if (vehicle_point == vehicle_points.end() || planet_point == planet_points.end()) {
     CMLMessage::error(
       __FILE__,__LINE__,"Invalid name specified.\n",
       "Could not match the specified names (", v_pt_name, ", ", p_pt_name, ") with a registered\n"
@@ -293,14 +259,16 @@ PointToPointManager::add_relative_position(
     return nullptr;
   }
 
-  relative_positions.push_back( new_rel_pos);
-  return relative_positions.back().position;
+  auto& new_rel_pos = relative_positions.emplace_back(v_pt_name, p_pt_name);
+  jeod::Vector3::copy(vehicle_point->position, new_rel_pos.v_pos);
+  jeod::Vector3::copy(planet_point->position, new_rel_pos.p_pos);
+  return new_rel_pos.position;
 }
 /****************************************************************************/
 void
 PointToPointManager::add_relative_position(
-    std::string v_pt_name,
-    std::string p_pt_name,
+    const std::string & v_pt_name,
+    const std::string & p_pt_name,
     double    *& target)
 {
   target = add_relative_position( v_pt_name, p_pt_name);
@@ -314,16 +282,19 @@ Purpose:
 *****************************************************************************/
 void
 PointToPointManager::remove_relative_position(
-    std::string v_pt_name,
-    std::string p_pt_name)
+    const std::string & v_pt_name,
+    const std::string & p_pt_name)
 {
-  for (auto it_r = relative_positions.begin();
-            it_r != relative_positions.end(); ++it_r) {
-    if ((*it_r).check_names( v_pt_name, p_pt_name)) {
-      relative_positions.erase(it_r);
-      return;
-    }
+  // TODO Nino Tarantino 09/10/26: in C++20, use return value of remove_if.
+  const auto original_size = relative_positions.size();
+  relative_positions.remove_if(
+    [&v_pt_name, &p_pt_name](const PointToPointPosition& point) {
+      return point.check_names(v_pt_name, p_pt_name);
+    });
+  if (relative_positions.size() < original_size) {
+    return;
   }
+
   CMLMessage::warn(
     __FILE__,__LINE__,"Invalid name specified.\n",
     "Could not match the specified names (", v_pt_name, ", ", p_pt_name, ") to a registered\n"
@@ -340,14 +311,15 @@ Purpose:
 *****************************************************************************/
 double *
 PointToPointManager::get_relative_position(
-  std::string v_pt_name,
-  std::string p_pt_name)
+  const std::string & v_pt_name,
+  const std::string & p_pt_name)
 {
-  for (auto it_r = relative_positions.begin();
-            it_r != relative_positions.end(); ++it_r) {
-    if ((*it_r).check_names( v_pt_name, p_pt_name)) {
-      return (*it_r).position;
-    }
+  const auto item = std::find_if(relative_positions.begin(), relative_positions.end(),
+    [&v_pt_name, &p_pt_name](const PointToPointPosition& point) {
+      return point.check_names(v_pt_name, p_pt_name);
+    });
+  if (item != relative_positions.end()) {
+    return item->position;
   }
   CMLMessage::error(
     __FILE__,__LINE__,"Invalid names specified.\n",
@@ -366,27 +338,24 @@ Purpose:
 void
 PointToPointManager::make_all_pairings()
 {
-  for (auto it_v = vehicle_points.begin();
-            it_v != vehicle_points.end(); ++it_v) {
-    std::string v_name = (*it_v).name;
-    for (auto it_p = planet_points.begin();
-              it_p != planet_points.end(); ++it_p) {
-      std::string p_name = (*it_p).name;
-      bool match = false;
-      for (auto it_r = relative_positions.begin();
-                it_r != relative_positions.end(); ++it_r) {
-        if ((*it_r).check_names( v_name, p_name)) {
-          match = true;
-          break;
-          // silently move on to the next pair.
-        }
-      }
-      if (!match) {
+  for (auto & vehicle_point : vehicle_points) {
+    const std::string& v_name = vehicle_point.name;
+    for (auto & planet_point : planet_points) {
+      const std::string& p_name = planet_point.name;
+
+      // See if the vehicle point and planet point pair exists yet. If not,
+      // create one.
+      const auto match = std::find_if(
+        relative_positions.begin(),
+        relative_positions.end(),
+        [&v_name, &p_name](const PointToPointPosition& position) {
+          return position.check_names(v_name, p_name);
+        });
+      if (match == relative_positions.end()) {
         // No matches in the relative_positions list.  Add this instance.
-        PointToPointPosition new_rel_pos (v_name, p_name);
-        jeod::Vector3::copy( (*it_v).position, new_rel_pos.v_pos);
-        jeod::Vector3::copy( (*it_p).position, new_rel_pos.p_pos);
-        relative_positions.push_back( new_rel_pos);
+        auto& new_rel_pos = relative_positions.emplace_back(v_name, p_name);
+        jeod::Vector3::copy(vehicle_point.position, new_rel_pos.v_pos);
+        jeod::Vector3::copy(planet_point.position, new_rel_pos.p_pos);
       }
     }
   }

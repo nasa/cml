@@ -10,8 +10,11 @@ PROGRAMMERS:
 #ifndef CML_WATCH_VALUES_SET_HH
 #define CML_WATCH_VALUES_SET_HH
 
+#include <string>
+#include <list>
+#include <cstddef>
 #include <vector>
-#include "watch_values_base.hh"
+#include "watch_values_base_core.hh"
 
 
 /*****************************************************************************
@@ -43,19 +46,21 @@ class WatchValuesSet : public WatchValuesBaseCore
     remains empty.
     Assigned only when the record_trigger_name flag is set.*/
  public:
-  bool require_all; /* (--)
+  bool require_all{false}; /* (--)
     Flag indicating how to interpret the status of the individual triggers.
     True  -- this event triggers when ALL triggers are satisfied.
     False -- this event triggers when ANY trigger is satsified.*/
-  bool record_trigger_name; /* (--)
+  bool record_trigger_name{false}; /* (--)
     An optional flag that allows the recording of which of the set of
     triggers was responsible for triggering the overall set.
     The name of the trigger is copied into trigger_name.
     If multiple triggers have been triggered, only the first one
     encountered in the triggers vector will be recorded.*/
 
-  WatchValuesSet();
+  WatchValuesSet() = default;
   ~WatchValuesSet() override = default;
+  WatchValuesSet (const WatchValuesSet&) = delete;
+  WatchValuesSet& operator = (const WatchValuesSet&) = delete;
 
   void add_trigger( WatchValuesBaseCore & new_trigger);
   void initialize( std::list<WatchValuesBaseCore *> * active_watch_in) override;
@@ -66,8 +71,5 @@ class WatchValuesSet : public WatchValuesBaseCore
  protected:
   void activate() override;
   void deactivate() override;
- private:
-  WatchValuesSet (const WatchValuesSet&);
-  WatchValuesSet& operator = (const WatchValuesSet&);
 };
 #endif

@@ -12,7 +12,10 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
+#include "../include/atmosphere_exec_atmos_base.hh"
 #include "../include/atmosphere_exec_std.hh"
+#include "../include/atmosphere_exec_out.hh"
+#include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
 
 
 /*****************************************************************************
@@ -20,13 +23,12 @@ Purpose:(Construct the class)
 *****************************************************************************/
 AtmosphereExec_STD::AtmosphereExec_STD(
        STD1976 & std_76_in,
-       const double    & topod_alt,
+       const double    & topodetic_alt,
        AtmosExecOutput & master_output)
   :
   AtmosphereExec_AtmosBase(master_output),
   std76(std_76_in),
-  topodetic_altitude(topod_alt),
-  hmsl(0.0)
+  topodetic_altitude(topodetic_alt)
 {
   name = "STD1976";
 }

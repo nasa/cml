@@ -15,7 +15,12 @@ PROGRAMMERS:
 #ifndef CML_ROCKET_MOTOR_TABLE_THRUST_HH
 #define CML_ROCKET_MOTOR_TABLE_THRUST_HH
 
+#include <cstddef>
 #include <vector>
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 #include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
@@ -32,10 +37,10 @@ public:
     PropConsumptionMburn = 3
   };
 
-  double thrust_fraction; /* (--) Current thrust divided by thrust_max. */
+  double thrust_fraction{0.0}; /* (--) Current thrust divided by thrust_max. */
 
 protected:
-  double thrust_max;      /* (N)  Maximum possible output thrust contribution
+  double thrust_max{0.0};      /* (N)  Maximum possible output thrust contribution
                                   of this motor. */
 
   TableLookupSet           table_set;    /* (--) Interpolation tables manager.*/
@@ -50,21 +55,19 @@ protected:
   TableIndependentVariable table_time;   /* (--) Time-points table. Values
                                                  assume units: s */
 
-  double isp;             /* (s)  Current Specific Impulse. */
-  double mburn;           /* (kg) Mass burned according to the mburn-table */
-  double delta_mass;      /* (kg)
+  double isp{0.0};             /* (s)  Current Specific Impulse. */
+  double mburn{0.0};           /* (kg) Mass burned according to the mburn-table */
+  double delta_mass{0.0};      /* (kg)
        Mass removed on any given frame. This value resets every cycle.
        This value is positive if the current record of consumable mass
        is larger than the table-driven record of how much mass should remain.
        Used only in the case of consumption_type = PropConsumptionBurn. */
-  double elapsed_time;    /* (s) Time since the motor started. Used as
+  double elapsed_time{0.0};    /* (s) Time since the motor started. Used as
                                  independent variable for table lookup. */
-  ConsumptionType consumption_type; /* (--)   Consumption-type enumeration */
-  double prop_mass_init;            /* (kg)   Initial consumable mass. */
-  #ifndef SWIG
-  static constexpr double grav_sea_level = 9.80665; /* (m/s2)
+  ConsumptionType consumption_type{Undefined}; /* (--)   Consumption-type enumeration */
+  double prop_mass_init{0.0};  /* (kg)   Initial consumable mass. */
+  static constexpr double grav_sea_level{9.80665}; /* (m/s2)
                                  Gravity at sea-level for Isp calc. */
-  #endif
 
   // The public constructors all call this protected constructor, which
   // eliminates the need to have four nearly-identical initialization lists.
@@ -94,35 +97,33 @@ public:
                            const double      & time,
                            const double      * veh_cm_in);
   ~RocketMotor_TableThrust() override = default;
+  RocketMotor_TableThrust (const RocketMotor_TableThrust&) = delete;
+  RocketMotor_TableThrust & operator = (const RocketMotor_TableThrust&) = delete;
 
-  void load_thrust_data(double * data,
-                        size_t   num_elements);
-  void load_thrust_data(std::vector<double> & data);
-  void load_isp_data(   double * data,
-                        size_t   num_elements);
-  void load_isp_data(   std::vector<double> & data);
-  void load_mdot_data(  double * data,
-                        size_t   num_elements);
-  void load_mdot_data(  std::vector<double> & data);
-  void load_mburn_data( double * data,
-                        size_t   num_elements);
-  void load_mburn_data( std::vector<double> & data);
-  void load_time_data(  double * data,
-                        size_t   num_elements);
-  void load_time_data(  std::vector<double> & data);
+  void load_thrust_data(const double * data,
+                        size_t num_elements);
+  void load_thrust_data(const std::vector<double> & data);
+  void load_isp_data(   const double * data,
+                        size_t num_elements);
+  void load_isp_data(   const std::vector<double> & data);
+  void load_mdot_data(  const double * data,
+                        size_t num_elements);
+  void load_mdot_data(  const std::vector<double> & data);
+  void load_mburn_data( const double * data,
+                        size_t num_elements);
+  void load_mburn_data( const std::vector<double> & data);
+  void load_time_data(  const double * data,
+                        size_t num_elements);
+  void load_time_data(  const std::vector<double> & data);
 
   void initialize() override;
   void update() override;
-  void set_consumption_type( ConsumptionType);
+  void set_consumption_type( ConsumptionType type_in);
   void shutdown_motor() override;
 
 protected:
   void start_motor() override;
   void update_table();
   void compute_flow_rate_and_isp();
-private:
-  // Not implemented:
-  RocketMotor_TableThrust (const RocketMotor_TableThrust&);
-  RocketMotor_TableThrust & operator = (const RocketMotor_TableThrust&);
 };
 #endif

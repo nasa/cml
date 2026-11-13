@@ -2,44 +2,56 @@
 PURPOSE:
   (Fault injection)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
 ############################################################################*/
 
 
+#include "../include/fault_bias.hh"
+#include "../include/fault_function.hh"
 #include "../include/fault_manager.hh"
-#include <cstdlib> // strtod, strtol, etc.
-#include <cstring> // strcmp
-#include <cmath>   // abs
-#include <libxml/parser.h> // xmlParseFile, xmlNodePtr
+#include "../include/fault_overwrite.hh"
+#include "../include/fault_random_walk.hh"
+#include "../include/fault_scale.hh"
+#include "../include/fault_stale.hh"
+#include "../include/fault_white_noise.hh"
+#include "../include/independent_variable.hh"
+#include "../include/trigger.hh"
+#include <algorithm>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <string>
+#include <unordered_map>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/convert_string/include/convert_string.hh"
+#include "cml/models/utilities/xml_helper/include/xml_helper.hh"
+#include "trick/MemoryManager.hh"
+#include "trick/parameter_types.h"
+#include "trick/reference.h"
 
 bool FaultManager::global_enabled = true;
-
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-FaultManager::FaultManager() :
-  enabled(false),
-  parsed(false)
-{}
 
 
 /*****************************************************************************
 Destructor
 *****************************************************************************/
 FaultManager::~FaultManager() {
-  for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto fault : faults[ii]) {
+  for (const auto & fault_list : faults) {
+    for (const auto* fault : fault_list) {
       delete fault;
     }
   }
-  for (auto trigger : triggers) {
+  for (const auto* trigger : triggers) {
     delete trigger;
   }
-  for (auto trigger_group : trigger_groups) {
+  for (const auto* trigger_group : trigger_groups) {
     delete trigger_group;
   }
 }
@@ -49,17 +61,18 @@ FaultManager::~FaultManager() {
 translate_location
 Purpose:(Translates a string into a Location.)
 *******************************************************************************/
-FaultManager::Location FaultManager::translate_location( const char* str) {
-  if (strcmp(str, "INIT") == 0) {
-    return Location::Initialize;
-  } else if (strcmp(str, "UPSTREAM") == 0) {
-    return Location::Upstream;
-  } else if (strcmp(str, "INTERMEDIATE_1") == 0) {
-    return Location::Intermediate_1;
-  } else if (strcmp(str, "INTERMEDIATE_2") == 0) {
-    return Location::Intermediate_2;
-  } else if (strcmp(str, "DOWNSTREAM") == 0) {
-    return Location::Downstream;
+FaultManager::Location FaultManager::translate_location(const std::string& str) {
+  static const std::unordered_map<std::string, Location> location_map {
+    {"INIT", Location::Initialize},
+    {"UPSTREAM", Location::Upstream},
+    {"INTERMEDIATE_1", Location::Intermediate_1},
+    {"INTERMEDIATE_2", Location::Intermediate_2},
+    {"DOWNSTREAM", Location::Downstream}
+  };
+
+  const auto location = location_map.find(str);
+  if (location != location_map.end()) {
+    return location->second;
   } else {
     return Location::INVALID;
   }
@@ -75,16 +88,16 @@ void FaultManager::initialize() {
     return;
   }
   parse();
-  for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto fault : faults[ii]) {
+  for (const auto & ii : faults) {
+    for (auto* fault : ii) {
       fault->initialize(); // Initialize fault
     }
   }
   // Go back and put in all the requested param changes.
-  for (auto& it : set_trigger_value_cache) {
-    set_trigger_value(it.first, it.second);
+  for (const auto& [trigger_name, value] : set_trigger_value_cache) {
+    set_trigger_value(trigger_name, value);
   }
-  for (auto& it : set_fault_param_cache) {
+  for (const auto& it : set_fault_param_cache) {
     set_fault_param(it.fault_name, it.param_name, it.value);
   }
 }
@@ -96,13 +109,13 @@ Purpose:(Injects faults.)
 *******************************************************************************/
 void FaultManager::update( const Location& location) {
   if (enabled && global_enabled) {
-    unsigned char location_index = static_cast<unsigned char>(location);
+    const auto location_index = static_cast<unsigned char>(location);
     if (location_index >= Location_count) {
       CMLMessage::fail(__FILE__, __LINE__,
         "Fault Management Error\n",
         "Invalid location passed to FaultManager::update.\n");
     } else {
-      for (auto fault : faults[location_index]) {
+      for (auto* fault : faults[location_index]) {
         fault->update();
       }
     }
@@ -115,12 +128,12 @@ get_fault
 Purpose:(Looks up a fault by name. If no fault with that name is found, returns
          nullptr.)
 *******************************************************************************/
-Fault* FaultManager::get_fault( std::string name) {
-  for (unsigned int ii = 0; ii < Location_count; ii++) {
-    for (auto fault : faults[ii]) {
-      if (name.compare(fault->name) == 0) {
-        return fault;
-      }
+Fault* FaultManager::get_fault( const std::string& name) {
+  for (auto & fault_list : faults) {
+    const auto fault = std::find_if(fault_list.begin(), fault_list.end(),
+      [&name](const Fault* fault_) {return name == fault_->name;});
+    if (fault != fault_list.end()) {
+      return *fault;
     }
   }
 
@@ -133,11 +146,11 @@ get_trigger
 Purpose:(Looks up a trigger by name. If no trigger with that name is found,
          returns nullptr.)
 *******************************************************************************/
-TriggerBase* FaultManager::get_trigger( std::string name) {
-  for (auto trigger : triggers) {
-    if (name.compare(trigger->name) == 0) {
-      return trigger;
-    }
+TriggerBase* FaultManager::get_trigger( const std::string& name) {
+  const auto trigger = std::find_if(triggers.begin(), triggers.end(),
+    [&name](const TriggerBase* trigger_) {return name == trigger_->name;});
+  if (trigger != triggers.end()) {
+    return *trigger;
   }
 
   return nullptr;
@@ -149,8 +162,8 @@ set_fault_enabled
 Purpose:(Enables or disables a fault.)
 *******************************************************************************/
 bool FaultManager::set_fault_enabled(
-  std::string fault_name,
-  bool        enable_flag)
+  const std::string& fault_name,
+  bool enable_flag)
 {
   if (parsed) {
     Fault* fault = get_fault(fault_name);
@@ -171,8 +184,7 @@ bool FaultManager::set_fault_enabled(
   }
   // if not parsed, store it away for later.
   else {
-    set_enable_for_fault_cache.push_back(
-      std::pair<std::string, bool>(fault_name, enable_flag));
+    set_enable_for_fault_cache.emplace_back(fault_name, enable_flag);
   }
   return true;
 }
@@ -184,9 +196,9 @@ Purpose:(Enables or disables a trigger for a specific fault. Triggers that are
          shared by multiple faults are disabled on a fault-by-fault basis.)
 *******************************************************************************/
 bool FaultManager::set_fault_trigger_enabled(
-  std::string fault_name,
-  std::string trigger_name,
-  bool        enable_flag)
+  const std::string& fault_name,
+  const std::string& trigger_name,
+  bool enable_flag)
 {
   if (parsed) {
     Fault* fault = get_fault(fault_name);
@@ -198,9 +210,13 @@ bool FaultManager::set_fault_trigger_enabled(
       return false;
     } else {
       bool trigger_found = false;
-      for (auto tg : fault->trigger_groups) {
-        trigger_found = tg->set_trigger_enable(trigger_name, enable_flag) ||
-          trigger_found;
+      for (auto* tg : fault->trigger_groups) {
+        // Operate on all trigger groups in case multiple groups have the same
+        // trigger name.
+        if (tg->set_trigger_enable(trigger_name, enable_flag)) {
+          // cppcheck-suppress useStlAlgorithm
+          trigger_found = true;
+        }
       }
 
       if (!trigger_found) {
@@ -226,10 +242,10 @@ Purpose:(Sets the value of a fault parameter. What these parameters can be
          depends on the type of fault.)
 *******************************************************************************/
 bool FaultManager::set_fault_param(
-  std::string fault_name,
-  std::string param_name,
-  double      value,
-  bool        modify_nominal_with_rate)
+  const std::string& fault_name,
+  const std::string& param_name,
+  double value,
+  bool modify_nominal_with_rate)
 {
   if (parsed) {
     Fault* fault = get_fault(fault_name);
@@ -258,8 +274,8 @@ set_trigger_value
 Purpose:(Sets a trigger value.)
 *******************************************************************************/
 bool FaultManager::set_trigger_value(
-  std::string trigger_name,
-  double      value)
+  const std::string& trigger_name,
+  double value)
 {
   if (parsed) {
     TriggerBase* trigger = get_trigger(trigger_name);
@@ -273,8 +289,7 @@ bool FaultManager::set_trigger_value(
 
     trigger->set_value(value);
   } else {
-    set_trigger_value_cache.push_back(
-      std::pair<std::string, double>(trigger_name, value));
+    set_trigger_value_cache.emplace_back(trigger_name, value);
   }
   return true;
 }
@@ -283,7 +298,7 @@ bool FaultManager::set_trigger_value(
 unset_trigger_count
 Purpose:(Removes the trigger-count-limit for the specified trigger.)
 *******************************************************************************/
-void FaultManager::unset_trigger_count( std::string trigger_name) {
+void FaultManager::unset_trigger_count( const std::string& trigger_name) {
   if (parsed) {
     TriggerBase* trigger = get_trigger(trigger_name);
 
@@ -300,14 +315,14 @@ void FaultManager::parse() {
 
   xmlDocPtr doc = xmlParseFile(fault_file.c_str());
 
-  if (!doc) {
+  if (doc == nullptr) {
     CMLMessage::fail(__FILE__, __LINE__,
       "Fault Management Error\n",
       "\nThe following fault file could not be opened.\n", fault_file, "");
     // Terminated
   }
   xmlNodePtr root = doc->children;
-  if (!root) {
+  if (root == nullptr) {
     // Unreachable code, manually tested.
     CMLMessage::fail(__FILE__, __LINE__,
       "Fault Management Error\n",
@@ -336,10 +351,10 @@ void FaultManager::parse() {
 
   // Go back and re-send the externally set variables that were cached off
   // prior to parsing.
-  for (auto& it : set_enable_for_fault_cache) {
-    set_fault_enabled(it.first, it.second);
+  for (const auto& [fault_name, enable_flag] : set_enable_for_fault_cache) {
+    set_fault_enabled(fault_name, enable_flag);
   }
-  for (auto& it : set_trigger_enable_for_fault_cache) {
+  for (const auto& it : set_trigger_enable_for_fault_cache) {
     set_fault_trigger_enabled(it.fault_name, it.trigger_name, it.enable_flag);
   }
   // Note -- the fault_param_cache and trigger_value_cache pending assignments
@@ -383,7 +398,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
       "This Fault will be ignored.\n");
     return;
   }
-  Location location = translate_location(loc_string);
+  const Location location = translate_location(loc_string);
   if (location == Location::INVALID) {
     CMLMessage::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
@@ -664,7 +679,7 @@ template<typename T> Fault* FaultManager::make_fault_bias(
     return nullptr;
   }
 
-  FaultBias<T>* new_fault = new FaultBias<T>(variable);
+  auto* new_fault = new FaultBias<T>(variable);
   new_fault->bias = ConvertString::convert<T>(bias_string);
 
   return new_fault;
@@ -702,7 +717,7 @@ template<typename T> Fault* FaultManager::make_fault_scale(
     return nullptr;
   }
 
-  FaultScale<T>* new_fault = new FaultScale<T>(variable);
+  auto* new_fault = new FaultScale<T>(variable);
   new_fault->scale_factor = ConvertString::convert<T>(scale_string);
 
   return new_fault;
@@ -774,9 +789,9 @@ template<typename T> Fault* FaultManager::make_fault_overwrite(
     random_value = false;
   }
 
-  FaultOverwrite<T>* new_fault = new FaultOverwrite<T>(variable);
+  auto* new_fault = new FaultOverwrite<T>(variable);
 
-  new_fault->faulted_value = (random_value) ?
+  new_fault->faulted_value = random_value ?
                              generate_random_value<T>() :
                              ConvertString::convert<T>(overwrite_string);
 
@@ -1190,7 +1205,7 @@ template<typename T> Fault* FaultManager::make_fault_white_noise(
     }
   }
 
-  FaultWhiteNoise<T>* new_fault = new FaultWhiteNoise<T>(variable);
+  auto* new_fault = new FaultWhiteNoise<T>(variable);
   // Parse the RandValue node and populate rand. If this fails, delete the
   // fault and return nullptr.
   if (!parse_rand_number(new_fault->noise, rand_node, fault_name)) {
@@ -1237,7 +1252,7 @@ template<typename T> Fault* FaultManager::make_fault_random_walk(
     }
   }
 
-  FaultRandomWalk<T>* new_fault = new FaultRandomWalk<T>(variable);
+  auto* new_fault = new FaultRandomWalk<T>(variable);
   // Parse the RandValue node and populate rand. If this fails, delete the
   // fault and return nullptr.
   if (!parse_rand_number(new_fault->rand, rand_node, fault_name)) {
@@ -1264,7 +1279,7 @@ TriggerGroup* FaultManager::parse_trigger_group(
   xmlNodePtr  trigger_group_node,
   const char* fault_name)
 {
-  TriggerGroup* new_trigger_group = new TriggerGroup;
+  auto* new_trigger_group = new TriggerGroup;
 
   bool empty_group = true;
   for (xmlNodePtr trigger_node = trigger_group_node->children;
@@ -1373,7 +1388,7 @@ TriggerBase* FaultManager::parse_trigger(
       "Trigger has not been added to the set of triggers.\n");
     return nullptr;
   }
-  TriggerBase::Operator_enm comp = TriggerBase::translate_operator(comp_str);
+  const TriggerBase::Operator_enm comp = TriggerBase::translate_operator(comp_str);
   if (comp == TriggerBase::Invalid) {
     CMLMessage::error(__FILE__, __LINE__,
       "XML input error parsing trigger comparator\n",
@@ -1438,7 +1453,7 @@ TriggerBase* FaultManager::parse_trigger(
       // Note -- not using make_trigger because we do not want to be trying to
       // convert a string via the ConvertString algorithm which is used in
       // make_trigger.
-      Trigger<std::string>* string_trigger =
+      auto* string_trigger =
         new Trigger<std::string>(*static_cast<std::string*>(Symbol->address));
       if (value != nullptr) {
         string_trigger->set_value(value);
@@ -1490,7 +1505,7 @@ TriggerBase* FaultManager::parse_trigger(
     {
       // Note -- not using make_trigger because we do not want to be trying to
       // convert a set boolean periods etc. as used in make_trigger.
-      Trigger<bool>* bool_trigger =
+      auto* bool_trigger =
         new Trigger<bool>(*static_cast<bool*>(Symbol->address));
       bool_trigger->set_value(ConvertString::convert<bool>(value));
       new_trigger = bool_trigger;
@@ -1560,7 +1575,7 @@ template<typename T> TriggerBase* FaultManager::make_trigger(
   //*****************************************************
   //Make the new trigger                                *
   //*****************************************************
-  Trigger<T>* new_trigger = new Trigger<T>(variable);
+  auto* new_trigger = new Trigger<T>(variable);
   if (value != nullptr) {
     new_trigger->value = ConvertString::convert<T>(value);
   }
@@ -1697,7 +1712,7 @@ bool FaultManager::parse_rand_number(
       if (min_str != nullptr &&
           max_str != nullptr &&
           temp_str != nullptr ) {
-        double mean_val = std::strtod(temp_str, nullptr);
+        const double mean_val = std::strtod(temp_str, nullptr);
         rng.lower_limit = mean_val - std::abs(std::strtod(min_str, nullptr));
         rng.upper_limit = mean_val + std::strtod(max_str, nullptr);
       }

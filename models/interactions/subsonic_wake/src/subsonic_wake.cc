@@ -18,7 +18,11 @@ NOTES:
 **********************************************************************/
 
 #include "../include/subsonic_wake.hh"
+#include "../include/wake_bodies.hh"
+#include "../include/wake_effects.hh"
+#include "../include/wake_params.hh"
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 
@@ -29,10 +33,10 @@ SubsonicWake::SubsonicWake(
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
      WakeFollowingBody  & objectB_in,
-     WakeEffectsOut & effects_in)
+     WakeEffectsOut & effects_output)
   :
   params(params_in),
-  effects(effects_in),
+  effects(effects_output),
   objectA(objectA_in),
   objectB_ref(objectB_in),
   prf_model( objectA_in,
@@ -40,11 +44,7 @@ SubsonicWake::SubsonicWake(
              params_in),
   rev_flow(  objectA_in,
              objectB_in,
-             params_in.rev_flow),
-  use_prf_model(false),
-  use_rev_flow(false),
-  subd_prf(false),
-  subd_revflow(false)
+             params_in.rev_flow)
 {
   subscribe_name = "SubsonicWake:";
 }
@@ -55,12 +55,12 @@ SubsonicWakeNoForce::SubsonicWakeNoForce(
      const double * bodyB_inertial_vel_in,
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
-     WakeEffectsOut   & effects_in)
+     WakeEffectsOut   & effects_output)
   :
   SubsonicWake(params_in,
                objectA_in,
                objectB,
-               effects_in),
+               effects_output),
   objectB( bodyB_area_in,
            bodyB_inertial_pos_in,
            bodyB_inertial_vel_in,
@@ -76,12 +76,12 @@ SubsonicWakeWithForce::SubsonicWakeWithForce(
      const double (& bodyB_T_struc_to_body_in)[3][3],
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
-     WakeEffectsOut & effects_in)
+     WakeEffectsOut & effects_output)
   :
   SubsonicWake(params_in,
                objectA_in,
                objectB,
-               effects_in),
+               effects_output),
   objectB( bodyB_area_in,
            bodyB_inertial_pos_in,
            bodyB_inertial_vel_in,
@@ -125,7 +125,7 @@ SubsonicWake::update()
   // populate the standard outputs and leave.
   // Similarly, if there is no force to be computed, and the vehicle is too
   // slow, the same rule applies.
-  bool fast_enough = (objectA.freestream_mach >=  params.mach_off);
+  const bool fast_enough = (objectA.freestream_mach >=  params.mach_off);
   if (params.generate_distance_override ||
        ( fast_enough && (rev_flow.is_active() || prf_model.is_active()))) {
     objectB_ref.compute_relative_state();

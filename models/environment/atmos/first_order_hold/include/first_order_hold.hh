@@ -19,25 +19,27 @@ PROGRAMMERS:
 
 class FirstOrderHold {
  public:
-  bool FO_hold;            /* (--) First order holding will be performed */
+  bool FO_hold{false};            /* (--) First order holding will be performed */
 
  protected:
-  bool FO_init;            /* (--) First order holding is initialized */
-  double reference_time;   /* (s)  time at most recent atmos exec call */
-  double previous_hold_time;    /* (s)  time the hold was last called */
-  double slope_valid_time; /* (s)  time interval for which the slope is valid */
+  bool FO_init{false}; /* (--) First order holding is initialized */
+  double reference_time{0.0}; /* (s)  time at most recent atmos exec call */
+  double previous_hold_time{0.0}; /* (s)  time the hold was last called */
+  double slope_valid_time{0.0}; /* (s)  time interval for which the slope is valid */
 
-  double reference_wind[3]; /* (m/s) 
+  double reference_wind[3]{}; /* (m/s) 
         wind velocity at most recent atmos exec call. */
-  double slope_reference_wind[3]; /* (m/s) 
+  double slope_reference_wind[3]{}; /* (m/s) 
         wind velocity at atmos_exec call previous to reference_wind. */
-  double slope[3];                /* (m/s2)  time gradient of wind */
+  double slope[3]{}; /* (m/s2)  time gradient of wind */
 
  public:
   FirstOrderHold( const double & dyn_time_in,
-                  const ExtendedPlanetaryDerivedState & planet_state,
+                  const ExtendedPlanetaryDerivedState & planet_state_in,
                   AtmosExecOutput & atmos_output_in);
   virtual ~FirstOrderHold() = default;
+  FirstOrderHold (const FirstOrderHold&) = delete;
+  FirstOrderHold & operator = (const FirstOrderHold&) = delete;
 
   void activate();
   void deactivate();
@@ -48,8 +50,5 @@ class FirstOrderHold {
   const ExtendedPlanetaryDerivedState & planet_state; /* (--)
            reference to vehicle's planet-state.*/
   AtmosExecOutput & out;   /* (--) reference to atmos-exec output struct */
- private:
-  FirstOrderHold (const FirstOrderHold&);
-  FirstOrderHold & operator = (const FirstOrderHold&);
 };
 #endif

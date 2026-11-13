@@ -6,6 +6,9 @@
     environment responses, or for applying a current vehicle state to another
     body with a different mass.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
     (Requires two sets of data inputs, one for the mass and one for the state.
      These data may come from a single vehicle, or from 2 different vehicles,
@@ -17,7 +20,10 @@ ASSUMPTIONS AND LIMITATIONS:
      ((Gary Turner) (OSR) (March 2015) (Modification to make more generic))
     )
 *******************************************************************************/
-#include <cstring> // NULL
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/dynamics/dyn_manager/include/dynamics_integration_group.hh"
+#include "jeod/models/dynamics/mass/include/mass.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
@@ -28,14 +34,14 @@ ASSUMPTIONS AND LIMITATIONS:
 Constructor
 *****************************************************************************/
 DummyVehicleLauncher::DummyVehicleLauncher(
-                jeod::DynBody& body_in,
+                jeod::DynBody& this_body,
                 const jeod::DynBody& real_body_in)
     :
     copy_rot_state(false),
     active(false),
     add_to_integ_group_at_launch(false),
     integ_group_specified(false),
-    body(body_in),
+    body(this_body),
     real_mass_body(real_body_in.mass),
     real_state_body(real_body_in),
     intended_integ_body(nullptr),
@@ -46,7 +52,7 @@ DummyVehicleLauncher::DummyVehicleLauncher(
 }
 /****************************************************************************/
 DummyVehicleLauncher::DummyVehicleLauncher(
-                jeod::DynBody& body_in,
+                jeod::DynBody& this_body,
                 const jeod::MassBody& real_mass_body_in,
                 const jeod::DynBody& real_state_body_in)
     :
@@ -54,7 +60,7 @@ DummyVehicleLauncher::DummyVehicleLauncher(
     active(false),
     add_to_integ_group_at_launch(false),
     integ_group_specified(false),
-    body(body_in),
+    body(this_body),
     real_mass_body(real_mass_body_in),
     real_state_body(real_state_body_in),
     intended_integ_body(nullptr),

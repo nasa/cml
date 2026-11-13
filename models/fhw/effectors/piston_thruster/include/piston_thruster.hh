@@ -34,17 +34,10 @@ Purpose:(Initialization of Piston Thruster outputs)
 class PistonThrusterOutputs
 {
 public:
-  double force[3];  /* (N)   Piston Thruster Force in struc frame. */
-  double moment[3]; /* (N*m) Piston Thruster Moment in struc frame. */
+  double force[3] {};  /* (N)   Piston Thruster Force in struc frame. */
+  double moment[3] {}; /* (N*m) Piston Thruster Moment in struc frame. */
 
-  PistonThrusterOutputs(){
-    force[0] = 0.0;
-    force[1] = 0.0;
-    force[2] = 0.0;
-    moment[0] = 0.0;
-    moment[1] = 0.0;
-    moment[2] = 0.0;
-  }
+  PistonThrusterOutputs() = default;
 };
 
 
@@ -55,11 +48,13 @@ Purpose:(Parameters that describe the piston thruster.)
 class PistonThrusterParams
 {
 public:
-  double position[3]; /* (m)   Position of Piston Thruster in local Frame. */
-  double elevation;   /* (rad) Elevation Angle of Piston Thruster:
-                               measured from y-z plane towards x-axis. */
-  double azimuth;     /* (rad) Azimuth Angle of Piston Thruster: in y-z plane,
-                               measured from negative-z-axis towards y-axis. */
+  double position[3]{};  /* (m)   Position of Piston Thruster in local Frame. */
+  double elevation{0.0}; /* (rad) Elevation Angle of Piston Thruster:
+                                  measured from y-z plane towards x-axis. */
+  double azimuth{0.0};   /* (rad) Azimuth Angle of Piston Thruster: in y-z plane,
+                                  measured from negative-z-axis towards y-axis. */
+
+  PistonThrusterParams() = default;
 };
 
 
@@ -75,33 +70,31 @@ public:
   PistonThrusterParams  param; /* (--) Position, elevation, and azimuth. */
   PistonThrusterOutputs out;   /* (--) Force and moment outputs, per thruster.*/
 
-  double T_local_to_struc[3][3]; /* (--)
+  double T_local_to_struc[3][3]{{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}}; /* (--)
        Transformation matrix, from local frame to structural frame. */
-  double position_local_frame_in_struc_frame[3];/* (m)
+  double position_local_frame_in_struc_frame[3]{};/* (m)
        Position of the origin of the local frame in the structural frame. */
 
 protected:
-  double trig_variable; /* (--) Intermediate value for a trig calculation. */
-  double direction[3];  /* (--)
+  double trig_variable{}; /* (--) Intermediate value for a trig calculation. */
+  double direction[3]{};  /* (--)
        3-vector direction, computed from azimuth and elevation. */
-  double moment_arm[3]; /* (m)
+  double moment_arm[3]{}; /* (m)
        Moment-arm to point of application relative to CoM. */
-  double position_struc[3];   /* (m) Point of application in structural frame.*/
-  const double * position_CoM;/* (m)
+  double position_struc[3]{};   /* (m) Point of application in structural frame.*/
+  const double * position_CoM{nullptr};/* (m)
        Pointer to the sim-side variable representing the center-of-mass
        of the vehicle. */
 
 public:
-  PistonThrusterVehicleSide();
+  PistonThrusterVehicleSide() = default;
   virtual ~PistonThrusterVehicleSide() = default;
+  PistonThrusterVehicleSide(const PistonThrusterVehicleSide& rhs) = delete;
+  PistonThrusterVehicleSide & operator = (const PistonThrusterVehicleSide& rhs) = delete;
 
   void loadCoM( const double * pos_CoM);
   void initialize();
   void update( double force_mag);
-
-private:
-  PistonThrusterVehicleSide(const PistonThrusterVehicleSide& rhs);
-  PistonThrusterVehicleSide & operator = (const PistonThrusterVehicleSide& rhs);
 };
 
 
@@ -117,9 +110,11 @@ public:
   PistonThrusterVehicleSide sideB; /* (--) The other of the two vehicles. */
 
   PistonThruster();
-  PistonThruster( const double *,
-                  const double *);
+  PistonThruster( const double * pos_CoM_A,
+                  const double * pos_CoM_B);
   ~PistonThruster() override = default;
+  PistonThruster(const PistonThruster& rhs) = delete;
+  PistonThruster & operator = (const PistonThruster& rhs) = delete;
 
   void loadCoM( const double * pos_CoM_A,
                 const double * pos_CoM_B);
@@ -130,9 +125,5 @@ protected:
   bool construction_complete; /* (--) Flag specifying whether the sides' CoM
                                       positions have been loaded. */
   void deactivate() override;
-
-private:
-  PistonThruster(const PistonThruster& rhs);
-  PistonThruster & operator = (const PistonThruster& rhs);
 };
 #endif

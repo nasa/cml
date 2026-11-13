@@ -4,6 +4,9 @@ Purpose:
   (An updated message-handler system; largely based on defaults developed
   in JEOD.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
   (((Gary Turner) (OSR) (March 2023) (ANTARES) (Initial version))
    ((Nino Tarantino) (CACI) (April 2026) (CML) (Refactor for unit testing and mocking))
@@ -23,16 +26,16 @@ namespace {
 
 CMLMessage::PublishLevel publish_level = CMLMessage::Warning;
 
-void terminate(const std::string & file,
-               int                 line,
-               const std::string & msg)
+void terminate([[maybe_unused]] const std::string & file,
+               [[maybe_unused]] int                 line,
+               [[maybe_unused]] const std::string & msg)
 {
   #ifdef TRICK_VER
   exec_terminate_with_return(1, file.c_str(), line, msg.c_str());
-  #endif
-  // Unreachable in a Trick environment because sim has terminated.
+  #else
   std::cout << ColorString::red(
-     "No instruction provided for terminating on a critical fault") << "\n";
+     "In a Trick environment the simulation would have terminated at this point") << '\n';
+  #endif
 }
 
 }
@@ -54,7 +57,9 @@ void publish(PublishLevel msg_level,
              int         line,
              const std::string & text)
 {
-  if (msg_level > publish_level) return;
+  if (msg_level > publish_level) {
+    return;
+  }
 
   // Colorize the string:
   std::string preamble;

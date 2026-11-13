@@ -9,10 +9,11 @@
 #ifndef CML_TABLE_TYPE_DEFS_HH
 #define CML_TABLE_TYPE_DEFS_HH
 
+#include <cstddef>
 #include<vector>
 
-  typedef std::vector<size_t>    SizeVec;
-  typedef std::vector<double>    DoubleVec;
-  typedef std::vector<double*>   DoublePtrVec;
+  using SizeVec = std::vector<size_t>;
+  using DoubleVec = std::vector<double>;
+  using DoublePtrVec = std::vector<double*>;
 
 #endif

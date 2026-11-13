@@ -9,11 +9,18 @@
       cubic polynomial so also depends on the values of the data for the
       base-variable.)
 
+ LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (May 2023) (Antares) (initial version))
    )
 *******************************************************************************/
+#include "../include/generic_single_input_table.hh"
 #include "../include/single_input_table_var_with_deriv.hh"
+#include "../include/table_type_defs.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
 
 
 /*****************************************************************************
@@ -25,14 +32,6 @@ Notes: - Class inherits constructors from GenericSingleInputTable
          constructor; these new constructors provide construction values
          to the derivs member.
 *****************************************************************************/
-SingleInputTableVarDeriv::SingleInputTableVarDeriv()
-  :
-  GenericSingleInputTable(),
-  derivs(),
-  omit_derivative_vals(false),
-  use_linear_interpolation(false)
-{}
-/****************************************************************************/
 SingleInputTableVarDeriv::SingleInputTableVarDeriv(
     double *dependent_variables,
     double *dependent_variables_derivs,
@@ -41,10 +40,7 @@ SingleInputTableVarDeriv::SingleInputTableVarDeriv(
   GenericSingleInputTable( dependent_variables,
                            num_vars),
   derivs( dependent_variables_derivs,
-          num_vars),
-  omit_derivative_vals(false),
-  use_linear_interpolation(false)
-
+          num_vars)
 {}
 /****************************************************************************/
 SingleInputTableVarDeriv::SingleInputTableVarDeriv(
@@ -52,10 +48,7 @@ SingleInputTableVarDeriv::SingleInputTableVarDeriv(
     double & dependent_variable_derivs)
   :
   GenericSingleInputTable( dependent_variable),
-  derivs(dependent_variable_derivs),
-  omit_derivative_vals(false),
-  use_linear_interpolation(false)
-
+  derivs(dependent_variable_derivs)
 {}
 
 /****************************************************************************/
@@ -64,9 +57,7 @@ SingleInputTableVarDeriv::SingleInputTableVarDeriv(
     const DoublePtrVec & dependent_variables_deriv)
   :
   GenericSingleInputTable( dependent_variables),
-  derivs( dependent_variables_deriv),
-  omit_derivative_vals(false),
-  use_linear_interpolation(false)
+  derivs( dependent_variables_deriv)
 {}
 
 
@@ -168,11 +159,11 @@ SingleInputTableVarDeriv::generate_output()
   //         dependent variable is taken with respect to
   //         the independent variable, so the bin-size of the
   //         independent variable is the step size dx in y' = dy / dx
-  double f = independents[0].first->fraction;
-  double mf = 1-f;
+  const double f = independents[0].first->fraction;
+  const double mf = 1-f;
   size_t data_ix = data_point_index[0];
-  double bin_size = independents[0].first->data[data_ix+1] -
-                    independents[0].first->data[data_ix];
+  const double bin_size = independents[0].first->data[data_ix+1] -
+                          independents[0].first->data[data_ix];
 
   // for the base variable, weights are:
   // (1-f)^2 (1+2f)         applied to x_0

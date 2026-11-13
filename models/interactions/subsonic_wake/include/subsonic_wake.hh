@@ -52,22 +52,24 @@ class SubsonicWake : public SubscriptionBase
   WakePrfModel        prf_model; /* (--) the pressure-recovery-fraction model.*/
   WakeReverseFlow     rev_flow;  /* (--) the reverse-flow model. */
 
-  bool use_prf_model; /* (--) whether to use the PRF model. */
-  bool use_rev_flow;  /* (--) whether to use the rev-flow model. */
+  bool use_prf_model{false}; /* (--) whether to use the PRF model. */
+  bool use_rev_flow{false};  /* (--) whether to use the rev-flow model. */
 
  protected:
   // These flags are used to determine whether to unsubscribe from the effect
   // models. The use_prf_model and use_rev_flow flags cannot be used for this
   // purpose because they are public and could be changed anytime.
-  bool subd_prf;  /* (--) Whether subscribed to the PRF model */
-  bool subd_revflow; /* (--) Whether subscribed to the rev-flow model*/
+  bool subd_prf{false};  /* (--) Whether subscribed to the PRF model */
+  bool subd_revflow{false}; /* (--) Whether subscribed to the rev-flow model*/
 
  public:
   SubsonicWake(const WakeParams & params_in,
                WakeGeneratingBody & objectA_in,
                WakeFollowingBody  & objectB_in,
-               WakeEffectsOut & effects_output_in);
+               WakeEffectsOut & effects_output);
   ~SubsonicWake() override = default;
+  SubsonicWake (const SubsonicWake& rhs) = delete;
+  SubsonicWake& operator = (const SubsonicWake& rhs) = delete;
 
   void initialize() override;
   void update();
@@ -76,10 +78,6 @@ class SubsonicWake : public SubscriptionBase
   void activate() override;
   void deactivate() override;
   virtual void query_objB()=0; // just to make it abstract
-
- private: // and undefined:
-  SubsonicWake (const SubsonicWake& rhs);
-  void operator = (const SubsonicWake& rhs);
 };
 
 /*****************************************************************************
@@ -97,14 +95,12 @@ class SubsonicWakeNoForce : public SubsonicWake
      const double * bodyB_inertial_vel_in,
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
-     WakeEffectsOut & effects_in);
+     WakeEffectsOut & effects_output);
+  SubsonicWakeNoForce (const SubsonicWakeNoForce& rhs) = delete;
+  SubsonicWakeNoForce& operator = (const SubsonicWakeNoForce& rhs) = delete;
 
  protected:
   void query_objB() override{} // just to make it instantiable
-
- private: // and undefined:
-  SubsonicWakeNoForce (const SubsonicWakeNoForce& rhs);
-  void operator = (const SubsonicWakeNoForce& rhs);
 };
 
 /*****************************************************************************
@@ -124,16 +120,14 @@ class SubsonicWakeWithForce : public SubsonicWake
      const double (& bodyB_T_struc_to_body_in)[3][3],
      const WakeParams & params_in,
      WakeGeneratingBody & objectA_in,
-     WakeEffectsOut & effects_in);
+     WakeEffectsOut & effects_output);
+  SubsonicWakeWithForce (const SubsonicWakeWithForce& rhs) = delete;
+  SubsonicWakeWithForce& operator = (const SubsonicWakeWithForce& rhs) = delete;
 
   void deactivate() override;
 
  protected:
   void query_objB() override{} // just to make it instantiable
-
- private: // and undefined:
-  SubsonicWakeWithForce (const SubsonicWakeWithForce& rhs);
-  void operator = (const SubsonicWakeWithForce& rhs);
 };
 
 #endif

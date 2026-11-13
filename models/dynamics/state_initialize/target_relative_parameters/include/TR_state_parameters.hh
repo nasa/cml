@@ -23,6 +23,7 @@ NOTES:
 #ifndef CML_TR_STATE_PARAMETERS_HH
 #define CML_TR_STATE_PARAMETERS_HH
 
+#include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameter_set.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 
@@ -44,13 +45,13 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
  friend class CorrelatedStateDispersion;
  public:
   /* Input parameters */
-  double  target_point_altitude;   /* (m)   Target geodetic altitude      */
-  double  target_point_latitude;   /* (rad)   Target geodetic latitude      */
-  double  target_point_longitude;  /* (rad)   Target longitude              */
+  double  target_point_altitude{0.0};   /* (m)   Target geodetic altitude      */
+  double  target_point_latitude{0.0};   /* (rad)   Target geodetic latitude      */
+  double  target_point_longitude{0.0};  /* (rad)   Target longitude              */
 
-  double  tolerance;  /* (m)
+  double  tolerance{1e-08};  /* (m)
     Convergence tolerance for geodetic altitude iteration */
-  int     iter_limit; /* (--)
+  int     iter_limit{1000}; /* (--)
     Maximum iteration limit for geodetic altitude iteration */
 
  protected:
@@ -61,10 +62,15 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
 
  public:
   /* Constructor */
-  TargetRelative_StateParameter();
+  TargetRelative_StateParameter() = default;
 
   /* Destructor */
   ~TargetRelative_StateParameter() override = default;
+
+  /* Deleted copy constructor and copy assignment operator */
+  TargetRelative_StateParameter (const TargetRelative_StateParameter&) = delete;
+  TargetRelative_StateParameter & operator = (
+                                 const TargetRelative_StateParameter&) = delete;
 
   /* Public Methods */
   void initialize( double ref_geodetic_altitude,
@@ -86,13 +92,13 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
 
   void compute_position_from_params( InputPosAngle input_theta_type);
   void compute_position_from_params( double        geodetic_altitude,
-                                     double        theta_Rng,
-                                     double        theta_Rot_or_Cross,
+                                     double        theta_Rng_,
+                                     double        theta_Rot_OR_phi,
                                      InputPosAngle input_theta_type,
                                      double        (&R_PCPF)[3]);
   void compute_position_from_params_SWIG( double        geodetic_altitude,
-                                          double        theta_Rng,
-                                          double        theta_Rot_or_Cross,
+                                          double        theta_Rng_,
+                                          double        theta_Rot_OR_phi,
                                           InputPosAngle input_theta_type,
                                           double        R_PCPF[3]);
 
@@ -102,10 +108,5 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
   bool initialize_check_config();
   void initialize_internal(const double R_Ref_PCPF[3]);
   double compute_position_magnitude();
-
-  // copy-constructor and operator= made empty to prevent misuse.
-  TargetRelative_StateParameter (const TargetRelative_StateParameter&);
-  TargetRelative_StateParameter & operator = (
-                                 const TargetRelative_StateParameter&);
 };
 #endif

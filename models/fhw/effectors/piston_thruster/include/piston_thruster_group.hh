@@ -41,8 +41,10 @@ PROGRAMMERS:
 #ifndef CML_PISTON_THRUSTER_GROUP_HH
 #define CML_PISTON_THRUSTER_GROUP_HH
 
-#include <list> // For std::list
+#include <list>
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
+#include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
 #include "piston_thruster.hh"
@@ -57,23 +59,22 @@ class PistonThrusterGroupInputs
 {
 public:
   // For use with ReferenceDeltaV option
-  double duration;  /* (s)   Duration of the thruster stroke. */
-  double deltaV;    /* (m/s) Delta-V imparted to test mass. */
-  double load_mass; /* (kg)  Mass used to generate delta-v in test. */
+  double duration{0.0};  /* (s)   Duration of the thruster stroke. */
+  double deltaV{0.0};    /* (m/s) Delta-V imparted to test mass. */
+  double load_mass{0.0}; /* (kg)  Mass used to generate delta-v in test. */
 
   // For use with TableLookup
-  double load_profile;                   /* (--) Thruster load percentage. */
+  double load_profile{1.0};                   /* (--) Thruster load percentage. */
   TableLookupSet           table_set;    /* (--) The table-manager. */
   TableIndependentVariable load_pct_table; /* (--)
                Lookup data for thruster load percentage */
   TableIndependentVariable time_table;   /* (s)   Thruster stroke time data. */
   GenericMultiInputTable   thrust_table; /* (lbf) Thruster load data. */
 
-  PistonThrusterGroupInputs( const double & time,
-                             double & thrust);
-private:
-  PistonThrusterGroupInputs(const PistonThrusterGroupInputs& rhs);
-  PistonThrusterGroupInputs & operator = (const PistonThrusterGroupInputs& rhs);
+  PistonThrusterGroupInputs( const double & time_in,
+                             double & thrust_in);
+  PistonThrusterGroupInputs(const PistonThrusterGroupInputs& rhs) = delete;
+  PistonThrusterGroupInputs & operator = (const PistonThrusterGroupInputs& rhs) = delete;
 };
 
 
@@ -93,14 +94,10 @@ public:
     SeparationTableLookup = 3  /* Not implemented. */
   };
 
-  ForceMethod mode; /* (--) Thruster Force Mode. */
-  double max_time;  /* (s)  Max time period the thruster can operate over. */
+  ForceMethod mode{ReferenceDeltaV}; /* (--) Thruster Force Mode. */
+  double max_time{0.0};  /* (s)  Max time period the thruster can operate over. */
 
-  PistonThrusterGroupParams()
-    :
-    mode(ReferenceDeltaV),
-    max_time(0.0)
-  {}
+  PistonThrusterGroupParams() = default;
 };
 
 
@@ -121,16 +118,18 @@ public:
 protected:
   std::list<PistonThruster *> piston_thrusters; /* (--)
         Set of piston thrusters that will fire simultaneously. */
-  double force_mag;    /* (N)
+  double force_mag{0.0};    /* (N)
         Magnitude of each of the individual thruster forces. Populated from
         either the table-lookup or the computation of
         reference-impulse / reference-time. */
-  double start_time;   /* (s) Time at which firing starts. */
+  double start_time{0.0};   /* (s) Time at which firing starts. */
   const double & time; /* (s) Simulation clock. */
 
 public:
   explicit PistonThrusterGroup( const double & time_in);
   ~PistonThrusterGroup() override = default;
+  PistonThrusterGroup(const PistonThrusterGroup& rhs) = delete;
+  PistonThrusterGroup & operator = (const PistonThrusterGroup& rhs) = delete;
 
   void initialize() override;
   virtual void update();
@@ -140,9 +139,5 @@ public:
 protected:
   void activate() override;
   void deactivate() override;
-
-private:
-  PistonThrusterGroup(const PistonThrusterGroup& rhs);
-  PistonThrusterGroup & operator = (const PistonThrusterGroup& rhs);
 };
 #endif

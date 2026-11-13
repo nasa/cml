@@ -2,6 +2,9 @@
 PURPOSE:
    (Interface for the GRAM atmosphere.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (May 2016) (ANTARES) 
@@ -9,30 +12,34 @@ PROGRAMMERS:
    )
 ********************************************************************************/
 
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <cstring>
 
+#include "../include/atmosphere_exec_atmos_base.hh"
 #include "../include/atmosphere_exec_gram.hh"
+#include "../include/atmosphere_exec_out.hh"
 
 // TODO: move these GramInterface lines to their own file?
 GramInterface::GramInterface()
 :
   out(),
-  input(),
   cache()
 {
 }
+
 void GramInterface::initialize( // Return: -- Void
- double ,
- double ,
- double ,
- double ,
- int    ,
- int    ,
- int    ,
- int    ,
- int    ,
- double )
+  [[maybe_unused]] double TSIM,
+  [[maybe_unused]] double HGRAM,
+  [[maybe_unused]] double THGRAM,
+  [[maybe_unused]] double PHGRAM,
+  [[maybe_unused]] int    GR_YEAR,
+  [[maybe_unused]] int    GR_MONTH,
+  [[maybe_unused]] int    GR_DAY,
+  [[maybe_unused]] int    GR_HOUR,
+  [[maybe_unused]] int    GR_MIN,
+  [[maybe_unused]] double GR_SEC)
 {
   CMLMessage::fail( __FILE__,__LINE__,
     "Missing derived GramInterface\n",
@@ -40,14 +47,13 @@ void GramInterface::initialize( // Return: -- Void
     "does not exist for this AtmosphereExec_Gram instance. This base class method\n"
     "is used only as a non-functional stub to support the Atmosphere Exec architecture\n"
     "when GRAM is not available.\n");
-    return;
 }
 
 void GramInterface::update(
-   double ,
-   double ,
-   double ,
-   double )
+  [[maybe_unused]] double TSIM,
+  [[maybe_unused]] double H_GC,
+  [[maybe_unused]] double ALONG,
+  [[maybe_unused]] double GCLAT)
 {
   CMLMessage::fail( __FILE__,__LINE__,
     "Missing derived GramInterface\n",
@@ -55,7 +61,6 @@ void GramInterface::update(
     "does not exist for this AtmosphereExec_Gram instance. This base class method\n"
     "is used only as a non-functional stub to support the Atmosphere Exec architecture\n"
     "when GRAM is not available.\n");
-    return;
 }
 
 /*****************************************************************************
@@ -71,16 +76,7 @@ AtmosphereExec_Gram::AtmosphereExec_Gram(
   AtmosphereExec_AtmosWindsBase(master_output, planet_state_in),
   gram_i( gram_in),
   master_gram( master_gram_10_in),
-  dyn_time( dyn_time_in),
-  activate_gram_from_master(true),
-  initialized(false),
-  year_init(0),
-  month_init(0),
-  day_init(0),
-  hour_init(0),
-  min_init(0),
-  sec_init(0.0),
-  last_update_time(-1.0e30) // A very large negative number
+  dyn_time( dyn_time_in)
 {
   name = "GRAM";
   if (master_gram == nullptr || master_gram == &gram_i) {
@@ -95,7 +91,9 @@ Purpose:(Activates the model, creates necessary subscriptions)
 void
 AtmosphereExec_Gram::activate()
 {
-  if (active) return;
+  if (active) {
+    return;
+  }
 
   // GRAM operation utilizes Fortran common blocks, which are assumed
   // populated with values appropriate to the current vehicle config.  It may

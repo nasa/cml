@@ -2,6 +2,9 @@
 PURPOSE:
    (Provide a motor model including an interpolated thrust table.)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS:
    ((If using the PropConsumptionMburn consumption type, assumes nothing else
      is drawing mass from the same body or string.))
@@ -10,8 +13,18 @@ PROGRAMMERS:
    ((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
 *******************************************************************************/
 
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include <algorithm>
+#include <cstddef>
+#include <vector>
 
+#include "../include/rocket_motor_basic.hh"
 #include "../include/rocket_motor_table_thrust.hh"
 
 /*****************************************************************************
@@ -24,7 +37,7 @@ RocketMotor_TableThrust::RocketMotor_TableThrust(
     DynamicMassBodyPropertiesInterface & mass_properties,
     const double                       & time,
     const double                       * veh_cm_in,
-    bool                                 use_mass_string_in)
+    const bool                           use_mass_string_in)
   :
   RocketMotor_Basic( mass_group_in,
                      mass_body,
@@ -33,20 +46,11 @@ RocketMotor_TableThrust::RocketMotor_TableThrust(
                      time,
                      veh_cm_in,
                      use_mass_string_in),
-  thrust_fraction(0.0),
-  thrust_max(0.0),
-  table_set(),
   thrust_table(thrust_magnitude),
   isp_table(isp),
   mdot_table(mass_flow_rate),
   mburn_table(mburn),
-  table_time(elapsed_time),
-  isp(0.0),
-  mburn(0.0),
-  delta_mass(0.0),
-  elapsed_time(0.0),
-  consumption_type(Undefined),
-  prop_mass_init(0.0)
+  table_time(elapsed_time)
 {
   table_set.add_independent_variable(table_time);
   table_set.add_table(thrust_table);
@@ -119,34 +123,38 @@ Purpose:(Pushes the specified data onto the thrust_table and scans the data
 *****************************************************************************/
 void
 RocketMotor_TableThrust::load_thrust_data(
-    double * data,
-    size_t   num_elements)
+    const double * data,
+    size_t num_elements)
 {
-  thrust_max = 0.0; // redundant, constructor assigns = 0, just a reminder.
-  for (size_t ii = 0; ii < num_elements; ++ii) {
-    if (data[ii] > thrust_max) {
-      thrust_max = data[ii];
-    }
+  if (num_elements == 0) {
+    CMLMessage::fail(
+      __FILE__, __LINE__, "Attempted to load invalid thrust data. "
+      "Cannot load thrust data of size 0!");
+    return;
   }
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( num_elements);
+  if (data == nullptr) {
+    CMLMessage::fail(
+      __FILE__, __LINE__, "Attempted to load invalid thrust data. "
+      "Thrust data pointer cannot be null!");
+    return;
+  }
+  thrust_max = *std::max_element(data, data + num_elements);
+  const std::vector<size_t> sizes {1, num_elements};
   thrust_table.load_data( data, sizes);
 }
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_thrust_data(
-    std::vector<double> & data)
+    const std::vector<double> & data)
 {
-  thrust_max = 0.0; // redundant, constructor assigns = 0, just a reminder.
-  for (size_t ii = 0; ii < data.size(); ++ii) {
-    if (data[ii] > thrust_max) {
-      thrust_max = data[ii];
-    }
+  if (data.empty()) {
+    CMLMessage::fail(
+      __FILE__, __LINE__, "Attempted to load invalid thrust data. "
+      "Cannot load thrust data of size 0!");
+    return;
   }
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( data.size());
+  thrust_max = *std::max_element(data.begin(), data.end());
+  const std::vector<size_t> sizes {1, data.size()};
   thrust_table.load_data( data, sizes);
 }
 
@@ -157,12 +165,10 @@ Purpose:(These methods provide interface-consistency between the various
 *****************************************************************************/
 void
 RocketMotor_TableThrust::load_isp_data(
-    double * data,
-    size_t   num_elements)
+    const double * data,
+    size_t num_elements)
 {
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( num_elements);
+  const std::vector<size_t> sizes {1, num_elements};
   // non-terminal NULL check in load_data, but returns false if NULL
   if (isp_table.load_data( data, sizes)) {
     // check minimum value.
@@ -182,11 +188,9 @@ RocketMotor_TableThrust::load_isp_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_isp_data(
-    std::vector<double> & data)
+    const std::vector<double> & data)
 {
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( data.size());
+  const std::vector<size_t> sizes {1, data.size()};
   if (isp_table.load_data( data, sizes)) {
     // check minimum value.
     double min_value = data[0];
@@ -205,54 +209,46 @@ RocketMotor_TableThrust::load_isp_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_mdot_data(
-    double * data,
-    size_t   num_elements)
+    const double * data,
+    size_t num_elements)
 {
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( num_elements);
+  const std::vector<size_t> sizes {1, num_elements};
   mdot_table.load_data( data, sizes);// non-terminal NULL check in load_data
 }
 
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_mdot_data(
-    std::vector<double> & data)
+    const std::vector<double> & data)
 {
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( data.size());
+  const std::vector<size_t> sizes {1, data.size()};
   mdot_table.load_data( data, sizes);
 }
 
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_mburn_data(
-    double * data,
-    size_t   num_elements)
+    const double * data,
+    size_t num_elements)
 {
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( num_elements);
+  const std::vector<size_t> sizes {1, num_elements};
   mburn_table.load_data( data, sizes);// non-terminal NULL check in load_data
 }
 
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_mburn_data(
-    std::vector<double> & data)
+    const std::vector<double> & data)
 {
-  std::vector<size_t> sizes;
-  sizes.push_back(1);
-  sizes.push_back( data.size());
+  const std::vector<size_t> sizes {1, data.size()};
   mburn_table.load_data( data, sizes);
 }
 
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_time_data(
-    double * data,
-    size_t   num_elements)
+    const double * data,
+    size_t num_elements)
 {
   table_time.load_data( data, num_elements);
   // non-terminal NULL check in load_data
@@ -261,7 +257,7 @@ RocketMotor_TableThrust::load_time_data(
 /****************************************************************************/
 void
 RocketMotor_TableThrust::load_time_data(
-    std::vector<double> & data)
+    const std::vector<double> & data)
 {
   table_time.load_data( data);
 }
@@ -470,8 +466,13 @@ RocketMotor_TableThrust::compute_flow_rate_and_isp()
                                                   0.0);
     break;
   case PropConsumptionMburn:
-    // mburn from table, in kg
-    delta_mass =  dyn_mass_properties.consumable_mass -
+    /* mass-change since last calculation is the difference between
+           (mass known to be remaining) and
+           (mass that should be remaining after mburn has been consumed)
+       mburn is from table, in kg
+    */
+    delta_mass =  (dyn_mass_properties.consumable_mass -
+                   dyn_mass_properties.mass_consumed_step) -
                   (prop_mass_init - mburn);
     if (MathUtils::is_near_equal( delta_mass, 0.0)) {
       mass_flow_rate = 0.0;

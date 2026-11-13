@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Definition of the bodies in the wake profile.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   ( ((Gary Turner) (OSR) (Mar 2016) (Antares)
                 (New adaptation to meet Antares coding standards))
@@ -8,9 +11,9 @@ PROGRAMMERS:
                   warning of float-point number equality comparison)))
 **********************************************************************/
 
-#include <cmath> // sqrt
-#include <cstring> // NULL
-#include <limits> // numeric_limits<double>::min
+#include <cmath>
+#include <limits>
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "../include/wake_bodies.hh"
@@ -39,9 +42,7 @@ WakeGeneratingBody::WakeGeneratingBody(
    freestream_vel( freestream_vel_in),
    freestream_mach( freestream_mach_in),
    freestream_density( freestream_density_in),
-   total_alpha(total_alpha_in),
-   freestream_vel_mag(0.0),
-   unitvec_freestream{0.0, 0.0, 0.0}
+   total_alpha(total_alpha_in)
 {
   if (inertial_pos == nullptr || inertial_vel == nullptr || freestream_vel == nullptr ||
       CoM_wrt_struc_in == nullptr) {
@@ -59,19 +60,10 @@ WakeFollowingBody::WakeFollowingBody(
       const double * grid_origin_in)
    :
    grid_origin(grid_origin_in),
-   generate_force(false),
    area(area_in),
    inertial_pos( inertial_pos_in),
    inertial_vel( inertial_vel_in),
-   objectA( objectA_in),
-   separation_distance(0.0),
-   trailing_distance(0.0),
-   radial_distance(0.0),
-   axial_sep_vel(0.0),
-   pos_wrt_grid_in_bodyA{ 0.0, 0.0, 0.0},
-   pos_wrt_objectA_bodyA{ 0.0, 0.0, 0.0},
-   pos_wrt_objectA_inrtl{ 0.0, 0.0, 0.0}
-
+   objectA( objectA_in)
 {
   if (inertial_pos == nullptr || inertial_vel == nullptr || grid_origin == nullptr) {
     CMLMessage::fail(
@@ -109,9 +101,7 @@ WakeFollowingBodyWithForce::WakeFollowingBodyWithForce(
                       objectA_in,
                       grid_origin_in),
    T_inrtl_to_body( T_inrtl_to_body_in),
-   T_struc_to_body( T_struc_to_body_in),
-   Cd(0.0),
-   force{0.0, 0.0, 0.0}
+   T_struc_to_body( T_struc_to_body_in)
 {}
 
 /*****************************************************************************

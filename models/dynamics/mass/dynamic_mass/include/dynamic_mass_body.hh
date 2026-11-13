@@ -58,47 +58,43 @@ class DynamicMassBody : public jeod::MassBody
      Typical mass-properties as initialized with MassBodyInit prior to
      adjusting mass properties within the sim. */
 
-  double residual_mass; /* (kg)
+  double residual_mass{-1.0}; /* (kg)
       The residual mass for this propellant tank.
       Total core mass = this value + dynamic_properties.consumable_mass*/
-  bool interp_enabled; /* (--)
+  bool interp_enabled{false}; /* (--)
       Whether to interpolate the position and inertia from data lookup
       tables, or simply use scaling.*/
  private:
-  bool dyn_mass_initialized; /* (--)
+  bool dyn_mass_initialized{false}; /* (--)
       Flag to inidicate whether method initialize_dyn_mass() has been called. */
-  double CM_offset[3];   /* (m)
+  double CM_offset[3]{};   /* (m)
         The CM offset from parent frame to CM table Frame */
 
-  double dry_mass_revert__consumable_mass; /* (kg)
+  double dry_mass_revert__consumable_mass{0.0}; /* (kg)
       The consumable-mass of record at the time the model was transitioned
       to check on dry-mass data.*/
-  bool dry_mass_revert__available; /* (--)
+  bool dry_mass_revert__available{false}; /* (--)
       Internal flag indicating that dry-mass-revert data is available.*/
 
  public:
   DynamicMassBody ();
+  DynamicMassBody (const DynamicMassBody&) = delete;
+  DynamicMassBody& operator = (const DynamicMassBody&) = delete;
   void initialize_dyn_mass(); // Run AFTER MassBodyInit.
   bool update_mass();
   void set_initial_position( bool overwrite_nominal,
-                             const double pos[3]);
+                             const double initial_position[3]);
   void set_CM_offset(const double offset[3]);
-  bool get_dyn_mass_initialized() {return dyn_mass_initialized;}
+  bool get_dyn_mass_initialized() const {return dyn_mass_initialized;}
 
   void initiate_dry_mass_config();
   void revert_dry_mass_config();
 
-  bool get_dry_mass_revert__available() {return dry_mass_revert__available;}
+  bool get_dry_mass_revert__available() const {return dry_mass_revert__available;}
 
  protected:
   void update_mass_internal();
   bool interpolate_properties();
-
- private:
-  // To disable the copy/assignment operations
-  DynamicMassBody (const DynamicMassBody&);
-  DynamicMassBody& operator = (const DynamicMassBody&);
-
 };
 
 

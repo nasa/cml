@@ -21,16 +21,17 @@
 // This sim object models Earth using the GGM02C gravity model, and RNP model.
 //=============================================================================
 
+##include "jeod/models/dynamics/dyn_manager/include/dyn_manager.hh"
 ##include "jeod/models/environment/planet/include/planet.hh"
 ##include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
 ##include "cml/models/environment/atmos/atmosphere_models/DRWP_atmos/include/lookup_winds.hh"
 ##include "cml/models/environment/atmos/atmosphere_models/std_atmos_1976/include/std_atmos_1976.hh"
 ##include "cml/models/environment/atmos/atmosphere_models/simple_lookup_wind/include/simple_lookup_wind.hh"
+##include "cml/models/utilities/cml_message/include/cml_message.hh" // For use in input files
 
 // Headers for default data
 ##include "jeod/models/environment/planet/data/include/earth.hh"
 ##include "jeod/models/environment/gravity/data/include/earth_GGM02C.hh"
-//##include "cml/models/aero/data/include/AERO_DISP__aero_disperse__default_data.hh";
 
 class EarthSimObject : public Trick::SimObject {
 

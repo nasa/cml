@@ -1,14 +1,15 @@
 #ifndef CML_CML_MESSAGE_MOCK_HH
 #define CML_CML_MESSAGE_MOCK_HH
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
 #include <string>
+
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 namespace CMLMessage {
 
 // Mock interface to CML's CMLMessage class
-class Mock final {
+class Mock {
 public:
     Mock();
     ~Mock();

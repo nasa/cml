@@ -1,0 +1,91 @@
+/*
+ * CML-specific overrides to the default Sphinx theme.
+ */
+
+/* Make sure that links don't change color after clicking on them */
+div.wy-nav-content a:visited {
+        color: #2980B9;
+}
+div.version a:visited, div.version a{
+    color: white;
+}
+
+/* Make inline C++ expressions render in monospace */
+.rst-content code.cpp-expr,
+.rst-content .sig-inline.cpp-expr,
+.rst-content code.cpp-expr *,
+.rst-content .sig-inline.cpp-expr * {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas,
+                 "Liberation Mono", "Courier New", monospace !important;
+}
+
+/* Kill the horizontal scroll wrapper the RTD theme adds. */
+.wy-table-responsive {
+    overflow: visible !important;
+}
+
+/* Make tables fit the content width and lay out fixed. */
+.wy-table-responsive table {
+    width: 100% !important;
+    table-layout: fixed !important;
+}
+
+/* Allow cell contents to wrap (RTD sets white-space: normal on td
+   but nowrap on some elements; force wrapping + word breaking). */
+.wy-table-responsive table td,
+.wy-table-responsive table th {
+    white-space: normal !important;
+    word-wrap: break-word; /* legacy name */
+    overflow-wrap: break-word; /* modern name */
+    word-break: break-word;
+}
+
+/* Page title style */
+h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--pst-color-primary, #0b5394);
+    border-bottom: 4px solid var(--pst-color-primary, #0b5394);
+    padding-bottom: 0.3em;
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+/* Full-width under-bars beneath each heading, thinner as level increases */
+h1 {
+    border-bottom: 4px solid currentColor;
+    padding-bottom: 0.3em;
+    width: 100%;
+}
+h2 {
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 0.25em;
+    width: 100%;
+}
+h3 {
+    border-bottom: 1px solid var(--pst-color-border, #999);
+    padding-bottom: 0.2em;
+    width: 100%;
+}
+
+/* Section titles that became links (from .. contents targets)
+   should look like normal heading text, not blue underlined links. */
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+h1 a, h1 a *,
+h2 a, h2 a *,
+h3 a, h3 a *,
+h4 a, h4 a *,
+h5 a, h5 a *,
+h6 a, h6 a * {
+    color: inherit !important;
+    text-decoration: none !important;
+}

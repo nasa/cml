@@ -5,6 +5,9 @@ PURPOSE: (The RcsJetGroup provides a convenient mechanism for grouping
   had several instances of RCS_MODEL that needed instantiating; this object
   represents a very similar concept to RCS_MODEL.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation))
@@ -12,8 +15,11 @@ PROGRAMMERS:
 **********************************************************************/
 
 #include <algorithm>
-#include <cmath>  // abs
+#include <numeric>
+#include <vector>
 #include "../include/rcs_group.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 
 /*****************************************************************************
@@ -22,27 +28,8 @@ Constructor
 RcsJetGroup::RcsJetGroup(
   const unsigned int & num_prop_components_)
   :
-  consumption_epsilon (1.0e-12),
   num_prop_components (num_prop_components_),
-  blow_down (false),
-  propc_use_isp(false),
-  signal_delay_time(0.0),
-  on_dead_time(0.0),
-  off_dead_time(0.0),
-  build_up_time(0.0),
-  trail_off_time(0.0),
-  min_on_time(0.0),
-  min_off_time(0.0),
-  mixture_ratio (0.0),
-  isp_prop_comp_ratio(num_prop_components, 0.0),
-  bd_force_coef(),
-  bd_isp_coef(),
-  bd_pressure_limit(0.0),
-  buffer_flag(false),
-  buffer_on_size (0),
-  buffer_off_size(0),
-  delay_time_on(0.0),
-  delay_time_off(0.0)
+  isp_prop_comp_ratio(num_prop_components, 0.0)
 {}
 
 
@@ -59,9 +46,9 @@ RcsJetGroup::initialize(
   /* Set up command buffers and initialize delays */
   /************************************************/
   /* total on delay is sum of signal delay and valve reaction time (dead_time) */
-  double total_on_delay = std::max(0.0, signal_delay_time + on_dead_time);
+  const double total_on_delay = std::max(0.0, signal_delay_time + on_dead_time);
   /* total off delay is sum of signal delay and valve reaction time (dead_time) */
-  double total_off_delay = std::max(0.0, signal_delay_time + off_dead_time);
+  const double total_off_delay = std::max(0.0, signal_delay_time + off_dead_time);
 
   // Check to see if a buffer is needed:
   // if on or off delays are equal or greater than one time_step, then
@@ -71,8 +58,14 @@ RcsJetGroup::initialize(
 
   // buffer size is the number of full time-steps necessary before a command
   // will be seen
-  buffer_on_size  = static_cast<unsigned int>(total_on_delay  / time_step);
-  buffer_off_size = static_cast<unsigned int>(total_off_delay / time_step);
+  buffer_on_size  = static_cast<unsigned int>(
+                        MathUtils::divide_protected( total_on_delay,
+                                                     time_step,
+                                                     0.0, true));
+  buffer_off_size = static_cast<unsigned int>(
+                        MathUtils::divide_protected( total_off_delay,
+                                                     time_step,
+                                                     0.0, true));
 
   /* delay time = remainder of last time_step before jet is turned on or off */
   delay_time_on = total_on_delay - buffer_on_size * time_step;
@@ -83,13 +76,12 @@ RcsJetGroup::initialize(
   // usage.
   if (propc_use_isp) {
     if (num_prop_components > 1){ /* multi-propellant case */
-      double sum_comp_ratio_ = 0.0;
       // Add up the values of isp_prop_comp_ratio.  It should come to 1.0
-      for (std::vector<double>::iterator it = isp_prop_comp_ratio.begin();
-           it != isp_prop_comp_ratio.end();
-           ++it) {
-        sum_comp_ratio_ += (*it);
-      }
+      const double sum_comp_ratio_ = std::accumulate(
+        isp_prop_comp_ratio.begin(),
+        isp_prop_comp_ratio.end(),
+        0.0);
+
       // Protection against missing isp_prop_comp_ratio setting
       if( MathUtils::is_near_equal( sum_comp_ratio_, 0.0)){
         CMLMessage::fail(
@@ -106,11 +98,8 @@ RcsJetGroup::initialize(
         "It instead has value ", sum_comp_ratio_, "\n"
         "Normalizing the values to prevent incorrect propellant usage.\n");
 
-        for (std::vector<double>::iterator it=isp_prop_comp_ratio.begin();
-             it != isp_prop_comp_ratio.end();
-             ++it) {
-           (*it) /= sum_comp_ratio_;
-        }
+        std::for_each(isp_prop_comp_ratio.begin(), isp_prop_comp_ratio.end(),
+          [&sum_comp_ratio_](double& ratio){ratio /= sum_comp_ratio_;});
       }
       // Otherwise, the isp_prop_comp_ratio values are appropriately valued.
     }

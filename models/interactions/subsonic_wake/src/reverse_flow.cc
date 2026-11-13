@@ -19,8 +19,10 @@ NOTES:
      Body B - The object inside the wake
 **********************************************************************/
 
-#include <cmath> //sqrt
+#include <cmath>
+#include "../include/wake_bodies.hh"
 #include "../include/wake_effects.hh"
+#include "../include/wake_params.hh"
 
 /*****************************************************************************
 constructor
@@ -32,9 +34,7 @@ WakeReverseFlow::WakeReverseFlow(
    :
    WakeEffectsBase( objectA_in,
                     objectB_in,
-                    params_in),
-   Qrev(0.0),
-   Qrev_lookup() // uses offset_trail_dist, sets Qrev
+                    params_in)
 {}
 
 /*****************************************************************************

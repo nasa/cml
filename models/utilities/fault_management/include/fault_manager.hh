@@ -13,7 +13,8 @@ PROGRAMMERS:
 #define CML_FAULT_MANAGER_HH
 
 #include <list>
-#include "trick/MemoryManager.hh" // REF2, trick_MM
+#include <string>
+#include "trick/MemoryManager.hh"
 #include "fault.hh"
 #include "fault_bias.hh"
 #include "fault_scale.hh"
@@ -25,7 +26,7 @@ PROGRAMMERS:
 #include "trigger.hh"
 #include "rand_number.hh"
 
-#include "cml/models/utilities/xml_helper/include/xml_helper.hh" //XmlHelper
+#include "cml/models/utilities/xml_helper/include/xml_helper.hh"
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -39,7 +40,6 @@ Purpose:(Constructs and manages a set of faults defined in an XML file.)
 class FaultManager {
 
   public :
-#ifndef SWIG // SWIG doesn't like enum classes
     // Note - this enumeration is cast to an unsigned char in update() and
     // used as an index. If it is edited:
     //   - Location_count must be updated.
@@ -55,37 +55,33 @@ class FaultManager {
     };
     static const unsigned int Location_count = 5; /* (--)
       The number of possible Locations. INVALID doesn't count. */
-    static Location translate_location(const char* str);
-    static Location translate_location(const std::string str) {
-      return translate_location(str.c_str());
-    }
-#endif
+    static Location translate_location(const std::string& str);
 
     ////    Operations    ////
 
-    FaultManager();
+    FaultManager() = default;
     virtual ~FaultManager();
+    FaultManager(const FaultManager&) = delete;
+    FaultManager& operator = (const FaultManager&) = delete;
     void initialize();
 
-#ifndef SWIG
     void update(const Location& location);
-#endif
 
-    Fault* get_fault(std::string name);
-    TriggerBase* get_trigger(std::string name);
+    Fault* get_fault(const std::string& name);
+    TriggerBase* get_trigger(const std::string& name);
 
-    bool set_fault_enabled(std::string fault_name, bool enable_flag);
-    bool set_fault_trigger_enabled( std::string fault_name,
-                                    std::string trigger_name,
+    bool set_fault_enabled(const std::string& fault_name, bool enable_flag);
+    bool set_fault_trigger_enabled( const std::string& fault_name,
+                                    const std::string& trigger_name,
                                     bool enable_flag);
 
-    bool set_fault_param( std::string fault_name,
-                          std::string param_name,
+    bool set_fault_param( const std::string& fault_name,
+                          const std::string& param_name,
                           double value,
                           bool modify_nominal_with_rate = false);
 
-    bool set_trigger_value(std::string trigger_name, double value);
-    void unset_trigger_count( std::string trigger_name);
+    bool set_trigger_value(const std::string& trigger_name, double value);
+    void unset_trigger_count( const std::string& trigger_name);
 
   protected:
     void parse();
@@ -121,13 +117,17 @@ class FaultManager {
     // the next few functions are virtual to support inserting an interface to
     // another fault-management service (such as fault_arch) that may use
     // other tags for variable names.
-    virtual xmlNodePtr check_rand_in_params(xmlNodePtr) {return nullptr;}
+    virtual xmlNodePtr check_rand_in_params(xmlNodePtr unused)
+    {
+      (void)unused;
+      return nullptr;
+    }
 
-    virtual bool parse_non_periodic_param( FaultFunctionParameter& var_param,
+    virtual bool parse_non_periodic_param( FaultFunctionParameter& params,
                                            xmlNodePtr function_node,
                                            const char* fault_name);
 
-    virtual bool parse_periodic_param( FaultFunctionParameter& var_param,
+    virtual bool parse_periodic_param( FaultFunctionParameter& param,
                                        xmlNodePtr function_node,
                                        const char* param_name,
                                        xmlNodePtr ind_var_node,
@@ -163,18 +163,18 @@ class FaultManager {
   public:
     std::string fault_file; /* (--) Name of an XML file that defines faults. */
 
-    bool enabled; /* (--)
+    bool enabled{false}; /* (--)
       If true, this object will parse the XML file and construct faults
       accordingly. If false (default), this object will do nothing. */
     static bool global_enabled; /* (--)
       Set this to false to disable all FaultManagers. */
 
   private:
-    bool parsed; /* (--)
+    bool parsed{false}; /* (--)
       If true, fault_file is the name of a valid XML fault file and that file has
       been parsed. */
 
-    std::list<Fault*> faults[Location_count]; /* (--)
+    std::list<Fault*> faults[Location_count]{}; /* (--)
       Pointers to the individual faults, stored as pointers to the base class to
       support polymorphic storage. The faults themselves are allocated when the
       XML file is parsed. */
@@ -211,10 +211,6 @@ class FaultManager {
 
     std::list<std::pair<std::string, double> > set_trigger_value_cache; /* (--)
       Cache for set_trigger_value commands sent before the XML file is parsed. */
-
-    // Make the class non-copyable
-    FaultManager(const FaultManager&);
-    FaultManager& operator = (const FaultManager&);
 };
 template<> bool FaultManager::generate_random_value<bool>();
 

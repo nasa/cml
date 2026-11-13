@@ -59,8 +59,12 @@ static inline double interp(const double x_vals[],   //the data set of x-axis
                             const double &x          //the x value of interpolated point
                            )
 {
-  if (x <= x_vals[0]) return y_vals[0];
-  if (x >= x_vals[tbl_len-1]) return y_vals[tbl_len-1];
+  if (x <= x_vals[0]) {
+    return y_vals[0];
+  }
+  if (x >= x_vals[tbl_len-1]) {
+    return y_vals[tbl_len-1];
+  }
  
   // The x value is within the x breakpoints.
   const double *ptr = std::lower_bound(x_vals, x_vals+tbl_len, x);
@@ -78,8 +82,12 @@ static inline double log_interp(const double x_vals[],  //the data set of x-axis
                                 const double &x         //the x value of interpolated point
                                 )
 {
-  if (x <= x_vals[0]) return y_vals[0];
-  if (x >= x_vals[tbl_len-1]) return y_vals[tbl_len-1];
+  if (x <= x_vals[0]) {
+    return y_vals[0];
+  }
+  if (x >= x_vals[tbl_len-1]) {
+    return y_vals[tbl_len-1];
+  }
 
   // The x value is within the x breakpoints.
   const double *ptr = std::lower_bound(x_vals, x_vals+tbl_len, x);

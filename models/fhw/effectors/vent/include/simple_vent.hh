@@ -14,9 +14,8 @@ PROGRAMMERS:
 #ifndef CML_SIMPLE_VENT_HH
 #define CML_SIMPLE_VENT_HH
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh"
-#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include <string>
+#include "jeod/models/utils/math/include/vector3.hh"
 
 class SimpleVent {
   friend class VentSet;
@@ -25,77 +24,77 @@ class SimpleVent {
   const double& dyn_time; /* (s) Dynamic time for timed vents */
 
  public:
-  double location[3]; /* (m)
+  double location[3]{}; /* (m)
      Position of vent in dyn_body's structural frame */
-  bool active; /* (--)
+  bool active{true}; /* (--)
       Flag controlling whether the vent is able to be switched on.
       Default: true */
-  bool indefinite_duration; /* (--)
+  bool indefinite_duration{false}; /* (--)
       Flag to control when vent closes.  If true, vent is opened with no
       specified duration and will remain open until stop_venting() called.
       Default: false. */
-  bool quiet_message_start_inactive; /* (--)
+  bool quiet_message_start_inactive{false}; /* (--)
       Flag used to identify whether the print an error message if a vent
       receives an instruction to start venting while inactive.
       This combination could be an error, or the system may deliberately use
       the active flag as a determination of whether to start venting.*/
 
  protected:
-  bool initialized; /* (--)
+  bool initialized{false}; /* (--)
       Internal flag indicating that the initialize method has completed
       successfully */
-  bool apply_as_impulse; /* (--)
+  bool apply_as_impulse{false}; /* (--)
       Flag indicating that the vent is to operate with an impulsive behavior;
       when the vent is switched on it will provide a single instantaneous
       impulse only.  Default: false. */
-  bool venting; /* (--)
+  bool venting{false}; /* (--)
       Internal flag indicating that this vent is actively producing a force.*/
-  bool indefinite_duration_warning_sent; /* (--)
+  bool indefinite_duration_warning_sent{false}; /* (--)
       Flag to control the sending of a warning message about opening a vent
       with an unspecified duration.  This warning message is sent only once.
       Default: false. */
-  bool allocated_in_set; /* (--)
+  bool allocated_in_set{false}; /* (--)
       Internal flag indicating that this vent was created by the vent-set,
       and needs destroying by the same.  Set only by the VentSet class.
       Default: false*/
-  double force_mag;    /* (N)    Magnitude of force from vent */
-  double impulse_mag;  /* (N*s)  Magnitude of impulse from vent */
-  double duration;     /* (s)    Duration of vent */
+  double force_mag{0.0};     /* (N)    Magnitude of force from vent */
+  double impulse_mag{0.0};   /* (N*s)  Magnitude of impulse from vent */
+  double duration{0.0};      /* (s)    Duration of vent */
 
-  double start_time;   /* (s)   Recorded time when current venting started.*/
-  double stop_time;    /* (s)   When to stop venting. */
-  double direction[3]; /* (--)
+  double start_time{0.0};    /* (s)   Recorded time when current venting started.*/
+  double stop_time{0.0};     /* (s)   When to stop venting. */
+  double direction[3]{};     /* (--)
       Force direction unit vector in structural frame of VentSet::dyn_body */
-  double force[3];         /* (N)
+  double force[3]{};         /* (N)
       Nominal force to be applied, expressed in the structural frame.*/
-  double impulse[3];       /* (N*s)
+  double impulse[3]{};       /* (N*s)
       Nominal impulse expressed in the structural frame.*/
-  bool direction_set; /* (--)
+  bool direction_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the direction
       in which its force/impulse is applied.*/
-  bool force_set; /* (--)
+  bool force_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the force
       to be applied.*/
-  bool force_mag_set; /* (--)
+  bool force_mag_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the force
       magnitude to be applied.*/
-  bool impulse_set; /* (--)
+  bool impulse_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the impulse
       to be applied.*/
-  bool impulse_mag_set; /* (--)
+  bool impulse_mag_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the impulse
       magnitude to be applied.*/
-  bool duration_set; /* (--)
+  bool duration_set{false}; /* (--)
       Internal flag indicating that this vent has knowledge of the duration
       over which the force will be applied.*/
-  double user_set_impulse; /* (N*s)
+  double user_set_impulse{0.0}; /* (N*s)
       User-set impulse magnitude, used for warning when switching to
       impulse mode.i
       Note -- in later edits, values that are automatically generated at or
       before initialization are also assigned to this variable, making it a
       bit of a misnomer; it's purpose remains -- it is an initial
       value used for warning when switching to impulse mode.*/
-  double user_set_duration; /* (s)
+  double user_set_duration{0.0}; /* (s)
       User-set duration, used for warning when switching to dynamic mode.
       Note -- in later edits, values that are automatically generated at or
       before initialization are also assigned to this variable, making it a
@@ -103,39 +102,41 @@ class SimpleVent {
       value used for warning when switching to dynamic mode.*/
 
  public:
-  std::string name; /* (--) name of the vent */
+  std::string name{"no-name"}; /* (--) name of the vent */
 
   explicit SimpleVent(const double& dyn_time_in);
   virtual ~SimpleVent() = default;
+  SimpleVent(const SimpleVent&) = delete;
+  SimpleVent& operator= (const SimpleVent&) = delete;
 
   virtual void use_impulse_mode(bool mode = true);
   void use_dynamic_mode(bool mode = true) { use_impulse_mode(!mode); }
 
-  void set_direction(double direction[3]);
-  void set_duration(double duration, bool hold_force = true);
+  void set_direction(double direction_in[3]);
+  void set_duration(double duration_, bool hold_force = true);
   virtual void set_force_magnitude(double force_, bool hold_impulse = false);
   virtual void set_force_vector(double force_[3], bool hold_impulse = false);
-  virtual void set_impulse_magnitude(double impulse, bool hold_force = true);
-  virtual void set_impulse_vector( double impulse[3],
+  virtual void set_impulse_magnitude(double impulse_, bool hold_force = true);
+  virtual void set_impulse_vector( double impulse_[3],
                                    bool hold_force_mag = true);
 
-  double get_force_magnitude() { return force_mag; }
-  double get_impulse_magnitude() { return impulse_mag; }
-  double get_duration() { return duration; }
-  double get_start_time() { return start_time; }
-  double get_stop_time() { return stop_time; }
+  double get_force_magnitude() const { return force_mag; }
+  double get_impulse_magnitude() const { return impulse_mag; }
+  double get_duration() const { return duration; }
+  double get_start_time() const { return start_time; }
+  double get_stop_time() const { return stop_time; }
   void get_direction(double direction_[3])
           { jeod::Vector3::copy(direction, direction_); }
   void get_force(double force_[3]) { jeod::Vector3::copy(force, force_); }
   void get_impulse(double impulse_[3]) { jeod::Vector3::copy(impulse, impulse_); }
-  bool direction_is_set() { return direction_set; }
-  bool force_is_set() { return force_set; }
-  bool force_magnitude_is_set() { return force_mag_set; }
-  bool impulse_is_set() { return impulse_set; }
-  bool impulse_magnitude_is_set() { return impulse_mag_set; }
-  bool duration_is_set() { return duration_set; }
-  bool is_venting() { return venting; }
-  bool is_impulse_mode() { return apply_as_impulse; }
+  bool direction_is_set() const { return direction_set; }
+  bool force_is_set() const { return force_set; }
+  bool force_magnitude_is_set() const { return force_mag_set; }
+  bool impulse_is_set() const { return impulse_set; }
+  bool impulse_magnitude_is_set() const { return impulse_mag_set; }
+  bool duration_is_set() const { return duration_set; }
+  bool is_venting() const { return venting; }
+  bool is_impulse_mode() const { return apply_as_impulse; }
 
   void unset_direction() {direction_set = false;
                           force_set = false;
@@ -152,12 +153,12 @@ class SimpleVent {
                          indefinite_duration = true;}
 
   // Allow access to Vent methods through SimpleVent pointers
-  virtual void set_flowrate( double, bool = true);
-  virtual void set_exhaust_speed( double, bool = true);
-  virtual double get_flowrate();
-  virtual double get_exhaust_speed();
-  virtual bool flowrate_is_set() { return false; }
-  virtual bool exhaust_speed_is_set() { return false; }
+  virtual void set_flowrate( double val, bool hold_exhaust_speed = true);
+  virtual void set_exhaust_speed( double val, bool hold_flowrate = true);
+  virtual double get_flowrate() const;
+  virtual double get_exhaust_speed() const;
+  virtual bool flowrate_is_set() const { return false; }
+  virtual bool exhaust_speed_is_set() const { return false; }
 
  protected:
   // Methods restricted so as to limit access to VentSet only
@@ -179,9 +180,5 @@ class SimpleVent {
   void set_impulse_internal();
   void set_duration_internal();
   virtual void set_force_internal();
-
- private:
-  SimpleVent(const SimpleVent&);
-  SimpleVent& operator= (const SimpleVent&);
 };
 #endif

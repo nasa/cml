@@ -3,14 +3,27 @@ PURPOSE: (Class for manipulating sets of vents and aggregating forces and
           moments)
 
 LIBRARY DEPENDENCY:
-  (../src/vent_set.cc)
+  ((../src/vent_set.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc))
 
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
  ************************************************************************/
 
-#include "jeod/models/utils/quaternion/include/quat.hh" // jeod::Quaternion
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/quaternion/include/quat.hh"
+#include <algorithm>
+#include <cstddef>
+#include <vector>
 
+#include "../include/simple_vent.hh"
+#include "../include/vent.hh"
 #include "../include/vent_set.hh"
 
 /*****************************************************************************
@@ -25,9 +38,6 @@ VentSet::VentSet(jeod::DynBody & dyn_body_,
   start_vents_at_activation(false),
   force{0.0, 0.0, 0.0},
   torque{0.0, 0.0, 0.0},
-  vents(),
-  dynamic_vents(),
-  impulsive_vents(),
   ang_impulse{0.0, 0.0, 0.0}
 {
   subscribe_name = "VentSet:";
@@ -43,7 +53,7 @@ VentSet::VentSet(
   VentSet(dyn_body_, time)
 {
   for (size_t ii = 0; ii < num_vents; ++ii) {
-    SimpleVent * new_vent = new SimpleVent(time);
+    auto * new_vent = new SimpleVent(time);
     new_vent->allocated_in_set = true;
     vents.push_back( new_vent);
   }
@@ -67,24 +77,22 @@ VentSet::VentSet(
 }
 /************************************************************************
 (d) All vents off their own individual tank
-    Note -- this is dangerous because it assumes the array is the same size
-            as num_vents.
 ************************************************************************/
 VentSet::VentSet(
-        size_t  num_vents,
         jeod::DynBody& dyn_body_,
         const double & time,
-        DynamicMassBody * tank_array)
+        const std::vector<DynamicMassBody *>& tank_array)
   :
   VentSet(dyn_body_, time)
 {
-  if (tank_array == nullptr) {
-    CMLMessage::fail(
-    __FILE__,__LINE__,"Construction error.\n",
-    "Tank array has not been specified.\n");
-  }
-  for (size_t ii = 0; ii < num_vents; ++ii) {
-    Vent * new_vent = new Vent( time, tank_array[ii]);
+  for (auto* tank : tank_array) {
+    if (tank == nullptr) {
+      CMLMessage::fail(
+         __FILE__,__LINE__,"Construction error.\n",
+         "Tank pointer cannot be null.\n");
+      return;
+    }
+    Vent * new_vent = new Vent( time, *tank);
     new_vent->allocated_in_set = true;
     vents.push_back( new_vent);
   }
@@ -235,7 +243,7 @@ Purpose:(Returns a pointer to the vent at specified index)
 *****************************************************************************/
 SimpleVent * VentSet::get_vent(size_t ii)
 {
-  size_t vents_size = vents.size();
+  const size_t vents_size = vents.size();
   if (ii < vents_size) {
     return vents[ii];
   }
@@ -311,7 +319,7 @@ void VentSet::apply_impulse()
   else {
     // Identify the root body; cast away the const-ness because we have to
     // apply the impulse to the root body.
-    jeod::DynBody * root_body = const_cast<jeod::DynBody *>(dyn_body.get_root_body());
+    auto * root_body = const_cast<jeod::DynBody *>(dyn_body.get_root_body());
     // Sanity check -- root body pointer must be non-NULL to continue.
     if (root_body == nullptr) {
       // Possibly an unreachable error? 'dyn_body' is protected, so there is no
@@ -388,7 +396,7 @@ void VentSet::apply_impulse_to_body(jeod::DynBody & root_body)
   Q_this_parent.left_quat_transform(lin_impulse, lin_impulse_inertial);
                                                    // now in inertial frame
 
-  double inverse_mass =
+  const double inverse_mass =
               MathUtils::divide_protected(1,
                                           root_body.mass.composite_properties.mass,
                                           0.0,
@@ -402,8 +410,8 @@ void VentSet::apply_impulse_to_body(jeod::DynBody & root_body)
 
 
   double inverse_inertia[3][3];
-  if ( !jeod::Matrix3x3::invert_symmetric( root_body.mass.composite_properties.inertia,
-                                     inverse_inertia)) {
+  if ( jeod::Matrix3x3::invert_symmetric( root_body.mass.composite_properties.inertia,
+                                     inverse_inertia) == 0) {
     double delta_w[3];
     jeod::Vector3::transform( inverse_inertia,
                               ang_impulse,
@@ -459,11 +467,11 @@ void VentSet::start_vent_internal(SimpleVent * vent)
     return;
   }
   if (vent->apply_as_impulse) {
-    if (!std::count(impulsive_vents.begin(), impulsive_vents.end(), vent)) {
+    if (std::count(impulsive_vents.begin(), impulsive_vents.end(), vent) == 0) {
       impulsive_vents.push_back(vent);
     }
   }
-  else if (!std::count(dynamic_vents.begin(), dynamic_vents.end(), vent)) {
+  else if (std::count(dynamic_vents.begin(), dynamic_vents.end(), vent) == 0) {
     dynamic_vents.push_back(vent);
   }
 }

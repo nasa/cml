@@ -23,8 +23,10 @@ Purpose:(A group of fault triggers.)
 class TriggerGroup {
   public :
 
-    TriggerGroup() : enabled(true) {}
+    TriggerGroup() = default;
     virtual ~TriggerGroup() = default;
+    TriggerGroup(const TriggerGroup&) = delete;
+    TriggerGroup& operator = (const TriggerGroup&) = delete;
 
     ////    Operations    ////
 
@@ -32,20 +34,15 @@ class TriggerGroup {
 
     void add_trigger(TriggerBase& trigger);
 
-    bool set_trigger_enable(std::string trigger_name, bool enable_flag);
+    bool set_trigger_enable(const std::string& trigger_name, bool enable_flag);
 
     ////    Attributes    ////
 
-    bool enabled; /* (--) Whether this group is enabled. */
+    bool enabled{true}; /* (--) Whether this group is enabled. */
 
  protected:
    std::list<std::pair<bool, TriggerBase*> > triggers; /* (--)
      List of triggers and whether they are enabled for this group. */
-
- private:
-   // Class is non-copyable
-   TriggerGroup(const TriggerGroup&);
-   TriggerGroup& operator = (const TriggerGroup&);
 };
 
 #endif

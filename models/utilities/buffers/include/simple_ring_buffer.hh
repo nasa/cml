@@ -18,6 +18,8 @@ ASSUMPTIONS:
 #ifndef CML_SIMPLE_RING_BUFFER_HH
 #define CML_SIMPLE_RING_BUFFER_HH
 
+#include <cstddef>
+#include <utility>
 #include <vector>
 #include <string>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -29,7 +31,7 @@ class CMLSimpleRingBuffer {
     Name of buffer, used for error reporting.*/
   std::vector<T> data;  /* (--)
     A cycling buffer of recorded values. Size is adjustable. */
-  size_t buffer_ix;  /* (--)
+  size_t buffer_ix{0};  /* (--)
     The index of the most recently populated set in the buffer.*/
   size_t max_buffer_size; /* (--)
     A settable limit to the buffer size. Prevents accidentially resizing the
@@ -39,11 +41,9 @@ class CMLSimpleRingBuffer {
 /*****************************************************************************
 Constructor/ destructor
 *****************************************************************************/
-  CMLSimpleRingBuffer(std::string name_)
+  explicit CMLSimpleRingBuffer(std::string name_)
     :
-    name(name_),
-    data(),
-    buffer_ix(0),
+    name(std::move(std::move(name_))),
     max_buffer_size( data.max_size())
   {
     data.resize(1);
@@ -119,7 +119,7 @@ Purpose:
     if (new_buffer_size > old_buffer_size) {
       data.resize(new_buffer_size);
       if (buffer_ix != (old_buffer_size -1)) {
-        size_t offset = new_buffer_size - old_buffer_size;
+        const size_t offset = new_buffer_size - old_buffer_size;
         for (size_t ii = old_buffer_size-1; ii > buffer_ix; --ii) {
           data[ii + offset] = data[ii];
         }
@@ -144,7 +144,7 @@ Purpose:
                never enters and the buffer is chopped imediately after buffer_ix.
     */
     else if (new_buffer_size > buffer_ix) {
-      size_t offset = old_buffer_size - new_buffer_size;
+      const size_t offset = old_buffer_size - new_buffer_size;
       for (size_t ii = buffer_ix + 1; ii < new_buffer_size; ++ii) {
         data[ii] = data[ii + offset];
       }

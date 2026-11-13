@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
 PURPOSE: (Provides a simple non-rotating aerodynamic drag model.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (March 2015) (Antares) (initial version))
    ((Gary Turner) (OSR) (June 2016) (Antares)
@@ -10,12 +13,14 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
 *******************************************************************************/
 
-#include <cstring>  // NULL
+#include <cstdlib>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include "../include/aero_executive_base.hh"
 #include "../include/aero_executive_simple.hh"
+#include "../include/aero_interface_output.hh"
 
 /*******************************************************************************
 Constructor:
@@ -31,12 +36,7 @@ AeroExecutiveSimple::AeroExecutiveSimple(
   dynamic_pressure( dynamic_pressure_in),
   T_inrtl_struc( T_inrtl_struc_in),
   mass( mass_in),
-  free_stream_vel_unit( free_stream_vel_unit_in),
-  drag_type( constant_vec),
-  BC(1.0),
-  CD(0.0),
-  drag_mag(0.0),
-  bc_epsilon(1E-6)
+  free_stream_vel_unit( free_stream_vel_unit_in)
 {
   if (free_stream_vel_unit == nullptr) {
    CMLMessage::warn(

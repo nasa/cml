@@ -2,28 +2,18 @@
 PURPOSE:
   (Function style faults)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
 ############################################################################*/
 
+#include "../include/fault.hh"
 #include "../include/fault_function.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
-
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-FaultFunctionBase::FaultFunctionBase() :
-  type(Linear),
-  frequency(),
-  amplitude(),
-  phase_offset(),
-  freq_int(0.0),
-  ind_prev(0.0),
-  freq_prev(0.0)
-{}
-
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 /*******************************************************************************
 initialize
@@ -68,35 +58,35 @@ set_param
 Purpose:(Generic method for setting fault parameters. For this type of fault,
          can be used to set function parameters.)
 *******************************************************************************/
-bool FaultFunctionBase::set_param( std::string param_name,
-                                   double      value,
-                                   bool        modify_nominal_with_rate)
+bool FaultFunctionBase::set_param( const std::string& param_name,
+                                   double value,
+                                   bool modify_nominal_with_rate)
 {
-  if (param_name.compare("initial") == 0 ||
-      param_name.compare("nominal") == 0 ) {
+  if (param_name == "initial" ||
+      param_name == "nominal" ) {
     nominal = value;
-  } else if (param_name.compare("rate") == 0) {
+  } else if (param_name == "rate") {
     if (modify_nominal_with_rate) {
       reset_nominal_with_new_rate( value);
     }
     rate = value;
-  } else if (param_name.compare("frequency") == 0) {
+  } else if (param_name == "frequency") {
     frequency.nominal = value;
-  } else if (param_name.compare("amplitude") == 0) {
+  } else if (param_name == "amplitude") {
     amplitude.nominal = value;
-  } else if (param_name.compare("phase_offset") == 0) {
+  } else if (param_name == "phase_offset") {
     phase_offset.nominal = value;
-  } else if (param_name.compare("frequency_rate") == 0) {
+  } else if (param_name == "frequency_rate") {
     if (modify_nominal_with_rate) {
       frequency.reset_nominal_with_new_rate( value);
     }
     frequency.rate = value;
-  } else if (param_name.compare("amplitude_rate") == 0) {
+  } else if (param_name == "amplitude_rate") {
     if (modify_nominal_with_rate) {
       amplitude.reset_nominal_with_new_rate( value);
     }
     amplitude.rate = value;
-  } else if (param_name.compare("phase_offset_rate") == 0) {
+  } else if (param_name == "phase_offset_rate") {
     if (modify_nominal_with_rate) {
       phase_offset.reset_nominal_with_new_rate( value);
     }

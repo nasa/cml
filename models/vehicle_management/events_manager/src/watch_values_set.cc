@@ -1,22 +1,19 @@
 /*******************************TRICK HEADER******************************
 PURPOSE: (Provides a multi-conditional event structure.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (October 2023) (Antares) (enhancement)))
 **********************************************************************/
 
-#include <algorithm> // any_of
+#include <algorithm>
+#include <list>
+#include "../include/watch_values_base_core.hh"
 #include "../include/watch_values_set.hh"
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-WatchValuesSet::WatchValuesSet()
-  :
-  triggers(),
-  require_all(false),
-  record_trigger_name(false)
-{}
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 /*****************************************************************************
 add_trigger
@@ -75,16 +72,6 @@ WatchValuesSet::test_crossing()
     }
   }
 
-  /* If the set triggers with ANY trigger, and any trigger satisfies its
-     condition, the set is Triggered.
-     If the set only triggers with ALL triggers, and any trigger does not
-     satisfy its condition, the set is NotTriggered.
-     So we can compare the require_all boolean against the event_triggered
-     value of each trigger-event to identify any significant single results.
-     - If any trigger has a status that does not match with "require_all", then
-       the overall status is "not require_all"
-     - Conversely, if all triggers have status matching "require_all", then the
-       overall status is going to be "require_all"*/
   event_triggered = std::any_of( triggers.begin(), triggers.end(),
                       [this](WatchValuesBaseCore * trigger_) {
                         return (require_all != trigger_->event_triggered);} )?
@@ -128,7 +115,7 @@ WatchValuesSet::activate()
   }
   active = true;
   if (add_self_to_manager_active_list) {
-    if (!active_watches) {
+    if (active_watches == nullptr) {
       CMLMessage::error( __FILE__,__LINE__,
         "Activating watch with internal instruction to add itself to\n"
         "the active-watch list, but has no access to that list.\n"

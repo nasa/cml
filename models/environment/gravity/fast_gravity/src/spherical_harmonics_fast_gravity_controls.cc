@@ -2,6 +2,9 @@
 Purpose:
   (Define member functions for the SphericalHarmonicsFastGravityControls class.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
  (((Gary Turner) (OSR) (May 2014) (Antares) (Implementation of Blair Thompson's
                      algorithm originally written for earlier JEOD))
@@ -12,38 +15,18 @@ Programmers:
 
 *******************************************************************************/
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
+#include "jeod/models/dynamics/dyn_manager/include/base_dyn_manager.hh"
+#include "jeod/models/environment/ephemerides/ephem_interface/include/ephem_ref_frame.hh"
+#include "jeod/models/environment/gravity/include/gravity_integ_frame.hh"
+#include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
-#include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 
 #include "../include/spherical_harmonics_fast_gravity_controls.hh"
-
-/*******************************************************************************
-  Function: SphericalHarmonicsFastGravityControls::
-                                          SphericalHarmonicsFastGravityControls
-  Purpose:  (Default constructor)
-*******************************************************************************/
-SphericalHarmonicsFastGravityControls::SphericalHarmonicsFastGravityControls()
- :
-   fast_enabled(true),
-   count_limit(10),
-   compute_count_limit(true),
-   threshold_ratio_delta_acc(1.0E-7),
-   available(false),
-   first_pass(true),
-   count(0),
-   reference_potential(0.0)
-{
-   jeod::Vector3::initialize(reference_pos_pfix);
-   jeod::Vector3::initialize(delta_pos);
-   jeod::Vector3::initialize(reference_accel_pfix);
-   jeod::Matrix3x3::initialize(reference_gradient_pfix);
-   jeod::Matrix3x3::initialize(reference_gradient_inrtl);
-}
-
 
 /*******************************************************************************
   Function: SphericalHarmonicsFastGravityControls::initialize
@@ -245,9 +228,9 @@ SphericalHarmonicsFastGravityControls::calc_nonspherical(// Return: --   Void
   // threshold that this set of fast gravity computations iproduced
 
   // accel_scratch is now the delta-accel: (fast-grav accel - full-grav accel)
-  double ratio_compare = (jeod::Vector3::vmag(accel_scratch) /
-                          jeod::Vector3::vmag(reference_accel_pfix)) /
-                          threshold_ratio_delta_acc;
+  const double ratio_compare = (jeod::Vector3::vmag(accel_scratch) /
+                                jeod::Vector3::vmag(reference_accel_pfix)) /
+                                threshold_ratio_delta_acc;
 
 
   // Adjust the count_limit to maximize the step size without exceeding
@@ -260,8 +243,6 @@ SphericalHarmonicsFastGravityControls::calc_nonspherical(// Return: --   Void
   }
   else {
      count_limit = std::floor(count_limit / ratio_compare);
-     if (count_limit < 1) {
-       count_limit = 1;
-     }
+     count_limit = std::max<unsigned int>(count_limit, 1);
   }
 }

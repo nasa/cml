@@ -73,7 +73,6 @@ add_cml_library(
         state_descriptors/earth_moon_rotating_frame/src/earth_moon_rotating_frame.cc
         state_descriptors/extended_planetary_derived_state/src/extended_planetary_derived_state.cc
         state_descriptors/extended_planetary_derived_state/src/point_to_point.cc
-        state_descriptors/extended_planetary_derived_state/src/range_safety_data.cc
         state_descriptors/extended_planetary_derived_state/src/topo_container.cc
         state_descriptors/extended_planetary_derived_state/src/velocity_set.cc
         state_descriptors/orb_elem_subset/src/orb_elem_subset.cc

@@ -44,8 +44,13 @@ PROGRAMMERS:
 #include "atmosphere_exec_std.hh"
 
 namespace jeod {
-    class TimeStandard;
+class DynBody;
+class TimeStandard;
 }
+class ExtendedPlanetaryDerivedState;
+class LookupAtmosWinds;
+class STD1976;
+class SimpleLookupWind;
 
 /*****************************************************************************
 AtmosphereExec
@@ -91,9 +96,9 @@ class AtmosphereExec : public AtmosphereExecInterface {
     AtmosphereExec_SimpleLookupWind   winds_simple;
 
     AtmosphereExec(
-           GramInterface   & gram_in,
-           LookupAtmosWinds   & DRWP_atmos_in,
-           STD1976            & std_76_in,
+           GramInterface   & gram_i_in,
+           LookupAtmosWinds   & drwp_atmos_in,
+           STD1976            & std76_in,
            SimpleLookupWind   & simple_wind_in,
            const GramInterface * master_gram_in,
            const double       & dyn_time_in,
@@ -102,14 +107,17 @@ class AtmosphereExec : public AtmosphereExecInterface {
 
     // GRAM-less constructor
     AtmosphereExec(
-           LookupAtmosWinds   & DRWP_atmos_in,
-           STD1976            & std_76_in,
+           LookupAtmosWinds   & drwp_atmos_in,
+           STD1976            & std76_in,
            SimpleLookupWind   & simple_wind_in,
            const double       & dyn_time_in,
            ExtendedPlanetaryDerivedState & state_in,
            jeod::DynBody  & body_in);
 
     ~AtmosphereExec() override = default;
+
+    AtmosphereExec (const AtmosphereExec&) = delete;
+    AtmosphereExec & operator = (const AtmosphereExec&) = delete;
 
     void initialize( jeod::TimeStandard & time_in);
 
@@ -125,10 +133,6 @@ class AtmosphereExec : public AtmosphereExecInterface {
     void initialize_atmosphere();
     void initialize_winds();
     void add_gust();
-
-  private:
-    AtmosphereExec (const AtmosphereExec&);
-    AtmosphereExec & operator = (const AtmosphereExec&);
 };
 
 #endif

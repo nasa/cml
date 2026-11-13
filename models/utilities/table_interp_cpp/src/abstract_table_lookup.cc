@@ -3,23 +3,40 @@ PURPOSE:
   (Table lookup model master controller, AbstractTableLookup is the base class for the
    table manager classes AbstractTableLookup and SimpleTableLookup.)
 
+LIBRARY DEPENDENCIES:
+  ((generic_multi_input_table.cc)
+   (generic_single_input_table.cc)
+   (single_input_table_for_angles.cc)
+   (single_input_table_for_quaternions.cc)
+   (single_input_table_var_with_deriv.cc)
+   (cml/models/utilities/cml_message/src/cml_message.cc)
+  )
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Oct 2017) (New implementation))
   )
 *******************************************************************************/
 
-#include <algorithm> //std::find, find_if, any_of
+#include "../include/abstract_table_lookup.hh"
+#include "../include/generic_multi_input_table.hh"
+#include "../include/generic_single_input_table.hh"
+#include "../include/single_input_table_for_angles.hh"
+#include "../include/single_input_table_for_quaternions.hh"
+#include "../include/single_input_table_var_with_deriv.hh"
+#include "../include/table_independent_variable.hh"
 
-#include "../include/table_lookup_set.hh"
+#include <algorithm>
+#include <cstdarg>
+#include <cstddef>
+#include <vector>
+
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 /*****************************************************************************
 Constructor
 *****************************************************************************/
 AbstractTableLookup::AbstractTableLookup()
-  :
-  independents(),
-  dependents(),
-  tables_to_destroy()
 {
   subscribe_name = "AbstractTableLookup:";
 }
@@ -30,15 +47,11 @@ Destructor
 *****************************************************************************/
 AbstractTableLookup::~AbstractTableLookup()
 {
-  std::vector<TableIndependentVariable*>::iterator it1 =
-                                              independents_to_destroy.begin();
-  for (; it1!=independents_to_destroy.end(); ++it1) {
-    delete (*it1);
+  for (const auto* independent : independents_to_destroy) {
+    delete independent;
   }
-
-  std::vector<GenericMultiInputTable*>::iterator it2 =  tables_to_destroy.begin();
-  for (; it2!=tables_to_destroy.end(); ++it2) {
-    delete (*it2);
+  for (const auto* table : tables_to_destroy) {
+    delete table;
   }
 }
 
@@ -88,7 +101,8 @@ AbstractTableLookup::initialize()
   for (TableIndependentVariable * indep : independents) {
     // If any of the independents fail to initialize, stop the table-manager
     // initialization.
-    if (!indep->initialize()) {
+    const bool success = indep->initialize();
+    if (!success) {
       CMLMessage::error(
         __FILE__,__LINE__,"Initialization error.\n",
         "Failure to initialize TableIndependentVariable ",
@@ -105,7 +119,8 @@ AbstractTableLookup::initialize()
    * - NOTE: this could use a std::all_of algorithm, but is left as a for-loop
    *         because it is easier to read.*/
   for (TableItem_t & table_iter: tables) {
-    if (!table_iter.first->initialize()) {
+    const bool success = table_iter.first->initialize();
+    if (!success) {
       CMLMessage::error(
         __FILE__,__LINE__,"Initialization error.\n",
         "Failure to initialize GenericMultiInputTable results in a\n"
@@ -210,7 +225,7 @@ AbstractTableLookup::create_table(
             double &dependent_variable,
             TableType type)
 {
-  DoublePtrVec scratch(1, &dependent_variable);
+  const DoublePtrVec scratch(1, &dependent_variable);
   return create_table(scratch, type);
 }
 
@@ -226,8 +241,9 @@ AbstractTableLookup::create_table(
   DoublePtrVec variables(num_vars);
   va_list variables_in;
   va_start(variables_in, variable_0);
-  if (0 < num_vars)
+  if (0 < num_vars) {
     variables[0] = variable_0;
+  }
   for (size_t ii = 1; ii < num_vars; ++ii) {
     variables[ii] = va_arg(variables_in, double*);
   }
@@ -275,7 +291,7 @@ AbstractTableLookup::create_table(
   }
 
   tables_to_destroy.push_back(new_table);
-  tables.push_back(TableItem_t(new_table, true));
+  tables.emplace_back(new_table, true);
   return new_table;
 }
 
@@ -291,7 +307,7 @@ AbstractTableLookup::create_independent_variable(
 {
   verify_independent_name(name_in);
 
-  TableIndependentVariable* new_var =
+  auto* new_var =
     new TableIndependentVariable( name_in, variable_in, continuity );
 
   independents_to_destroy.push_back(new_var);
@@ -341,9 +357,7 @@ Purpose:(returns a bool indicating whether the specified dependent variable
 bool
 AbstractTableLookup::is_a_dependent_variable( double &variable)
 {
-  DoublePtrVec::iterator it = std::find(dependents.begin(),
-                                                dependents.end(),
-                                                &variable);
+  const auto it = std::find(dependents.begin(), dependents.end(), &variable);
   return dependents.end()!=it;
 }
 
@@ -360,6 +374,7 @@ AbstractTableLookup::verify_and_add_dependent_variable(double *variable_ptr)
       __FILE__, __LINE__, "Invalid table addition\n",
       "One of the output variables from the table lookup has no target to "
       "populate.\nAll output data must have a specified target.\n");
+    return;
   }
 
   if (is_a_dependent_variable(*variable_ptr)) {
@@ -387,7 +402,7 @@ AbstractTableLookup::lookup_independent(
   auto it = std::find_if(
                  independents.begin(), independents.end(),
                  [var_name] (TableIndependentVariable * var_) {
-                   return (var_name.compare(var_->get_name()) == 0);
+                   return (var_name == var_->get_name());
                  });
   if (it == independents.end()) { return nullptr; }
   return *it;
@@ -401,13 +416,15 @@ bool
 AbstractTableLookup::is_table_interp_enabled(
     const GenericMultiInputTable *tbl) const
 {
-  if (!tbl || tables.empty()) {return false;}
+  if ((tbl == nullptr) || tables.empty()) {
+    return false;
+  }
   auto it = std::find_if( tables.begin(), tables.end(),
                           [tbl] (const TableItem_t & table_) {
                             return (table_.first == tbl);
                           });
   if (it == tables.end()) {return false;}
-  return (*it).second;
+  return it->second;
 }
 
 /*****************************************************************************
@@ -419,13 +436,15 @@ void
 AbstractTableLookup::enable_table_interp(
     const GenericMultiInputTable *tbl, bool flag)
 {
-  if (!tbl || tables.empty()) return;
+  if ((tbl == nullptr) || tables.empty()) {
+    return;
+  }
 
   auto it = std::find_if( tables.begin(), tables.end(),
                           [tbl] (const TableItem_t & table_) {
                             return (table_.first == tbl);
                           });
   if (it != tables.end()) {
-    (*it).second = flag;
+    it->second = flag;
   }
 }

@@ -9,21 +9,8 @@ PROGRAMMERS:
 
 
 #include "../include/rand_number.hh"
-#include <ctime> // time
-
-/*****************************************************************************
-Cosntructor
-*****************************************************************************/
-FaultRandNumber::FaultRandNumber() :
-  distribution_type(GAUSSIAN),
-  mean(0.0),
-  std_dev(0.0),
-  lower_limit(0.0),
-  upper_limit(0.0),
-  seed(0),
-  seeded(false)
-{}
-
+#include <ctime>
+#include <random>
 
 /*******************************************************************************
 initialize

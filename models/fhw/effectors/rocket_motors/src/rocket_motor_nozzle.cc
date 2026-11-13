@@ -3,6 +3,9 @@ PURPOSE:
   (Provide class representing rocket nozzles to accompany
    RocketMotorMultiNozzle - a rocket motor with nozzles)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares)
        (initial, adapted from SolidRocketMotor2 and from las_prop_init.c))
@@ -10,43 +13,12 @@ PROGRAMMERS:
             true parameters, simplified methods)))
 
 ******************************************************************************/
-#include <cmath>  // M_PI, sin, cos
+#include <algorithm>
+#include <cmath>
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "../include/rocket_motor_nozzle.hh"
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-RocketMotorNozzle::RocketMotorNozzle()
-  :
-  azimuth(0.0),
-  pitch(0.0),
-  radius(0.0),
-  height(0.0),
-  sf(0.0),
-  exit_area(0.0),
-  azimuth_disp(0.0),
-  pitch_disp(0.0),
-  thrust_azm_disp(0.0),
-  radius_disp(0.0),
-  height_disp(0.0),
-  sf_disp(0.0),
-  sf_true(0.0),
-  thrust_dir{0.0, 0.0, 0.0},
-  nominal_thrust_dir{0.0, 0.0, 0.0},
-  thrust{0.0, 0.0, 0.0},
-  thrust_vac{0.0, 0.0, 0.0},
-  azimuth_true(0.0),
-  pitch_true(0.0),
-  radius_true(0.0),
-  height_true(0.0),
-  position{0.0, 0.0, 0.0},
-  thrust_mag(0.0),
-  thrust_vac_mag(0.0),
-  azimuth_thrust(0.0)
-{}
 
 /*****************************************************************************
 initialize
@@ -175,10 +147,8 @@ void
 RocketMotorNozzle::modify_thrust_mag_atmos(
    double atm_pressure)
 {
-  thrust_mag -= exit_area * atm_pressure;
-  if (thrust_mag < 0.0) {
-    thrust_mag = 0.0;
-  }
+  // Prevent a negative thrust magnitude.
+  thrust_mag = std::max(0.0, thrust_mag - exit_area * atm_pressure);
 }
 
 /*****************************************************************************

@@ -19,16 +19,13 @@ Programmers:
 #ifndef CML_MASS_BODY_DETACH_IMPULSIVE_HH
 #define CML_MASS_BODY_DETACH_IMPULSIVE_HH
 
-#include "jeod/models/dynamics/mass/include/class_declarations.hh"
-
-// Model includes
-#include "jeod/models/dynamics/body_action/include/class_declarations.hh"
 #include "jeod/models/dynamics/body_action/include/body_action.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
 
 namespace jeod {
 class DynBody;
+class DynManager;
 class MassPoint;
 }
 
@@ -36,32 +33,35 @@ class MassPoint;
 class MassBodyDetachImpulsive : public jeod::BodyAction {
   // Member data
   public:
-    double impulse_magnitude;       /* (N*s)
+    double impulse_magnitude{0.0}; /* (N*s)
       The impulse applied during the detach. */
 
     std::string subject_point_name; /* (--)
       The suffix of the name of the subject point. This must match the
       subject_point_name used in the JEOD BodyAttachAligned class. */
 
-    std::string parent_point_name;  /* (--)
+    std::string parent_point_name; /* (--)
       The suffix of the name of the point on the parent body.
       This must match the parent_point_name used in the
       JEOD BodyAttachAligned class. */
 
-    double separation_speed;        /* (m/s)
+    double separation_speed{0.0}; /* (m/s)
       The delta-V from the bodies detaching specified by the user instead
       of being calculated in the apply_impulse() method. */
 
-    bool sep_speed_spec_by_user;    /* (--)
+    bool sep_speed_spec_by_user{false}; /* (--)
       Flag used to determine if the delta-V is to be calculated (default), or
       is set by the user and the impulse should be calculated instead. */
 
   // Member functions
     // Default constructor.
-    MassBodyDetachImpulsive ();
+    MassBodyDetachImpulsive () = default;
 
     // Destructor.
     ~MassBodyDetachImpulsive() override = default;
+
+    MassBodyDetachImpulsive( const MassBodyDetachImpulsive& rhs) = delete;
+    MassBodyDetachImpulsive & operator = ( const MassBodyDetachImpulsive&) = delete;
 
     // initialize: Initialize the initializer.
     void initialize (jeod::DynManager & dyn_manager) override;
@@ -70,13 +70,8 @@ class MassBodyDetachImpulsive : public jeod::BodyAction {
     void apply (jeod::DynManager & dyn_manager) override;
 
   protected:
-    virtual void apply_impulse( jeod::DynBody          & dyn_body,
-                                std::string  mass_point_name);
-
-  private:
-    // not implemented
-    MassBodyDetachImpulsive( const MassBodyDetachImpulsive& rhs);
-    MassBodyDetachImpulsive & operator = ( const MassBodyDetachImpulsive&);
+    virtual void apply_impulse( jeod::DynBody     & dyn_body,
+                                const std::string & mass_point_name);
 };
 
 #endif

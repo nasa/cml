@@ -3,6 +3,9 @@ PURPOSE:
   (Provide an enhanced solid-motor model with multiple nozzles and
      optional flex effects..)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares)
          (initial, providing features dictated by requirements for
@@ -12,11 +15,21 @@ PROGRAMMERS:
 
 *******************************************************************************/
 
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_group.hh"
+#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_string.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+#include <algorithm>
+#include <cmath>
+#include <cstddef>
 
 #include "../include/rocket_motor_multi_nozzle.hh"
+#include "../include/rocket_motor_nozzle.hh"
+#include "../include/rocket_motor_table_thrust.hh"
 
 /*****************************************************************************
 Constructor
@@ -38,23 +51,8 @@ RocketMotor_MultiNozzle::RocketMotor_MultiNozzle(
                            time,
                            veh_cm_in,
                            use_mass_string_in),
-  atmos_pressure(atm_press),
-  motor_lin_flex(nullptr),
-  motor_rot_flex(nullptr),
-  table_is_net_thrust(false),
-  compute_cosine_losses(false),
-  atm_press_adjust(false),
-  cosine_loss_scale_factor(1.0),
-  net_roll_torq(0.0),
-  thrust_vac{0.0, 0.0, 0.0},
-  thrust_vac_mag(0.0),
-  using_flex(false),
-  flex_threshold(1.0E-12),
-  num_flex_elements(0),
-  num_noz(0)
+  atmos_pressure(atm_press)
 {
-  nozzles_ptr_vec.clear();
-
   // thrust_unit_motor is not used for a multi-nozzle configuration because the
   // direction is determined by the nozzle directions.
   // So set it to an arbitrary unit vector so its absence does not trigger any
@@ -136,14 +134,12 @@ void
 RocketMotor_MultiNozzle::add_nozzle(
     RocketMotorNozzle &nozzle)
 {
-  for (size_t ii = 0; ii < nozzles_ptr_vec.size(); ++ii) {
-    if (&nozzle == nozzles_ptr_vec[ii]) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Configuration error\n",
-        "Instruction received to add a nozzle that is already in the vector\n"
-        "of nozzles.\nInstruction ignored.\n");
-      return;
-    }
+  if (std::find(nozzles_ptr_vec.begin(), nozzles_ptr_vec.end(), &nozzle) != nozzles_ptr_vec.end()) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Configuration error\n",
+      "Instruction received to add a nozzle that is already in the vector\n"
+      "of nozzles.\nInstruction ignored.\n");
+    return;
   }
   nozzles_ptr_vec.push_back( &nozzle);
   num_noz = nozzles_ptr_vec.size();
@@ -232,7 +228,8 @@ void
 RocketMotor_MultiNozzle::initialize_nozzles()
 {
   // Initialize the nozzles and sum the nominal and dispersed scale factors
-  double total_scale_factor = 0.0, total_dispersed_scale_factor = 0.0;
+  double total_scale_factor = 0.0;
+  double total_dispersed_scale_factor = 0.0;
   for (unsigned int ii = 0; ii < num_noz; ii++) {
     nozzles_ptr_vec[ii]->initialize( position,
                                      T_struc_to_motor_frame);
@@ -261,7 +258,8 @@ RocketMotor_MultiNozzle::initialize_nozzles()
         // The values specified in the nozzle are the nominal values, so execute
         // the computation of the scaled thrust for each nozzle.
 
-        double sf_thrust_dir[3], accum_sf_thrust_dir[3] = {0.0, 0.0, 0.0};
+        double sf_thrust_dir[3];
+        double accum_sf_thrust_dir[3] = {0.0, 0.0, 0.0};
         // Accumulate the vector-sum and the scalar-sum
         for (unsigned int ii = 0; ii < num_noz; ii++) {
           jeod::Vector3::scale( nozzles_ptr_vec[ii]->nominal_thrust_dir,
@@ -321,7 +319,7 @@ RocketMotor_MultiNozzle::initialize_nozzles()
      "Zeroing the scale-factor on all nozzles.\n");
   }
   else {
-    sf_scale = MathUtils::divide_protected( num_noz,
+    sf_scale = MathUtils::divide_protected( static_cast<double>(num_noz),
                                             total_dispersed_scale_factor,
                                             0.0);
   }
@@ -389,7 +387,7 @@ RocketMotor_MultiNozzle::update()
   // checked and enforced to be equal to the number of nozzles.
   // NOTE - num_noz != 0 verified at initialization, resulting in termination if
   // it failed.
-  double thrust_per_sf = thrust_magnitude / num_noz;
+  const double thrust_per_sf = thrust_magnitude / static_cast<double>(num_noz);
   // Start by initializing the system values to allow incremental accumulation
   jeod::Vector3::initialize(thrust);
   jeod::Vector3::initialize(thrust_vac);
@@ -415,10 +413,11 @@ RocketMotor_MultiNozzle::update()
 
     // Add the nozzle thrust and moment to the system totals
     if (using_flex) { // Adjust thrust and moment
+      const size_t noz_num = 3UL * ii;
       double new_position[3]; // For calculating moment
-      jeod::Vector3::sum(pos_wrt_cm, motor_lin_flex + 3*ii, new_position);
+      jeod::Vector3::sum(pos_wrt_cm, motor_lin_flex + noz_num, new_position);
 
-      double rotang = jeod::Vector3::vmag(motor_rot_flex + 3*ii);
+      const double rotang = jeod::Vector3::vmag(motor_rot_flex + noz_num);
       if (rotang > flex_threshold) {
         // Euler rotation: angle = vmag(motor_rot_flex_ii)
         //           unit vector = motor_rot_flex_ii / vmag(motor_rot_flex_ii)
@@ -426,7 +425,7 @@ RocketMotor_MultiNozzle::update()
         // Perform the rotation using a quaternion
         jeod::Quaternion Q_flex;
         Q_flex.scalar = std::cos(rotang / 2);
-        jeod::Vector3::scale( motor_rot_flex + 3*ii,
+        jeod::Vector3::scale( motor_rot_flex + noz_num,
                         std::sin(rotang / 2) / rotang,
                         Q_flex.vector);
 
@@ -476,7 +475,7 @@ RocketMotor_MultiNozzle::shutdown_motor()
   for (unsigned int ii = 0; ii<num_noz; ii++)  {
     nozzles_ptr_vec[ii]->shutdown_nozzle();
   }
-  RocketMotor_Basic::shutdown_motor();
+  RocketMotor_TableThrust::shutdown_motor();
 }
 
 /*******************************************************************************
@@ -492,7 +491,7 @@ RocketMotor_MultiNozzle::enable_flex()
   // If not initialized, set using_flex = true; these will then be checked at
   // initialization.
   if ( !initialized ||
-       (motor_lin_flex && motor_rot_flex && (num_flex_elements==3* num_noz))) {
+       ((motor_lin_flex != nullptr) && (motor_rot_flex != nullptr) && (num_flex_elements==3* num_noz))) {
     using_flex = true;
   }
   else {

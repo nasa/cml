@@ -12,7 +12,7 @@ jobs:
   code-format:
     runs-on: ubuntu-latest
     container:
-      image: rockylinux:8
+      image: rockylinux/rockylinux:9
 
     defaults:
       run:
@@ -22,7 +22,8 @@ jobs:
       - name: Install system dependencies
         run: |
           dnf install -y epel-release
-          dnf config-manager --enable powertools
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --set-enabled crb
           dnf update -y
           dnf install -y git python3-devel
 
@@ -76,10 +77,10 @@ jobs:
           retention-days: 2
 
 
-  clang-tidy:
+  cppcheck:
     runs-on: ubuntu-latest
     container:
-      image: rockylinux:8
+      image: rockylinux/rockylinux:9
 
     defaults:
       run:
@@ -89,11 +90,105 @@ jobs:
       - name: Install system dependencies
         run: |
           dnf install -y epel-release
-          dnf config-manager --enable powertools
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --set-enabled crb
           dnf update -y
-          dnf install -y git make cmake gcc gcc-c++ libxml2-devel openmotif-devel \
-            perl perl-Digest-MD5 udunits2-devel zlib-devel libX11-devel libXt-devel \
-            python3-devel clang-tools-extra
+          dnf install -y git bison clang clang-devel cmake diffutils flex gcc \
+            gcc-c++ libxml2-devel llvm-devel llvm-static perl perl-Digest-MD5 \
+            python3-devel udunits2 udunits2-devel zlib-devel cppcheck
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure environment
+        run: |
+          echo "CML_HOME=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+          echo "TRICK_HOME=$GITHUB_WORKSPACE/externals/trick" >> "$GITHUB_ENV"
+          echo "JEOD_HOME=$GITHUB_WORKSPACE/externals/jeod" >> "$GITHUB_ENV"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          echo "SSL_CERT_FILE=/etc/pki/tls/cert.pem" >> "$GITHUB_ENV"
+
+      - name: Clone Trick
+        uses: ./.github/actions/build-trick
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          clone-only: "true"
+
+      - name: Clone JEOD
+        uses: ./.github/actions/build-jeod
+        with:
+          trick-home: ${{ env.TRICK_HOME }}
+          jeod-home: ${{ env.JEOD_HOME }}
+          clone-only: "true"
+
+      - name: Generate compile commands
+        run: cmake --preset user-debug --fresh
+
+      # We're suppressing missing includes here. We build with Trick and JEOD set
+      # as system include paths, which cppcheck deliberately does not attempt to
+      # process. If there's truly a bad include path somewhere, the build itself
+      # will fail in a different Action.
+      - name: Cppcheck configuration check
+        run: |
+          cppcheck \
+            --project=build/debug/compile_commands.json \
+            --check-config \
+            --error-exitcode=1 \
+            -j $(nproc) \
+            --suppress=missingInclude \
+            --suppress=unmatchedSuppression \
+            2> >(tee cppcheck-config.log >&2)
+
+      # Note that we're ignoring a few large files which mostly just define data.
+      # Cppcheck is absolutely horrible about processing files like those. Luckily,
+      # clang-tidy is much faster.
+      # We're also suppressing unused function checks because we're building a
+      # library; we fully expect some functions to not be called by the rest of the
+      # codebase.
+      - name: Run Cppcheck
+        run: |
+          cppcheck \
+            --project=build/debug/compile_commands.json \
+            --max-configs=1 \
+            --enable=all \
+            --inline-suppr \
+            -i models/environment/EGM2008/src/egm_2008_data.cc \
+            -i models/environment/gravity/lunar_GRGM900C/data/src/GRGM900C_lunar_gravity.cc \
+            -j $(nproc) \
+            --suppress=unusedFunction \
+            --suppress=unmatchedSuppression \
+            --error-exitcode=1 \
+            2> >(tee cppcheck-check.log >&2)
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cppcheck-failure-logs
+          path: cppcheck-*.log
+          if-no-files-found: warn
+          retention-days: 2
+
+
+  clang-tidy:
+    runs-on: ubuntu-latest
+    container:
+      image: rockylinux/rockylinux:9
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install system dependencies
+        run: |
+          dnf install -y epel-release
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --set-enabled crb
+          dnf update -y
+          dnf install -y git bison clang clang-devel cmake diffutils flex gcc \
+            gcc-c++ libxml2-devel llvm-devel llvm-static perl perl-Digest-MD5 \
+            python3-devel udunits2 udunits2-devel zlib-devel clang-tools-extra
 
       - name: Checkout code
         uses: actions/checkout@v4

@@ -38,37 +38,34 @@ protected:
   /***************************************************************************/
   // Internal variables
   /***************************************************************************/
-  AeroExecutiveBase * executive_ptr; /* (--) 
+  AeroExecutiveBase * executive_ptr{nullptr}; /* (--) 
        A pointer to the currently-used executive.*/
 
 public:
   /***************************************************************************/
   // User-settable inputs
   /***************************************************************************/
-  bool disable_aero_moments; /* (--) self-explanatory */
-  bool disable_aero_damping; /* (--) self-explanatory */
-  double max_atmos_altitude; /* (m)  Only activate if at a sensible altitude. */
+  bool disable_aero_moments{false}; /* (--) self-explanatory */
+  bool disable_aero_damping{false}; /* (--) self-explanatory */
+  double max_atmos_altitude{3.5E6}; /* (m)  Only activate if at a sensible altitude. */
 
   /***************************************************************************/
   // Outputs
   /***************************************************************************/
   AeroInterfaceOutput output; /* (--) output of the model. */
-public:
+
   AeroInterfaceBase( AtmosRelativeState & atmos_rel_state_in,
-                     const double       & geodetic_altitude);
+                     const double       & geodetic_altitude_in);
 
   ~AeroInterfaceBase() override = default;
+
+  AeroInterfaceBase (const AeroInterfaceBase &) = delete;
+  AeroInterfaceBase & operator = (const AeroInterfaceBase &) = delete;
 
   virtual void update() = 0;
 
 protected:
   void activate() override;
   void deactivate() override;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies
-  AeroInterfaceBase (const AeroInterfaceBase &);
-  AeroInterfaceBase & operator = (const AeroInterfaceBase &);
 };
 #endif

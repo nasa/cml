@@ -42,7 +42,7 @@ PROGRAMMERS:
 #ifndef CML_DYNAMIC_MASS_BODY_NOMINAL_PROPERTIES_HH
 #define CML_DYNAMIC_MASS_BODY_NOMINAL_PROPERTIES_HH
 
-#include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
 
 // NOTE - this class does not inherit from jeod::MassProperties because of the
 // extraneous capabilities that jeod::MassPoint (parent to jeod::MassProperties)
@@ -50,23 +50,20 @@ PROGRAMMERS:
 // duplicate the data elements - mass, position, inertia.
 class DynamicMassBodyNominalProperties {
 public:
-   double position[3];   /* (m)
+   double position[3]{};   /* (m)
           Center of mass location in the parent body's structural frame. */
-   double core_mass;     /* (kg)    Mass (always >= 0). */
-   double inertia[3][3]; /* (kg*m2) Inertia matrix in element body frame. */
+   double core_mass{0.0};     /* (kg)    Mass (always >= 0). */
+   double inertia[3][3]{}; /* (kg*m2) Inertia matrix in element body frame. */
 
 protected:
-   bool   data_assigned; /* (--) Nominal data has been assigned. */
+   bool   data_assigned{false}; /* (--) Nominal data has been assigned. */
 
 // NOTE - source code found in dynamic_mass_body_properties.cc
 public:
-   DynamicMassBodyNominalProperties();
+   DynamicMassBodyNominalProperties() = default;
+   DynamicMassBodyNominalProperties (const DynamicMassBodyNominalProperties&) = delete;
+   DynamicMassBodyNominalProperties& operator = (const DynamicMassBodyNominalProperties&) = delete;
    void set_data( jeod::MassProperties & properties_in);
-
-private:
-   // To prevent the copy/assignment operations
-   DynamicMassBodyNominalProperties (const DynamicMassBodyNominalProperties&);
-   DynamicMassBodyNominalProperties& operator = (const DynamicMassBodyNominalProperties&);
 };
 
 

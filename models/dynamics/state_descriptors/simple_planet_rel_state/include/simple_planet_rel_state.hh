@@ -16,6 +16,8 @@ PROGRAMMERS:
 #include <string>
 #include "jeod/models/dynamics/derived_state/include/relative_derived_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/dynamics/dyn_manager/include/class_declarations.hh"
 
 class SimplePlanetRelState : public SubscriptionBase,
                              public jeod::RelativeDerivedState
@@ -28,18 +30,17 @@ class SimplePlanetRelState : public SubscriptionBase,
          name of the planet reference frame, including the name of the planet
          E.g. Earth.inertial, Moon.pfix. */
  public:
-  double reference_radius; /* (m) Reference-radius for computing the altitude*/
-  double altitude;         /* (m) height of the frame-of-interest above the
+  double reference_radius{0.0}; /* (m) Reference-radius for computing the altitude*/
+  double altitude{0.0};         /* (m) height of the frame-of-interest above the
                                   reference-height. */
 
-  SimplePlanetRelState(std::string body_frame_name_,
-                       std::string planet_frame_name);
+  SimplePlanetRelState(std::string  body_frame_name_,
+                       std::string  planet_frame_name_);
+  SimplePlanetRelState (const SimplePlanetRelState&) = delete;
+  SimplePlanetRelState & operator = (const SimplePlanetRelState&) = delete;
 
   void initialize(jeod::DynBody & subject_body,
                           jeod::DynManager & dyn_manager) override;
   void update() override;
- private:
-  SimplePlanetRelState (const SimplePlanetRelState&);
-  SimplePlanetRelState & operator = (const SimplePlanetRelState&);
 };
 #endif

@@ -5,12 +5,19 @@
       This simplifies the form of the method generate_base_values() and
       generate_output.)
 
+LIBRARY DEPENDENCIES:
+   ((cml/models/utilities/cml_message/src/cml_message.cc))
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (May 2023) (Antares) (initial version))
    )
 *******************************************************************************/
 
+#include "../include/generic_multi_input_table.hh"
 #include "../include/generic_single_input_table.hh"
+#include "../include/table_independent_variable.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
 
 
 /*****************************************************************************
@@ -62,7 +69,7 @@ Notes:
 void
 GenericSingleInputTable::generate_base_values()
 {
-  TableIndependentVariable & TIV = *independents[0].first;
+  const TableIndependentVariable & TIV = *independents[0].first;
   size_t index =   TIV.get_index();
 
   switch(independents[0].second) {
@@ -164,7 +171,7 @@ GenericSingleInputTable::generate_output()
     // moving from the lower index to the upper index. So the upper index
     // should be weighted by fraction, and the lower index weighted by
     // (1-fraction)
-    double frac =  independents[0].first->fraction;
+    const double frac =  independents[0].first->fraction;
     for (double* out_ptr : output) {
       *out_ptr = data[data_ix]   * (1-frac) +
                  data[data_ix+1] * frac;

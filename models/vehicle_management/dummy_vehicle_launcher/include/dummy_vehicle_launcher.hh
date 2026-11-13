@@ -26,7 +26,6 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/mass/include/mass.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dynamics_integration_group.hh"
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 class DummyVehicleLauncher
 {
@@ -59,11 +58,13 @@ class DummyVehicleLauncher
 
  public:
   DummyVehicleLauncher( jeod::DynBody & this_body,
-                        const jeod::MassBody & mass,
-                        const jeod::DynBody & state);
+                        const jeod::MassBody & real_mass_body_in,
+                        const jeod::DynBody & real_state_body_in);
   DummyVehicleLauncher( jeod::DynBody & this_body,
-                        const jeod::DynBody & real_body);
+                        const jeod::DynBody & real_body_in);
   virtual ~DummyVehicleLauncher() = default;
+  DummyVehicleLauncher (const DummyVehicleLauncher& rhs) = delete;
+  DummyVehicleLauncher& operator = (const DummyVehicleLauncher& rhs) = delete;
 
   void initialize_integ_group_actions();
   void launch();
@@ -71,15 +72,10 @@ class DummyVehicleLauncher
   void set_intended_integ_body(jeod::DynBody * tgt);
   void set_intended_integ_body_state_body();
 
-  bool get_active() {return active;}
+  bool get_active() const {return active;}
 
  protected:
   void add_to_integ_group();
   void process_inconsistent_setup();
-
- private:
-  // Not implemented:
-  DummyVehicleLauncher (const DummyVehicleLauncher& rhs);
-  DummyVehicleLauncher& operator = (const DummyVehicleLauncher& rhs);
 };
 #endif

@@ -10,7 +10,7 @@ PROGRAMMERS:
 #ifndef CML_AERO_ENVIRONMENT_HH
 #define CML_AERO_ENVIRONMENT_HH
 
-#include <cstring>  // NULL
+#include <cstring>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*******************************************************************************
@@ -55,34 +55,30 @@ public:
     cg_position( cg_position_in),
     true_body_rates( true_body_rates_in)
   {
-    if (cg_position == NULL) {
+    if (cg_position == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid construction of Table/API interface\n",
         "The cg_position pointer was not specified.\n"
         "It is required.\n");
     }
-    if (true_body_rates == NULL) {
+    if (true_body_rates == nullptr) {
       CMLMessage::fail(
         __FILE__,__LINE__,"Invalid construction of Table/API interface\n",
         "The true_body_rates pointer was not specified.\n"
         "It is required.\n");
     }
   }
+  AeroEnvironment (const AeroEnvironment &) = delete;
+  AeroEnvironment & operator = (const AeroEnvironment &) = delete;
 
-  double get_mach() {return Mach_number;}
-  double get_dynamic_pressure() { return dynamic_pressure;}
-  double get_total_angle_of_attack() { return total_angle_of_attack;}
-  double get_angle_of_attack() { return angle_of_attack;}
-  double get_angle_of_sideslip() { return angle_of_sideslip;}
-  double get_phi_roll() { return phi_roll;}
-  double get_free_stream_vel_mag() { return free_stream_vel_mag;}
-  const double * get_cg_position() { return cg_position;}
-  const double * get_true_body_rates() { return true_body_rates;}
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroEnvironment (const AeroEnvironment &);
-  AeroEnvironment & operator = (const AeroEnvironment &);
+  double get_mach() const {return Mach_number;}
+  double get_dynamic_pressure() const { return dynamic_pressure;}
+  double get_total_angle_of_attack() const { return total_angle_of_attack;}
+  double get_angle_of_attack() const { return angle_of_attack;}
+  double get_angle_of_sideslip() const { return angle_of_sideslip;}
+  double get_phi_roll() const { return phi_roll;}
+  double get_free_stream_vel_mag() const { return free_stream_vel_mag;}
+  const double * get_cg_position() const { return cg_position;}
+  const double * get_true_body_rates() const { return true_body_rates;}
 };
 #endif

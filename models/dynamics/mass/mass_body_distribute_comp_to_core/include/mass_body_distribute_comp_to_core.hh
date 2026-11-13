@@ -24,11 +24,10 @@ Programmers:
 #ifndef CML_MASS_BODY_DISTRIBUTE_COMP_TO_CORE_HH
 #define CML_MASS_BODY_DISTRIBUTE_COMP_TO_CORE_HH
 
-#include "jeod/models/dynamics/mass/include/mass.hh" // jeod::MassBody
-#include "jeod/models/dynamics/mass/include/mass_properties.hh" // jeod::MassProperties
-#include "jeod/models/dynamics/mass/include/mass_point_state.hh" // MassPointState
+#include "jeod/models/dynamics/mass/include/mass.hh"
+#include "jeod/models/dynamics/mass/include/mass_properties.hh"
+#include "jeod/models/dynamics/mass/include/mass_point_state.hh"
 
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************
@@ -47,7 +46,7 @@ class MassBodyDistributeCompToCore
                                       adjusted in order to meet the specified
                                       composite-properties of the target-body.*/
  public:
-  bool fail_if_mass_invalid; /* (--) Determines the model's behaviour if the new
+  bool fail_if_mass_invalid{true}; /* (--) Determines the model's behaviour if the new
                         mass properties are invalid.
                         If true:  simulation is terminated
                         If false: simulation continues with an error message
@@ -58,11 +57,11 @@ class MassBodyDistributeCompToCore
                         structure-point wrt the target-body structure-point. */
   jeod::MassProperties target_properties; /* (--) target properties generated from
                         a combination of nominal and dispersed properties. */
-  double old_mass; /* (kg) the original mass of the adjustable_body. */
+  double old_mass{0.0}; /* (kg) the original mass of the adjustable_body. */
 
  public:
-  MassBodyDistributeCompToCore( jeod::MassBody & adjustable_body,
-                                jeod::MassBody & target_body);
+  MassBodyDistributeCompToCore( jeod::MassBody & adjustable_body_in,
+                                jeod::MassBody & target_body_in);
   virtual ~MassBodyDistributeCompToCore() = default;
 
 
@@ -72,7 +71,7 @@ class MassBodyDistributeCompToCore
   bool check_configuration();
   void generate_new_position();
   void generate_new_inertia();
-  void check_for_valid_mass_properties();
+  void check_for_valid_mass_properties() const;
 
   MassBodyDistributeCompToCore(const MassBodyDistributeCompToCore&);
   MassBodyDistributeCompToCore & operator = (

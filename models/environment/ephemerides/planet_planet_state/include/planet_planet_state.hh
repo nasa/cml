@@ -53,11 +53,13 @@ class PlanetPlanetState : public SubscriptionBase
   bool init_from_name; /* (--) Ref frames set by name */
 
  public:
-  explicit PlanetPlanetState( jeod::DynManager & dyn_mgr);
-  PlanetPlanetState( jeod::DynManager & dyn_mgr,
-                     jeod::RefFrame & to_frame,
-                     jeod::RefFrame & from_frame);
+  explicit PlanetPlanetState( jeod::DynManager & dyn_mgr_in);
+  PlanetPlanetState( jeod::DynManager & dyn_mgr_in,
+                     jeod::RefFrame & to_frame_in,
+                     jeod::RefFrame & from_frame_in);
   ~PlanetPlanetState() override = default;
+  PlanetPlanetState (const PlanetPlanetState&) = delete;
+  PlanetPlanetState& operator = (const PlanetPlanetState&) = delete;
 
   void initialize() override;
   void update();
@@ -65,10 +67,5 @@ class PlanetPlanetState : public SubscriptionBase
  protected:
   void activate() override;
   void deactivate() override;
-
- private:
-   // Not implemented:
-   PlanetPlanetState (const PlanetPlanetState&);
-   PlanetPlanetState& operator = (const PlanetPlanetState&);
 };
 #endif

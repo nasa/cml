@@ -16,49 +16,26 @@ PURPOSE: (Provides a table-lookup-set when the data is presented in a
           This class supports data presented in the latter format.  The data
           may be subdivided into as many tables as necessary or desired.
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Nov 2017) (Antares) (initial)))
 **********************************************************************/
-#include <fstream> // ifstream
-#include <sstream> // istringstream
-#include <iterator>// istream_iterator
-#include <cstring> // strcmp
-#include <algorithm> // max_element
+#include <fstream>
+#include <sstream>
+#include <iterator>
+#include <cstring>
+#include <algorithm>
+#include <string>
+#include <vector>
 
 
+#include "../include/abstract_table_lookup.hh"
+#include "../include/table_independent_variable.hh"
 #include "../include/table_lookup__transpose_data.hh"
-
-/*****************************************************************************
-constructors
-*****************************************************************************/
-TableLookupTransposeDataSet_TableConfig::
-                                     TableLookupTransposeDataSet_TableConfig()
-  :
-  name(),
-  block_independent_addition(false),
-  index_low(0),
-  index_high(0),
-  indices(),
-  table_ptr(nullptr),
-  dependent_variables(),
-  table_type(AbstractTableLookup::Generic),
-  lookup_method( TableIndependentVariable::Interp),
-  data_scratch(),
-  num_variables(0),
-  total_num_lines(0)
-{}
-/****************************************************************************/
-TableLookupTransposeDataSet::TableLookupTransposeDataSet()
-  :
-  table_config(),
-  independent_var(nullptr),
-  indep_continuity(TableIndependentVariable::Linear),
-  populate_independent_from_file(false),
-  indep_index(0),
-  min_length(0),
-  min_length_line(0),
-  data_processed(false)
-{}
+#include "../include/table_type_defs.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 /*****************************************************************************
 initialize
@@ -110,12 +87,12 @@ TableLookupTransposeDataSet_TableConfig::check_indices()
   }
   else {
     if (index_high < index_low) {
-      size_t index_scratch = index_high;
+      const size_t index_scratch = index_high;
       index_high = index_low;
       index_low = index_scratch;
     }
 
-    size_t size = index_high - index_low + 1;
+    const size_t size = index_high - index_low + 1;
     indices.resize(size);
     for (size_t ii = 0; ii < size; ++ii){
       indices[ii] = index_low + ii;
@@ -129,12 +106,12 @@ Purpose:(Parses a line of data, extracting the appropriate pieces.)
 *****************************************************************************/
 void
 TableLookupTransposeDataSet_TableConfig::parse_line(
-    size_t line_index, // first line is numbered 0
+    size_t line_num, // first line is numbered 0
     const DoubleVec & data_line)
 {
   // take the data off this line and put it in the scratch storage space.
   for (size_t ix = 0; ix < num_variables; ++ix) {
-    data_scratch[ ix*total_num_lines + line_index] = data_line[indices[ix]];
+    data_scratch[ ix*total_num_lines + line_num] = data_line[indices[ix]];
   }
 }
 
@@ -157,6 +134,7 @@ TableLookupTransposeDataSet_TableConfig::populate_table()
     CMLMessage::fail(
     __FILE__,__LINE__,"Invalid table management sequence\n",
     "Allocation for a GenericMultiInputTable failed.\n");
+    return;
   }
   // define internal sizing of vector
   SizeVec dim_list(2);
@@ -201,7 +179,7 @@ TableLookupTransposeDataSet::process_data(
 
 
   // Get a count of the number of lines and length of the shortest line
-  size_t data_lines_total_count = data_file.size();
+  const size_t data_lines_total_count = data_file.size();
   min_length = data_file.front().size();
   size_t line_num = 1;
   for (const DoubleVec & line_iter : data_file) {
@@ -262,7 +240,7 @@ TableLookupTransposeDataSet::process_data(
   // PART B: Check and process dependent data.
   //***************************************************************************
   // Verify that no tables have already been assigned to this manager:
-  if (tables.size() != 0) {
+  if (!tables.empty()) {
     CMLMessage::warn(
       __FILE__,__LINE__,"Unexpected configuration.\n",
       "Found data tables already added to this manager.\n"
@@ -437,24 +415,21 @@ Purpose:(Returns a pointer to one of the entries in table_config.
 TableLookupTransposeDataSet_TableConfig *
 TableLookupTransposeDataSet::get_config( const char * name_in)
 {
-  std::string search_name(name_in);
+  const std::string search_name(name_in);
   return get_config( search_name);
 }
 /****************************************************************************/
 TableLookupTransposeDataSet_TableConfig *
 TableLookupTransposeDataSet::get_config( const std::string & name_in)
 {
-
-  std::vector<TableLookupTransposeDataSet_TableConfig>::iterator table_it =
-                                                           table_config.begin();
   size_t num_matches = 0;
   TableLookupTransposeDataSet_TableConfig * ret_val = nullptr;
 
-  for (; table_it != table_config.end(); ++table_it) {
-    if (name_in.compare((*table_it).name) == 0) {
+  for (auto& table_it : table_config) {
+    if (name_in == table_it.name) {
       num_matches++;
       if (ret_val == nullptr) {
-        ret_val = &(*table_it);
+        ret_val = &table_it;
       }
     }
   }
@@ -494,7 +469,7 @@ TableLookupTransposeDataSet::check_independent()
 
   // If none have been added, or an invalid instance has been added,
   // create a new TableIndependentVariable.
-  if (independents.size() == 0 || independents.at(0) == nullptr) {
+  if (independents.empty() || independents.at(0) == nullptr) {
     // Must have knowledge of the independent variable
     if (independent_var == nullptr) {
       CMLMessage::fail(
@@ -545,7 +520,7 @@ TableLookupTransposeDataSet::remove_config(
      one assigned for removal.
   */
   for (const auto & config : table_config) {
-    bool indices_match = (config.indices.empty())?
+    const bool indices_match = (config.indices.empty())?
                             ((config_remove.index_low == config.index_low) &&
                              (config_remove.index_high == config.index_high))
                             :

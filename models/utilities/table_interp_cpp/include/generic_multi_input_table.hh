@@ -16,9 +16,8 @@
 #ifndef CML_GENERIC_MULTI_INPUT_TABLE_HH
 #define CML_GENERIC_MULTI_INPUT_TABLE_HH
 
-#include <list>
-#include <string> // std::string
-#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <cstddef>
+#include <string>
 
 #include "table_independent_variable.hh"
 #include "table_type_defs.hh"
@@ -81,9 +80,9 @@ class GenericMultiInputTable
   bool load_data( const DoubleVec & data_in,
                   const SizeVec &dim_list);
 
-  void add_dependent( double & dependent);
-  void append_dependent_data( double & dependent,
-                              const DoubleVec & data_in,
+  void add_dependent( double & new_dep_var);
+  void append_dependent_data( double & new_dep_var,
+                              const DoubleVec & data_vec,
                               const SizeVec &dim_list);
   void add_independent( TableIndependentVariable & var,
                         TableIndependentVariable::LookupMethod lookup_method=
@@ -105,10 +104,10 @@ class GenericMultiInputTable
   size_t get_data_size() const { return data.size();}
   double* get_dependent_variable_ptr(size_t index) {return output.at(index);}
 
-  void bias_data(double bias, size_t idx1, size_t idx2);
+  void bias_data(double bias, size_t idx_start, size_t idx_stop);
   void bias_data(double bias, size_t idx) { bias_data( bias, idx, idx);}
   void bias_data(double bias) {bias_data( bias, 0, data.size()-1);}
-  void scale_data(double scale, size_t idx1, size_t idx2);
+  void scale_data(double scale, size_t idx_start, size_t idx_stop);
   void scale_data(double scale, size_t idx) { scale_data( scale, idx, idx);}
   void scale_data(double scale) {scale_data( scale, 0, data.size()-1);}
 
@@ -119,7 +118,7 @@ class GenericMultiInputTable
   virtual bool generate_output();
   bool precheck_output();
   void generate_trivial_output();
-  bool index_checks(size_t & idx1, size_t & idx2, std::string func);
+  bool index_checks(size_t & idx_start, size_t & idx_stop, const std::string & func);
 
  private:
   bool load_data_internal_check( const SizeVec &dim_list );

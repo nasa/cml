@@ -1,0 +1,5 @@
+# Disable the const correctness check. It takes way too long to run for this huge data file.
+
+InheritParentConfig: true
+
+Checks: '-misc-const-correctness'

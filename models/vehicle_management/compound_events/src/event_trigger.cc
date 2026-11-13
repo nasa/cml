@@ -11,24 +11,8 @@ PROGRAMMERS:
   )
 **********************************************************************/
 #include "../include/event_trigger.hh"
-
-
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-EventTriggerBase::EventTriggerBase()
-    :
-    comparison_logic(Undefined),
-    function_modifier(NoModification),
-    direction_limit(NoDirectionLimit),
-    variable_dbl(0.0),
-    variable_dbl_prev(0.0),
-    variable_dbl_activation(0.0),
-    reference_dbl(0.0),
-    locked(false)
-{}
-
+#include <cmath>
+#include <cstdlib>
 
 /*****************************************************************************
 apply_function_modifier
@@ -74,7 +58,7 @@ Purpose:
   conditionally-assigned reference.
 *****************************************************************************/
 bool
-EventTriggerBase::has_conditional_reference()
+EventTriggerBase::has_conditional_reference() const
 {
   return ((comparison_logic == MAX_CONDITIONAL_FIRST) ||
           (comparison_logic == MIN_CONDITIONAL_FIRST) ||
@@ -84,6 +68,54 @@ EventTriggerBase::has_conditional_reference()
           (comparison_logic == MIN_CONDITIONAL_LAST) ||
           (comparison_logic == ABS_MAX_CONDITIONAL_LAST) ||
           (comparison_logic == ABS_MIN_CONDITIONAL_LAST));
+}
+
+/*****************************************************************************
+has_managed_value_reference
+Purpose:
+  Returns a simple flag indicating whether the trigger has
+  managed values of reference.  These should be multi-shot.
+*****************************************************************************/
+bool
+EventTriggerBase::has_managed_value() const
+{
+  switch (comparison_logic) {
+    case MAX_FIRST:
+    case MIN_FIRST:
+    case ABS_MAX_FIRST:
+    case ABS_MIN_FIRST:
+    case MAX_LAST:
+    case MIN_LAST:
+    case ABS_MAX_LAST:
+    case ABS_MIN_LAST:
+    case MAX_CONDITIONAL_FIRST:
+    case MIN_CONDITIONAL_FIRST:
+    case ABS_MAX_CONDITIONAL_FIRST:
+    case ABS_MIN_CONDITIONAL_FIRST:
+    case MAX_CONDITIONAL_LAST:
+    case MIN_CONDITIONAL_LAST:
+    case ABS_MAX_CONDITIONAL_LAST:
+    case ABS_MIN_CONDITIONAL_LAST:
+      return true;
+    case Undefined:
+    case EQ:
+    case NE:
+    case GT:
+    case LT:
+    case GE:
+    case LE:
+    case ABS_EQ:
+    case ABS_GT:
+    case ABS_GE:
+    case ABS_LT:
+    case ABS_LE:
+    case OC:
+    case Change:
+    case Crossing:
+      return false;
+  }
+
+  return false;
 }
 
 /*****************************************************************************
@@ -136,4 +168,3 @@ EventTriggerBase::set_new_reference()
     break;
   }
 }
-

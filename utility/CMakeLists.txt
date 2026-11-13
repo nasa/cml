@@ -1,3 +1,21 @@
+# This target exists for CML's static analysis tools. Headers which aren't included
+# by any source file aren't analyzed by clang-tidy. Therefore, we use this empty
+# source file to include the Trickification S_source.hh file, which by necessity
+# includes all CML headers.
+include(AddCMLLibrary)
+add_cml_library(
+    NAME
+        all_headers
+
+    SOURCES
+        all_headers.cc
+)
+
+target_link_libraries(cml_all_headers
+    PUBLIC
+        LibXml2::LibXml2
+)
+
 # This function copies a prebuilt Trick library, such as libtrick.a, to the build
 # directory and converts all of the library's internal symbols from strong symbols
 # to weak symbols.

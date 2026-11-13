@@ -23,21 +23,19 @@ class FaultOverwrite : public Fault {
  private:
   T& variable; /* (--) Reference to the variable to fault. */
  public:
-  T faulted_value; /* (--) The faulted value of the variable. */
+  T faulted_value {}; /* (--) The faulted value of the variable. */
 
   explicit FaultOverwrite(T& var)
     :
     variable(var)
   {}
   ~FaultOverwrite() override = default;
+  FaultOverwrite(const FaultOverwrite&) = delete;
+  FaultOverwrite& operator = (const FaultOverwrite&) = delete;
 
   void overwrite_value() override { variable = faulted_value; }
 
-  bool set_param(std::string param_name, double val_, bool) override;
-
- private:
-  FaultOverwrite(const FaultOverwrite&) = delete;
-  FaultOverwrite& operator = (const FaultOverwrite&) = delete;
+  bool set_param(const std::string& param_name, double val_, bool reset_nominal) override;
 };
 
 
@@ -48,10 +46,11 @@ Purpose:(Generic method for setting fault parameters. For this type of fault,
 *******************************************************************************/
 template<typename T>
 bool FaultOverwrite<T>::set_param(
-  std::string param_name,
+  const std::string& param_name,
   double val_,
-  bool)
+  bool reset_nominal)
 {
+  (void)reset_nominal;
   if (param_name == "value") {
     faulted_value = val_;
     return true;
@@ -61,7 +60,7 @@ bool FaultOverwrite<T>::set_param(
 }
 /******************************************************************************/
 template<>
-bool FaultOverwrite<bool>::set_param( std::string param_name,
+bool FaultOverwrite<bool>::set_param( const std::string& param_name,
                                       double val_,
-                                      bool);
+                                      bool reset_nominal);
 #endif

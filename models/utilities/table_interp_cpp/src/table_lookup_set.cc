@@ -2,15 +2,25 @@
 PURPOSE:
   (Table lookup model master controller)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (New implementation))
    ((Bingquan Wang) (OSR) (Aug 2017) (IVV code cleanup and refactored))
   )
 *******************************************************************************/
 
-#include <cstdarg> // for variadic function arguments
+#include <algorithm>
+#include <cstddef>
+#include <string>
+#include <vector>
 
+#include "../include/abstract_table_lookup.hh"
+#include "../include/generic_multi_input_table.hh"
+#include "../include/table_independent_variable.hh"
 #include "../include/table_lookup_set.hh"
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 
 /*****************************************************************************
@@ -45,7 +55,7 @@ TableLookupSet::add_table( GenericMultiInputTable &new_table)
     return;
   }
 
-  size_t num_vars = new_table.get_num_dep_vars();
+  const size_t num_vars = new_table.get_num_dep_vars();
   for (size_t ii = 0; ii < num_vars; ++ii) {
     double *var_ptr = new_table.get_dependent_variable_ptr(ii);
     verify_and_add_dependent_variable( var_ptr);
@@ -59,9 +69,8 @@ TableLookupSet::add_table( GenericMultiInputTable &new_table)
   // In this scenario, the second addition of the table will be a duplicate,
   // but checking the dependent variables is unsufficient.  So check the tables
   // as well.
-  std::vector<TableItem_t>::iterator it_tab =  tables.begin();
-  for (; it_tab!=tables.end(); ++it_tab) {
-    if (&new_table == (*it_tab).first) {
+  for (const auto& [table, enabled_flag] : tables) {
+    if (&new_table == table) {
       CMLMessage::warn(
         __FILE__,__LINE__,"Initialization duplication detected.\n",
         "The same table was added to the table-manager twice.\n"
@@ -72,7 +81,7 @@ TableLookupSet::add_table( GenericMultiInputTable &new_table)
   }
 
   // Add this table to the list and default it to be enabled.
-  tables.push_back(AbstractTableLookup::TableItem_t(&new_table, true));
+  tables.emplace_back(&new_table, true);
 }
 
 /*****************************************************************************
@@ -93,16 +102,13 @@ TableLookupSet::add_independent_variable(
   }
 
   // Check that it has not already been added:
-  std::vector<TableIndependentVariable*>::iterator it = independents.begin();
-  for (; it != independents.end(); ++it) {
-    if (&var_in == *it) {
-      CMLMessage::warn(
-        __FILE__, __LINE__, "Duplicate variable addition\n",
-        "Attempted to add variable ",var_in.get_name(),
-        " but it has already been added.\n"
-        "Addition aborted.\n");
-      return;
-    }
+  if (std::find(independents.begin(), independents.end(), &var_in) != independents.end()) {
+    CMLMessage::warn(
+      __FILE__, __LINE__, "Duplicate variable addition\n",
+      "Attempted to add variable ",var_in.get_name(),
+      " but it has already been added.\n"
+      "Addition aborted.\n");
+    return;
   }
 
   // Check that it has a unique name, names are used for lookups.

@@ -18,6 +18,8 @@ PROGRAMMERS:
 
 #include "cml/models/vehicle_management/events_manager/include/watch_values_delay.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include <string>
+#include <utility>
 
 // Provide SWIG with the necessary template so it can see through to the
 // layer above.
@@ -66,7 +68,7 @@ struct EventTriggerBase
     MIN_CONDITIONAL_FIRST,
     ABS_MAX_CONDITIONAL_FIRST,
     ABS_MIN_CONDITIONAL_FIRST,
-    
+
     // options with managed values of reference:
     MAX_LAST,   // triggers when variable reaches a pt >= reference (LAST occurance)
                 // and resets reference to this value.
@@ -79,7 +81,7 @@ struct EventTriggerBase
     MIN_CONDITIONAL_LAST,
     ABS_MAX_CONDITIONAL_LAST,
     ABS_MIN_CONDITIONAL_LAST
-  } comparison_logic; /* (--)
+  } comparison_logic{Undefined}; /* (--)
     Specifies how to compare the value of variable against the
     recorded reference value.*/
 
@@ -93,7 +95,7 @@ struct EventTriggerBase
     AbsSine,
     AbsCosine,
     AbsTan
-  } function_modifier; /* (--)
+  } function_modifier{NoModification}; /* (--)
     Specifies how to modify the value of "variable" before comparing against
     "reference". */
 
@@ -111,34 +113,32 @@ struct EventTriggerBase
     DEC                             = 2,
     Strictly_Increasing             = 3,
     Strictly_Decreasing             = 4,
-  } direction_limit; /* (--)
+  } direction_limit{NoDirectionLimit}; /* (--)
     Specifies further restrictions on what is considered a triggering.
     E.g. value has to be greater than threshold and decreasing.
     Using all legacy enumerations to try to maintain as much
     backward-compatibility as possible.*/
  protected:
-  double variable_dbl; /* (--)
+  double variable_dbl{0.0}; /* (--)
     The value obtained when the template pointer variable is dereferenced
     and cast to type double. This value may be further modified by a
     function in the enumerated list FunctionModifier.*/
-  double variable_dbl_prev; /* (--)
+  double variable_dbl_prev{0.0}; /* (--)
     The previous value of variable_dbl.*/
-  double variable_dbl_activation; /* (--)
+  double variable_dbl_activation{0.0}; /* (--)
     The value of variable_dbl at activation, used in cases of the reference
     threshold being assigned as an offset from the initial (activation)
     value.*/
-  double reference_dbl; /* (--)
+  double reference_dbl{0.0}; /* (--)
     The value obtained when the template reference value (or template
     reference pointer) is cast to type double. This defines the threshold
     for logical comparisons made in this class.*/
-  bool locked; /* (--)
-    Boolean used to lock at each cycle, so each WatchValuesBase cannot be 
-    tested more than once per cycle, leading to unintended behavior.*/
 
  public:
-  EventTriggerBase();
+  EventTriggerBase() = default;
   void apply_function_modifier();
-  bool has_conditional_reference();
+  bool has_conditional_reference() const;
+  bool has_managed_value() const;
   void set_new_reference();
 };
 
@@ -150,29 +150,24 @@ template <typename T>
 class EventTrigger : public WatchValuesDelay<T>,
                      public EventTriggerBase
 {
-  bool relative_to_activation_ET; /* (--)
-    This is a bit kludgy. relative_to_activation is inherited from
-    WatchValuesDelay (from WatchValuesBase) and is a public flag;
-    for an EventTrigger, this needs to be locked down at activation.
-    relative_to_activation_protected is also inherited from WatchValuesDelay
-    and is set at activation.
-    But this protected variable is used in WatchValuesBase::test_crossing()
-    to reset "reference" based on the current value of variable.
-    We need to reset "reference" based on the current value of "variable"
-    after the modifier function has been applied.
-    So we cannot use relative_to_activation_protected and need a
-    new variable, similar in intent, specifically for EventTrigger.*/
+  bool relative_to_activation_ET{false}; /* (--)
+    This is a protected form of relative_to_activation. used to support
+    applying the function-modified value of the monitored variable as
+    recorded at trigger-activation. It works similarly to the inherited
+    relative_to_activation_protected, but for applying the function-modified
+    value instead of the raw-value.bit kludgy.
+    See documentation section "Pre-comparison Function Application" for more
+    comprehensive discussion.*/
 
  public:
-  EventTrigger( const double & delay_ref,
-                std::string name_ = "")
+  explicit EventTrigger( const double & delay_ref,
+                         std::string name_ = "")
     :
-    WatchValuesDelay<T> (delay_ref),
-    relative_to_activation_ET(false)
+    WatchValuesDelay<T> (delay_ref)
   {
     /* name is inherited from WatchValuesDelay from WatchValuesBase from
     * WatchValuesBaseCore.*/
-    this->name = name_;
+    this->name = std::move(name_);
     /* In the event that type T is not float or similar, we need the
      * use_threshold_crossing_trigger flag to bring the execution back to this
      * class's test_crossing_dbl() method from high up in the WatchValues
@@ -180,6 +175,8 @@ class EventTrigger : public WatchValuesDelay<T>,
     WatchValuesBase<T>::use_threshold_crossing_trigger = true;
   }
   ~EventTrigger() override = default;
+  EventTrigger (const EventTrigger& rhs) = delete;
+  EventTrigger& operator = (const EventTrigger& rhs) = delete;
 
 
  protected:
@@ -194,43 +191,52 @@ Purpose:
   WatchValues implementations.
 Notes:
 - Going all the way back to WatchValuesBaseCore, the method test_crossing()
-  is the method-template entry-point for determining whether the event
-  should be triggered. For data types double, float, and any others with
-  the "use_threshold_crossing_trigger" flag set, the call to test_crossing
-  eventually transfers to test_crossing_dbl(double), which evaluates
-  whether the value is on the "triggered" side of the threshold, and sets
-  the event_triggered flag in response.
+    is the method-template entry-point for determining whether the event
+    should be triggered.
+- For data types double, float, and any others with the
+    "use_threshold_crossing_trigger" flag set, the call to test_crossing
+    eventually transfers to test_crossing_dbl(double), which evaluates
+    whether the value is on the "triggered" side of the threshold, and sets
+    the event_triggered flag in response.
 - In WatchValuesDelay, the test_crossing() method is expanded to wrap
-  the delay mechanism around the core WatchValuesBaseCore::test_crossing_dbl
-  functionality.
-- In this model, we utilize the wrapped-up capabilities provided by
-  WatchValuesDelay::test_crossing and overwrite the basic
-  threshold-crossing evaluations in WatchValuesBaseCore::test_crossing_dbl
-  to include the new requirements encapsulated in the enumerations
-  TriggerCondition, FunctionModifier, and DirectionLimit.
-- The reference (threshold) value can be:
-   - Fixed: pre-defined to a specific value
-   - Fixed: computed at trigger-activations to be a pre-defined offset from
-       the value of the monitored variable at trigger-activation.
-   - Variable: using a pointer to access the reference-variable.
-   - Variable: using that pointer to access the extent to which the
-       reference (threshold) value should be offset from the recorded baseline
-       value of the monitored variable at trigger-activation.
-  Case 1, and 2 use the class member value reference_dbl.
-  Case 3 uses the passed argument ref_val.
-  Case 4 uses ref_val + the value stored at activation, which is a
-  post-modified value unknown to WatchValuesBase so cannot be incorporated
-  in WatchValuesBase prior to entry into this method.
+    the delay mechanism around the core WatchValuesBaseCore::test_crossing
+    functionality.
+- In this model (which inherits the WatchValuesDelay functionality), we utilize
+    the wrapped-up capabilities provided by WatchValuesDelay and overwrite the
+    basic threshold-crossing evaluations (as previously implemented in
+    WatchValuesBaseCore::test_crossing_dbl) to include the new requirements
+    encapsulated in the enumerations
+    -  TriggerCondition,
+    -  FunctionModifier, and
+    -  DirectionLimit.
+- The 2nd argument (ref_val) is passed into here from WatchValuesBase.
+    This represents the trigger threshold and can be:
+     1. Fixed: pre-defined to a specific value
+     2. Fixed: computed at trigger-activations from the value of the
+               monitored variable at trigger-activation; allows the application
+               of the same function_modifier to the monitored variable at model
+               activation and now.
+     3. Variable: equal to the value of another sim variable at the current time.
+     4. Variable: equal to the sum of the value of another sim variable and the
+                  value of the monitored variable at trigger-activation, after
+                  applying the function-modifier.
+    Case 1, and 2 use the class member value reference_dbl.
+    Case 3 uses the passed argument ref_val.
+    Case 4 uses ref_val + the value stored at trigger-activation
 ******************************************************************************/
   void test_crossing_dbl( double var_val,
                           double ref_val) override
   {
     if (this->reference_is_variable) {
       if (relative_to_activation_ET) {
+        // Case 4 above in notes:
         reference_dbl = ref_val + variable_dbl_activation;
       } else {
+        // Case 3 above in notes
         reference_dbl = ref_val;
       }
+      // else:
+      // Cases 1 and 2 above in notes, reference_dbl is already known.
     }
 
     variable_dbl = var_val;
@@ -252,7 +258,7 @@ Notes:
     case EQ:
       // FIXME the use of is_near_equal() in this and other cases in this method,
       // with the default ulp of 0.5, tests for actual equality to the precision of
-      // the representation. 
+      // the representation.
       this->event_triggered = MathUtils::is_near_equal(variable_dbl, reference_dbl);
       break;
     case NE:
@@ -482,17 +488,17 @@ Notes:
              (comparison_logic == ABS_MIN_LAST)) {
       reference_dbl = std::abs(variable_dbl);
     }
-    else if ((comparison_logic == MAX_CONDITIONAL_FIRST) || 
+    else if ((comparison_logic == MAX_CONDITIONAL_FIRST) ||
              (comparison_logic == MAX_CONDITIONAL_LAST)) {
       reference_dbl = std::numeric_limits<double>::lowest();
     }
-    else if ((comparison_logic == MIN_CONDITIONAL_FIRST) || 
+    else if ((comparison_logic == MIN_CONDITIONAL_FIRST) ||
              (comparison_logic == MIN_CONDITIONAL_LAST) ||
-             (comparison_logic == ABS_MIN_CONDITIONAL_FIRST) || 
+             (comparison_logic == ABS_MIN_CONDITIONAL_FIRST) ||
              (comparison_logic == ABS_MIN_CONDITIONAL_LAST)) {
       reference_dbl = std::numeric_limits<double>::max();
     }
-    else if ((comparison_logic == ABS_MAX_CONDITIONAL_FIRST) || 
+    else if ((comparison_logic == ABS_MAX_CONDITIONAL_FIRST) ||
              (comparison_logic == ABS_MAX_CONDITIONAL_LAST)) {
       reference_dbl = 0.0;
     }
@@ -519,11 +525,8 @@ Notes:
     }
 
     // All actions complete, set the active flag and exit.
+    WatchValuesDelay<T>::activate();
     this->active = true;
   }
-
- private:
-  EventTrigger (const EventTrigger& rhs);
-  EventTrigger& operator = (const EventTrigger& rhs);
 };
 #endif

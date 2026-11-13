@@ -1,6 +1,9 @@
 /*******************************TRICK HEADER************************************
 PURPOSE: (Provides the methods for the AeroTableSet class)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (Antares) (initial version))
    ((Gary Turner) (OSR) (June 2016) (Antares) (Refactor))
@@ -8,37 +11,24 @@ PROGRAMMERS:
 *******************************************************************************/
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
-#include "jeod/models/utils/math/include/vector3.hh"
-#include "jeod/models/utils/math/include/matrix3x3.hh"
+#include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
+#include <string>
+#include <utility>
 
+#include "../include/aero_coefficients.hh"
 #include "../include/aero_table_set_base.hh"
 
 /*******************************************************************************
 Constructor
 *******************************************************************************/
 AeroTableSetBase::AeroTableSetBase(
-     const std::string & name_in,
+     std::string name_in,
      AeroCoefficientsTable & coefficients_out,
      AeroCoefficientsDisp  & uncertainties_out)
    :
-   TableLookupSet(),
-
    coefficients( coefficients_out),
    uncertainty_ref( uncertainties_out),
-
-   name( name_in),
-   Aref(0.0),
-   Lref(0.0),
-   T_struc_to_aero_frame{{1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{0.0, 0.0, 1.0}},
-   mrc_position{0.0, 0.0, 0.0},
-   uncertainties_expressed_as_percent(false),
-   uncertainty(),
-   aero_damping_in_table(false),
-   data_table_type( Unspecified),
-   aero_damping_on_diag_in_table( NotInTable),
-   aero_damping_off_diag_in_table( NotInTable),
-   uncertainty_data_present(false),
-   coef_data_present(false)
+   name( std::move(name_in))
 {}
 
 /*******************************************************************************
@@ -151,9 +141,8 @@ AeroTableSetBase::query_aero_damping()
 {
   query_on_diag_aero_damping();
   query_off_diag_aero_damping();
-  aero_damping_in_table = aero_damping_on_diag_in_table ||
-                          aero_damping_off_diag_in_table;
-  return;
+  aero_damping_in_table = (aero_damping_on_diag_in_table != 0) ||
+                          (aero_damping_off_diag_in_table != 0);
 }
 
 /*******************************************************************************
@@ -207,7 +196,7 @@ verify_aero_damping
 Purpose:()
 *******************************************************************************/
 AeroTableSetBase::AeroDampingType
-AeroTableSetBase::verify_aero_damping( std::string type)
+AeroTableSetBase::verify_aero_damping( const std::string & type) const
 {
   if (coef_data_present) {
     if (!uncertainty_data_present) {

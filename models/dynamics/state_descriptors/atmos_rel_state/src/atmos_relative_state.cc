@@ -11,7 +11,8 @@ REFERENCE:
      ((SORT - Aero Functions) (AROVAR.f) (AROATT.f)))
 
 LIBRARY DEPENDENCIES:
-    ((utils/orientation/src/eigen_rotation.cc)
+    ((cml/models/utilities/cml_message/src/cml_message.cc)
+     (utils/orientation/src/eigen_rotation.cc)
      (utils/orientation/src/euler_angles.cc)
      (utils/quaternion/src/quat_from_mat.cc)
      (utils/quaternion/src/quat_to_mat.cc)
@@ -40,15 +41,16 @@ PROGRAMMERS:
     )
 *******************************************************************************/
 
-#include <cmath>   // M_PI, isnan
-#include <cstring> // NULL
-#include "trick/constant.h" // conversions like RTD, LBFTON, MTF
-#include "jeod/models/utils/orientation/include/orientation.hh" // Orientation
-#include "jeod/models/utils/math/include/vector3.hh"    // Vector3
-#include "jeod/models/utils/math/include/matrix3x3.hh"  // Matrix3x3
+#include <cmath>
+#include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+#include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_interface.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+#include "jeod/models/utils/orientation/include/orientation.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
-#include "cml/models/utilities/math_utils/include/math_utils.hh" // MathUtils
+#include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/atmos_relative_state.hh"
 
@@ -60,65 +62,15 @@ AtmosRelativeState::AtmosRelativeState(
       ExtendedPlanetaryDerivedState & planet_rel_state_ref,
       AtmosphereExecInterface       & atmos_exec_ref)
   :
-  warn_on_v_parallel_r(true),
-  terminate_on_nan_euler(false),
-
-  free_stream_vel_mag(0.0),
-  free_stream_vel(),
-  free_stream_vel_unit(),
-  free_stream_td_vel(),
-  free_stream_body_vel(),
-
-  free_stream_flight_path(0.0),
-  free_stream_azimuth(0.0),
-  angle_of_attack(0.0),
-  angle_of_sideslip(0.0),
-  bank_angle(0.0),
-  total_angle_of_attack(0.0),
-  phi_roll(0.0),
-
-  mach_number(0.0),
-  dynamic_pressure(0.0),
-  drag_accel(0.0),
-  side_accel(0.0),
-  lift_accel(0.0),
-  sensed_accel_mag(0.0),
-
-  angle_of_attack_alt(0.0),
-  angle_of_sideslip_alt(0.0),
-  total_angle_of_attack_alt(0.0),
-  phi_roll_alt(0.0),
-
-  T_inrtl_traj(),
-  T_traj_body(),
-  T_traj_wind(),
-  T_inrtl_wind(),
-  T_wind_stab(),
-  T_inrtl_stab(),
-
-  reynolds_number(0.0),
-
-  qalpha_total(0.0),
-  qalpha_total_psfdeg(0.0),
-  qalpha(0.0),
-  qbeta(0.0),
-
   body(body_ref),
   planet_rel_state(planet_rel_state_ref),
   atmos_exec(atmos_exec_ref),
-  atmos(atmos_exec.out),
-  reference_length(nullptr),
-  compute_angles_subscriptions(0),
-  complete_calculation_subscriptions(0),
-  ref_length_null_msg_sent(false),
-  traj_to_body_RYP(),
-  psfdeg_converter(1.19664723485755)
+  atmos(atmos_exec.out)
 {
   subscribe_name = "AtmosRelativeState:";
   jeod::Matrix3x3::identity(T_inrtl_traj);
   jeod::Matrix3x3::identity(T_inrtl_wind);
   jeod::Matrix3x3::identity(T_inrtl_stab);
-  jeod::Vector3::initialize(traj_to_body_RYP);
 }
 
 /*****************************************************************************
@@ -170,7 +122,7 @@ AtmosRelativeState::activate()
   // currently active, but not otherwise.  So we need to rerun
   // planet-rel if (and only if) atmos-exec is already active AND no other
   // model already subscribes to the relative-velocity computation.
-  bool rerun_planet_rel_state = atmos_exec.is_active() &&
+  const bool rerun_planet_rel_state = atmos_exec.is_active() &&
                                 !planet_rel_state.is_rel_vel_subscribed();
 
   // Add a subscription to the relative-velocity computation
@@ -242,7 +194,7 @@ Purpose: Sets the reference length pointer
 *******************************************************************************/
 void
 AtmosRelativeState::set_reference_length(
-   double * ref_length_in)
+   const double * ref_length_in)
 {
   reference_length = ref_length_in;
   initialize();
@@ -424,7 +376,7 @@ AtmosRelativeState::compute_T_inrtl_traj()
   //     passing the "is-near-equal" test, and then failing the equivalent
   //     test at normalization ... which would result in a [0,0,0] vector for
   //     the y-axis.
-  double y_axis_mag = jeod::Vector3::vmag(y_axis);
+  const double y_axis_mag = jeod::Vector3::vmag(y_axis);
   if (MathUtils::is_near_equal( y_axis_mag, 0.0)) {
     if (std::isnan(y_axis[0])) { // check for NaN, vmag turns NaN into 0.
       CMLMessage::error(
@@ -492,7 +444,7 @@ AtmosRelativeState::compute_fpangle_azimuth()
                       free_stream_vel,
                       free_stream_td_vel);
 
-  double free_stream_td_vel_xy = std::sqrt(
+  const double free_stream_td_vel_xy = std::sqrt(
                             free_stream_td_vel[0] * free_stream_td_vel[0] +
                             free_stream_td_vel[1] * free_stream_td_vel[1] );
 
@@ -560,11 +512,11 @@ AtmosRelativeState::compute_alternate_angles()
                       free_stream_vel,
                       free_stream_body_vel);
 
-  double free_stream_body_vel_xz = std::sqrt( // for angle_of_sideslip_alt only
+  const double free_stream_body_vel_xz = std::sqrt( // for angle_of_sideslip_alt only
                             free_stream_body_vel[0] * free_stream_body_vel[0] +
                             free_stream_body_vel[2] * free_stream_body_vel[2]);
 
-  double free_stream_body_vel_yz = std::sqrt( // for tot_ang_attack only
+  const double free_stream_body_vel_yz = std::sqrt( // for tot_ang_attack only
                             free_stream_body_vel[1] * free_stream_body_vel[1] +
                             free_stream_body_vel[2] * free_stream_body_vel[2]);
 
@@ -664,8 +616,8 @@ AtmosRelativeState::check_euler_for_nan()
       // Note - could make this method iterate on itself, but there is at
       //        most one follow-on iteration so this is easier than adding
       //        infinite-loop protection
-      for (unsigned int jj = 0; jj < 3; jj++) {
-        if ( std::isnan(traj_to_body_RYP[jj])) {
+      for (const double element : traj_to_body_RYP) {
+        if ( std::isnan(element)) {
           // Still got a NAN in there.  Nothing we can do to fix it at this
           // point.  Got 2 options for bailing out:
           if (terminate_on_nan_euler) {

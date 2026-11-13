@@ -10,44 +10,9 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Mar 2021) (Antares) (Secondary IV&V)))
 *******************************************************************************/
 
-// Local headers:
 #include "../include/mass_properties_dispersions.hh"
 
-// Library headers:
-#include <random> // For the random number generator
-
-/*******************************************************************************
-Constructor
-*******************************************************************************/
-MassPropertiesDispersions::MassPropertiesDispersions()
-  :
-  mass(0.0),
-  position(),
-  moi(),
-  poi(),
-  position_match( DispMatchNone),
-  position_match_sf(1.0),
-  moi_match( DispMatchNone),
-  moi_match_sf(1.0),
-  poi_match( DispMatchNone),
-  poi_match_sf(1.0),
-  mass_disp_mag(0.0),
-  position_disp_mag{0.0, 0.0, 0.0},
-  moi_disp_mag{0.0, 0.0, 0.0},
-  poi_disp_mag{0.0, 0.0, 0.0},
-  seed_rand(),
-  inertia()
-{}
-/******************************************************************************/
-MassPropertiesDispersionsFlags::MassPropertiesDispersionsFlags()
-  :
-  random_num_distribution(false),
-  mass_disp_is_relative(false),
-  pos_disp_is_relative(false),
-  inertia_moi_disp_is_relative(false),
-  inertia_poi_disp_is_relative(false),
-  poi_are_negative_integrals(true)
-{}
+#include <random>
 
 /*******************************************************************************
 generate_inertia_tensor
@@ -200,7 +165,7 @@ void MassPropertiesDispersions::scale_mass( double nominal)
   mass *= nominal;
 }
 /******************************************************************************/
-void MassPropertiesDispersions::scale_position( double nominal[3])
+void MassPropertiesDispersions::scale_position( const double nominal[3])
 {
   for (unsigned int ii = 0; ii <3; ii++) {
     position[ii] *= nominal[ii];

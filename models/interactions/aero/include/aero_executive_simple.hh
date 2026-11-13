@@ -15,6 +15,8 @@ PROGRAMMERS:
 
 #include "aero_executive_base.hh"
 
+class AeroInterfaceOutput;
+
 /*******************************************************************************
 AeroExecutiveSimple
 Purpose:(Provides a simple aerodynamic executive to use with the AeroExec.)
@@ -49,13 +51,13 @@ protected:
   /***************************************************************************/
   // internal values
   /***************************************************************************/
-  DragType drag_type;  /* (--) Specifies which model to use. */
+  DragType drag_type{constant_vec};  /* (--) Specifies which model to use. */
 
 public:
-  double BC;           /* (kg/m2) Ballistic Coefficient. */
-  double CD;           /* (--)    Coefficient of drag. */
-  double drag_mag;     /* (N)     Magnitude of drag force. */
-  double bc_epsilon;   /* (1/m2)
+  double BC{1.0};          /* (kg/m2) Ballistic Coefficient. */
+  double CD{0.0};          /* (--)    Coefficient of drag. */
+  double drag_mag{0.0};    /* (N)     Magnitude of drag force. */
+  double bc_epsilon{1E-6}; /* (1/m2)
           A test-value for the validity of BC, ensuring that
           (dyn-pressure / BC) < (1/bc_epsilon).
           It is effectively 1/(the largest acceleration for which the
@@ -63,23 +65,18 @@ public:
           maximum acceleration of 1E6 m/s^2. Can be adjusted to accommodate
           extreme cases. */
 
-public:
   AeroExecutiveSimple( AeroInterfaceOutput & output_ref,
-                       const double & dynamic_pressure,
-                       const double * const free_stream_vel_in,
+                       const double & dynamic_pressure_in,
+                       const double * const free_stream_vel_unit_in,
                        const double (&T_inrtl_struc_in)[3][3],
                        const double & mass_in);
   ~AeroExecutiveSimple() override = default;
+  AeroExecutiveSimple (const AeroExecutiveSimple &) = delete;
+  AeroExecutiveSimple & operator = (const AeroExecutiveSimple &) = delete;
 
-  void set_drag_type(DragType drag_type);
+  void set_drag_type(DragType drag_type_in);
 
   void initialize() override;
   void update() override;
-
-private:
-  // Make the copy constructor and assignment operator private
-  // (and unimplemented) to avoid erroneous copies.
-  AeroExecutiveSimple (const AeroExecutiveSimple &);
-  AeroExecutiveSimple & operator = (const AeroExecutiveSimple &);
 };
 #endif

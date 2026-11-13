@@ -12,7 +12,7 @@ PROGRAMMERS:
 #ifndef CML_FAULT_FUNCTION_HH
 #define CML_FAULT_FUNCTION_HH
 
-#include <cmath> // M_PI
+#include <cmath>
 #include "fault.hh"
 #include "fault_function_parameter.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -31,17 +31,19 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
       Trianglewave
     };
 
-    FaultFunctionBase();
+    FaultFunctionBase() = default;
     ~FaultFunctionBase() override = default;
+    FaultFunctionBase(const FaultFunctionBase&) = delete;
+    FaultFunctionBase& operator = (const FaultFunctionBase&) = delete;
 
     void initialize() override;
     void reset() override;
     void overwrite_value() override = 0;
-    bool set_param(std::string param_name,
+    bool set_param(const std::string& param_name,
                    double value,
                    bool modify_nominal_with_rate = false) override;
 
-    FunctionType type; /* (--)
+    FunctionType type{Linear}; /* (--)
       The type of function to add to the fault variable. */
 
 // SWIG doesn't respect deleted copy constructors or assignment operators if you
@@ -69,16 +71,12 @@ class FaultFunctionBase : public Fault, public FaultFunctionParameter {
 #endif
 
   protected:
-    double freq_int; /* (--)
+    double freq_int{0.0}; /* (--)
       Double the integral of the frequency with respect to the independent
       variable. Used internally as part of the independent variable of periodic
       functions. */
-    double ind_prev; /* (--) The previous value of the independent variable. */
-    double freq_prev; /* (--) The previous value of the frequency. */
-
-  private:
-    FaultFunctionBase(const FaultFunctionBase&);
-    FaultFunctionBase& operator = (const FaultFunctionBase&);
+    double ind_prev{0.0}; /* (--) The previous value of the independent variable. */
+    double freq_prev{0.0}; /* (--) The previous value of the frequency. */
 };
 
 
@@ -91,14 +89,13 @@ template<typename T> class FaultFunction : public FaultFunctionBase {
 
     explicit FaultFunction(T& var) : variable(var) {}
     ~FaultFunction() override = default;
+    FaultFunction(const FaultFunction&) = delete;
+    FaultFunction& operator = (const FaultFunction&) = delete;
 
     void overwrite_value() override;
 
   private :
     T& variable; /* (--) The variable to fault. */
-
-    FaultFunction(const FaultFunction&);
-    FaultFunction& operator = (const FaultFunction&);
 };
 
 
@@ -108,11 +105,11 @@ overwrite_value
 Purpose:(Injects the fault.)
 *******************************************************************************/
 template<typename T> void FaultFunction<T>::overwrite_value() {
-  double ind = ind_variable.get_value();
+  const double ind = ind_variable.get_value();
   if (type == Linear) {
     variable += nominal + rate * ind;
   } else {
-    double freq = frequency.get_value();
+    const double freq = frequency.get_value();
     // phase = (phase offset) + integral(frequency d(ind_variable))
     // Use a trapezoidal approximation for integration.
     // See documentation for derivation.
@@ -121,9 +118,9 @@ template<typename T> void FaultFunction<T>::overwrite_value() {
     ind_prev = ind;
     freq_prev = freq;
 
-    double A = amplitude.get_value();
-    double psi = phase_offset.get_value();
-    double phi = psi + freq_int;
+    const double A = amplitude.get_value();
+    const double psi = phase_offset.get_value();
+    const double phi = psi + freq_int;
     switch (type) {
       case Sinewave:
         variable += A * std::sin(2 * M_PI * phi);

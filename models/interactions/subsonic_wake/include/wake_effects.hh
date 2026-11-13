@@ -47,26 +47,26 @@ class WakeEffectsBase : public SubscriptionBase
        inherits this class.*/
 
  public:
-  double  grid_offset;  /* (m)
+  double  grid_offset{0.0};  /* (m)
        Offset of reverse-flow / PRF model origin from wake grid origin.
        Grid offset is specified as a distance along the body-frame x-axis,
        whereas grid origin is specified in the structural frame.*/
-  double  force_toward_A; /* (N)
+  double  force_toward_A{0.0}; /* (N)
        Recirculation force on the following body acting toward the
        wake-generating body */
 
-  bool data_loaded; /* (--)
+  bool data_loaded{false}; /* (--)
        Have data been loaded into the look-up tables? This is a sanity check;
        the model will not initialize until the user sets this to true. */
 
  protected:
-  bool in_region; /* (--)
+  bool in_region{false}; /* (--)
        Flag to indicate following body is inside the recirculation zone.*/
-  double  offset_trail_dist;  /* (m)
+  double  offset_trail_dist{0.0};  /* (m)
        Offset trailing distance for the reverse flow / PRF  model */
-  double  offset_radial_dist; /* (m)
+  double  offset_radial_dist{0.0}; /* (m)
        Offset radial distance for the reverse flow / PRF  model  */
-  double  eff_wake_vel; /* (m/s)
+  double  eff_wake_vel{0.0}; /* (m/s)
        Effective velocity in the recirculation zone due to
        reverse flow / PRF model.*/
 
@@ -74,9 +74,11 @@ class WakeEffectsBase : public SubscriptionBase
   WakeEffectsBase( const WakeGeneratingBody & objectA_in,
                    const WakeFollowingBody & objectB_in,
                    const WakeParamsSub & params_in);
+  WakeEffectsBase (const WakeEffectsBase& rhs) = delete;
+  WakeEffectsBase& operator = (const WakeEffectsBase& rhs) = delete;
 
   virtual void update() = 0;
-  bool get_in_region(){return in_region;}
+  bool get_in_region() const {return in_region;}
 
  protected:
   void deactivate() override {
@@ -84,10 +86,6 @@ class WakeEffectsBase : public SubscriptionBase
     SubscriptionBase::deactivate();
   }
   void generate_trail_and_radial_dist();
-
- private: // and undefined:
-  WakeEffectsBase (const WakeEffectsBase& rhs);
-  void operator = (const WakeEffectsBase& rhs);
 };
 
 
@@ -98,7 +96,7 @@ Purpose:(Replaces old REV_FLOW struct, provides reverse-flow model variables.)
 class WakeReverseFlow : public WakeEffectsBase
 {
  public:
-  double  Qrev; /* (--)
+  double  Qrev{0.0}; /* (--)
        Ratio of wake to free-stream dynamic pressure in the reverse flow model*/
   std::vector<double> offset_trail_dist_axis; /* (m)
        Offset-trailing-distance (independent) values for table look-up */
@@ -111,16 +109,14 @@ class WakeReverseFlow : public WakeEffectsBase
   WakeReverseFlow (const WakeGeneratingBody & objectA_in,
                    const WakeFollowingBody & objectB_in,
                    const WakeParamsSub & params_in);
+  WakeReverseFlow (const WakeReverseFlow& rhs) = delete;
+  WakeReverseFlow& operator = (const WakeReverseFlow& rhs) = delete;
 
   void initialize() override;
   void update() override;
 
  protected:
   void deactivate() override;
-
- private: // and undefined:
-  WakeReverseFlow (const WakeReverseFlow& rhs);
-  void operator = (const WakeReverseFlow& rhs);
 };
 
 
@@ -136,14 +132,14 @@ class WakePrfModel : public WakeEffectsBase
        Reference diameter of the wake-generating body.*/
 
  public:
-  double effective_area_sf; /* (--)
+  double effective_area_sf{0.49}; /* (--)
        A scaling factor to reduce the actual area to an effective area, used to
        generate the effective diameter.*/
-  double PRF_mean;        /* (--)
+  double PRF_mean{1.0};        /* (--)
        Mean value of interpolated PRF inside the wake region */
-  double PRF;             /* (--)
+  double PRF{1.0};             /* (--)
        PRF including estimated uncertainty inside the wake region */
-  double unc_factor;           /* (--)
+  double unc_factor{0};           /* (--)
        Uncertainty factor used to modify the interpolated mean PRF value to
        generate the actual PRF value.*/
 
@@ -158,9 +154,9 @@ class WakePrfModel : public WakeEffectsBase
   std::vector<double> prf_table; /* (--) 4D look-up table for PRF_mean */
 
  protected:
-  double trail_diameters; /* (--)
+  double trail_diameters{0.0}; /* (--)
        Offset trailing distance in main body diameters */
-  double effective_diam;  /* (m)
+  double effective_diam{0.0};  /* (m)
        Effective diameter of body inside the aft wake zone */
 
   TableLookupSet           table_set; /* (--) Interpolation manager */
@@ -178,16 +174,14 @@ class WakePrfModel : public WakeEffectsBase
   WakePrfModel (const WakeGeneratingBody & objectA_in,
                 const WakeFollowingBody & objectB_in,
                 const WakeParams & params_in);
+  WakePrfModel (const WakePrfModel& rhs) = delete;
+  WakePrfModel& operator = (const WakePrfModel& rhs) = delete;
 
   void initialize() override;
   void update() override;
 
  protected:
   void deactivate() override;
-
- private: // and undefined:
-  WakePrfModel (const WakePrfModel& rhs);
-  void operator = (const WakePrfModel& rhs);
 };
 
 

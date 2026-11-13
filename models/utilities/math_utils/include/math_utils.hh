@@ -17,15 +17,18 @@
 #ifndef CML_MATH_UTILS_HH
 #define CML_MATH_UTILS_HH
 
-#include <vector>  // mainly for std::vector use
-#include <string>  // mainly for std::string use
+#include <algorithm>
+#include <array>
+#include <vector>
+#include <string>
 #include <list>
-#include <cstring> // memset
+#include <cstring>
+#include <iterator>
+#include <type_traits>
 
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
-// Function template definitions
 #include "cml/models/utilities/math_utils/include/math_utils_private.hh"
 
 
@@ -69,7 +72,7 @@ public:
                                      double (&T_inrtl_vnc)[3][3]);
 
 
-  static void generate_T_pfix_to_enu( const double position_ecef[3],
+  static void generate_T_pfix_to_enu( const double position_pfix[3],
                                       double T_pfix_to_enu[3][3]);
   static void generate_Q_enu_to_pfix( double longitude,
                                       double latitude,
@@ -79,7 +82,7 @@ public:
   // STL-vector.  The first element of the coeffs vector is the x^0 term, the
   // last is the x^n term where n = coeffs.size()-1
   static double polynomial( double x,
-                            std::vector<double> & coeffs,
+                            const std::vector<double> & coeffs,
                             const double failed_val  = 0.0,
                             const bool   failed_flag = false);
                         // Last 2 optional arguments are for if values near inf.
@@ -94,12 +97,12 @@ public:
   // passed in, along with the size of 1 dimension of the array (e.g. 6x6 array
   // is sized "6").  An optional 5th argument allows processing a smaller
   // sub-matrix.
-  static bool cholesky_decomposition( std::string caller_id,
+  static bool cholesky_decomposition( const std::string & caller_id,
                                       const double * in_array,
                                       double * out_array,
-                                      size_t size_in,
-                                      size_t size_out = 0); // optional for
-                                                            // sub-matrices
+                                      size_t dimension_in,
+                                      size_t sub_mx_size = 0); // optional for
+                                                               // sub-matrices
 
 
   // Compute the backward difference of a variable given its history specified
@@ -227,13 +230,15 @@ public:
     // Avoiding using a difference (e.g. val1 - val2) so as to avoid
     // complication of differences evaluating to a negative value and
     // wrapping on an unsigned type.
-    if (tol < 0) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid arguments\n",
-        "Testing whether two values are within an absolute tolerance\n"
-        "is not well-defined when the tolerance is negative.\n"
-        "Returning false.\n");
-      return false;
+    if constexpr (std::is_signed_v<T>) {
+      if (tol < 0) {
+        CMLMessage::error(
+          __FILE__,__LINE__,"Invalid arguments\n",
+          "Testing whether two values are within an absolute tolerance\n"
+          "is not well-defined when the tolerance is negative.\n"
+          "Returning false.\n");
+        return false;
+      }
     }
     return ((val2 > val1) ?
                 val1 + tol >= val2 : 
@@ -246,13 +251,15 @@ public:
   {
     // still want to identify as false on a negative tolerance, but fully
     // evaluate a positive tolerance about a negative value.
-    if (tol < 0) {
-      CMLMessage::error(
-        __FILE__,__LINE__,"Invalid arguments\n",
-        "Testing whether two values are within a relative tolerance\n"
-        "is not well-defined when the tolerance is negative.\n"
-        "Returning false.\n");
-      return false;
+    if constexpr (std::is_signed_v<T>) {
+      if (tol < 0) {
+        CMLMessage::error(
+          __FILE__,__LINE__,"Invalid arguments\n",
+          "Testing whether two values are within a relative tolerance\n"
+          "is not well-defined when the tolerance is negative.\n"
+          "Returning false.\n");
+        return false;
+      }
     }
     return is_within_abs_tolerance( value, expected,
                                       static_cast<T>(tol*std::fabs(expected)));
@@ -378,14 +385,14 @@ Linear Algebra Section
   template <size_t N>
   static std::array<double, N> diff( const double (&lhs)[N],
                                      const double (&rhs)[N]) {
-    std::array<double, N> result;
+    std::array<double, N> result{};
     for (size_t ii = 0; ii < N; ++ii) { result[ii] = lhs[ii] - rhs[ii];}
     return result;
   }
   template <size_t N>
   static std::array<double, N> sum( const double (&lhs)[N],
                                     const double (&rhs)[N]) {
-    std::array<double, N> result;
+    std::array<double, N> result{};
     for (size_t ii = 0; ii < N; ++ii) { result[ii] = lhs[ii] + rhs[ii];}
     return result;
   }
@@ -411,6 +418,7 @@ Linear Algebra Section
     return sqrt_protected(vec_mag_sq(vec));
   }
 
+  // TODO Nino Tarantino 10/19/26: these should all use std::hypot.
   static double vec_mag_xy( const double (&vec)[3]) {
     return sqrt_protected( vec[0]*vec[0] + vec[1]*vec[1] );
   }
@@ -457,11 +465,11 @@ Linear Algebra Section
   // zero vector: zeroes the specified vector:
   template <size_t N>
   static void zero_vector( std::array<double, N>& vec) {
-    for (size_t ii = 0; ii < N; ii++) { vec[ii] = 0.0;}
+    vec.fill(0.0);
   }
   template <size_t N>
   static void zero_vector( double (&vec)[N]) {
-    for (size_t ii = 0; ii < N; ii++) { vec[ii] = 0.0;}
+    std::fill(std::begin(vec), std::end(vec), 0.0);
   }
 
   /* TODO Hirad Mirhashemi 2025/10.
@@ -514,13 +522,6 @@ Linear Algebra Section
     std::array<double, N> result;
     for (size_t ii = 0; ii < N; ii++) { result[ii] = sqrt_protected(vec[ii]); }
     return result;
-  }
-
-  template <size_t N>
-  static std::array<double, N> vector_elementwise_sqrt(
-                                         const std::array<double, N>&& vec) {
-    for (size_t ii = 0; ii < N; ii++) { vec[ii] = sqrt_protected(vec[ii]); }
-    return vec;
   }
 
   template <size_t N>
@@ -1000,7 +1001,7 @@ template<> bool MathUtils::is_equal<float>( float val1, float val2);
 template<> bool MathUtils::is_equal<double>( double val1, double val2);
 
 // TODO: these don't make sense to support. Remove them in the future.
-template<> bool MathUtils::is_within_abs_tolerance<bool>( bool, bool, bool);
-template<> bool MathUtils::is_within_rel_tolerance<bool>( bool, bool, double);
+template<> bool MathUtils::is_within_abs_tolerance<bool>( bool val1, bool val2, bool tol);
+template<> bool MathUtils::is_within_rel_tolerance<bool>( bool value, bool expected, double tol);
 
 #endif

@@ -2,22 +2,21 @@
 PURPOSE: (Provides a set of EventTriggers, analagous to how a
           WatchValuesSet provides a set of WatchValues.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2023) (ANTARES)
     (Merging concepts found in former grok-events and CML-events))
   )
 ***********************************************************************/
 
-#include <algorithm> // find_if
+#include <algorithm>
+#include <string>
+#include "../include/event_trigger.hh"
 #include "../include/event_trigger_set.hh"
-
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-EventTriggerSet::EventTriggerSet()
-{}
-
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 
 /*****************************************************************************
 Destructor
@@ -64,13 +63,31 @@ void
 EventTriggerSet::populate_conditional_reference_trigger_list()
 {
   for (WatchValuesBaseCore * trigger : triggers) {
-    EventTriggerBase * event_trigger = dynamic_cast<EventTriggerBase*>(trigger);
+    auto * event_trigger = dynamic_cast<EventTriggerBase*>(trigger);
     if (event_trigger != nullptr &&
         event_trigger->has_conditional_reference()) {
       conditional_reference_triggers.push_back(event_trigger);
     }
     // else ignore it, either not a conditional event trigger, or not an
     // event trigger at all.
+  }
+}
+
+/*****************************************************************************
+Name: force_multi_shot_for_managed_values
+Purpose:
+  Triggers that have managed value references should always have multi_shot
+  forced.  Otherwise, they'll inappropriately stop updating.
+*****************************************************************************/
+void
+EventTriggerSet::force_multi_shot_for_managed_values()
+{
+  for (WatchValuesBaseCore * trigger : triggers) {
+    auto * event_trigger = dynamic_cast<EventTriggerBase*>(trigger);
+      if (event_trigger != nullptr &&
+        event_trigger->has_managed_value()) {
+      trigger->multi_shot = true;
+    }
   }
 }
 

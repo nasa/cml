@@ -46,6 +46,7 @@ PROGRAMMERS:
 
 #include <list>
 #include <string>
+#include "trick/DataRecordGroup.hh"
 #include "trick/exec_proto.h"
 #include "cml/models/utilities/trick_logging/include/trick_logging.hh"
 
@@ -74,18 +75,7 @@ class EventActionSimStopDyn : public EventActionBase {
  public:
   std::list<bool*> trans_dyn_flags;
   bool specific_execution() override {
-    // once we delete ii from the list we can no longer increment it.
-    // so we do some gymnastics to avoid that problem: get a copy of the
-    // to-be-deleted item's pointer, move on to the next item, then delete the
-    // item behind it using the copied pointer.
-    for(std::list<bool*>::iterator ii = trans_dyn_flags.begin();
-                                   ii != trans_dyn_flags.end(); ) {
-       std::list<bool*>::iterator to_parse = ii;
-       ++ii;
-       if(!(**to_parse)) {
-          trans_dyn_flags.erase(to_parse);
-       }
-    }
+    trans_dyn_flags.remove_if([](const bool* is_enabled){return !*is_enabled;});
     if(trans_dyn_flags.empty()) {
        exec_set_terminate_time(exec_get_sim_time());
     }
@@ -102,7 +92,7 @@ class EventActionDeactivateSimObject : public EventActionBase {
    std::string simobj_name;
    bool specific_execution() override {
      exec_set_sim_object_onoff(simobj_name.c_str(), 0);
-     return false;};
+     return false;}
 };
 
 /*****************************************************************************
@@ -113,14 +103,15 @@ class EventActionAdjustLogging : public EventActionBase {
  protected:
   TrickLogging & logging;
  public:
-  double log_cycle; /* (s) New logging frequency */
-  bool   log_now;   /* (--) log and reset the logging schedule immediately.*/
-  EventActionAdjustLogging(TrickLogging & logging_in)
+  double log_cycle{1.0}; /* (s) New logging frequency */
+  bool   log_now{false};   /* (--) log and reset the logging schedule immediately.*/
+  explicit EventActionAdjustLogging(TrickLogging & logging_in)
     :
-    logging(logging_in),
-    log_cycle(1.0),
-    log_now(false)
-  {};
+    logging(logging_in)
+  {}
+  EventActionAdjustLogging (const EventActionAdjustLogging&) = delete;
+  EventActionAdjustLogging& operator = (const EventActionAdjustLogging&) = delete;
+
   bool specific_execution() override {
     logging.set_cycle(log_cycle);
     if (log_now) {
@@ -128,9 +119,6 @@ class EventActionAdjustLogging : public EventActionBase {
     }
     return false;
   }
- private:
-  EventActionAdjustLogging (const EventActionAdjustLogging&);
-  EventActionAdjustLogging& operator = (const EventActionAdjustLogging&);
 };
 
 /*****************************************************************************
@@ -150,26 +138,26 @@ class EventActionAdjustLoggingGroup : public EventActionBase {
     If this is used for a specific group, this is the group name.
     If this is left empty, the intruction will be applied to all Trick
     Logging groups.*/
-  bool enable_group; /* (--)
+  bool enable_group{true}; /* (--)
     This flag is used to enable and disable the group.
     Note -- this flag can be set as part of the add_ext_bool_on/off within the
     same event that executes this action.
     Default: true (group is enabled).*/
-  double log_cycle; /* (s) New logging frequency */
-  bool   log_now;   /* (--) log and reset the logging schedule immediately.*/
-  EventActionAdjustLoggingGroup(TrickLogging & logging_in)
+  double log_cycle{1.0}; /* (s) New logging frequency */
+  bool   log_now{false}; /* (--) log and reset the logging schedule immediately.*/
+  explicit EventActionAdjustLoggingGroup(TrickLogging & logging_in)
     :
-    logging(logging_in),
-    group_name(),
-    enable_group(true),
-    log_cycle(1.0)
-  {};
+    logging(logging_in)
+  {}
+  EventActionAdjustLoggingGroup (const EventActionAdjustLoggingGroup&) = delete;
+  EventActionAdjustLoggingGroup& operator = (
+                                 const EventActionAdjustLoggingGroup&) = delete;
 
   bool specific_execution() override {
     if (group_name_list.empty()) {
       process_group( group_name);
     } else {
-      for (std::string & name : group_name_list) {
+      for (const std::string & name : group_name_list) {
         process_group (name);
       }
     }
@@ -179,17 +167,18 @@ class EventActionAdjustLoggingGroup : public EventActionBase {
   void process_group( const std::string & group_name_)
   {
     Trick::DataRecordGroup * drg = logging.get_group( group_name_);
-    if (drg) {
-      if (enable_group) {drg->enable();}
+    if (drg != nullptr) {
+      if (enable_group) {
+        drg->enable();
+        if (log_now && drg->freq != Trick::DR_Freq::DR_Always) {
+          logging.log_now(*drg);
+        }
+      }
       else {drg->disable();}
       drg->set_cycle(log_cycle);
       logging.reset_next_call_time(*drg);
     }
   }
- private:
-  EventActionAdjustLoggingGroup (const EventActionAdjustLoggingGroup&) = delete;
-  EventActionAdjustLoggingGroup& operator = (
-                                 const EventActionAdjustLoggingGroup&) = delete;
 };
 
 /*****************************************************************************
@@ -202,16 +191,16 @@ class EventActionLogNow : public EventActionBase {
  protected:
   TrickLogging & logging;
  public:
-  EventActionLogNow(TrickLogging & logging_in)
+  explicit EventActionLogNow(TrickLogging & logging_in)
      :
      logging(logging_in)
-  {};
+  {}
+  EventActionLogNow (const EventActionLogNow& rhs) = delete;
+  EventActionLogNow& operator = (const EventActionLogNow& rhs) = delete;
+
   bool specific_execution() override {
     logging.log_now();
     return false;
   }
- private:
-  EventActionLogNow (const EventActionLogNow& rhs);
-  EventActionLogNow& operator = (const EventActionLogNow& rhs);
 };
 #endif

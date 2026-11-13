@@ -24,17 +24,10 @@ struct CompoundEventActionConfig
 {
   std::string name;
   std::string datatype;
-  void * target_ptr;
-  double target_value_assignment;
+  void * target_ptr{nullptr};
+  double target_value_assignment{0.0};
   std::string target_string_assignment;
-  CompoundEventActionConfig()
-    :
-    name(""),
-    datatype(""),
-    target_ptr(nullptr),
-    target_value_assignment(0.0),
-    target_string_assignment("")
-  {}
+  CompoundEventActionConfig() = default;
 };
 
 /*****************************************************************************
@@ -65,12 +58,12 @@ struct CompoundEventPythonInterface
   bool        flag_report;
   std::vector< CompoundEventTriggerConfig > trigger_configs;
   std::vector< CompoundEventActionConfig >  actions;
-  void add_action( std::string, double, std::string);
-  void add_action( std::string, std::string);
-  void add_action( std::string, double);
-  void add_action( std::string, void*, double);
-  void add_action( std::string, void*);
-  void add_action( std::string);
+  void add_action( std::string action_name, double action_value, std::string action_string);
+  void add_action( std::string action_name, std::string action_string);
+  void add_action( std::string action_name, double action_value);
+  void add_action( std::string action_name, void* target_ptr, double action_value);
+  void add_action( std::string action_name, void* target_ptr);
+  void add_action( std::string action_name);
 };
 
 #endif

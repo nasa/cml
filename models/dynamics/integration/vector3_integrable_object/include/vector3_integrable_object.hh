@@ -17,7 +17,6 @@ PROGRAMMERS:
 
 #include "er7_utils/integration/core/include/integrable_object.hh"
 #include "er7_utils/integration/core/include/integrator_result.hh"
-#include "jeod/models/utils/integration/include/restartable_state_integrator.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
@@ -28,12 +27,12 @@ class Vector3IntegrableObject : public SubscriptionBase,
                                 public er7_utils::IntegrableObject
 {
   public:
-    double variable[3]; /* (--) Arbitrary vector, but typically pos or vel. */
-    double deriv[3];    /* (--) values of the derivatives (optional). */
+    double variable[3] {}; /* (--) Arbitrary vector, but typically pos or vel. */
+    double deriv[3] {};    /* (--) values of the derivatives (optional). */
 
   protected:
-    const double * deriv_ptr; /* (--) pointer to the derivative (optional) */
-    jeod::DynBody * dyn_body; /* (--)
+    const double * deriv_ptr {nullptr}; /* (--) pointer to the derivative (optional) */
+    jeod::DynBody * dyn_body {nullptr}; /* (--)
           ptr to the dyn-body that will integrate this variable. */
 
   public:
@@ -41,6 +40,8 @@ class Vector3IntegrableObject : public SubscriptionBase,
     explicit Vector3IntegrableObject(jeod::DynBody & body_in);
     Vector3IntegrableObject(jeod::DynBody & body_in,
                             const double * deriv_ptr_in);
+    Vector3IntegrableObject& operator = (const Vector3IntegrableObject& rhs) = delete;
+    Vector3IntegrableObject(const Vector3IntegrableObject& rhs) = delete;
 
     ~Vector3IntegrableObject() override;
 
@@ -74,9 +75,5 @@ class Vector3IntegrableObject : public SubscriptionBase,
 #ifndef SWIG
     RestartableVector3FirstOrderODEIntegrator integrator; //!< trick_units(--)
 #endif
-
-    // Assignment and copy constructors are private and unimplemented
-    Vector3IntegrableObject& operator = (const Vector3IntegrableObject& rhs);
-    Vector3IntegrableObject(const Vector3IntegrableObject& rhs);
 };
 #endif

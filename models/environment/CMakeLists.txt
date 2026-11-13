@@ -26,6 +26,7 @@ add_cml_library(
         gravity/fast_gravity/include/spherical_harmonics_fast_gravity_controls.hh
         gravity/gravity_fidelity_manager/include/gravity_fidelity_manager.hh
         gravity/lunar_GRGM900C/data/include/GRGM900C_lunar_gravity.hh
+        msl/include/msl_alt.hh
 
     SOURCES
         EGM2008/src/egm_2008.cc
@@ -48,4 +49,6 @@ add_cml_library(
         gravity/fast_gravity/src/spherical_harmonics_fast_gravity_controls.cc
         gravity/gravity_fidelity_manager/src/gravity_fidelity_manager.cc
         gravity/lunar_GRGM900C/data/src/GRGM900C_lunar_gravity.cc
+        msl/src/msl_alt_dd.cc
+        msl/src/msl_alt.cc
 )

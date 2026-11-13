@@ -19,7 +19,9 @@ Programmers:
 
 #include "range_computation.hh"
 
+namespace jeod {
 class PlanetFixedPosition;
+}
 
 class RangeToPfixReference : public RangeComputation
 {
@@ -33,23 +35,18 @@ class RangeToPfixReference : public RangeComputation
  public:
   explicit RangeToPfixReference( const jeod::PlanetFixedPosition & state_in);
   RangeToPfixReference( const jeod::PlanetFixedPosition & state_in,
-                        const double (&direction)[3]);
+                        const double (&direction_)[3]);
   ~RangeToPfixReference() override = default;
+  RangeToPfixReference(const RangeToPfixReference& rhs) = delete;
+  RangeToPfixReference & operator = (const RangeToPfixReference&) = delete;
 
   void set_reference_data() override;
-  void update ();
+  void update() override;
 
  protected:
   void update_using_cartesian() override;
   void update_using_polar() override;
   void is_abstract() override {} // Makes this class instantiable
-
- private:
-
-   // Copy constructor and assignment operator for this class are
-   // declared private and are not implemented.
-  RangeToPfixReference(const RangeToPfixReference& rhs);
-  RangeToPfixReference & operator = (const RangeToPfixReference&);
 
 };
 

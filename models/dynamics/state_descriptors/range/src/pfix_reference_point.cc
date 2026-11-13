@@ -2,37 +2,21 @@
 Purpose:
    (Sets the characteristics of the fixed reference location.)
 
+Library dependencies:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 Programmers:
    (((Gary Turner) (OSR) (Sept 2014 (Initial version)))
 
 *******************************************************************************/
 
+#include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "jeod/models/environment/planet/include/planet.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
 #include "../include/pfix_reference_point.hh"
-
-/*****************************************************************************
-Constructor
-*****************************************************************************/
-PfixReferencePoint::PfixReferencePoint()
-  :
-  position_type(undefined),
-  direction_type(undefined),
-  latitude(0.0),
-  longitude(0.0),
-  altitude(0.0),
-  position{0.0, 0.0, 0.0},
-  azimuth(0.0),
-  direction{0.0, 0.0, 0.0}
-{}
-
-/*****************************************************************************
-initialize (inherit from PlanetFixedPosition)
-*****************************************************************************/
-
 
 /*****************************************************************************
 set_point

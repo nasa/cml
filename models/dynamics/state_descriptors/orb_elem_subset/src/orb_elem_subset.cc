@@ -14,6 +14,8 @@ PROGRAMMERS:
 
 #include <cmath>
 #include "jeod/models/environment/planet/include/planet.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "../include/orb_elem_subset.hh"
 
@@ -24,41 +26,9 @@ OrbElemSubset::OrbElemSubset(const jeod::RefFrameTrans & inrtl_state_in,
                              const jeod::Planet & planet_in,
                              const double & planet_mu)
   :
-  use_pfix_z_values(false),
-  position{0.0, 0.0, 0.0},
-  position_unit{0.0, 0.0, 0.0},
-  position_mag(0.0),
-  velocity{0.0, 0.0, 0.0},
-  vel_vertical{0.0, 0.0, 0.0},
-  vel_horizontal_unit{0.0, 0.0, 0.0},
-  vel_vertical_scalar(0.0),
-  semi_major_axis(0.0),
-  semi_parameter(0.0),
-  ecc_mag(0.0),
-  ecc_anomaly(0.0),
-  true_anomaly(0.0),
-  arg_periapsis(0.0),
-  mean_motion(0.0),
-  orbit_type(UNDEFINED),
-  specific_energy(0.0),
-  tol_energy(1.0E-6),
-  ang_momentum{0.0, 0.0, 0.0},
-  node_line{0.0, 0.0, 0.0},
-  cos_true_anomaly(0.0),
-  node_angle(0.0),
-  sinI_sinL(0.0),
-  sinI_cosL(0.0),
-  sin_sq_I(0.0),
-  e_sinE(0.0),
-  e_cosE(0.0),
-  j2(0.0010836), // Earth
-  j2_r_eq_2(0.0),
-  j2_correction(0.0),
-  j2_delta(0.0),
   inertial_state(inrtl_state_in),
   planet(planet_in),
-  mu(planet_mu),
-  polar_axis_inrtl{0.0, 0.0, 0.0}
+  mu(planet_mu)
 {}
 
 
@@ -231,20 +201,20 @@ OrbElemSubset::generate_cartesian_inertial()
 
 
   // O - Omega, the argument of ascending node
-  double cosO = node_line[0];
-  double sinO = node_line[1];
+  const double cosO = node_line[0];
+  const double sinO = node_line[1];
 
   // I - angle of inclination.
-  double sinI = std::sqrt(sin_sq_I);
-  double cosI = std::sqrt(1.0 - sin_sq_I);
+  const double sinI = std::sqrt(sin_sq_I); // NOLINT(misc-confusable-identifiers)
+  const double cosI = std::sqrt(1.0 - sin_sq_I); // NOLINT(misc-confusable-identifiers)
 
   // W - omega, argument of periapsis
-  double cosW = std::cos(arg_periapsis);
-  double sinW = std::sin(arg_periapsis);
+  const double cosW = std::cos(arg_periapsis);
+  const double sinW = std::sin(arg_periapsis);
 
   // Positions in PQW frame ( x=periapsis, z=ang_mom, y completes)
-  double x_pqw = position_mag * cos_true_anomaly;
-  double y_pqw = position_mag * std::sin(true_anomaly);
+  const double x_pqw = position_mag * cos_true_anomaly;
+  const double y_pqw = position_mag * std::sin(true_anomaly);
 
   // Transform to inertial.  See JEOD Orbital Elements for unabridged version.
   position[0] = (cosO * cosW - sinO * sinW * cosI) * x_pqw -

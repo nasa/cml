@@ -2,6 +2,9 @@
 PURPOSE:
   (Calculate the forces and torques resulting from a group of parallel springs.)
 
+LIBRARY DEPENDENCIES:
+  ((cml/models/utilities/cml_message/src/cml_message.cc))
+
 ASSUMPTIONS AND LIMITATIONS:
   (Springs are aligned)
 
@@ -10,42 +13,15 @@ PROGRAMMERS:
    ((Brent Caughron) (OSR) (Jan 2021) (Antares) (Code review and IV&V)))
 *******************************************************************************/
 
-#include <cstring> // NULL
+#include "cml/models/dynamics/state_descriptors/separation_state/include/separation_state.hh"
+#include "jeod/models/dynamics/dyn_body/include/body_ref_frame.hh"
+#include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+#include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
 #include "../include/simple_spring_group.hh"
-
-/*******************************************************************************
-Constructor
-*******************************************************************************/
-SimpleSpringGroup::SimpleSpringGroup()
-  :
-  enabled(true),
-  num_springs(0),
-  spring_array(nullptr),
-  action_body_is_child(true),
-  separation_complete(false),
-  total_force_struc_reaction{0,0,0},
-  total_force_struc_action{0,0,0},
-  total_torque_struc_reaction{0,0,0},
-  total_torque_struc_action{0,0,0},
-  active(false),
-  initialized(false),
-  initialized_bodies(false),
-  separation_speed(0.0),
-  force_axial{0,0,0},
-  force_struc_action{0,0,0},
-  force_struc_reaction{0,0,0},
-  T_spring_structure{{1,0,0},{0,1,0},{0,0,1}},
-  T_action_reaction{{1,0,0},{0,1,0},{0,0,1}},
-  moment_arm{0,0,0},
-  spring_frame(nullptr),
-  separation_state(nullptr),
-  action_body(nullptr),
-  reaction_body(nullptr)
-{}
 
 /*******************************************************************************
 initialize
@@ -112,6 +88,7 @@ SimpleSpringGroup::set_sep_state( SeparationState  & sep_state_in)
       "by the conclusion of the initialization of the sep-state), or a \n"
       "configuration error in the separation state itself.\n"
       "Sep-state initialization flag is ", separation_state->is_initialized(), "");
+    return;
   }
 
   spring_frame = dynamic_cast<jeod::BodyRefFrame*>(sep_source);
@@ -124,6 +101,7 @@ SimpleSpringGroup::set_sep_state( SeparationState  & sep_state_in)
       "The Spring model requires that the RefFrame also be a BodyRefFrame\n"
       "and in this case it is not.\n"
       "Frame name is ", sep_source->get_name(), "\n");
+    return;
   }
   // TODO Turner Jan 2017
   // Assumption here that the sep-state's source is a member of the

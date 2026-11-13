@@ -17,8 +17,11 @@ NOTES:
      Body B - The object inside the wake
 **********************************************************************/
 
-#include <cmath> // sin, cos
+#include <cmath>
+#include "../include/wake_bodies.hh"
 #include "../include/wake_effects.hh"
+#include "../include/wake_params.hh"
+#include "jeod/models/utils/math/include/vector3.hh"
 /*****************************************************************************
 constructor
 *****************************************************************************/
@@ -27,17 +30,9 @@ WakeEffectsBase::WakeEffectsBase(
      const WakeFollowingBody & objectB_in,
      const WakeParamsSub & params_in)
    :
-   SubscriptionBase(),
    objectA(objectA_in),
    objectB(objectB_in),
-   params(params_in),
-   grid_offset(0.0),
-   force_toward_A(0.0),
-   data_loaded(false),
-   in_region(false),
-   offset_trail_dist(0.0),
-   offset_radial_dist(0.0),
-   eff_wake_vel(0.0)
+   params(params_in)
 {
   subscribe_name = "WakeEffectsBase:";
 }
@@ -76,7 +71,7 @@ WakeEffectsBase::generate_trail_and_radial_dist()
 
   // Now we can obtain the offset_trail_distance and offset radial_distance
   // without resorting to trig functions:
-  double offset_sep_dist = jeod::Vector3::vmag( pos_wrt_offset_grid_in_bodyA);
+  const double offset_sep_dist = jeod::Vector3::vmag( pos_wrt_offset_grid_in_bodyA);
   offset_trail_dist = -jeod::Vector3::dot(  pos_wrt_offset_grid_in_bodyA,
                                       objectA.unitvec_freestream);
   offset_radial_dist = std::sqrt( (offset_sep_dist * offset_sep_dist) -

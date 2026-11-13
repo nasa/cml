@@ -33,6 +33,9 @@ PROGRAMMERS:
 
 #include <list>
 
+#include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+#include "cml/models/vehicle_management/events_manager/include/event_variable_assignment.hh"
+#include "cml/models/vehicle_management/events_manager/include/event_action_base.hh"
 #include "watch_values_base_core.hh"
 
 /*****************************************************************************
@@ -54,7 +57,7 @@ class WatchValuesFlipFlop : public WatchValuesBaseCore
     The associated_watch does not need to be added to the Events-Manager,
     although it can be and should be if it has specific-actions itself.
     */
-  bool state; /* (--)
+  bool state{false}; /* (--)
     Flag indicating the current triggered-status of the associated_watch
     Used to identify transitions in that status.*/
 
@@ -71,8 +74,10 @@ class WatchValuesFlipFlop : public WatchValuesBaseCore
     list of encapsulated actions to be executed when the associated_watch
     event_triggered value switches from true to false. */
 
-  explicit WatchValuesFlipFlop( WatchValuesBaseCore & associated_watch);
+  explicit WatchValuesFlipFlop( WatchValuesBaseCore & associated_watch_);
   ~WatchValuesFlipFlop() override;
+  WatchValuesFlipFlop( const WatchValuesFlipFlop&) = delete;
+  WatchValuesFlipFlop& operator=( const WatchValuesFlipFlop&) = delete;
 
   void initialize(std::list<WatchValuesBaseCore *> * active_watches_in) override;
   bool test_crossing() override;
@@ -95,9 +100,6 @@ class WatchValuesFlipFlop : public WatchValuesBaseCore
  protected:
   void activate() override;
   void deactivate() override;
- private:
-  WatchValuesFlipFlop( const WatchValuesFlipFlop&) = delete;
-  WatchValuesFlipFlop& operator=( const WatchValuesFlipFlop&) = delete;
 };
 
 /*****************************************************************************
@@ -116,34 +118,33 @@ class WatchValuesFlipFlopDelayed : public WatchValuesFlipFlop
   const double & delay_variable; /* (--)
     Reference to the variable used to delay the transition.
     This is typically to simulation dynamic-time.*/
-  bool in_delay; /* (--)
+  bool in_delay{false}; /* (--)
     Flag indicating that the conditions have been satisfied to flip the state
     and we are just waiting for the delay to process.*/
-  double baseline_delay_value; /* (--)
+  double baseline_delay_value{0.0}; /* (--)
     The value of delay_variable when the delay-process starts.*/
-  double delay_value; /* (--)
+  double delay_value{0.0}; /* (--)
     A copy of either up_delay or down_delay, depending on which transition
     is pending. Considered only while in_delay = true.*/
 
  public:
-  double up_delay; /* (--)
+  double up_delay{0.0}; /* (--)
     The "delay" in the value of delay_variable when triggering up.
     This is the difference between the value of delay_variable at the time the
     transition conditions are satisfied and the value of delay_variable when
     the transition should be applied.*/
-  double down_delay; /* (--)
+  double down_delay{0.0}; /* (--)
     The "delay" in the value of delay_variable when triggering up.
     This is the difference between the value of delay_variable at the time the
     transition conditions are satisfied and the value of delay_variable when
     the transition should be applied.*/
-  WatchValuesFlipFlopDelayed( WatchValuesBaseCore & associated_watch,
-                              const double & delay_variable);
-  bool test_crossing() override;
- protected:
-  bool evaluate_delay();
- private:
+  WatchValuesFlipFlopDelayed( WatchValuesBaseCore & associated_watch_,
+                              const double & delay_variable_);
   WatchValuesFlipFlopDelayed( const WatchValuesFlipFlopDelayed&) = delete;
   WatchValuesFlipFlopDelayed& operator=(
                               const WatchValuesFlipFlopDelayed&) = delete;
+  bool test_crossing() override;
+ protected:
+  bool evaluate_delay() const;
 };
 #endif

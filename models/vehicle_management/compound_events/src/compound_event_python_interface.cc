@@ -38,7 +38,7 @@ CompoundEventPythonInterface::add_action( std::string action_name,
   CompoundEventActionConfig config;
   config.name = std::move(action_name);
   config.target_value_assignment = action_value;
-  config.target_string_assignment = action_string;
+  config.target_string_assignment = std::move(action_string);
   actions.push_back(config);
 }
 
@@ -49,7 +49,7 @@ CompoundEventPythonInterface::add_action( std::string action_name,
 {
   CompoundEventActionConfig config;
   config.name = std::move(action_name);
-  config.target_string_assignment = action_string;
+  config.target_string_assignment = std::move(action_string);
   actions.push_back(config);
 }
 

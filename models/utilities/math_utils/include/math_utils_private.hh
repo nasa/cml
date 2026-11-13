@@ -2,10 +2,10 @@
 #define CML_MATH_UTILS_PRIVATE_HH
 
 #include <cassert>
-#include <cmath>   // abs, isnan, isinf
-#include <algorithm> // std::max, min
-#include <fenv.h>  // fp exception
-#include <limits>  // std::numeric_limits::min, epsilon
+#include <cmath>
+#include <algorithm>
+#include <fenv.h>
+#include <limits>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
@@ -171,7 +171,7 @@ class MathUtilsPrivate {
     assert(-1 != fe_prev); // If -1, there was a failure
 
     T res;
-    res = (base10)? std::log10(val) : std::log(val);
+    res = base10? std::log10(val) : std::log(val);
 
     if (std::isnan(res) || std::isinf(res)) {
       if (failed_flag) {
@@ -185,8 +185,8 @@ class MathUtilsPrivate {
           "Log of negative number.\n",
           "The log of ", val, " is undefined,\n"
           "and the result is set as ", failed_val, ".");
-        res = failed_val;
       }
+      res = failed_val;
     }
 
     feenableexcept(fe_prev); // restore the previous settings of fp exceptions

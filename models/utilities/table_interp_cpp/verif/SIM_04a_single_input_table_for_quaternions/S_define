@@ -5,7 +5,9 @@
 Test sim object
 *****************************************************************************/
 ##include "../../include/simple_table_lookup.hh"
+##include "../../include/table_independent_variable.hh"
 ##include "../../include/table_lookup_set.hh"
+##include "../../include/single_input_table_for_quaternions.hh"
 
 class TestingModelSimObject : public Trick::SimObject {
   public:

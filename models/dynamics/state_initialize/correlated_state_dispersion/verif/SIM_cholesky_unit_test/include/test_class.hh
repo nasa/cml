@@ -9,7 +9,7 @@ PROGRAMMERS:
 #ifndef CML_TEST_CLASS_HH
 #define CML_TEST_CLASS_HH
 
-#include <cmath> //sqrt
+#include <cmath>
 
 #include "../../../include/correlated_state_dispersion.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
