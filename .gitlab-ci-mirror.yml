@@ -1,0 +1,149 @@
+stages:
+  - static-analysis
+  - build
+
+variables:
+  GIT_STRATEGY: clone
+  GIT_DEPTH: "0"
+  PYTHON_VERSION: "3"
+  TRICK_SHA: 25.1.0
+  TRICK_URL: "https://github.com/nasa/trick.git"
+  JEOD_SHA: jeod_v5.4.1
+  JEOD_URL: "https://github.com/nasa/jeod.git"
+  MAVEN_OPTS: "-Dcom.redhat.fips=false"
+
+default:
+  before_script:
+    - module load gcc/8.5.0 libxml2
+    - export MAKEFLAGS="-j$(nproc)"
+    - export TRICK_HOME=${CI_PROJECT_DIR}/externals/trick
+    - export PATH=${TRICK_HOME}/bin:${PATH}
+    - export JEOD_HOME=${CI_PROJECT_DIR}/externals/jeod
+    - python3 -m venv .venv
+    - source .venv/bin/activate
+    - pip3 install --upgrade pip
+    - pip3 install .
+
+# See CML Core static-analysis.yml action
+static-analysis:
+  stage: static-analysis
+  needs: []
+  tags:
+    - ramtares
+  script:
+    # The basenames of all header files need to be unique because our include
+    # guards only contain the all-caps basename, not the full paths to files.
+    # We don't check files in verif directories since those aren't user-facing
+    # and are only used for individual verification sims.
+    - |
+      violations="$(
+        git ls-files 'models/*.hh' 'models/*.h' 'utility/*.hh' 'utility/*.h' ':!*verif*' \
+        | awk -F/ '{print $NF}' \
+        | tr '[:upper:]' '[:lower:]' \
+        | sort \
+        | uniq -d
+      )"
+      if [ -n "$violations" ]; then
+        printf 'The following header files do not have unique, case-insensitive names:\n%s\n' "$violations" | tee header-file-name-issues.log
+        exit 1
+      fi
+
+    # Include guards use correct format
+    - |
+      violations="$(checkguard -r -p "path 0 | upper | prepend CML_ " models utility)"
+      if [ -n "$violations" ]; then
+        printf 'Invalid include guards for:\n%s\n' "$violations" | tee include-guard-issues.log
+        exit 1
+      fi
+  artifacts:
+    when: on_failure
+    paths:
+      - "*.log"
+    expire_in: 2 weeks
+
+
+# See CML Core static-analysis.yml action
+clang-tidy:
+  stage: static-analysis
+  needs: []
+  tags:
+    - ramtares
+  script:
+    # Clone Trick and JEOD but don't build them
+    - git clone ${TRICK_URL} --depth 1 --branch ${TRICK_SHA} ${TRICK_HOME}
+    - git clone ${JEOD_URL} --depth 1 --branch ${JEOD_SHA} ${JEOD_HOME}
+
+    # Generate compile commands
+    - cmake --preset user-debug --fresh
+
+    # Run clang-tidy
+    - |
+      run-clang-tidy \
+        -p build/debug \
+        -j $(nproc) \
+        -quiet \
+        -extra-arg=-Wno-unknown-warning-option \
+        -extra-arg=-w \
+        | tee clang-tidy.log
+  artifacts:
+    when: on_failure
+    paths:
+      - "*.log"
+    expire_in: 2 weeks
+
+
+# See CML Core ci.yml action
+build-and-test:
+  stage: build
+  needs: []
+  tags:
+    - ramtares
+  script:
+    # Build Trick
+    - git clone ${TRICK_URL} --depth 1 --branch ${TRICK_SHA} ${TRICK_HOME}
+    - cd ${TRICK_HOME}
+    - ./configure
+    - make
+
+    # Build JEOD
+    - git clone ${JEOD_URL} --depth 1 --branch ${JEOD_SHA} ${JEOD_HOME}
+    - cd ${JEOD_HOME}
+    - make -f bin/jeod/makefile TRICK_BUILD=1
+    - make -C trickified
+
+    # Source project environment
+    - cd ${CI_PROJECT_DIR}
+    - source .bashrc
+
+    # Build CML, trickify it, and run unit tests
+    - cmake --workflow --preset dev
+
+    # Build and run verification sims
+    - ./bin/test.py builds --quiet
+    - ./bin/test.py runs --quiet
+    - ./bin/test.py comparisons --quiet
+
+    # Generate coverage report XML file
+    - |
+      gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
+        --xml-pretty --exclude ${TRICK_HOME}/ --exclude ${JEOD_HOME}/ \
+        --exclude '.*/test/.*' --exclude utility/mocks \
+        --filter '^models/.*' -o coverage.xml
+
+    # Print coverage to the terminal for viewing in a merge request
+    - |
+      gcovr -r . --exclude-unreachable-branches --exclude-throw-branches \
+        --exclude '.*/test/.*' --exclude utility/mocks \
+        --exclude ${TRICK_HOME}/ --exclude ${JEOD_HOME}/ \
+        --filter '^models/.*' --txt
+
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+  artifacts:
+    when: always
+    paths:
+      - bin/logs
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    expire_in: 2 weeks

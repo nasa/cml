@@ -2,6 +2,8 @@ export CML_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export CTEST_PARALLEL_LEVEL=$(nproc)
 export ASAN_OPTIONS="suppressions=${CML_HOME}/utility/sanitizers/asan.supp:fast_unwind_on_malloc=0"
 export LSAN_OPTIONS="suppressions=${CML_HOME}/utility/sanitizers/lsan.supp"
+export TRICK_EXCLUDE="${TRICK_EXCLUDE}:/software/spack"
+export MAVEN_OPTS="-Dcom.redhat.fips=false"
 
 venv="${CML_HOME}/.venv/bin/activate"
 if [ -f "$venv" ]; then
