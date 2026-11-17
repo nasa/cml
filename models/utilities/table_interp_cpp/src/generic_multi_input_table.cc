@@ -773,7 +773,7 @@ GenericMultiInputTable::configure_support_arrays()
   // 2^n data points:
 
   // 2^n:
-  const size_t num_data_points_interp = size_t(1) << independents.size();
+  const size_t num_data_points_interp = 1U << independents.size();
 
   data_point_weight.resize(num_data_points_interp);
   data_point_index.resize(num_data_points_interp);

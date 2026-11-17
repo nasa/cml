@@ -1,12 +1,20 @@
 # Ignored warnings:
 #
 # bugprone:
+#     bugprone-derived-method-shadowing-base-method:
+#         To be fixed in the future (https://github.com/nasa/cml/issues/151)
 #     bugprone-easily-swappable-parameters:
 #         May end up hurting readability in many cases. However, in the future
 #         we may want to set the MinimumLength option to a higher number to
 #         warn on excessively long argument lists of the same type.
+#     bugprone-random-generator-seed:
+#         Repeatable random number generation is a good thing for simulation
+#         models.
 #     bugprone-reserved-identifier:
 #         Will be enabled in the future (https://github.com/nasa/cml/issues/87).
+#     bugprone-throwing-static-initialization:
+#         Not much we can do without making the code more difficult to maintain,
+#         and we rarely catch exceptions in the first place.
 #
 # clang-analyzer:
 #     clang-analyzer-optin.performance.Padding:
@@ -22,10 +30,14 @@
 #         Recursion is fine.
 #     misc-non-private-member-variables-in-classes:
 #         Not useful for Trick sims.
+#     misc-override-with-different-visibility:
+#         To be fixed in the future (https://github.com/nasa/cml/issues/150).
 #
 # modernize:
 #     modernize-avoid-c-arrays:
 #         Trick doesn't yet have full support for std::array.
+#     modernize-avoid-variadic-functions:
+#         To be fixed in the future (https://github.com/nasa/cml/issues/152)
 #     modernize-use-nodiscard:
 #         The version of SWIG that we test against doesn't process this properly.
 #     modernize-use-trailing-return-type:
@@ -72,8 +84,11 @@
 # and cppcoreguidelines-*.
 Checks: >
     bugprone-*,
+        -bugprone-derived-method-shadowing-base-method,
         -bugprone-easily-swappable-parameters,
+        -bugprone-random-generator-seed,
         -bugprone-reserved-identifier,
+        -bugprone-throwing-static-initialization,
     cppcoreguidelines-*coroutines*,
     cppcoreguidelines-avoid-goto,
     cppcoreguidelines-interfaces-global-init,
@@ -91,8 +106,10 @@ Checks: >
         -misc-multiple-inheritance,
         -misc-no-recursion,
         -misc-non-private-member-variables-in-classes,
+        -misc-override-with-different-visibility,
     modernize-*,
         -modernize-avoid-c-arrays,
+        -modernize-avoid-variadic-functions,
         -modernize-use-nodiscard,
         -modernize-use-trailing-return-type,
     portability-*,
