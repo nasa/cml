@@ -21,14 +21,14 @@ PROGRAMMERS:
 
 #include "simple_spring_group.hh"
 
-namespace cml {
-
-class SeparationState;
-
 namespace jeod {
 class DynBody;
 class DynManager;
 }
+
+namespace cml {
+
+class SeparationState;
 
 /* spring specific info for each spring */
 class MassBodyDetachWithSprings : public jeod::BodyDetach
