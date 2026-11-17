@@ -18,16 +18,16 @@ AUTHOR:
 class UnitSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   double R_P[3];
   double longitude;
   double latitude;
 
-  PolygonEnclosureSphere<4> rectangle;
-  PolygonEnclosureSphere<4> polar_quad_north;
-  PolygonEnclosureSphere<4> polar_quad_south;
-  PolygonEnclosureSphere<6> irreg_hex;
-  PolygonEnclosureSphere<4> invalid;
+  cml::PolygonEnclosureSphere<4> rectangle;
+  cml::PolygonEnclosureSphere<4> polar_quad_north;
+  cml::PolygonEnclosureSphere<4> polar_quad_south;
+  cml::PolygonEnclosureSphere<6> irreg_hex;
+  cml::PolygonEnclosureSphere<4> invalid;
 
   bool in_rectangle_ang;
   bool in_rectangle_cart;

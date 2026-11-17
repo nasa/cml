@@ -24,6 +24,8 @@ PROGRAMMERS:
 #include "../include/table_independent_variable.hh"
 #include "../include/table_type_defs.hh"
 
+namespace cml {
+
 /*****************************************************************************
 load_independent_data
 Purpose:(Create the table-variable and populate it with independent-variable
@@ -464,3 +466,5 @@ SimpleTableLookup::get_table()
 
   return tables[0].first;
 }
+
+} // namespace cml

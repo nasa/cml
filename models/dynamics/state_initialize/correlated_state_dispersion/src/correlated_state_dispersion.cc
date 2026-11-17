@@ -24,6 +24,8 @@ PROGRAMMERS:
 
 #include "../include/correlated_state_dispersion.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -789,3 +791,5 @@ CorrelatedStateDispersion::transform_TR_param(
     vel_error[ii] = V_wrt_PCI_PCI[ii] - velocity[ii];
   }
 }
+
+} // namespace cml

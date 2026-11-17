@@ -30,6 +30,8 @@
 #include <algorithm>
 #include <numeric>
 
+namespace cml {
+
 /*****************************************************************************
 initialize
 Purpose:(Copies the body_collection to available_bodies)
@@ -216,3 +218,5 @@ DynamicMassString::update()
   consumable_mass = std::accumulate(available_bodies.begin(), available_bodies.end(), 0.0, add_consumable_mass);
   mass_consumed += mass_consumed_step;
 }
+
+} // namespace cml

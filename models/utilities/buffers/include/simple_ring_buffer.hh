@@ -24,6 +24,8 @@ ASSUMPTIONS:
 #include <string>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 template <typename T>
 class CMLSimpleRingBuffer {
  public:
@@ -183,4 +185,7 @@ Purpose:
   }
 
 };
+
+} // namespace cml
+
 #endif

@@ -25,6 +25,8 @@ class DynBody;
 class MassProperties;
 }
 
+namespace cml {
+
 /*****************************************************************************
 MassDerivativeDynamics
 Purpose:(Provides a pseudo-force and pseudo-torque to emulate the effects of
@@ -151,4 +153,7 @@ class MassDerivativeDynamics : public SubscriptionBase
   void compute_J_dot();
   void modify_velocity();
 };
+
+} // namespace cml
+
 #endif

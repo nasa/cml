@@ -16,6 +16,8 @@ PROGRAMMERS:
 #include "trick/exec_proto.h"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 class TrickLogging {
   public:
     std::list<Trick::DataRecordGroup *> group_list;
@@ -228,4 +230,7 @@ class TrickLogging {
       return nullptr;
     }
 };
+
+} // namespace cml
+
 #endif

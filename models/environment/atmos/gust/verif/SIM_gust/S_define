@@ -21,7 +21,7 @@ class Gust_unitSimObject: public Trick::SimObject {
 
   public:
     double    time;
-    GustModel gust;
+    cml::GustModel gust;
 
     //Constructor
     Gust_unitSimObject()

@@ -51,10 +51,10 @@ class VehicleSimObject : public Trick::SimObject {
     jeod::DynBodyInitRotState    rot_init;
 
 // ********** Insert testing instance here:   *******
-    MassBodyDetachImpulsive  detach_B_from_A;
-    MassBodyDetachImpulsive  detach_C_from_A;
-    MassBodyDetachImpulsive  detach_D_from_C;
-    MassBodyDetachImpulsive  detach_E_from_B;
+    cml::MassBodyDetachImpulsive  detach_B_from_A;
+    cml::MassBodyDetachImpulsive  detach_C_from_A;
+    cml::MassBodyDetachImpulsive  detach_D_from_C;
+    cml::MassBodyDetachImpulsive  detach_E_from_B;
 // *************************************************
 
 

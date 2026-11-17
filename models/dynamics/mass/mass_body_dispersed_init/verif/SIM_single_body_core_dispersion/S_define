@@ -25,7 +25,7 @@ mass body disp sim object
 class MassBodyDispSimObject : public Trick::SimObject {
 public:
   jeod::DynBody      body;
-  MassBodyDispersedInit  mass_init;
+  cml::MassBodyDispersedInit  mass_init;
 
   MassBodyDispSimObject( jeod::DynManager & dyn_mgr_in)
     :

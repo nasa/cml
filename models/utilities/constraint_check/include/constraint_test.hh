@@ -16,6 +16,8 @@ PROGRAMMERS:
 
 #include "constraint_enum.hh"
 
+namespace cml {
+
 /**
  * Provides the mechanism for testing some value against some threshold using some
  * specified logical comparison.
@@ -219,4 +221,7 @@ class ConstraintTestTimed : public ConstraintTest
    */
   void update_timer(double delta_time);
 };
+
+} // namespace cml
+
 #endif

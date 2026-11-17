@@ -259,7 +259,7 @@ template <size_t N>
 std::array<double, N>& operator/=(std::array<double, N>& lhs,
                                   const double& rhs) {
   for (size_t ii = 0; ii < N; ii++) {
-    lhs[ii] = MathUtils::divide_protected( lhs[ii],
+    lhs[ii] = cml::MathUtils::divide_protected( lhs[ii],
                                            rhs);
   }
   return lhs;
@@ -284,7 +284,7 @@ std::array<double, N> operator/(const double& lhs,
                                 const std::array<double, N>& rhs) {
   std::array<double, N> result = rhs;
   for (size_t ii = 0; ii < N; ii++) {
-    result[ii] = MathUtils::divide_protected( lhs,
+    result[ii] = cml::MathUtils::divide_protected( lhs,
                                              result[ii]);
   }
   return result;  // Can't re-use operator/= in this case.
@@ -301,7 +301,7 @@ template <size_t N>
 std::array<double, N>& operator/=(std::array<double, N>& lhs,
                                   const std::array<double, N>& rhs) {
   for (size_t ii = 0; ii < N; ii++) {
-    lhs[ii] = MathUtils::divide_protected( lhs[ii],
+    lhs[ii] = cml::MathUtils::divide_protected( lhs[ii],
                                           rhs[ii]);
   }
   return lhs;
@@ -311,7 +311,7 @@ template <size_t N>
 std::array<double, N>& operator/=(std::array<double, N>& lhs,
                                   const double (&rhs)[N]) {
   for (size_t ii = 0; ii < N; ii++) {
-    lhs[ii] = MathUtils::divide_protected( lhs[ii],
+    lhs[ii] = cml::MathUtils::divide_protected( lhs[ii],
                                           rhs[ii]);
   }
   return lhs;
@@ -335,7 +335,7 @@ template <size_t N>
 std::array<double, N> operator/(const std::array<double, N>& lhs, const double (&rhs)[N]) {
   std::array<double, N> result;
   for (size_t ii = 0; ii < N; ii++) {
-    result[ii] = MathUtils::divide_protected( lhs[ii],
+    result[ii] = cml::MathUtils::divide_protected( lhs[ii],
                                              rhs[ii]);
   }
   return result;
@@ -345,7 +345,7 @@ template <size_t N>
 std::array<double, N> operator/(const double (&lhs)[N], const std::array<double, N>& rhs) {
   std::array<double, N> result;// = std_copy(lhs) / rhs;
   for (size_t ii = 0; ii < N; ii++) {
-    result[ii] = MathUtils::divide_protected( lhs[ii],
+    result[ii] = cml::MathUtils::divide_protected( lhs[ii],
                                              rhs[ii]);
   }
   return result;

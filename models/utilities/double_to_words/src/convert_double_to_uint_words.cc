@@ -24,6 +24,8 @@ PROGRAMMERS:
 #include <utility>
 #include <vector>
 
+namespace cml {
+
 /**
  * Instantiates a @ref ConvertDoubleToUintWords class to do the conversion.
  */
@@ -239,3 +241,5 @@ ConvertDoubleToUintWords::update()
     }
   }
 }
+
+} // namespace cml

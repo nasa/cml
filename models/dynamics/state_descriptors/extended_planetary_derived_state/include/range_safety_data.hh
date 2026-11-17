@@ -21,6 +21,7 @@
 #ifndef CML_RANGE_SAFETY_DATA_HH
 #define CML_RANGE_SAFETY_DATA_HH
 
+namespace cml {
 
 /*
    PURPOSE:
@@ -73,4 +74,7 @@ class RangeSafetyData
                               to the South Impact Limit Line (ILL).  */
     double ZVRT{0.0};           /* (m)   Altitude in pad frame */
 };
+
+} // namespace cml
+
 #endif

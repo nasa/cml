@@ -55,24 +55,24 @@ class ConvertStringSimObject: public Trick::SimObject {
     std::string str_false_2 = "False";
     std::string str_false_3 = "FALSE";
 
-    f = ConvertString::convert<float>(NULL);
+    f = cml::ConvertString::convert<float>(NULL);
 
-    f = ConvertString::convert<float>(str_f);
-    d = ConvertString::convert<double>(str_f);
-    i = ConvertString::convert<int>(str_i);
-    ui = ConvertString::convert<unsigned int>(str_i);
-    l = ConvertString::convert<long>(str_i);
-    ul = ConvertString::convert<unsigned long>(str_i);
-    ll = ConvertString::convert<long long>(str_i);
-    ull = ConvertString::convert<unsigned long long>(str_i);
-    s = ConvertString::convert<size_t>(str_i);
-    bt1 = ConvertString::convert<bool>(str_i);
-    bt1 = ConvertString::convert<bool>(str_true_1);
-    bt2 = ConvertString::convert<bool>(str_true_2);
-    bt3 = ConvertString::convert<bool>(str_true_3);
-    bf1 = ConvertString::convert<bool>(str_false_1);
-    bf2 = ConvertString::convert<bool>(str_false_2);
-    bf3 = ConvertString::convert<bool>(str_false_3);
+    f = cml::ConvertString::convert<float>(str_f);
+    d = cml::ConvertString::convert<double>(str_f);
+    i = cml::ConvertString::convert<int>(str_i);
+    ui = cml::ConvertString::convert<unsigned int>(str_i);
+    l = cml::ConvertString::convert<long>(str_i);
+    ul = cml::ConvertString::convert<unsigned long>(str_i);
+    ll = cml::ConvertString::convert<long long>(str_i);
+    ull = cml::ConvertString::convert<unsigned long long>(str_i);
+    s = cml::ConvertString::convert<size_t>(str_i);
+    bt1 = cml::ConvertString::convert<bool>(str_i);
+    bt1 = cml::ConvertString::convert<bool>(str_true_1);
+    bt2 = cml::ConvertString::convert<bool>(str_true_2);
+    bt3 = cml::ConvertString::convert<bool>(str_true_3);
+    bf1 = cml::ConvertString::convert<bool>(str_false_1);
+    bf2 = cml::ConvertString::convert<bool>(str_false_2);
+    bf3 = cml::ConvertString::convert<bool>(str_false_3);
   }
 
  private:

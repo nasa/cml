@@ -20,6 +20,8 @@ PROGRAMMERS:
 
 #include "../include/gust.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -118,3 +120,5 @@ GustModel::deactivate()
   MathUtils::zero_vector(gust_vector);
   //jeod::Vector3::initialize(gust_vector);
 }
+
+} // namespace cml

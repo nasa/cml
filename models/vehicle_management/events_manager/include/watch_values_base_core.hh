@@ -25,6 +25,8 @@ PROGRAMMERS:
 #include "event_variable_assignment.hh"
 #include "event_action_base.hh"
 
+namespace cml {
+
 //Forward declaration
 class VehicleEventsManager;
 
@@ -146,4 +148,7 @@ class WatchValuesBaseCore : public SubscriptionBase {
   virtual bool specific_execution(){ return false;}
   virtual void apply_complementary_changes();
 };
+
+} // namespace cml
+
 #endif

@@ -25,6 +25,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /**
  * Uses the threshold constraint tests, which are violated when the variable
  * has an unfavorable comparison against some threshold value
@@ -637,4 +639,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
     post_update(); // inherited.
   }
 };
+
+} // namespace cml
+
 #endif

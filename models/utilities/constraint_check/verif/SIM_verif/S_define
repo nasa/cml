@@ -16,7 +16,7 @@ AUTHOR:
 class VerifUnitSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   double  var_x;
   double  var_x_neg;
   int     var_i;

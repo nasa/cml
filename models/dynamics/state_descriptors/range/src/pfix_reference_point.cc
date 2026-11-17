@@ -18,6 +18,8 @@ Programmers:
 
 #include "../include/pfix_reference_point.hh"
 
+namespace cml {
+
 /*****************************************************************************
 set_point
 Purpose:(sets the reference-point position based on the input values.)
@@ -143,3 +145,5 @@ PfixReferencePoint::set_direction(
     break;
   }
 }
+
+} // namespace cml

@@ -14,6 +14,8 @@
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+namespace cml {
+
 class SimSpeedMonitor : public SubscriptionBase {
  protected:
   #ifndef SWIG
@@ -67,4 +69,7 @@ class SimSpeedMonitor : public SubscriptionBase {
   }
   #endif
 };
+
+} // namespace cml
+
 #endif

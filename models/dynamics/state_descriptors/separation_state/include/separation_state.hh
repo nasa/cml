@@ -27,6 +27,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include <string>
 
+namespace cml {
 
 class SeparationState : public SubscriptionBase
 {
@@ -109,4 +110,7 @@ class SeparationState : public SubscriptionBase
    void deactivate() override;
 
 };
+
+} // namespace cml
+
 #endif

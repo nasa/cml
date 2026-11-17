@@ -14,7 +14,7 @@ PROGRAMMERS:
 #include "../../../include/correlated_state_dispersion.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
-class TestCorrelatedStateDispersion : public CorrelatedStateDispersion  {
+class TestCorrelatedStateDispersion : public cml::CorrelatedStateDispersion  {
  public:
   double reconstruct[9][9];
   double delta[9][9];
@@ -25,12 +25,12 @@ class TestCorrelatedStateDispersion : public CorrelatedStateDispersion  {
     {
         // This is usually managed internally before cholesky_decomposition
         // runs, we must set it here for testing
-        CorrelatedStateDispersion::dimension = 9;
+        cml::CorrelatedStateDispersion::dimension = 9;
     };
 
   // Public interface to protected method
   void cholesky_decomposition() {
-      MathUtils::cholesky_decomposition( "test",
+      cml::MathUtils::cholesky_decomposition( "test",
                                           &covariance[0][0],
                                           &sqrt_covariance[0][0],
                                           9);

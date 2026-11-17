@@ -33,6 +33,9 @@ PROGRAMMERS:
 #define CML_STD_ATMOS_1976_HH
 
 #include <cstddef>
+
+namespace cml {
+
 /** The main class to implement the computation of standard atmosphere model 1976 */
 class STD1976 
 {
@@ -105,5 +108,6 @@ private:
    void initialize();
 } ;
 
+} // namespace cml
 
 #endif

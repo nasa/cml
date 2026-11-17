@@ -20,6 +20,8 @@ PROGRAMMERS:
 
 #include <cmath>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -315,3 +317,5 @@ RcsPropPod::set_thrust_factor(
     "The thrust_factor vector is not sufficiently large to handle index ", index, ".\n");
   }
 }
+
+} // namespace cml

@@ -8,9 +8,9 @@
 namespace {
 
 // Test driver
-class ConstraintUnitTest : public Constraint {
+class ConstraintUnitTest : public cml::Constraint {
 public:
-    using Constraint::Constraint;
+    using cml::Constraint::Constraint;
     void update() override {post_update();}
 };
 
@@ -19,14 +19,14 @@ TEST(Constraint, ConfigurationErrors) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
 
     ConstraintUnitTest article;
-    article.violation_condition = ConstraintEnum::In;
+    article.violation_condition = cml::ConstraintEnum::In;
 
     // Test an empty list of constraints.
     EXPECT_CALL(cml_message_mock,
-        publish(CMLMessage::Error, _, _, HasSubstr("Constraint requires at least one constraint-test")));
+        publish(cml::CMLMessage::Error, _, _, HasSubstr("Constraint requires at least one constraint-test")));
     article.initialize();
     EXPECT_FALSE(article.is_initialized());
 
@@ -37,15 +37,15 @@ TEST(Constraint, ConfigurationErrors) {
     // Create some constraint tests.
     // The first test will have an invalid violation condition.
     // The second test will fail initialization due to its value set being empty.
-    ConstraintTest_ValSet<int> constraint_tests[2];
+    cml::ConstraintTest_ValSet<int> constraint_tests[2];
     constraint_tests[0].values = {1, 2, 3};
-    constraint_tests[1].set_violation_condition(ConstraintEnum::In);
+    constraint_tests[1].set_violation_condition(cml::ConstraintEnum::In);
     article.register_tests(constraint_tests);
 
     EXPECT_CALL(cml_message_mock,
-        publish(CMLMessage::Error, _, _, HasSubstr("Cannot initialize a value-set constraint-test with an empty\nset of values")));
+        publish(cml::CMLMessage::Error, _, _, HasSubstr("Cannot initialize a value-set constraint-test with an empty\nset of values")));
     EXPECT_CALL(cml_message_mock,
-        publish(CMLMessage::Error, _, _, HasSubstr("Failure to initialize a constraint-test")));
+        publish(cml::CMLMessage::Error, _, _, HasSubstr("Failure to initialize a constraint-test")));
     article.initialize();
     EXPECT_FALSE(article.is_initialized());
 }
@@ -54,11 +54,11 @@ TEST(Constraint, ConfigurationErrors) {
 TEST(Constraint, ViolateOnAnyTestViolation) {
     ConstraintUnitTest article;
 
-    ConstraintTest_ValSet<int> constraint_tests[2];
+    cml::ConstraintTest_ValSet<int> constraint_tests[2];
     constraint_tests[0].values = {1, 2, 3};
-    constraint_tests[0].set_violation_condition(ConstraintEnum::In);
+    constraint_tests[0].set_violation_condition(cml::ConstraintEnum::In);
     constraint_tests[1].values = {2, 4, 6, 8};
-    constraint_tests[1].set_violation_condition(ConstraintEnum::In);
+    constraint_tests[1].set_violation_condition(cml::ConstraintEnum::In);
     article.register_tests(constraint_tests);
     article.violate_on_any_test = true;
 
@@ -113,11 +113,11 @@ TEST(Constraint, ViolateOnAnyTestViolation) {
 TEST(Constraint, ViolateOnAllTestViolations) {
     ConstraintUnitTest article;
 
-    ConstraintTest_ValSet<int> constraint_tests[2];
+    cml::ConstraintTest_ValSet<int> constraint_tests[2];
     constraint_tests[0].values = {1, 2, 3};
-    constraint_tests[0].set_violation_condition(ConstraintEnum::In);
+    constraint_tests[0].set_violation_condition(cml::ConstraintEnum::In);
     constraint_tests[1].values = {2, 4, 6, 8};
-    constraint_tests[1].set_violation_condition(ConstraintEnum::In);
+    constraint_tests[1].set_violation_condition(cml::ConstraintEnum::In);
     article.register_tests(constraint_tests);
     article.violate_on_any_test = false;
 

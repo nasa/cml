@@ -21,6 +21,9 @@ Author:
 #include <cstddef>
 #include <iterator>
 #include <string>
+
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -254,3 +257,5 @@ LaggedAtmosWind::set_max_delta_altitude( double max_new)
     max_delta_altitude = max_new;
   }
 }
+
+} // namespace cml

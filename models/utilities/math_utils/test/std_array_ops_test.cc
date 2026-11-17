@@ -18,8 +18,8 @@ TEST(StdArrayOps, Equality) {
         constexpr std::array<double, 3> lhs {1.0, -2.0, 3.0};
         constexpr std::array<double, 3> rhs1 {1.0, -2.0, 3.0};
         constexpr std::array<double, 3> rhs2 {1.0, 0.0, 0.0};
-        EXPECT_TRUE(MathUtils::is_near_equal(lhs, rhs1));
-        EXPECT_FALSE(MathUtils::is_near_equal(lhs, rhs2));
+        EXPECT_TRUE(cml::MathUtils::is_near_equal(lhs, rhs1));
+        EXPECT_FALSE(cml::MathUtils::is_near_equal(lhs, rhs2));
     }
 
     // Single precision
@@ -27,8 +27,8 @@ TEST(StdArrayOps, Equality) {
         constexpr std::array<float, 3> lhs {1.0, -2.0, 3.0};
         constexpr std::array<float, 3> rhs1 {1.0, -2.0, 3.0};
         constexpr std::array<float, 3> rhs2 {1.0, 0.0, 0.0};
-        EXPECT_TRUE(MathUtils::is_near_equal(lhs, rhs1));
-        EXPECT_FALSE(MathUtils::is_near_equal(lhs, rhs2));
+        EXPECT_TRUE(cml::MathUtils::is_near_equal(lhs, rhs1));
+        EXPECT_FALSE(cml::MathUtils::is_near_equal(lhs, rhs2));
     }
 }
 

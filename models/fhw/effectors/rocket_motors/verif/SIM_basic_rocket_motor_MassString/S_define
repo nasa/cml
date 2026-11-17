@@ -19,15 +19,15 @@ Rocket Motor sim object
 
 class RocketMotorSimObject : public Trick::SimObject {
   public:
-    RocketMotor_Basic        basic_motor;
-    RocketMotor_Basic        basic_motor_group;
-    RocketMotor_Basic        basic_motor_group_string;
+    cml::RocketMotor_Basic        basic_motor;
+    cml::RocketMotor_Basic        basic_motor_group;
+    cml::RocketMotor_Basic        basic_motor_group_string;
     double                   dynamic_time;
     double                   vehicle_com[3];
-    DynamicMassGroup         motor_prop_group;
-    DynamicMassBody          motor_prop_a;
-    DynamicMassBody          motor_prop_b;
-    DynamicMassString        motor_prop_string;
+    cml::DynamicMassGroup         motor_prop_group;
+    cml::DynamicMassBody          motor_prop_a;
+    cml::DynamicMassBody          motor_prop_b;
+    cml::DynamicMassString        motor_prop_string;
     jeod::MassPropertiesInit mass_init;
     double attach_offset[3] = {0,0,0};
     double attach_T[3][3] = {{1,0,0},{0,1,0},{0,0,1}};

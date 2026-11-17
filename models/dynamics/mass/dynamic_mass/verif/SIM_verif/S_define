@@ -34,7 +34,7 @@ class VehicleSimObject : public Trick::SimObject {
   jeod::DynManager & dyn_manager;
  public:
   jeod::DynBody        body;
-  StateInitialize      state_initialize;
+  cml::StateInitialize      state_initialize;
   jeod::MassProperties nominal_override;
   jeod::MassBodyInit   mass_init[4]; // (--)  0 is tank[0]
                                      //       1 is body
@@ -43,10 +43,10 @@ class VehicleSimObject : public Trick::SimObject {
   jeod::BodyAttachMatrix tank_attach[2];
 
   // Instances for testing
-  DynamicMassBody         tanks[2];
-  DynamicMassBody         free_flying_body;
-  DynamicMassGroup        group;
-  DynamicMassGroup        group_alt;
+  cml::DynamicMassBody         tanks[2];
+  cml::DynamicMassBody         free_flying_body;
+  cml::DynamicMassGroup        group;
+  cml::DynamicMassGroup        group_alt;
 
   VehicleSimObject(jeod::DynManager & dyn_mgr_in)
     :

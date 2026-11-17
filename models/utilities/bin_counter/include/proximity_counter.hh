@@ -23,6 +23,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/bin_counter/include/bin_counter.hh"
 
+namespace cml {
+
 /*****************************************************************************
 CML_ProximityCounter
 Purpose:
@@ -44,4 +46,7 @@ class CML_ProximityCounter : public CML_BinCounter {
   }
   size_t get_ntarget() const {return nbin;}
 };
+
+} // namespace cml
+
 #endif

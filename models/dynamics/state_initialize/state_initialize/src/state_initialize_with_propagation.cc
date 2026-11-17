@@ -53,6 +53,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*****************************************************************************
 constructor
 *****************************************************************************/
@@ -318,3 +320,5 @@ StateInitializeWithPropagation::compute_planet_orientation(
                       T_inrtl_to_initial_pfix,
                       planet->pfix.state.rot.T_parent_this);
 }
+
+} // namespace cml

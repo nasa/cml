@@ -22,6 +22,7 @@ PROGRAMMERS:
 
 #include "restartable_vector3_1st_order_integrator.hh"
 
+namespace cml {
 
 class Vector3IntegrableObject : public SubscriptionBase,
                                 public er7_utils::IntegrableObject
@@ -76,4 +77,7 @@ class Vector3IntegrableObject : public SubscriptionBase,
     RestartableVector3FirstOrderODEIntegrator integrator; //!< trick_units(--)
 #endif
 };
+
+} // namespace cml
+
 #endif

@@ -21,6 +21,7 @@ PROGRAMMERS:
 #include <cstddef>
 #include <string>
 
+namespace cml {
 
 /*****************************************************************************
 DRWPTableLookup
@@ -220,4 +221,7 @@ protected:
   void calculate_wind_mag_dir();
   void stream_error(int line, const std::string& drwpFileName_);
 };
+
+} // namespace cml
+
 #endif

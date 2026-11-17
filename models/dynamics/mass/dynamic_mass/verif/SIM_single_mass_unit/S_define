@@ -26,8 +26,8 @@ Purpose:(The sim)
 class DynMassUnitTestSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework        framework;
-  DynamicMassBody          tank;
+  cml::UnitTestFramework        framework;
+  cml::DynamicMassBody          tank;
   jeod::MassPropertiesInit mass_init;
   double                   mass_consumed;
   bool                     fail_check;
@@ -55,7 +55,7 @@ class DynMassUnitTestSimObject: public Trick::SimObject {
   void add_poi_data()
   {
     static const double i_array[2] = {1.0, 0.5};
-    DynamicMassBodyInterpolation &mass_interp =
+    cml::DynamicMassBodyInterpolation &mass_interp =
                                      tank.dynamic_properties.interpolation;
     std::vector<size_t> dim_list(2);
     dim_list[0]=1; dim_list[1] = 2;
@@ -85,7 +85,7 @@ class DynMassUnitTestSimObject: public Trick::SimObject {
                           {1.0, 1.5},
                           {1.0, 0.0}
                         };
-    DynamicMassBodyInterpolation &mass_interp = tank.dynamic_properties.interpolation;
+    cml::DynamicMassBodyInterpolation &mass_interp = tank.dynamic_properties.interpolation;
     std::vector<size_t> dim_list(2);
     dim_list[0]=1; dim_list[1] = 2;
 

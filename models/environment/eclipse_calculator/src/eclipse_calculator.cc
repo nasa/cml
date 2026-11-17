@@ -16,6 +16,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -128,3 +130,5 @@ EclipseCalculator::deactivate()
   earth.local_frame_ptr->unsubscribe();
   moon.local_frame_ptr->unsubscribe();
 }
+
+} // namespace cml

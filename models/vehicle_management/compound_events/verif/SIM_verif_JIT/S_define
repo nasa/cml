@@ -17,7 +17,7 @@ AUTHOR:
 class EventUnitSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   /* dependencies and model instance*/
   double time;
   double threshold;
@@ -25,7 +25,7 @@ class EventUnitSimObject: public Trick::SimObject {
   double trigger_var_disarm[3];
   double trigger_var_action[3];
   bool action_assgt;
-  CompoundEventsManager manager;
+  cml::CompoundEventsManager manager;
 
   EventUnitSimObject()
     :
@@ -51,65 +51,65 @@ class EventUnitSimObject: public Trick::SimObject {
   int jit_input_replacement()
   {
     // create and configure the triggers.
-    EventTrigger<double> & trigger_arm0 =
+    cml::EventTrigger<double> & trigger_arm0 =
                      manager.create_trigger( trigger_var_arm[0],
                                              1.2,
-                                             EventTriggerBase::GE);
+                                             cml::EventTriggerBase::GE);
     trigger_arm0.multi_shot = true;
     /**********************/
-    EventTrigger<double> & trigger_arm1 =
+    cml::EventTrigger<double> & trigger_arm1 =
                      manager.create_trigger( trigger_var_arm[1],
                                              2.3,
-                                             EventTriggerBase::GT);
+                                             cml::EventTriggerBase::GT);
     trigger_arm1.multi_shot = true;
     /**********************/
-    EventTrigger<double> & trigger_arm2 =
+    cml::EventTrigger<double> & trigger_arm2 =
                      manager.create_trigger( trigger_var_arm[2],
                                              3.4,
-                                             EventTriggerBase::LT);
+                                             cml::EventTriggerBase::LT);
     trigger_arm2.multi_shot = true;
     /**********************/
-    EventTrigger<double> & trigger_disarm0 =
+    cml::EventTrigger<double> & trigger_disarm0 =
                      manager.create_trigger( trigger_var_disarm[0],
                                              1.2,
-                                             EventTriggerBase::GE);
+                                             cml::EventTriggerBase::GE);
     trigger_disarm0.multi_shot = true;
     /**********************/
-    EventTrigger<double> & trigger_disarm1 =
+    cml::EventTrigger<double> & trigger_disarm1 =
                      manager.create_trigger( trigger_var_disarm[1],
                                              2.3,
-                                             EventTriggerBase::GT);
+                                             cml::EventTriggerBase::GT);
     trigger_disarm1.multi_shot = true;
     /**********************/
-    EventTrigger<double> & trigger_disarm2 =
+    cml::EventTrigger<double> & trigger_disarm2 =
                      manager.create_trigger( trigger_var_disarm[2],
                                              3.4,
-                                             EventTriggerBase::LT);
+                                             cml::EventTriggerBase::LT);
     trigger_disarm2.multi_shot = true;
     /**********************/
-    EventTrigger<double> & trigger_act0 =
+    cml::EventTrigger<double> & trigger_act0 =
                      manager.create_trigger( trigger_var_action[0],
                                              1.2,
-                                             EventTriggerBase::GE);
+                                             cml::EventTriggerBase::GE);
     /**********************/
-    EventTrigger<double> & trigger_act1 =
+    cml::EventTrigger<double> & trigger_act1 =
                      manager.create_trigger( trigger_var_action[1],
                                              2.3,
-                                             EventTriggerBase::GT);
+                                             cml::EventTriggerBase::GT);
     /**********************/
-    EventTrigger<double> & trigger_act2 =
+    cml::EventTrigger<double> & trigger_act2 =
                      manager.create_trigger( trigger_var_action[2],
                                              0.0,
-                                             EventTriggerBase::Change);
+                                             cml::EventTriggerBase::Change);
                                              
     /**********************/
-    EventTrigger<double> & trigger_act3 =
+    cml::EventTrigger<double> & trigger_act3 =
                      manager.create_trigger( "verif.trigger_var_action[2]",
                                              0.0,
-                                             EventTriggerBase::Change);
+                                             cml::EventTriggerBase::Change);
 
     // create and configure the events
-    CompoundEvent & event = manager.create_event();
+    cml::CompoundEvent & event = manager.create_event();
     event.name = "Test Event";
     event.message = "Test Event processed";
     event.delay_offset = 2;

@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "../include/table_type_defs.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 // NOTE - using [index] rather than .at(index) to index STL-vectors primarily
 //        because doing so is much faster.
 //        The .at(index) notation is generally considered safer because it
@@ -1048,3 +1050,5 @@ GenericMultiInputTable::index_checks(
   }
   return false;
 }
+
+} // namespace cml

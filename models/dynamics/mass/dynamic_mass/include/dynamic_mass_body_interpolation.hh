@@ -46,6 +46,7 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
+namespace cml {
 
 class DynamicMassBodyInterpolation {
 public:
@@ -185,5 +186,7 @@ private:
    bool initialized{false}; /* (--)
         flag to indicate whether method initialize() has been called. */
 };
+
+} // namespace cml
 
 #endif

@@ -21,6 +21,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 /**
  * Manages a set of constraints
  *
@@ -100,4 +102,7 @@ class ConstraintSet : public SubscriptionBase
    */
   const std::string & get_violated_constraints() const { return violated_constraints;}
 };
+
+} // namespace cml
+
 #endif

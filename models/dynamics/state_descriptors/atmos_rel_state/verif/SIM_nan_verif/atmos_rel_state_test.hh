@@ -14,14 +14,14 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/vector3.hh"
 
 
-class AtmosRelStateTest : public AtmosRelativeState
+class AtmosRelStateTest : public cml::AtmosRelativeState
 {
 public:
 
    AtmosRelStateTest(
      const jeod::DynBody       & body_ref,
-     ExtendedPlanetaryDerivedState & pds_ref,
-     AtmosphereExecInterface       & atmos_exec_ref);
+     cml::ExtendedPlanetaryDerivedState & pds_ref,
+     cml::AtmosphereExecInterface       & atmos_exec_ref);
    ~AtmosRelStateTest() override = default;
    AtmosRelStateTest (const AtmosRelStateTest &) = delete;
    AtmosRelStateTest & operator= (const AtmosRelStateTest &) = delete;
@@ -34,9 +34,9 @@ public:
 
 inline AtmosRelStateTest::AtmosRelStateTest( 
   const jeod::DynBody       & body_ref,
-  ExtendedPlanetaryDerivedState & pds_ref,
-  AtmosphereExecInterface       & atmos_exec_ref):
-  AtmosRelativeState( body_ref, pds_ref, atmos_exec_ref ),
+  cml::ExtendedPlanetaryDerivedState & pds_ref,
+  cml::AtmosphereExecInterface       & atmos_exec_ref):
+  cml::AtmosRelativeState( body_ref, pds_ref, atmos_exec_ref ),
   ryp_vector() 
   {
   }

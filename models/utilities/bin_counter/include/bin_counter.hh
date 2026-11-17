@@ -22,6 +22,7 @@ PROGRAMMERS:
 #include <string>
 #include <vector>
 
+namespace cml {
 
 /*****************************************************************************
 CML_BinCounterElement
@@ -88,4 +89,7 @@ class CML_BinCounter {
   }
   size_t get_nbin() const {return nbin;}
 };
+
+} // namespace cml
+
 #endif

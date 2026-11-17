@@ -42,19 +42,19 @@ class DynMassUnitTestSimObject: public Trick::SimObject
 
  public:
   // Framework
-  UnitTestFramework       framework;
+  cml::UnitTestFramework       framework;
   // Model for testing:
-  DynamicMassBody         tank_a;
-  DynamicMassBody         tank_b;
-  DynamicMassBody         tank_c;
-  DynamicMassBody         dummy_body;
+  cml::DynamicMassBody         tank_a;
+  cml::DynamicMassBody         tank_b;
+  cml::DynamicMassBody         tank_c;
+  cml::DynamicMassBody         dummy_body;
      /* (--) used in tests:
         RUN_21_failed_lookups, RUN_22_initailization_sequence_error and
         RUN_23_update_mass_error */
-  DynamicMassGroup        group;
-  DynamicMassString       string;
-  DynamicMassString       second_string;
-  DynamicMassString       dummy_string; /* (--) used in RUN_21_failed_lookups */
+  cml::DynamicMassGroup        group;
+  cml::DynamicMassString       string;
+  cml::DynamicMassString       second_string;
+  cml::DynamicMassString       dummy_string; /* (--) used in RUN_21_failed_lookups */
   // support variables:
   jeod::DynBody           body;
   jeod::MassBodyInit      mass_init[4]; // (--) tank_a, body, tank_b, tank_c

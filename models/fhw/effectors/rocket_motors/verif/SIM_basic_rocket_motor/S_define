@@ -19,11 +19,11 @@ Rocket Motor sim object
 
 class RocketMotorSimObject : public Trick::SimObject {
   public:
-    RocketMotor_Basic        basic_motor;
-    RocketMotor_Basic        no_cm_motor;
+    cml::RocketMotor_Basic        basic_motor;
+    cml::RocketMotor_Basic        no_cm_motor;
     double                   dynamic_time;
     double                   vehicle_com[3];
-    DynamicMassBody          motor_prop;
+    cml::DynamicMassBody          motor_prop;
     jeod::MassPropertiesInit mass_init;
 
     RocketMotorSimObject()

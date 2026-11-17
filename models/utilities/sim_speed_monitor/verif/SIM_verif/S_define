@@ -13,7 +13,7 @@ PROGRAMMERS:
 
 class TestSimObject : public Trick::SimObject {
  public:
-  SimSpeedMonitor  sim_speed[4];
+  cml::SimSpeedMonitor  sim_speed[4];
   double           cycle_time[4];
 
   TestSimObject()

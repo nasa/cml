@@ -21,8 +21,8 @@ class SimpleUnitTestSimObject: public Trick::SimObject {
 
    public:
    // Framework (leave this alone)
-    UnitTestFramework framework;
-    UnitTestFramework another_framework;
+    cml::UnitTestFramework framework;
+    cml::UnitTestFramework another_framework;
     double var1; /* (--) var1 */
     double var2; /* (--) var2 */
     

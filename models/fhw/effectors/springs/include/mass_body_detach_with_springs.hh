@@ -21,6 +21,8 @@ PROGRAMMERS:
 
 #include "simple_spring_group.hh"
 
+namespace cml {
+
 class SeparationState;
 
 namespace jeod {
@@ -110,4 +112,7 @@ public:
     jeod::BodyDetach::apply(dyn_manager);
   }
 };
+
+} // namespace cml
+
 #endif

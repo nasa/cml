@@ -37,6 +37,7 @@ PROGRAMMERS:
 #include "abstract_table_lookup.hh"
 #include "table_type_defs.hh"
 
+namespace cml {
 
 /*****************************************************************************
 TableLookupTransposeDataSet_TableConfig
@@ -170,4 +171,7 @@ class TableLookupTransposeDataSet : public TableLookupSet
  private:
   void check_independent();
 };
+
+} // namespace cml
+
 #endif

@@ -9,6 +9,8 @@ PROGRAMMERS:
 #include <cmath>
 #include <limits>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -84,3 +86,5 @@ bool QuadraticSolver::solve( bool compute_roots)
   }
   return roots_exist;
 }
+
+} // namespace cml

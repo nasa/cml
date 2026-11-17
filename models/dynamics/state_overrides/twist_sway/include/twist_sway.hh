@@ -50,6 +50,7 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
 
 /*****************************************************************************
 TwistSwayParams
@@ -257,5 +258,7 @@ public:
   void accumulate_perturbations();
   void compute_twist_sway_enu();
 };
+
+} // namespace cml
 
 #endif

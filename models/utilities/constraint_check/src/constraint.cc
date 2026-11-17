@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include <algorithm>
 #include <iterator>
 
+namespace cml {
+
 // Verify that the model was configured correctly
 void
 Constraint::initialize()
@@ -86,3 +88,5 @@ Constraint::activate()
   }
   active = true;
 }
+
+} // namespace cml

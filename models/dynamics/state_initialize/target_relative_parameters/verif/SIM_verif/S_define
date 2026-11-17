@@ -23,7 +23,7 @@ Purpose:(The sim)
 class AntaresUnitTestSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
 
   double ref_position[3]; /* (m) */
   double ref_alt;
@@ -74,16 +74,16 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
   double velocity_out_from_pos_vel[3]; /* (m/s)
       Velocity computed using compute_pos_vel_from_params() */
 
-  TR_ParameterSet params_out;
-  TR_ParameterSet params_in;
-  TargetRelative_StateParameter::InputPosAngle pos_angle_in;
+  cml::TR_ParameterSet params_out;
+  cml::TR_ParameterSet params_in;
+  cml::TargetRelative_StateParameter::InputPosAngle pos_angle_in;
 
   // Use 2 independent instances of TargetRelative_StateParameters.
   // The sim will convert from parameters to vectors and back again but to make
   // sure there are no hidden dependencies, each direction will be handled by
   // an independent instance.
-  TargetRelative_StateParameter tr_params_to_R3;
-  TargetRelative_StateParameter tr_R3_to_params;
+  cml::TargetRelative_StateParameter tr_params_to_R3;
+  cml::TargetRelative_StateParameter tr_R3_to_params;
 
 
   AntaresUnitTestSimObject()
@@ -179,7 +179,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
                                           params_out.altitude,
                                           params_out.theta_Rng,
                                           params_out.theta_Rot,
-                                          TargetRelative_StateParameter::INPUT_THETA_ROT,
+                                          cml::TargetRelative_StateParameter::INPUT_THETA_ROT,
                                           NULL);
       }
       else if (run_compute_velocity_from_params) {
@@ -203,7 +203,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
                                           params_out.altitude,
                                           params_out.theta_Rng,
                                           params_out.theta_Rot,
-                                          TargetRelative_StateParameter::INPUT_THETA_ROT,
+                                          cml::TargetRelative_StateParameter::INPUT_THETA_ROT,
                                           position_out_from_rot);
 
       // Note that if using cross-angle, then we need to split the call based
@@ -213,14 +213,14 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
                                               params_out.altitude,
                                               params_out.theta_Rng,
                                               params_out.phi_Cross,
-                                              TargetRelative_StateParameter::INPUT_PHI_ABS_THETA_ROT_LT_90,
+                                              cml::TargetRelative_StateParameter::INPUT_PHI_ABS_THETA_ROT_LT_90,
                                               position_out_from_cross);
       } else {
         tr_params_to_R3.compute_position_from_params(
                                               params_out.altitude,
                                               params_out.theta_Rng,
                                               params_out.phi_Cross,
-                                              TargetRelative_StateParameter::INPUT_PHI_ABS_THETA_ROT_GT_90,
+                                              cml::TargetRelative_StateParameter::INPUT_PHI_ABS_THETA_ROT_GT_90,
                                               position_out_from_cross);
       }
       // Generate the "target_is_behind_vehicle" setting based on the input
@@ -248,7 +248,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
                                r0_target_phat)) < -1E-3;
 
       tr_params_to_R3.compute_pos_vel_from_params(params_out,
-                                                  TargetRelative_StateParameter::INPUT_THETA_ROT,
+                                                  cml::TargetRelative_StateParameter::INPUT_THETA_ROT,
                                                   position_out_from_pos_vel,
                                                   velocity_out_from_pos_vel);
       tr_params_to_R3.compute_velocity_from_params(

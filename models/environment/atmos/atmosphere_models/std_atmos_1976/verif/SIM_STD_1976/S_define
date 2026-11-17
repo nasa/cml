@@ -29,8 +29,8 @@ PROGRAMMERS:
 class Std76UnitTestSimObject: public Trick::SimObject {
 
 public:
-    UnitTestFramework framework;
-    STD1976 std1976;
+    cml::UnitTestFramework framework;
+    cml::STD1976 std1976;
     double altitude; /* (m) input altitude */
 
     Std76UnitTestSimObject() :

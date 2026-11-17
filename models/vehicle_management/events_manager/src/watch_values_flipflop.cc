@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include <cstdlib>
 #include <list>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -258,3 +260,5 @@ WatchValuesFlipFlopDelayed::evaluate_delay() const
 {
   return (std::abs( delay_variable - baseline_delay_value) >= delay_value);
 }
+
+} // namespace cml

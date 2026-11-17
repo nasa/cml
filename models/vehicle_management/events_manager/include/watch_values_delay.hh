@@ -14,13 +14,14 @@ PROGRAMMERS:
 #ifdef SWIG
 #ifndef CML_WATCH_VALUES_SWIG_TEMPLATES
 #define CML_WATCH_VALUES_SWIG_TEMPLATES
-%template(WatchValuesBase_bool) WatchValuesBase<bool>;
-%template(WatchValuesBase_int) WatchValuesBase<int>;
-%template(WatchValuesBase_double) WatchValuesBase<double>;
-%template(WatchValuesBase_unsigned_int) WatchValuesBase<unsigned int>;
+%template(WatchValuesBase_bool) cml::WatchValuesBase<bool>;
+%template(WatchValuesBase_int) cml::WatchValuesBase<int>;
+%template(WatchValuesBase_double) cml::WatchValuesBase<double>;
+%template(WatchValuesBase_unsigned_int) cml::WatchValuesBase<unsigned int>;
 #endif
 #endif
 
+namespace cml {
 
 template <typename watchType>
 class WatchValuesDelay : public WatchValuesBase<watchType>
@@ -106,4 +107,7 @@ Purpose: tests for the satisfaction of the trigger condition and the subsequent
     delay_offset = delay_offset_;
   }
 };
+
+} // namespace cml
+
 #endif
