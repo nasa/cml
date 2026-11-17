@@ -35,9 +35,9 @@ class VehicleSimObject : public Trick::SimObject {
   public:
    jeod::DynBody      body;
    jeod::MassBodyInit mass_init;
-   StateInitialize    state_initialize;
+   cml::StateInitialize    state_initialize;
 
-   SimplePlanetRelState   planet_rel;
+   cml::SimplePlanetRelState   planet_rel;
 
    VehicleSimObject(jeod::DynManager & dyn_mgr_in)
      :

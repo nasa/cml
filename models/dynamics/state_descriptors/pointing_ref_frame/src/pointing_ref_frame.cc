@@ -18,6 +18,8 @@ Programmers:
 
 #include "../include/pointing_ref_frame.hh"
 
+namespace cml {
+
 /**
  * @details Initializes the frame with zero vectors for the position and velocity.
  *          The angular velocity is set to a unit vector along the z-axis. The
@@ -275,3 +277,5 @@ PointingRefFrame::deactivate()
   pointing_frame.unsubscribe();
   active = false;
 }
+
+} // namespace cml

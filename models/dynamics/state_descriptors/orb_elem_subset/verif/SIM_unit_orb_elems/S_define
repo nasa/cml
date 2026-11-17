@@ -25,13 +25,13 @@
 
 class OrbElemsSimObject: public Trick::SimObject {
 public:
-   UnitTestFramework framework;
+   cml::UnitTestFramework framework;
 
    bool correct_j2;
    bool gen_cartesian_inrtl;
    bool pfix_z_values;
 
-   OrbElemSubset        orb_elems;
+   cml::OrbElemSubset        orb_elems;
    jeod::DynBody    body;
 
    OrbElemsSimObject( const jeod::RefFrameTrans & inrtl_state_in,

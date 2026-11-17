@@ -19,8 +19,8 @@ Verif sim object
 
 class VerifSimObject : public Trick::SimObject {
     public:
-        TrickLogging dr_groups;
-        UnitTestFramework input1;
+        cml::TrickLogging dr_groups;
+        cml::UnitTestFramework input1;
 
         double group1_var;      /* (--) Group 1 dummy variable */
         double group2_var;      /* (--) Group 2 dummy variable */

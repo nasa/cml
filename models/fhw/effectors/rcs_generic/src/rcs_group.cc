@@ -21,6 +21,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+namespace cml {
 
 /*****************************************************************************
 Constructor
@@ -127,3 +128,5 @@ RcsJetGroup::set_blow_down(
   }
   blow_down = blow_down_;
 }
+
+} // namespace cml

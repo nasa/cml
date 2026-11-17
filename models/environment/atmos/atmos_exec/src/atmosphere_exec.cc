@@ -55,6 +55,7 @@ PROGRAMMERS:
 #include "../include/atmosphere_exec_gram.hh"
 #include "../include/atmosphere_exec_interface.hh"
 
+namespace cml {
 
 /*******************************************************************************
 Method:
@@ -423,3 +424,5 @@ AtmosphereExec::add_gust()
                       out.wind_velocity_tc);
   out.wind_vmag = jeod::Vector3::vmag( out.wind_velocity_td );
 }
+
+} // namespace cml

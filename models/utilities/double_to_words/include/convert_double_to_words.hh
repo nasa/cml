@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include <cstdint>
 #include <vector>
 
+namespace cml {
+
 /**
  * Convert a `double` into n-bit unsigned integer words
  *
@@ -148,5 +150,7 @@ public:
    */
   bool check_values();
 };
+
+} // namespace cml
 
 #endif

@@ -12,7 +12,7 @@ Constructor
 *****************************************************************************/
 RcsTestMultigroup::RcsTestMultigroup()
   :
-  RcsGeneric (2), // bi-propellant
+  cml::RcsGeneric (2), // bi-propellant
   rcs_pod_1    (2, num_propellant_components, time_step),
   rcs_pod_2    (2, num_propellant_components, time_step),
   group_1      (num_propellant_components),
@@ -45,7 +45,7 @@ Purpose:(model-level settings)
 void
 RcsTestMultigroup::configure_model()
 {
-  input_force    = RcsGeneric::vector;
+  input_force    = cml::RcsGeneric::vector;
 }
 
 

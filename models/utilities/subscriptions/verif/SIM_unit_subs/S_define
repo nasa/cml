@@ -16,7 +16,7 @@
 class SubscriptionSimObject: public Trick::SimObject {
 
   public:
-    SubscriptionBase       subs;
+    cml::SubscriptionBase       subs;
     SubscriptionTestClass  activation_fails;
 
     SubscriptionSimObject()

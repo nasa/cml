@@ -19,8 +19,8 @@ PlanetRelStateSimObject
 class PlanetRelStateSimObject: public Trick::SimObject {
 
 public:
-   UnitTestFramework framework;
-   ExtendedPlanetaryDerivedState earth_rel;
+   cml::UnitTestFramework framework;
+   cml::ExtendedPlanetaryDerivedState earth_rel;
 
    jeod::DynBody body;
    jeod::Planet earth;

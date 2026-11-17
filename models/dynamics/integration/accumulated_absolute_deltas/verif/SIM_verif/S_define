@@ -23,10 +23,10 @@ Purpose:(The sim)
 class AntaresUnitTestSimObject: public Trick::SimObject {
  public:
   // Framework (leave this alone)
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
 
   // Model for testing:
-  AccumulatedAbsoluteDeltas accum_val;
+  cml::AccumulatedAbsoluteDeltas accum_val;
 
   // support variables:
   double vals[4];

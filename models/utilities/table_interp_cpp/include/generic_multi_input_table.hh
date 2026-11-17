@@ -22,6 +22,7 @@
 #include "table_independent_variable.hh"
 #include "table_type_defs.hh"
 
+namespace cml {
 
 /*****************************************************************************
 GenericMultiInputTable
@@ -134,4 +135,7 @@ class GenericMultiInputTable
   GenericMultiInputTable (const GenericMultiInputTable&);
   GenericMultiInputTable& operator = (const GenericMultiInputTable&);
 };
+
+} // namespace cml
+
 #endif

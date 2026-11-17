@@ -27,6 +27,7 @@ PROGRAMMERS:
 #include <algorithm>
 #include <string>
 
+namespace cml {
 
 /*****************************************************************************
 Constructor / Destructor
@@ -209,3 +210,5 @@ CompoundEventsManager::set_trigger_delay_offset(
                                                      ref);
   }
 }
+
+} // namespace cml

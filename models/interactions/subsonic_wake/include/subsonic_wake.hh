@@ -32,6 +32,7 @@ NOTES:
 #include "wake_params.hh"
 #include "wake_effects.hh"
 
+namespace cml {
 
 /*****************************************************************************
 SubsonicWake
@@ -129,5 +130,7 @@ class SubsonicWakeWithForce : public SubsonicWake
  protected:
   void query_objB() override{} // just to make it instantiable
 };
+
+} // namespace cml
 
 #endif

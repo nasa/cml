@@ -34,6 +34,8 @@ PROGRAMMERS:
 #include <string>
 #include <utility>
 
+namespace cml {
+
 namespace {
 
 /*****************************************************************************
@@ -360,3 +362,5 @@ PointToPointManager::make_all_pairings()
     }
   }
 }
+
+} // namespace cml

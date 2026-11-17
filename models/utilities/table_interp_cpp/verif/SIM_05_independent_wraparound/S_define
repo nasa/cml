@@ -12,22 +12,22 @@ class TestingModelSimObject : public Trick::SimObject {
  public:
    double dependent;
    double independent;
-   TableIndependentVariable tiv_name;   // (--) a named TIV
-   TableIndependentVariable tiv_noname; // (--) an unnamed TIV
-   TableIndependentVariable tiv_error;  // (--) a TIV for testing errors
-   TableIndependentVariable tiv_bias;   // (--) a TIV for testing biasing
-   GenericMultiInputTable   table;
-   TableLookupSet           table_set;
+   cml::TableIndependentVariable tiv_name;   // (--) a named TIV
+   cml::TableIndependentVariable tiv_noname; // (--) an unnamed TIV
+   cml::TableIndependentVariable tiv_error;  // (--) a TIV for testing errors
+   cml::TableIndependentVariable tiv_bias;   // (--) a TIV for testing biasing
+   cml::GenericMultiInputTable   table;
+   cml::TableLookupSet           table_set;
 
    TestingModelSimObject()
      :
      dependent(0.0),
      independent(-3.0),
      tiv_name( "named", independent,
-       TableIndependentVariable::WrapAround, 1.0E-1),
-     tiv_noname(independent, TableIndependentVariable::WrapAround),
-     tiv_error(independent, TableIndependentVariable::WrapAround),
-     tiv_bias( independent, TableIndependentVariable::WrapAround),
+       cml::TableIndependentVariable::WrapAround, 1.0E-1),
+     tiv_noname(independent, cml::TableIndependentVariable::WrapAround),
+     tiv_error(independent, cml::TableIndependentVariable::WrapAround),
+     tiv_bias( independent, cml::TableIndependentVariable::WrapAround),
      table(dependent),
      table_set()
    {

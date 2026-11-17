@@ -24,34 +24,34 @@ PROGRAMMERS:
 // duplicate this for the types that you're using with the Constraint Tests.
 struct TestConstraintTypes
 {
-  ConstraintTest_ThresholdTimed<double> constraint_test_threshold_timed_double;
-  ConstraintTest_ThresholdTimed<int>    constraint_test_threshold_timed_int;
-  ConstraintTest_Threshold<double>      constraint_test_threshold_double;
-  ConstraintTest_Threshold<int>         constraint_test_threshold_int;
-  ConstraintTest_IntervalTimed<double>  constraint_test_interval_timed_double;
-  ConstraintTest_IntervalTimed<int>     constraint_test_interval_timed_int;
-  ConstraintTest_Interval<double>       constraint_test_interval_double;
+  cml::ConstraintTest_ThresholdTimed<double> constraint_test_threshold_timed_double;
+  cml::ConstraintTest_ThresholdTimed<int>    constraint_test_threshold_timed_int;
+  cml::ConstraintTest_Threshold<double>      constraint_test_threshold_double;
+  cml::ConstraintTest_Threshold<int>         constraint_test_threshold_int;
+  cml::ConstraintTest_IntervalTimed<double>  constraint_test_interval_timed_double;
+  cml::ConstraintTest_IntervalTimed<int>     constraint_test_interval_timed_int;
+  cml::ConstraintTest_Interval<double>       constraint_test_interval_double;
 };
 
 class TestConstraintSet
 {
  public:
-  ConstraintSet                                   set;
-  ThresholdTimedConstraint<double, 4>             threshold_x4t;
-  ThresholdInstantConstraint<double, 4>           threshold_x4i;
+  cml::ConstraintSet                                   set;
+  cml::ThresholdTimedConstraint<double, 4>             threshold_x4t;
+  cml::ThresholdInstantConstraint<double, 4>           threshold_x4i;
 
-  ThresholdTimedConstraint<int, 4>                threshold_i4t;
-  ThresholdInstantConstraint<int, 4>              threshold_i4i;
+  cml::ThresholdTimedConstraint<int, 4>                threshold_i4t;
+  cml::ThresholdInstantConstraint<int, 4>              threshold_i4i;
 
-  ThresholdTimedConstraintSpecData<double, 4, 4>  threshold_x4s;
-  ThresholdTimedConstraintSpecData<double, 4, 3>  threshold_x3s;
-  ThresholdTimedConstraintSpecData<double, 4, 3>  threshold_x3s_neg;
-  ThresholdTimedConstraintSpecData<double, 4, 5>  threshold_x5s;
+  cml::ThresholdTimedConstraintSpecData<double, 4, 4>  threshold_x4s;
+  cml::ThresholdTimedConstraintSpecData<double, 4, 3>  threshold_x3s;
+  cml::ThresholdTimedConstraintSpecData<double, 4, 3>  threshold_x3s_neg;
+  cml::ThresholdTimedConstraintSpecData<double, 4, 5>  threshold_x5s;
 
-  IntervalTimedConstraint<double, 2>              interval_x2t;
-  IntervalTimedConstraint<double, 2>              interval_x2t_neg;
-  IntervalTimedConstraint<int, 2>                 interval_i2t;
-  IntervalInstantConstraint<double, 2>            interval_x2i;
+  cml::IntervalTimedConstraint<double, 2>              interval_x2t;
+  cml::IntervalTimedConstraint<double, 2>              interval_x2t_neg;
+  cml::IntervalTimedConstraint<int, 2>                 interval_i2t;
+  cml::IntervalInstantConstraint<double, 2>            interval_x2i;
 
   TestConstraintSet( const double& delta_time,
                      const double& var_x,
@@ -79,14 +79,14 @@ class TestConstraintSet
     threshold_x4t.tests[1].time_limit = 1.0;
     threshold_x4t.tests[2].time_limit = 0.8;
     threshold_x4t.tests[3].time_limit = 0.5;
-    threshold_x4t.violation_condition = ConstraintEnum::GE;
+    threshold_x4t.violation_condition = cml::ConstraintEnum::GE;
     threshold_x4t.name = "x4t";
 
     threshold_x4i.tests[0].threshold = 10.0;
     threshold_x4i.tests[1].threshold = 20.0;
     threshold_x4i.tests[2].threshold = 30.0;
     threshold_x4i.tests[3].threshold = 35.0;
-    threshold_x4i.violation_condition = ConstraintEnum::GT;
+    threshold_x4i.violation_condition = cml::ConstraintEnum::GT;
     threshold_x4i.name = "x4i";
 
     threshold_i4t.tests[0].threshold = 10;
@@ -97,14 +97,14 @@ class TestConstraintSet
     threshold_i4t.tests[1].time_limit = 1.0;
     threshold_i4t.tests[2].time_limit = 1.8;
     threshold_i4t.tests[3].time_limit = 2.5;
-    threshold_i4t.violation_condition = ConstraintEnum::LT;
+    threshold_i4t.violation_condition = cml::ConstraintEnum::LT;
     threshold_i4t.name = "i4t";
 
     threshold_i4i.tests[0].threshold = 10;
     threshold_i4i.tests[1].threshold = 20;
     threshold_i4i.tests[2].threshold = 30;
     threshold_i4i.tests[3].threshold = 40;
-    threshold_i4i.violation_condition = ConstraintEnum::EQ;
+    threshold_i4i.violation_condition = cml::ConstraintEnum::EQ;
     threshold_i4i.name = "i4i";
 
     threshold_x4s.threshold_spec[0] = 10.0;
@@ -115,7 +115,7 @@ class TestConstraintSet
     threshold_x4s.time_spec[1] = 1.0;
     threshold_x4s.time_spec[2] = 1.8;
     threshold_x4s.time_spec[3] = 2.5;
-    threshold_x4s.violation_condition = ConstraintEnum::LE;
+    threshold_x4s.violation_condition = cml::ConstraintEnum::LE;
     threshold_x4s.name = "x4s";
 
     threshold_x3s.threshold_spec[0] = 10.0;
@@ -126,7 +126,7 @@ class TestConstraintSet
     threshold_x3s.time_spec[1] = 1.0;
     threshold_x3s.time_spec[2] = 1.8;
     threshold_x3s.time_spec[3] = 1.5;
-    threshold_x3s.violation_condition = ConstraintEnum::LT;
+    threshold_x3s.violation_condition = cml::ConstraintEnum::LT;
     threshold_x3s.name = "x3s";
 
     threshold_x3s_neg.threshold_spec[0] = -10.0;
@@ -137,7 +137,7 @@ class TestConstraintSet
     threshold_x3s_neg.time_spec[1] = 1.0;
     threshold_x3s_neg.time_spec[2] = 1.8;
     threshold_x3s_neg.time_spec[3] = 1.5;
-    threshold_x3s_neg.violation_condition = ConstraintEnum::GT;
+    threshold_x3s_neg.violation_condition = cml::ConstraintEnum::GT;
     threshold_x3s_neg.name = "x3s_neg";
 
     threshold_x5s.threshold_spec[0] = 10.0;
@@ -148,7 +148,7 @@ class TestConstraintSet
     threshold_x5s.time_spec[1] = 3.0;
     threshold_x5s.time_spec[2] = 0.3;
     threshold_x5s.time_spec[3] = 0.1;
-    threshold_x5s.violation_condition = ConstraintEnum::GT;
+    threshold_x5s.violation_condition = cml::ConstraintEnum::GT;
     threshold_x5s.name = "x5s";
     threshold_x5s.use_linear_interpolation = false;
 
@@ -158,7 +158,7 @@ class TestConstraintSet
     interval_x2t.tests[1].upper_bound = 40.0;
     interval_x2t.tests[0].time_limit = 0.5;
     interval_x2t.tests[1].time_limit = 0.8;
-    interval_x2t.violation_condition = ConstraintEnum::In;
+    interval_x2t.violation_condition = cml::ConstraintEnum::In;
     interval_x2t.name = "x2t";
 
     interval_x2t_neg.tests[0].lower_bound = -20.0;
@@ -167,7 +167,7 @@ class TestConstraintSet
     interval_x2t_neg.tests[1].upper_bound = -30.0;
     interval_x2t_neg.tests[0].time_limit = 0.5;
     interval_x2t_neg.tests[1].time_limit = 0.8;
-    interval_x2t_neg.violation_condition = ConstraintEnum::In;
+    interval_x2t_neg.violation_condition = cml::ConstraintEnum::In;
     interval_x2t_neg.name = "x2t_neg";
 
     interval_i2t.tests[0].lower_bound = 10;
@@ -176,14 +176,14 @@ class TestConstraintSet
     interval_i2t.tests[1].upper_bound = 40;
     interval_i2t.tests[0].time_limit = 0.5;
     interval_i2t.tests[1].time_limit = 0.8;
-    interval_i2t.violation_condition = ConstraintEnum::In;
+    interval_i2t.violation_condition = cml::ConstraintEnum::In;
     interval_i2t.name = "i2t";
 
     interval_x2i.tests[0].lower_bound = 10.0;
     interval_x2i.tests[0].upper_bound = 20.0;
     interval_x2i.tests[1].lower_bound = 30.0;
     interval_x2i.tests[1].upper_bound = 40.0;
-    interval_x2i.violation_condition = ConstraintEnum::In;
+    interval_x2i.violation_condition = cml::ConstraintEnum::In;
     interval_x2i.name = "x2i";
   }
 

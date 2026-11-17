@@ -31,6 +31,8 @@ PROGRAMMERS:
 
 #include "trick/input_processor_proto.h"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -626,3 +628,5 @@ UnitTestFramework::update_file()
   }
   commands.pop_front();
 }
+
+} // namespace cml

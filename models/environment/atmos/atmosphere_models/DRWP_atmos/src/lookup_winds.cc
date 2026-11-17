@@ -28,6 +28,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*****************************************************************************
 verify
 Purpose:
@@ -846,3 +848,5 @@ void LookupAtmosWinds::test_for_reinitialize()
     "Check intent on why this method was called, and review documentation for "
     "alternative approach.\n");
 }
+
+} // namespace cml

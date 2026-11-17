@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include <regex>
 #include <string>
 
+namespace cml {
+
 // Expand all environment variables in a given string
 std::string expand_env_variables(const std::string& input) noexcept(false)
 {
@@ -51,3 +53,5 @@ std::string expand_env_variables(const std::string& input) noexcept(false)
     result.append(input, last_position, input.size() - last_position);
     return result;
 }
+
+} // namespace cml

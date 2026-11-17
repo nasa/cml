@@ -37,9 +37,9 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
    jeod::RefFrameState & moon_inrtl;
  public:
   // Framework
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   // Model for testing:
-  EarthMoonRotatingFrame  em_rotating_frame;
+  cml::EarthMoonRotatingFrame  em_rotating_frame;
   // support variables
   double earth_moon_mass_ratio; // (--) also used as a flag
 
@@ -95,7 +95,7 @@ class VehicleSimObject : public Trick::SimObject {
  public:
   jeod::DynBody              body;
   jeod::MassBodyInit         mass_init;
-  StateInitialize            state_initialize;
+  cml::StateInitialize            state_initialize;
   jeod::RelativeDerivedState rel_state;
 
   VehicleSimObject(jeod::DynManager & dyn_mgr_in)

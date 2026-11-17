@@ -18,23 +18,23 @@ class TestingModelSimObject : public Trick::SimObject {
    // environment to test specific checks, such as those that require extra
    // table independent variable additions with different or extra data required to
    // hit the error or warning checks desired
-   TableIndependentVariable tiv_1;
-   TableIndependentVariable tiv_2;
-   TableIndependentVariable tiv_3;
-   TableIndependentVariable tiv_4;
-   TableIndependentVariable tiv_5;
-   GenericMultiInputTable   generic_table;
+   cml::TableIndependentVariable tiv_1;
+   cml::TableIndependentVariable tiv_2;
+   cml::TableIndependentVariable tiv_3;
+   cml::TableIndependentVariable tiv_4;
+   cml::TableIndependentVariable tiv_5;
+   cml::GenericMultiInputTable   generic_table;
 
    TestingModelSimObject()
      :
      indep(1.5),
      indp(2.0),
      use_config(false),
-     tiv_1(independent, TableIndependentVariable::Linear),
-     tiv_2(independent, TableIndependentVariable::Linear),
-     tiv_3(independent, TableIndependentVariable::Linear),
-     tiv_4(indep, TableIndependentVariable::Linear),
-     tiv_5(indp, TableIndependentVariable::Linear),
+     tiv_1(independent, cml::TableIndependentVariable::Linear),
+     tiv_2(independent, cml::TableIndependentVariable::Linear),
+     tiv_3(independent, cml::TableIndependentVariable::Linear),
+     tiv_4(indep, cml::TableIndependentVariable::Linear),
+     tiv_5(indp, cml::TableIndependentVariable::Linear),
      generic_table(dependent)
    {
      ("initialization") configure();

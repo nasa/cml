@@ -20,6 +20,8 @@ PROGRAMMERS:
 #include <stdexcept>
 #include <string>
 
+namespace cml {
+
 /**
  * Retrieve the environment variable if it is set, otherwise terminate the program
  *
@@ -92,5 +94,7 @@ inline std::string getenv_or_throw(const std::string& var_name) noexcept(false)
  * @return      The original string with environment variables expanded
  */
 std::string expand_env_variables(const std::string& input) noexcept(false);
+
+} // namespace cml
 
 #endif

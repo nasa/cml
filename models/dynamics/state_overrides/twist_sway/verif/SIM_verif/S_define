@@ -28,10 +28,10 @@ class TwistSwaySimObject : public Trick::SimObject {
    double ts_y_in_ecef[3];
    double ts_z_in_ecef[3];
 
-   TwistSwayMagnitudes test_mags;
+   cml::TwistSwayMagnitudes test_mags;
    double call_period;
 
-   TwistSway    ts;
+   cml::TwistSway    ts;
 
 
   TwistSwaySimObject()

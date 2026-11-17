@@ -27,7 +27,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
 
  public:
   // Framework (leave this alone)
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   // support variables:
   double      lagged_altitude;/* (m) altitude of interpolated point*/
   PayloadData payload;        /* (--) data for recording. */

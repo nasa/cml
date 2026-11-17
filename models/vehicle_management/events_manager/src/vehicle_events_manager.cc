@@ -10,6 +10,8 @@ PROGRAMMERS:
 #include "../include/vehicle_events_manager.hh"
 #include <list>
 
+namespace cml {
+
 /*****************************************************************************
 initialize
 Purpose:(initializes all of the watches)
@@ -62,3 +64,5 @@ VehicleEventsManager::update()
     }
   }
 }
+
+} // namespace cml

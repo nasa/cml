@@ -15,15 +15,15 @@ public:
   double  indep_incr; // (--) increment per cycle.
   int     frame_count;
   int     reverse_on_count;
-  SimpleTableLookup         table_degrees;
-  SimpleTableLookup         table_radians;
+  cml::SimpleTableLookup         table_degrees;
+  cml::SimpleTableLookup         table_radians;
 
   // Constructor options, testing only the constructors:
-  SingleInputTableForAngles angle_table_default;
-  SingleInputTableForAngles angle_table_array;
-  SingleInputTableForAngles angle_table_ref;
+  cml::SingleInputTableForAngles angle_table_default;
+  cml::SingleInputTableForAngles angle_table_array;
+  cml::SingleInputTableForAngles angle_table_ref;
   std::vector<double *>     ptrvec;
-  SingleInputTableForAngles angle_table_ptrvec;
+  cml::SingleInputTableForAngles angle_table_ptrvec;
 
   TestingModelSimObject()
     :
@@ -65,13 +65,13 @@ private:
                                2,
                                &scratch_depend_deg[0][0],
                                6,
-                               AbstractTableLookup::AngularDeg);
+                               cml::AbstractTableLookup::AngularDeg);
     table_radians.load_independent_data( independent, scratch_indep, 6);
     table_radians.load_dependent_data( dependent_radians,
                                2,
                                &scratch_depend_rad[0][0],
                                6,
-                               AbstractTableLookup::AngularRad);
+                               cml::AbstractTableLookup::AngularRad);
   }
 
   void init()

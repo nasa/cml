@@ -27,7 +27,7 @@ class SepStateSimObject: public Trick::SimObject
   jeod::DynManager     &  dyn_manager;
  public:
   // Framework (leave this alone)
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
 
   // support variables:
   jeod::DynBody       source;
@@ -37,7 +37,7 @@ class SepStateSimObject: public Trick::SimObject
   unsigned int        initialization_option;
 
   // Model for testing:
-  SeparationState   sep_state;
+  cml::SeparationState   sep_state;
 
   //Constructor
   SepStateSimObject( jeod::DynManager & dyn_mngr_in)

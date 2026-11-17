@@ -12,7 +12,7 @@ PROGRAMMERS:
 #ifndef CML_GUST_HH
 #define CML_GUST_HH
 
-
+namespace cml {
 
 class GustModel
 {
@@ -65,4 +65,7 @@ class GustModel
   void   deactivate();
   bool   is_active() const {return active;}
 };
+
+} // namespace cml
+
 #endif

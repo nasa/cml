@@ -11,6 +11,8 @@ PROGRAMMERS:
 #ifndef CML_CONSTRAINT_ENUM_HH
 #define CML_CONSTRAINT_ENUM_HH
 
+namespace cml {
+
 /**
  * Enumerations used by the %Constraint Check model classes
  */
@@ -45,4 +47,7 @@ struct ConstraintEnum
     OpenOpen /**< Neither the lower bound nor the upper bound are included in the interval */
   };
 };
+
+} // namespace cml
+
 #endif

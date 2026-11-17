@@ -18,7 +18,7 @@ AUTHOR:
 class EventUnitSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   SampleSimData sim_data;
   VerifCompoundEventsManager manager;
 

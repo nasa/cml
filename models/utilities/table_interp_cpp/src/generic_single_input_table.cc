@@ -19,6 +19,7 @@ LIBRARY DEPENDENCIES:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <cstddef>
 
+namespace cml {
 
 /*****************************************************************************
 Constructors omitted
@@ -180,3 +181,5 @@ GenericSingleInputTable::generate_output()
   }
   return true;
 }
+
+} // namespace cml

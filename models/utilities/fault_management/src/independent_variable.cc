@@ -9,6 +9,8 @@ PROGRAMMERS:
 
 #include "../include/independent_variable.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Destructor
 *****************************************************************************/
@@ -47,3 +49,5 @@ double FaultFunctionIndependentVariable::get_value() {
 
   return relative_value ? absolute - relative_value_init : absolute;
 }
+
+} // namespace cml

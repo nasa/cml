@@ -28,14 +28,14 @@ class AntaresUnitTestSimObject: public Trick::SimObject
 {
  public:
  // Framework (leave this alone)
-  UnitTestFramework             framework;
+  cml::UnitTestFramework             framework;
 
  // support variables:
   double                        dyn_time;
   double                        ref_len;
   jeod::DynBody                 body;
-  ExtendedPlanetaryDerivedState planet_rel_state;
-  AtmosphereExecInterface       atmos_exec;
+  cml::ExtendedPlanetaryDerivedState planet_rel_state;
+  cml::AtmosphereExecInterface       atmos_exec;
 
  // Model for testing:
   AtmosRelStateTest             atmos_test;

@@ -22,9 +22,9 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
 
  public:
  // Framework (leave this alone)
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
  // Model for testing:
-  SimpleLookupWind wind;
+  cml::SimpleLookupWind wind;
  // support variables:
   double altitude;
   bool   use_precompiled_data;

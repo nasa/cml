@@ -68,10 +68,10 @@ VehicleSimObject veh_reaction(dynamics.dyn_manager);
 /************************************/
 class VehicleKidSimObject : public VehicleSimObject {
 public:
-  SeparationState           rel_state;
-  SeparationState           sep_state_not_initialized;
+  cml::SeparationState           rel_state;
+  cml::SeparationState           sep_state_not_initialized;
   jeod::BodyAttachMatrix    attach;
-  MassBodyDetachWithSprings detach;
+  cml::MassBodyDetachWithSprings detach;
 
   VehicleKidSimObject(  jeod::DynManager & dyn_mgr_in,
                         jeod::DynBody & parent_in)

@@ -12,21 +12,21 @@
 #include "trick/constant.h"
 #include "../../include/piston_thruster_group.hh"
 
-class SamplePistonGroup : public PistonThrusterGroup
+class SamplePistonGroup : public cml::PistonThrusterGroup
 {
  public:
   double vehA_CoM[3];
   double vehB_CoM[3];
   // Two different ways of creating a 3-thruster set, either is valid --
   // as an array and as 3 individuals:
-  PistonThruster  thruster_set[3];
-  PistonThruster  thrusterA;
-  PistonThruster  thrusterB;
-  PistonThruster  thrusterC;
+  cml::PistonThruster  thruster_set[3];
+  cml::PistonThruster  thrusterA;
+  cml::PistonThruster  thrusterB;
+  cml::PistonThruster  thrusterC;
 
   SamplePistonGroup(const double & time_in)
     :
-    PistonThrusterGroup(time_in),
+    cml::PistonThrusterGroup(time_in),
     // Construct the individuals here.
     thrusterA( vehA_CoM, vehB_CoM),
     thrusterB( vehA_CoM, vehB_CoM),
@@ -82,7 +82,7 @@ class SamplePistonGroup : public PistonThrusterGroup
     input.table_set.associate_table_and_independent();
     input.table_set.initialize();
 
-    param.mode = PistonThrusterGroupParams::ReferenceDeltaV;
+    param.mode = cml::PistonThrusterGroupParams::ReferenceDeltaV;
     param.max_time = 10.0;
 
     // Now configure the two sets of thrusters identically

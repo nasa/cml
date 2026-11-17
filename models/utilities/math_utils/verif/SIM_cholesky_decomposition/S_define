@@ -45,12 +45,12 @@ private:
     print_mx( "A (modified)", A);
     bool success;
     if (test_4_arg_version) {
-      success = MathUtils::cholesky_decomposition( "test",
+      success = cml::MathUtils::cholesky_decomposition( "test",
                                                    &A[0][0],
                                                    &sqrt_A[0][0],
                                                    10);
     } else {
-      success = MathUtils::cholesky_decomposition( "test",
+      success = cml::MathUtils::cholesky_decomposition( "test",
                                                    &A[0][0],
                                                    &sqrt_A[0][0],
                                                    10,
@@ -58,7 +58,7 @@ private:
     }
 
     if (test_in_array_null) {
-      success = MathUtils::cholesky_decomposition( "test",
+      success = cml::MathUtils::cholesky_decomposition( "test",
                                                    NULL,
                                                    &sqrt_A[0][0],
                                                    10,
@@ -66,7 +66,7 @@ private:
     }
 
     if (test_out_array_null) {
-      success = MathUtils::cholesky_decomposition( "test",
+      success = cml::MathUtils::cholesky_decomposition( "test",
                                                    &A[0][0],
                                                    NULL,
                                                    10,
@@ -76,7 +76,7 @@ private:
     if (test_non_symmetric) {
       A[0][1] = 55;
       A[0][5] = 110;
-      success = MathUtils::cholesky_decomposition( "test",
+      success = cml::MathUtils::cholesky_decomposition( "test",
                                                    &A[0][0],
                                                    &sqrt_A[0][0],
                                                    10,

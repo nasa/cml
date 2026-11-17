@@ -34,7 +34,7 @@ NOTES:
 class EventUnitSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   SampleSimData sim_data;
   VerifCompoundEventsManager manager;
 
@@ -53,177 +53,177 @@ class EventUnitSimObject: public Trick::SimObject {
 
   // Additional methods, see NOTES in file header for rationale.
   void run_1b() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::EQ;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::EQ;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1c() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::NE;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::NE;
     manager.trigger_i.set_reference(0);
   }
 
   void run_1d() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::GT;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::GT;
     manager.trigger_i.set_reference(2);
   }
 
   void run_1e() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::LT;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::LT;
     manager.trigger_i.set_reference(0);
   }
 
   void run_1f() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::GE;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::GE;
     manager.trigger_i.set_reference(3);
   }
 
   void run_1g() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::LE;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::LE;
     manager.trigger_i.set_reference(0);
   }
 
   void run_1h() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_EQ;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_EQ;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1i() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_GT;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_GT;
     manager.trigger_i.set_reference(4);
   }
 
   void run_1j() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_GE;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_GE;
     manager.trigger_i.set_reference(4);
   }
 
   void run_1k() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_LT;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_LT;
     manager.trigger_i.set_reference(2);
   }
 
   void run_1l() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_LE;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_LE;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1m() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::OC;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::OC;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1n() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::Change;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::Change;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1o() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::Crossing;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::Crossing;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1p() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::MAX_FIRST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::MAX_FIRST;
     manager.trigger_i.set_reference(-1);
   }
 
   void run_1q() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::MIN_FIRST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::MIN_FIRST;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1s() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_MAX_FIRST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_MAX_FIRST;
     manager.trigger_i.set_reference(-1);
   }
 
   void run_1t() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_MIN_FIRST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_MIN_FIRST;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1u() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::MAX_CONDITIONAL_FIRST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::MAX_CONDITIONAL_FIRST;
     manager.trigger_i.set_reference(-1);
   }
 
   void run_1v() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::MIN_CONDITIONAL_FIRST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::MIN_CONDITIONAL_FIRST;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1w() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_MAX_CONDITIONAL_FIRST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_MAX_CONDITIONAL_FIRST;
     manager.trigger_i.set_reference(-1);
   }
 
   void run_1x() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_MIN_CONDITIONAL_FIRST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_MIN_CONDITIONAL_FIRST;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1y() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::MAX_LAST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::MAX_LAST;
     manager.trigger_i.set_reference(-1);
   }
 
   void run_1z() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::MIN_LAST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::MIN_LAST;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1aa() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_MAX_LAST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_MAX_LAST;
     manager.trigger_i.set_reference(-1);
   }
 
   void run_1ab() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_MIN_LAST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_MIN_LAST;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1ac() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::MAX_CONDITIONAL_LAST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::MAX_CONDITIONAL_LAST;
     manager.trigger_i.set_reference(-1);
   }
 
   void run_1ad() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::MIN_CONDITIONAL_LAST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::MIN_CONDITIONAL_LAST;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1ae() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_MAX_CONDITIONAL_LAST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_MAX_CONDITIONAL_LAST;
     manager.trigger_i.set_reference(-1);
   }
 
   void run_1af() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::ABS_MIN_CONDITIONAL_LAST;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::ABS_MIN_CONDITIONAL_LAST;
     manager.trigger_i.set_reference(1);
   }
 
   void run_1ag() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::EQ;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::EQ;
     manager.trigger_i.set_reference(0);
-    manager.trigger_i.direction_limit = EventTriggerBase::Increasing;
+    manager.trigger_i.direction_limit = cml::EventTriggerBase::Increasing;
   }
 
   void run_1ah() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::EQ;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::EQ;
     manager.trigger_i.set_reference(0);
-    manager.trigger_i.direction_limit = EventTriggerBase::Decreasing;
+    manager.trigger_i.direction_limit = cml::EventTriggerBase::Decreasing;
   }
 
   void run_1ai() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::EQ;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::EQ;
     manager.trigger_i.set_reference(0);
-    manager.trigger_i.direction_limit = EventTriggerBase::Strictly_Increasing;
+    manager.trigger_i.direction_limit = cml::EventTriggerBase::Strictly_Increasing;
   }
 
   void run_1aj() {
-    manager.trigger_i.comparison_logic = EventTriggerBase::EQ;
+    manager.trigger_i.comparison_logic = cml::EventTriggerBase::EQ;
     manager.trigger_i.set_reference(0);
-    manager.trigger_i.direction_limit = EventTriggerBase::Strictly_Decreasing;
+    manager.trigger_i.direction_limit = cml::EventTriggerBase::Strictly_Decreasing;
   }
  private:
   EventUnitSimObject (const EventUnitSimObject&);

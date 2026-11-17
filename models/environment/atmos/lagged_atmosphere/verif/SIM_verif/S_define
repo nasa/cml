@@ -25,15 +25,15 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
 
  public:
   // Framework (leave this alone)
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   // support variables:
   std::string            name;           /* (--) test name*/
   double                 lagged_altitude;/* (m) altitude of interpolated point*/
-  LaggedAtmosPayloadData payload;        /* (--) data for recording. */
+  cml::LaggedAtmosPayloadData payload;        /* (--) data for recording. */
 
   // Model for testing:
-  LaggedAtmosWind lagged_data_noname; /* (--) tests the constructor only*/
-  LaggedAtmosWind lagged_data;        /* (--) test instance */
+  cml::LaggedAtmosWind lagged_data_noname; /* (--) tests the constructor only*/
+  cml::LaggedAtmosWind lagged_data;        /* (--) test instance */
 
 
   AntaresUnitTestSimObject()

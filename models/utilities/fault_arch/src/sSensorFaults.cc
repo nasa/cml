@@ -19,6 +19,7 @@ PROGRAMMERS:
 #include <libxml/tree.h>
 #include <string>
 
+namespace cml {
 
 /*******************************************************************************
 Injection
@@ -377,3 +378,5 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
 
   return true;
 }
+
+} // namespace cml

@@ -27,6 +27,8 @@ namespace jeod {
    class Planet;
 }
 
+namespace cml {
+
 class OrbElemSubset{
 
  public:
@@ -117,5 +119,7 @@ class OrbElemSubset{
   OrbElemSubset(const OrbElemSubset& rhs) = delete;
   OrbElemSubset & operator = (const OrbElemSubset&) = delete;
 };
+
+} // namespace cml
 
 #endif

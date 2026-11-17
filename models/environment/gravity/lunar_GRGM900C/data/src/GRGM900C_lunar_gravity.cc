@@ -30,6 +30,7 @@ Programmers:
 
 #include "../include/GRGM900C_lunar_gravity.hh"
 
+namespace cml {
 
 // NOTE - allocated memory is assigned to the SphericalHarmonicsGravitySource
 //        and is destroyed with the SphericalHarmonicsGravitySource.  This
@@ -821835,3 +821836,5 @@ GRGM900C_LunarGravity::populate_max_res_c() const
   memcpy (grav_source.Snm[900], temp_S_900, sizeof(temp_S_900));
 
 }
+
+} // namespace cml

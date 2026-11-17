@@ -28,6 +28,8 @@ Programmers:
 
 #include "../include/twist_sway.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -609,3 +611,5 @@ TwistSway::deactivate()
   slow_list.clear();
   SubscriptionBase::deactivate();
 }
+
+} // namespace cml

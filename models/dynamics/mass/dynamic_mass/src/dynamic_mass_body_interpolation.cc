@@ -22,6 +22,8 @@ PROGRAMMERS:
 
 #include "../include/dynamic_mass_body_interpolation.hh"
 
+namespace cml {
+
 /********************************************************************************
 Method: Constructor
 ********************************************************************************/
@@ -412,3 +414,5 @@ DynamicMassBodyInterpolation::warn_no_interp(const char* const table_name)
      "Data remain available for use, but the interpolation will not execute\n"
      "until the control flag is set to true.\n");
 }
+
+} // namespace cml

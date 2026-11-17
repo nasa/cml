@@ -37,6 +37,7 @@ PROGRAMMERS:
 #include <string>
 #include <list>
 
+namespace cml {
 
 // forward declaration
 class CommandableAction;
@@ -115,4 +116,7 @@ class CommandableActionSet
  protected:
   virtual void generate_fsw_command() = 0;
 };
+
+} // namespace cml
+
 #endif

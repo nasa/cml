@@ -15,6 +15,8 @@ PROGRAMMERS:
 
 #include "../include/vent.hh"
 
+namespace cml {
+
 /************************************************************************
 Constructor
 ************************************************************************/
@@ -427,3 +429,5 @@ void Vent::update_mass_demand()
                                                       (dyn_time - prev_time);
   prev_time = dyn_time;
 }
+
+} // namespace cml

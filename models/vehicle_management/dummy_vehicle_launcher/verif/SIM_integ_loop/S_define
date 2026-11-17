@@ -27,8 +27,8 @@ VehicleSimObject vehicle2(dynamics.dyn_manager);
 
 class VerifSimObject : public Trick::SimObject {
     public:
-        DummyVehicleLauncher           launcher; // (--) makes the vehicle active
-        DummyVehicleLauncher           launcher_no_mass_body;
+        cml::DummyVehicleLauncher           launcher; // (--) makes the vehicle active
+        cml::DummyVehicleLauncher           launcher_no_mass_body;
         jeod::MassBody                 mass_body;
         jeod::DynamicsIntegrationGroup group;
         er7_utils::RK4IntegratorConstructor   rk4_constructor;

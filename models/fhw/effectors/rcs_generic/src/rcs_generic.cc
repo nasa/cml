@@ -83,6 +83,8 @@ PROGRAMMERS:
 
 #include <vector>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 Purpose:()
@@ -484,3 +486,5 @@ RcsGeneric::set_calc_flow_rate(bool new_value)
     calc_flow_rate = new_value;
   }
 }
+
+} // namespace cml

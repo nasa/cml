@@ -25,6 +25,7 @@ NOTES:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
 
 /*****************************************************************************
 constructor
@@ -195,3 +196,5 @@ SubsonicWakeWithForce::deactivate()
   jeod::Vector3::initialize(objectB.force);
   SubsonicWake::deactivate();
 }
+
+} // namespace cml

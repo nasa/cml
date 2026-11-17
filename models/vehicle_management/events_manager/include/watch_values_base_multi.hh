@@ -12,6 +12,8 @@ PROGRAMMERS:
 #include "watch_values_base_core.hh"
 #include <list>
 
+namespace cml {
+
 template <typename A, typename B>
 class WatchValuesBase2 : public WatchValuesBaseCore
 {
@@ -115,5 +117,7 @@ Purpose:(Unsubscribe from watch_a and watch_b to deactivate them.
     active = false;
   }
 };
+
+} // namespace cml
 
 #endif

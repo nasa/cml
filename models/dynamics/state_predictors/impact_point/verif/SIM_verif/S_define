@@ -19,7 +19,7 @@ class ImpactPoint_SimObject: public Trick::SimObject {
 
  public:
   jeod::PlanetaryDerivedState planet_rel_state;
-  ImpactPoint impact_point;
+  cml::ImpactPoint impact_point;
   double reference_position[3];
  protected:
   jeod::DynManager & dyn_manager;

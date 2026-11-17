@@ -30,13 +30,13 @@ PROGRAMMERS:
 class TestModelBase
 {
 public:
-  TableLookupSet table_set;
+  cml::TableLookupSet table_set;
   double dependent_vars[3]; /* (--)
      The dependent variables would typically reside in the respective model,
      while the independent variables might be completely external.
      For this testing, the independents are instantiated in the S_define, and
      the dependents are instantiated here. */
-  TableIndependentVariable::LookupMethod lookup_method[4];
+  cml::TableIndependentVariable::LookupMethod lookup_method[4];
 
   // Data elements.  Put here to ensure commonality between the two
   // implementations.
@@ -104,7 +104,7 @@ public:
 
 
     for (size_t ii = 0; ii < 4; ++ii) {
-      lookup_method[ii] = TableIndependentVariable::Interp;
+      lookup_method[ii] = cml::TableIndependentVariable::Interp;
     }
   }
 
@@ -166,7 +166,7 @@ public:
 
 
     // First create and populate the first table
-    GenericMultiInputTable * new_table =
+    cml::GenericMultiInputTable * new_table =
                 table_set.create_table(2,
                                        &dependent_vars[0],
                                        &dependent_vars[1]);
@@ -174,10 +174,10 @@ public:
 
 
     // now create and populate the first of the independent variables:
-    TableIndependentVariable * new_var =
+    cml::TableIndependentVariable * new_var =
       table_set.create_independent_variable( "var_0",
                                              independent_vars[0],
-                                             TableIndependentVariable::Linear);
+                                             cml::TableIndependentVariable::Linear);
     new_var->load_data( independents_data[0]);
 
     /* Associate these two components just created.
@@ -281,7 +281,7 @@ public:
     new_var = table_set.create_independent_variable(
                                          "var_3",
                                          independent_vars[3],
-                                         TableIndependentVariable::WrapAround);
+                                         cml::TableIndependentVariable::WrapAround);
     new_var->load_data( independents_data[3]);
 
     /* Associate this variable and the current table.
@@ -351,12 +351,12 @@ Purpose:
 class TestModelPreInstantiated :public TestModelBase
 {
 public:
-  TableIndependentVariable indep0;
-  TableIndependentVariable indep1;
-  TableIndependentVariable indep2;
-  TableIndependentVariable indep3;
-  GenericMultiInputTable   multi_table;
-  GenericMultiInputTable   single_table;
+  cml::TableIndependentVariable indep0;
+  cml::TableIndependentVariable indep1;
+  cml::TableIndependentVariable indep2;
+  cml::TableIndependentVariable indep3;
+  cml::GenericMultiInputTable   multi_table;
+  cml::GenericMultiInputTable   single_table;
   // Keep a record of the interpolation-indices for testing purposes:
   size_t indep0_ix;
   size_t indep1_ix;
@@ -369,10 +369,10 @@ public:
   TestModelPreInstantiated( double independent_vars[4] )
     :
     TestModelBase(),
-    indep0(independent_vars[0], TableIndependentVariable::Linear),
-    indep1(independent_vars[1], TableIndependentVariable::Linear),
-    indep2("indy2", independent_vars[2], TableIndependentVariable::Linear),
-    indep3("indy3", independent_vars[3], TableIndependentVariable::WrapAround),
+    indep0(independent_vars[0], cml::TableIndependentVariable::Linear),
+    indep1(independent_vars[1], cml::TableIndependentVariable::Linear),
+    indep2("indy2", independent_vars[2], cml::TableIndependentVariable::Linear),
+    indep3("indy3", independent_vars[3], cml::TableIndependentVariable::WrapAround),
     multi_table(),
     single_table(dependent_vars[2])
   {}

@@ -2,7 +2,7 @@
 #include "../include/unit_test.hh"
 
 TEST(UnitTestFramework, DefaultConstructorInitializesState) {
-    UnitTestFramework utf;
+    cml::UnitTestFramework utf;
 
     EXPECT_TRUE(utf.enabled);
     EXPECT_FALSE(utf.cycle_data);

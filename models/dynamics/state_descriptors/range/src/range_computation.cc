@@ -27,6 +27,8 @@ Programmers:
 
 #include "../include/range_computation.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -293,3 +295,5 @@ RangeComputation::update_using_cartesian()
     downrange_angle *= -1.0;
   }
 }
+
+} // namespace cml

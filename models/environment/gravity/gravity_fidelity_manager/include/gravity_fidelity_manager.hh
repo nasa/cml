@@ -21,6 +21,8 @@ class RefFrame;
 class SphericalHarmonicsGravityControls;
 }
 
+namespace cml {
+
 class GravityFidelityManager : public SubscriptionBase
 {
  protected: // External references
@@ -68,4 +70,7 @@ class GravityFidelityManager : public SubscriptionBase
   void initialize() override;
   void update();
 };
+
+} // namespace cml
+
 #endif

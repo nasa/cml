@@ -16,6 +16,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+namespace cml {
+
 /**
  * @note If the model has already been initialized, it will be re-initialized.
  */
@@ -187,3 +189,5 @@ ConstraintTestTimed::update_timer( double delta_time)
     }
   }
 }
+
+} // namespace cml

@@ -26,8 +26,8 @@ public:
   double is_asc;
 
   TestModel(double &driver_in,
-            TableIndependentVariable::LookupMethod lookup_method_in =
-                               TableIndependentVariable::INTERP)
+            cml::TableIndependentVariable::LookupMethod lookup_method_in =
+                               cml::TableIndependentVariable::INTERP)
     :
     lookup(driver_in, lookup_method_in),
     driver_incr(0.25),
