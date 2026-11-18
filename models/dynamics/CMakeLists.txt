@@ -105,5 +105,6 @@ add_cml_tests(
         dynamics
 
     SOURCES
+        integration/accumulated_absolute_deltas/test/accumulated_absolute_deltas_test.cc
         mass_derivative_dynamics/tests/test_mass_derivative_dynamics.cpp
 )
