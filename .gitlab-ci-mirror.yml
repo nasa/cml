@@ -19,9 +19,9 @@ default:
     - export TRICK_HOME=${CI_PROJECT_DIR}/externals/trick
     - export PATH=${TRICK_HOME}/bin:${PATH}
     - export JEOD_HOME=${CI_PROJECT_DIR}/externals/jeod
-    - python3 -m venv .venv
+    - python3.11 -m venv .venv
     - source .venv/bin/activate
-#    - python3 -m pip install "pip @ https://files.pythonhosted.org/packages/3f/06/3e4420302363fbb71be3c7f35ce042f54bfca330e3e66b3a2e3c4cca579f/pip-26.2.2-py3-none-any.whl#sha256=fd7f4dfa8190e014013b9f08f3e973f4e4c26ffd179a204895533a7254813a70"
+    - python3 -m pip install "pip @ https://files.pythonhosted.org/packages/3f/06/3e4420302363fbb71be3c7f35ce042f54bfca330e3e66b3a2e3c4cca579f/pip-26.2.2-py3-none-any.whl#sha256=fd7f4dfa8190e014013b9f08f3e973f4e4c26ffd179a204895533a7254813a70"
     - pip3 install --upgrade pip
     - pip3 install .
 
