@@ -20,8 +20,7 @@ PROGRAMMERS:
 #include <vector>
 #include <cstdint>
 #include <fstream>
-//#include <cstring> // strerror
-//#include <iostream>
+#include <algorithm>
 
 #include "../include/lookup_winds.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
@@ -557,13 +556,15 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   //      representing the altitude data
   //  - an array of <number_of_profiles_> integers representing the wind numbers.
   // This adds up to this much space:
-  const data_int bytesAtBeginning_ = LookupAtmosWinds::size_of_source_integer * (2 + number_of_profiles_) +
-                                     LookupAtmosWinds::size_of_source_float   * number_of_altitudes_;
+  const data_int bytesAtBeginning_ =
+      LookupAtmosWinds::size_of_source_integer * (2 + number_of_profiles_) +
+      LookupAtmosWinds::size_of_source_float   * number_of_altitudes_;
 
   // Then each profile occupies memory for:
   // - an integer to confirm the profile number
   // - bytesperBlock for the actual data.
-  const data_int bytesPerProfile_ = bytesPerBlock_ + LookupAtmosWinds::size_of_source_integer;
+  const data_int bytesPerProfile_ =
+      bytesPerBlock_ + LookupAtmosWinds::size_of_source_integer;
 
   // then we also bypass the integer at the front of the profile we actually
   // want; we have already checked that this integer has value = wind_number_
@@ -586,7 +587,8 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   }
 
   // As before, to load the data we must convert it to double.
-  const std::vector<double> dependent_variables_( input_data_.begin(), input_data_.end());
+  const std::vector<double> dependent_variables_( input_data_.begin(),
+                                                  input_data_.end());
   std::vector<double *> dep_vec_;
   dep_vec_.push_back( &u );
   dep_vec_.push_back( &v );
@@ -640,28 +642,49 @@ LookupAtmosWinds::compute_average_wind(
 /****************************************************************************/
 void
 LookupAtmosWinds::compute_average_wind(
-    double min_alt,
-    double max_alt)
+    double min_altitude,
+    double max_altitude)
 {
   const size_t target_index = (active)? current_index : 0;
-  compute_average_wind( target_index, false, min_alt, max_alt);
+  compute_average_wind( target_index,
+                        false,
+                        min_altitude,
+                        max_altitude);
 }
 /****************************************************************************/
 void
 LookupAtmosWinds::compute_average_wind(
     size_t table_index,
-    double min_alt,
-    double max_alt)
+    double min_altitude,
+    double max_altitude)
 {
-  compute_average_wind( table_index, false, min_alt, max_alt);
+  compute_average_wind( table_index,
+                        false,
+                        min_altitude,
+                        max_altitude);
 }
+
+/****************************************************************************/
+void
+LookupAtmosWinds::compute_average_wind_interp(
+    double min_altitude,
+    double max_altitude,
+    double step_altitude)
+{
+  const size_t target_index = (active)? current_index : 0;
+  compute_average_wind_interp( target_index,
+                               min_altitude,
+                               max_altitude,
+                               step_altitude);
+}
+
 /****************************************************************************/
 void
 LookupAtmosWinds::compute_average_wind(
     size_t table_index,
     bool   full_domain,
-    double min_alt,
-    double max_alt)
+    double min_altitude,
+    double max_altitude)
 {
   if (table_index >= number_of_datasets) {
     CMLMessage::error( __FILE__,__LINE__,
@@ -682,19 +705,20 @@ LookupAtmosWinds::compute_average_wind(
       table_.update();
       calculate_wind_mag_dir();
       jeod::Vector3::incr( wind_velocity_tc,
-                     average_wind);
+                           average_wind);
       num_alts++;
     }
-  } else { // using min-alt and max_alt
+  } else { // using min_altitude and max_altitude
     bool in_domain = false;
     for (double const & altitude_ : table_.independent->data) {
-      if ((altitude_ > min_alt) && (altitude_ < max_alt)) {
+      if (   (altitude_ > min_altitude)
+          && (altitude_ < max_altitude)) {
         in_domain = true;
         altitude = altitude_;
         table_.update();
         calculate_wind_mag_dir();
         jeod::Vector3::incr( wind_velocity_tc,
-                       average_wind);
+                             average_wind);
         num_alts++;
       } else if (in_domain) {
         // Was in-domain, but now out-of-domain. No need to check the rest
@@ -710,13 +734,13 @@ LookupAtmosWinds::compute_average_wind(
   if (num_alts == 0) {
     CMLMessage::error( __FILE__,__LINE__,
       "Error computing average wind velocity within specified bounds\n",
-      "No altitude breakpoints found in between 'min_alt' (", min_alt,
-      ")\nand 'max_alt' (", max_alt, ") for given DRWP Binary file.");
+      "No altitude breakpoints found in between 'min_altitude' (", min_altitude,
+      ")\nand 'max_altitude' (", max_altitude, ") for given DRWP Binary file.");
     // Leave average at zero-vector
   }
   else {
     jeod::Vector3::scale( (1.0/static_cast<double>(num_alts)),
-                    average_wind);
+                          average_wind);
     // We just populated the model's output data with values from an altitude
     // that is not the current altitude. If the model is currently active, that
     // might cause some problems with data logging.
@@ -724,6 +748,63 @@ LookupAtmosWinds::compute_average_wind(
     if (active) {
       update(original_altitude);
     }
+  }
+}
+/****************************************************************************/
+void
+LookupAtmosWinds::compute_average_wind_interp(
+    size_t table_index,
+    double min_altitude,
+    double max_altitude,
+    double step_altitude)
+{
+  if (table_index >= number_of_datasets) {
+    CMLMessage::error( __FILE__,__LINE__,
+      "Error computing average wind velocity for profile at index ",
+      table_index, ".\nThis index has not been populated with data.\n"
+      "Aborting computation.\n");
+    return;
+  }
+
+  const double original_altitude = altitude;
+  jeod::Vector3::initialize(average_wind);
+  DRWPTableLookup & table_ = TableLookup_array[table_index];
+
+  // Table logic to maintain bounds of operated on
+  // altitude array within available domain
+  const double table_end1 = table_.independent->data.front();
+  const double table_end2 = table_.independent->data.back();
+  const double table_min = std::min(table_end1, table_end2);
+  const double table_max = std::max(table_end1, table_end2);
+  const double min_alt_ = std::max(table_min, min_altitude);
+  const double max_alt_ = std::min(table_max, max_altitude);
+
+  if (min_alt_ > max_alt_) {
+    CMLMessage::error( __FILE__,__LINE__,
+      "Error computing average wind velocity within specified bounds\n",
+      "No altitude data found in between 'min_altitude' (", min_altitude,
+      ")\nand 'max_altitude' (", max_altitude, ") for given DRWP Binary file.");
+    // Leave average at zero-vector
+    return;
+  }
+  const size_t num_alts = 1 +
+                   static_cast<size_t>((max_alt_ - min_alt_) / step_altitude);
+  for (size_t alt = 0; alt < num_alts; ++alt) {
+    altitude = min_alt_ + static_cast<double>(alt) * step_altitude;
+    table_.update();
+    calculate_wind_mag_dir();
+    jeod::Vector3::incr( wind_velocity_tc,
+                         average_wind);
+  }
+
+  jeod::Vector3::scale( (1.0 / static_cast<double>(num_alts)),
+                        average_wind);
+  // We just populated the model's output data with values from an altitude
+  // that is not the current altitude. If the model is currently active, that
+  // might cause some problems with data logging.
+  // Reset model outputs to current table and altitude.
+  if (active) {
+    update(original_altitude);
   }
 }
 
