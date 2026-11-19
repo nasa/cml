@@ -20,6 +20,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -91,3 +93,5 @@ void  MslAlt::update()
    table_set.update();
    msl_altitude = geod_alt - alt_from_table;
 }
+
+} // namespace cml

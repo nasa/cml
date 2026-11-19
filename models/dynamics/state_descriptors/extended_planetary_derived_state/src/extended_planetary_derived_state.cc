@@ -44,6 +44,8 @@ PROGRAMMERS:
 
 #include "../include/extended_planetary_derived_state.hh"
 
+namespace cml {
+
 /*************************************************************************
 Method: ExtendedPlanetaryDerivedState
 Purpose: Constructor
@@ -733,3 +735,5 @@ ExtendedPlanetaryDerivedState::calculate_relative_accel()
   jeod::Vector3::decr(omega_cross_omega_cross_r, relative_accel);
   jeod::Vector3::decr(two_omega_cross_v, relative_accel);
 }
+
+} // namespace cml

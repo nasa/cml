@@ -22,11 +22,11 @@ Note: - AeroTableSet is a TableLookupSet because the typical configuration
         typical configuration).  Consequently, cannot use SimpleAeroTableLookup
         even though there is only 1 independent variable.)
 *****************************************************************************/
-class SimpleAeroTableSet : public AeroTableSet
+class SimpleAeroTableSet : public cml::AeroTableSet
 {
  public:
-  TableIndependentVariable  independent;
-  GenericMultiInputTable    dependents; /* (--) dependent variables. */
+  cml::TableIndependentVariable  independent;
+  cml::GenericMultiInputTable    dependents; /* (--) dependent variables. */
   std::vector<double*>      dep_var_list;
   bool                      include_diagonal_damping_terms;
   bool                      include_off_diagonal_damping_terms;
@@ -34,11 +34,11 @@ class SimpleAeroTableSet : public AeroTableSet
   bool                      include_off_diagonal_damping_unc_terms;
 
 
-  SimpleAeroTableSet( AeroExecutiveTable & executive,
+  SimpleAeroTableSet( cml::AeroExecutiveTable & executive,
                       const double & indep_in,
                       std::string name_in)
     :
-    AeroTableSet( name_in, executive),
+    cml::AeroTableSet( name_in, executive),
     independent( "indy",    indep_in),
     dependents(),
     include_diagonal_damping_terms(false),
@@ -120,7 +120,7 @@ class SimpleAeroTableSet : public AeroTableSet
     add_independent_variable(independent);
     associate_table_and_independent();
 
-    AeroTableSet::initialize();
+    cml::AeroTableSet::initialize();
   }
 
  private:
@@ -135,7 +135,7 @@ Purpose:(Derivative of SimpleAeroTableSet used for testing the option: SYM_LDm)
 class SimpleAeroTableSet_SYM_LDm : public SimpleAeroTableSet
 {
  public:
-  SimpleAeroTableSet_SYM_LDm( AeroExecutiveTable & executive,
+  SimpleAeroTableSet_SYM_LDm( cml::AeroExecutiveTable & executive,
                               const double & indep)
     :
     SimpleAeroTableSet( executive, indep, "SYM_LDm")
@@ -160,7 +160,7 @@ Purpose:(Derivative of SimpleAeroTableSet used for testing the option: SYM_ANm)
 class SimpleAeroTableSet_SYM_ANm : public SimpleAeroTableSet
 {
  public:
-  SimpleAeroTableSet_SYM_ANm( AeroExecutiveTable & executive,
+  SimpleAeroTableSet_SYM_ANm( cml::AeroExecutiveTable & executive,
                               const double & indep)
     :
     SimpleAeroTableSet( executive, indep,  "SYM_ANm")
@@ -185,7 +185,7 @@ Purpose:(Derivative of SimpleAeroTableSet used for testing the option: XYZ)
 class SimpleAeroTableSet_XYZ : public SimpleAeroTableSet
 {
  public:
-  SimpleAeroTableSet_XYZ( AeroExecutiveTable & executive,
+  SimpleAeroTableSet_XYZ( cml::AeroExecutiveTable & executive,
                               const double & indep)
     :
 
@@ -220,7 +220,7 @@ Purpose:(Derivative of SimpleAeroTableSet used for testing the option: AYN)
 class SimpleAeroTableSet_AYN : public SimpleAeroTableSet
 {
  public:
-  SimpleAeroTableSet_AYN( AeroExecutiveTable & executive,
+  SimpleAeroTableSet_AYN( cml::AeroExecutiveTable & executive,
                               const double & indep)
     :
     SimpleAeroTableSet( executive, indep, "AYN")
@@ -251,7 +251,7 @@ Purpose:(Derivative of SimpleAeroTableSet used for testing the option: AYN_unc)
 class SimpleAeroTableSet_AYN_unc : public SimpleAeroTableSet
 {
  public:
-  SimpleAeroTableSet_AYN_unc( AeroExecutiveTable & executive,
+  SimpleAeroTableSet_AYN_unc( cml::AeroExecutiveTable & executive,
                               const double & indep)
     :
     SimpleAeroTableSet( executive, indep, "AYN_unc")
@@ -280,7 +280,7 @@ Purpose:(Derivative of SimpleAeroTableSet used for testing the option: DSL)
 class SimpleAeroTableSet_DSL : public SimpleAeroTableSet
 {
  public:
-  SimpleAeroTableSet_DSL( AeroExecutiveTable & executive,
+  SimpleAeroTableSet_DSL( cml::AeroExecutiveTable & executive,
                               const double & indep)
     :
     SimpleAeroTableSet( executive, indep, "DSL")
@@ -313,7 +313,7 @@ Purpose:(Derivative of SimpleAeroTableSet used for testing whether incomplete
 class SimpleAeroTableSet_Incomplete : public SimpleAeroTableSet
 {
  public:
-  SimpleAeroTableSet_Incomplete( AeroExecutiveTable & executive,
+  SimpleAeroTableSet_Incomplete( cml::AeroExecutiveTable & executive,
                                  const double & indep)
     :
 
@@ -332,13 +332,13 @@ Note - this is more illustrative than necessary for testing; the transition
        from 1 independent to 3 independents is actually a function of the
        TableInterp model, not of this model.
 *****************************************************************************/
-class ExampleTableSet1 : public AeroTableSet
+class ExampleTableSet1 : public cml::AeroTableSet
 {
  public:
-  TableIndependentVariable  mach; /* (--) Mach number */
-  TableIndependentVariable  alpha;/* (degree) alpha angle */
-  TableIndependentVariable  beta; /* (degree) beta angle */
-  GenericMultiInputTable    dependents; /* (--) dependent variables. */
+  cml::TableIndependentVariable  mach; /* (--) Mach number */
+  cml::TableIndependentVariable  alpha;/* (degree) alpha angle */
+  cml::TableIndependentVariable  beta; /* (degree) beta angle */
+  cml::GenericMultiInputTable    dependents; /* (--) dependent variables. */
 
  protected:
   const static size_t num_dependents = 6; /* (count)
@@ -350,12 +350,12 @@ class ExampleTableSet1 : public AeroTableSet
   const static size_t size_beta_array = 5; /* (count)
         Number of data elements used to specify beta domain*/
  public:
-  ExampleTableSet1( AeroExecutiveTable & executive,
+  ExampleTableSet1( cml::AeroExecutiveTable & executive,
                     const double & mach_number,
                     const double & angle_of_attack,
                     const double & angle_of_sideslip)
     :
-    AeroTableSet("example_table", executive),
+    cml::AeroTableSet("example_table", executive),
     mach(  "mach",              mach_number),
     alpha( "angle of attack",   angle_of_attack),
     beta(  "angle of sideslip", angle_of_sideslip),
@@ -378,7 +378,7 @@ class ExampleTableSet1 : public AeroTableSet
     // don't try re-loading the data, but do still need to pass re-inits
     // through to AeroTableSet
     if (initialized) {
-      AeroTableSet::initialize();
+      cml::AeroTableSet::initialize();
       return;
     }
 
@@ -454,7 +454,7 @@ class ExampleTableSet1 : public AeroTableSet
     add_independent_variable(beta);
     associate_table_and_independent();
 
-    AeroTableSet::initialize();
+    cml::AeroTableSet::initialize();
   }
 
  private:

@@ -30,7 +30,7 @@ class SepStateSimObject: public Trick::SimObject
   jeod::Planet         & earth;
  public:
   // Framework (leave this alone)
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
 
   // support variables:
   jeod::DynBody        source;
@@ -45,9 +45,9 @@ class SepStateSimObject: public Trick::SimObject
   jeod::LvlhFrame      external_lvlh;
 
   // Model for testing:
-  LvlhSeparationState   sep_state_1;
-  LvlhSeparationState   sep_state_2;
-  LvlhSeparationState   sep_state_3;
+  cml::LvlhSeparationState   sep_state_1;
+  cml::LvlhSeparationState   sep_state_2;
+  cml::LvlhSeparationState   sep_state_3;
 
   //Constructor
   SepStateSimObject( jeod::DynManager & dyn_mngr_in,

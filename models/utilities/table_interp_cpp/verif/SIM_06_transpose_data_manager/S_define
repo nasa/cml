@@ -20,24 +20,24 @@ class TestingModelSimObject : public Trick::SimObject {
   std::vector<double> data_line;
 
   // Model suppoort variables
-  TableIndependentVariable TIV_1; // (--) a TIV to use with manager (optional)
-  TableIndependentVariable TIV_2; // (--) a second TIV for testing purposes only
-  GenericMultiInputTable   table; // (--) a table to use with manager (optional)
+  cml::TableIndependentVariable TIV_1; // (--) a TIV to use with manager (optional)
+  cml::TableIndependentVariable TIV_2; // (--) a second TIV for testing purposes only
+  cml::GenericMultiInputTable   table; // (--) a table to use with manager (optional)
                                   //      nominal setup creates a new table for the
                                   //      first configuration set and uses this
                                   //      table for the second.
-  GenericMultiInputTable   table_2; // (--) a second table instance
+  cml::GenericMultiInputTable   table_2; // (--) a second table instance
 
   // Class for testing:
-  TableLookupTransposeDataSet manager;
+  cml::TableLookupTransposeDataSet manager;
 
   TestingModelSimObject()
       :
       independent(0.0),
       independent_2(0.0),
       indep_incr(5.0),
-      TIV_1(independent, TableIndependentVariable::Linear),
-      TIV_2(independent_2, TableIndependentVariable::Linear),
+      TIV_1(independent, cml::TableIndependentVariable::Linear),
+      TIV_2(independent_2, cml::TableIndependentVariable::Linear),
       table( dependent[2]),
       table_2( dependent[3])
   {
@@ -168,7 +168,7 @@ class TestingModelSimObject : public Trick::SimObject {
     manager.populate_independent_from_file = true;
     manager.indep_index = 1;
 
-    TableLookupTransposeDataSet_TableConfig config;
+    cml::TableLookupTransposeDataSet_TableConfig config;
     config.name = "var1";
     config.index_low = 3;
     config.index_high = 4;

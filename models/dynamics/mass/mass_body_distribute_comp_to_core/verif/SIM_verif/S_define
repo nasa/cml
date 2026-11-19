@@ -36,10 +36,10 @@ class MassBodyDistributeSimObject : public Trick::SimObject {
   jeod::BodyAttachMatrix           attach[2];
   jeod::MassProperties             new_properties;
 
-  MassBodyDistributeCompToCore adjust_0_0;
-  MassBodyDistributeCompToCore adjust_0_1;
-  MassBodyDistributeCompToCore adjust_2_0;
-  MassBodyDistributeCompToCore adjust_2_1;
+  cml::MassBodyDistributeCompToCore adjust_0_0;
+  cml::MassBodyDistributeCompToCore adjust_0_1;
+  cml::MassBodyDistributeCompToCore adjust_2_0;
+  cml::MassBodyDistributeCompToCore adjust_2_1;
 
   MassBodyDistributeSimObject()
     :

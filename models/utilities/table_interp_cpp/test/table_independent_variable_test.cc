@@ -19,10 +19,10 @@ TEST(TableIndependentVariable, Construction) {
     double variable {};
     const double eps = 1.0e-9;
 
-    CMLMessage::Mock cml_message_mock;
+    cml::CMLMessage::Mock cml_message_mock;
 
     {
-        TableIndependentVariable article(variable, eps);
+        cml::TableIndependentVariable article(variable, eps);
         EXPECT_TRUE(article.get_name().empty());
 
         const std::string name = "VarName";
@@ -31,27 +31,27 @@ TEST(TableIndependentVariable, Construction) {
     }
     {
         const std::string name = "VarName";
-        TableIndependentVariable article(name, variable, eps);
+        cml::TableIndependentVariable article(name, variable, eps);
         EXPECT_EQ(name, article.get_name());
 
         // The model will complain, but will let us change the name.
         const std::string new_name = "DifferentName";
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Warning, _, _, HasSubstr("set_name warning")));
+            publish(cml::CMLMessage::Warning, _, _, HasSubstr("set_name warning")));
         article.set_name(new_name);
         EXPECT_EQ(new_name, article.get_name());
     }
     {
-        TableIndependentVariable article(variable, TableIndependentVariable::Linear, eps);
+        cml::TableIndependentVariable article(variable, cml::TableIndependentVariable::Linear, eps);
         EXPECT_TRUE(article.get_name().empty());
     }
     {
         const std::string name = "VarName";
-        TableIndependentVariable article(
+        cml::TableIndependentVariable article(
             name,
             variable,
-            TableIndependentVariable::WrapAround,
+            cml::TableIndependentVariable::WrapAround,
             eps);
         EXPECT_EQ(name, article.get_name());
     }
@@ -63,50 +63,50 @@ TEST(TableIndependentVariable, LoadInvalidData) {
     using testing::HasSubstr;
 
     double variable {};
-    TableIndependentVariable article(variable);
+    cml::TableIndependentVariable article(variable);
 
     // Initializing before loading any data.
     {
-        CMLMessage::Mock cml_message_mock;
-        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, _));
+        cml::CMLMessage::Mock cml_message_mock;
+        EXPECT_CALL(cml_message_mock, publish(cml::CMLMessage::Error, _, _, _));
         EXPECT_FALSE(article.initialize());
     }
 
     // Biasing and scaling before loading any data.
     {
-        CMLMessage::Mock cml_message_mock;
+        cml::CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Warning, _, _, HasSubstr("data has not yet been loaded"))).Times(2);
+            publish(cml::CMLMessage::Warning, _, _, HasSubstr("data has not yet been loaded"))).Times(2);
         article.bias_data(2.0, 0, 10);
         article.scale_data(2.0, 0, 10);
     }
 
     // Updating before loading any data.
     {
-        CMLMessage::Mock cml_message_mock;
+        cml::CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("has not been initialized")));
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("has not been initialized")));
         EXPECT_FALSE(article.update());
     }
 
     // Bad pointer.
     {
-        CMLMessage::Mock cml_message_mock;
+        cml::CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("cannot be NULL")));
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("cannot be NULL")));
         EXPECT_FALSE(article.load_data(nullptr, 100));
         EXPECT_FALSE(article.is_data_loaded());
     }
 
     // Bad data size.
     {
-        CMLMessage::Mock cml_message_mock;
+        cml::CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("must be > 0")));
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("must be > 0")));
         const double some_data[] {0.0, 1.0, 2.0};
         EXPECT_FALSE(article.load_data(some_data, 0));
         EXPECT_FALSE(article.is_data_loaded());
@@ -114,10 +114,10 @@ TEST(TableIndependentVariable, LoadInvalidData) {
 
     // Empty data.
     {
-        CMLMessage::Mock cml_message_mock;
+        cml::CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("Data must not be empty")));
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("Data must not be empty")));
         const std::vector<double> empty_data {};
         EXPECT_FALSE(article.load_data(empty_data));
         EXPECT_FALSE(article.is_data_loaded());
@@ -125,10 +125,10 @@ TEST(TableIndependentVariable, LoadInvalidData) {
 
     // Non-monotonic data.
     {
-        CMLMessage::Mock cml_message_mock;
+        cml::CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("direction of increasing values")));
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("direction of increasing values")));
         const std::vector<double> non_monotonic_data {0.0, -1.0, 2.0, 0.0, 3.0};
         EXPECT_FALSE(article.load_data(non_monotonic_data));
         EXPECT_FALSE(article.is_data_loaded());
@@ -136,10 +136,10 @@ TEST(TableIndependentVariable, LoadInvalidData) {
 
     // Duplicated values.
     {
-        CMLMessage::Mock cml_message_mock;
+        cml::CMLMessage::Mock cml_message_mock;
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("identical")));
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("identical")));
         const std::vector<double> duplicated_data {1.0, 1.0, 1.0};
         EXPECT_FALSE(article.load_data(duplicated_data));
         EXPECT_FALSE(article.is_data_loaded());
@@ -152,7 +152,7 @@ TEST(TableIndependentVariable, ReloadData) {
     using ::testing::Pointwise;
 
     double variable {};
-    TableIndependentVariable article(variable);
+    cml::TableIndependentVariable article(variable);
 
     const std::vector<double> dataset1 {1.0, 2.0, 3.0};
     EXPECT_TRUE(article.load_data(dataset1));
@@ -188,7 +188,7 @@ TEST(TableIndependentVariable, BiasAndScale) {
     const std::vector<double> expected_data {2.1, 4.1, 6.1, 8.1};
 
     {
-        TableIndependentVariable article(variable);
+        cml::TableIndependentVariable article(variable);
         article.load_data(breakpoints);
 
         article.scale_data(2.0);
@@ -199,13 +199,13 @@ TEST(TableIndependentVariable, BiasAndScale) {
         // Same as the previous case except we mix up the upper and lower indices.
         // The model will graciously swap these values and still apply our bias
         // and scale factor.
-        CMLMessage::Mock cml_message_mock;
-        TableIndependentVariable article(variable);
+        cml::CMLMessage::Mock cml_message_mock;
+        cml::TableIndependentVariable article(variable);
         article.load_data(breakpoints);
 
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Warning, _, _, HasSubstr("higher than the stop index"))).Times(2);
+            publish(cml::CMLMessage::Warning, _, _, HasSubstr("higher than the stop index"))).Times(2);
         article.scale_data(2.0, breakpoints.size() - 1, 0);
         article.bias_data(0.1, breakpoints.size() - 1, 0);
         EXPECT_THAT(article.data, Pointwise(DoubleNear(1e-3), expected_data));
@@ -221,18 +221,18 @@ TEST(TableIndependentVariable, BiasAndScale) {
         //
         // The model will reject these attempts and leave the original breakpoints
         // unchanged.
-        CMLMessage::Mock cml_message_mock;
-        TableIndependentVariable article(variable);
+        cml::CMLMessage::Mock cml_message_mock;
+        cml::TableIndependentVariable article(variable);
         article.load_data(breakpoints);
 
         // We're expecting error messages from the monotonicity check and the
         // bias/scaling functions.
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("direction of increasing values"))).Times(2);
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("direction of increasing values"))).Times(2);
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("would result in an invalid data set"))).Times(2);
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("would result in an invalid data set"))).Times(2);
 
         article.scale_data(0.1, breakpoints.size() - 1);
         EXPECT_THAT(article.data, Pointwise(DoubleNear(1e-3), breakpoints));
@@ -245,7 +245,7 @@ TEST(TableIndependentVariable, BiasAndScale) {
 // Test data that's off the table's front and back.
 TEST(TableIndependentVariable, OffTable) {
     double variable {};
-    TableIndependentVariable article(variable);
+    cml::TableIndependentVariable article(variable);
 
     std::vector<double> breakpoints {0.0, 1.0, 2.0};
     article.load_data(breakpoints);
@@ -276,7 +276,7 @@ TEST(TableIndependentVariable, OffTable) {
 TEST(TableIndependentVariable, OneBreakpoint) {
     double variable {};
     const std::vector<double> breakpoints {1.0};
-    TableIndependentVariable article(variable);
+    cml::TableIndependentVariable article(variable);
     article.load_data(breakpoints);
     article.initialize();
 
@@ -301,7 +301,7 @@ TEST(TableIndependentVariable, OneBreakpoint) {
 // Test various lookups with a data size of 2.
 TEST(TableIndependentVariable, TwoBreakpoints) {
     double variable {};
-    TableIndependentVariable article(variable);
+    cml::TableIndependentVariable article(variable);
 
     const std::vector<double> breakpoints {0.0, 1.0};
     article.load_data(breakpoints);
@@ -340,7 +340,7 @@ TEST(TableIndependentVariable, TwoBreakpoints) {
 TEST(TableIndependentVariable, WrapAroundContinuity) {
     double variable {};
     const double eps = 1e-3;
-    TableIndependentVariable article(variable, TableIndependentVariable::WrapAround, eps);
+    cml::TableIndependentVariable article(variable, cml::TableIndependentVariable::WrapAround, eps);
 
     // Set breakpoints starting at 0 and ending at 2 with an interval of 0.1.
     // The large number of breakpoints exercises the binary search functionality.

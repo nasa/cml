@@ -20,6 +20,8 @@ PROGRAMMERS:
 #include "aero_table_set_base.hh"
 #include "aero_executive_table.hh"
 
+namespace cml {
+
 class AeroTableSet: public AeroTableSetBase
 {
 public:
@@ -39,4 +41,7 @@ public:
   AeroTableSet (const AeroTableSet &) = delete;
   AeroTableSet & operator = (const AeroTableSet &) = delete;
 };
+
+} // namespace cml
+
 #endif

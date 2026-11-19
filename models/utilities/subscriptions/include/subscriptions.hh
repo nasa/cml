@@ -20,6 +20,8 @@
 
 #include <string>
 
+namespace cml {
+
 /**
  * Provides a subscription baseline for all models
  *
@@ -164,4 +166,7 @@ class SubscriptionBase {
    */
   virtual void deactivate(){active = false;}
 };
+
+} // namespace cml
+
 #endif

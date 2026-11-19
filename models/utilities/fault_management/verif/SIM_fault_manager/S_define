@@ -6,8 +6,8 @@
 class FaultArchitectureTestSimObject: public Trick::SimObject {
 
   public:
-    FaultManager faults;
-    FaultFunctionIndependentVariable  bad_var;
+    cml::FaultManager faults;
+    cml::FaultFunctionIndependentVariable  bad_var;
     bool replace_values;
     bool execute_bad_update;
     std::string command;
@@ -89,17 +89,17 @@ class FaultArchitectureTestSimObject: public Trick::SimObject {
       ref_sint(var_sint)
     {
       ("initialization") faults.initialize();
-      ("initialization") faults.update(FaultManager::Location::Initialize);
+      ("initialization") faults.update(cml::FaultManager::Location::Initialize);
 
       (0.1, "scheduled") update();
     }
 
     void update() {
       update_internals();
-      faults.update(FaultManager::Location::Upstream);
-      faults.update(FaultManager::Location::Intermediate_1);
-      faults.update(FaultManager::Location::Intermediate_2);
-      faults.update(FaultManager::Location::Downstream);
+      faults.update(cml::FaultManager::Location::Upstream);
+      faults.update(cml::FaultManager::Location::Intermediate_1);
+      faults.update(cml::FaultManager::Location::Intermediate_2);
+      faults.update(cml::FaultManager::Location::Downstream);
       copy_var_char();
     }
 
@@ -137,7 +137,7 @@ class FaultArchitectureTestSimObject: public Trick::SimObject {
         var_bool    = !var_bool;
       }
       if (execute_bad_update) {
-        faults.update(FaultManager::Location::INVALID);
+        faults.update(cml::FaultManager::Location::INVALID);
       }
     }
 

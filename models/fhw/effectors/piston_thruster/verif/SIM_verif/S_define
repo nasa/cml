@@ -20,12 +20,12 @@
 class PistonsUnitTestSimObject: public Trick::SimObject {
 public:
   // Framework (leave this alone)
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   // Model for testing:
   SamplePistonGroup pistons;
   // support variables:
-  PistonThruster extra_piston;
-  PistonThruster unusable_piston;
+  cml::PistonThruster extra_piston;
+  cml::PistonThruster unusable_piston;
   double time;
   bool   null_flag_A; // (--) For sideA on a thruster
   bool   null_flag_B; // (--) For sideB on a thruster

@@ -11,7 +11,7 @@ inline constexpr double tolerance = 1e-12;
 TEST(QuadraticSolver, ComputeRoots) {
     // x^2-3x+2=0
     {
-        QuadraticSolver article(1.0, -3.0, 2.0);
+        cml::QuadraticSolver article(1.0, -3.0, 2.0);
         const bool success = article.solve();
         EXPECT_NEAR(article.root1, 1.0, tolerance);
         EXPECT_NEAR(article.root2, 2.0, tolerance);
@@ -21,7 +21,7 @@ TEST(QuadraticSolver, ComputeRoots) {
 
     // x^2+2x+1=0
     {
-        QuadraticSolver article(1.0, 2.0, 1.0);
+        cml::QuadraticSolver article(1.0, 2.0, 1.0);
         const bool success = article.solve();
         EXPECT_NEAR(article.root1, -1.0, tolerance);
         EXPECT_NEAR(article.root2, -1.0, tolerance);
@@ -31,7 +31,7 @@ TEST(QuadraticSolver, ComputeRoots) {
 
     // 2x+1=0
     {
-        QuadraticSolver article(0.0, 2.0, 1.0);
+        cml::QuadraticSolver article(0.0, 2.0, 1.0);
         const bool success = article.solve();
         EXPECT_NEAR(article.root1, -0.5, tolerance);
         EXPECT_NEAR(article.root2, -0.5, tolerance);
@@ -41,7 +41,7 @@ TEST(QuadraticSolver, ComputeRoots) {
 
     // x^2-1=0
     {
-        QuadraticSolver article(1.0, 0.0, -1.0);
+        cml::QuadraticSolver article(1.0, 0.0, -1.0);
         const bool success = article.solve();
         EXPECT_NEAR(article.root1, -1.0, tolerance);
         EXPECT_NEAR(article.root2, 1.0, tolerance);
@@ -51,7 +51,7 @@ TEST(QuadraticSolver, ComputeRoots) {
 
     // x^2+3x=0
     {
-        QuadraticSolver article(1.0, 3.0, 0.0);
+        cml::QuadraticSolver article(1.0, 3.0, 0.0);
         const bool success = article.solve();
         EXPECT_NEAR(article.root1, 0.0, tolerance);
         EXPECT_NEAR(article.root2, -3.0, tolerance);
@@ -61,7 +61,7 @@ TEST(QuadraticSolver, ComputeRoots) {
 
     // 1=0
     {
-        QuadraticSolver article(0.0, 0.0, 1.0);
+        cml::QuadraticSolver article(0.0, 0.0, 1.0);
         const bool success = article.solve();
         EXPECT_NEAR(article.root1, 0.0, tolerance);
         EXPECT_NEAR(article.root2, 0.0, tolerance);
@@ -71,7 +71,7 @@ TEST(QuadraticSolver, ComputeRoots) {
 
     // 3x=0
     {
-        QuadraticSolver article(0.0, 3.0, 0.0);
+        cml::QuadraticSolver article(0.0, 3.0, 0.0);
         const bool success = article.solve();
         EXPECT_NEAR(article.root1, 0.0, tolerance);
         EXPECT_NEAR(article.root2, 0.0, tolerance);
@@ -81,7 +81,7 @@ TEST(QuadraticSolver, ComputeRoots) {
 
     // 3x^2=0
     {
-        QuadraticSolver article(3.0, 0.0, 0.0);
+        cml::QuadraticSolver article(3.0, 0.0, 0.0);
         const bool success = article.solve();
         EXPECT_NEAR(article.root1, 0.0, tolerance);
         EXPECT_NEAR(article.root2, 0.0, tolerance);
@@ -91,7 +91,7 @@ TEST(QuadraticSolver, ComputeRoots) {
 
     // 0=0
     {
-        QuadraticSolver article(0.0, 0.0, 0.0);
+        cml::QuadraticSolver article(0.0, 0.0, 0.0);
         const bool success = article.solve();
         EXPECT_NEAR(article.root1, 0.0, tolerance);
         EXPECT_NEAR(article.root2, 0.0, tolerance);
@@ -101,7 +101,7 @@ TEST(QuadraticSolver, ComputeRoots) {
 
     // x^2+(1e308)x+1=0
     {
-        QuadraticSolver article(1.0, 1e308, 1.0);
+        cml::QuadraticSolver article(1.0, 1e308, 1.0);
         const bool success = article.solve();
         EXPECT_NEAR(article.root1, -1e-308, tolerance);
         EXPECT_NEAR(article.root2, -1e308, tolerance);
@@ -115,7 +115,7 @@ TEST(QuadraticSolver, ComputeRoots) {
 TEST(QuadraticSolver, DontComputeRoots) {
     // x^2-3x+2=0
     {
-        QuadraticSolver article(1.0, 3.0, 2.0, false);
+        cml::QuadraticSolver article(1.0, 3.0, 2.0, false);
         const bool success = article.solve(false);
         EXPECT_TRUE(article.roots_exist);
         EXPECT_TRUE(success);
@@ -127,7 +127,7 @@ TEST(QuadraticSolver, DontComputeRoots) {
 
     // 2x+1=0
     {
-        QuadraticSolver article(0.0, 2.0, 1.0, false);
+        cml::QuadraticSolver article(0.0, 2.0, 1.0, false);
         const bool success = article.solve(false);
         EXPECT_TRUE(article.roots_exist);
         EXPECT_TRUE(success);

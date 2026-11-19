@@ -26,6 +26,8 @@ PROGRAMMERS:
 #include <algorithm>
 #include <array>
 
+namespace cml {
+
 template<size_t N>
 class PolygonEnclosureSphere
 {
@@ -599,4 +601,7 @@ Purpose:
     }
   }
 };
+
+} // namespace cml
+
 #endif

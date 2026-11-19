@@ -11,25 +11,25 @@ PROGRAMMERS:
 #include "sample_sim_data.hh"
 
 
-class VerifCompoundEventsManager : public CompoundEventsManager
+class VerifCompoundEventsManager : public cml::CompoundEventsManager
 {
  public:
-  EventTrigger<double> trigger_arm0;
-  EventTrigger<double> trigger_arm1;
-  EventTrigger<double> trigger_arm2;
-  EventTrigger<double> trigger_disarm0;
-  EventTrigger<double> trigger_disarm1;
-  EventTrigger<double> trigger_disarm2;
-  EventTrigger<double> trigger_act0;
-  EventTrigger<double> trigger_act1;
-  EventTrigger<double> trigger_act2;
+  cml::EventTrigger<double> trigger_arm0;
+  cml::EventTrigger<double> trigger_arm1;
+  cml::EventTrigger<double> trigger_arm2;
+  cml::EventTrigger<double> trigger_disarm0;
+  cml::EventTrigger<double> trigger_disarm1;
+  cml::EventTrigger<double> trigger_disarm2;
+  cml::EventTrigger<double> trigger_act0;
+  cml::EventTrigger<double> trigger_act1;
+  cml::EventTrigger<double> trigger_act2;
 
-  CompoundEvent event;
+  cml::CompoundEvent event;
 
 
   VerifCompoundEventsManager (SampleSimData & sim_data)
     :
-    CompoundEventsManager(sim_data.time),
+    cml::CompoundEventsManager(sim_data.time),
 
     trigger_arm0(    sim_data.time),
     trigger_arm1(    sim_data.time),
@@ -45,37 +45,37 @@ class VerifCompoundEventsManager : public CompoundEventsManager
 
   {
     trigger_arm0.set_watch( sim_data.trigger_var_arm[0], 1.2);
-    trigger_arm0.comparison_logic = EventTriggerBase::GE;
+    trigger_arm0.comparison_logic = cml::EventTriggerBase::GE;
     trigger_arm0.multi_shot = true;
     /****/
     trigger_arm1.set_watch( sim_data.trigger_var_arm[1], 2.3);
-    trigger_arm1.comparison_logic = EventTriggerBase::GT;
+    trigger_arm1.comparison_logic = cml::EventTriggerBase::GT;
     trigger_arm1.multi_shot = true;
     /****/
     trigger_arm2.set_watch( sim_data.trigger_var_arm[2], 3.4);
-    trigger_arm2.comparison_logic = EventTriggerBase::LT;
+    trigger_arm2.comparison_logic = cml::EventTriggerBase::LT;
     trigger_arm2.multi_shot = true;
     /****/
     trigger_disarm0.set_watch( sim_data.trigger_var_disarm[0], 1.2);
-    trigger_disarm0.comparison_logic = EventTriggerBase::GE;
+    trigger_disarm0.comparison_logic = cml::EventTriggerBase::GE;
     trigger_disarm0.multi_shot = true;
     /****/
     trigger_disarm1.set_watch( sim_data.trigger_var_disarm[1], 2.3);
-    trigger_disarm1.comparison_logic = EventTriggerBase::GT;
+    trigger_disarm1.comparison_logic = cml::EventTriggerBase::GT;
     trigger_disarm1.multi_shot = true;
     /****/
     trigger_disarm2.set_watch( sim_data.trigger_var_disarm[2], 3.4);
-    trigger_disarm2.comparison_logic = EventTriggerBase::LT;
+    trigger_disarm2.comparison_logic = cml::EventTriggerBase::LT;
     trigger_disarm2.multi_shot = true;
     /****/
     trigger_act0.set_watch( sim_data.trigger_var_action[0], 1.2);
-    trigger_act0.comparison_logic = EventTriggerBase::GE;
+    trigger_act0.comparison_logic = cml::EventTriggerBase::GE;
     /****/
     trigger_act1.set_watch( sim_data.trigger_var_action[1], 2.3);
-    trigger_act1.comparison_logic = EventTriggerBase::GT;
+    trigger_act1.comparison_logic = cml::EventTriggerBase::GT;
     /****/
     trigger_act2.set_watch( sim_data.trigger_var_action[2], 0.0);
-    trigger_act2.comparison_logic = EventTriggerBase::Change;
+    trigger_act2.comparison_logic = cml::EventTriggerBase::Change;
 
     // configure the events
     event.name = "Test Event";

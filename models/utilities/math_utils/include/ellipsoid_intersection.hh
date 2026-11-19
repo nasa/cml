@@ -25,6 +25,8 @@ NOTES:
 #include "quadratic_solver.hh"
 #include "std_array_ops.hh"
 
+namespace cml {
+
 class EllipsoidIntersection{
  private:
   const double (&end1)[3]; /* (m)
@@ -106,4 +108,7 @@ Algorithm:
   double get_scaled_root1() const {return quadratic.root1;}
   double get_scaled_root2() const {return quadratic.root2;}
 };
+
+} // namespace cml
+
 #endif

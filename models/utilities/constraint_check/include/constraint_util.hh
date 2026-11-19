@@ -18,6 +18,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+namespace cml {
+
 #ifndef SWIG
 /**
  * Generic equality check
@@ -147,5 +149,7 @@ bool test_interval_violation(
 
     return in_interval;
 }
+
+} // namespace cml
 
 #endif

@@ -52,6 +52,8 @@ PROGRAMMERS:
 
 #include "event_action_base.hh"
 
+namespace cml {
+
 /*****************************************************************************
 EventActionSimStopNow
 Purpose:
@@ -203,4 +205,7 @@ class EventActionLogNow : public EventActionBase {
     return false;
   }
 };
+
+} // namespace cml
+
 #endif

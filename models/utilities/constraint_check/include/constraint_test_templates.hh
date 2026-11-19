@@ -25,6 +25,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Notes:
  - The classes defined in here are class-template extensions of
@@ -246,4 +248,7 @@ class ConstraintTest_ValSet : public ConstraintTest
     return violation;
   }
 };
+
+} // namespace cml
+
 #endif

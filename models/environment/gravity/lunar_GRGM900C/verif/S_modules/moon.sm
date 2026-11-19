@@ -38,7 +38,7 @@ class MoonSimObject: public Trick::SimObject
   jeod::SphericalHarmonicsGravitySource gravity_source;
 
   jeod::Planet_moon_default_data    planet_default_data;
-  GRGM900C_LunarGravity       GRGM900C_lunar_gravity;
+  cml::GRGM900C_LunarGravity       GRGM900C_lunar_gravity;
 
   //Constructor
   MoonSimObject( jeod::GravityManager & grav_in,
@@ -47,7 +47,7 @@ class MoonSimObject: public Trick::SimObject
     grav_manager(grav_in),
     dyn_manager(dyn_manager_in),
     gravity_source(),
-    GRGM900C_lunar_gravity( GRGM900C_LunarGravity::MAX_RES_900,
+    GRGM900C_lunar_gravity( cml::GRGM900C_LunarGravity::MAX_RES_900,
                             gravity_source)
 
   {

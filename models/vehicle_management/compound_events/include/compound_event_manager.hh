@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "trick/memorymanager_c_intf.h"
 #include <utility>
 
+namespace cml {
+
 class CompoundEventsManager : public VehicleEventsManager
 {
  protected:
@@ -237,4 +239,7 @@ class CompoundEventsManager : public VehicleEventsManager
     return reinterpret_cast<T*>(var_name_ref->address);
   }
 };
+
+} // namespace cml
+
 #endif

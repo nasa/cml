@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include "../include/bin_counter.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -251,3 +253,5 @@ CML_BinCounter::apply_tolerance(double tol)
     bins[0].bin_floor -= tol;
   }
 }
+
+} // namespace cml

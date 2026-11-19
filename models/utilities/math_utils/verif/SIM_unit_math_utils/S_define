@@ -16,7 +16,7 @@
 
 class MathUtilsSimObject: public Trick::SimObject {
 public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
 
   // Frame Transformation Inputs and Outputs
   double      T_inrtl_lvlh[3][3];
@@ -121,7 +121,7 @@ private:
 
   void generate_inertial_to_lvlh() {
     if (test_inertial_to_lvlh) {
-      MathUtils::generate_inertial_to_lvlh( vector1,
+      cml::MathUtils::generate_inertial_to_lvlh( vector1,
                                             vector2,
                                             T_inrtl_lvlh);
     }
@@ -129,7 +129,7 @@ private:
 
   void generate_inertial_to_uvw() {
     if (test_inertial_to_uvw) {
-      MathUtils::generate_inertial_to_uvw( vector1,
+      cml::MathUtils::generate_inertial_to_uvw( vector1,
                                            vector2,
                                            T_inrtl_uvw);
     }
@@ -137,7 +137,7 @@ private:
 
   void generate_inertial_to_reference() {
     if (test_inertial_to_reference) {
-      MathUtils::generate_inrtl_to_reference( vector1,
+      cml::MathUtils::generate_inrtl_to_reference( vector1,
                                               vector2,
                                               T_inrtl_reference);
     }
@@ -145,7 +145,7 @@ private:
 
   void generate_inertial_to_vnc() {
     if (test_inertial_to_vnc) {
-      MathUtils::generate_inrtl_to_vnc( vector1,
+      cml::MathUtils::generate_inrtl_to_vnc( vector1,
                                         vector2,
                                         T_inrtl_vnc);
     }
@@ -153,50 +153,50 @@ private:
 
   void generate_T_pfix_to_enu() {
     if (test_T_pfix_to_enu) {
-      MathUtils::generate_T_pfix_to_enu( vector1,
+      cml::MathUtils::generate_T_pfix_to_enu( vector1,
                                          T_pfix_enu);
     }
   }
 
   void generate_T_null() {
     if (test_T_NULL) {
-      MathUtils::generate_inertial_to_lvlh( vector1,
+      cml::MathUtils::generate_inertial_to_lvlh( vector1,
                                             vector2,
                                             NULL);
-      MathUtils::generate_inertial_to_lvlh( NULL,
+      cml::MathUtils::generate_inertial_to_lvlh( NULL,
                                             vector2,
                                             T_inrtl_lvlh);
-      MathUtils::generate_inertial_to_lvlh( vector1,
+      cml::MathUtils::generate_inertial_to_lvlh( vector1,
                                             NULL,
                                             T_inrtl_lvlh);
-      MathUtils::generate_inertial_to_uvw( vector1,
+      cml::MathUtils::generate_inertial_to_uvw( vector1,
                                            vector2,
                                            NULL);
-      MathUtils::generate_inertial_to_uvw( NULL,
+      cml::MathUtils::generate_inertial_to_uvw( NULL,
                                            vector2,
                                            T_inrtl_uvw);
-      MathUtils::generate_inertial_to_uvw( vector1,
+      cml::MathUtils::generate_inertial_to_uvw( vector1,
                                            NULL,
                                            T_inrtl_uvw);
-      MathUtils::generate_inrtl_to_reference( vector1,
+      cml::MathUtils::generate_inrtl_to_reference( vector1,
                                               vector2,
                                               NULL);
-      MathUtils::generate_inrtl_to_reference( NULL,
+      cml::MathUtils::generate_inrtl_to_reference( NULL,
                                               vector2,
                                               T_inrtl_reference);
-      MathUtils::generate_inrtl_to_reference( vector1,
+      cml::MathUtils::generate_inrtl_to_reference( vector1,
                                               NULL,
                                               T_inrtl_reference);
-      MathUtils::generate_T_pfix_to_enu( vector1,
+      cml::MathUtils::generate_T_pfix_to_enu( vector1,
                                          NULL);
-      MathUtils::generate_T_pfix_to_enu( NULL,
+      cml::MathUtils::generate_T_pfix_to_enu( NULL,
                                          T_pfix_enu);
     }
   }
 
   void generate_Q_enu_to_pfix() {
     if (test_Q_enu_to_pfix) {
-      MathUtils::generate_Q_enu_to_pfix( longitude,
+      cml::MathUtils::generate_Q_enu_to_pfix( longitude,
                                          latitude,
                                          Q_enu_pfix);
     }
@@ -204,7 +204,7 @@ private:
 
   void compute_unit_vec_deriv() {
     if (test_unit_vec_deriv) {
-      MathUtils::compute_unit_vector_derivative( vector1,
+      cml::MathUtils::compute_unit_vector_derivative( vector1,
                                                  vector2,
                                                  unit_vec_deriv);
     }
@@ -214,7 +214,7 @@ private:
     if (test_backward_difference) {
       size = static_cast<size_t>( size_d);
       std::list<double> history(back_diff_vals, back_diff_vals + size);
-      backward_diff = MathUtils::compute_backward_difference(history);
+      backward_diff = cml::MathUtils::compute_backward_difference(history);
     }
   }
 
@@ -229,29 +229,29 @@ private:
           vec8[2*ii + jj] = arr42[0][ii][jj];
         }
       }
-      MathUtils::matrix_trans( arr42[0], arr24); 
-      MathUtils::matrix_mult_left_trans( arr43[0], arr42[0], arr32);
-      MathUtils::matrix_mult_right_trans( arr32, arr42[0], arr34);
-      MathUtils::matrix_mult_trans_trans( arr42[0], arr34, arr23);
-      MathUtils::matrix_mult( arr42[0], arr23, arr43[1]);
-      MathUtils::col_maj_vec_to_matrix(vec8, arr42[1]);
-      MathUtils::row_maj_vec_to_matrix(vec8, arr42[2]);
+      cml::MathUtils::matrix_trans( arr42[0], arr24); 
+      cml::MathUtils::matrix_mult_left_trans( arr43[0], arr42[0], arr32);
+      cml::MathUtils::matrix_mult_right_trans( arr32, arr42[0], arr34);
+      cml::MathUtils::matrix_mult_trans_trans( arr42[0], arr34, arr23);
+      cml::MathUtils::matrix_mult( arr42[0], arr23, arr43[1]);
+      cml::MathUtils::col_maj_vec_to_matrix(vec8, arr42[1]);
+      cml::MathUtils::row_maj_vec_to_matrix(vec8, arr42[2]);
 
       // arr33[0] is populated in unit-test data
-      MathUtils::matrix_inv_using_cholesky( arr33[0], arr33[1], inv_fail_on_error);
-      MathUtils::matrix_copy( arr33[1], arr33[2]);
-      MathUtils::matrix_incr( arr33[0], arr33[2]);  // [2] = [0] + [1]
-      MathUtils::matrix_copy( arr33[2], arr33[3]);
-      MathUtils::matrix_decr( arr33[0], arr33[3]); // [3] = [2] - [0] = [1]
-      MathUtils::matrix_transformation( arr33[0], arr33[1], arr33[4]);
-      MathUtils::matrix_inverse_transformation( arr33[1], arr33[1], arr33[5]);
+      cml::MathUtils::matrix_inv_using_cholesky( arr33[0], arr33[1], inv_fail_on_error);
+      cml::MathUtils::matrix_copy( arr33[1], arr33[2]);
+      cml::MathUtils::matrix_incr( arr33[0], arr33[2]);  // [2] = [0] + [1]
+      cml::MathUtils::matrix_copy( arr33[2], arr33[3]);
+      cml::MathUtils::matrix_decr( arr33[0], arr33[3]); // [3] = [2] - [0] = [1]
+      cml::MathUtils::matrix_transformation( arr33[0], arr33[1], arr33[4]);
+      cml::MathUtils::matrix_inverse_transformation( arr33[1], arr33[1], arr33[5]);
       // arr33[3] should = arr33[1]
       // arr33[4] should = arr33[0] if arr33[0] is symmetric
       // arr33[4] should = arr33[1] if arr33[0] is a transformation matrix.
       
-      MathUtils::zero_matrix(arr33[6]); // [6] = zeros
-      MathUtils::matrix_copy( arr33[1], arr33[7]);
-      MathUtils::matrix_scale(2.5, arr33[7]); // [7] = 2.5 * [1]
+      cml::MathUtils::zero_matrix(arr33[6]); // [6] = zeros
+      cml::MathUtils::matrix_copy( arr33[1], arr33[7]);
+      cml::MathUtils::matrix_scale(2.5, arr33[7]); // [7] = 2.5 * [1]
 
       // fill arr22[0-2] and arr33[8-10] with elements of 100 to see behavior for over- or under-copying
       for (size_t ii = 0; ii < 3; ++ii) {
@@ -262,24 +262,24 @@ private:
           }
         }
       }
-      MathUtils::matrix_copy(arr22[0], arr22[1]);
-      MathUtils::matrix_copy(arr22[0], arr22[2]);
-      MathUtils::matrix_copy(arr33[8], arr33[9]);
-      MathUtils::matrix_copy(arr33[8], arr33[10]);
+      cml::MathUtils::matrix_copy(arr22[0], arr22[1]);
+      cml::MathUtils::matrix_copy(arr22[0], arr22[2]);
+      cml::MathUtils::matrix_copy(arr33[8], arr33[9]);
+      cml::MathUtils::matrix_copy(arr33[8], arr33[10]);
 
-      MathUtils::matrix_copy_submatrix_out(arr42[0], arr22[0], 2, 0);
-      MathUtils::matrix_copy_submatrix_out(arr42[0], arr22[1], 2, 1);
-      MathUtils::matrix_copy_submatrix_out(arr42[0], arr22[2], 3, 0);
+      cml::MathUtils::matrix_copy_submatrix_out(arr42[0], arr22[0], 2, 0);
+      cml::MathUtils::matrix_copy_submatrix_out(arr42[0], arr22[1], 2, 1);
+      cml::MathUtils::matrix_copy_submatrix_out(arr42[0], arr22[2], 3, 0);
       
-      MathUtils::matrix_copy_submatrix_in(arr22[0], arr33[8], 1, 1);
-      MathUtils::matrix_copy_submatrix_in(arr22[0], arr33[9], 1, 2);
-      MathUtils::matrix_copy_submatrix_in(arr22[0], arr33[10], 2, 1);
+      cml::MathUtils::matrix_copy_submatrix_in(arr22[0], arr33[8], 1, 1);
+      cml::MathUtils::matrix_copy_submatrix_in(arr22[0], arr33[9], 1, 2);
+      cml::MathUtils::matrix_copy_submatrix_in(arr22[0], arr33[10], 2, 1);
     }
   }
 
   void compute_pv_covariance_matrix() {
     if (test_pv_covariance_matrix) {
-      MathUtils::transform_pv_matrix(arr33[0], 
+      cml::MathUtils::transform_pv_matrix(arr33[0], 
                                      arr66[0], 
                                      arr66[1]);
     }
@@ -287,7 +287,7 @@ private:
 
   void compute_correlation_coefficients() {
     if (test_correlation_coefficients) {
-      MathUtils::extract_correlation_coefficients(arr33[0],
+      cml::MathUtils::extract_correlation_coefficients(arr33[0],
                                                   arr33[1]);
     }
   }

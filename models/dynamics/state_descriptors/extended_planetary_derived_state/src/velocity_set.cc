@@ -29,6 +29,8 @@ PROGRAMMERS:
 
 #include "../include/velocity_set.hh"
 
+namespace cml {
+
 /*****************************************************************************
 VelocitySet
 Purpose:(Constructor)
@@ -87,3 +89,5 @@ VelocitySet::update()
                              vel_xy );
   altitude_rate = -velocity[2];
 }
+
+} // namespace cml

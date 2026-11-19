@@ -16,6 +16,8 @@ PROGRAMMERS:
 
 #include <libxml/parser.h>
 
+namespace cml {
+
 class XmlHelper {
  public:
   static xmlNodePtr xml_find(        xmlNodePtr node, const char* name);
@@ -30,5 +32,7 @@ class XmlHelper {
   static const char * xml_convert_ptr (const char * ptr);
   static const char * xml_convert_ptr (const unsigned char * ptr);
 };
+
+} // namespace cml
 
 #endif

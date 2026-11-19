@@ -18,18 +18,18 @@ class TestingModelSimObject : public Trick::SimObject {
   std::vector<double> data_line;
 
   // Model suppoort variables
-  TableIndependentVariable TIV_1; // (--) a TIV to use with manager (optional)
+  cml::TableIndependentVariable TIV_1; // (--) a TIV to use with manager (optional)
 
-  TableLookupTransposeDataSet_TableConfig config1;
+  cml::TableLookupTransposeDataSet_TableConfig config1;
 
   // Class for testing:
-  TableLookupTransposeDataSet manager;
+  cml::TableLookupTransposeDataSet manager;
 
   TestingModelSimObject()
       :
       independent(0.0),
       indep_incr(5.0),
-      TIV_1(independent, TableIndependentVariable::Linear),
+      TIV_1(independent, cml::TableIndependentVariable::Linear),
       config1()
   {
     ("default_data")   defaults();
@@ -91,7 +91,7 @@ class TestingModelSimObject : public Trick::SimObject {
     const char config_name[10] = "var1";
     std::string config_name_str("var1");
 
-    TableLookupTransposeDataSet_TableConfig * config_ptr =
+    cml::TableLookupTransposeDataSet_TableConfig * config_ptr =
                                      manager.get_config( config_name );
     std::cout << "****Testing get-config; index-low should = 3*****\n";
     std::cout << "config index-low = " << config_ptr->index_low << "\n";

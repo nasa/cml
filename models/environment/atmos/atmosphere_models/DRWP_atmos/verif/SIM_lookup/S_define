@@ -25,9 +25,9 @@ class DRWP_UnitTestSimObject: public Trick::SimObject {
 
  public:
   //  Unit Test class
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   //  the model to be tested
-  LookupAtmosWinds  lookup_table_winds;
+  cml::LookupAtmosWinds  lookup_table_winds;
   // support variables
   double altitude;
 

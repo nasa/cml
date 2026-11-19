@@ -34,6 +34,8 @@
 
 #include "../include/math_utils.hh"
 
+namespace cml {
+
 /*******************************************************************************
 generate_inertial_to_lvlh
 Purpose:( Generates the transformation matrix from inertial to LVLH given
@@ -1014,3 +1016,5 @@ bool MathUtils::is_within_rel_tolerance<bool>( bool value, bool expected, double
 {
   return is_within_abs_tolerance(value, expected, static_cast<bool>(tol));
 }
+
+} // namespace cml

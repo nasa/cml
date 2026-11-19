@@ -21,6 +21,7 @@ PROGRAMMERS:
 #include <vector>
 #include <string>
 
+namespace cml {
 
 /*****************************************************************************
 SweepSet
@@ -132,4 +133,7 @@ inline void unit_test_init( UNIT_TEST * data) {data->initialize();}
 inline void unit_test( UNIT_TEST * data) {data->update();}
 inline void unit_test_dd( UNIT_TEST * data) {(void) data;}
 inline void unit_test_shutdown( UNIT_TEST * data) {(void) data;}
+
+} // namespace cml
+
 #endif

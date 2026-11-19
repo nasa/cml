@@ -28,7 +28,7 @@ class VehicleSimObject : public Trick::SimObject {
   jeod::SphericalHarmonicsGravityControls  grav_controls;
 
 
-  UnitTestFramework  framework;
+  cml::UnitTestFramework  framework;
 
   // for logging
   double radius;

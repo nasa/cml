@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include <algorithm>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
                                         RcsBuildUpTrailOffJetData * const jet_,
                                         const double& time)
@@ -57,3 +59,5 @@ void RcsBuildUpTrailOff::build_up_trail_off_effects()
     }
   }
 }
+
+} // namespace cml

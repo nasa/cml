@@ -25,6 +25,8 @@ PROGRAMMERS:
 #include <limits>
 #include <algorithm>
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -86,3 +88,5 @@ CML_ProximityCounter::set_data(const std::vector<double> & targets_)
   bins[nbin - 1].count = 0;
   bins[nbin - 1].bin_ceil = std::numeric_limits<double>::max();
 }
+
+} // namespace cml

@@ -30,6 +30,7 @@ PROGRAMMERS:
 #include "../include/std_atmos_1976.hh"
 #include "std_atmos_formula.h"
 
+namespace cml {
 
 const double STD1976::min_valid_alt = -5000.0;
 const double STD1976::max_valid_alt = 1000000.0;
@@ -117,3 +118,5 @@ size_t STD1976::get_alt_tbl_len()
 
   return alt_tbl_len;
 }
+
+} // namespace cml

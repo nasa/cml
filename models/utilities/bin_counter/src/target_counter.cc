@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "../include/target_counter.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -128,3 +130,5 @@ CML_TargetCounter::does_val_exist(int val) const
   return std::any_of( targets.begin(), targets.end(),
       [val](const auto & target_) {return (val == target_.value);});
 }
+
+} // namespace cml

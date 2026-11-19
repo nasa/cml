@@ -17,7 +17,7 @@ PROGRAMMERS:
 class AntaresUnitTestSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
 
   std::vector<double> edges;
   std::vector<int> empty_ints;
@@ -35,16 +35,16 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
   int    i;
 
   // Model for testing:
-  CML_BinCounter        bin_counter_vec;
-  CML_BinCounter        bin_counter_arr;
-  CML_BinCounter        bin_counter_arr_open;
-  CML_BinCounter        bin_counter_interval;
-  CML_BinCounter        bin_counter_interval_open;
-  CML_TargetCounter     tgt_counter_vec;
-  CML_TargetCounter     tgt_counter_arr;
-  CML_TargetCounter     tgt_counter_interval;
-  CML_ProximityCounter  prox_counter;
-  CML_ProximityCounter  prox_counter_vec;
+  cml::CML_BinCounter        bin_counter_vec;
+  cml::CML_BinCounter        bin_counter_arr;
+  cml::CML_BinCounter        bin_counter_arr_open;
+  cml::CML_BinCounter        bin_counter_interval;
+  cml::CML_BinCounter        bin_counter_interval_open;
+  cml::CML_TargetCounter     tgt_counter_vec;
+  cml::CML_TargetCounter     tgt_counter_arr;
+  cml::CML_TargetCounter     tgt_counter_interval;
+  cml::CML_ProximityCounter  prox_counter;
+  cml::CML_ProximityCounter  prox_counter_vec;
 
 
 

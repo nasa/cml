@@ -21,6 +21,8 @@ Programmers:
 
 #include "../include/earth_moon_rotating_frame.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor
 Purpose:  (Construct a EarthMoonRotatingFrame object.)
@@ -133,3 +135,5 @@ EarthMoonRotatingFrame::update()
     pointing_frame.state.rot.compute_quaternion();
   }
 }
+
+} // namespace cml

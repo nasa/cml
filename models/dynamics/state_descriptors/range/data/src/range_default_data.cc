@@ -13,7 +13,7 @@ PROGRAMMERS:
 #include "../../include/range_from_pfix_reference.hh"
 #include "../include/range_default_data.hh"
 
-
+namespace cml {
 
 /*****************************************************************************
 launch_pad_KSC_39B
@@ -33,3 +33,5 @@ RangeDefaultData::launch_pad_KSC_39B(
   pad.reference_data.direction_type = PfixReferencePoint::topodetic;
   pad.reference_data.azimuth = M_PI_2;
 }
+
+} // namespace cml

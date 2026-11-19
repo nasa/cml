@@ -13,10 +13,10 @@ PROGRAMMERS:
 #include <iostream>
 #include "../../include/subscriptions.hh"
 
-class SubscriptionTestClass : public SubscriptionBase
+class SubscriptionTestClass : public cml::SubscriptionBase
 {
   public:
-  using SubscriptionBase::SubscriptionBase;
+  using cml::SubscriptionBase::SubscriptionBase;
   SubscriptionTestClass(const SubscriptionTestClass&) = delete;
   SubscriptionTestClass& operator=(const SubscriptionTestClass&) = delete;
 

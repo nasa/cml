@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
+namespace cml {
+
 /*****************************************************************************
 MslAlt
 Purpose:(Provides an altitude based on the MSL.)
@@ -60,5 +62,7 @@ class MslAlt : public SubscriptionBase
    void initialize() override;
    void update();
 };
+
+} // namespace cml
 
 #endif /*CML_MSL_ALT_HH*/

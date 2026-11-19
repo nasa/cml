@@ -30,12 +30,12 @@ Purpose:(Unit test the RangeFromPfixReference and RangeToPfixReference
 class RangeUnitTestSimObject: public Trick::SimObject {
    public:
     // Framework
-    UnitTestFramework framework;
+    cml::UnitTestFramework framework;
 
     // Model for testing
-    RangeFromPfixReference range_from_pfix;
-    RangeToPfixReference   range_to_pfix;
-    RangeToPfixReference   range_to_pfix_internal_ref;
+    cml::RangeFromPfixReference range_from_pfix;
+    cml::RangeToPfixReference   range_to_pfix;
+    cml::RangeToPfixReference   range_to_pfix_internal_ref;
 
     // support variables
     jeod::DynManager             dyn_manager;
@@ -100,28 +100,28 @@ class RangeUnitTestSimObject: public Trick::SimObject {
     }
 
   private:
-    void update_reference_point(PfixReferencePoint & point) {
+    void update_reference_point(cml::PfixReferencePoint & point) {
       // Regardless of position_type, the reference position will be the same.
       point.update_from_spher(reference_position);
 
       switch (point.position_type) {
-       case PfixReferencePoint::topodetic:
+       case cml::PfixReferencePoint::topodetic:
         point.longitude = point.ellip_coords.longitude;
         point.latitude = point.ellip_coords.latitude;
         point.altitude = point.ellip_coords.altitude;
         point.azimuth = azimuth;
         break;
-       case PfixReferencePoint::topocentric:
+       case cml::PfixReferencePoint::topocentric:
         point.longitude = point.sphere_coords.longitude;
         point.latitude = point.sphere_coords.latitude;
         point.altitude = point.sphere_coords.altitude;
         point.azimuth = azimuth;
         break;
-       case PfixReferencePoint::pfix:
+       case cml::PfixReferencePoint::pfix:
         jeod::Vector3::copy(point.cart_coords, point.position);
         jeod::Vector3::copy(pfix_rel_vel, point.direction);
         break;
-       case PfixReferencePoint::inertial:
+       case cml::PfixReferencePoint::inertial:
         jeod::Vector3::transform_transpose( point.planet->pfix.state.rot.T_parent_this,
                                       point.cart_coords,
                                       point.position);

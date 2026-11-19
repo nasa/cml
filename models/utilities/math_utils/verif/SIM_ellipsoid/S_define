@@ -18,14 +18,14 @@ AUTHOR:
 class UnitSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   double source[3];
   double target[3];
 
   double root1[3];
   double root2[3];
 
-  EllipsoidIntersection ellipsoid_intersection;
+  cml::EllipsoidIntersection ellipsoid_intersection;
 
   UnitSimObject()
     :

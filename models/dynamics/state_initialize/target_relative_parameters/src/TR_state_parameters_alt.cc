@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include "../include/TR_state_param.hh"
 #include "../include/TR_state_parameter_set.hh"
 
+namespace cml {
+
 /*****************************************************************************
 initialize
 Purpose:(Initialize uhat_Ref given a position reference vector.
@@ -151,3 +153,5 @@ TargetRelative_StateParameter_Alt::compute_position_from_params(
                     position);
   }
 }
+
+} // namespace cml

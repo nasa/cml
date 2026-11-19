@@ -28,7 +28,7 @@ Programmers:
 #include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/dynamics/mass/include/mass_point_state.hh"
 
-
+namespace cml {
 
 /*****************************************************************************
 MassBodyDistributeCompToCore
@@ -77,4 +77,7 @@ class MassBodyDistributeCompToCore
   MassBodyDistributeCompToCore & operator = (
                                const MassBodyDistributeCompToCore&);
 };
+
+} // namespace cml
+
 #endif

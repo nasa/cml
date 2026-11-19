@@ -26,6 +26,8 @@ PROGRAMMERS:
 #include <vector>
 #include <string>
 
+namespace cml {
+
 class AeroInterfaceOutput;
 class AeroEnvironment;
 
@@ -202,4 +204,7 @@ protected:
   void increment_coeffs_with_bias();
   void increment_damping_coeffs_with_bias();
 };
+
+} // namespace cml
+
 #endif

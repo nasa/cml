@@ -11,16 +11,16 @@ PROGRAMMERS:
 #include "sample_sim_data.hh"
 
 
-class VerifCompoundEventsManager : public CompoundEventsManager
+class VerifCompoundEventsManager : public cml::CompoundEventsManager
 {
  public:
-  EventTrigger<int> trigger_i;
-  EventTrigger<bool> trigger_b;
-  CompoundEvent event;
+  cml::EventTrigger<int> trigger_i;
+  cml::EventTrigger<bool> trigger_b;
+  cml::CompoundEvent event;
 
   VerifCompoundEventsManager (SampleSimData & sim_data)
     :
-    CompoundEventsManager(sim_data.time),
+    cml::CompoundEventsManager(sim_data.time),
     trigger_i( sim_data.time, "integer trigger"),
     trigger_b( sim_data.time, "boolean trigger"),
     event( sim_data.time)
@@ -30,7 +30,7 @@ class VerifCompoundEventsManager : public CompoundEventsManager
     trigger_i.multi_shot = true;
     trigger_b.set_watch( sim_data.sim_bool, true);
     trigger_b.multi_shot = true;
-    trigger_b.comparison_logic = EventTriggerBase::EQ;
+    trigger_b.comparison_logic = cml::EventTriggerBase::EQ;
 
     // configure the events
     event.name = "Test Event";

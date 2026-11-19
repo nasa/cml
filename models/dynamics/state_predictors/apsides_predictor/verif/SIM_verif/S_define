@@ -19,7 +19,7 @@
 class ApsidesPredictor_SimObject: public Trick::SimObject {
 
  public:
-  ApsidesPredictor apsides;
+  cml::ApsidesPredictor apsides;
   jeod::PlanetaryDerivedState planet_rel_state;
  protected:
   jeod::DynManager & dyn_manager;

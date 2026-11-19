@@ -19,8 +19,8 @@
 
 class ContactSimObject : public Trick::SimObject {
  public:
-  UnitTestFramework framework;
-  ContactStateOverride contact;
+  cml::UnitTestFramework framework;
+  cml::ContactStateOverride contact;
   jeod::DynBody ref;
   jeod::DynBody override;
   jeod::DynBody root;

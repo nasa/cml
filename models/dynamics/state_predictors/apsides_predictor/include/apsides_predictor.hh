@@ -25,6 +25,8 @@ class RefFrameTrans;
 class Planet;
 }
 
+namespace cml {
+
 class ApsidesPredictor : public SubscriptionBase {
 
  public:
@@ -69,5 +71,7 @@ class ApsidesPredictor : public SubscriptionBase {
  private:
   void compute_next_apsis();
 };
- 
+
+} // namespace cml
+
 #endif

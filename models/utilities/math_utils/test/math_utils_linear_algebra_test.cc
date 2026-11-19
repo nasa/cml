@@ -28,8 +28,8 @@ TEST(MathUtils, VectorAlgebra) {
 
     constexpr double lhs[5] {1.0, 2.0, 3.0, 4.0, 5.0};
     constexpr double rhs[5] {-3.0, 6.0, 0.0, 2.0, -1.0};
-    const std::array<double, 5> diff = MathUtils::diff(lhs, rhs);
-    const std::array<double, 5> sum = MathUtils::sum(lhs, rhs);
+    const std::array<double, 5> diff = cml::MathUtils::diff(lhs, rhs);
+    const std::array<double, 5> sum = cml::MathUtils::sum(lhs, rhs);
 
     EXPECT_THAT(diff, Pointwise(DoubleNear(tolerance), {4.0, -4.0, 3.0, 2.0, 6.0}));
     EXPECT_THAT(sum, Pointwise(DoubleNear(tolerance), {-2.0, 8.0, 3.0, 6.0, 4.0}));
@@ -40,20 +40,20 @@ TEST(MathUtils, VectorMagnitude) {
     // Test the Pythagorean quintuple, [1, 2, 8, 10, 13].
     constexpr std::array<double, 4> arr4 {-1.0, 2.0, -8.0, -10.0};
     constexpr double c_arr4[4] {-1.0, 2.0, -8.0, -10.0};
-    EXPECT_NEAR(MathUtils::vec_mag_sq(arr4), 169.0, tolerance);
-    EXPECT_NEAR(MathUtils::vec_mag_sq(c_arr4), 169.0, tolerance);
-    EXPECT_NEAR(MathUtils::vec_mag(arr4), 13.0, tolerance);
-    EXPECT_NEAR(MathUtils::vec_mag(c_arr4), 13.0, tolerance);
+    EXPECT_NEAR(cml::MathUtils::vec_mag_sq(arr4), 169.0, tolerance);
+    EXPECT_NEAR(cml::MathUtils::vec_mag_sq(c_arr4), 169.0, tolerance);
+    EXPECT_NEAR(cml::MathUtils::vec_mag(arr4), 13.0, tolerance);
+    EXPECT_NEAR(cml::MathUtils::vec_mag(c_arr4), 13.0, tolerance);
 
     // Magnitude of vector components using the Euler brick [44, 117, 240].
     constexpr std::array<double, 3> arr3 {44.0, 117.0, 240.0};
     constexpr double c_arr3[3] {44.0, 117.0, 240.0};
-    EXPECT_NEAR(MathUtils::vec_mag_xy(arr3), 125.0, tolerance);
-    EXPECT_NEAR(MathUtils::vec_mag_xy(c_arr3), 125.0, tolerance);
-    EXPECT_NEAR(MathUtils::vec_mag_xz(arr3), 244.0, tolerance);
-    EXPECT_NEAR(MathUtils::vec_mag_xz(c_arr3), 244.0, tolerance);
-    EXPECT_NEAR(MathUtils::vec_mag_yz(arr3), 267.0, tolerance);
-    EXPECT_NEAR(MathUtils::vec_mag_yz(c_arr3), 267.0, tolerance);
+    EXPECT_NEAR(cml::MathUtils::vec_mag_xy(arr3), 125.0, tolerance);
+    EXPECT_NEAR(cml::MathUtils::vec_mag_xy(c_arr3), 125.0, tolerance);
+    EXPECT_NEAR(cml::MathUtils::vec_mag_xz(arr3), 244.0, tolerance);
+    EXPECT_NEAR(cml::MathUtils::vec_mag_xz(c_arr3), 244.0, tolerance);
+    EXPECT_NEAR(cml::MathUtils::vec_mag_yz(arr3), 267.0, tolerance);
+    EXPECT_NEAR(cml::MathUtils::vec_mag_yz(c_arr3), 267.0, tolerance);
 }
 
 // Test unit vector functions.
@@ -72,8 +72,8 @@ TEST(MathUtils, UnitVector) {
             5.0 / 11.0,  //  0.4545454545454545
             -8.0 / 11.0  // -0.7272727272727273
         };
-        EXPECT_THAT(MathUtils::unit_vector(vec4), Pointwise(DoubleNear(tolerance), expected));
-        EXPECT_THAT(MathUtils::unit_vector(c_vec4), Pointwise(DoubleNear(tolerance), expected));
+        EXPECT_THAT(cml::MathUtils::unit_vector(vec4), Pointwise(DoubleNear(tolerance), expected));
+        EXPECT_THAT(cml::MathUtils::unit_vector(c_vec4), Pointwise(DoubleNear(tolerance), expected));
     }
 
     // Unit vector of a vector with magnitude zero.
@@ -81,8 +81,8 @@ TEST(MathUtils, UnitVector) {
         constexpr std::array<double, 4> vec4 {};
         constexpr double c_vec4[4] {};
         constexpr std::array<double, 4> zero {};
-        EXPECT_THAT(MathUtils::unit_vector(vec4), Pointwise(Eq(), zero));
-        EXPECT_THAT(MathUtils::unit_vector(c_vec4), Pointwise(Eq(), zero));
+        EXPECT_THAT(cml::MathUtils::unit_vector(vec4), Pointwise(Eq(), zero));
+        EXPECT_THAT(cml::MathUtils::unit_vector(c_vec4), Pointwise(Eq(), zero));
     }
 }
 
@@ -97,10 +97,10 @@ TEST(MathUtils, ZeroVector) {
         double c_arr[3] {1.0, 2.0, 3.33333};
         constexpr std::array<double, 3> zero {};
 
-        MathUtils::zero_vector(arr);
-        MathUtils::zero_vector(c_arr);
-        EXPECT_THAT(MathUtils::unit_vector(arr), Pointwise(Eq(), zero));
-        EXPECT_THAT(MathUtils::unit_vector(c_arr), Pointwise(Eq(), zero));
+        cml::MathUtils::zero_vector(arr);
+        cml::MathUtils::zero_vector(c_arr);
+        EXPECT_THAT(cml::MathUtils::unit_vector(arr), Pointwise(Eq(), zero));
+        EXPECT_THAT(cml::MathUtils::unit_vector(c_arr), Pointwise(Eq(), zero));
     }
 
     // Size 4
@@ -109,10 +109,10 @@ TEST(MathUtils, ZeroVector) {
         double c_arr[4] {1.0, 2.0, 3.33333, -4.4};
         constexpr std::array<double, 4> zero {};
 
-        MathUtils::zero_vector(arr);
-        MathUtils::zero_vector(c_arr);
-        EXPECT_THAT(MathUtils::unit_vector(arr), Pointwise(Eq(), zero));
-        EXPECT_THAT(MathUtils::unit_vector(c_arr), Pointwise(Eq(), zero));
+        cml::MathUtils::zero_vector(arr);
+        cml::MathUtils::zero_vector(c_arr);
+        EXPECT_THAT(cml::MathUtils::unit_vector(arr), Pointwise(Eq(), zero));
+        EXPECT_THAT(cml::MathUtils::unit_vector(c_arr), Pointwise(Eq(), zero));
     }
 }
 
@@ -124,11 +124,11 @@ TEST(MathUtils, VectorElementWiseSquareRoot) {
     constexpr std::array<double, 4> arr {4.0, 1.0, 16.0, 25.0};
     constexpr double c_arr[4] {4.0, 1.0, 16.0, 25.0};
     constexpr std::array<double, 4> expected {2.0, 1.0, 4.0, 5.0};
-    EXPECT_THAT(MathUtils::vector_elementwise_sqrt(arr), Pointwise(DoubleNear(tolerance), expected));
-    EXPECT_THAT(MathUtils::vector_elementwise_sqrt(c_arr), Pointwise(DoubleNear(tolerance), expected));
+    EXPECT_THAT(cml::MathUtils::vector_elementwise_sqrt(arr), Pointwise(DoubleNear(tolerance), expected));
+    EXPECT_THAT(cml::MathUtils::vector_elementwise_sqrt(c_arr), Pointwise(DoubleNear(tolerance), expected));
 
     double output[4] {};
-    MathUtils::vector_elementwise_sqrt(c_arr, output);
+    cml::MathUtils::vector_elementwise_sqrt(c_arr, output);
     EXPECT_THAT(output, Pointwise(DoubleNear(tolerance), expected));
 }
 
@@ -143,10 +143,10 @@ TEST(MathUtils, VectorCrossProduct) {
     constexpr double c_arr2[3] {arr2[0], arr2[1], arr2[2]};
 
     constexpr std::array<double, 3> arr1_cross_arr2 {-8.75, -3.5, -17.5};
-    EXPECT_THAT(MathUtils::vector_cross_product(arr1, arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
-    EXPECT_THAT(MathUtils::vector_cross_product(c_arr1, arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
-    EXPECT_THAT(MathUtils::vector_cross_product(arr1, c_arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
-    EXPECT_THAT(MathUtils::vector_cross_product(c_arr1, c_arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
+    EXPECT_THAT(cml::MathUtils::vector_cross_product(arr1, arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
+    EXPECT_THAT(cml::MathUtils::vector_cross_product(c_arr1, arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
+    EXPECT_THAT(cml::MathUtils::vector_cross_product(arr1, c_arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
+    EXPECT_THAT(cml::MathUtils::vector_cross_product(c_arr1, c_arr2), Pointwise(DoubleNear(tolerance), arr1_cross_arr2));
 }
 
 // Test the scalar product functions.
@@ -156,13 +156,13 @@ TEST(MathUtils, VectorScalarProduct) {
     constexpr double c_lhs[4] {lhs[0], lhs[1], lhs[2], lhs[3]};
     constexpr double c_rhs[4] {rhs[0], rhs[1], rhs[2], rhs[3]};
 
-    ASSERT_NEAR(MathUtils::vector_scalar_product(lhs, rhs), -22.0, tolerance);
-    ASSERT_NEAR(MathUtils::vector_scalar_product(c_lhs, rhs), -22.0, tolerance);
-    ASSERT_NEAR(MathUtils::vector_scalar_product(lhs, c_rhs), -22.0, tolerance);
-    ASSERT_NEAR(MathUtils::vector_scalar_product(c_lhs, c_rhs), -22.0, tolerance);
+    ASSERT_NEAR(cml::MathUtils::vector_scalar_product(lhs, rhs), -22.0, tolerance);
+    ASSERT_NEAR(cml::MathUtils::vector_scalar_product(c_lhs, rhs), -22.0, tolerance);
+    ASSERT_NEAR(cml::MathUtils::vector_scalar_product(lhs, c_rhs), -22.0, tolerance);
+    ASSERT_NEAR(cml::MathUtils::vector_scalar_product(c_lhs, c_rhs), -22.0, tolerance);
 
     double output = 0.0;
-    MathUtils::vector_scalar_product(c_lhs, c_rhs, output);
+    cml::MathUtils::vector_scalar_product(c_lhs, c_rhs, output);
     ASSERT_NEAR(output, -22.0, tolerance);
 }
 
@@ -183,8 +183,8 @@ TEST(MathUtils, ConvertBetweenOneDimensionalVectorAndMatrix) {
 
     double col_major_output[4][3] {};
     double row_major_output[4][3] {};
-    MathUtils::col_maj_vec_to_matrix(col_major_vec, col_major_output);
-    MathUtils::row_maj_vec_to_matrix(row_major_vec, row_major_output);
+    cml::MathUtils::col_maj_vec_to_matrix(col_major_vec, col_major_output);
+    cml::MathUtils::row_maj_vec_to_matrix(row_major_vec, row_major_output);
 
     test_matrices_equal(col_major_output, expected);
     test_matrices_equal(row_major_output, expected);
@@ -194,7 +194,7 @@ TEST(MathUtils, ConvertBetweenOneDimensionalVectorAndMatrix) {
 TEST(MathUtils, MatrixCopyOperations) {
     using testing::_;
 
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
 
     constexpr double input[3][4] {
         {1.0, 2.0, 3.0, 4.0},
@@ -205,7 +205,7 @@ TEST(MathUtils, MatrixCopyOperations) {
     // Matrix copy
     {
         double output[3][4] {};
-        MathUtils::matrix_copy(input, output);
+        cml::MathUtils::matrix_copy(input, output);
         test_matrices_equal(input, output);
     }
 
@@ -217,7 +217,7 @@ TEST(MathUtils, MatrixCopyOperations) {
             {6.0, 7.0},
             {10.0, 11.0}
         };
-        MathUtils::matrix_copy_submatrix_out(input, output, 1, 1);
+        cml::MathUtils::matrix_copy_submatrix_out(input, output, 1, 1);
         test_matrices_equal(output, expected1);
 
         // Invalid case.
@@ -225,8 +225,8 @@ TEST(MathUtils, MatrixCopyOperations) {
             {8.0, 0.0},
             {12.0, 0.0}
         };
-        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, _));
-        MathUtils::matrix_copy_submatrix_out(input, output, 1, 3);
+        EXPECT_CALL(cml_message_mock, publish(cml::CMLMessage::Error, _, _, _));
+        cml::MathUtils::matrix_copy_submatrix_out(input, output, 1, 3);
         test_matrices_equal(output, expected2);
     }
 
@@ -245,7 +245,7 @@ TEST(MathUtils, MatrixCopyOperations) {
             {1100.0, 9.0, 10.0, 11.0, 12.0},
             {1600.0, 1700.0, 1800.0, 1900.0, 2000.0}
         };
-        MathUtils::matrix_copy_submatrix_in(input, output1, 0, 1);
+        cml::MathUtils::matrix_copy_submatrix_in(input, output1, 0, 1);
         test_matrices_equal(output1, expected1);
 
         // Invalid case.
@@ -261,8 +261,8 @@ TEST(MathUtils, MatrixCopyOperations) {
             {1100.0, 1200.0, 1300.0, 1.0, 2.0},
             {1600.0, 1700.0, 1800.0, 5.0, 6.0}
         };
-        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, _));
-        MathUtils::matrix_copy_submatrix_in(input, output2, 2, 3);
+        EXPECT_CALL(cml_message_mock, publish(cml::CMLMessage::Error, _, _, _));
+        cml::MathUtils::matrix_copy_submatrix_in(input, output2, 2, 3);
         test_matrices_equal(output2, expected2);
     }
 }
@@ -278,7 +278,7 @@ TEST(MathUtils, MatrixAlgebra) {
             {7.0, 8.0, 9.0}
         };
         constexpr double zeros_square[3][3] {};
-        MathUtils::zero_matrix(input_square);
+        cml::MathUtils::zero_matrix(input_square);
         test_matrices_equal(input_square, zeros_square);
 
         // Non-square matrix
@@ -288,7 +288,7 @@ TEST(MathUtils, MatrixAlgebra) {
             {5.0, 6.0}
         };
         constexpr double zeros_nonsquare[3][2] {};
-        MathUtils::zero_matrix(input_nonsquare);
+        cml::MathUtils::zero_matrix(input_nonsquare);
         test_matrices_equal(input_nonsquare, zeros_nonsquare);
     }
 
@@ -309,7 +309,7 @@ TEST(MathUtils, MatrixAlgebra) {
             {5.0, 1.0},
             {5.0, 16.0}
         };
-        MathUtils::matrix_incr(increment, input);
+        cml::MathUtils::matrix_incr(increment, input);
         test_matrices_equal(input, expected);
     }
 
@@ -330,7 +330,7 @@ TEST(MathUtils, MatrixAlgebra) {
             {1.0, 7.0},
             {5.0, -4.0}
         };
-        MathUtils::matrix_decr(decrement, input);
+        cml::MathUtils::matrix_decr(decrement, input);
         test_matrices_equal(input, expected);
     }
 
@@ -346,7 +346,7 @@ TEST(MathUtils, MatrixAlgebra) {
             {-1.0, 0.0},
             {-20.0, -22.0}
         };
-        MathUtils::matrix_scale(2.0, input);
+        cml::MathUtils::matrix_scale(2.0, input);
         test_matrices_equal(input, expected);
     }
 }
@@ -364,7 +364,7 @@ TEST(MathUtils, MatrixTranspose) {
             {1.0, 4.0},
             {2.0, 5.0}
         };
-        MathUtils::matrix_trans(input, output);
+        cml::MathUtils::matrix_trans(input, output);
         test_matrices_equal(output, expected);
     }
 
@@ -380,7 +380,7 @@ TEST(MathUtils, MatrixTranspose) {
             {2.0, 5.0},
             {3.0, 6.0}
         };
-        MathUtils::matrix_trans(input, output);
+        cml::MathUtils::matrix_trans(input, output);
         test_matrices_equal(output, expected);
     }
 }
@@ -403,7 +403,7 @@ TEST(MathUtils, MatrixMultiplication) {
             {-13.0, -5.5},
             {-2.0, -6.5}
         };
-        MathUtils::matrix_mult(lhs1, rhs1, output1);
+        cml::MathUtils::matrix_mult(lhs1, rhs1, output1);
         test_matrices_equal(output1, expected1);
 
         // Non-square matrices.
@@ -422,7 +422,7 @@ TEST(MathUtils, MatrixMultiplication) {
             {-21.0, 9.0, -6.0},
             {23.0, -45.0, 10.0}
         };
-        MathUtils::matrix_mult(lhs2, rhs2, output2);
+        cml::MathUtils::matrix_mult(lhs2, rhs2, output2);
         test_matrices_equal(output2, expected2);
     }
 
@@ -442,7 +442,7 @@ TEST(MathUtils, MatrixMultiplication) {
             {-21.0, 9.0, -6.0},
             {23.0, -45.0, 10.0}
         };
-        MathUtils::matrix_mult_left_trans(lhs, rhs, output);
+        cml::MathUtils::matrix_mult_left_trans(lhs, rhs, output);
         test_matrices_equal(output, expected);
     }
 
@@ -464,7 +464,7 @@ TEST(MathUtils, MatrixMultiplication) {
             {-21.0, 9.0, -6.0},
             {23.0, -45.0, 10.0}
         };
-        MathUtils::matrix_mult_right_trans(lhs, rhs, output);
+        cml::MathUtils::matrix_mult_right_trans(lhs, rhs, output);
         test_matrices_equal(output, expected);
     }
 
@@ -484,7 +484,7 @@ TEST(MathUtils, MatrixMultiplication) {
             {26.0, 26.0},
             {-8.0, 8.0}
         };
-        MathUtils::matrix_mult_trans_trans(lhs, rhs, output);
+        cml::MathUtils::matrix_mult_trans_trans(lhs, rhs, output);
         test_matrices_equal(output, expected);
     }
 }
@@ -513,10 +513,10 @@ TEST(MathUtils, MatrixTransformation) {
     };
     double output[3][3] {};
 
-    MathUtils::matrix_transformation(trans, mat, output);
+    cml::MathUtils::matrix_transformation(trans, mat, output);
     test_matrices_equal(output, transformation_expected);
 
-    MathUtils::matrix_inverse_transformation(trans, mat, output);
+    cml::MathUtils::matrix_inverse_transformation(trans, mat, output);
     test_matrices_equal(output, inverse_transform_expected);
 }
 
@@ -525,7 +525,7 @@ TEST(MathUtils, CorrelationMatrix) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
 
     // Ordinary covariance matrix.
     {
@@ -541,7 +541,7 @@ TEST(MathUtils, CorrelationMatrix) {
             {0.2121320343559642, 0.3674234614174767, 1.0}
         };
 
-        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_TRUE(success);
         test_matrices_equal(output, expected);
     }
@@ -560,7 +560,7 @@ TEST(MathUtils, CorrelationMatrix) {
             {0.1897366596101027, -0.3286335345030997, 1.0}
         };
 
-        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_TRUE(success);
         test_matrices_equal(output, expected);
     }
@@ -576,8 +576,8 @@ TEST(MathUtils, CorrelationMatrix) {
         constexpr double expected[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("a diagonal element is negative")));
-        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("a diagonal element is negative")));
+        const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         ASSERT_FALSE(success);
         test_matrices_equal(output, expected);
     }
@@ -596,7 +596,7 @@ TEST(MathUtils, CorrelationMatrix) {
             {0.0, 0.0, 1.0}
         };
 
-        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+        const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_TRUE(success);
         test_matrices_equal(output, expected);
     }
@@ -612,8 +612,8 @@ TEST(MathUtils, CorrelationMatrix) {
         constexpr double expected[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
-        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
+        const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_FALSE(success);
         test_matrices_equal(output, expected);
     }
@@ -629,8 +629,8 @@ TEST(MathUtils, CorrelationMatrix) {
         constexpr double expected[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
-        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+            publish(cml::CMLMessage::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
+        const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_FALSE(success);
         test_matrices_equal(output, expected);
     }
@@ -650,8 +650,8 @@ TEST(MathUtils, CorrelationMatrix) {
         };
 
         EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals")));
-        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+            publish(cml::CMLMessage::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals")));
+        const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_TRUE(success);
         test_matrices_equal(output, expected);
     }
@@ -671,8 +671,8 @@ TEST(MathUtils, CorrelationMatrix) {
         };
 
         EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals"))).Times(3);
-        const bool success = MathUtils::extract_correlation_coefficients(covariance, output);
+            publish(cml::CMLMessage::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals"))).Times(3);
+        const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_TRUE(success);
         test_matrices_equal(output, expected);
     }
@@ -702,7 +702,7 @@ TEST(MathUtils, TransformPvMatrix) {
         {-8.0,   5.0, -20.0,     5.0, -3.0,  2.0}
     };
     double output[6][6];
-    MathUtils::transform_pv_matrix(transform, pv_matrix, output);
+    cml::MathUtils::transform_pv_matrix(transform, pv_matrix, output);
     test_matrices_equal(output, expected);
 }
 

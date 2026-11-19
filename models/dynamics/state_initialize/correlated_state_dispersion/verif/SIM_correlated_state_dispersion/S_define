@@ -24,7 +24,7 @@ Verif sim object
 
 class VerifSimObject : public Trick::SimObject {
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   jeod::DynBody trans_base;
   jeod::DynBody rot_base;
   jeod::MassBodyInit mass_init_trans_base;
@@ -34,7 +34,7 @@ class VerifSimObject : public Trick::SimObject {
   jeod::DynBodyInitRotState rot_init_trans_base;
   jeod::DynBodyInitRotState rot_init_rot_base;
 
-  CorrelatedStateDispersion corr_state;
+  cml::CorrelatedStateDispersion corr_state;
   jeod::Planet planet;
   double true_position[3];
   double true_velocity[3];

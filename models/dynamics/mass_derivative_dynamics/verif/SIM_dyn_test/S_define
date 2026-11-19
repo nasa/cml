@@ -37,8 +37,8 @@ class VehicleSimObject : public Trick::SimObject
 
  public:
   jeod::DynBody               body;
-  DynamicMassBody             tank;
-  DynamicMassGroup            tank_group;
+  cml::DynamicMassBody             tank;
+  cml::DynamicMassGroup            tank_group;
   jeod::MassBodyInit          mass_init;
   jeod::MassBodyInit          tank_init;
   jeod::BodyAttachMatrix      tank_attach;
@@ -57,7 +57,7 @@ class VehicleSimObject : public Trick::SimObject
 
 
   // Model for testing:
-  MassDerivativeDynamics  test_dyn;
+  cml::MassDerivativeDynamics  test_dyn;
 
   VehicleSimObject(  const double & dyn_time,
                      jeod::DynManager & dyn_mgr_in)
@@ -109,7 +109,7 @@ class VehicleSimObject : public Trick::SimObject
     if (null_check) {
       double dummy_;
       double dummy_mx_[3][3];
-      MassDerivativeDynamics null_check_instance( dummy_,
+      cml::MassDerivativeDynamics null_check_instance( dummy_,
                                                   dummy_,
                                                   dummy_mx_,
                                                   nullptr,

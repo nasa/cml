@@ -21,9 +21,9 @@ Verif sim object
 
 class VerifSimObject : public Trick::SimObject {
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   VerifVehicleEventsManager   manager;
-  TrickLogging logging_groups;
+  cml::TrickLogging logging_groups;
 
   double sim_time; /* (--) Simple simulation time */
   double position; /* (--) Arbitrary values to use as a watch variable */

@@ -17,25 +17,25 @@ class TestingModelSimObject : public Trick::SimObject {
   bool   use_not_enabled;
   bool   use_extra_load;
 
-  TableIndependentVariable  tiv_1;
-  TableIndependentVariable  tiv_2;
-  TableIndependentVariable  tiv_3;
-  TableIndependentVariable  tiv_4;
-  TableIndependentVariable  tiv_5;
-  GenericMultiInputTable    generic_table;
+  cml::TableIndependentVariable  tiv_1;
+  cml::TableIndependentVariable  tiv_2;
+  cml::TableIndependentVariable  tiv_3;
+  cml::TableIndependentVariable  tiv_4;
+  cml::TableIndependentVariable  tiv_5;
+  cml::GenericMultiInputTable    generic_table;
 
   // Instance of TableLookupSet used to manage the 3 independent
   // variables and the single table that depends on them.
-  TableLookupSet            manager;
+  cml::TableLookupSet            manager;
 
   TestingModelSimObject()
     :
     use_small_line(false),
     use_not_enabled(false),
     use_extra_load(false),
-    tiv_1(independent, TableIndependentVariable::Linear),
-    tiv_2(independent, TableIndependentVariable::Linear),
-    tiv_3(independent, TableIndependentVariable::Linear),
+    tiv_1(independent, cml::TableIndependentVariable::Linear),
+    tiv_2(independent, cml::TableIndependentVariable::Linear),
+    tiv_3(independent, cml::TableIndependentVariable::Linear),
     tiv_4(independent),               // test this constructor
     tiv_5("has_a_name", independent), // test this constructor
     generic_table(),
@@ -108,7 +108,7 @@ class TestingModelSimObject : public Trick::SimObject {
   void create_table_with_NULL()
   {
     std::vector<double*> var(1,NULL);
-    manager.create_table(var, AbstractTableLookup::Generic);
+    manager.create_table(var, cml::AbstractTableLookup::Generic);
   }
   //***************************************************************************
   // create a table with duplicate dependents.

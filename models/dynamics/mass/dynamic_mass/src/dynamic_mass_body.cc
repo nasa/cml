@@ -37,6 +37,8 @@
 #include "../include/dynamic_mass_body_properties.hh"
 #include "../include/dynamic_mass_body_interpolation.hh"
 
+namespace cml {
+
 /********************************************************************************
 Method: DynamicMassBody
 Purpose: (Constructor)
@@ -394,3 +396,5 @@ DynamicMassBody::revert_dry_mass_config()
   dry_mass_revert__available = false;
   update_mass_internal();
 }
+
+} // namespace cml

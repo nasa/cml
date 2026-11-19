@@ -9,6 +9,8 @@ PROGRAMMERS:
 
 #include "../include/fault_function_parameter.hh"
 
+namespace cml {
+
 /*******************************************************************************
 get_value
 Purpose:(Gets the value of the parameter.)
@@ -32,3 +34,5 @@ void FaultFunctionParameter::reset_nominal_with_new_rate( double new_rate) {
   // standard evaluation leaves nominal unchanged, as would be expected.
   nominal = get_value() - new_rate * ind_variable.get_value();
 }
+
+} // namespace cml

@@ -19,7 +19,7 @@
 
 class VerifSimObject : public Trick::SimObject {
     public:
-        DummyVehicleLauncher launcher; // makes the vehicle active
+        cml::DummyVehicleLauncher launcher; // makes the vehicle active
         jeod::DynBody        state_body;
         jeod::MassBody       mass_body;
         jeod::DynBody        launch_body;

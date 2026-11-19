@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*************************************************************************
 Constructor
 *************************************************************************/
@@ -762,3 +764,5 @@ void SimpleVent::set_force_internal()
   force_mag_set = true;
   force_set = true;
 }
+
+} // namespace cml

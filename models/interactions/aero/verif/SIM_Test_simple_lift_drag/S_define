@@ -31,21 +31,21 @@ Purpose:(The sim)
 class AntaresUnitTestSimObject: public Trick::SimObject {
  public:
   // Framework (leave this alone)
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   // support of support:
   double             time;
   jeod::DynBody      body;
-  ExtendedPlanetaryDerivedState planet_rel;
-  AtmosphereExecInterface    atmos_exec;
+  cml::ExtendedPlanetaryDerivedState planet_rel;
+  cml::AtmosphereExecInterface    atmos_exec;
   // support
-  AtmosRelativeState atmos_rel;
+  cml::AtmosRelativeState atmos_rel;
   double geodetic_altitude;
   double T_inrtl_struc[3][3];
   double mass;
   unsigned int drag_type_in;
 
   // Model for testing:
-  AeroInterfaceSimpleLiftDrag interface;
+  cml::AeroInterfaceSimpleLiftDrag interface;
 
   //Constructor
   AntaresUnitTestSimObject()

@@ -28,8 +28,8 @@ class MslUnitSimObject: public Trick::SimObject
   double geodetic_latitude{0.0}; /* (rad) Geodetic latitude      */
   double longitude{0.0};         /* (rad) Planet fixed longitude */
 
-  MslAlt            msl_alt;
-  UnitTestFramework framework;
+  cml::MslAlt            msl_alt;
+  cml::UnitTestFramework framework;
 
   MslUnitSimObject()
     :

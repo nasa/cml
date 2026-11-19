@@ -11,7 +11,7 @@ class MultiLoadSimObject : public Trick::SimObject {
   public:
     double              independent_variable;
     double              dependent_variable[4];
-    SimpleTableLookup   table_set;
+    cml::SimpleTableLookup   table_set;
 
    MultiLoadSimObject()
      :

@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <string>
 
+namespace cml {
+
 /*******************************************************************************
 initialize
 Purpose:(Initializes the fault.)
@@ -97,3 +99,5 @@ bool FaultFunctionBase::set_param( const std::string& param_name,
 
   return true;
 }
+
+} // namespace cml

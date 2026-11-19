@@ -5,14 +5,14 @@
 namespace {
 
 // Test stub which does nothing.
-class ConstraintUnitTest : public Constraint {
+class ConstraintUnitTest : public cml::Constraint {
 public:
     void update() override {}
 };
 
 // Test a regular update.
 TEST(ConstraintSet, Update) {
-    ConstraintSet article;
+    cml::ConstraintSet article;
     ConstraintUnitTest constraint1;
     ConstraintUnitTest constraint2;
     constraint1.name = "Constraint 1";
@@ -44,7 +44,7 @@ TEST(ConstraintSet, Update) {
 
 // Test an update where the constraint set is not active.
 TEST(ConstraintSet, Inactive) {
-    ConstraintSet article;
+    cml::ConstraintSet article;
     ConstraintUnitTest constraint1;
     ConstraintUnitTest constraint2;
     constraint1.name = "Constraint 1";

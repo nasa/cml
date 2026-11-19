@@ -18,6 +18,7 @@ PROGRAMMERS:
 
 #include "watch_values_base_core.hh"
 
+namespace cml {
 
 /*****************************************************************************
 WatchValuesBase
@@ -415,5 +416,7 @@ template <> inline void WatchValuesBase<bool>::set_dbl_reference(double ref)
 {
   reference = std::fpclassify(ref) != FP_ZERO;
 }
+
+} // namespace cml
 
 #endif

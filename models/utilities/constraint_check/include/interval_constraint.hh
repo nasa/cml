@@ -24,6 +24,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <cstddef>
 
+namespace cml {
+
 /**
  * Uses the interval constraint tests, which are violated when the variable
  * is either within or without a specified interval
@@ -235,4 +237,7 @@ class IntervalTimedConstraint : public Constraint
     post_update(); // inherited.
   }
 };
+
+} // namespace cml
+
 #endif

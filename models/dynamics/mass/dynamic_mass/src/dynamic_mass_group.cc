@@ -23,6 +23,8 @@ PROGRAMMERS:
 #include "../include/dynamic_mass_group.hh"
 #include "../include/dynamic_mass_string.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Method: DynamicMassGroup
 Purpose: (Constructor)
@@ -519,3 +521,5 @@ DynamicMassGroup::add_mass_to_group_internal(
     }
   }
 }
+
+} // namespace cml
