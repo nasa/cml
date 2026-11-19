@@ -1,7 +1,7 @@
 veh_action.detach.springs.enabled      = True
 veh_action.detach.springs.num_springs  = 1
 veh_action.detach.springs.spring_array = trick.sim_services.alloc_type(1,
-                                                   "SimpleSpringIndividual")
+                                                   "cml::SimpleSpringIndividual")
 
 
 #Spring 1

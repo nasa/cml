@@ -24,12 +24,13 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+#include <cstddef>
 #include <cstring>
 #include <algorithm>
 
 namespace cml {
 
-template<size_t N>
+template<std::size_t N>
 class PolygonEnclosure
 {
  protected:
@@ -81,8 +82,9 @@ class PolygonEnclosure
  public:
   bool enabled{true}; /* (--)
     Model enabled flag.*/
-  static constexpr size_t num_pts{N}; /* (--)
-    External interface to output information about the size of this polygon.*/
+
+  // External interface to output information about the size of this polygon
+  static constexpr std::size_t num_pts() { return N; }
 
 
 /*****************************************************************************
