@@ -1,0 +1,83 @@
+/*****************************************************************************
+PURPOSE: (Tests the activation of a shadow vehicle with a state determined by
+          the prescribed trajectory of the original vehicle.)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (2017-12) (Antares) (initial))
+    )
+*****************************************************************************/
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_basic.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/dynamics/state_overrides/traj_model/include/traj_model.hh"
+
+##include "../../include/shadow_trajectory.hh"
+
+class VehicleSimObject : public Trick::SimObject {
+ protected:
+  jeod::DynManager & dyn_manager;
+ public:
+  jeod::DynBody  body;
+  jeod::MassBodyInit       mass_init;
+  StateInitialize    state_initialize;
+  TrajModel          traj;
+  bool               primary_switch_to_integ; /* (--)
+                     switches the body state over from traj to integration.*/
+  ShadowTrajectory   shadow;
+
+  VehicleSimObject( const double & dyn_time,
+                    jeod::DynManager & dyn_mgr,
+                    const jeod::Planet & earth_p)
+    :
+    dyn_manager (dyn_mgr),
+    traj(dyn_time, earth_p, body),
+    primary_switch_to_integ(false),
+    shadow(body, traj)
+  {
+    ("default_data")         traj.subscribe();
+
+    P_ENV ("initialization") body.initialize_model( dyn_manager);
+    P_ENV ("initialization") shadow.initialize( dyn_manager);
+    ("initialization") traj.initialize();
+    ("initialization") shadow.initialize_integ();
+
+    (1.0, "environment") traj.update();
+    (1.0, "environment") shadow.update();
+
+    (100.0, 2.0, "scheduled") activate_shadow();
+  };
+  private:
+  void activate_shadow()
+  {
+    // NOTE - must turn on the shadow before turning off the priamry traj-model
+    shadow.subscribe();
+    if (primary_switch_to_integ) {
+      traj.unsubscribe();
+    }
+  }
+    VehicleSimObject( const VehicleSimObject&);
+    VehicleSimObject & operator= ( const VehicleSimObject&);
+
+
+};
+VehicleSimObject vehicle(jeod_time.time_manager.dyn_time.seconds,
+                         dynamics.dyn_manager,
+                         earth.planet);
+
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;

@@ -50,6 +50,7 @@ add_cml_library(
         state_initialize/target_relative_parameters/include/TR_state_parameters.hh
         state_initialize/target_relative_parameters/include/TR_state_parameters_alt.hh
         state_overrides/contact/include/contact_state_override.hh
+        state_overrides/shadow_trajectory/include/shadow_trajectory.hh
         state_overrides/twist_sway/include/twist_sway.hh
         state_predictors/apsides_predictor/include/apsides_predictor.hh
         state_predictors/impact_point/include/impact_point.hh
@@ -94,6 +95,7 @@ add_cml_library(
         state_initialize/target_relative_parameters/src/TR_state_parameters.cc
         state_initialize/target_relative_parameters/src/TR_state_parameters_alt.cc
         state_overrides/contact/src/contact_state_override.cc
+        state_overrides/shadow_trajectory/src/shadow_trajectory.cc
         state_overrides/twist_sway/src/twist_sway.cc
         state_predictors/apsides_predictor/src/apsides_predictor.cc
         state_predictors/impact_point/src/impact_point.cc

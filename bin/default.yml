@@ -3770,6 +3770,78 @@ SIM_verif_trigger_test2_compound_events:
       compare:
       - models/vehicle_management/compound_events/verif/SIM_verif_trigger_test2/RUN_2h_function_modifier_abs_tan/log_test_data.csv
         vs. models/vehicle_management/compound_events/verif/SIM_verif_trigger_test2/verif_data/RUN_2h_function_modifier_abs_tan/log_test_data.csv
+SIM_0_one_vehicle_shadow_trajectory:
+  model_dir: models/dynamics/state_overrides/shadow_trajectory
+  path: models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle
+  runs:
+    RUN_0_default/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/RUN_0_default/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/verif_data/RUN_0_default/log_test_data.csv
+    RUN_1_trans_only/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/RUN_1_trans_only/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/verif_data/RUN_1_trans_only/log_test_data.csv
+    RUN_2_trans_only_data/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/RUN_2_trans_only_data/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/verif_data/RUN_2_trans_only_data/log_test_data.csv
+    RUN_3_real_to_integ/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/RUN_3_real_to_integ/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/verif_data/RUN_3_real_to_integ/log_test_data.csv
+    RUN_4_shadow_to_integ/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/RUN_4_shadow_to_integ/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/verif_data/RUN_4_shadow_to_integ/log_test_data.csv
+    RUN_5_both_to_integ/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/RUN_5_both_to_integ/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_0_one_vehicle/verif_data/RUN_5_both_to_integ/log_test_data.csv
+SIM_1_two_vehicles_with_detach_shadow_trajectory:
+  model_dir: models/dynamics/state_overrides/shadow_trajectory
+  path: models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach
+  runs:
+    RUN_0_baseline/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach/RUN_0_baseline/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach/verif_data/RUN_0_baseline/log_test_data.csv
+    RUN_1_detach3/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach/RUN_1_detach3/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach/verif_data/RUN_1_detach3/log_test_data.csv
+    RUN_2_unsub2_detach3/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach/RUN_2_unsub2_detach3/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach/verif_data/RUN_2_unsub2_detach3/log_test_data.csv
+    RUN_3_detach3_unsub4_wait/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach/RUN_3_detach3_unsub4_wait/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach/verif_data/RUN_3_detach3_unsub4_wait/log_test_data.csv
+    RUN_4_detach3_unsub4_immediate/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach/RUN_4_detach3_unsub4_immediate/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_1_two_vehicles_with_detach/verif_data/RUN_4_detach3_unsub4_immediate/log_test_data.csv
+SIM_detach_shadow_trajectory:
+  model_dir: models/dynamics/state_overrides/shadow_trajectory
+  path: models/dynamics/state_overrides/shadow_trajectory/verif/SIM_detach
+  runs:
+    RUN_0_basic/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_detach/RUN_0_basic/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_detach/verif_data/RUN_0_basic/log_test_data.csv
+    RUN_1_with_detach/input.py:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_detach/RUN_1_with_detach/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_detach/verif_data/RUN_1_with_detach/log_test_data.csv
+    RUN_2_with_offset:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_detach/RUN_2_with_offset/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_detach/verif_data/RUN_2_with_offset/log_test_data.csv
+    RUN_3_offset_and_rotation:
+      compare:
+      - models/dynamics/state_overrides/shadow_trajectory/verif/SIM_detach/RUN_3_offset_and_rotation/log_test_data.csv
+        vs. models/dynamics/state_overrides/shadow_trajectory/verif/SIM_detach/verif_data/RUN_3_offset_and_rotation/log_test_data.csv
 SIM_verif_twist_sway:
   model_dir: models/dynamics/state_overrides/twist_sway
   path: models/dynamics/state_overrides/twist_sway/verif/SIM_verif

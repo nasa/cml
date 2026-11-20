@@ -1,0 +1,119 @@
+/*****************************************************************************
+PURPOSE: (Tests the activation of a shadow vehicle with a state determined by
+          the prescribed trajectory of the original vehicle.)
+PROGRAMMERS:
+    (
+     ((Gary Turner) (OSR) (2017-12) (Antares) (initial))
+    )
+*****************************************************************************/
+#include "default_priority_settings.sm"
+#define DYNAMICS 1
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+#include "time_dyntime_only.sm"
+#include "dynamics.sm"
+#include "environment_sans_de405.sm"
+#include "earth_basic.sm"
+
+/*****************************************************************************
+Vehicle sim object
+*****************************************************************************/
+
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "jeod/models/dynamics/body_action/include/mass_body_init.hh"
+##include "jeod/models/dynamics/body_action/include/body_attach_matrix.hh"
+##include "jeod/models/dynamics/body_action/include/body_detach.hh"
+##include "cml/models/dynamics/state_descriptors/separation_state/include/separation_state.hh"
+##include "cml/models/dynamics/state_initialize/state_initialize/include/state_initialize.hh"
+##include "cml/models/dynamics/state_overrides/traj_model/include/traj_model_base.hh"
+
+##include "../../include/shadow_trajectory.hh"
+
+
+class VehicleSimObject : public Trick::SimObject {
+ protected:
+  jeod::DynManager & dyn_manager;
+ public:
+  jeod::DynBody           parent;
+  jeod::DynBody           child;
+  jeod::MassBodyInit      mass_init[2];
+  jeod::BodyAttachMatrix  attach;
+  jeod::BodyDetach        detach;
+  SeparationState         child_wrt_parent;
+  SeparationState         shadow_wrt_parent;
+  SeparationState         shadow_wrt_child;
+  jeod::MassPointInit     mass_point[3];
+
+
+  StateInitialize         state_initialize;
+  TrajModel               traj;
+
+  ShadowTrajectory        shadow;
+
+  VehicleSimObject( const double & dyn_time,
+                    jeod::DynManager & dyn_mgr,
+                    const jeod::Planet & earth_p)
+    :
+    dyn_manager (dyn_mgr),
+    traj(dyn_time, earth_p, parent),
+    shadow(child, traj)
+  {
+    ("default_data")  default_config();
+
+    P_ENV ("initialization") child.initialize_model( dyn_manager);
+    P_ENV ("initialization") parent.initialize_model( dyn_manager);
+    P_ENV ("initialization") shadow.initialize( dyn_manager);
+
+    // - Add the mass point to the shadow-body; the dyn-manager will manage
+    //   the state of this point as a child of the shadow-body.
+    P_DYN ("initialization") shadow.body.add_mass_point( mass_point[2]);
+    ("initialization") shadow.initialize_integ();
+
+
+    // Now initialize the sep-states.
+    P_DYN ("initialization") child_wrt_parent.initialize( dyn_manager,
+                                                          parent,
+                                                          child,
+                                                          "parent_pt",
+                                                          "child_pt");
+    P_DYN ("initialization") shadow_wrt_parent.initialize( dyn_manager,
+                                                           parent,
+                                                           shadow.body,
+                                                           "parent_pt",
+                                                           "shadow_pt");
+    P_DYN ("initialization") shadow_wrt_child.initialize( dyn_manager,
+                                                          child,
+                                                          shadow.body,
+                                                          "child_pt",
+                                                          "shadow_pt");
+
+    ("initialization") traj.initialize();
+
+    (1.0, "environment") traj.update();
+    (1.0, "environment") shadow.update();
+    (1.0, "environment") child_wrt_parent.update();
+    (1.0, "environment") shadow_wrt_parent.update();
+    (1.0, "environment") shadow_wrt_child.update();
+
+
+  };
+
+  void default_config()
+  {
+    mass_init[0].points.push_back(&mass_point[0]);
+    mass_init[1].points.push_back(&mass_point[1]);
+    traj.subscribe();
+  }
+ private:
+  VehicleSimObject( const VehicleSimObject&);
+  VehicleSimObject & operator= ( const VehicleSimObject&);
+};
+
+VehicleSimObject vehicle(jeod_time.time_manager.dyn_time.seconds,
+                         dynamics.dyn_manager,
+                         earth.planet);
+
+
+IntegLoop sim_integ_loop (DYNAMICS) dynamics;
