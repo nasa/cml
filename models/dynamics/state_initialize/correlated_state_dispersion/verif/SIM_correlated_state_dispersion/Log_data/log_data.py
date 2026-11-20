@@ -23,3 +23,7 @@ def log_att():
 def log_prm():
   for ii in range(5) :
     dr_group.add_variable("verif.corr_state.prm_error[%d]" %ii)
+
+def log_sensor_error():
+  log_3vec( dr_group, "verif.corr_state.sensor_error_state_error")
+  log_3vec( dr_group, "verif.dispersed_sensor_error_state")
