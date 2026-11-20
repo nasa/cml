@@ -100,13 +100,15 @@ class EventUnitSimObject: public Trick::SimObject {
     EventTrigger<double> & trigger_act2 =
                      manager.create_trigger( trigger_var_action[2],
                                              0.0,
-                                             EventTriggerBase::Change);
+                                             EventTriggerBase::Change,
+                                             "");
                                              
     /**********************/
     EventTrigger<double> & trigger_act3 =
                      manager.create_trigger( "verif.trigger_var_action[2]",
                                              0.0,
-                                             EventTriggerBase::Change);
+                                             EventTriggerBase::Change,
+                                             "");
 
     // create and configure the events
     CompoundEvent & event = manager.create_event();

@@ -117,7 +117,7 @@ class CompoundEventsManager : public VehicleEventsManager
   EventTrigger<T>& create_trigger(const std::string& var_name,
                                   T ref,
                                   EventTriggerBase::TriggerCondition comparison,
-                                  const std::string & name = "")
+                                  const std::string & name)
   {
     T* var = address_from_name(var_name, ref);
     if (var != nullptr) {
@@ -134,7 +134,7 @@ class CompoundEventsManager : public VehicleEventsManager
   EventTrigger<T>& create_trigger(const std::string& var_name,
                                   T * ref,
                                   EventTriggerBase::TriggerCondition comparison,
-                                  const std::string & name = "")
+                                  const std::string & name)
    {
     T* var = address_from_name(var_name, *ref);
     if (var != nullptr) {
