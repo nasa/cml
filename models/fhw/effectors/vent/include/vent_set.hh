@@ -16,10 +16,11 @@ PROGRAMMERS:
 #include <vector>
 #include <list>
 #include "jeod/models/dynamics/dyn_body/include/class_declarations.hh"
-#include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "simple_vent.hh"
+
+class DynamicMassBody;
 
 class VentSet : public SubscriptionBase {
  protected: // external references
