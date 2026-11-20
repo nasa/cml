@@ -1,0 +1,12 @@
+sys.exec.out.time {s},two_level_vent_model_obj.two_level_vent_set2.force[0] {N},two_level_vent_model_obj.two_level_vent_set2.force[1] {N},two_level_vent_model_obj.two_level_vent_set2.force[2] {N},two_level_vent_model_obj.two_level_vent_set2.torque[0] {N*m},two_level_vent_model_obj.two_level_vent_set2.torque[1] {N*m},two_level_vent_model_obj.two_level_vent_set2.torque[2] {N*m}
+                   0,                1200,                   0,                   0,                   0,                   0,                   0
+                   1,                1200,                   0,                   0,                   0,                   0,                   0
+                   2,                 600,                   0,                   0,                   0,                   0,                   0
+                   3,                 600,                   0,                   0,                   0,                   0,                   0
+                   4,                 600,                   0,                   0,                   0,                   0,                   0
+                   5,                1200,                   0,                   0,                   0,                   0,                   0
+                   6,                1200,                   0,                   0,                   0,                   0,                   0
+                   7,                 600,                   0,                   0,                   0,                   0,                   0
+                   8,                 600,                   0,                   0,                   0,                   0,                   0
+                   9,                 600,                   0,                   0,                   0,                   0,                   0
+                  10,                1200,                   0,                   0,                   0,                   0,                   0
