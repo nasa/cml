@@ -1,0 +1,12 @@
+sys.exec.out.time {s},two_level_vent_model_obj.vent2.high_venting {--},two_level_vent_model_obj.vent2.force_mag {N},two_level_vent_model_obj.vent2.high_duration {s},two_level_vent_model_obj.vent2.high_wait_time {s},two_level_vent_model_obj.vent2.sched_onTime {s},two_level_vent_model_obj.vent2.dv_mag {m/s},two_level_vent_model_obj.vent2.start_time_high {s}
+                   0,1,                 300,                   2,                   5,                   5,                   6,                   0
+                   1,1,                 300,                   2,                   5,                   5,                   6,                   0
+                   2,0,                 100,                   2,                   5,                   5,                   6,                   0
+                   3,0,                 100,                   2,                   5,                   5,                   6,                   0
+                   4,0,                 100,                   2,                   5,                   5,                   6,                   0
+                   5,1,                 300,                   2,                   5,                  10,                   6,                   5
+                   6,1,                 300,                   2,                   5,                  10,                   6,                   5
+                   7,0,                 100,                   2,                   5,                  10,                   6,                   5
+                   8,0,                 100,                   2,                   5,                  10,                   6,                   5
+                   9,0,                 100,                   2,                   5,                  10,                   6,                   5
+                  10,1,                 300,                   2,                   5,                  15,                   6,                  10

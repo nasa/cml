@@ -1,0 +1,66 @@
+/**************************** Trick Header ************************************
+PURPOSE:
+    (Two-Level Vent Verif Sim)
+******************************************************************************/
+#include "default_priority_settings.sm"
+#define DYNAMICS 1.0
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+#include "time_dyntime_only.sm"
+
+//////////////////////////////////////////////////////////////
+// Two-Level Vent Object
+//////////////////////////////////////////////////////////////
+
+// JEOD
+##include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
+##include "dynamics/body_action/include/mass_body_init.hh"
+
+// CML
+##include "cml/models/fhw/effectors/two_level_vent/include/two_level_vent.hh"
+##include "cml/models/fhw/effectors/two_level_vent/include/two_level_vent_set.hh"
+
+
+class TwoLevelVentModelSimObject : public Trick::SimObject {
+
+public:
+    // Vehicle Data
+    jeod::DynBody vehicle_body;
+
+    // Custom number of vents
+    size_t num_vents = 6;
+
+    // Vehicle Mass Bodies
+    jeod::MassBodyInit mass_init;
+
+    // Model to Test
+    TwoLevelVentSet two_level_vent_set1;
+    TwoLevelVentSet two_level_vent_set2;
+
+    TwoLevelVent vent1;
+    TwoLevelVent vent2;
+    SimpleVent vent3;
+    // Constructor
+    TwoLevelVentModelSimObject(const double& dyn_time)
+    :
+        two_level_vent_set1(vehicle_body, dyn_time),
+        two_level_vent_set2(num_vents, vehicle_body, dyn_time),
+        vent1(dyn_time, two_level_vent_set1),
+        vent2(dyn_time, two_level_vent_set1),
+        vent3(dyn_time) {
+    
+        // Initialize the Two-Level Vent Model
+        P_DYN("initialization") two_level_vent_set1.initialize();
+        P_DYN("initialization") two_level_vent_set2.initialize();
+        // Update the Two-Level Vent Model at the Dynamics Update Rate
+        (DYNAMICS, "scheduled") two_level_vent_set1.update();
+        (DYNAMICS, "scheduled") two_level_vent_set2.update();
+    }
+
+private:
+    TwoLevelVentModelSimObject (const TwoLevelVentModelSimObject&);
+    TwoLevelVentModelSimObject & operator = (const TwoLevelVentModelSimObject&);
+} ;
+
+TwoLevelVentModelSimObject two_level_vent_model_obj(jeod_time.time_manager.dyn_time.seconds);
+

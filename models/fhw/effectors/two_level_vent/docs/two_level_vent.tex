@@ -1,0 +1,946 @@
+\documentclass[11pt,fleqn]{report}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{enumitem}
+\usepackage{makecell}
+\usepackage{comment}
+\usepackage{float}
+\usepackage{pdflscape}
+\usepackage{adjustbox}
+\usepackage{ragged2e}
+% \usepackage{tabularray}
+\usepackage[skins]{tcolorbox}
+\usepackage{lmodern}
+\usepackage{cml}
+
+\lstnewenvironment{codeXML}
+    {\lstset{basicstyle=\small\ttfamily,
+             language=XML,
+             xleftmargin=0.0in,
+             xrightmargin=0.0in,
+             backgroundcolor=\color{Orchid!60}, % 60% orchid, 40% white
+             escapeinside={\%*}{*)}, %  .tex file characters inside %*...*) are
+                                     %  treated as Tex commands.
+            }
+    }
+    { }
+
+\newcommand{\ModelName}{CML Two-Level Vent}
+\newcommand{\ModelAuthor}{Suyog Benegalrao \& Alexandre Masset}
+\newcommand{\ModelAffiliation}{NASA}
+\newcommand{\ModelDate}{September 2025}
+\pagestyle{plain}
+\usepackage[parfill]{parskip}
+\usepackage[margin=1.5cm]{caption}
+\usepackage{subfig}
+
+\setlist[enumerate, 1]{label=\arabic*., ref=\arabic*}
+\setlist[enumerate, 2]{label=\arabic{enumi}.\arabic*., 
+                       ref=\arabic{enumi}.\arabic*}
+\setlist[enumerate, 3]{label=\arabic{enumi}.\arabic{enumii}.\arabic*., 
+                       ref=\arabic{enumi}.\arabic{enumii}.\arabic*}
+
+\begin{document}
+\pagestyle{empty}
+\titlePage
+\pagenumbering{roman}
+\tableofcontents % Print table of contents
+\vfill
+\pagebreak
+{\Large \textbf {Revision History}}
+{\large
+\begin{center}
+\begin{tabular}{|l||l|l|l|}
+\hline
+ \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Purpose} \\ \hline \hline
+1 & Sep 2025 & Suyog Benegalrao \& Alexandre Masset & Initial Version \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\chapter{Introduction} % Make a "chapter" heading
+\pagenumbering{arabic} % Start text with arabic 1
+\noindent 
+This model is an extension of the CML Vent model, with the specific purpose to model venting events
+of a candidate vehicle. Indeed, this model was built to answer RPOD requirements but can be used for any
+vehicle if the user finds the proposed behavior appropriate for their application.
+
+More specifically, this model proposes :
+\begin{itemize}
+    \item A SimpleVent class extension with two venting modes: Low and High.
+    \item Parameters for appropriate Monte Carlo simulation setup
+    \item A VentSet class extension to manage these venting modes
+\end{itemize}
+
+The following documentation assumes that the user is familiar with the parent CML Vent model and shall
+refer to its documentation if needed as this model explicitly overrides and uses the parent's methods.
+
+\chapter{Requirements}
+\noindent The requirements for the two-level venting model are:
+
+\begin{enumerate}[noitemsep]
+    \item At the model-level, the CML Two-Level Vent model shall:
+    \begin{enumerate}
+        \item meet the CML Vent parent model requirements.
+        \item provide implementation of individual two-level vents and systems of two-level vents.
+        \item provision each two-level vent with a set of boolean flags providing:
+        \begin{enumerate}
+            \item a user-interface for configuring and verifying the configuration and operation of the two-level vent.
+            \item an information-only indication whether the two-level vent is operating in low mode or high mode.
+        \end{enumerate}
+        \item provide appropriate feedback and error-catching when configurations are incorrect
+    \end{enumerate}
+    \item A two-level vent-set shall:
+    \begin{enumerate}
+        \item be associated with a vehicle
+        \item be associated with a number of vents
+        \item provide access to the two-level vent instances it controls
+        \item handle start/stop of the vents it controls
+        \item strictly contain TwoLevelVent instances
+    \end{enumerate}
+        \item A two-level vent shall:
+        \begin{enumerate}
+            \item be associated with a single two-level vent-set
+            \item be configured as dynamic to ensure integration of forces on the vehicle body over time
+            \item have a low venting mode, enforcing a user-defined minimum acceleration
+            \item have a high venting mode, enforcing a delta-V based on user-defined acceleration and high-mode event durations
+            \item automate transition from a venting mode to another 
+            \item transition to a low-mode when:
+            \begin{enumerate}
+                \item the current high-mode firing duration is reached
+                \item the user-defined maximum delta-V value is reached for protection
+                \item the vent stops venting
+                \item the vent is reset
+                \item the vent is disabled
+                \item the two-level vent-set is deactivated through unsubscribtion
+                \item the high-mode duration is undefined or zero
+            \end{enumerate}
+            \item transition to a high-mode when:
+            \begin{enumerate}
+                \item the two-level vent starts venting.
+                \item the current high-mode wait time (period) is reached
+            \end{enumerate}
+            \item be configurable with parameters describing:
+            \begin{enumerate}
+                \item the period between the start of high mode events
+                \item the duration of high mode venting events
+                \item the minimum acceleration to use in low-venting mode
+                \item the maximum delta-V the vehicle cannot exceed in one integration step during high-venting mode
+                \item the acceleration applied to the vehicle during a high-venting event
+            \end{enumerate}
+            \item provide a set of parameters for Monte Carlo simulations such as:
+            \begin{enumerate}
+                \item minimum and maximum wait time between start of high-mode venting events
+                \item minimum and maximum duration of high-mode venting events
+            \end{enumerate}
+            \item provide flags to enable/disable randomization of the MC parameters
+            \item provide an interface to reset scheduled high-mode events and transition to a low venting mode in a single event
+        \end{enumerate}
+\end{enumerate}
+
+% \makecell{Two\_Level\_Venting\_Model-0001 \\ Vent Number} &
+% \underline{Requirement}: The Two-Level Venting Model shall model multiple, independent active venting disturbance effects. \newline
+% \underline{Rationale}: Two-Level Vents can potentially produce periodic venting effects due to various effects. This will perturb the vehicle's dynamic behavior by applying a disturbance acceleration. The number and cadence of these active venting events is unknown, so the Two-Level Venting Model will include a configurable static value representing the maximum number of vents, and each vent active disturbance is modeled independently such that multiple, independent vent active disturbances can occur at any cadence. \\
+
+% \makecell{Two\_Level\_Venting\_Model-0002 \\ Active Venting Disturbance Direction} &
+% \underline{Requirement}: The Two-Level Venting Model shall prescribe a configurable, constant unit vector representing the direction of the perturbation caused by each independent active venting disturbance. \newline
+% \underline{Rationale}: When an active venting event occurs in the Two-Level Venting Model, the direction of the disturbance acceleration will be defined as a constant unit vector for each independent vent.  The unit vector origin (tail) will be placed at the Two-Level center-of-gravity.   \\
+
+% \makecell{Two\_Level\_Venting\_Model-0003 \\ Active Venting Disturbance Acceleration Magnitude} &
+% \underline{Requirement}: The Two-Level Venting Model shall include a configurable, constant parameter representing the acceleration magnitude of the perturbation caused by each independent active venting disturbance. \newline
+% \underline{Rationale}: When an active venting event occurs in the Two-Level Venting Model, the magnitude of the disturbance will be defined by a constant parameter for each independent vent.  The acceleration disturbance vector is calculated by multiplying the acceleration magnitude by the pre-defined unit vector. \\
+
+% \makecell{Two\_Level\_Venting\_Model-0004 \\ Active Venting Disturbance Duration} &
+% \underline{Requirement}: The Two-Level Venting Model shall model the disturbance duration for each active venting event independently such that it is either randomly sampled from a range of configurable maximum and minimum duration values or set to a pre-defined configurable fixed value. \newline
+% \underline{Rationale}: For each active venting event, the disturbance duration is either randomized or fixed.  The resultant Delta-V effect is achieved through simulation integration. \\
+
+% \makecell{Two\_Level\_Venting\_Model-0005 \\ Active Venting Disturbance Period} &
+% \underline{Requirement}: The Two-Level Venting Model shall institute a given wait-time between each independent active venting disturbance event that is either randomly sampled from a range of configurable maximum and minimum wait-time values or set to a fixed value. \newline
+% \underline{Rationale}: For each active venting event, the next active venting event is scheduled such that it occurs at a either a randomly sampled time or a fixed value. The wait-time / period is defined as the time between the start times of corresponding active venting events. \\
+
+
+\chapter{Model Architecture}
+\noindent Most of the model architecture is inherited from the Common Model Libraries (CML) VentSet
+and SimpleVent. This section covers the members and functions that are unique to the Two-Level Vent model.
+
+\section{TwoLevelVent Class}
+\subsection{TwoLevelVent Class Members}
+\noindent The tables below contain the members for the TwoLevelVent class. This class inherits from the 
+SimpleVent class.
+
+\begin{table}[!h]
+    \caption{TwoLevelVent members for Monte Carlo setup}
+    \begin{tabularx}{\textwidth}{|c|c|X|X|} 
+    \hline
+    \textbf{Access} & \textbf{Type} & \textbf{Name} & \textbf{Purpose} \\
+    \hline
+    public & double & wait\_time\_min & Minimum wait time between start of high mode firings \\
+    \hline
+    public & double & wait\_time\_max & Maximum wait time between start of high mode firings \\
+    \hline
+    public & double & high\_duration\_min & Minimum duration of high mode firings \\
+    \hline
+    public & double & high\_duration\_max & Maximum duration of high mode firings \\
+    \hline
+    public & bool & wait\_time\_randFlag & Flag where TRUE randomizes at each update the wait time between
+                                        the specified min and max values \\
+    \hline
+    public & bool & high\_duration\_randFlag & Flag where TRUE randomizes at each update the duration between
+                                        the specified min and max values \\
+    \hline
+    \end{tabularx}
+\end{table}
+
+\begin{table}[!h]
+    \caption{Other TwoLevelVent members}
+    \begin{tabularx}{\textwidth}{|c|c|X|X|} 
+    \hline
+    \textbf{Access} & \textbf{Type} & \textbf{Name} & \textbf{Purpose} \\
+    \hline
+    public & double & accel\_mag\_high & Magnitude of high mode firing acceleration \\
+    \hline
+    public & double & accel\_mag\_low & Magnitude of low mode firing acceleration \\
+    \hline
+    public & double & high\_duration & Duration of high mode firings. Updated if high\_duration\_randFlag is TRUE \\
+    \hline
+    public & double & high\_wait\_time & Wait time of high mode firings. Updated if wait\_time\_randFlag is TRUE \\
+    \hline
+    public & double & dv\_max & Maximum delta-V allowed for each high mode firing \\
+    \hline
+    public & TwoLevelVentReset & action\_reset & Event-action instance to reset vent configuration to low-mode on call \\
+    \hline
+    protected & const double \& & vehicle\_mass & (kg) Reference to vehicle mass \\
+    \hline
+    protected & std::mt19937 \& & gen & Reference to random number generator \\
+    \hline
+    protected & double & dv\_mag & Logged delta-V for each high mode firing \\
+    \hline
+    protected & double & sched\_onTime & Logged boolean whether the vent is working in high mode (1) or low-mode(0) \\
+    \hline
+    protected & bool & high\_venting & Logged scheduled time at which a high mode firing shall start \\
+    \hline
+    protected & double & start\_time\_high & Time when the current high mode firing started. \\
+    \hline
+    \end{tabularx}
+\end{table}
+
+
+\subsection{TwoLevelVent Class Methods}
+
+\noindent The table below contains the methods for the TwoLevelVent Class.
+
+\begin{table}[!h]
+    \begin{tabularx}{\textwidth}{|c|c|X|c|X|} \hline
+    \textbf{Access} & \textbf{Return Type} & \textbf{Name} & \textbf{Arguments} & \textbf{Purpose} \\
+    \hline
+    protected & void & check\_configuration & void & Override of SimpleVent method to check if configuration is correct with additional checks.  \\
+    \hline
+    protected & void & reset & void & Resets the two-level vent into a low-mode configuration, resetting the current sched\_onTime value to zero. \\
+    \hline
+    protected & void & stop\_venting & void & Override method that stops the vent and resets it  \\
+    \hline
+    protected & void & update\_force & void & Override method to compute vent force and switch between high and low mode if conditions are met.  \\
+    \hline
+    protected & void & high\_venting\_mode & void & Configures the vent in a high mode  \\
+    \hline
+    protected & void & low\_venting\_ode & void & Configures the vent in a low mode  \\
+    \hline
+    \end{tabularx}
+\end{table}
+
+This model also has a TwoLevelVentReset class, which is an extension of the CML EventAction class. 
+More details about its use are provided in the next sections.
+
+\section{TwoLevelVentSet Class}
+\subsection{TwoLevelVentSet Class Members}
+\noindent The table below contains the members for the TwoLevelVentSet class.  This class inherits from the VentSet class in CML.
+
+\begin{table}[!h]
+    \caption{TwoLevelVentSet members}
+    \begin{tabularx}{\textwidth}{|c|c|X|X|} \hline
+    \textbf{Access} & \textbf{Type} & \textbf{Name} & \textbf{Purpose} \\
+    \hline
+    public & int & rand\_seed & Random seed used for vent duration and wait time randomization \\
+    \hline
+    protected & const double\& & vehicle\_mass & Reference to vehicle mass (kg) \\
+    \hline
+    protected & std::mt19937 & gen & Random number generator for vent duration and wait time randomization \\
+    \hline
+    \end{tabularx}
+\end{table}
+
+\subsection{TwoLevelVentSet Class Methods}
+\noindent The table below contains the methods for the TwoLevelVent Class.
+
+\begin{table}[!h]
+    \caption{TwoLevelVentSet Class Methods}
+    \begin{tabularx}{\textwidth}{|c|c|X|c|X|} \hline
+    \textbf{Access} & \textbf{Return Type} & \textbf{Name} & \textbf{Arguments} & \textbf{Purpose} \\
+    \hline
+    public & void & initialize & void & Initializes the vents and runs sanity checks on inputs  \\
+    \hline
+    public & TwoLevelVent * & get\_two\_level\_vent & size\_t ii & Returns pointer to the two-level vent stored at index ii  \\
+    \hline
+    protected & void & deactivate & void & Override method to deactivate the vent set. Called when unsubscribed. This override 
+    resets all the vents to low mode so that they can start again in high mode when re-activated.\\
+    \hline
+    \end{tabularx}
+\end{table}
+
+\section{Mathematical Formulation}
+
+\noindent This section will not detail how the vents compute forces. The user shall refer to the CML Vent documentation 
+for more details. Instead, this section is used to explain how the two-level vent differs from its CML parent. 
+
+\noindent A two-level vent has two venting mode, low and high.
+\begin{itemize}
+    \item The "low" mode corresponds to the minimum acceleration disturbance whose magnitude is flowed down from the Candidate 
+    Vehicle Delta-V requirements.
+    \item The "high" mode corresponds to the periodic increases in force that are meant to represent actual on-orbit venting 
+    instances.
+\end{itemize}
+
+Note that in either mode, the vent is actively venting, setting its \emph{venting} parameter to true. Therefore, the \emph{duration}
+parameter is set zero and the flag \emph{infinite\_duration} to true. A high venting mode shall be used when a delta-V requirement 
+exists.
+
+\noindent By default, a two-level vent is in low-mode, checking whether it shall transition to a high mode or not. The two-level vent
+is meant to be dynamic, hence producing a force that is collected by the vent set. The magnitude of this force is determined by
+the current vent mode.
+
+\begin{tcolorbox}[colback=lightgray, boxrule=0pt, sharp corners]
+\textbf{NOTE:} If a user specifies a venting duration, the two-level vent will interrupt any venting events
+    when the duration is reached. 
+\end{tcolorbox}
+
+\begin{figure}[!h]
+\begin{center}
+\includegraphics[scale=0.5]{Images/example.png}
+\caption{Example of expected behavior and parameterization}
+\label{fig:example.png}
+\end{center}
+\end{figure}
+
+\chapter{User's Guide}
+\section{Instantiation and Population}
+
+Just like its CML parent, two-level vents are meant to be controlled by a vent set. Although it is possible to populate multiple VentSets
+with the same vent, TwoLevelVent instances are added at construction to a single vent set and should not be manually added to 
+another vent set. Note that this model has its own override to the \emph{add\_vent()} method, set to protected here for that purpose.
+
+\noindent A two-level vent instance requires dynamic time and the reference to the vent set it is added to in order to be initialized.
+A TwoLevelVentSet instance requires a dynamic body reference and the dynamic time as well. An example is provided below.
+
+\begin{codeC}
+##include "cml/models/fhw/effectors/two_level_vent/include/two_level_vent.hh"
+##include "cml/models/fhw/effectors/two_level_vent/include/two_level_vent_set.hh"
+...
+DynBody vehicle_body;
+MassBodyInit mass_init;
+TwoLevelVentSet vent_set(vehicle_body, dyn_time);	
+TwoLevelVent two_level_vent(dyn_time, vent_set);	
+\end{codeC}
+
+There are two ways to create and populate a TwoLevelVentSet instance through two different constructors:
+\begin{itemize}
+    \item Creating independent TwoLevelVent instances that will be added at construction to the specified vent set.
+    \item Specifying at construction the number of two-level vents to add to the vent set
+\end{itemize}
+
+The first method is presented above. The second method is done through:
+
+\begin{codeC}
+    size_t num_vents = 5;
+    TwoLevelVentSet vent_set(num_vents, vehicle_body, dyn_time);	
+\end{codeC}
+
+\section{Configuring Vents}
+
+If the vents are declared and instantiated outside of the TwoLevelVentSet, a user can directly modify their public parameters:
+
+\begin{codeC}
+    vent1.high_duration = 10.0;
+\end{codeC}
+
+An astute reader will notice that the constructors available are similar to those of CML VentSet class. However, it is important to note 
+that the two-level vents created in the second method won't be accessible for logging as Trick cannot log STL-vectors. In this case, any vent 
+configuration shall be done using the \emph{get\_two\_level\_vent(size\_t ii)} method:
+
+\begin{codeC}
+    two_level_vent.get_two_level_vent(0).high_duration = 10.0;
+\end{codeC}
+
+This also works in a Python input file. Note that the CML VentSet class also has a \emph{get\_vent(size\_t ii)} method. The main 
+difference is that the latter return a SimpleVent pointer that does not have access to the TwoLevelVent parameters.
+
+\begin{tcolorbox}[colback=lightgray, boxrule=0pt, sharp corners]
+\textbf{NOTE:} The two-level vents are meant to be dynamic. The user shall not use the CML Vent methods to set the vents in an 
+impulse mode. This would result in unexpected/undesired resuts.
+\end{tcolorbox}
+
+\subsection{Randomization}
+The TwoLevelVent model provides the option to randomize the high mode venting firings duration and period. To do so, the user must set 
+the following flag to true:
+
+\begin{codeC}
+    two_level_vent.get_two_level_vent(0).high_duration_randFlag = true;
+    two_level_vent.get_two_level_vent(0).wait_time_randFLag = true;
+\end{codeC}
+
+\subsection{Event-action \& Reset}
+\noindent It can be desired to reset (return to low mode and set \emph{sched\_onTime} to zero) a given vent during a run. 
+The model has an event-action child class named TwoLevelVentReset that can be used for that purpose.
+It is recommended to be familiar with the CML EventManager model. 
+
+\noindent This event-action is to be added to the desired WatchValue that will trigger the TwoLevelVent \emph{reset()} method 
+when its condition is met.
+
+\noindent The event-action is stored in each two-level vent instance as the parameter \emph{action\_reset}. 
+The latter must be added to the watch value.
+
+\begin{codeC}
+    WatchValuesBase<double> watch_value;
+    watch_value.add_action(vent.action_reset)
+\end{codeC}
+
+\section{Initialization}
+\noindent Each two-level vent initialization is handled through the two-level vent set instance. Therefore, it is only required to
+run the following method to initialize all the vents added to the vent set.
+
+\begin{codeC}
+P_DYN("initialization") two_level_vent_set.initialize();	
+\end{codeC}
+
+\section{Execution}
+\noindent Each two-level vent update is handled through the two-level vent set instance. Therefore, it is only required to run the 
+following method to update all the vents added to the vent set.
+\begin{codeC}
+(DYNAMICS,"scheduled") two_level_vent_set.update();	
+\end{codeC}
+
+\section{Start/Stop}
+\noindent There exists multiple options to start and stop vents. Some of them are already presented in the CML Vent model 
+documentation but will be provided here for clarity.
+
+\noindent The vent set manages all the vents, which should not be stopped/started manually through their own methods.
+The vent set class has its own method for this purpose.
+
+\noindent To start and stop all the vents, the user can call:
+\begin{codeC}
+    two_level_vent_set.start_vents();
+    two_level_vent_set.stop_vents();
+\end{codeC}
+
+\begin{tcolorbox}[colback=lightgray, boxrule=0pt, sharp corners]
+\textbf{NOTE:} These methods are defined in the CML VentSet class and call \emph{start\_venting(), stop\_venting()} methods
+defined in the CML SimpleVent class. Only the latter has been overriden to reset the vent at the same time, guaranteeing that 
+it starts again in a high mode when called if possible. Therefore, \emph{stop\_vents()} will call the TwoLevelVent override.
+\end{tcolorbox}
+
+\noindent To start and stop a single vent, the user can also specify an index and call:
+\begin{codeC}
+    two_level_vent_set.start_vent(0);
+    two_level_vent_set.stop_vent(0);
+\end{codeC}
+
+\begin{tcolorbox}[colback=lightgray, boxrule=0pt, sharp corners]
+\textbf{NOTE:} Same comment as above
+\end{tcolorbox}
+
+\noindent To start and stop a single vent, the user can also manually deactivate it:
+\begin{codeC}
+    two_level_vent_set.get_two_level_vent(0).active = false;
+    two_level_vent_set.get_two_level_vent(0).active = true;
+    two_level_vent_set.start_vent(0);
+\end{codeC}
+
+\begin{tcolorbox}[colback=lightgray, boxrule=0pt, sharp corners]
+\textbf{NOTE:} This method is not recommended. The reason is that setting the TwoLevelVent \emph{active} parameter to false 
+and back to true does not restart the vent on its own. It is required to call \emph{start\_vent(0)} method to do so. 
+\end{tcolorbox}
+
+\section{Notes on logging}
+This section aims at removing confusion that arises when logging vent parameters through different tools. \\
+
+First, note that Trick logging does not exactly match the sim dynamic time. Logging happens at the end of every Trick frame window
+which has in the middle of it dynamic time incrementation. This means that the Trick frame $t=t_{frame}$  starts when the dynamic time 
+$t=t_{frame} - \delta t_{step}$ is still on.
+
+If using \emph{start\_vents()} method with \emph{trick.add\_read( i, ...)}, the update is actually applied at $t=t_{frame} - \delta t_{step}$.
+This can result in shorter venting than expected since the stop time will be $t = t_{frame} - \delta t_{step} + t_{duration}$. However, the 
+higher rate the sim uses, the smaller the error is, becoming totally negligible at 200Hz (most likely to be used for vents). 
+Note that this issue is true for any type of vents currently implemented. \\
+
+A second "issue" can arise from the logging tool used. One can see in the Verification part that when the vent duration is set to 2 seconds,
+and the logging rate to 1Hz, there are two data points that will show high venting mode on. Koviz (and most plotting tools) will interpolate 
+between the two data points before and after the vent switches to low mode. This results in a confusing interpretation that the venting is 
+switching to low mode between those steps, resulting in a shorter high mode (or longer low mode). However, this is a plotting issue rather than a 
+missed integration step. This flag is not updated before the next integration step is reached. Again, note that with higher logging rates, this
+becomes invisible on a plot.
+
+
+\chapter{Verification}
+
+\section{Code Coverage}
+
+\begin{figure}[!h]
+\begin{center}
+\includegraphics[scale=0.5]{Images/code_coverage.png}
+\caption{Code Coverage}
+\label{fig:code_coverage.png}
+\end{center}
+\end{figure}
+
+\section{Exceptions}
+
+\begin{itemize}
+    \item In two\_level\_vent.cc, \emph{stop\_venting()}, line 131: Simple override. \emph{reset()} is tested elsewhere.
+    \emph{SimpleVent::stop\_venting()} verified in CML Vent. \\
+    \begin{minipage}[t]{\linewidth}
+          \raggedright
+          \adjustbox{valign=t}{%
+            \includegraphics[scale=0.5]{Images/exception_1.png}
+          }
+            \captionof{figure}{two\_level\_vent\_set.cc : line 81}
+          \medskip
+    \end{minipage}
+
+    \item In two\_level\_vent\_set.cc, \emph{deactivate()}, line 61: override method: methods already tested in CML Vent. \\
+    \begin{minipage}[t]{\linewidth}
+          \raggedright
+          \adjustbox{valign=t}{%
+            \includegraphics[scale=0.5]{Images/exception_2.png}
+          }
+            \captionof{figure}{two\_level\_vent\_set.cc : line 104}
+          \medskip
+    \end{minipage}
+
+    \item In \emph{initialize()}, line 91: if the vehicle mass is zero, returns an error. Manually tested. \\
+    \begin{minipage}[t]{\linewidth}
+          \raggedright
+          \adjustbox{valign=t}{%
+            \includegraphics[scale=0.5]{Images/exception_3.png}
+          }
+            \captionof{figure}{two\_level\_vent\_set.cc : line 119}
+          \medskip
+    \end{minipage}
+\end{itemize}
+
+\newpage
+\section{Unit Test Inventory}
+RUN\_01\_nominal
+
+RUN\_02\_fixedDur
+
+RUN\_03\_fixedWaitTime
+
+RUN\_04\_reset\_event\_action
+
+ERROR\_rand\_config
+
+ERROR\_rand\_duration
+
+ERROR\_rand\_wait\_time
+
+ERROR\_time\_config
+
+WARN\_01\_dur
+
+WARN\_02\_wait\_time
+
+WARN\_03\_maxDV
+
+FAIL\_invalid\_index
+
+
+\newpage
+\section{Default Unit Test Setup}
+
+\noindent The table below contains the default parameter settings for the unit test campaign of the two-level venting model.
+A single vehicle body is added at the zero position. \\
+
+We define two vent sets with the following properties:
+
+\subsubsection{VentSet1}
+VentSet1 contains two TwoLevelVents: Vent1 and Vent2.
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|} \hline
+    \textbf{Parameter Name} & \textbf{Parameter Setting} & \textbf{Units} \\
+    \hline
+    composite\_properties.mass & 100.0 & kg \\
+    \hline
+    vent1.accel\_mag\_high & 2.0 & m/s$^{2}$ \\
+    \hline
+    vent1.accel\_mag\_low & 1.0 & m/s$^{2}$ \\
+    \hline
+    vent1.high\_duration\_randFlag & TRUE & bool \\
+    \hline
+    vent1.high\_duration & 2.0 & s \\
+    \hline
+    vent1.wait\_time\_randFlag & TRUE & bool \\
+    \hline
+    vent1.high\_wait\_time & 5.0 & s \\
+    \hline
+    vent1.dv\_max & 4.0 & m/s \\
+    \hline
+    vent2.accel\_mag\_high & 3.0 & m/s$^{2}$ \\
+    \hline
+    vent2.accel\_mag\_low & 1.0 & m/s$^{2}$ \\
+    \hline
+    vent2.high\_duration\_randFlag & FALSE & bool \\
+    \hline
+    vent2.high\_duration & 2.0 & s \\
+    \hline
+    vent2.wait\_time\_randFlag & FALSE & bool \\
+    \hline
+    vent2.high\_wait\_time & 5.0 & s \\
+    \hline
+    vent2.dv\_max & 6.0 & m/s \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{VentSet2}
+The second vent set contains 6 TwoLevelVents built with the integrated constructor that all share the same properties as Vent1.
+
+\newpage
+\subsection{Nominal}
+\textbf{RUN\_01\_nominal}
+
+\noindent This test verifies all the main features of the two-level venting model. We randomize the two time parameters
+ \emph{high\_duration} and \emph{wait\_time\_high} of Vent1. while keeping Vent2's constant. VentSet2 has six vents with
+ non-randomized time parameters.
+
+\subsubsection{Results}
+This tests emphasizes that:
+\begin{itemize} 
+    \item the two separate vents Vent1 and Vent2 each produces high mode venting disturbances with unique durations and periods
+    \item the behavior for each vent is independent of all the other vents
+    \item the commanded duration adheres to the pre-defined minimum and maximum limits
+    \item the magnitude of the venting force switches between a minimum and maximum value depending on whether it is in a high or low state
+    \item the commanded wait time adheres to the pre-defined minimum and maximum limits
+    \item the forces generated and collected are as expected
+\end{itemize}
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Time (s)} & \textbf{Force[0] (N)} & \textbf{Force[1]} & \textbf{Force[2]} & \textbf{Torque[0](N.m)} & \textbf{Torque[1]} & \textbf{Torque[2]}\\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{Images/RUN_01_verif_set1.png}
+\caption{Raw data for RUN\_01\_nominal - VentSet1}
+\label{fig:RUN_01_verif_set1}
+\end{center}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Time (s)} & \textbf{Force[0] (N)} & \textbf{Force[1]} & \textbf{Force[2]} & \textbf{Torque[0](N.m)} & \textbf{Torque[1]} & \textbf{Torque[2]}\\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{Images/RUN_01_verif_set2.png}
+\caption{Raw data for RUN\_01\_nominal - VentSet2}
+\label{fig:RUN_01_verif_set2}
+\end{center}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Time (s)} & \textbf{High venting} & \textbf{Force Mag (N)} & \textbf{High duration (s)} & \textbf{Wait time (s)} & \textbf{sched\_onTime (s)} & \textbf{DV mag (m/s)} & \textbf{start time high (s)}\\
+    \hline
+    \end{tabular}
+    }
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{Images/RUN_01_verif_vent1.png}
+\caption{Raw data for RUN\_01\_nominal - Vent1}
+\label{fig:RUN_01_verif_vent1}
+\end{center}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Time (s)} & \textbf{High venting} & \textbf{Force Mag (N)} & \textbf{High duration (s)} & \textbf{Wait time (s)} & \textbf{sched\_onTime (s)} & \textbf{DV mag (m/s)} & \textbf{start time high (s)}\\
+    \hline
+    \end{tabular}
+    }
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{Images/RUN_01_verif_vent2.png}
+\caption{Raw data for RUN\_01\_nominal - Vent2}
+\label{fig:RUN_01_verif_vent2}
+\end{center}
+\end{figure}
+
+
+
+
+\newpage
+\subsection{Fixed High Mode Duration}
+
+\noindent \textbf{RUN\_02\_fixedDur}
+
+\noindent This test sets a high mode duration to a fixed value and randomize the high mode wait time.
+The changes from the default parameter table are shown below:
+
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{|c|c|c|} \hline
+    \textbf{Parameter Name} & \textbf{Parameter Setting} & \textbf{Units}\\
+    \hline
+    wait\_time\_randFlag & TRUE & bool  \\
+    \hline
+    high\_duration & 2.0 & s  \\
+    \hline
+    wait\_time\_max & 5.0 & s  \\
+    \hline
+    wait\_time\_min & 3.0 & s  \\
+    \hline
+    dv\_max & 4.0 & m/s \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Results}
+We cannot predict the random value high duration will have. Therefore, we simply provide here the raw data
+that is simple enough to verify the model capabilities.
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Time (s)} & \textbf{high venting} & \textbf{high duration (s)} & \textbf{sched\_onTime (s) } \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.7]{Images/RUN_02_verif.png}
+\caption{Raw data for RUN\_02\_fixedDur}
+\label{fig:RUN_02_verif}
+\end{center}
+\end{figure}
+
+
+\newpage
+\subsection{Fixed High Mode Period}
+\noindent \textbf{RUN\_03\_fixedWaitTime}
+
+\noindent This test sets the high mode wait time to a fixed value while the duraiton is randomized. 
+The changes from the default parameter table are shown below:
+
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{|c|c|c|} \hline
+    \textbf{Parameter Name} & \textbf{Parameter Setting} & \textbf{Units}\\
+    \hline
+    high\_duration\_randFlag & TRUE & bool  \\
+    \hline
+    high\_wait\_time & 4.0 & s  \\
+    \hline
+    high\_duration\_max & 3.0 & s  \\
+    \hline
+    high\_duration\_min & 1.0 & s  \\
+    \hline
+    high\_wait\_time & 4.0 & s  \\
+    \hline
+    dv\_max & 6.0 & m/s \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Results}
+We cannot predict the random value high duration will have. Therefore, we simply provide here the raw data
+that is simple enough to verify the model capabilities.
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textbf{Time (s)} & \textbf{high venting} & \textbf{high duration (s)} & \textbf{DV mag (m/s)} & \textbf{sched\_onTime (s) } \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.7]{Images/RUN_03_verif.png}
+\caption{Raw data for RUN\_03\_fixedWaitTime}
+\label{fig:RUN_03_verif}
+\end{center}
+\end{figure}
+
+\newpage
+\subsection{Reset Event}
+\textbf{RUN\_04\_reset\_event\_action}
+
+\noindent This test verifies that the vent is correctly reset when the TwoLevelVentReset event-action
+\emph{specific\_execution()} method is called. Duration and wait time are not randomized.
+
+\subsubsection{Results}
+    the \emph{sched\_onTime} is set to a different value. The value is not zero (as one could expect) because
+    the value is logged at the end of every cycle, while the reset is done at the beginning. Therefore, the \emph{sched\_onTime}
+    is updated before being logged. This behavior is desired.
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textbf{Time (s)} & \textbf{sched\_onTime (s)} & \textbf{start time high (s)} & \textbf{high venting} & \textbf{Force mag (N)} \\
+    \hline
+    0.0 & 5.0 & 0.0 & 1 & 200.0\\
+    \hline
+    1.0 & 5.0 & 0.0 & 1 & 200.0\\
+    \hline
+    2.0 & 5.0 & 0.0 & 0 & 100.0\\
+    \hline
+    3.0 & 5.0 & 0.0 & 0 & 100.0\\
+    \hline
+    4.0 & 5.0 & 0.0 & 0 & 100.0\\
+    \hline
+    5.0 & 10.0 & 5.0 & 1 & 200.0\\
+    \hline
+    6.0 & 10.0 & 5.0 & 1 & 200.0\\
+    \hline
+    7.0 & 10.0 & 5.0 & 0 & 100.0\\
+    \hline
+    8.0 & 13.0 & 8.0 & 1 & 200.0\\
+    \hline
+    9.0 & 13.0 & 8.0 & 1 & 200.0\\
+    \hline
+    10.0 & 13.0 & 8.0 & 0 & 100.0\\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{Images/RUN_04_verif.png}
+\caption{Raw data for RUN\_04\_reset\_event\_action}
+\label{fig:RUN_04_verif}
+\end{center}
+\end{figure}
+
+\newpage
+\subsection{Errors}
+\textbf{ERROR\_rand\_config} \\
+\textbf{ERROR\_rand\_duration} \\
+\textbf{ERROR\_rand\_wait\_time} \\
+\textbf{ERROR\_time\_config} \\
+
+\noindent This section gathers runs that verify appropriate error messages are published when maximum high mode
+duration is larger than minimum wait time or minimum high mode duration is larger for:
+\begin{itemize}
+    \item both wait time and duration randomized
+    \item duration randomized only
+    \item wait time randomized only
+    \item no randomization
+\end{itemize}
+
+\subsection{Results}
+\noindent All these cases output the same error message. Figure \ref{fig:unit_test_error_1} show the published error message. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{Images/error_msg_1.png}
+\caption{Error Message for invalid time inputs}
+\label{fig:unit_test_error_1}
+\end{center}
+\end{figure}
+
+\newpage
+\subsection{Warnings}
+\textbf{WARN\_01\_dur} \\
+\textbf{WARN\_02\_wait\_time} \\
+\textbf{WARN\_03\_maxDV} \\
+
+\noindent This section gathers runs that verify appropriate warning messages are published when:
+\begin{itemize}
+    \item the maximum delta-V is reached, resetting the high mode duration to match maximum delta-V
+    \item minimum high mode wait time is larger than the maximum high mode wait time when randomizing wait time,
+        resetting the flag to False
+    \item minimum high mode duration is larger than the maximum high mode duration when randomizing high duration,
+        resetting the flag to False
+\end{itemize}
+
+\subsection{Results}
+\noindent Figures \ref{fig:unit_test_warn_1}, \ref{fig:unit_test_warn_2} and \ref{fig:unit_test_warn_3} show the published error message. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{Images/warn_msg_1.png}
+\caption{Error Message for invalid randomized duration inputs}
+\label{fig:unit_test_warn_1}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{Images/warn_msg_2.png}
+\caption{Error Message for invalid randomized wait time inputs}
+\label{fig:unit_test_warn_2}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{Images/warn_msg_3.png}
+\caption{Warning Message for maximum delta-V reached}
+\label{fig:unit_test_warn_3}
+\end{center}
+\end{figure}
+
+
+\newpage
+\subsection{Invalid Index Fail}
+
+\noindent This test verifies that the run fails if the user tries to get a TwoLevelVent pointer at an incorrect index (that matches a SimpleVent).
+
+\subsubsection{Results}
+Figure \ref{fig:unit_test_fail} shows that:
+
+\begin{itemize}
+    \item the run is correctly failed.
+\end{itemize}
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.3]{Images/fail.png}
+\caption{Fail for invalid index in getter method}
+\label{fig:unit_test_fail}
+\end{center}
+\end{figure}
+
+\chapter{Future Work}
+
+\noindent No future work.
+
+\end{document}
