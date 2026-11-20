@@ -63,8 +63,9 @@ class CorrelatedStateDispersion {
   };
 
   enum CorrelationOption{
-    CORRELATED_PV       = 0, /* Correlated pos and vel covariance 6x6  */
-    CORRELATED_PV_ATT   = 1  /* Correlated pos, vel, and att cov 9x9   */
+    CORRELATED_PV             = 0,  /* Correlated pos and vel covariance 6x6  */
+    CORRELATED_PV_ATT         = 1,  /* Correlated pos, vel, and att cov 9x9   */
+    CORRELATED_SENSOR_ERROR   = 2   /* Correlated Sensor Error cov 3x3   */
   };
 
   //  The rotational state is built as a rotation by some amount relative to a
@@ -265,6 +266,8 @@ class CorrelatedStateDispersion {
       attitude error produced from covariance in desired frame.*/
   double prm_error[5]{};/* (--)
       Target-relative state-parameter errors produced from covariance matrix. */
+  double sensor_error_state_error[3]{};/* (--)
+      sensor error state error produced from covariance in desired frame.*/
 
   double r_mag{0.0};       /* (m)   radius vector magnitude             */
   double declination{0.0}; /* (rad) declination of pos wrt inrtl        */
@@ -316,9 +319,11 @@ class CorrelatedStateDispersion {
   bool disperse_state( double position[3],
                        double velocity[3]);
   void disperse_state( double (&trans_mx)[3][3]);
+  bool disperse_state( double sensor_error_state[3]);
   void apply_translational_dispersions( double position[3],
                                         double velocity[3]);
   void apply_attitude_dispersions( double (&trans_mx)[3][3]);
+  void apply_sensor_dispersions( double sensor_error_state[3]);
 
  protected:
   bool initialize(); /* returns a flag indicating whether the model

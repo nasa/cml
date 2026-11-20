@@ -208,6 +208,24 @@ CorrelatedStateDispersion::disperse_state(
   generate_dispersions();
   apply_attitude_dispersions(trans_mx);
 }
+/*****************************************************************************
+disperse_state (1 arguments)
+Purpose:(
+ -  Generates the state dispersions.
+   -  If corr_option == CORRELATED_SENSOR_ERROR, generates sensor error dispersions
+
+Note:    NULL checks performed in apply_sensor_dispersions.
+*****************************************************************************/
+bool
+CorrelatedStateDispersion::disperse_state(
+     double sensor_error_state[3])
+{
+  if (!initialize()) { return false; }
+  dimension = 3;
+  generate_dispersions();
+  apply_sensor_dispersions(sensor_error_state);
+  return true;
+}
 
 /*****************************************************************************
 apply_translational_dispersions
@@ -325,6 +343,25 @@ CorrelatedStateDispersion::apply_attitude_dispersions(
     }
   }
 }
+/*****************************************************************************
+apply_sensor_dispersions
+Purpose:(Applies sensor error dispersions to sensor error state.)
+*****************************************************************************/
+void
+CorrelatedStateDispersion::apply_sensor_dispersions(
+     double sensor_error_state[3])
+{
+  if (sensor_error_state == nullptr) {
+    CMLMessage::error(
+      __FILE__,__LINE__,"Invalid input\n.",
+      "Input sensor_error_state vector passed in is NULL.\n"
+      "Aborting state dispersion.\n");
+    return;
+  }
+
+  jeod::Vector3::incr(sensor_error_state_error, sensor_error_state);
+
+}
 
 /*****************************************************************************
 initialize
@@ -399,7 +436,15 @@ CorrelatedStateDispersion::generate_dispersions()
   //     Cholesky decomposition, sqrt_covariance is a lower triangular matrix,
   //     so the elements above the diagonal do not have to be included in the
   //     multiplication.
-  if (dimension == 5) { // i.e. using parameter-set to disperse position-velocity
+  if (dimension == 3) { // Dispersion 3-axis sensor errors
+    for( unsigned int ii = 0; ii < 3; ii++) {
+      sensor_error_state_error[ii] = sqrt_covariance[ii][0] * random_vec[0];
+      for (unsigned int jj = 1; jj <= ii; jj++) {
+        sensor_error_state_error[ii] += sqrt_covariance[ii][jj] * random_vec[jj];
+      }
+    }
+  }
+  else if (dimension == 5) { // i.e. using parameter-set to disperse position-velocity
     for( unsigned int ii = 0; ii < 5; ii++) {
       prm_error[ii] = sqrt_covariance[ii][0] * random_vec[0];
       for (unsigned int jj = 1; jj <= ii; jj++) {
