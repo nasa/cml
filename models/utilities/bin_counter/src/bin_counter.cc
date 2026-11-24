@@ -27,29 +27,29 @@ namespace cml {
 /*****************************************************************************
 Constructors
 *****************************************************************************/
-CML_BinCounter::CML_BinCounter()
+BinCounter::BinCounter()
   :
   bins_ready(false),
   nbin(),
   bin_data(nullptr)
 {}
 /****************************************************************************/
-CML_BinCounter::CML_BinCounter(
+BinCounter::BinCounter(
   const std::vector<double> & edges,
   bool closed_ends)
   :
-  CML_BinCounter()
+  BinCounter()
 {
   set_data(edges, closed_ends);
 }
 /****************************************************************************/
-CML_BinCounter::CML_BinCounter(
+BinCounter::BinCounter(
   double limit_a,
   double limit_b,
   unsigned int num_bins,
   bool closed_ends)
   :
-  CML_BinCounter()
+  BinCounter()
 {
   set_data( limit_a, limit_b, num_bins, closed_ends);
 }
@@ -68,7 +68,7 @@ Options:
    bins will be equally spaced ebtween the two limits.
 *****************************************************************************/
 void
-CML_BinCounter::set_data(const std::vector<double> & edges,
+BinCounter::set_data(const std::vector<double> & edges,
                          bool closed_ends)
 {
   bins.clear();
@@ -127,7 +127,7 @@ CML_BinCounter::set_data(const std::vector<double> & edges,
 }
 /*****************************************************************************/
 void
-CML_BinCounter::set_data( double limit_a,
+BinCounter::set_data( double limit_a,
                           double limit_b,
                           unsigned int num_bins,
                           bool closed_ends)
@@ -207,7 +207,7 @@ Note:
   closed) so we do that.
 *****************************************************************************/
 void
-CML_BinCounter::insert(double value)
+BinCounter::insert(double value)
 {
   // Consider only values below upper edge and only if model passed sanity
   // check.
@@ -235,7 +235,7 @@ Purpose:
   the bin edge to accommodate that desired allowance.
 *****************************************************************************/
 void
-CML_BinCounter::apply_tolerance(double tol)
+BinCounter::apply_tolerance(double tol)
 {
   if (!bins_ready) {
     message::error( __FILE__,__LINE__,

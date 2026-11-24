@@ -29,7 +29,7 @@ ASSUMPTIONS:
 namespace cml {
 
 template <typename T>
-class CMLSimpleRingBuffer {
+class SimpleRingBuffer {
  public:
   std::string name; /* (--)
     Name of buffer, used for error reporting.*/
@@ -45,14 +45,14 @@ class CMLSimpleRingBuffer {
 /*****************************************************************************
 Constructor/ destructor
 *****************************************************************************/
-  explicit CMLSimpleRingBuffer(std::string name_)
+  explicit SimpleRingBuffer(std::string name_)
     :
-    name(std::move(std::move(name_))),
+    name(std::move(name_)),
     max_buffer_size( data.max_size())
   {
     data.resize(1);
   }
-  virtual ~CMLSimpleRingBuffer() = default;
+  virtual ~SimpleRingBuffer() = default;
 
 /*****************************************************************************
 advance_index

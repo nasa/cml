@@ -24,10 +24,10 @@ PROGRAMMERS:
 namespace cml {
 
 /*****************************************************************************
-CML_TargetCounterElement
+TargetCounterElement
 Purpose: Contents of each element of the working vector
 *****************************************************************************/
-struct CML_TargetCounterElement {
+struct TargetCounterElement {
   int value; /* (--)
     Target integer value to be counted */
   unsigned int count; /* (1)
@@ -36,29 +36,29 @@ struct CML_TargetCounterElement {
 
 
 /*****************************************************************************
-CML_TargetCounter
+TargetCounter
 Purpose:
   Receives a value via the insert() command and bins it into one of
   a set of bins, each covering a finite domain.
 *****************************************************************************/
-class CML_TargetCounter {
+class TargetCounter {
  protected:
-  std::vector<CML_TargetCounterElement> targets;  /* (--)
+  std::vector<TargetCounterElement> targets;  /* (--)
     The targets to be counting occurrences of. */
   size_t ntarget;  /* (--)
     Number of targets.*/
-  const CML_TargetCounterElement* target_data;  /* (--)
+  const TargetCounterElement* target_data;  /* (--)
     Array of targets data. For logging compatibility only.*/
 
  public:
   std::string name; /* (--)
     Name of group (for debugging purposes)*/
-  CML_TargetCounter();
-  explicit CML_TargetCounter( const std::vector<int> & targets_);
-  CML_TargetCounter( int limit_a,
+  TargetCounter();
+  explicit TargetCounter( const std::vector<int> & targets_);
+  TargetCounter( int limit_a,
                      int limit_b);
-  CML_TargetCounter(const CML_TargetCounter&) = delete;
-  CML_TargetCounter& operator=(const CML_TargetCounter&) = delete;
+  TargetCounter(const TargetCounter&) = delete;
+  TargetCounter& operator=(const TargetCounter&) = delete;
 
   void insert(int value);
   bool does_val_exist(int val) const;

@@ -35,13 +35,13 @@ ASSUMPTIONS:
 namespace cml {
 
 /*****************************************************************************
-CMLTaggedRingBufferMember
+TaggedRingBufferMember
 Purpose:
   The data structure put into the ring-buffer; comprises a tag and an
   accompanying data structure.
 *****************************************************************************/
 template <typename T_Tag, typename T_Data>
-struct CMLTaggedRingBufferMember
+struct TaggedRingBufferMember
 {
   T_Tag tag; /* (--)
     The tag to be attached to a data-set to facilitate future retrieval of
@@ -49,7 +49,7 @@ struct CMLTaggedRingBufferMember
   T_Data data; /* (--)
     The data-set associated with "tag". */
 
-  CMLTaggedRingBufferMember()
+  TaggedRingBufferMember()
     :
     tag(),
     data()
@@ -57,13 +57,13 @@ struct CMLTaggedRingBufferMember
 };
 
 /*****************************************************************************
-CMLTaggedRingBuffer
+TaggedRingBuffer
 Purpose:
   An extension of the SimpleRingBuffer, allowing for the tagging of each
   element in the buffer.
 *****************************************************************************/
 template <typename T_Tag, typename T_Data>
-class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >
+class TaggedRingBuffer : public SimpleRingBuffer< TaggedRingBufferMember< T_Tag, T_Data> >
 {
  public:
   bool require_exact_tag{false}; /* (--)
@@ -86,12 +86,12 @@ class CMLTaggedRingBuffer : public CMLSimpleRingBuffer< CMLTaggedRingBufferMembe
     only if the difference is within this threshold; otherwise, it returns
     a null pointer with a error message*/
 
-  explicit CMLTaggedRingBuffer( const std::string& name)
+  explicit TaggedRingBuffer( const std::string& name)
     :
-    CMLSimpleRingBuffer<CMLTaggedRingBufferMember<T_Tag, T_Data>>(name)
+    SimpleRingBuffer<TaggedRingBufferMember<T_Tag, T_Data>>(name)
   {}
   
-  ~CMLTaggedRingBuffer() override = default;
+  ~TaggedRingBuffer() override = default;
 
 
 /*****************************************************************************
@@ -99,7 +99,7 @@ buffer_data
 Purpose: Adds the data and its tag to the buffer
 Note:
   This could also be achieved by inheritance -- construct an instance of
-  the CMLTaggedRingBufferMember and call the CMLSimpleRingBuffer::buffer_data
+  the TaggedRingBufferMember and call the SimpleRingBuffer::buffer_data
   method, passing that constructed member.
   But this process would require an extra copy operation to populate the
   intermediate instance.
@@ -110,8 +110,8 @@ Note:
   {
     // Create aliases to the tagged data-type, and to the buffer base-type:
     // Note -- aliases are only to make the code easier to read.
-    using DataMember = CMLTaggedRingBufferMember< T_Tag, T_Data>;
-    using SimpleBuf = CMLSimpleRingBuffer< DataMember >;
+    using DataMember = TaggedRingBufferMember< T_Tag, T_Data>;
+    using SimpleBuf = SimpleRingBuffer< DataMember >;
 
     // advance the index, using the method defined in the simple-ring-buffer.
     SimpleBuf::advance_index();
@@ -125,22 +125,22 @@ Note:
 
 /*****************************************************************************
 set_buffer_size
-Purpose:  Access to the set_buffer_size method in CMLSimpleRingBuffer
+Purpose:  Access to the set_buffer_size method in SimpleRingBuffer
 *****************************************************************************/
   void set_buffer_size (size_t new_buffer_size)
   {
-    CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >::
+    SimpleRingBuffer< TaggedRingBufferMember< T_Tag, T_Data> >::
                                          set_buffer_size(new_buffer_size);
   }
 
 /*****************************************************************************
 identify_previous_index
-Purpose:  Access to the identify_previous_index method in CMLSimpleRingBuffer
+Purpose:  Access to the identify_previous_index method in SimpleRingBuffer
 *****************************************************************************/
   size_t identify_previous_index (size_t n) const
   {
     return
-      CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >::
+      SimpleRingBuffer< TaggedRingBufferMember< T_Tag, T_Data> >::
                                                    identify_previous_index(n);
   }
 
@@ -163,12 +163,12 @@ Note:
   const T_Data * lookup_tag( T_Tag t) const
   {
     // set references as aliases to make coding easier to read:
-    const std::vector<CMLTaggedRingBufferMember< T_Tag, T_Data> > & data_ =
-      CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >::data;
+    const std::vector<TaggedRingBufferMember< T_Tag, T_Data> > & data_ =
+      SimpleRingBuffer< TaggedRingBufferMember< T_Tag, T_Data> >::data;
     const std::string & name_ =
-      CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >::name;
+      SimpleRingBuffer< TaggedRingBufferMember< T_Tag, T_Data> >::name;
     const size_t & buffer_ix_ =
-      CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >::buffer_ix;
+      SimpleRingBuffer< TaggedRingBufferMember< T_Tag, T_Data> >::buffer_ix;
 
     if ( data_.empty()) {
       message::error( __FILE__,__LINE__,

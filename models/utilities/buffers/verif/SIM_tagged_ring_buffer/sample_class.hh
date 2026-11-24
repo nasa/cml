@@ -27,7 +27,7 @@ struct SampleModel
   double     buffered_tags[10];
 
   size_t buffer_size;
-  cml::CMLTaggedRingBuffer<double, TestStruc> buffer;
+  cml::TaggedRingBuffer<double, TestStruc> buffer;
   double lookup_tag;
   double lookup_x;
   SampleModel()

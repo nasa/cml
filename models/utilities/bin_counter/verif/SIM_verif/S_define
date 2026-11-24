@@ -35,19 +35,16 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
   int    i;
 
   // Model for testing:
-  cml::CML_BinCounter        bin_counter_vec;
-  cml::CML_BinCounter        bin_counter_arr;
-  cml::CML_BinCounter        bin_counter_arr_open;
-  cml::CML_BinCounter        bin_counter_interval;
-  cml::CML_BinCounter        bin_counter_interval_open;
-  cml::CML_TargetCounter     tgt_counter_vec;
-  cml::CML_TargetCounter     tgt_counter_arr;
-  cml::CML_TargetCounter     tgt_counter_interval;
-  cml::CML_ProximityCounter  prox_counter;
-  cml::CML_ProximityCounter  prox_counter_vec;
-
-
-
+  cml::BinCounter        bin_counter_vec;
+  cml::BinCounter        bin_counter_arr;
+  cml::BinCounter        bin_counter_arr_open;
+  cml::BinCounter        bin_counter_interval;
+  cml::BinCounter        bin_counter_interval_open;
+  cml::TargetCounter     tgt_counter_vec;
+  cml::TargetCounter     tgt_counter_arr;
+  cml::TargetCounter     tgt_counter_interval;
+  cml::ProximityCounter  prox_counter;
+  cml::ProximityCounter  prox_counter_vec;
 
   AntaresUnitTestSimObject()
     :

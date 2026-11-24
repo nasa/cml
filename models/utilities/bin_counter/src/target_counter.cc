@@ -24,25 +24,25 @@ namespace cml {
 /*****************************************************************************
 Constructor
 *****************************************************************************/
-CML_TargetCounter::CML_TargetCounter()
+TargetCounter::TargetCounter()
   :
   ntarget(0),
   target_data(nullptr)
 {}
 /****************************************************************************/
-CML_TargetCounter::CML_TargetCounter(
+TargetCounter::TargetCounter(
   const std::vector<int> & targets_)
   :
-  CML_TargetCounter()
+  TargetCounter()
 {
   set_data( targets_);
 }
 /****************************************************************************/
-CML_TargetCounter::CML_TargetCounter(
+TargetCounter::TargetCounter(
   int limit_a,
   int limit_b)
   :
-  CML_TargetCounter()
+  TargetCounter()
 {
   set_data( limit_a, limit_b);
 }
@@ -59,7 +59,7 @@ Options:
    target value for every integer between the limits, including both limits.
 *****************************************************************************/
 void
-CML_TargetCounter::set_data(const std::vector<int> & targets_)
+TargetCounter::set_data(const std::vector<int> & targets_)
 {
   targets.clear();
   ntarget = 0;
@@ -89,7 +89,7 @@ CML_TargetCounter::set_data(const std::vector<int> & targets_)
 }
 /****************************************************************************/
 void
-CML_TargetCounter::set_data( int limit_a,
+TargetCounter::set_data( int limit_a,
                              int limit_b)
 {
   targets.clear();
@@ -111,10 +111,10 @@ insert
 Purpose: Increments the count for the specific target.
 *****************************************************************************/
 void
-CML_TargetCounter::insert(int value)
+TargetCounter::insert(int value)
 {
   auto it = std::find_if( targets.begin(), targets.end(),
-                          [value](const CML_TargetCounterElement & target) {
+                          [value](const TargetCounterElement & target) {
                             return (target.value == value);}
                         );
   if (it != targets.end()) { (it->count)++;}
@@ -125,7 +125,7 @@ does_val_exist
 Purpose: Checks whether the specified value is in the targets vector
 *****************************************************************************/
 bool
-CML_TargetCounter::does_val_exist(int val) const
+TargetCounter::does_val_exist(int val) const
 {
   return std::any_of( targets.begin(), targets.end(),
       [val](const auto & target_) {return (val == target_.value);});

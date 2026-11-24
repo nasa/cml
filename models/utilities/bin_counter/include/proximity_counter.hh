@@ -28,17 +28,17 @@ PROGRAMMERS:
 namespace cml {
 
 /*****************************************************************************
-CML_ProximityCounter
+ProximityCounter
 Purpose:
   Receives a value via the insert() command and bins it into one of
   a set of bins, each covering a finite domain.
 *****************************************************************************/
-class CML_ProximityCounter : public CML_BinCounter {
+class ProximityCounter : public BinCounter {
  public:
-  CML_ProximityCounter();
-  explicit CML_ProximityCounter(const std::vector<double> & targets_);
-  CML_ProximityCounter(const CML_ProximityCounter&) = delete;
-  CML_ProximityCounter& operator=(const CML_ProximityCounter&) = delete;
+  ProximityCounter();
+  explicit ProximityCounter(const std::vector<double> & targets_);
+  ProximityCounter(const ProximityCounter&) = delete;
+  ProximityCounter& operator=(const ProximityCounter&) = delete;
   void set_data( const std::vector<double> & targets_);
   template <size_t n_targets>
   void set_data( const double (&new_targets)[n_targets])

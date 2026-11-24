@@ -30,14 +30,14 @@ namespace cml {
 /*****************************************************************************
 Constructors
 *****************************************************************************/
-CML_ProximityCounter::CML_ProximityCounter() = default;
+ProximityCounter::ProximityCounter() = default;
 /****************************************************************************/
-CML_ProximityCounter::CML_ProximityCounter(
+ProximityCounter::ProximityCounter(
   const std::vector<double> & targets_)
   :
-  CML_ProximityCounter()
+  ProximityCounter()
 {
-  CML_ProximityCounter::set_data(targets_);
+  ProximityCounter::set_data(targets_);
 }
 
 /*****************************************************************************
@@ -52,7 +52,7 @@ Options:
    these n values with bins spaced at the midpoint of consecutive target
 *****************************************************************************/
 void
-CML_ProximityCounter::set_data(const std::vector<double> & targets_)
+ProximityCounter::set_data(const std::vector<double> & targets_)
 {
   bins.clear();
   bins_ready = false;

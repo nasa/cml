@@ -23,7 +23,7 @@ struct SampleModel
   TestStruc  instance;
   TestStruc  output[10];
   size_t buffer_size;
-  cml::CMLSimpleRingBuffer<TestStruc> buffer;
+  cml::SimpleRingBuffer<TestStruc> buffer;
   SampleModel()
     :
     buffer("buffer")
