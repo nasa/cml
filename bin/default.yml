@@ -960,6 +960,10 @@ SIM_correlated_state_dispersion_correlated_state_dispersion:
       compare:
       - models/dynamics/state_initialize/correlated_state_dispersion/verif/SIM_correlated_state_dispersion/RUN_null_check/log_test_data.csv
         vs. models/dynamics/state_initialize/correlated_state_dispersion/verif/SIM_correlated_state_dispersion/verif_data/RUN_null_check/log_test_data.csv
+    RUN_sensor_error/input.py:
+      compare:
+      - models/dynamics/state_initialize/correlated_state_dispersion/verif/SIM_correlated_state_dispersion/RUN_sensor_error/log_test_data.csv
+        vs. models/dynamics/state_initialize/correlated_state_dispersion/verif/SIM_correlated_state_dispersion/verif_data/RUN_sensor_error/log_test_data.csv
     RUN_zero_position/input.py:
       compare:
       - models/dynamics/state_initialize/correlated_state_dispersion/verif/SIM_correlated_state_dispersion/RUN_zero_position/log_test_data.csv
