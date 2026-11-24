@@ -30,7 +30,7 @@ void set_val_set_timed_constraint_params(cml::ValSetTimedConstraint<double, 2>& 
 // Test a nominal update of the ValSetInstantConstraint
 TEST(ValSetInstantConstraint, Update) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     double var = 0.0;
@@ -54,7 +54,7 @@ TEST(ValSetInstantConstraint, Update) {
 // Test that an inactive constraint doesn't report any violations.
 TEST(ValSetInstantConstraint, Inactive) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     const double var = 2.0;
@@ -75,7 +75,7 @@ TEST(ValSetInstantConstraint, SuspiciousConfiguration) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     const double var = 0.0;
     cml::ValSetInstantConstraint<double, 2> article(var);
@@ -86,14 +86,14 @@ TEST(ValSetInstantConstraint, SuspiciousConfiguration) {
     article.violate_on_any_test = true;
 
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Warning, _, _, HasSubstr("Possible mismatch on constraint")));
+        publish(cml::message::Warning, _, _, HasSubstr("Possible mismatch on constraint")));
     article.initialize();
 }
 
 // Test a nominal update of the ValSetTimedConstraint.
 TEST(ValSetTimedConstraint, Update) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     double var = 0.0;
@@ -122,7 +122,7 @@ TEST(ValSetTimedConstraint, Update) {
 // Test that an inactive constraint doesn't report any violations.
 TEST(ValSetTimedConstraint, Inactive) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     const double var = 2.0;
@@ -145,7 +145,7 @@ TEST(ValSetTimedConstraint, SuspiciousConfiguration) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Construct with the ConstraintSet for coverage.
     const double var = 0.0;
@@ -159,7 +159,7 @@ TEST(ValSetTimedConstraint, SuspiciousConfiguration) {
     article.violate_on_any_test = true;
 
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Warning, _, _, HasSubstr("Possible mismatch on constraint")));
+        publish(cml::message::Warning, _, _, HasSubstr("Possible mismatch on constraint")));
     article.initialize();
 }
 

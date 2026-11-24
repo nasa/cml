@@ -35,12 +35,12 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
     using testing::_;
     using testing::HasSubstr;
 
-    cml::CMLMessage::Mock cml_message_mock;
+    cml::message::Mock cml_message_mock;
 
     // Passing an invalid pointer to the free function interface.
     EXPECT_CALL(
         cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("words array was passed in as NULL")));
+        publish(cml::message::Error, _, _, HasSubstr("words array was passed in as NULL")));
     cml::convert_double_to_uint_words(1.0, 1e-3, nullptr, 2, 8);
 
     // Invalid word count.
@@ -51,7 +51,7 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         constexpr unsigned int bit_size = 16U;
         EXPECT_CALL(
             cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("will generate 0 words")));
+            publish(cml::message::Error, _, _, HasSubstr("will generate 0 words")));
         const cml::ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
         EXPECT_EQ(article.words.size(), 0);
     }
@@ -64,7 +64,7 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         constexpr unsigned int bit_size = 64U;
         EXPECT_CALL(
             cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("bit_size cannot be > 32")));
+            publish(cml::message::Error, _, _, HasSubstr("bit_size cannot be > 32")));
         cml::ConvertDoubleToUintWords(value, resolution, word_count, bit_size);
     }
 
@@ -77,7 +77,7 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         cml::ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
         EXPECT_CALL(
             cml_message_mock,
-            publish(cml::CMLMessage::Inform, _, _, HasSubstr("too large to be represented")));
+            publish(cml::message::Inform, _, _, HasSubstr("too large to be represented")));
         article.update();
 
         // All bits should be set to 1. With 16 bits, expecting 2^16 - 1 = 65535.
@@ -107,7 +107,7 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         cml::ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
         EXPECT_CALL(
             cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("Resolution of words is lower than the resolution of double")));
+            publish(cml::message::Error, _, _, HasSubstr("Resolution of words is lower than the resolution of double")));
         article.check_values();
     }
 }

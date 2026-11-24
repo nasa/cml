@@ -60,7 +60,7 @@ void
 DynamicMassBody::initialize_dyn_mass()
 {
   if (dyn_mass_initialized) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"initialize_dyn_mass warning.\n",
       "DynamicMassBody (named ", name.get_name(), ") has already been initialized.\n"
       "It can only be run once.\n");
@@ -71,7 +71,7 @@ DynamicMassBody::initialize_dyn_mass()
   // core-properties set. mass_properties_initialized is a
   // jeod::MassBody-inherited flag.
   if (!get_mass_properties_initialized()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"initialization sequence error\n",
       "The mass-properties for this dynamic mass have not been set.\n"
       "Cannot initialize the dynamic aspects of the mass until the\n"
@@ -86,7 +86,7 @@ DynamicMassBody::initialize_dyn_mass()
 
   if (dynamic_properties.interpolation.mass_indep.get_size() > 1) {
     if (!interp_enabled) {
-      CMLMessage::inform(
+      message::inform(
         __FILE__,__LINE__,"initialize_dyn_mass information.\n",
         "The interp_enabled flag of DynamicMassBody is not enabled.\n"
         "However, there is an interpolation data source provided; it will be\n"
@@ -96,7 +96,7 @@ DynamicMassBody::initialize_dyn_mass()
     dynamic_properties.interpolation.initialize();
   }
   else if (interp_enabled) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"initialize_dyn_mass warning.\n",
       "The interp_enabled flag has been enabled, but the mass data is\n"
       "inadequate to support interpolation, containing ", dynamic_properties.interpolation.mass_indep.get_size(), " data points.\n"
@@ -174,7 +174,7 @@ DynamicMassBody::initialize_dyn_mass()
   if (check_sign &&
       (residual_mass < 0.0 ||
        dynamic_properties.consumable_mass < 0.0)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"mass initialization error.\n",
       "residual mass = ", residual_mass, "\n"
       "consumable mass = ", dynamic_properties.consumable_mass, "\n"
@@ -201,7 +201,7 @@ bool
 DynamicMassBody::update_mass() /* return: -- whether the mass has changed*/
 {
   if (!dyn_mass_initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"update_mass error.\n",
       "The DynamicMassBody (named ", name.get_name(), ") has not been initialized.\n"
       "Cannot update the mass\n");
@@ -231,7 +231,7 @@ DynamicMassBody::update_mass_internal()
 
   if (interp_enabled) {
     if (!interpolate_properties()) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Interpolation failed.\n",
         "The mass interpolation failed.\n"
         "Check the configuration on the table-interpolation model.\n");
@@ -263,7 +263,7 @@ DynamicMassBody::interpolate_properties()
    // Test whether there are any interpolation sources - indicating that
    //   interpolation tables have been loaded properly.
    if (dynamic_properties.interpolation.mass_indep.get_size() <= 1) {
-     CMLMessage::warn(
+     message::warn(
        __FILE__,__LINE__,"initialize_dyn_mass warning.\n",
        "The interp_enabled flag has been enabled, but the mass data is\n"
        "inadequate to support interpolation, containing ", dynamic_properties.interpolation.mass_indep.get_size(), " data points.\n"
@@ -315,7 +315,7 @@ DynamicMassBody::set_initial_position(
        const double initial_position[3])
 {
   if (initial_position == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid input.\n",
       "The position array passed in to the set_initial_position method is NULL."
       "\nThis is not a valid value.\n"
@@ -340,14 +340,14 @@ void
 DynamicMassBody::set_CM_offset(const double offset[3])
 {
   if (offset == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"set_CM_offset warning.\n",
       "DynamicMassBody::set_CM_offset method was called with a NULL argument.\n"
       "Ignoring call.\n");
     return;
   }
 
-  CMLMessage::inform(
+  message::inform(
     __FILE__,__LINE__,"set_CM_offset warning.\n",
     "The CM_offset of DynamicMassBody is being reset to (", offset[0], ", ", offset[1], ", ", offset[2], ").\n");
 
@@ -363,7 +363,7 @@ void
 DynamicMassBody::initiate_dry_mass_config()
 {
   if (!dyn_mass_initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"update_mass error.\n",
       "The DynamicMassBody (named ", name.get_name(), ") has not been initialized.\n"
       "Cannot update the mass\n");

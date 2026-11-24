@@ -107,7 +107,7 @@ class IntervalInstantConstraint : public Constraint
         (NumIntervals > 1) &&
         (violate_on_any_test ==
              (tests[0].get_violation_condition() == ConstraintEnum::Out))) {
-      CMLMessage::warn( __FILE__,__LINE__,
+      message::warn( __FILE__,__LINE__,
         "Possible mismatch on constraint ",name,
         "\nbetween the violate_on_any_test flag (", violate_on_any_test,
         ")\n and the violation_condition setting (",violation_condition,
@@ -218,7 +218,7 @@ class IntervalTimedConstraint : public Constraint
         (NumIntervals > 1) &&
         (violate_on_any_test ==
              (tests[0].get_violation_condition() == ConstraintEnum::Out))) {
-      CMLMessage::warn( __FILE__,__LINE__,
+      message::warn( __FILE__,__LINE__,
         "Possible mismatch on constraint ",name,
         "\nbetween the violate_on_any_test flag (", violate_on_any_test,
         ")\n and the violation_condition setting (",violation_condition,

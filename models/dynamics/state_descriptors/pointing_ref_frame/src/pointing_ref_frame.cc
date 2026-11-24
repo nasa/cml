@@ -45,14 +45,14 @@ PointingRefFrame::set_originating_frame(
     jeod::RefFrame * originating_frame_in)
 {
   if (active) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Reconfiguration error\n",
       "Once activated, the PointingRefFrame ", pointing_frame.get_name(), " cannot change its originating "
       "frame.\nOriginating-frame remains at its current setting.");
     return;
   }
   if (originating_frame_in == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Attempt to assign the originating-frame of PointingRefFrame ", pointing_frame.get_name(), " to be "
       "NULL.\nThis is not a valid setting.\nAttempt failed.\n");
@@ -67,14 +67,14 @@ PointingRefFrame::set_target_frame(
     jeod::RefFrame * target_frame_in)
 {
   if (active) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Reconfiguration error\n",
       "Once activated, the PointingRefFrame ", pointing_frame.get_name(), " cannot change its target "
       "frame.\nOriginating-frame remains at its current setting.");
     return;
   }
   if (target_frame_in == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Attempt to assign the target-frame of PointingRefFrame ", pointing_frame.get_name(), " to be "
       "NULL.\nThis is not a valid setting.\nAttempt failed.\n");
@@ -107,7 +107,7 @@ PointingRefFrame::update()
   const double pos_r = jeod::Vector3::vmag( target_wrt_originating_state.trans.position );
   if (MathUtils::is_near_equal( pos_r, 0.0, 1.0)) {
     // if pos = 0, T = Tprev (= Identity for first update) and ang_vel_this = 0
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__, "Proximity Error\n",
       "The relative position vector is zero, resulting in an undefined "
       "pointing reference frame.\n"
@@ -141,7 +141,7 @@ PointingRefFrame::update()
     vmag = jeod::Vector3::vmag(axis_scratch);
     // if that doesn't happen, use alternative #1; drop a warning and move on:
     if (vmag > 0.0) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__, "Alignment of r and v vectors\n",
         "The relative position and velocity vectors between the target "
         "and originating frames are aligned.\nUsing the relative position and "
@@ -161,7 +161,7 @@ PointingRefFrame::update()
                       axis_scratch);
 
       // Send message
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__, "Alignment of r and v vectors\n",
         "The relative position, velocity, and the most recent y-axis are "
         "aligned.\nComputing z-axis from most recent z-axis value.");
@@ -211,7 +211,7 @@ bool
 PointingRefFrame::setup_frames()
 {
   if (target_frame == nullptr || originating_frame == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Incomplete specification\n",
       "The target-frame and/or originating-frame of the\n"
       "Pointing_Reference-Frame have not been assigned.\n"

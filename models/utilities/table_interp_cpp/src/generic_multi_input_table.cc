@@ -49,7 +49,7 @@ GenericMultiInputTable::GenericMultiInputTable(
   GenericMultiInputTable()
 {
   if (dependent_variables == nullptr) {
-    CMLMessage::fail(__FILE__,__LINE__,"Construction error: ",
+    message::fail(__FILE__,__LINE__,"Construction error: ",
        "The input parameter \"dependent_variables\" cannot be NULL. \n");
   }
   for (unsigned int ii = 0; ii < num_vars; ++ii) {
@@ -115,7 +115,7 @@ GenericMultiInputTable::load_data_internal_check(
             const SizeVec &dim_list)
 {
   if (dim_list.size() < 2) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Table data-load failure:\n",
       "There must be at least 2 dimensions to the data table so the\n"
       "2nd argument must be a vector of at least size 2.\n"
@@ -128,7 +128,7 @@ GenericMultiInputTable::load_data_internal_check(
   }
 
   if (dim_list.at(0) != output.size()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Table data-load failure:\n",
       "The specified number of dependent variables (",dim_list.at(0),
       ") does not match\n"
@@ -138,7 +138,7 @@ GenericMultiInputTable::load_data_internal_check(
   }
 
   if (data_loaded) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Table data-load error\n",
       "Data has already been loaded for this table.\n"
       "Rewriting data.\n");
@@ -162,7 +162,7 @@ GenericMultiInputTable::add_dependent(
     double & new_dep_var)
 {
   if (initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Table-variable connection error:\n",
       "Cannot add new dependent variables after initialization.\n"
       "Addition failed.\n");
@@ -183,19 +183,19 @@ GenericMultiInputTable::append_dependent_data(
     const SizeVec &dim_list)
 {
   if (initialized) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot add new dependent variables after initialization.\n"
       "Addition failed.\n");
       return;
   }
   if (!data_loaded) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot append data to a table until it has data already loaded.\n"
       "Addition failed.\n");
       return;
   }
   if ( dim_list.size() != size_of_dimension.size()-1) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Dimension of new data array does not match that of existing data"
       "sub-array.\n"
       "New data is specified to have ",dim_list.size()," dimensions:\n"
@@ -206,7 +206,7 @@ GenericMultiInputTable::append_dependent_data(
   }
   for (size_t ii = 0; ii < dim_list.size(); ++ii) {
     if ( dim_list[ii] != size_of_dimension[ii+1] ) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Number of elements in dimension ",ii," of new data does not\n"
         "match with that of existing data.\n"
         "New data specifies      ",dim_list[ii]," elements.\n"
@@ -245,7 +245,7 @@ GenericMultiInputTable::add_independent(
 {
   // Only succeed if model has not been initialized already
   if (initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Table-variable connection error:\n",
       "Cannot add new independent variables after initialization.\n"
       "Addition failed.\n");
@@ -258,7 +258,7 @@ GenericMultiInputTable::add_independent(
   // check input for duplication
   for (size_t ii = 0; ii < size; ++ii) {
     if (&var == independents[ii].first) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Redundant configuration\n",
         "Attempted to add an TableIndependentVariable instance (name: ",
         var.get_name_char(),")\n"
@@ -273,7 +273,7 @@ GenericMultiInputTable::add_independent(
 
   if (index < size) {
     if (independents[index].first != nullptr) {
-      CMLMessage::warn(
+      message::warn(
       __FILE__,__LINE__,"Table-variable connection error:\n",
       "Connecting dimension ",index, " of the table with an independent "
       "variable (", var.get_name_char(),").\n"
@@ -301,7 +301,7 @@ bool
 GenericMultiInputTable::initialize()
 {
   if (initialized) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Redundant initialization:\n",
       "Called the initialize method redundantly.\n"
       "The initialize method has already completed successfully.\n");
@@ -309,7 +309,7 @@ GenericMultiInputTable::initialize()
   }
 
   if (!data_loaded) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Initialization error:\n",
       "Called the initialize method before the data table\n"
       "has been populated with data.\n"
@@ -319,7 +319,7 @@ GenericMultiInputTable::initialize()
   }
 
   if (!output_ptrs_set) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "initialization failed:\n",
       "The output pointers have not been set, data has nowhere to go.\n");
     return false;
@@ -344,7 +344,7 @@ GenericMultiInputTable::initialize()
   // first independent variable has index 7 and the second independent
   // variable has index 1.
   if (num_independents != (data_dimension - 1)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Initialization error:\n",
       "The number of independent variables(",num_independents,
       ") is inconsistent with the\n"
@@ -362,7 +362,7 @@ GenericMultiInputTable::initialize()
 
     // Check for NULL pointer:
     if (independents[ii].first == nullptr) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Initialization error:\n",
         "The independent variable at location ",ii," in the independents vector"
         " has not been populated.\nThe pointer to it is still NULL.\n"
@@ -371,7 +371,7 @@ GenericMultiInputTable::initialize()
     }
     // Check that the TableIndependentVariable has data
     if (!independents[ii].first->is_data_loaded()) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Initialization error:\n",
         "The independent array at index ",ii," (named ",
         independents[ii].first->get_name_char(),") has not had data loaded."
@@ -382,7 +382,7 @@ GenericMultiInputTable::initialize()
     // the size of the corresponding dimension of output data.
     if (independents[ii].first->get_size() !=
                          size_of_dimension.at(ii + 1)) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Initialization error:\n",
         "The size of independent variable[",ii,"] (",
         independents[ii].first->get_size(),") is inconsistent with the\n"
@@ -399,7 +399,7 @@ GenericMultiInputTable::initialize()
     if (independents[ii].first->get_size() <= 1) {
       if (num_data_elements_per_increment_of_index[ii] !=
           num_data_elements_per_increment_of_index[ii+1]) {
-        CMLMessage::fail(
+        message::fail(
           __FILE__,__LINE__,"Internal error:\n",
           "Failed sanity check on the structure of the "
           "num_data_elements_per_increment_of_index\n"
@@ -413,7 +413,7 @@ GenericMultiInputTable::initialize()
           " data-points.\n");
       }
       // Sanity check passed, go ahead and remove it.
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Single-valued Independent:\n",
         "At index ",ii,", the independent variable has only 1 data value.\n"
         "There is nothing to interpolate or look up for this value; it is\n"
@@ -461,7 +461,7 @@ bool
 GenericMultiInputTable::update()
 {
   if (!initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Lookup error.\n",
       "Table has not been initialized; cannot proceed to perform interpolation "
       "or lookup.\n");
@@ -544,7 +544,7 @@ GenericMultiInputTable::precheck_output()
   // size, and there is no reason they would not be the same size.  But check
   // it anyway in case the code gets modified at a later date.
   if (data_point_index.size() != data_point_weight.size()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Internal error:\n",
       "The sizes of the data_point_weight and data_point_index vectors "
       "differ.\nThey should always be identical, something has gone wrong\n"
@@ -560,7 +560,7 @@ GenericMultiInputTable::precheck_output()
   const size_t num_independents = independents.size();
   for (size_t ii = 0; ii < num_independents; ++ii) {
     if (independents[ii].first->get_size() != size_of_dimension[ii + 1]) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Internal error:\n",
         "The size of independent variable[",ii,"] (",
         independents[ii].first->get_size(),") is inconsistent with the\n"
@@ -592,7 +592,7 @@ GenericMultiInputTable::generate_trivial_output()
     //  add_dependents or populate_output (both set output_ptrs_set = true),
     //  but initialization cannot succeed if the output vector is empty and those
     //  are the only ways to populate the output vector.
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"generate output error:\n",
      "The output pointers have not been set, data has nowhere to go.\n");
     return;
@@ -612,7 +612,7 @@ GenericMultiInputTable::populate_output(
        const DoublePtrVec &var_ptr_list)
 {
   if (output_ptrs_set) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Construction error:\n",
       "The output pointers have already been set.\n"
       "This action will remove all current output pointers.\n");
@@ -620,7 +620,7 @@ GenericMultiInputTable::populate_output(
 
   const size_t num_vars = var_ptr_list.size();
   if (num_vars == 0) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Construction error:\n",
      "There should be at least 1 output for each table.  A zero-sized vector\n"
      "was passed in for configuring table outputs.\n");
@@ -630,7 +630,7 @@ GenericMultiInputTable::populate_output(
   // record them permanently in the output vector.
   for (size_t ii = 0; ii < num_vars; ++ii) {
     if (var_ptr_list[ii] == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Construction error:\n",
         "Table must be provided with pointers to the variables to be "
         "populated.  'nullptr' is not a valid target.\n");
@@ -651,7 +651,7 @@ GenericMultiInputTable::copy_data(
            const double *data_in)
 {
   if (data_in == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Table data-load error\n",
       "No data is given for the data-load; its pointer is NULL.\n"
       "Without data, this table cannot function.\n"
@@ -661,7 +661,7 @@ GenericMultiInputTable::copy_data(
   // Configure internal data structure, abort on error
   const size_t total_data_elements = configure_internal_data_structure();
   if (total_data_elements == 0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Table data-load error\n",
       "The internal data structure contains no elements."
       "Without data, this table cannot function.\n"
@@ -685,7 +685,7 @@ GenericMultiInputTable::copy_data(
   // Configure internal data structure, abort on error
   const size_t total_data_elements = configure_internal_data_structure();
   if (total_data_elements == 0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Table data-load error\n",
       "The internal data structure contains no elements."
       "Without data, this table cannot function.\n"
@@ -694,7 +694,7 @@ GenericMultiInputTable::copy_data(
   }
 
   if (data_in.size() != total_data_elements) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Table data-load error\n",
       "Size of the incoming data is inconsistent with the specified "
       "dimensions.\n"
@@ -739,7 +739,7 @@ GenericMultiInputTable::configure_internal_data_structure()
     --index;
     num_data_elements_per_increment_of_index[index] = total_data_elements;
     if (0 == size_of_dimension[index]) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Table data-load error\n",
         "The dimension-size at index ",index," shoudn't be zero.\n"
         "Critical error.  Aborting data configuration.\n");
@@ -855,7 +855,7 @@ GenericMultiInputTable::generate_base_values()
 
       // else: special case -- add to the interpolation.
       if (dwell >= num_data_points_interp) {
-        CMLMessage::fail(
+        message::fail(
           __FILE__,__LINE__,"Data Processing error.\n",
           "The value `dwell` (",dwell,") is too large.\n"
           "It can be at most one-half of the number of interpolation points (",
@@ -961,7 +961,7 @@ GenericMultiInputTable::generate_base_values()
       // part of the add_independent method, which requires a valid
       // enumeration (or assuumes one if none is provided).  THereafter, that
       // value is protected.  This is a fail-safe.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid specification\n",
         "Specification of LookupMethod is invalid.\n");
       break;
@@ -1023,7 +1023,7 @@ GenericMultiInputTable::index_checks(
 {
   // Note - data_loaded implies data.size() > 0.
   if (!data_loaded) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid external initialization sequence\n",
       "Call made to ",func," data but data has not yet been loaded.\n"
       "There are no data to ",func,".\n"
@@ -1031,7 +1031,7 @@ GenericMultiInputTable::index_checks(
     return true;
   }
   if (idx_start > idx_stop) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid arguments\n",
       "Call made to ",func," data between two indices with the start index (",
       idx_start,")\n"
@@ -1040,7 +1040,7 @@ GenericMultiInputTable::index_checks(
     std::swap(idx_start, idx_stop);
   }
   if (idx_stop >= data.size()) {
-    CMLMessage::warn(__FILE__, __LINE__, "Invalid index\n",
+    message::warn(__FILE__, __LINE__, "Invalid index\n",
       "Call made to ",func," data with the stop index (",idx_stop,
       ") past the end of the list.\n"
       "Will ",func," all data between the start index and\n"

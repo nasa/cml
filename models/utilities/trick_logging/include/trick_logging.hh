@@ -33,7 +33,7 @@ class TrickLogging {
     /***************************************************************************/
     void add_to_list(Trick::DataRecordGroup * add_me) {
       if (add_me == nullptr) {
-        CMLMessage::error (
+        message::error (
           __FILE__, __LINE__, "TrickLogging::SetupError\n",
           "The intended data record group to add is NULL."
           "\nPlease specify a valid data record group.\n");
@@ -211,7 +211,7 @@ class TrickLogging {
     Trick::DataRecordGroup * get_group( const char * name)
     {
       if (name == nullptr) {
-        CMLMessage::error ( __FILE__, __LINE__,
+        message::error ( __FILE__, __LINE__,
           "No name specified for the intended data record group."
           "\nPlease specify a valid data record group name.\n");
         return nullptr;
@@ -226,7 +226,7 @@ class TrickLogging {
       if (group != group_list.end()) {
         return *group;
       }
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "No DataRecordGroup found with name ",name,".\n"
         "Returning nullptr.\n");
       return nullptr;

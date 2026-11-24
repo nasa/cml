@@ -152,7 +152,7 @@ ContactStateOverride::override_state()
     auto* override_root = const_cast<jeod::DynBody*>(
                                              override_body.get_root_body());
     if (override_root == nullptr) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Unidentified mass tree error\n"
         "The mass-tree returned a NULL pointer for the root of the tree\n"
         "containing the override-body (", override_body.name.get_name(),"(.\n"
@@ -368,7 +368,7 @@ void
 ContactStateOverride::set_contact_normal(double contact_normal_in[3])
 {
   if (active) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Modified an active contact model\n",
       "This contact model is currently active and the contact-normal is\n"
       "being manually reset.  This can have unexpected consequences for the\n"
@@ -396,7 +396,7 @@ ContactStateOverride::set_contact_position(
 {
   if (active)
   {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Attempted to modify an active model\n",
       "This contact model is currently active and the contact position is\n"
       "already defined.  It is not permissible to change the "
@@ -429,7 +429,7 @@ ContactStateOverride::set_contact_orientation(
 {
   if (active)
   {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Attempted to modify an active model\n",
       "This contact model is currently active and the contact orientation is\n"
       "already defined.  It is not permissible to change the "
@@ -449,7 +449,7 @@ ContactStateOverride::set_contact_orientation_Q(
 {
   if (active)
   {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Attempted to modify an active model\n",
       "This contact model is currently active and the contact orientation is\n"
       "already defined.  It is not permissible to change the "
@@ -473,7 +473,7 @@ void
 ContactStateOverride::set_deactivation_threshold( double threshold)
 {
   if (threshold < 0.0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Illegal value\n",
       "Attempt to set the deactivation_threshold to ",threshold," FAILED.\n"
       "The deactivation threshold must be greater than or equal to 0.0.\n"

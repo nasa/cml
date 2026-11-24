@@ -1,6 +1,6 @@
 # should result in the executive returning immediately.
 exec(open("RUN_02_example_table/input.py").read())
-trick.cml.CMLMessage.set_publish_level (trick.cml.CMLMessage.Inform)
+trick.cml.message.set_publish_level (trick.cml.message.Inform)
 trick.add_read(0.0, """
 print('************ Redundant request to change to "example_table" **********')
 aero.interface.executive.change_table('example_table')

@@ -44,7 +44,7 @@ drg3.add_variable("events_manager_verif.sim_time")
 events_manager_verif.framework.data_file_name = "../data/events_manager_ut_data.txt"
 events_manager_verif.framework.vars_file_name = "../data/events_manager_ut_variables.txt"
 
-trick.cml.CMLMessage.set_publish_level( trick.cml.CMLMessage.Inform)
+trick.cml.message.set_publish_level( trick.cml.message.Inform)
 
 events_manager_verif.manager.action_adjust_logging_group.log_cycle =1
 

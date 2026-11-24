@@ -136,7 +136,7 @@ TODO Nino Tarantino 9/11/26: This function is way too long. Split it apart.
        be a terminal fault). */
     if (N < 3) {
       // TODO Nino Tarantino: make this a compile-time error
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot form a polygon with less than 3 vertices.\n"
         "Polygon initialization failed.\n");
       return;
@@ -171,7 +171,7 @@ TODO Nino Tarantino 9/11/26: This function is way too long. Split it apart.
       point, then all points are in a line, and the last trio will also be
       aligned and we don't have a polygon*/
     if (direction_sign == 0) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Vertices do not form a polygon.\n"
         "The vertices are all aligned.\n"
         "Polygon initialization failed.\n");
@@ -210,7 +210,7 @@ TODO Nino Tarantino 9/11/26: This function is way too long. Split it apart.
     }
 
     if (!convex) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Vertices do not form a convex polygon.\n"
         "The algorithm used to verify inclusion within the defined polygon\n"
         "will not work if any vertex generates a concave perimeter.\n"
@@ -571,7 +571,7 @@ Purpose:
   void set_vertices(double (&vals)[N][2])
   {
     if (initialized) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Cannot define xy data after the polygon has been initialized.\n"
         "Check configuration.\n");
     } else {
@@ -591,7 +591,7 @@ Purpose:
   void set_vertices(double (&vals)[N][3])
   {
     if (initialized) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Cannot define xy data after the polygon has been initialized.\n"
         "Check configuration.\n");
     } else {

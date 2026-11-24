@@ -69,7 +69,7 @@ AbstractTableLookup::initialize()
   }
 
   if (initialized) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, "Redundant Initialization\n",
       "Called the initialize method redundantly.\n"
       "The initialize method has already completed successfully.\n");
@@ -77,14 +77,14 @@ AbstractTableLookup::initialize()
   }
 
   if (tables.empty()) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Incomplete Initialization\n",
       "There are no data tables available for the AbstractTableLookup to use.\n"
       "Initialization failed.\n");
     return;
   }
   if (independents.empty()) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Incomplete Initialization\n",
       "The AbstractTableLookup has no registered independent variables to use "
       "for input.\nInitialization failed.\n");
@@ -92,7 +92,7 @@ AbstractTableLookup::initialize()
   }
 
   if (dependents.empty()) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Incomplete Initialization\n",
       "The AbstractTableLookup has no registered dependent variables to populate "
       "for output.\nInitialization failed.\n");
@@ -105,7 +105,7 @@ AbstractTableLookup::initialize()
     // initialization.
     const bool success = indep->initialize();
     if (!success) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Initialization error.\n",
         "Failure to initialize TableIndependentVariable ",
         indep->get_name(), "\nresults in a failure to initialize the "
@@ -123,7 +123,7 @@ AbstractTableLookup::initialize()
   for (TableItem_t & table_iter: tables) {
     const bool success = table_iter.first->initialize();
     if (!success) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Initialization error.\n",
         "Failure to initialize GenericMultiInputTable results in a\n"
         "failure to initialize the table-manager.\n");
@@ -159,7 +159,7 @@ AbstractTableLookup::initialize()
                     [pair_]( TableIndependentVariable * var_)
                     {return (pair_.first == var_);})); }
       )) {
-      CMLMessage::error(
+      message::error(
         __FILE__, __LINE__, "Incomplete Initialization\n",
         "One of the tables has an independent variable that is not known\n"
         "to the AbstractTableLookup manager.\n"
@@ -193,7 +193,7 @@ AbstractTableLookup::update()
   // update all independents:
   for (TableIndependentVariable * indep_iter : independents) {
     if (!indep_iter->update()) {
-      CMLMessage::error(
+      message::error(
         __FILE__, __LINE__, "Update failure\n",
         "The TableIndependentVariable ", indep_iter->get_name(),
         "failed to update.\n"
@@ -207,7 +207,7 @@ AbstractTableLookup::update()
     // if table is enabled, update it.  If update fails, return false
     // if table is not enabled, ignore it.
     if (table_iter.second && !table_iter.first->update()) {
-      CMLMessage::error(
+      message::error(
         __FILE__, __LINE__, "Update failure\n",
         "The GenericMultiInputTable failed to update.\n"
         "Its dependent variable(s) may have obsolete values.\n");
@@ -286,7 +286,7 @@ AbstractTableLookup::create_table(
   default:
     // FAILSAFE - the list above should be comprehensive so this should not be
     //            accessible.
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid option.\n",
     "Invalid option (",type,") passed to create table.\n"
     "For Legal options, see TableType enumerated list.\n");
@@ -336,7 +336,7 @@ AbstractTableLookup::verify_independent_name(
 
   TableIndependentVariable *ret = AbstractTableLookup::lookup_independent(name_in);
   if (ret != nullptr) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Invalid variable addition\n",
       "The attempted addition of an independent variable to a table set\n"
       "caused a duplication in variable names (",name_in,").\n"
@@ -372,7 +372,7 @@ void
 AbstractTableLookup::verify_and_add_dependent_variable(double *variable_ptr)
 {
   if (variable_ptr == nullptr) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Invalid table addition\n",
       "One of the output variables from the table lookup has no target to "
       "populate.\nAll output data must have a specified target.\n");
@@ -380,7 +380,7 @@ AbstractTableLookup::verify_and_add_dependent_variable(double *variable_ptr)
   }
 
   if (is_a_dependent_variable(*variable_ptr)) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Invalid table addition\n",
       "The attempted addition of a table to a table-set caused a duplication\n"
       "of output variables.\n"

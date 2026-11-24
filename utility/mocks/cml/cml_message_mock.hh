@@ -6,9 +6,9 @@
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
-namespace cml::CMLMessage {
+namespace cml::message {
 
-// Mock interface to CML's CMLMessage class
+// Mock interface to CML's message class
 class Mock {
 public:
     Mock();
@@ -23,5 +23,5 @@ public:
         const std::string& text));
 };
 
-} // namespace CMLMessage
+} // namespace message
 #endif

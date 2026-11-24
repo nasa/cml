@@ -27,7 +27,7 @@ void
 WatchValuesSet::add_trigger( WatchValuesBaseCore & new_trigger)
 {
   if (initialized) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot add a new trigger to an initialized WatchValuesSet.\n");
     return;
   }
@@ -44,7 +44,7 @@ void
 WatchValuesSet::initialize( std::list<WatchValuesBaseCore *> * active_watch_in)
 {
   if (triggers.empty()) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
      "Cannot initialize a WatchValuesSet without any associated triggers.\n");
     return;
   }
@@ -118,7 +118,7 @@ WatchValuesSet::activate()
   active = true;
   if (add_self_to_manager_active_list) {
     if (active_watches == nullptr) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Activating watch with internal instruction to add itself to\n"
         "the active-watch list, but has no access to that list.\n"
         "WatchValueSet will not get checked by the event-manager.\n");

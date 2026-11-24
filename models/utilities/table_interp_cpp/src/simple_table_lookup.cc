@@ -41,7 +41,7 @@ SimpleTableLookup::load_independent_data(
     const TableIndependentVariable::Continuity   continuity)       //optional
 {
   if (data == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the data source array.\n"
       "Data load failed.\n");
@@ -66,7 +66,7 @@ SimpleTableLookup::load_independent_data(
   lookup_method = lookup_method_in;
 
   if (!independents.empty()) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Data warning:\n",
       "Independent variable has already been created.\n"
       "Overwriting data.\n");
@@ -196,7 +196,7 @@ SimpleTableLookup::load_dependent_data(
          TableType      type) //optional
 {
   if (data == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the data source array.\n"
       "Data load failed.\n");
@@ -237,14 +237,14 @@ SimpleTableLookup::load_dependent_data(
          TableType      type) //optional
 {
   if (data == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the data source array.\n"
       "Data load failed.\n");
     return false;
   }
   if (dependent_vars == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the dependent-variables "
       "array.\nData load failed.\n");
@@ -271,7 +271,7 @@ SimpleTableLookup::load_dependent_data(
          TableType         type) //optional
 {
   if (dependent_vars == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the dependent-variables "
       "array.\nData load failed.\n");
@@ -295,7 +295,7 @@ SimpleTableLookup::load_dependent_data(
          TableType            type) //optional
 {
   if (data == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid data load\n",
       "Null pointer was passed in as the origin of the data source array.\n"
       "Data load failed.\n");
@@ -321,7 +321,7 @@ SimpleTableLookup::load_dependent_data(
   // like these inputs and then come here anyway.
   const size_t num_deps = dependent_vars.size();
   if (num_deps < 1 || num_data_points_per_variable < 1) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Data error:\n",
       "The number of dependents (",num_deps,") and number of data points "
       "per variable (",num_data_points_per_variable,")\n"
@@ -332,7 +332,7 @@ SimpleTableLookup::load_dependent_data(
   // Check size of data:
   const size_t target_size =  num_deps * num_data_points_per_variable;
   if (data.size() < target_size) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Data error:\n",
       "There is insufficient data to populate :\n",
       num_deps," variables at\n",
@@ -342,7 +342,7 @@ SimpleTableLookup::load_dependent_data(
   }
 
   if (!tables.empty()) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Data warning:\n",
       "Data table has already been created.\n"
       "Overwriting data.\n");
@@ -416,26 +416,26 @@ SimpleTableLookup::initialize()
   // from AbstractTableLookup.
   if (!initialized) {
     if (independents.empty()) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Initalization Error.\n",
         "Incomplete initialization.  There is no independent variable.\n");
       return;
     }
     if (!indep_data_loaded) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Initalization Error.\n",
         "Incomplete initialization.  There is no independent data.\n");
       return;
     }
 
     if (tables.empty()) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Initalization Error.\n",
         "Incomplete initialization.  There is no data table.\n");
       return;
     }
     if (!dependent_data_loaded) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Initalization Error.\n",
         "Incomplete initialization.  There is no dependent data.\n");
       return;

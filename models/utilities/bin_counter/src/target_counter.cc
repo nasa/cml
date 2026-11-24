@@ -67,7 +67,7 @@ CML_TargetCounter::set_data(const std::vector<int> & targets_)
   const size_t num_targets = targets_.size();
   // Sanity check for number of targets:
   if (num_targets == 0) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot count onto fewer than 1 target.\n"
       "Target counter (",name,") cannot be used.\n");
     return;

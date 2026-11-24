@@ -89,14 +89,14 @@ TargetRelative_StateParam::compute_velocity_from_params_SWIG(
   // Check for improper inputs
   //-----------------------------------------------------
   if (V_wrt_PCI == nullptr) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "NULL vectors cannot be populated by target-reference parameters.\n"
       "Aborting calculation of velocity vector.\n");
     return;
   }
 
   if (R == nullptr) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Position vector is required to obtain the velocity from parameters.\n"
       "NULL vector passed in for position.\n"
       "Aborting calculation of velocity vector.\n");
@@ -134,7 +134,7 @@ TargetRelative_StateParam::compute_velocity_from_params()
   // Make sure model has been initialized
   //-----------------------------------------------------
   if (!flag_initialized) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Attempt to compute the velocity from assigned parameters before the\n"
       "model has been initialized.\n"
       "Initialization is required to set the u-hat, N-hat and P-hat vectors\n"
@@ -150,14 +150,14 @@ TargetRelative_StateParam::compute_velocity_from_params()
    * If it is still zero, nothing we can do.*/
   double r_mag = jeod::Vector3::vmag( position );
   if (MathUtils::is_near_equal( r_mag, 0)) {
-    CMLMessage::warn( __FILE__,__LINE__,
+    message::warn( __FILE__,__LINE__,
       "Trying to construct velocity vector from parameters.\n"
       "The input position has zero magnitude.\n"
       "Attempting to construct a position vector from the parameters.\n");
     compute_position_from_params();
     r_mag = jeod::Vector3::vmag( position );
     if (MathUtils::is_near_equal( r_mag, 0)) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "The input position still has zero magnitude.\n"
         "Cannot compute the velocity."
         "Setting velocity to zero.\n");
@@ -194,7 +194,7 @@ TargetRelative_StateParam::compute_velocity_from_params()
     // When Position vector and BiasedTarget position vector are nearly
     // aligned, lateral angle is undefined.  It is then not possible
     // to define a velocity vector given a lateral angle value.
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Position vector and BiasedTarget position vector are nearly aligned.\n"
       "In this case, lateral angle is undefined.  It is thus not possible\n"
       "to define a velocity vector relative to the BiasedTarget plane "
@@ -234,7 +234,7 @@ TargetRelative_StateParam::compute_velocity_from_params()
   // Error if the lateral angle has been specified to an invalid value,
   //   i.e. if |sin_theta_RngBias| < |sin(Lambda)|
   if ( std::abs(sin_H) > 1.0 ) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,
       "Questionable results for inputs Lambda and theta_RngBias!!\n",
       "  Lambda         = ",Lambda,"\n"
@@ -292,7 +292,7 @@ TargetRelative_StateParam::compute_velocity_from_params()
   const double p_hat_component_of_V = jeod::Vector3::dot( uhat_V,
                                                           Position_Target_frame.p_hat);
   if (std::abs(p_hat_component_of_V) < 1.0E-6) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Ambiguous result\n",
       "The generation of the velocity vector from TR-parameters produces 2 "
       "results --\nreflections in the u-n plane of the Position-Target frame.\n"
@@ -350,7 +350,7 @@ TargetRelative_StateParam::compute_params_from_vectors()
   // Make sure model has been initialized
   //-----------------------------------------------------
   if (!flag_initialized) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Attempt to compute the parameters from assigned position/velocity\n"
       "before the model has been initialized.\n"
       "Initialization is required to set the u-hat, N-hat and P-hat\n"
@@ -361,7 +361,7 @@ TargetRelative_StateParam::compute_params_from_vectors()
   // generate the unit vector to the initial position.
   const double r_mag = jeod::Vector3::vmag( position );
   if (MathUtils::is_near_equal( r_mag, 0)) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "The input position has zero magnitude.\n"
       "This makes the parameters also undefined."
       "Setting parameters to zero.\n");
@@ -398,7 +398,7 @@ TargetRelative_StateParam::compute_params_from_vectors()
   Vmag = jeod::Vector3::vmag( velocity );
 
   if (MathUtils::is_near_equal( Vmag, 0)) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "The input velocity has zero magnitude, which leaves the heading plane "
       "undefined.\n"
       "This makes the parameters gamma and lambda also undefined."
@@ -429,7 +429,7 @@ TargetRelative_StateParam::compute_params_from_vectors()
   // but providing an estimate of how much the target moves through inertial
   // space *with* the pfix frame.
   if (!compute_biased_target()) {
-    CMLMessage::warn( __FILE__,__LINE__,
+    message::warn( __FILE__,__LINE__,
       "Position vector and BiasedTarget position vector are nearly aligned.\n"
       "In this case, lateral angle is undefined.\n"
       "It is appropriate in this case to return lateral angle (Lambda) value "
@@ -458,7 +458,7 @@ TargetRelative_StateParam::compute_params_from_vectors()
     // When position and velocity vectors are nearly aligned,
     // lateral angle is undefined.  It is appropriate in this
     // case to return a lateral angle value of zero.
-    CMLMessage::warn(
+    message::warn(
      __FILE__,__LINE__,"Configuration warning\n",
      "Position and velocity vector inputs are nearly aligned."
      "\nThis is unusual but manageable.  Check configuration.\n");
@@ -496,7 +496,7 @@ TargetRelative_StateParam::compute_position_from_params(
   // Make sure model has been initialized
   //-----------------------------------------------------
   if (!flag_initialized) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Attempt to compute the position from assigned parameters before the\n"
       "model has been initialized.\n"
       "Initialization is required to set the u-hat, N-hat and P-hat vectors\n"
@@ -532,7 +532,7 @@ TargetRelative_StateParam::compute_position_from_params(
     sin_theta_Rot = 0.0;
     cos_theta_Rot = 1.0;
     if ( std::abs(phi_Cross) > 0 ) {
-      CMLMessage::warn( __FILE__,__LINE__,
+      message::warn( __FILE__,__LINE__,
         "Range angle (theta_Rng) input is near zero.\n"
         "In this case, the cross angle (phi_Cross) input should be zero.\n"
         "Ignoring the non-zero cross angle input (",phi_Cross,").\n"
@@ -551,7 +551,7 @@ TargetRelative_StateParam::compute_position_from_params(
 
     /* Check for valid combination of phi and theta_Rng */
     if ( std::abs( sin_theta_Rot) > 1.0 ) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Questionable results for inputs phi and theta_Rng!!\n",
         "  phi        = ",phi_Cross,"\n"
         "  theta_Rng  = ",theta_Rng,"\n"
@@ -635,7 +635,7 @@ TargetRelative_StateParam::compute_biased_target()
     // vector about the omega axis.
     if (MathUtils::is_near_equal( K_theta, 0) &&
         !k_theta_warning_sent) {
-      CMLMessage::warn( __FILE__,__LINE__,
+      message::warn( __FILE__,__LINE__,
        "The value of K_theta is close to zero, which probably means it has "
        "not been set.\n"
        "This will result in invalid biasing of the target.\n"

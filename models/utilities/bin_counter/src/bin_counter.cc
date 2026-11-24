@@ -77,7 +77,7 @@ CML_BinCounter::set_data(const std::vector<double> & edges,
   const size_t n_edges = edges.size();
   // Sanity check for number of bins:
   if (n_edges <= 1 && closed_ends) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot count into fewer than 1 bin.\n"
       "Bin group (",name,") cannot be used.\n");
     return;
@@ -86,7 +86,7 @@ CML_BinCounter::set_data(const std::vector<double> & edges,
   // Sanity check for monotonicity of edges:
   for (size_t ii = 1; ii < n_edges; ii++) {
     if (edges[ii] <= edges[ii-1]) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Bin edges (bin-group name : ",name,") are malformed,\n"
         "they are not monotonically increasing.\n"
         "  edge(",ii-1,") = ",edges[ii-1],"\n"
@@ -137,7 +137,7 @@ CML_BinCounter::set_data( double limit_a,
 
   // Sanity check for number of bins:
   if (num_bins == 0) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot count into fewer than 1 bin.\n"
       "Bin group (",name,") cannot be used.\n");
     return;
@@ -157,7 +157,7 @@ CML_BinCounter::set_data( double limit_a,
     upper_limit = limit_a;
   }
   else {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot count into an infinitesimal domain.\n"
       "Bin group (",name,") cannot be used.\n");
     bins_ready = false;
@@ -238,7 +238,7 @@ void
 CML_BinCounter::apply_tolerance(double tol)
 {
   if (!bins_ready) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot apply bin tolerance, bins not ready\n");
     return;
   }

@@ -63,7 +63,7 @@ void
 PistonThrusterGroup::add_piston_thruster( PistonThruster & new_thruster)
 {
   if (active) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__, "Invalid thruster addition\n",
       "Attempted to add a thruster to the thruster group during the active phase."
       "\nAttempt failed.\n");
@@ -71,7 +71,7 @@ PistonThrusterGroup::add_piston_thruster( PistonThruster & new_thruster)
   }
 
   if (std::find(piston_thrusters.begin(), piston_thrusters.end(), &new_thruster) != piston_thrusters.end()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__, "Invalid thruster addition.\n",
       "Attempted to add a thruster instance that has already been added.\n"
       "\nAttempt failed.\n");
@@ -112,7 +112,7 @@ PistonThrusterGroup::activate()
 {
   if (param.mode == PistonThrusterGroupParams::ReferenceDeltaV) {
     if (MathUtils::is_near_equal(input.duration, 0.0)) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__, "Invalid thruster inputs\n",
         "Attempted to start a thruster group with a fixed deltaV over zero time."
         "\n Requires an infinite force.\n"
@@ -122,7 +122,7 @@ PistonThrusterGroup::activate()
     }
     if (MathUtils::is_near_equal(input.load_mass, 0.0) ||
         MathUtils::is_near_equal(input.deltaV, 0.0)) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__, "Invalid thruster inputs\n",
         "Attempted to start a thruster group with a fixed deltaV with no "
         "required impulse.\n"
@@ -179,7 +179,7 @@ PistonThrusterGroup::update()
     break;
   case PistonThrusterGroupParams::SeparationTableLookup:
   default:
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__, "Unsupported mode\n",
       "Attempted to execute a thruster group with an invalid/unsupported\n"
       "force-generation method.  Turning thrusters off.\n");
@@ -210,7 +210,7 @@ void
 PistonThrusterGroup::set_mode( PistonThrusterGroupParams::ForceMethod new_mode)
 {
   if (active) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__, "Invalid mode-change request\n",
       "Cannot adjust mode while thrusters are active.\n"
       "Mode remains at ", param.mode, "\n");

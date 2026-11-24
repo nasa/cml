@@ -138,7 +138,7 @@ CompoundEventsManager::get_trigger(const std::string & name)
                             return (trigger_->name == name); }
                         );
   if (it == managed_triggers.end()) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "Manager has does not manage a trigger with name ",name,".\n"
       "Returning NULL.\n");
     return nullptr;

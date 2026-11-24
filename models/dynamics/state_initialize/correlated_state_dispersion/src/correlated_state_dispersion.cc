@@ -181,7 +181,7 @@ CorrelatedStateDispersion::disperse_state(
     dimension = 9;
     break;
    default:
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Invalid corr_option\n",
       "corr_option must be valid when calling disperse_state with\n"
       "multiple arguments.\n");
@@ -223,7 +223,7 @@ CorrelatedStateDispersion::apply_translational_dispersions(
      double velocity[3])
 {
   if (position == nullptr || velocity == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid input\n.",
       "One or both of the position and velocity vectors passed in are NULL.\n"
       "Aborting state dispersion.\n");
@@ -263,7 +263,7 @@ CorrelatedStateDispersion::apply_translational_dispersions(
     break;
 
    default:
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Invalid covariance frame\n",
       "Covariance frame option not found.\n");
   }
@@ -362,7 +362,7 @@ CorrelatedStateDispersion::generate_dispersions()
   {
     if (MathUtils::is_near_equal(sigma_limit, 0.0))
     {
-      CMLMessage::warn (
+      message::warn (
         __FILE__, __LINE__, "Invalid limit\n",
         "Tried to use a bounded distribution with the value sigma_limit still\n"
         "at its default 0.0. This would result in no dispersion.\n"
@@ -372,7 +372,7 @@ CorrelatedStateDispersion::generate_dispersions()
 
     if (sigma_limit < 0.0)
     {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__, "Negative limit\n",
         "Negative number specified for sigma_limit. Using its absolute "
         "value.\n");
@@ -391,7 +391,7 @@ CorrelatedStateDispersion::generate_dispersions()
                                           &sqrt_covariance[0][0],
                                           9,
                                           dimension)) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Decomposition failed\n",
       "Cholesky decomposition of the covariance matrix failed.\n"
       "Check that the covariance is valid and has been entered correctly.\n");
@@ -468,7 +468,7 @@ CorrelatedStateDispersion::generate_random_vec()
     }
     while (++num_iterations < max_iterations && radius_sq > sigma_lim_sq);
     if (radius_sq > sigma_lim_sq) {
-      CMLMessage::error(
+      message::error(
         __FILE__, __LINE__, "Limit too small for TruncatedGaussian\n",
         "Reached the maximum number of iterations (", max_iterations, ") trying to randomize\n"
         "the dispersions using a truncated Gaussian distribution. Will use\n"
@@ -499,7 +499,7 @@ CorrelatedStateDispersion::generate_random_vec()
 
   case NoDispersion:
   default:
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Invalid Dispersion Distribution\n",
       "Invalid option specified for dispersion_distribution!\n");
   }
@@ -531,7 +531,7 @@ CorrelatedStateDispersion::populate_random_vec_unit()
   const double radius = std::sqrt(radius_sq);
 
   if (MathUtils::is_near_equal(radius, 0.0)) {
-    CMLMessage::error(__FILE__, __LINE__, "Random number generation\n",
+    message::error(__FILE__, __LINE__, "Random number generation\n",
       "The random number generator returned all zeros. The probability of\n"
       "this happening by chance is infinitesimally small, so something is\n"
       "almost certainly wrong.\nCannot generate random unit vector. State "
@@ -588,7 +588,7 @@ CorrelatedStateDispersion::transform_ra_dec_fp(
 
   // safety check:
   if (MathUtils::is_near_equal(r_mag, 0.0)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid position vector\n",
       "The position vector has zero magnitude.\n"
       "Assigning RA and dec to 0.0 and aligning NED with inertial\n");
@@ -714,7 +714,7 @@ CorrelatedStateDispersion::transform_TR_param(
 {
   /* TR_param.pfix-position.planet must have been configured prior to use */
   if (TR_param.pfix_position.planet == nullptr) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid planet specification\n",
     "Planet has not been assigned to the PlanetFixedPosition instance\n"
     "(TR_param.pfix_position). "

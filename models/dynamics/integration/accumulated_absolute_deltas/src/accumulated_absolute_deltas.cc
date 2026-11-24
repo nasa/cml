@@ -32,12 +32,12 @@ AccumulatedAbsoluteDeltas::AccumulatedAbsoluteDeltas(
   subscribe_name = "AccumulatedAbsoluteDeltas:";
 
   if (variable == nullptr) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid construction\n",
     "The variable being accumulated in NULL.\n");
   }
   if (size == 0) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid construction\n",
     "The size of the array must be positive.\n"
     "For a scalar, use size = 1.\n");

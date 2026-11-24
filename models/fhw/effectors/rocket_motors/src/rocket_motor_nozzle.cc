@@ -34,7 +34,7 @@ RocketMotorNozzle::initialize(
 {
   if (T_struc_to_motor_frame == nullptr)
   {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid initialization data.\n",
       "A NULL pointer was passed in for the transformation from structure\n"
       "to motor frame.\nCannot perform correct transformation.\n");
@@ -42,14 +42,14 @@ RocketMotorNozzle::initialize(
 
   if (position_struc_to_motor_frame == nullptr)
   {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid initialization parameters\n",
       "RocketMotorNozzle requires a non-NULL position vector from the vehicle\n"
       "structure frame to the motor frame. \n");
   }
 
   if (exit_area < 0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Initialization \n",
       "The exit area of a rocket nozzle cannot be < 0.\n"
       "Resetting the exit_area to 0.0 and continuing.\n"
@@ -59,7 +59,7 @@ RocketMotorNozzle::initialize(
   }
 
   if (sf < 0.0) {
-    CMLMessage::error(__FILE__, __LINE__, "Invalid nominal scale factor\n",
+    message::error(__FILE__, __LINE__, "Invalid nominal scale factor\n",
       "The nominal scale factor has a value of ", sf, ". It should be at least 0.0.\n"
       "Resetting the nominal scale factor to 0.0.\n");
     sf = 0.0;
@@ -74,7 +74,7 @@ RocketMotorNozzle::initialize(
   azimuth_thrust = azimuth_true + thrust_azm_disp + M_PI;
 
   if (sf_true < 0.0) {
-    CMLMessage::error(__FILE__, __LINE__, "Invalid scale factor\n",
+    message::error(__FILE__, __LINE__, "Invalid scale factor\n",
       "The dispersed scale factor has a value of ", sf_true, ". It must be at least\n"
       "0.0. This is the result of adding a negative dispersion to a\n"
       "nominal scale factor with a smaller absolute value. Resetting the\n"

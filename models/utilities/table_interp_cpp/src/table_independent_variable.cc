@@ -84,7 +84,7 @@ TableIndependentVariable::load_data(
        size_t size_in)
 {
   if (data_in == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Data load error.\n",
       "The given pointer to data table for independent variable ",name,
       " cannot be NULL.\n");
@@ -92,7 +92,7 @@ TableIndependentVariable::load_data(
   }
 
   if (size_in == 0U) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Data load error.\n",
       "The given size for data for independent variable ",name,
       " must be > 0.\n");
@@ -108,7 +108,7 @@ TableIndependentVariable::load_data(
        const DoubleVec & data_in)
 {
   if (data_loaded) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Data load error.\n",
       "Data for independent variable ",name," has already been loaded.\n"
       "Second call to load_data() fails without first clearing out the "
@@ -118,7 +118,7 @@ TableIndependentVariable::load_data(
   }
   size = data_in.size();
   if ( size < 1 ) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Data load error:\n",
       "Data must not be empty\n" );
       return false;
@@ -131,7 +131,7 @@ TableIndependentVariable::load_data(
 
   // sanity check
   if (size == 1) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Data load warning:\n",
       "The data table to load for independent variable ",name," has only one "
       "data point.\n"
@@ -154,7 +154,7 @@ bool
 TableIndependentVariable::initialize()
 {
   if (!data_loaded) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Update error.\n",
       "Data for independent variable (",name,") has not been loaded yet.\n"
       "It cannot be used.\n");
@@ -183,7 +183,7 @@ bool
 TableIndependentVariable::update()
 {
   if (!initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Update error.\n",
       "Independent variable ",name," has not been initialized.\n"
       "It cannot be used.\n");
@@ -247,7 +247,7 @@ TableIndependentVariable::bias_data(
 {
   // Note - data_loaded implies data.size() > 0.
   if (!data_loaded) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid external initialization sequence\n",
       "Call made to bias data but data has not yet been loaded.\n"
       "There is no data to bias.\n"
@@ -255,7 +255,7 @@ TableIndependentVariable::bias_data(
     return;
   }
   if (idx_start > idx_stop) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid arguments\n",
       "Call made to bias data between two indices with the start index (",
       idx_start,")\n"
@@ -274,7 +274,7 @@ TableIndependentVariable::bias_data(
     data_copy[ii] += bias;
   }
   if (!check_monotonicity(data_copy)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Bias application\n",
       "Bias being applied to data would result in an invalid data set for\n"
       "the TableIndependentVariable data.\n"
@@ -306,7 +306,7 @@ TableIndependentVariable::scale_data(
         size_t idx_stop)
 {
   if (!data_loaded) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid external initialization sequence\n",
       "Call made to scale data but data has not yet been loaded.\n"
       "There is no data to scale.\n"
@@ -314,7 +314,7 @@ TableIndependentVariable::scale_data(
     return;
   }
   if (idx_start > idx_stop) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid arguments\n",
       "Call made to scale data between two indices with the start index (",
       idx_start,")\n"
@@ -332,7 +332,7 @@ TableIndependentVariable::scale_data(
     data_copy[ii] *= scale;
   }
   if (!check_monotonicity(data_copy)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Bias application\n",
       "Scale being applied to data would result in an invalid data set for\n"
       "the TableIndependentVariable data.\n"
@@ -361,7 +361,7 @@ void
 TableIndependentVariable::set_name (const std::string &new_name)
 {
   if (!name.empty()) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"set_name warning:\n",
       "Changing the name of independent variable ",name," to ",new_name,"\n");
   }
@@ -557,7 +557,7 @@ TableIndependentVariable::generate_fraction()
 {
   if ((index + 1) >= size) {
     // We should never hit this case, but protect against it just in case.
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Binary search error for independent variable ",
       name, ":\n",
       "The search has failed and we're attempting to interpolate off the "
@@ -606,7 +606,7 @@ TableIndependentVariable::check_monotonicity(
   // values because the mononicity test (next) prevents values from reversing.
   for (size_t test_ix = 1; test_ix < size; ++test_ix) {
     if (MathUtils::is_near_equal(data_in[test_ix], data_in[test_ix-1])) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Data load error:\n",
         "Two or more of the values in the data table for independent variable ",
         name," are identical.\n"
@@ -619,7 +619,7 @@ TableIndependentVariable::check_monotonicity(
     // next data point has a value that is in the same direction as the
     // established trend.
     if ((data_in[test_ix] > data_in[test_ix-1]) != table_values_increasing) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Data error:\n",
         "The direction of increasing values in the data table for independent "
         " variable ",name," switched at index ",test_ix-1," with sequence ",

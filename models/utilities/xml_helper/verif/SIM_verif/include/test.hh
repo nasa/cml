@@ -212,7 +212,7 @@ struct XmlHelperTester {
 
   void error_report() {
     std::cout << "**********************************************************\n";
-    cml::CMLMessage::fail(
+    cml::message::fail(
       __FILE__,__LINE__,"Error\n",
       "Error encountered. Terminating.\n");
   }

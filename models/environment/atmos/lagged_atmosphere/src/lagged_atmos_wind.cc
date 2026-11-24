@@ -73,19 +73,19 @@ void
 LaggedAtmosWind::compute( double input_altitude)
 {
   if (!initialized) {
-    CMLMessage::fail( __FILE__, __LINE__,
+    message::fail( __FILE__, __LINE__,
     "Atmosphere queried before initialization in ",model_name,".\n");
   }
 
   // Unreachable code in current implementation; nodes is protected, it has
   // one entry if initialized, and does not pop off its last set.
   if (nodes.empty()) {
-    CMLMessage::fail(__FILE__,__LINE__,
+    message::fail(__FILE__,__LINE__,
     "There are no nodes in the list in model ",model_name,".\n");
   }
 
   if (nodes.size() == 1) {
-    CMLMessage::warn(__FILE__, __LINE__,
+    message::warn(__FILE__, __LINE__,
     "Unable to bound altitude in model ",model_name,".\n"
     "There is only 1 node on which to base the output.\n\n");
     // pull the data from the only node, except for altitude which comes from
@@ -129,7 +129,7 @@ LaggedAtmosWind::compute( double input_altitude)
   // interpolate.
   if (below == nodes.begin()) {
     ++below;
-    CMLMessage::warn(__FILE__, __LINE__,
+    message::warn(__FILE__, __LINE__,
     "Unable to bound altitude in model ",model_name,".\n"
     "Input altitude ",input_altitude," is at or above the top of the node "
     "table.\n"
@@ -144,7 +144,7 @@ LaggedAtmosWind::compute( double input_altitude)
   else if (below == nodes.end()) {
     --below;
     above = std::prev(below,1);
-    CMLMessage::warn(__FILE__, __LINE__,
+    message::warn(__FILE__, __LINE__,
     "Unable to bound altitude in model ",model_name,".\n"
     "Input altitude ",input_altitude," is below the node table.\n"
     "Extrapolating based on node-altitudes ",above->altitude," and ",
@@ -235,7 +235,7 @@ void
 LaggedAtmosWind::set_min_delta_altitude( double min_new)
 {
   if (min_new <= 0.0) {
-    CMLMessage::warn(__FILE__, __LINE__,
+    message::warn(__FILE__, __LINE__,
     "Illegal value for delta-altitude in model ",model_name,".\n"
     "Minimum delta-altitude must be greater than 0 to preserve\n"
     "uniqueness of the node points.\n");
@@ -248,7 +248,7 @@ void
 LaggedAtmosWind::set_max_delta_altitude( double max_new)
 {
   if (max_new <= 0.0) {
-    CMLMessage::warn(__FILE__, __LINE__,
+    message::warn(__FILE__, __LINE__,
     "Illegal value for delta-altitude in model ",model_name,".\n"
     "Maximum delta-altitude must be greater than 0 to preserve\n"
     "any node points; node points more than this value above the\n"

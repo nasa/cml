@@ -24,7 +24,7 @@ void
 Constraint::initialize()
 {
   if (test_list.empty()) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Failure to initialize a constraint:\n"
       "Constraint requires at least one constraint-test.\n"
       "Aborting initialization.\n");
@@ -36,7 +36,7 @@ Constraint::initialize()
       test->set_violation_condition(violation_condition);
     }
     if (!test->initialize()) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Failure to initialize a constraint-test means the constraint\n"
         "cannot be initialized.\n"
         "Aborting initialization.\n");

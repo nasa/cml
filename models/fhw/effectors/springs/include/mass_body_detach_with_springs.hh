@@ -67,7 +67,7 @@ public:
     } else {
       // The subject is either a MassBody with no DynBody parent or was never
       // defined.
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"jeod::DynBody is NULL:\n",
         "The subject body on which the springs will separate from is not a "
         "jeod::DynBody as it should be, so it has no state.\n"
@@ -94,7 +94,7 @@ public:
     } else {
       // The subject is either a MassBody with no DynBody parent or was never
       // defined.
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"jeod::DynBody is NULL:\n",
         "The subject body on which the springs will separate from is not a "
         "jeod::DynBody as it should be, so it has no state.\n"

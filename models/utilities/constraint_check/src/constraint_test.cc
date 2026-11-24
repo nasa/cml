@@ -49,7 +49,7 @@ ConstraintTest::initialize_threshold()
   if (violation_condition == ConstraintEnum::Undefined ||
       violation_condition == ConstraintEnum::In ||
       violation_condition == ConstraintEnum::Out) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot initialize a threshold constraint-test without a valid "
       "violation-condition.\n"
       "Defaulting to GT (greater than):\n"
@@ -65,7 +65,7 @@ ConstraintTest::initialize_interval()
 {
   if (violation_condition != ConstraintEnum::In &&
       violation_condition != ConstraintEnum::Out) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot initialize an interval constraint-test with a\n"
       "violation-condition of ",violation_condition,".\n"
       "Defaulting to In:\n"
@@ -81,7 +81,7 @@ ConstraintTest::initialize_val_set()
 {
   if (violation_condition != ConstraintEnum::In &&
       violation_condition != ConstraintEnum::Out) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot initialize a value-set constraint-test with a\n"
       "violation-condition of ",violation_condition,".\n"
       "Defaulting to In:\n"

@@ -32,7 +32,7 @@ RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
   // NULL check
   if (jet == nullptr)
   {
-    CMLMessage::fail(__FILE__, __LINE__, "Invalid pointer\n",
+    message::fail(__FILE__, __LINE__, "Invalid pointer\n",
       "Pointer to jet data is NULL! Cannot initialize RcsBuildUpTrailOff.\n");
   }
 }

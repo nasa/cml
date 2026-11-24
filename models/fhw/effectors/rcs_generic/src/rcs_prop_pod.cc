@@ -71,7 +71,7 @@ RcsPropPod::set_dyn_mass_interface(
       DynamicMassBodyPropertiesInterface & dyn_mass_interface)
 {
   if (component_index >= components.size()) {
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__,"Assignment error\n",
     "Cannot assign a dyn-mass interface to component index ", component_index, " because\n"
     "there are only ", components.size(), " components (so max index is ", components.size()-1, ").\n");
@@ -189,7 +189,7 @@ RcsPropPod::increment_mass_consumption(
                                            // for a single jet
 {
   if (jet_consumption.size() !=  components.size()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__," Incompatibility between jets and components.\n",
       "Mismatch on the number of propellant components. \n"
       "The jets have ", jet_consumption.size(), " components and the propulsion pod has ", components.size(), " components.\n"
@@ -249,7 +249,7 @@ RcsPropPod::compute_jets_on(
 
   /* protect for bad condition */
   if (num_jets_on > max_num_jets_on) {
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__,"Computation error\n",
     "Number of jets attempting to simultaneously feed from\n"\
     "a prop pod (at least ", num_jets_on, ") exceeds number allowed (", max_num_jets_on, ")\n"
@@ -273,7 +273,7 @@ RcsPropPod::get_flow_rate_scale_factor(
     return 1.0;
   }
   if (component_index >= components.size()) {
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__,"Assignment error\n",
     "Cannot extract the flow-rate scale-factor from component index ", component_index, "\n"
     "because there are only ", components.size(), " components (so max index is ", components.size()-1, ").\n");
@@ -312,7 +312,7 @@ RcsPropPod::set_thrust_factor(
     thrust_factor.at(index) = value;
   }
   else {
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__,"Invalid assignment\n",
     "The thrust_factor vector is not sufficiently large to handle index ", index, ".\n");
   }

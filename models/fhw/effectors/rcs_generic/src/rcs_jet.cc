@@ -67,7 +67,7 @@ RcsJet::initialize()
     // be overwritten by blowdown model.
     if( (group.get_blow_down()) &&
         (!MathUtils::is_near_equal(force_cl, 0.0 ))) { // i.e. non-zero
-      CMLMessage::warn(
+      message::warn(
       __FILE__,__LINE__,"Incompatible configuration.\n",
       "JET: force_cl has been specified but will be overwritten by "
       "blowdown model\n");
@@ -85,7 +85,7 @@ RcsJet::initialize()
     // if blowdown requested, error (since blowdown model -- not IC -- will
     // then define force mag
     if( group.get_blow_down() ) {
-      CMLMessage::warn(
+      message::warn(
       __FILE__,__LINE__,"Incompatible configuration.\n",
       "Jet force vector (input_force spec as 'vector' (2)) has been\n"
       "used to specify the initial conditions, but when used in blowdown\n"
@@ -100,7 +100,7 @@ RcsJet::initialize()
    case RcsGeneric::input_force_error:
    default:
     // Error
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Incomplete configuration.\n",
     "\nERROR: Input force method flag not set.\n"\
     "Set input_force = mag_and_uvec (1) for magnitude and unit vector.  OR\n"\
@@ -128,7 +128,7 @@ RcsJet::initialize()
        (MathUtils::is_near_equal(cone_angle_std_dev, 0.0 ))){
        // NOTE - legitimate comparisons against zero; basically testing whether
        // these values have moved from their construction values.
-     CMLMessage::warn(
+     message::warn(
       __FILE__,__LINE__,"Incomplete configuration.\n",
       "jet has random errors on but none of the constraining parameters "
       "are set.\n");
@@ -164,7 +164,7 @@ RcsJet::compute_component_flow_rates()
   }
 
   if (isp_g <= 0.0 ) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid configuration.\n",
     "Invaid information when trying calculate flow rate:\n"\
     "Specific Impulse = ", isp, " s\nwith g included, velocity = ", isp_g, " m/s\n");
@@ -182,7 +182,7 @@ RcsJet::compute_component_flow_rates()
     // These default to 0.0, so if they are still 0.0, they have not been
     // set.
     if (group.mixture_ratio <= 0.0) {
-      CMLMessage::fail(
+      message::fail(
       __FILE__,__LINE__,"Invalid configuration.\n",
       "Invaid information when trying calculate flow rate:\n"\
       "Mixture Ratio = ", group.mixture_ratio, "\n");
@@ -196,7 +196,7 @@ RcsJet::compute_component_flow_rates()
     // Protect against excessive # of propellant components.
     // This should have been caught in RcsGeneric::initialize,
     // but in case the configuration changed mid-sim:
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid configuration.\n",
     "'calc_flow_rate = true' assumes 1 or 2 prop components,\n"
     "but there are ", num_prop_components, " components\n");
@@ -273,7 +273,7 @@ RcsJet::update(
     command = false;
     break;
    default:
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__,"Invalid setting.\n",
     "Illegal value of failure flag.\n");
     command = false;
@@ -887,7 +887,7 @@ RcsJet::get_component_consumption(
       unsigned int ix)
 {
   if (ix >= component_consumption.size()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Request error\n",
       "Cannot extract the index ", ix, " because component_consumption has "
       "only ", component_consumption.size(), " elements.\n");
@@ -906,7 +906,7 @@ RcsJet::get_component_flow_rate(
       unsigned int ix)
 {
   if (ix >= component_flow_rate.size()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Request error\n",
       "Cannot extract the index ", ix, " because component_flow_rate has "
       "only ", component_flow_rate.size(), " elements.\n");
@@ -936,7 +936,7 @@ RcsJet::set_component_flow_rate(
     double rate)
 {
   if (component_ix >= component_flow_rate.size()) {
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__,"Assignment error\n",
     "Cannot assign a component flow-rate to component index ", component_ix, " because\n"
     "there are only ", component_flow_rate.size(), " components (so max index is ", component_flow_rate.size()-1, ").\n");
@@ -1123,7 +1123,7 @@ void
 RcsJet::set_force_direction(double force_dir[3])
 {
   if (force_dir == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"NULL argument.\n",
       "The force direction input was a NULL argument. Exiting without "
       "replacement.\n");

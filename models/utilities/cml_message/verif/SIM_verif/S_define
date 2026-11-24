@@ -32,10 +32,10 @@ class VerifSimObject: public Trick::SimObject {
   {
     if (!perform_speed_test) return;
     for (int ii = 0; ii < 10000; ++ii) {
-      cml::CMLMessage::error(__FILE__,__LINE__,"Error number",ii);
+      cml::message::error(__FILE__,__LINE__,"Error number",ii);
 //      jeod::MessageHandler::error(__FILE__,__LINE__,"Error number",ii);
     }
-    cml::CMLMessage::fail(__FILE__,__LINE__,"Close out");
+    cml::message::fail(__FILE__,__LINE__,"Close out");
   }
 };
 VerifSimObject verif ;

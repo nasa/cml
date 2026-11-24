@@ -241,17 +241,17 @@ AtmosphereExec::initialize( // Return: --   Void
 
   AtmosphereExecInterface::initialize();
 
-  CMLMessage::inform(
+  message::inform(
     __FILE__,__LINE__," Atmosphere Exec initialization configuration:\n",
     "For vehicle ", body.name.get_name(),
     ":\nAtmosphere: ", current_atmos->name,
     "\nWinds: ", current_winds->name,
     "\nTime: ", time_in.calendar_year, "/",
-    CMLMessage::printf_fmt("%02d", month_init), "/",
-    CMLMessage::printf_fmt("%02d", time_in.calendar_day), " :: ",
-    CMLMessage::printf_fmt("%02d", time_in.calendar_hour), ":",
-    CMLMessage::printf_fmt("%02d", time_in.calendar_minute), ":",
-    CMLMessage::printf_fmt("%05.2f", time_in.calendar_second));
+    message::printf_fmt("%02d", month_init), "/",
+    message::printf_fmt("%02d", time_in.calendar_day), " :: ",
+    message::printf_fmt("%02d", time_in.calendar_hour), ":",
+    message::printf_fmt("%02d", time_in.calendar_minute), ":",
+    message::printf_fmt("%05.2f", time_in.calendar_second));
 }
 
 /*****************************************************************************
@@ -280,7 +280,7 @@ AtmosphereExec::initialize_atmosphere()
     break;
 
   default:
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid initialization.\n",
     "Invalid atmosphere option has been selected\n");
     break;
@@ -313,7 +313,7 @@ AtmosphereExec::initialize_winds()
     break;
 
   default:
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid initialization.\n",
     "Invalid winds option has been selected\n");
     break;
@@ -405,7 +405,7 @@ AtmosphereExec::add_gust()
     break;
   default:
     /* Initialize the gust vector with the null vector and turn gust off.*/
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid gust frame specification\n",
       "Invalid specification for gust.gust_frame.\n"
       "Setting gust to zero and turning off the model.\n");

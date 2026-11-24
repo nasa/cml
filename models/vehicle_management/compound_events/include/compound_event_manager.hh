@@ -208,7 +208,7 @@ class CompoundEventsManager : public VehicleEventsManager
     if ((var_name_ref          == nullptr) ||
         (var_name_ref->attr    == nullptr) ||
         (var_name_ref->address == nullptr)) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Unable to find simulation variable ",var_name,
         ".\n Cannot create a trigger based on this name.\n");
 
@@ -229,7 +229,7 @@ class CompoundEventsManager : public VehicleEventsManager
           ref_type==typeid(int) ||
           ref_type==typeid(unsigned int))
         && trick_type != TRICK_ENUMERATED)) {
-        CMLMessage::warn(__FILE__,__LINE__,
+        message::warn(__FILE__,__LINE__,
           var_name," has type ", type, " (TRICK_TYPE ", std::to_string(trick_type), ") and ref has type ",ref_type.name()
           // , ".\nThese need to be the same type; otherwise the trigger will be wrong."
           );

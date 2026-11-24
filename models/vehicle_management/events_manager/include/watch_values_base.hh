@@ -92,7 +92,7 @@ Notes:
   /***************************************************************************/
   void set_watch( const watchType & var, const watchType * ref) {
     if (ref == nullptr) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot set a watch to monitor a variable against a null reference "
         "variable.\n");
       return;
@@ -124,13 +124,13 @@ Notes:
   const watchType * set_watch_primitives_test_ref_val( const void * var)
   {
     if (var == nullptr) {
-      CMLMessage::fail(
+      message::fail(
       __FILE__,__LINE__,"Critical failure in calling set_watch\n",
       "Trick was unable to find the specified watch variable.\n"
       "The pointer passed into the set_watch_primitives method is NULL.\n"
       "Check the variable for the correct name.\n");
     }
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Unsafe method call set_watch_primitives\n",
       "The void pointer(s) returned by 'get_address' and passed into "
       "set_watch_primitives\nis about to be reinterpret_cast to the type "
@@ -143,27 +143,27 @@ Notes:
   const watchType * set_watch_primitives_test_ref_var( const void * var, const void * ref)
   {
     if (var == nullptr && ref != nullptr) {
-      CMLMessage::fail(
+      message::fail(
       __FILE__,__LINE__,"Critical failure in calling set_watch\n",
       "Trick was unable to find the specified watch variable.\n"
       "The pointer passed into the set_watch_primitives method is NULL.\n"
       "Check the variable for the correct name.\n");
     }
     else if (var != nullptr && ref == nullptr) {
-      CMLMessage::fail(
+      message::fail(
       __FILE__,__LINE__,"Critical failure in calling set_watch\n",
       "Trick was unable to find the specified reference variable.\n"
       "The pointer passed into the set_watch_primitives method is NULL.\n"
       "Check the variable for the correct name.\n");
     }
     else if (var == nullptr && ref == nullptr) {
-      CMLMessage::fail(
+      message::fail(
       __FILE__,__LINE__,"Critical failure in calling set_watch\n",
       "Trick was unable to find the specified watch and reference variables.\n"
       "The pointers passed into the set_watch_primitives method are NULL.\n"
       "Check the variables for the correct names.\n");
     }
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Unsafe method call set_watch_primitives\n",
       "The void pointer(s) returned by 'get_address' and passed into "
       "set_watch_primitives\nis about to be reinterpret_cast to the type "
@@ -294,7 +294,7 @@ Purpose:(Split behavior based on whether the template class variable type
       // Impossible to hit this error because direction is protected,
       // and because set_direction() converts all positive numbers
       // to 1 and all negative numbers to -1
-      CMLMessage::error (
+      message::error (
       __FILE__, __LINE__, "Invalid Event/Watch activation: No direction:\n",
       "An attempt was made to activate a WatchValue instance with no direction\n"
       "It is unclear whether the event should trigger when the variable is\n"
@@ -312,7 +312,7 @@ Assumption: (Both activate() and initialize() must have been called)
  ******************************************************************************/
   void activate() override {
     if (variable == nullptr) {
-      CMLMessage::error (
+      message::error (
       __FILE__, __LINE__, "Invalid Event/Watch activation: NULL variable:\n",
       "An attempt was made to activate a WatchValue instance with a NULL\n"
       "variable to watch.\n  Attempt failed.\n");
@@ -327,7 +327,7 @@ Assumption: (Both activate() and initialize() must have been called)
     active = true;
     if (add_self_to_manager_active_list) {
       if (active_watches == nullptr) {
-        CMLMessage::error( __FILE__,__LINE__,
+        message::error( __FILE__,__LINE__,
           "Activating watch with internal instruction to add itself to\n"
           "the active-watch list, but has no access to that list.\n"
           "Watch will not get checked by the event-manager.\n");
@@ -349,7 +349,7 @@ Purpose:(Internal activation sub-method for case where reference is relative\
   {
     (void)var;
     if (reference == variable_at_activation) {
-        CMLMessage::warn(
+        message::warn(
           __FILE__,__LINE__,"Possible unintended behavior with bool event\n",
           "An event based on a boolean variable has relative_to_activation\n "
           "set to True, but the value of the watch variable at activation\n "
@@ -390,7 +390,7 @@ Purpose:(Internal activation sub-method for case where reference is relative\
   void set_reference_relative_to_activation(varType* var)
   {
     (void)var;
-    CMLMessage::error (
+    message::error (
       __FILE__, __LINE__, "Invalid Event/Watch activation: undefined behavior:\n",
       "A watch was activated with the flag to watch for a value to be\n"
       "determined relative to the current value.\n"

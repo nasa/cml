@@ -73,7 +73,7 @@ sSensorFaults::parse_non_periodic_param( FaultFunctionParameter& params,
   xmlNodePtr params_node =
       XmlHelper::xml_find_child(function_node, "Parameters");
   if (params_node == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> was defined as a Linear FUNCTION type\n"
       "but is missing the Parameters subnode of the Function node.\n"
@@ -83,7 +83,7 @@ sSensorFaults::parse_non_periodic_param( FaultFunctionParameter& params,
   }
   const char* temp_string = XmlHelper::xml_find_value(params_node, "a");
   if (temp_string == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> was defined as a Linear FUNCTION type but the\n"
       "Parameters subnode of the Function node is missing specification of\n"
@@ -150,7 +150,7 @@ sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
                                                      "Parameters");
   if (param_node == nullptr) {
     if (nom_required) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "XML input error parsing fault configuration\n",
         "The Fault: <", fault_name, "> was defined as a periodic function type\n"
         "but it has no specified Parameters node for specifying the value\n"
@@ -168,7 +168,7 @@ sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
                                                         true);
   if (value_string == nullptr) {
     if (nom_required) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "XML input error parsing fault configuration\n",
         "The Fault: <", fault_name, "> was defined as a periodic function type\n"
         "but it has no specified ", param_name_, " field in the Parameters node.\n"
@@ -198,7 +198,7 @@ sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
   if (value_string == nullptr) {
     // No rate specified, no point in going on to look for an independent
     // variable.
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> is configured as a periodic function, with the\n",
       param_name_, " parameter assigned a Var<param_name> node but no \"scalar\" field.\n"
@@ -220,7 +220,7 @@ sSensorFaults::parse_periodic_param( FaultFunctionParameter&  param,
   if (!parse_ind_variable( param.ind_variable,
                            variable_node,
                            fault_name)) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> is configured as a periodic function, with the\n",
       param_name_, "s parameter assigned a Var node, indicating that it is to be treated\n"
@@ -250,7 +250,7 @@ sSensorFaults::check_rand_in_params( xmlNodePtr fault_node)
   xmlNodePtr param_node = XmlHelper::xml_find_child( fault_node,
                                                      "Params");
   if (param_node != nullptr) {
-    CMLMessage::warn(__FILE__,__LINE__,
+    message::warn(__FILE__,__LINE__,
       "XML input checking for deprecated pattern\n",
       "Fault Manager did not find a RandValue node, which is required to\n"
       "configure the random distribution somewhere in the fault system.\n"
@@ -301,7 +301,7 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
     if (temp_str != nullptr) {
       rng.std_dev = strtod(temp_str, nullptr);
     } else {
-      CMLMessage::error( __FILE__, __LINE__,
+      message::error( __FILE__, __LINE__,
         "XML input error parsing randomized configuration.\n",
         "A Gaussian / Normal random variable in fault ", fault_name, " was specified\n"
         "without a standard deviation value.\n"
@@ -314,7 +314,7 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
     if ( temp_str != nullptr) {
       rng.mean = strtod(temp_str, nullptr);
     } else {
-      CMLMessage::warn(__FILE__, __LINE__,
+      message::warn(__FILE__, __LINE__,
         "XML input missing while parsing randomized "
         "configuration.\n",
         "A Gaussian / Normal random variable in Fault ", fault_name, " S was specified\n"
@@ -349,7 +349,7 @@ bool sSensorFaults::parse_rand_number( FaultRandNumber&  rng,
         rng.upper_limit = mean_val + std::strtod(max_str, nullptr);
       }
       else {
-        CMLMessage::error(__FILE__, __LINE__,
+        message::error(__FILE__, __LINE__,
           "XML input error parsing randomized "
           "configuration.\n",
           "A flat distribution random variable in fault ", fault_name, "\n"

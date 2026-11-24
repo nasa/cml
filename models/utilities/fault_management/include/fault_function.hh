@@ -140,7 +140,7 @@ template<typename T> void FaultFunction<T>::overwrite_value() {
         // Impossible to get here since we already handled this above, but included
         // for completeness.
       default:
-        CMLMessage::error(__FILE__, __LINE__,
+        message::error(__FILE__, __LINE__,
           "Fault Management Error\n",
           "Invalid FunctionType enumeration in fault <", name, "> \n"
           "Disabling the fault.\n");

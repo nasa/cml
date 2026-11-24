@@ -11,7 +11,7 @@ verif.framework.vars_file_name = "Unit_test_data/vars.txt"
 verif.framework.data_file_name = "Unit_test_data/data.txt"
 
 verif.manager.enabled = True
-trick.cml.CMLMessage.set_publish_level( trick.cml.CMLMessage.Debug)
+trick.cml.message.set_publish_level( trick.cml.message.Debug)
 
 verif.manager.event.subscribe();
 

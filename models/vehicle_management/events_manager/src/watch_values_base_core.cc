@@ -84,7 +84,7 @@ WatchValuesBaseCore::apply_complementary_changes()
     x->specific_execution();
   }
   if (!message.empty()) {
-    CMLMessage::inform( __FILE__,__LINE__,
+    message::inform( __FILE__,__LINE__,
       "Event processed:\n", message, "\n\n");
   }
 }

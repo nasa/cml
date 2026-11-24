@@ -68,7 +68,7 @@ PlanetPlanetState::initialize()
 {
    if (init_from_name) {
      if (from_frame_name.empty()) {
-      CMLMessage::fail (
+      message::fail (
          __FILE__, __LINE__, "PlanetPlanetState::invalid name\n",
          "Missing from_frame_name for PlanetPlanetState.\n"
          "(corresponding to_frame_name for identification is '",
@@ -78,7 +78,7 @@ PlanetPlanetState::initialize()
      // Note -- can use from_frame_name in next message because it is non-null
      // by previous check.
      if (to_frame_name.empty()) {
-      CMLMessage::fail (
+      message::fail (
          __FILE__, __LINE__, "PlanetPlanetState::invalid name\n",
          "Missing to_frame_name for PlanetPlanetState.\n"
          "(corresponding from_frame_name for identification is '",
@@ -95,13 +95,13 @@ PlanetPlanetState::initialize()
   // Ensure frames found and pointers allocated.
   // Note -- names are valid constructs, but don't name valid frames.
   if (to_frame  == nullptr) {
-     CMLMessage::fail (
+     message::fail (
         __FILE__, __LINE__, "PlanetPlanetState::invalid name\n",
         "Invalid to-frame '", to_frame_name, "' for PlanetPlanetState");
      return;
   }
   if (from_frame == nullptr) {
-     CMLMessage::fail (
+     message::fail (
         __FILE__, __LINE__, "PlanetPlanetState::invalid name\n",
         "Invalid from-frame '", from_frame_name, "' for PlanetPlanetState");
      return;

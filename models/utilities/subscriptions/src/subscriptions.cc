@@ -19,7 +19,7 @@ SubscriptionBase::subscribe()
 {
   if (!enabled) {
     if (!quiet_disabled_warning) {
-      CMLMessage::error(
+      message::error(
        __FILE__, __LINE__, "Subscription Error\n",
        "Model (", subscribe_name, ") has been disabled for this scenario. \n"
        "Cannot subscribe to a disabled model.\n");
@@ -65,7 +65,7 @@ SubscriptionBase::unsubscribe()
       sub_pending--;
     }
     else if (!quiet_unsubscribe_warning) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Pre-init unsubscribe error.\n",
         "Instruction received to unsubscribe the model (", subscribe_name, ") but there are no\n"
         "pending subscriptions.  Check your configuration.\n"
@@ -79,7 +79,7 @@ SubscriptionBase::unsubscribe()
       num_subscriptions--;
     }
     else if (!quiet_unsubscribe_warning) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Post-init unsubscribe error.\n",
         "Instruction received to unsubscribe the model (", subscribe_name, ") but there are no\n"
         "active subscriptions.  Check your configuration.\n"
@@ -88,7 +88,7 @@ SubscriptionBase::unsubscribe()
     }
     // else, silently take no action.
     if (num_subscriptions <= 0 && active) {
-      CMLMessage::inform(
+      message::inform(
         __FILE__,__LINE__,"Deactivation from Unsubscribe.\n",
         "Instruction received to remove the last subscription to model (", subscribe_name, ").\n"
         "Consequentially deactivating model.\n");
@@ -122,7 +122,7 @@ SubscriptionBase::initialize()
     // initialization of the model without having to recover the source of
     // the failed pending subscriptions; this is default.
     else if (initialize_on_failed_activation) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Failure During Initialization.\n",
         "The SubscriptionBase initialization for '", subscribe_name, "' failed when the model\n"
         "attempted to activate during initialization:\n"
@@ -135,7 +135,7 @@ SubscriptionBase::initialize()
       num_subscriptions = 0;
     }
     else {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Failure During Initialization.\n",
         "The SubscriptionBase initialization for '", subscribe_name, "' failed when the model\n"
         "attempted to activate during initialization:\n"

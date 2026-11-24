@@ -58,7 +58,7 @@ Purpose:(Provides the variable to be evaluated.)
 *******************************************************************************/
 template<typename T> void FaultFunctionIndependentVariable::initialize(T& var) {
   if (initialized) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Fault Management Error\n",
       "Tried to initialize a FaultFunctionIndependentVariable twice!");
       return;

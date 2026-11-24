@@ -62,7 +62,7 @@ ImpactPoint::initialize(
     const double reference_position_pfix[3])
 {
   if (reference_position_pfix == nullptr) {
-    CMLMessage::fail(__FILE__, __LINE__, "Null pointer\n", 
+    message::fail(__FILE__, __LINE__, "Null pointer\n",
                          "The input pointer 'reference_position_pfix' is null.");  
   }
   // Set included model data

@@ -67,7 +67,7 @@ bool Fault::set_param( const std::string& param_name,
                        [[maybe_unused]] double value,
                        [[maybe_unused]] bool reset_nominal)
 {
-  CMLMessage::error(__FILE__, __LINE__,
+  message::error(__FILE__, __LINE__,
     "Fault Management Error\n",
     "The fault: ", name, "\nwas asked to set the unknown parameter: ", param_name, "\n");
   return false;

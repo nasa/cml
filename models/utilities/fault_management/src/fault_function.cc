@@ -23,7 +23,7 @@ Purpose:(Initializes the fault.)
 *******************************************************************************/
 void FaultFunctionBase::initialize() {
   if (!ind_variable.is_initialized()) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Fault Management Error\n",
       "The function fault <", name, "> has not been initialized with an independent "
       "variable.\n");

@@ -36,7 +36,7 @@ void convert_double_to_uint_words( double convert_value,
                                    unsigned int bit_size)
 {
   if (words == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid arguments.\n",
       "The words array was passed in as NULL. There is nowhere for the\n"
       "converted values to go.\n");
@@ -88,7 +88,7 @@ ConvertDoubleToUintWords::ConvertDoubleToUintWords( const double & in_convert_va
   compute_significance();
   words.assign(word_count,0);
   if (word_count == 0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Initialization error:\n\n",
       "Specified that the double-to-words model will generate 0 words.\n"
       "This is probably not useful and probably an error.\n"
@@ -96,7 +96,7 @@ ConvertDoubleToUintWords::ConvertDoubleToUintWords( const double & in_convert_va
       "called.\n");
   }
   if (bit_size > 32) { // the words array can only hold up to 32-bit integers.
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Initialization error:\n\n",
       "The requested bit_size cannot be > 32.\n"
       "The generated words are assigned to uint32_t types.\n"
@@ -134,7 +134,7 @@ ConvertDoubleToUintWords::check_values()
     }
     // If the if statement is tripped write out a message with the inform
     // severity so that it can be viewed as wanted by the user
-    CMLMessage::inform(
+    message::inform(
       __FILE__,__LINE__,"Roundoff warning:\n\n",
       "input value ", convert_value, " is too large to be represented by words.\n"
       "The output will be the max possible value (", significance.at(word_count)-resolution, ") instead.\n");
@@ -159,7 +159,7 @@ ConvertDoubleToUintWords::check_values()
   // the current value.  If that distance is larger than "resolution", then
   // there will be words that fit in the gap that will therefore be unusable.
   if (convert_value >= std::ldexp(resolution, std::numeric_limits<double>::digits)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Initialization error:\n\n",
       "Resolution of words is lower than the resolution of double.\n "
       "Not all words are available for value ", convert_value, ".\n");

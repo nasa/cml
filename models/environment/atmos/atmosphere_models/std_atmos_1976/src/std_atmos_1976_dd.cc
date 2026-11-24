@@ -105,14 +105,14 @@ size_t STD1976::get_alt_tbl_len()
   static const size_t alt_tbl_len = std::size(alt_table);
   for (size_t i=1; i<alt_tbl_len; ++i) {
     if (alt_table[i] <= alt_table[i-1]) {
-      CMLMessage::fail(__FILE__, __LINE__, "Data out of order.\n", "Data in table alt_table should be in increasing order.");
+      message::fail(__FILE__, __LINE__, "Data out of order.\n", "Data in table alt_table should be in increasing order.");
     }
   }
 
   static const size_t ext_alt_tbl_len = std::size(ext_alt_table);
   for (size_t i=1; i<ext_alt_tbl_len; ++i) {
     if (ext_alt_table[i] <= ext_alt_table[i-1]) {
-      CMLMessage::fail(__FILE__, __LINE__, "Data out of order.\n", "Data in table ext_alt_table should be in increasing order.");
+      message::fail(__FILE__, __LINE__, "Data out of order.\n", "Data in table ext_alt_table should be in increasing order.");
     }
   } 
 

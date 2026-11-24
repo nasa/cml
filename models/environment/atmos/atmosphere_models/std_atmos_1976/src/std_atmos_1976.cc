@@ -75,14 +75,14 @@ void STD1976::update(const double &altitude_in  //the given geometric height
 
   altitude = altitude_in;
   if(altitude < min_valid_alt) { //lower than the minimum geometic height
-    CMLMessage::warn(__FILE__, __LINE__,
+    message::warn(__FILE__, __LINE__,
        "Lower than the minimum geometric height\n",
        "altitude = ", altitude, " - Altitude is below ", min_valid_alt, " m (out of range low), and "
        "is trimmed.\n");
     altitude = min_valid_alt ;
   }
   else if(altitude > max_valid_alt) { //higher the maximum geomaric height
-    CMLMessage::warn(__FILE__, __LINE__,
+    message::warn(__FILE__, __LINE__,
        "Higher than the maximum geometric height\n",
        "altitude = ", altitude, " - Altitude is above ", max_valid_alt, " m (out of range high), and "
        "is trimmed.\n");

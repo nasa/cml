@@ -74,7 +74,7 @@ void AeroExecutiveSimpleLiftDrag::update()
     // so it is most appropriate to check the ratio between the value of.
     // BC and the dynamic-pressure
     if (std::abs(dynamic_pressure * bc_epsilon) >= BC) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid settings\n",
         "The value for BC (", BC, ") is unusually small.\nGiven the current "
         "dynamic_pressure (", dynamic_pressure, "), the resulting acceleration (P / BC) would\n"
@@ -126,7 +126,7 @@ AeroExecutiveSimpleLiftDrag::set_aero_type(AeroType aero_type_in)
   switch (aero_type_in) {
   case ballistic_coeff_and_LoD:
     if (BC <= 0.0) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__, __LINE__, "Simple Lift/Drag Aerodynamics Setup error.\n",
         "Selected Ballistic Coefficient as the method for computing the aero-"
         "drag\nforce but the value for BC (", BC, ") is illegal.\n");
@@ -134,13 +134,13 @@ AeroExecutiveSimpleLiftDrag::set_aero_type(AeroType aero_type_in)
     break;
   case lift_drag_coeff:
     if (MathUtils::is_near_equal(CD, 0.0)) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__, "Simple Lift/Drag Aerodynamics Setup error.\n",
         "Selected Coefficient of drag as the method for computing the aero-"
         "drag\nforce but CD = 0.0, which means there will be no drag force.\n");
     }
     if (MathUtils::is_near_equal(Aref, 0.0)) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__, "Simple Lift/Drag Aerodynamics Setup error.\n",
         "Selected Coefficient of lift/drag as the method for computing the aero"
         "\nforce but Aref = 0.0, which means there will be no lift or drag force.\n");
@@ -148,7 +148,7 @@ AeroExecutiveSimpleLiftDrag::set_aero_type(AeroType aero_type_in)
     break;
   case constant_mag:
     if (MathUtils::is_near_equal(drag_mag, 0.0)) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__, "Simple Lift/Drag Aerodynamics Setup error.\n",
         "Selected constant-lift/drag as the method for computing the aero"
         "\nforce but specified 0.0 for the drag force magnitude (drag_mag).\n");

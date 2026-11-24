@@ -87,7 +87,7 @@ ExtendedPlanetaryDerivedState::initialize(
   // However, that is an external dependency, and if that were to change in
   // a future release, this would be necessary.
   if (planet == nullptr) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__, "Planetary Derived State initialization failure\n",
     "Model failed to find the specified planet.\n"
     "This error should have been caught in DerivedState::find_planet();\n"
@@ -293,14 +293,14 @@ void ExtendedPlanetaryDerivedState::subscribe_hang_roll()
   // Error  if hang / roll vectors are near zero in magnitude, they must be
   // defined to enable the sub-model
   if (jeod::Vector3::vmag(hang_angle_body_vec) < std::numeric_limits<double>::min() ) {
-      CMLMessage::error (
+      message::error (
         __FILE__, __LINE__, "hang_angle_body_vec magnitude near zero!\n",
         "A zero body vector will result in incorrect hang angle calculation.\n"
         "Refusing to subscribe to hang/roll, try setting hang_angle_body_vec.\n");
       subscribe = false;
   }
   if (jeod::Vector3::vmag(roll_wrt_hdg_body_vec) < std::numeric_limits<double>::min() ) {
-      CMLMessage::error (
+      message::error (
         __FILE__, __LINE__, "roll_wrt_hdg_body_vec magnitude near zero!\n",
         "A zero body vector will result in incorrect roll angle calculation.\n"
         "Refusing to subscribe to hang/roll, try setting roll_wrt_hdg_body_vec.\n");

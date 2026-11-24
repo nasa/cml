@@ -1,7 +1,7 @@
 exec(open("RUN_02_interp/input.py").read())
 
 #Set suppression level high enough to Inform() messages
-trick.cml.CMLMessage.set_publish_level (trick.cml.CMLMessage.Inform)
+trick.cml.message.set_publish_level (trick.cml.message.Inform)
 
 # pick up initialization warn regarding non-interoplation when data is present
 #  warnings specified at dynamic_mass_body_interpolation.cc:417, called from

@@ -113,7 +113,7 @@ void FaultManager::update( const Location& location) {
   if (enabled && global_enabled) {
     const auto location_index = static_cast<unsigned char>(location);
     if (location_index >= Location_count) {
-      CMLMessage::fail(__FILE__, __LINE__,
+      message::fail(__FILE__, __LINE__,
         "Fault Management Error\n",
         "Invalid location passed to FaultManager::update.\n");
     } else {
@@ -178,7 +178,7 @@ bool FaultManager::set_fault_enabled(
       }
       return true;
     } else {
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "Fault Management Error\n",
         "The fault <", fault_name, "> was not found and could not be enabled / disabled.\n");
       return false;
@@ -205,7 +205,7 @@ bool FaultManager::set_fault_trigger_enabled(
   if (parsed) {
     Fault* fault = get_fault(fault_name);
     if (fault == nullptr) {
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "Fault Management Error\n",
         "The fault <", fault_name, "> was not found and its trigger could not be "
         "enabled / disabled.\n");
@@ -222,7 +222,7 @@ bool FaultManager::set_fault_trigger_enabled(
       }
 
       if (!trigger_found) {
-        CMLMessage::error(__FILE__, __LINE__,
+        message::error(__FILE__, __LINE__,
           "Fault Management Error\n",
           "The trigger: ", trigger_name, "\nwas not found for the fault: ", fault_name, "\n");
         return false;
@@ -252,7 +252,7 @@ bool FaultManager::set_fault_param(
   if (parsed) {
     Fault* fault = get_fault(fault_name);
     if (fault == nullptr) {
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "Fault Management Error\n",
         "The fault <", fault_name, "> was not found and its parameter could not be set.\n");
       return false;
@@ -283,7 +283,7 @@ bool FaultManager::set_trigger_value(
     TriggerBase* trigger = get_trigger(trigger_name);
 
     if (trigger == nullptr) {
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "Fault Management Error\n",
         "The trigger >", trigger_name, "> was not found and its value could not be set.\n");
       return false;
@@ -318,7 +318,7 @@ void FaultManager::parse() {
   xmlDocPtr doc = xmlParseFile(fault_file.c_str());
 
   if (doc == nullptr) {
-    CMLMessage::fail(__FILE__, __LINE__,
+    message::fail(__FILE__, __LINE__,
       "Fault Management Error\n",
       "\nThe following fault file could not be opened.\n", fault_file, "");
     // Terminated
@@ -326,14 +326,14 @@ void FaultManager::parse() {
   xmlNodePtr root = doc->children;
   if (root == nullptr) {
     // Unreachable code, manually tested.
-    CMLMessage::fail(__FILE__, __LINE__,
+    message::fail(__FILE__, __LINE__,
       "Fault Management Error\n",
       "The fault file >", fault_file, "> did not correctly parse for unknown reasons.\n");
     // Terminated
   }
   // Make sure the XML file we are working with is for FaultManager
   if (!XmlHelper::xml_name_match(root, "FaultManager")) {
-    CMLMessage::fail(__FILE__, __LINE__,
+    message::fail(__FILE__, __LINE__,
       "Fault Management Error\n",
       "The following fault file did not specify a FaultManager hierarchy.\n", fault_file, "\n");
     // Terminated
@@ -375,14 +375,14 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
   // Parse out the fault name
   const char* fault_name = XmlHelper::xml_find_value(fault_node, "ID");
   if (fault_name == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "A fault does not have an ID name. All faults must have a unique ID "
       "name.\n");
     return;
   }
   if (get_fault(fault_name) != nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "A fault named: <", fault_name, "> was already found in the fault map.\n"
       "Cannot have two faults with identical names.\n"
@@ -393,7 +393,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
   // Check for valid location string
   const char* loc_string = XmlHelper::xml_find_value(fault_node, "loc");
   if (loc_string == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault named <", fault_name, "> does not have an injection location.\n"
       "Injection location is required.\n"
@@ -402,7 +402,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
   }
   const Location location = translate_location(loc_string);
   if (location == Location::INVALID) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault named <", fault_name, "> does not have a valid injection location.\n"
       "Injection location is required.\n"
@@ -413,7 +413,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
   // Get Trick Reference Attributes of the variable to be faulted
   xmlNodePtr sim_var = XmlHelper::xml_find_child(fault_node, "SimVar");
   if (sim_var == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> is missing the parameter \"SimVar\".\n"
       "Target variable (to which the fault will be applied) is required.\n"
@@ -422,7 +422,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
   }
   const char* sim_var_name = XmlHelper::xml_find_value(sim_var, "name");
   if (sim_var_name == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> is missing the \"name\" field in \"SimVar\".\n"
       "Target variable (to which the fault will be applied) is required.\n"
@@ -431,7 +431,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
   }
   REF2* Symbol = get_trick_variable(sim_var_name);
   if (Symbol == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> is to be applied to variable >", sim_var_name, "\",\n"
       "but >", sim_var_name, "> cannot be found in the simulation.\n"
@@ -501,7 +501,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
                                                           "type",
                                                           true);
       if (fault_type == nullptr) {
-        CMLMessage::error(__FILE__,__LINE__,
+        message::error(__FILE__,__LINE__,
           "XML input error parsing fault configuration\n",
           "The fault <", fault_name, "> does not have a specified fault-type.\n"
           "Fault-type is required.\n"
@@ -516,7 +516,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
       } else if (strcmp(fault_type, "STALE") == 0) {
         new_fault = new FaultStale<bool>(boolvar);
       } else {
-        CMLMessage::error(__FILE__,__LINE__,
+        message::error(__FILE__,__LINE__,
           "XML input error parsing fault configuration\n",
           "The fault <", fault_name, "> specifies the Boolean variable >", sim_var_name, "\"\n"
           "and a fault-type >", fault_type, "\".\n"
@@ -526,7 +526,7 @@ void FaultManager::parse_fault( xmlNodePtr fault_node) {
       break;
     }
     default:
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "XML input error parsing fault configuration\n",
         "The variable >", sim_var_name, "> (the sim variable specified by fault <", fault_name, ">)\n"
         "is not of a type that can be faulted.\n"
@@ -576,7 +576,7 @@ Purpose:(Gets a Trick Reference from a variable name and checks that the
 REF2* FaultManager::get_trick_variable( const char* variable_name) {
   REF2* Symbol = trick_MM->ref_attributes(variable_name);
   if (Symbol == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__,"Trick lookup error parsing variable name\n",
       "No Trick variable named >", variable_name, "> found.\n");
     return nullptr;
@@ -586,7 +586,7 @@ REF2* FaultManager::get_trick_variable( const char* variable_name) {
   // have a num_index of 2. This model does not support the faulting of
   // pointers or the use of pointers as independent or trigger variables.
   if (Symbol->attr->num_index != 0) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Trick lookup error parsing variable name\n",
       "The variable >", variable_name, "> is a pointer.\n"
       "The FaultManager does not support the faulting of pointers or the\n"
@@ -610,7 +610,7 @@ template<typename T> Fault* FaultManager::make_fault(
                                                       "type",
                                                       true);
   if (fault_type == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> does not have a specified fault-type.\n"
       "Fault-type is required.\n"
@@ -640,7 +640,7 @@ template<typename T> Fault* FaultManager::make_fault(
   } else if (strcmp(fault_type, "RANDOMWALK") == 0) {
     new_fault = make_fault_random_walk<T>(fault_node, variable, fault_name);
   } else {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> has an invalid fault type of <", fault_type, "\".\n"
       "A valid fault-type is required.\n"
@@ -663,7 +663,7 @@ template<typename T> Fault* FaultManager::make_fault_bias(
   const char* bias_string = nullptr;
   xmlNodePtr bias_node = XmlHelper::xml_find_child(fault_node, "Bias");
   if (bias_node == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> has no Bias child node specified.\n"
       "A valid Bias-node \"<Bias>...</Bias>\" is required for BIAS faults.\n"
@@ -673,7 +673,7 @@ template<typename T> Fault* FaultManager::make_fault_bias(
 
   bias_string = XmlHelper::xml_find_value(bias_node, "value");
   if (bias_string == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> has no value specified in its Bias child node.\n"
       "The Bias value is required for BIAS faults.\n"
@@ -700,7 +700,7 @@ template<typename T> Fault* FaultManager::make_fault_scale(
   // Get the Scale value.
   xmlNodePtr scale_node = XmlHelper::xml_find_child(fault_node, "Scale");
   if (scale_node == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> has no Scale child node specified.\n"
       "A valid Scale-node \"<Scale>...</Scale>\" is required for SCALE faults.\n"
@@ -711,7 +711,7 @@ template<typename T> Fault* FaultManager::make_fault_scale(
   const char* scale_string = nullptr;
   scale_string = XmlHelper::xml_find_value(scale_node, "value");
   if (scale_string == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> has no value specified in its Scale child node.\n"
       "The Scale value is required for SCALE faults.\n"
@@ -773,7 +773,7 @@ template<typename T> Fault* FaultManager::make_fault_overwrite(
     } else {
       msg += "The RandValue node does not exist.";
     }
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> requires an overwrite value specified in either an\n"
       "Overwrite node or a RandValue node\n",
@@ -782,7 +782,7 @@ template<typename T> Fault* FaultManager::make_fault_overwrite(
     return nullptr;
   }
   if (overwrite_value && random_value) {
-    CMLMessage::warn(__FILE__,__LINE__,
+    message::warn(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> requires an overwrite value specified in either an\n"
       "Overwrite node or a RandValue node\n"
@@ -811,7 +811,7 @@ Purpose:
 template<>
 bool FaultManager::generate_random_value<bool>()
 {
-  CMLMessage::error( __FILE__, __LINE__,
+  message::error( __FILE__, __LINE__,
     "Random number generation returns a value of type double.\n"
     "Casting that to a boolean is problematic without knowing the "
     "distribution parameters.\n"
@@ -832,7 +832,7 @@ bool FaultManager::populate_fault_function(
   // Check for existence of the Function node.
   xmlNodePtr function_node = XmlHelper::xml_find_child(fault_node, "Function");
   if (function_node == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> is declared as type FUNCTION but the configuration\n"
       "has no Function node.\n"
@@ -847,7 +847,7 @@ bool FaultManager::populate_fault_function(
                                                                 "type",
                                                                 true);
   if (function_type_string == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> is declared as type FUNCTION but the configuration\n"
       "of the accompanying Function node does not include a \"type\" "
@@ -873,7 +873,7 @@ bool FaultManager::populate_fault_function(
     new_fault->type = FaultFunctionBase::Trianglewave;
   }
   else {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> is declared as type FUNCTION but the configuration\n"
       "of the accompanying Function node has an invalid function type <", function_type_string, ">."
@@ -887,7 +887,7 @@ bool FaultManager::populate_fault_function(
   xmlNodePtr variable_node =
     XmlHelper::xml_find_child(function_node, "IndVariable");
   if (variable_node == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The fault <", fault_name, "> is declared as type FUNCTION but the configuration\n"
       "of the accompanying Function node does not include a \"IndVariable\" "
@@ -898,7 +898,7 @@ bool FaultManager::populate_fault_function(
   }
   // Check for population of the IndVariable node
   if (!parse_ind_variable(new_fault->ind_variable, variable_node, fault_name)) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing fault configuration\n",
       "In fault <", fault_name, ">, the IndVariable node could not be fully processed\n"
       "(see error message immediately preceding)\n"
@@ -956,7 +956,7 @@ bool FaultManager::parse_ind_variable(
 {
   const char* variable_name = XmlHelper::xml_find_value(variable_node, "name");
   if (variable_name == nullptr) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing fault configuration\n",
       "In fault <", fault_name, ">, the IndVariable node is missing the specification\n"
       "of the variable name (\'<IndVariable name=\"...\">\').\n"
@@ -966,7 +966,7 @@ bool FaultManager::parse_ind_variable(
   }
   REF2* Symbol = get_trick_variable(variable_name);
   if (Symbol == nullptr) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing fault configuration\n",
       "In fault <", fault_name, ">, the IndVariable node includes a specified variable\n"
       "name but that name <", variable_name, "> cannot be found in the simulation.\n"
@@ -1019,7 +1019,7 @@ bool FaultManager::parse_ind_variable(
         *static_cast<unsigned long long*>(Symbol->address));
       break;
     default:
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "XML input error parsing fault configuration\n",
         "In fault <", fault_name, ">, the IndVariable node includes a specified variable\n"
         "but that variable <", variable_name, "> is not of a valid type for an independent "
@@ -1057,7 +1057,7 @@ bool FaultManager::parse_periodic_param(
                                           param_name);
   if (param_node == nullptr) {
     if (nom_required) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "XML input error parsing fault configuration\n",
         "The Fault: <", fault_name, "> was defined as a periodic function type\n"
         "but it has no specified ", param_name, " node.\n"
@@ -1070,7 +1070,7 @@ bool FaultManager::parse_periodic_param(
   const char* value_string = XmlHelper::xml_find_value(param_node, "nominal");
   if (value_string == nullptr) {
     if (nom_required) { // did not find it, and need it,
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "XML input error parsing fault configuration\n",
         "The Fault <", fault_name, "> was defined as a periodic function type but\n"
         "its ", param_name, " node does not have a specified nominal value.\n"
@@ -1093,7 +1093,7 @@ bool FaultManager::parse_periodic_param(
     if (variable_node != nullptr) {
       // But there is an Independent Variable specified, which is indicative of
       // a misconfiguration..
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "XML input error parsing fault configuration\n",
         "The Fault <", fault_name, "> is configured as a periodic function, with the\n",
          param_name, " parameter assigned an independent variable node but not a rate.\n"
@@ -1115,7 +1115,7 @@ bool FaultManager::parse_periodic_param(
     if (!parse_ind_variable( param.ind_variable,
                              variable_node,
                              fault_name)) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "XML input error parsing fault configuration\n",
         "The Fault <", fault_name, "> is configured as a periodic function, with the\n",
          param_name, " parameter assigned a rate, indicating that it is to be treated "
@@ -1143,7 +1143,7 @@ bool FaultManager::parse_non_periodic_param(
   xmlNodePtr params_node =
       XmlHelper::xml_find_child(function_node, "Parameters");
   if (params_node == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> was defined as a Linear FUNCTION type\n"
       "but is missing the Parameters subnode of the Function node.\n"
@@ -1153,7 +1153,7 @@ bool FaultManager::parse_non_periodic_param(
   }
   const char* temp_string = XmlHelper::xml_find_value(params_node, "rate");
   if (temp_string == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> was defined as a Linear FUNCTION type but the\n"
       "Parameters subnode of the Function node is missing specification of\n"
@@ -1196,7 +1196,7 @@ template<typename T> Fault* FaultManager::make_fault_white_noise(
     //      message unguarded by the additional if which can be removed.
     rand_node = check_rand_in_params( fault_node);
     if (rand_node == nullptr) {
-      CMLMessage::error(
+      message::error(
          __FILE__,__LINE__,"XML input error parsing fault configuration\n",
         "The Fault <", fault_name, "> is configured as a WHITENOISE Fault\n"
         "but is missing a RandValue node to specify the random distribution "
@@ -1212,7 +1212,7 @@ template<typename T> Fault* FaultManager::make_fault_white_noise(
   // fault and return nullptr.
   if (!parse_rand_number(new_fault->noise, rand_node, fault_name)) {
     delete new_fault;
-    CMLMessage::error(
+    message::error(
        __FILE__,__LINE__,"XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> is configured as a WHITENOISE Fault\n"
       "but the RandValue node is incomplete\n"
@@ -1243,7 +1243,7 @@ template<typename T> Fault* FaultManager::make_fault_random_walk(
     //      message unguarded by the additional if which can be removed.
     rand_node = check_rand_in_params( fault_node);
     if (rand_node == nullptr) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "XML input error parsing fault configuration\n",
         "The Fault <", fault_name, "> is configured as a RANDOMWALK Fault\n"
         "but is missing a RandValue node to specify the random distribution "
@@ -1259,7 +1259,7 @@ template<typename T> Fault* FaultManager::make_fault_random_walk(
   // fault and return nullptr.
   if (!parse_rand_number(new_fault->rand, rand_node, fault_name)) {
     delete new_fault;
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "XML input error parsing fault configuration\n",
       "The Fault <", fault_name, "> is configured as a RANDOMWALK Fault\n"
       "but the RandValue node is incomplete\n"
@@ -1295,7 +1295,7 @@ TriggerGroup* FaultManager::parse_trigger_group(
       if (reuse_name != nullptr) {
         TriggerBase* temp_ptr = get_trigger(reuse_name);
         if (temp_ptr == nullptr) {
-          CMLMessage::error(__FILE__, __LINE__,
+          message::error(__FILE__, __LINE__,
             "XML input error parsing trigger group contents.\n",
             "The trigger <", reuse_name, "> listed for fault <", fault_name, ">\n"
             "is listed as re-used but no existing trigger with that name can "
@@ -1334,7 +1334,7 @@ TriggerBase* FaultManager::parse_trigger(
 {
   const char* name_string = XmlHelper::xml_find_value(trigger_node, "name");
   if (name_string == nullptr) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing trigger name\n",
       "A trigger for fault <", fault_name, "> was defined without a name.\n"
       "This is not allowed.\n"
@@ -1345,7 +1345,7 @@ TriggerBase* FaultManager::parse_trigger(
   // Check for a trigger of the same name already existing
   TriggerBase * duplicate_trigger = get_trigger(name_string);
   if (duplicate_trigger != nullptr) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing trigger name\n",
       "A trigger with the name <", name_string, "> has already been defined.\n"
       "Duplicate instance found under fault <", fault_name, ">\n"
@@ -1359,7 +1359,7 @@ TriggerBase* FaultManager::parse_trigger(
   // Pull the variable name from the trigger node
   const char* var_name = XmlHelper::xml_find_value(trigger_node, "variable");
   if (var_name == nullptr) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing trigger variable name\n",
       "A trigger with the name <", name_string, "> (under fault <", fault_name, ">)\n"
       "was defined without naming a trigger variable.\n"
@@ -1369,7 +1369,7 @@ TriggerBase* FaultManager::parse_trigger(
   }
   REF2* Symbol = get_trick_variable(var_name);
   if (Symbol == nullptr) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing trigger variable\n",
       "A trigger with the name <", name_string, "> (under fault <", fault_name, ">)\n"
       "was defined with an invalid trigger variable\n"
@@ -1382,7 +1382,7 @@ TriggerBase* FaultManager::parse_trigger(
   // Pull the comparison type
   const char* comp_str = XmlHelper::xml_find_value(trigger_node, "compare");
   if (comp_str == nullptr) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing trigger comparator\n",
       "A trigger with the name <", name_string, "> (under fault <", fault_name, ">)\n"
       "was defined without a comparison type.\n"
@@ -1392,7 +1392,7 @@ TriggerBase* FaultManager::parse_trigger(
   }
   const TriggerBase::Operator_enm comp = TriggerBase::translate_operator(comp_str);
   if (comp == TriggerBase::Invalid) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing trigger comparator\n",
       "A trigger with the name <", name_string, "> (under fault <", fault_name, ">)\n"
       "was defined with an invalid comparison type of <", comp_str, "\".\n"
@@ -1416,7 +1416,7 @@ TriggerBase* FaultManager::parse_trigger(
     rand_node = XmlHelper::xml_find_child(trigger_node, "RandValue");
     // If there is also no RandValue XML child-node, the trigger is incomplete.
     if (rand_node == nullptr) {
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "XML input error parsing trigger comparison.\n",
         "A trigger with the name <", name_string, "> (under fault <", fault_name, ">)\n"
         "was defined without a valid comparison value or random value setup.\n"
@@ -1427,7 +1427,7 @@ TriggerBase* FaultManager::parse_trigger(
     // If there is a RandValue XML child-node, parse it; if it is incomplete,
     // then the trigger is also incomplete.
     if (!parse_rand_number(rand, rand_node, fault_name)) {
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "XML input error parsing trigger random config.\n",
         "A trigger with the name <", name_string, "> (under fault <", fault_name, ">)\n"
         "was defined to use a random trigger value but has an incomplete\n"
@@ -1514,7 +1514,7 @@ TriggerBase* FaultManager::parse_trigger(
       break;
     }
     default:
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "XML input error parsing trigger variable (data type).\n",
         "A trigger with the name <", name_string, "> (under fault <", fault_name, ">)\n"
         "was defined with an invalid comparison variable <", var_name, ">.\n"
@@ -1598,7 +1598,7 @@ template<typename T> TriggerBase* FaultManager::make_trigger(
     new_trigger->set_periodic(trigger_length, trigger_period);
     // If periodic settings failed, drop a message.
     if (!new_trigger->get_periodic()) {
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "XML input error parsing trigger periodicity.\n",
         "A trigger with the name <", XmlHelper::xml_find_value(trigger_node, "name"), ">\n"
         "was assigned values for periodic parameters:\n"
@@ -1615,7 +1615,7 @@ template<typename T> TriggerBase* FaultManager::make_trigger(
   // If only 1 setting was made, the configuration is incomplete.
   else if (trigger_period_string != nullptr ||
            trigger_length_string != nullptr ) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing trigger periodicity.\n",
       "A trigger with the name <", XmlHelper::xml_find_value(trigger_node, "name"), ">\n"
       "was assigned values for only 1 of:\n"
@@ -1641,7 +1641,7 @@ bool FaultManager::parse_rand_number(
 {
   const char* temp_str = XmlHelper::xml_find_value(rand_node, "distribution");
   if (temp_str == nullptr) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing randomized configuration.\n",
       "A random variable in Fault <", fault_name, "> was specified\n"
       "without a distribution specification.\n"
@@ -1654,7 +1654,7 @@ bool FaultManager::parse_rand_number(
   } else if (strcmp(temp_str, "FLAT") == 0) {
     rng.distribution_type = FaultRandNumber::FLAT;
   } else {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "XML input error parsing randomized configuration.\n",
       "A random variable in Fault <", fault_name, "> was specified\n"
       "with an invalid distribution specification <", temp_str, "\".\n"
@@ -1671,7 +1671,7 @@ bool FaultManager::parse_rand_number(
     if (temp_str != nullptr) {
       rng.std_dev = std::strtod(temp_str, nullptr);
     } else {
-      CMLMessage::error( __FILE__, __LINE__,
+      message::error( __FILE__, __LINE__,
         "XML input error parsing randomized configuration.\n",
         "A Gaussian / Normal random variable in fault <", fault_name, "> was specified\n"
         "without a standard deviation value.\n"
@@ -1684,7 +1684,7 @@ bool FaultManager::parse_rand_number(
     if ( temp_str != nullptr) {
       rng.mean = std::strtod(temp_str, nullptr);
     } else {
-      CMLMessage::warn(__FILE__, __LINE__,
+      message::warn(__FILE__, __LINE__,
         "XML input missing while parsing randomized "
         "configuration.\n",
         "A Gaussian / Normal random variable in Fault <", fault_name, "> was specified\n"
@@ -1719,7 +1719,7 @@ bool FaultManager::parse_rand_number(
         rng.upper_limit = mean_val + std::strtod(max_str, nullptr);
       }
       else {
-        CMLMessage::error(__FILE__, __LINE__,
+        message::error(__FILE__, __LINE__,
           "XML input error parsing randomized "
           "configuration.\n",
           "A flat distribution random variable in fault <", fault_name, ">\n"

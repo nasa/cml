@@ -46,7 +46,7 @@ bool TR_Parameter_RefFrame::compute_frame(
     const double vec_B[3])
 {
   if (vec_A == nullptr || vec_B == nullptr) {
-    CMLMessage::fail( __FILE__,__LINE__,
+    message::fail( __FILE__,__LINE__,
       "Error in generating frame ",name,"\n"
       "NULL vectors cannot be converted into target-reference frames.\n");
   }
@@ -60,7 +60,7 @@ bool TR_Parameter_RefFrame::compute_frame(
 
   const double cos_theta = std::fabs(jeod::Vector3::dot( u_hat, vec_B_hat));
   if (cos_theta > cos_0_01_deg) { // i.e. theta < 0.01 degrees
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Error in generating frame '",name,"'\n"
       "The two input vectors are nearly aligned.\n"
       "The rest of the frame cannot be constructed.\n"

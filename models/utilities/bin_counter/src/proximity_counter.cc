@@ -60,7 +60,7 @@ CML_ProximityCounter::set_data(const std::vector<double> & targets_)
   const size_t n_targets_ = targets_.size();
   // Sanity check for number of targets:
   if (n_targets_ < 1) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot count onto fewer than 1 targets.\n"
       "Group (",name,") cannot be used.\n");
     return;

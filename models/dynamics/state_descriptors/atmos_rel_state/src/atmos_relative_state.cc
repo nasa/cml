@@ -91,7 +91,7 @@ AtmosRelativeState::activate()
 
   if (complete_calculation_subscriptions > 0 &&
       reference_length == nullptr) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, "Atmosphere Relative State Setup error\n",
       "The flag to perform the complete calculation has been set but\n"
       "the reference-length pointer has not been set.\n"
@@ -223,7 +223,7 @@ AtmosRelativeState::update()
   free_stream_vel_mag = jeod::Vector3::vmag( free_stream_vel );
 
   if (MathUtils::is_near_equal(free_stream_vel_mag, 0.0)) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Free stream velocity vanished to 0.0\n",
       "Atmosphere relative state is not well defined because the vehicle has\n"
       "no velocity relative to the atmosphere.\n");
@@ -381,7 +381,7 @@ AtmosRelativeState::compute_T_inrtl_traj()
   const double y_axis_mag = jeod::Vector3::vmag(y_axis);
   if (MathUtils::is_near_equal( y_axis_mag, 0.0)) {
     if (std::isnan(y_axis[0])) { // check for NaN, vmag turns NaN into 0.
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Reference Frame Error.\n",
         "The y-axis of the trajectory frame has NaN content."
         "Holding previous definition of trajectory frame.\n\n"
@@ -392,7 +392,7 @@ AtmosRelativeState::compute_T_inrtl_traj()
     }
     else if ( warn_on_v_parallel_r) {
       jeod::Vector3::normalize( y_axis); // returns [0,0,0] if y_axis = [0,0,0] or NaN
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Reference frame undefined.\n",
         "The free-stream velocity and position vectors are parallel\n"
         "(or anti-parallel).  The trajectory-reference-frame is undefined.\n"
@@ -419,7 +419,7 @@ AtmosRelativeState::compute_T_inrtl_traj()
   jeod::Vector3::normalize( z_axis); // returns [0,0,0] if z_axis = [0,0,0] or NaN
   // Check again, just for rigor.  This check should be impossible to fail.
   if (MathUtils::is_near_equal( jeod::Vector3::vmag(z_axis), 0.0)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Reference frame undefined.\n",
       "Unknown error resulted in an undefined trajectory reference frame\n"
       "This error message should never be seen\n"
@@ -571,7 +571,7 @@ AtmosRelativeState::compute_reynolds_number()
                         reynolds_number);
   }
   else if (!ref_length_null_msg_sent) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Atmosphere Relative State Setup error\n",
       "Computation of Reynolds Number requires a reference length, which "
       "has not been assigned.\n"
@@ -597,7 +597,7 @@ AtmosRelativeState::check_euler_for_nan()
   for (unsigned int ii = 0; ii < 3; ii++) {
     // Check for NaN values
     if ( std::isnan(traj_to_body_RYP[ii])) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Corrupted traj-to-body transformation matrix.\n"
         "The RYP Euler angles corresponding to T_traj_body contain a NaN\n"
         "at index ", ii, ".  Attempting fix.\n");
@@ -623,7 +623,7 @@ AtmosRelativeState::check_euler_for_nan()
           // Still got a NAN in there.  Nothing we can do to fix it at this
           // point.  Got 2 options for bailing out:
           if (terminate_on_nan_euler) {
-            CMLMessage::fail(
+            message::fail(
               __FILE__,__LINE__,"Corrupted traj-to-body transformation matrix.\n",
               "The T_traj_body transformation matrix was badly corrupted.\n"
               "Renormalization was attempted but it failed.\n"
@@ -633,7 +633,7 @@ AtmosRelativeState::check_euler_for_nan()
             // exit - terminated
           }
           else {
-            CMLMessage::error(
+            message::error(
               __FILE__,__LINE__,"Corrupted traj-to-body transformation matrix.\n",
               "The T_traj_body transformation matrix was badly corrupted.\n"
               "Renormalization was attempted but it failed.\n"
@@ -652,7 +652,7 @@ AtmosRelativeState::check_euler_for_nan()
       }
 
       // all values are non-NaN at this point.  Normalization worked.
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Corrupted traj-to-body transformation matrix.\n",
         "The T_traj_body transformation matrix was badly corrupted.\n"
         "The matrix was succesfully normalized from:\n"

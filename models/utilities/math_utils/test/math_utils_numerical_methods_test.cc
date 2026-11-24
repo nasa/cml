@@ -48,10 +48,10 @@ TEST(MathUtils, IsWithinRange) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Inform, _, _, HasSubstr("Deprecated method")));
+        publish(cml::message::Inform, _, _, HasSubstr("Deprecated method")));
     EXPECT_TRUE(cml::MathUtils::is_within_range(3.45, 3.46, 0.01));
 }
 
@@ -71,7 +71,7 @@ TEST(MathUtils, IsWithinAbsoluteTolerance) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Nominal tests.
     EXPECT_TRUE(cml::MathUtils::is_within_abs_tolerance(3.45, 3.46, 0.01));
@@ -82,7 +82,7 @@ TEST(MathUtils, IsWithinAbsoluteTolerance) {
 
     // Boolean cases.
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("ambiguous interpretation"))).Times(5);
+        publish(cml::message::Error, _, _, HasSubstr("ambiguous interpretation"))).Times(5);
     EXPECT_TRUE(cml::MathUtils::is_within_abs_tolerance(true, true, true));
     EXPECT_TRUE(cml::MathUtils::is_within_abs_tolerance(true, true, false));
     EXPECT_FALSE(cml::MathUtils::is_within_abs_tolerance(true, false, false));
@@ -91,7 +91,7 @@ TEST(MathUtils, IsWithinAbsoluteTolerance) {
 
     // A negative absolute tolerance will emit an error.
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("not well-defined when the tolerance is negative"))).Times(3);
+        publish(cml::message::Error, _, _, HasSubstr("not well-defined when the tolerance is negative"))).Times(3);
     EXPECT_FALSE(cml::MathUtils::is_within_abs_tolerance(-2.0, -2.01, -1.0));
     EXPECT_FALSE(cml::MathUtils::is_within_abs_tolerance(-2.0f, -2.01f, -1.0f));
     EXPECT_FALSE(cml::MathUtils::is_within_abs_tolerance(-2, -3, -3));
@@ -102,7 +102,7 @@ TEST(MathUtils, IsWithinRelativeTolerance) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Nominal tests.
     EXPECT_TRUE(cml::MathUtils::is_within_rel_tolerance(1.65, 1.5, 0.1));
@@ -113,7 +113,7 @@ TEST(MathUtils, IsWithinRelativeTolerance) {
 
     // Boolean tests.
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("ambiguous interpretation"))).Times(5);
+        publish(cml::message::Error, _, _, HasSubstr("ambiguous interpretation"))).Times(5);
     EXPECT_TRUE(cml::MathUtils::is_within_rel_tolerance(true, true, true));
     EXPECT_TRUE(cml::MathUtils::is_within_rel_tolerance(true, true, false));
     EXPECT_FALSE(cml::MathUtils::is_within_rel_tolerance(true, false, false));
@@ -122,7 +122,7 @@ TEST(MathUtils, IsWithinRelativeTolerance) {
 
     // A negative relative tolerance will emit an error.
     EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("not well-defined when the tolerance is negative"))).Times(3);
+            publish(cml::message::Error, _, _, HasSubstr("not well-defined when the tolerance is negative"))).Times(3);
     EXPECT_FALSE(cml::MathUtils::is_within_rel_tolerance(-2.0, -2.01, -1.0));
     EXPECT_FALSE(cml::MathUtils::is_within_rel_tolerance(-2.0f, -2.01f, -1.0));
     EXPECT_FALSE(cml::MathUtils::is_within_rel_tolerance(-2, -3, -3.0));
@@ -160,9 +160,9 @@ TEST(MathUtils, Polynomial) {
 
     // Overflow case, use fallback value.
     {
-        cml::CMLMessage::Mock cml_message_mock;
+        cml::message::Mock cml_message_mock;
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("The polynomial sum is overflow")));
+            publish(cml::message::Warning, _, _, HasSubstr("The polynomial sum is overflow")));
 
         const std::vector coeffs {3.0, 4.0, 5.0};
         EXPECT_NEAR(cml::MathUtils::polynomial(1e308, coeffs, 75.7575), 75.7575, tolerance);
@@ -182,9 +182,9 @@ TEST(MathUtils, Polynomial) {
 
     // Overflow case with failure enabled.
     {
-        cml::CMLMessage::Mock cml_message_mock;
+        cml::message::Mock cml_message_mock;
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Fail, _, _, HasSubstr("The polynomial sum is overflow")));
+            publish(cml::message::Fail, _, _, HasSubstr("The polynomial sum is overflow")));
 
         const std::vector coeffs {5.0, 4.0, 3.0};
         EXPECT_NEAR(cml::MathUtils::polynomial(1e308, coeffs, 0.0, true), 0.0, tolerance);
@@ -195,7 +195,7 @@ TEST(MathUtils, Polynomial) {
 TEST(MathUtils, BackwardDifference) {
     using testing::_;
     using testing::HasSubstr;
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Floating point comparison tolerance.
     constexpr double tolerance = 1e-12;
@@ -203,7 +203,7 @@ TEST(MathUtils, BackwardDifference) {
     std::list<double> history;
 
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("there is no history for this variable")));
+        publish(cml::message::Error, _, _, HasSubstr("there is no history for this variable")));
     EXPECT_EQ(cml::MathUtils::compute_backward_difference(history), 0.0);
 
     // History = [436]
@@ -242,7 +242,7 @@ TEST(MathUtils, UnitVectorDerivative) {
     // Floating point comparison tolerance.
     constexpr double tolerance = 1e-12;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     double unit_vector_derivative[3] {};
 
@@ -252,7 +252,7 @@ TEST(MathUtils, UnitVectorDerivative) {
         constexpr double derivative[3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("A unit vector is not defined for a zero vector")));
+            publish(cml::message::Error, _, _, HasSubstr("A unit vector is not defined for a zero vector")));
         cml::MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         EXPECT_THAT(unit_vector_derivative, Pointwise(DoubleNear(tolerance), {0.0, 0.0, 0.0}));
     }
@@ -263,7 +263,7 @@ TEST(MathUtils, UnitVectorDerivative) {
         constexpr double derivative[3] {3.0, 4.0, 0.0};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("A unit vector is not defined for a zero vector")));
+            publish(cml::message::Error, _, _, HasSubstr("A unit vector is not defined for a zero vector")));
         cml::MathUtils::compute_unit_vector_derivative(vector, derivative, unit_vector_derivative);
         EXPECT_THAT(unit_vector_derivative, Pointwise(DoubleNear(tolerance), {0.6, 0.8, 0.0}));
     }

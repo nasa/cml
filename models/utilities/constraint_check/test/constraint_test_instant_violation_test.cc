@@ -42,7 +42,7 @@ TEST(ConstraintTestThreshold, TestViolation) {
     using testing::HasSubstr;
 
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     cml::ConstraintTest_Threshold<int> int_test;
@@ -145,7 +145,7 @@ TEST(ConstraintTestThreshold, TestViolation) {
     // to hit in the ConstraintTest_Threshold interface since the set_violation_condition
     // calls initialize(), which then rejects the invalid violation condition option.
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _,
+        publish(cml::message::Error, _, _,
             HasSubstr("Invalid setting of numerical_violation_condition"))).Times(3);
     EXPECT_FALSE(cml::test_threshold_violation(1, 1, cml::ConstraintEnum::In));
     EXPECT_FALSE(cml::test_threshold_violation(1.0, 1.0, cml::ConstraintEnum::In));
@@ -157,7 +157,7 @@ TEST(ConstraintTestThreshold, InvalidConfiguration) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     cml::ConstraintTest_Threshold<int> article;
     article.threshold = 1;
@@ -168,7 +168,7 @@ TEST(ConstraintTestThreshold, InvalidConfiguration) {
     // The inside/outside violation condition is for intervals and sets, not thresholds.
     // The model will reset its violation condition to greater-than.
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _,
+        publish(cml::message::Error, _, _,
             HasSubstr("Cannot initialize a threshold constraint-test without a valid violation-condition")));
     article.set_violation_condition(cml::ConstraintEnum::In);
     EXPECT_EQ(article.get_violation_condition(), cml::ConstraintEnum::GT);
@@ -199,7 +199,7 @@ TEST(ConstraintTestInterval, Inactive) {
 // Test the violation determination logic for instantaneous interval constraints.
 TEST(ConstraintTestInterval, TestViolation) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     cml::ConstraintTest_Interval<int> inside_interval_test;
@@ -298,7 +298,7 @@ TEST(ConstraintTestInterval, InvalidConfiguration) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     cml::ConstraintTest_Interval<int> article;
     article.lower_bound = 1;
@@ -315,7 +315,7 @@ TEST(ConstraintTestInterval, InvalidConfiguration) {
 
     // The violation condition must be inside or outside, not a comparison function.
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _,
+        publish(cml::message::Error, _, _,
             HasSubstr("Cannot initialize an interval constraint-test")));
     article.set_violation_condition(cml::ConstraintEnum::EQ);
 
@@ -323,7 +323,7 @@ TEST(ConstraintTestInterval, InvalidConfiguration) {
     article.upper_bound = 5;
     article.lower_bound = 5;
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("zero-width interval")));
+        publish(cml::message::Error, _, _, HasSubstr("zero-width interval")));
     EXPECT_FALSE(article.initialize());
 }
 
@@ -351,7 +351,7 @@ TEST(ConstraintTestValSet, Inactive) {
 // Test the violation determination logic for instantaneous value-set constraints.
 TEST(ConstraintTestValSet, TestViolation) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     cml::ConstraintTest_ValSet<int> inside_valset_test;
@@ -384,7 +384,7 @@ TEST(ConstraintTestValSet, InvalidConfiguration) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     cml::ConstraintTest_ValSet<int> article;
     article.values = {1, -2, 3};
@@ -393,13 +393,13 @@ TEST(ConstraintTestValSet, InvalidConfiguration) {
     article.activate();
 
     // The violation condition must be inside or outside, not a comparison function.
-    EXPECT_CALL(cml_message_mock, publish(cml::CMLMessage::Error, _, _, _));
+    EXPECT_CALL(cml_message_mock, publish(cml::message::Error, _, _, _));
     article.set_violation_condition(cml::ConstraintEnum::EQ);
     EXPECT_EQ(article.get_violation_condition(), cml::ConstraintEnum::In);
 
     // There must be at least one value to test against.
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _,
+        publish(cml::message::Error, _, _,
             HasSubstr("Cannot initialize a value-set constraint-test with an empty\nset of values")));
     article.values.clear();
     EXPECT_FALSE(article.initialize());

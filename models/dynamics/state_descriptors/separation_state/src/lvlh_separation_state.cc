@@ -97,7 +97,7 @@ LvlhSeparationState::initialize( jeod::DynManager  & dyn_manager,
                          subject_body.find_vehicle_point(subject_name));
   }
   if (subject_frame == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid frame name\n",
       "The specified frame-name '", subject_name, "' on body-name '", subject_body.name.get_name(), "' could not be found\n"
       "by the dynamics manager.\n"
@@ -109,7 +109,7 @@ LvlhSeparationState::initialize( jeod::DynManager  & dyn_manager,
 
   // Check to see whether we need to be configuring the Lvlh Frame:
   if (using_external_lvlh) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__, "Invalid initialize(...) call \n",
       "This initialize(...) call will configure the LVLH frame but\n"
       "the model is configured to use an externally-provided LVLH frame.\n"
@@ -127,7 +127,7 @@ LvlhSeparationState::initialize( jeod::DynManager  & dyn_manager,
                            source_body.find_vehicle_point(source_name));
   }
   if (lvlh_origin_frame == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid frame name\n",
       "The specified frame-name '", source_name, "' on body-name '", source_body.name.get_name(), "' could not be found\n"
       "by the dynamics manager.\n"
@@ -139,7 +139,7 @@ LvlhSeparationState::initialize( jeod::DynManager  & dyn_manager,
   // check the planet:
   jeod::BasePlanet * planet = dyn_manager.find_base_planet (planet_name);
   if (planet == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid planet name\n",
       "The specified planet-name / celestial-body-name ", planet_name, " could not be found\n"
       "by the dynamics manager.\n"
@@ -171,7 +171,7 @@ LvlhSeparationState::initialize( jeod::DynManager     & dyn_manager,
   }
 
   if (using_external_lvlh) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__, "Invalid initialize(...) call \n",
       "This initialize(...) call will configure the LVLH frame but\n"
       "the model is configured to use an externally-provided LVLH frame.\n"
@@ -235,7 +235,7 @@ LvlhSeparationState::initialize( jeod::DynManager     & dyn_manager,
   }
 
   if (!using_external_lvlh) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__, "Invalid configuration at initialization\n",
       "The LvlhSeparationState::initialize(...) method called requires\n"
       "an externally generated LVLH frame.\n"
@@ -249,7 +249,7 @@ LvlhSeparationState::initialize( jeod::DynManager     & dyn_manager,
 
   if (planet_centered_inertial == nullptr ||
       lvlh_origin_frame == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__, "initialization error\n",
       "Could not find the frames associated with the external LVLH frame.\n"
       "It is possible that it has not been properly configured.\n"

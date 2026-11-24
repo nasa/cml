@@ -19,14 +19,14 @@ TEST(Constraint, ConfigurationErrors) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     ConstraintUnitTest article;
     article.violation_condition = cml::ConstraintEnum::In;
 
     // Test an empty list of constraints.
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("Constraint requires at least one constraint-test")));
+        publish(cml::message::Error, _, _, HasSubstr("Constraint requires at least one constraint-test")));
     article.initialize();
     EXPECT_FALSE(article.is_initialized());
 
@@ -43,9 +43,9 @@ TEST(Constraint, ConfigurationErrors) {
     article.register_tests(constraint_tests);
 
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("Cannot initialize a value-set constraint-test with an empty\nset of values")));
+        publish(cml::message::Error, _, _, HasSubstr("Cannot initialize a value-set constraint-test with an empty\nset of values")));
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("Failure to initialize a constraint-test")));
+        publish(cml::message::Error, _, _, HasSubstr("Failure to initialize a constraint-test")));
     article.initialize();
     EXPECT_FALSE(article.is_initialized());
 }

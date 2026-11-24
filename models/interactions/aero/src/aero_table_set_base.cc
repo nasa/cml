@@ -97,7 +97,7 @@ AeroTableSetBase::initialize()
                   is_a_dependent_variable(coefficients.Cn_mrc));
     break;
   case Unspecified:
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Illegal operation mode\n",
       "AeroTable data mode has not been specified.\n"
       "Specified data mode is still at the default 'Unspecified'.\n");
@@ -105,13 +105,13 @@ AeroTableSetBase::initialize()
   default:
     // UNREACHABLE CODE; sanity check
     // Switch cases should be exhaustive.
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Illegal operation mode\n",
       "AeroTable data mode not found.\n"
       "Specified data mode is ", data_table_type, "\n");
   }
   if (!data_found) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Incomplete data table.\n",
       "The associated data tables do not contain the data necessary for the\n"
       "selected data mode.\nError in table-set ", name, " for data-mode ", data_table_type, ".\n");
@@ -202,7 +202,7 @@ AeroTableSetBase::verify_aero_damping( const std::string & type) const
 {
   if (coef_data_present) {
     if (!uncertainty_data_present) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__, "Incomplete data setup\n",
         "Aero damping is provided with table data for the ", type, " coefficients,\n"
         "but none for the uncertainties. Dispersions will be applied based\n"
@@ -228,7 +228,7 @@ AeroTableSetBase::set_table_type( AeroDataTableType new_type)
 {
   // trivial-case
   if (new_type == data_table_type) {
-    CMLMessage::inform(
+    message::inform(
       __FILE__,__LINE__,"Redundant initialization sequence.\n",
       "The data-table-type (", new_type, ") already matches the newly specified type.\n"
       "No action taken.\n");
@@ -236,7 +236,7 @@ AeroTableSetBase::set_table_type( AeroDataTableType new_type)
   }
 
   if (initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid initialization sequence.\n",
       "The data-table-type cannot be changed after the table has been "
       "initialized.\nChange to type ", new_type, " failed; table remains at type ", data_table_type, "\n");

@@ -54,7 +54,7 @@ VelocitySet::initialize(
     return;
   }
   if (vel_in == nullptr) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__, __LINE__, "Invalid initialization\n",
     "Attempted to set the inrtl_velocity pointer to NULL.\n");
   }

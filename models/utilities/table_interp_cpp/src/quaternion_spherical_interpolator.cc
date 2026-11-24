@@ -57,14 +57,14 @@ QuaternionSphericalInterpolator::update()
     if (quat_1.norm_sq() < epsilon_delta) {
       quat_1.set_to_zero();
       if (quat_0_error) { // Quat_0 and Quat_1 are both invalid
-        CMLMessage::error( __FILE__, __LINE__,
+        message::error( __FILE__, __LINE__,
             "Error in Spherical interpolation. Quat_0 and Quat_1 are invalid.\n"
             "Zeroing Quat_0 and Quat_1.\nReturning Identity.\n");
         quat_out.make_identity();
         return;
 
       } else { // Quat_1 is invalid, Quat_0 is good.
-        CMLMessage::error( __FILE__, __LINE__,
+        message::error( __FILE__, __LINE__,
             "Error in Spherical interpolation. Quat_1 is invalid.\n"
             "Zeroing Quat_1.\nReturning normalized Quat_0.");
         quat_out = quat_0;
@@ -73,7 +73,7 @@ QuaternionSphericalInterpolator::update()
     }
 
     else if (quat_0_error) { // Quat_0 is invalid, Quat_1 is good.
-      CMLMessage::error( __FILE__, __LINE__,
+      message::error( __FILE__, __LINE__,
           "Error in Spherical interpolation. Quat_0 is invalid.\n"
           "Zeroing Quat_0.\nReturning normalized Quat_1.");
       quat_1.normalize();
@@ -150,7 +150,7 @@ QuaternionSphericalInterpolator::update()
    * result in FE-exception NaN.
    * So we do need to check, and avoid normalizing if quat_out is 0.*/
   if (quat_out.norm_sq() < epsilon_delta) {
-    CMLMessage::error( __FILE__, __LINE__,
+    message::error( __FILE__, __LINE__,
       "Error in Spherical interpolation. Output quaternion interpolated to 0.\n"
       "Returning identity quaternion instead.\n");
     quat_out.make_identity();
@@ -173,7 +173,7 @@ void
 QuaternionSphericalInterpolator::set_epsilon_delta( double new_epsilon)
 {
   if (new_epsilon < 1.0E-15) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid optional argument.\n",
       "The epsilon value has a minimum of 1E-15."
       "Resetting to minimum.\n");

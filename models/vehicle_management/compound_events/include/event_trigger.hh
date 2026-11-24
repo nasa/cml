@@ -253,7 +253,7 @@ Notes:
      * comparison of variable-value against threshold.*/
     switch (comparison_logic) {
     default:
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Invalid comparator specified : ", comparison_logic,".\n"
         "Disabling trigger.\n");
         this->event_triggered = false;
@@ -423,7 +423,7 @@ Notes:
  ******************************************************************************/
   void activate() override {
     if (this->variable == nullptr) {
-      CMLMessage::error ( __FILE__, __LINE__,
+      message::error ( __FILE__, __LINE__,
         "Invalid Event/Watch activation: nullptr variable:\n",
         "An attempt was made to activate an EventTrigger instance with a\n "
         "nullptr variable to watch.\n  Attempt failed.\n");
@@ -431,7 +431,7 @@ Notes:
     }
 
     if (comparison_logic == Undefined) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Invalid comparator. Comparator remains on the default 'Undefined'.\n"
         "There is no comparison available to result in a triggering.\n"
         "Trigger activation failed.\n");
@@ -456,7 +456,7 @@ Notes:
          (comparison_logic == MIN_CONDITIONAL_LAST) ||
          (comparison_logic == ABS_MAX_CONDITIONAL_LAST) ||
          (comparison_logic == ABS_MIN_CONDITIONAL_LAST))) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Invalid configuration. The reference-management flags:\n"
         "         reference_is_variable:  ",this->reference_is_variable,"\n"
         "         relative_to_activation: ",this->relative_to_activation,"\n"

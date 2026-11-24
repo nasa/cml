@@ -88,7 +88,7 @@ TargetRelative_StateParameter::initialize_check_config()
   // initialization with the set_planet method.
   //-----------------------------------------------------
   if (pfix_position.planet == nullptr) {
-    CMLMessage::fail( __FILE__,__LINE__,
+    message::fail( __FILE__,__LINE__,
     "Planet has not been assigned to the PlanetFixedPosition instance\n"
     "(pfix_position) in TargetRelative_StateParameters.\n"
     "This instance is necessary for correct operation.\n"
@@ -128,7 +128,7 @@ TargetRelative_StateParameter::initialize_internal(
   /* Compute unit target position vector */
   if (!  Target_Reference_frame.compute_frame( pfix_position.cart_coords,
                                                R_Ref_PCPF)) {
-    CMLMessage::fail( __FILE__,__LINE__,
+    message::fail( __FILE__,__LINE__,
      "Target and Reference position vectors are nearly aligned.\n",
      "This is an invalid configuration.\n"
      "Pick a different reference vector.\n");
@@ -146,7 +146,7 @@ TargetRelative_StateParameter::initialize_internal(
   omega_mag = jeod::Vector3::vmag(omega_pfix_wrt_inrtl__pfix);
 
   if ( MathUtils::is_near_equal( omega_mag, 0) ) {
-    CMLMessage::warn( __FILE__,__LINE__,
+    message::warn( __FILE__,__LINE__,
       "Planetary rotation is zero.  Setting unit planetary rotation\n"
       "vector to [0,0,1].  Check configuration.\n");
     omega_pfix_wrt_inrtl__pfix[2] = 1.0;
@@ -154,7 +154,7 @@ TargetRelative_StateParameter::initialize_internal(
   // construct Omega_Target_frame basis vectors
   if (!Omega_Target_frame.compute_frame( omega_pfix_wrt_inrtl__pfix,
                                          pfix_position.cart_coords)) {
-    CMLMessage::warn( __FILE__,__LINE__,
+    message::warn( __FILE__,__LINE__,
       "Target position vector and planetary rotation vector are nearly aligned."
       "\nThis is unusual but manageable.  Check configuration.\n");
     sin_phi_omega = 0.0;
@@ -181,7 +181,7 @@ void
 TargetRelative_StateParameter::set_planet( const jeod::Planet * planet_IN )
 {
   if (planet_IN == nullptr) {
-    CMLMessage::fail( __FILE__,__LINE__,
+    message::fail( __FILE__,__LINE__,
       "Planet passed in was NULL.\n"
       "Pfix-position has not been configured correctly or an invalid pointer\n"
       "was manually specified.\n"
@@ -217,7 +217,7 @@ TargetRelative_StateParameter::compute_params_from_vectors_SWIG(
   TR_ParameterSet & param_set)
 {
   if (R_PCPF == nullptr || V_wrt_PCI_PCPF == nullptr) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "Passed a null pointer in to compute_params_from_vectors_SWIG.\n"
       "Aborting.\n");
     return;
@@ -270,7 +270,7 @@ TargetRelative_StateParameter::compute_position_from_params_SWIG(
   // Check for improper inputs
   //-----------------------------------------------------
   if (R_PCPF == nullptr) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "NULL vectors cannot be populated by target-reference parameters.\n"
       "Aborting calculation of position vector.\n");
     return;
@@ -359,7 +359,7 @@ TargetRelative_StateParameter::compute_position_magnitude()
       Rmag += deltaR;
     }
     if ( iter_count >= iter_limit ) {
-      CMLMessage::warn( __FILE__,__LINE__,
+      message::warn( __FILE__,__LINE__,
         " Geodetic altitude max iteration exceeded!!!\n"
         "Altitude iteration failed to converge with:\n"
         "  target altitude = ",altitude,"\n"

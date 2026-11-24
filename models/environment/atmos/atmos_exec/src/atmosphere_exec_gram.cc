@@ -43,7 +43,7 @@ void GramInterface::initialize( // Return: -- Void
   [[maybe_unused]] int    GR_MIN,
   [[maybe_unused]] double GR_SEC)
 {
-  CMLMessage::fail( __FILE__,__LINE__,
+  message::fail( __FILE__,__LINE__,
     "Missing derived GramInterface\n",
     "GramInterface initialize() method has not been overridden which means GRAM\n"
     "does not exist for this AtmosphereExec_Gram instance. This base class method\n"
@@ -57,7 +57,7 @@ void GramInterface::update(
   [[maybe_unused]] double ALONG,
   [[maybe_unused]] double GCLAT)
 {
-  CMLMessage::fail( __FILE__,__LINE__,
+  message::fail( __FILE__,__LINE__,
     "Missing derived GramInterface\n",
     "GramInterface update() method has not been overridden, which means GRAM\n"
     "does not exist for this AtmosphereExec_Gram instance. This base class method\n"
@@ -103,7 +103,7 @@ AtmosphereExec_Gram::activate()
   // before running the GRAM model.
   if( activate_gram_from_master) {
     if (master_gram == nullptr) {
-      CMLMessage::error(
+      message::error(
       __FILE__,__LINE__,"Atmos-exec activation error\n",
       "Flags set such that GRAM will be initialized from an external\n"
       "instance of GRAM at activation but the pointer to the external\n"

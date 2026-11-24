@@ -69,7 +69,7 @@ MonteCarloStateDispersion::disperse_trans_state()
                                   velocity_dispersion_inertial);
     break;
   default:
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Invalid Coordinate frame\n",
       "Specified frame option not found.\n"
       "Valid options are Inertial Lvlh, and UVW.\n");

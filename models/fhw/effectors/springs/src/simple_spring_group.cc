@@ -55,7 +55,7 @@ SimpleSpringGroup::set_sep_state( SeparationState  & sep_state_in)
   // post-initialization.  Safest method is to call initialize() at
   // initialization.
   if (!sep_state_in.is_initialized()) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Spring Group activation: \n",
       "Error in activating the Spring Group.\n"
       "The accompanying SeparationState not been initialized.\n"
@@ -81,7 +81,7 @@ SimpleSpringGroup::set_sep_state( SeparationState  & sep_state_in)
   // NOTE: Hitting this NULL check may be impossible do to other checks in
   // place from the separation state model.
   if (sep_source == nullptr) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid separation state:\n",
       "The provided separation state is not (yet) valid for use in the Springs"
       " model.\n"
@@ -95,7 +95,7 @@ SimpleSpringGroup::set_sep_state( SeparationState  & sep_state_in)
 
   spring_frame = dynamic_cast<jeod::BodyRefFrame*>(sep_source);
   if (spring_frame == nullptr) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid reference frame:\n",
       "The separation state provided is not valid for use in the Springs model.\n"
       "All SeparationState instances provide the state of a BodyRefFrame\n"
@@ -163,7 +163,7 @@ void
 SimpleSpringGroup::activate()
 {
   if (!enabled) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Spring Group activation: \n",
       "Error in activating the Spring Group.\n"
       "The model has been disabled\n");
@@ -171,7 +171,7 @@ SimpleSpringGroup::activate()
   }
 
   if (!initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Spring Group activation: \n",
       "Error in activating the Spring Group.\n"
       "The model has NOT been initialized\n");
@@ -183,7 +183,7 @@ SimpleSpringGroup::activate()
   // just above. As having a faulty subscribe() after having a good initialize
   // and activation seems unlikely.
   if (!separation_state->is_active()) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Spring Group activation: \n",
       "Error in activating the Spring Group.\n"
       "The associated separation-state is not available.\n");
@@ -202,7 +202,7 @@ SimpleSpringGroup::activate()
     jeod::Matrix3x3::copy( reaction_body->mass.structure_point.T_parent_this,
                            T_action_reaction);
   } else {
-    CMLMessage::error(
+    message::error(
         __FILE__,__LINE__,"Spring Group activation error: \n",
         "Cannot determine T_action_reaction when bodies, ", action_body->name.get_name(),
         " and ", reaction_body->name.get_name(), ", are not attached.\n");
@@ -241,7 +241,7 @@ SimpleSpringGroup::update()
 
   if (action_body->mass.is_progeny_of(reaction_body->mass) ||
       reaction_body->mass.is_progeny_of(action_body->mass) ) {
-    CMLMessage::warn (
+    message::warn (
       __FILE__,__LINE__,"Spring Group activation error: \n",
       "Model has been activated while the two bodies, ", action_body->name.get_name(),
       " and ", reaction_body->name.get_name(), " are attached.\n");

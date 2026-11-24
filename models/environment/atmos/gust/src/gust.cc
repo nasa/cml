@@ -43,7 +43,7 @@ GustModel::activate()
   }
   if (period < 0.0 ) {
     if (!period_message_sent) {
-      CMLMessage::error ( __FILE__,__LINE__,
+      message::error ( __FILE__,__LINE__,
         "The period has been set to an invalid value < 0.0\n"
         "Change period to a positive value.\n"
         "Activation failed.\n");
@@ -53,7 +53,7 @@ GustModel::activate()
   }
   if (!MathUtils::has_changed_from( period, 0.0)) {
     if (!period_message_sent) {
-      CMLMessage::error ( __FILE__,__LINE__,
+      message::error ( __FILE__,__LINE__,
         "The gust period has not been set, or set to an invalid value = 0.0\n"
         "Change period to a positive value.\n"
         "Activation failed.\n");

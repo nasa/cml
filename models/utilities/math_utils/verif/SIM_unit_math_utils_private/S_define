@@ -993,7 +993,7 @@ private:
 
   void check_comparison() {
     if (comparison_failure) {
-      cml::CMLMessage::error(
+      cml::message::error(
         __FILE__,__LINE__,"Failed Comparison.\n",
         "One or more of tests just run have failed to successfully compare\n"
         "to the desired result. Check the comparison output above to find which\n"

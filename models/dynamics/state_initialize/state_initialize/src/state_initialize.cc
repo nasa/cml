@@ -77,7 +77,7 @@ StateInitialize::initialize(
   // DynBodyInit method changes) check it again here.  Note, however, it is
   // not possible to test this line of code.
   if (planet == nullptr) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Invalid configuration.\n",
       "Action named '", action_identifier, "' failed:\n" "Could not find planet named '", planet_name, "'");
     return;
@@ -88,11 +88,11 @@ StateInitialize::initialize(
   auto* subject = get_subject_dyn_body();
   if (subject == nullptr) {
     if (mass_subject != nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__, __LINE__, "Invalid configuration.\n",
         "The subject provided must be a DynBody, not a MassBody.");
     } else {
-      CMLMessage::fail(
+      message::fail(
         __FILE__, __LINE__, "Invalid configuration.\n",
         "A subject was never provided.");
     }
@@ -275,7 +275,7 @@ StateInitialize::select_position_initializer()
     break;
 
    case Unspecified:
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
        action_identifier, " failed:\n"
       "Position init option not specified.  Use 'Off' to turn off");
@@ -290,7 +290,7 @@ StateInitialize::select_position_initializer()
    case ICOPT_EUL_RYP_FS:
    case ICOPT_INERT_BODY_ROTMAT:
    case ICOPT_EUL_YPR_INERT_BODY:
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
       action_identifier, " error:\n"
       "Deprecated init option specified. This will be removed in the future.");
@@ -317,7 +317,7 @@ StateInitialize::select_position_initializer()
    case RotInit_NED:
    case TR_InertialSpeedGammaLatang:
    default:
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
        action_identifier, " failed:\n"
       "Illegal position init option specified");
@@ -407,7 +407,7 @@ StateInitialize::select_velocity_initializer()
     break;
 
    case Unspecified:
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
        action_identifier, " failed:\n"
       "Velocity init option not specified.  Use 'Off' to turn off");
@@ -421,7 +421,7 @@ StateInitialize::select_velocity_initializer()
    case ICOPT_EUL_RYP_FS:
    case ICOPT_INERT_BODY_ROTMAT:
    case ICOPT_EUL_YPR_INERT_BODY:
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
       action_identifier, " error:\n"
       "Deprecated init option specified. This will be removed in the future.");
@@ -448,7 +448,7 @@ StateInitialize::select_velocity_initializer()
    case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_LT_90:
    case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_GT_90:
    default:
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
        action_identifier, " failed:\n"
       "Illegal velocity init option specified");
@@ -535,7 +535,7 @@ StateInitialize::select_attitude_initializer()
   }
   // Check for an override of the default sequence.
   if (ref_body_sequence_override != jeod::Orientation::NoSequence) {
-    CMLMessage::inform(
+    message::inform(
       __FILE__,__LINE__,"Modified Euler Sequence\n",
       "Euler sequence for orientation type ", attitude_input_data_type, " is being changed from the "
       "default ", ref_body_sequence, " to the manual override ", ref_body_sequence_override, ".\n");
@@ -578,7 +578,7 @@ StateInitialize::select_attitude_initializer()
     //      using an orbital-elements specification.
     if( use_trans_init_passthrough &&
            (reference_ref_frame_name_inertial == trans_init.reference_ref_frame_name)) {
-      CMLMessage::fail (
+      message::fail (
         __FILE__, __LINE__, "StateInitialization::invalid_configuration\n",
         "Rot init is being configured using the sun-vehicle vector.\n"
         "That requires the vehicle position wrt the initializing planet.\n"
@@ -586,7 +586,7 @@ StateInitialize::select_attitude_initializer()
         "Expecting ", reference_ref_frame_name_inertial, " but the specified frame name is ", trans_init.reference_ref_frame_name, ".\n");
     }
     if( use_pfix_frame_trans) { // which defaults to false
-      CMLMessage::fail (
+      message::fail (
         __FILE__, __LINE__, "StateInitialization::invalid_configuration\n",
         "Rot init is being configured using the sun-vehicle vector.\n"
         "That requires the vehicle position wrt the initializing planet.\n"
@@ -733,7 +733,7 @@ StateInitialize::select_attitude_initializer()
     break;
 
    case Unspecified:
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
        action_identifier, " failed:\n"
       "Attitude init option not specified.  Use 'Off' to turn off");
@@ -743,7 +743,7 @@ StateInitialize::select_attitude_initializer()
    case ICOPT_INERT_VEL_GAM_AZ:
    case ICOPT_REL_VEL_GAM_AZ:
    case EulerPfixVelvec_YPR:
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
       action_identifier, " error:\n"
       "Deprecated init option specified. This will be removed in the future.");
@@ -766,7 +766,7 @@ StateInitialize::select_attitude_initializer()
    case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_GT_90:
    case TR_InertialSpeedGammaLatang:
    default:
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
        action_identifier, " failed:\n"
       "Illegal attitude init option specified");
@@ -830,7 +830,7 @@ StateInitialize::select_att_rate_initializer()
     break;
 
    case Unspecified:
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
        action_identifier, " failed:\n"
       "Attitude-rate init option not specified.  Use 'Off' to turn off");
@@ -845,7 +845,7 @@ StateInitialize::select_att_rate_initializer()
    case ICOPT_EUL_RYP_FS:
    case ICOPT_INERT_BODY_ROTMAT:
    case ICOPT_EUL_YPR_INERT_BODY:
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
       action_identifier, " error:\n"
       "Deprecated init option specified. This will be removed in the future.");
@@ -875,7 +875,7 @@ StateInitialize::select_att_rate_initializer()
    case TR_GeodAlt_RngAng_CrossAng_AbsRotAng_GT_90:
    case TR_InertialSpeedGammaLatang:
    default:
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
        action_identifier, " failed:\n"
       "Illegal attitude-rate init option specified");
@@ -892,7 +892,7 @@ StateInitialize::apply(
    jeod::DynManager & dyn_manager)
 {
   if (!initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Premature application of Body Action.\n"
       "This body-action ('", action_identifier, "') must be initialized before it can be applied.\n"
       "Application failed.\n");
@@ -913,7 +913,7 @@ StateInitialize::apply(
   if (monte_carlo_dispersion.disperse_pv) {
     if ( correlation.dispersion_distribution !=
                               CorrelatedStateDispersion::NoDispersion) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Simultaneous application of dispersions\n",
         "The configuration calls for application of 2 independent dispersions"
         "\napplied to the nominal state.\n"
@@ -1292,7 +1292,7 @@ StateInitialize::generate_pfix_ref_point_state()
 
    case jeod::NorthEastDown::undefined:
    default:
-     CMLMessage::fail (
+     message::fail (
         __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
          action_identifier, " failed:\n"
         "AltLatLong type option not recognized");
@@ -1415,7 +1415,7 @@ StateInitialize::generate_free_stream_velocity(
       double rel_wind_vel_inrtl[3])
 {
   if (rel_wind_vel_inrtl == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__, jeod::BodyActionMessages::illegal_value, "\n",
       "input vector is NULL.  Cannot process.\n"
       "Aborting free-stream velocity generation.\n");
@@ -1566,7 +1566,7 @@ StateInitialize::overwrite_attitude_from_free_stream(
        double rel_wind_inrtl[3])
 {
   if (!requires_free_stream_velocity) {
-    CMLMessage::warn (
+    message::warn (
       __FILE__, __LINE__, jeod::BodyActionMessages::illegal_value, "\n",
       "overwrite_vel_from_free_stream was called, but this is only a valid\n"
       "call when the velocity was set for initialization with a free-stream"
@@ -1575,7 +1575,7 @@ StateInitialize::overwrite_attitude_from_free_stream(
   }
 
   if (rel_wind_inrtl == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__, jeod::BodyActionMessages::illegal_value, "\n",
       "input vector is NULL.  Cannot process.\n"
       "Aborting attitude-overwrite.\n");
@@ -1594,7 +1594,7 @@ StateInitialize::overwrite_attitude_from_free_stream(
 
   auto* dyn_body = get_subject_dyn_body();
   if (dyn_body == nullptr) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Invalid configuration\n",
       "The subject provided must be a valid DynBody.");
     return;
@@ -1614,7 +1614,7 @@ StateInitialize::verify_compatibility() const
 {
   if ((force_match_trans &&
        (position_input_data_type != velocity_input_data_type))) {
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__,
       "Action ", action_identifier, " failed:\n"
       "Some options require similar usage between the partner initialize\n"
@@ -1629,7 +1629,7 @@ StateInitialize::verify_compatibility() const
 
   if ((force_match_rot &&
        (attitude_input_data_type != att_rate_input_data_type))) {
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__,
       "Action ", action_identifier, " failed:\n"
       "Some options require similar usage between the partner initialize "

@@ -105,7 +105,7 @@ bool test_threshold_violation(
         case ConstraintEnum::Out:
         case ConstraintEnum::Undefined:
         default:
-            CMLMessage::error( __FILE__,__LINE__,
+            message::error( __FILE__,__LINE__,
               "Invalid setting of numerical_violation_condition: ",
               violation_condition,"\nMust be ==, !=, >, >=, <, or <=.\n");
     }

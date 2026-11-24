@@ -48,7 +48,7 @@ EGM2008_WGS84::initialize()
   table_set.initialize();
 
   if (!table_set.is_active()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Table-initialization error.\n",
       "Error in initializing the lookup table.\n"
       "EGM2008 Geoid cannot be constructed.\n"

@@ -43,7 +43,7 @@ RocketMotorDispersions::apply_dispersions(
   // or responsibility for the generation of these dispersions.
 
   if (position == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid calling argument\n",
       "Received position vector is NULL.\n"
       "Cannot apply dispersion to a NULL vector.\n");
@@ -54,7 +54,7 @@ RocketMotorDispersions::apply_dispersions(
                  position);
 
   if (T_parent_to_motor == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid calling argument\n",
       "Received transformation matrix is NULL.\n"
       "Cannot apply dispersion to a NULL matrix.\n");

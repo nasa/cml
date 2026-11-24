@@ -203,7 +203,7 @@ WatchValuesFlipFlop::apply_complementary_changes()
       x->specific_execution();
     }
     if (!message.empty()) {
-      CMLMessage::inform( __FILE__,__LINE__,
+      message::inform( __FILE__,__LINE__,
         "Event processed:\n", message, "\nFlipped down.\n\n");
     }
   }
@@ -225,7 +225,7 @@ WatchValuesFlipFlop::activate()
 
   if (add_self_to_manager_active_list) {
     if (active_watches == nullptr) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Activating watch with internal instruction to add itself to\n"
         "the active-watch list, but has no access to that list.\n"
         "Watch will not get checked by the event-manager.\n");

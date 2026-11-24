@@ -60,13 +60,13 @@ public:
     true_body_rates( true_body_rates_in)
   {
     if (cg_position == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid construction of Table/API interface\n",
         "The cg_position pointer was not specified.\n"
         "It is required.\n");
     }
     if (true_body_rates == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid construction of Table/API interface\n",
         "The true_body_rates pointer was not specified.\n"
         "It is required.\n");

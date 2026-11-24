@@ -171,7 +171,7 @@ Note:
       CMLSimpleRingBuffer< CMLTaggedRingBufferMember< T_Tag, T_Data> >::buffer_ix;
 
     if ( data_.empty()) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "In buffer ",name_,", there are no entries.\n"
         "Returning NULL.\n");
       return nullptr;
@@ -208,7 +208,7 @@ Note:
       }
 
       // If we get back to buffer_ix_ without returning, no match was found.
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "In buffer ", name_,", could not find an exact match to tag ",t,"\n"
         "Cannot identify the desired data set.\n"
         "Returning NULL.\n");
@@ -244,7 +244,7 @@ Note:
     }
     
     if (proximity_flag && tag_delta_min > proximity_threshold) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "In buffer ", name_,", could not find a tag ",t," within the proximity threshold ",
         proximity_threshold,"\n"
         "Cannot identify the desired data set.\n"

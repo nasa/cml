@@ -50,7 +50,7 @@ bool
 DynamicMassBodyInterpolation::initialize()
 {
   if (mass_indep.get_size() <= 1) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Initialization error.\n",
       "The number of data points on the independent variable (mass)\n"
       "needs to be more than one to do interpolation. \n");
@@ -58,7 +58,7 @@ DynamicMassBodyInterpolation::initialize()
   }
 
   if (initialized) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Initialization warning.\n",
       "DynamicMassBodyInterpolation has already been initialized. "
       "It cannot be executed again. \n");
@@ -200,7 +200,7 @@ bool
 DynamicMassBodyInterpolation::interpolate()
 {
   if (!initialized) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Interpolation error.\n",
       "DynamicMassBodyInterpolation was called prior to its initialization.\n"
       "Check your configuration.\n");
@@ -371,7 +371,7 @@ DynamicMassBodyInterpolation::set_inertia_structural_cg_flag(bool flag)
   }
 
   if (initialized) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"set_inertia_structural_cg_flag failed.\n",
       "The DynamicMassBodyInterpolation flag inertia_is_structural_cg is "
       "used during initialization.\n"
@@ -390,7 +390,7 @@ Purpose: (Helper method to show the warning message for empty data table with
 void
 DynamicMassBodyInterpolation::warn_no_data(const char* const table_name)
 {
-   CMLMessage::error(
+   message::error(
      __FILE__,__LINE__,"No interpolation data.\n",
      "The interpolation flag was set to true for the table ", table_name, ",\n"
      "but the table was not populated with any data.\n"
@@ -406,7 +406,7 @@ Purpose: (Helper method to show the warning message for non-empty data table wit
 void
 DynamicMassBodyInterpolation::warn_no_interp(const char* const table_name)
 {
-   CMLMessage::warn(
+   message::warn(
      __FILE__,__LINE__,"Interpolation flag disabled  warning.\n",
      "Data have been loaded for the DynamicMassBodyInterpolation table ", table_name, ",\n"
      "but the flag controlling its usage has been set to false.\n"

@@ -116,7 +116,7 @@ Purpose:
        construction, but that wouldn't block its usage (unless it was made to
        be a terminal fault).*/
     if (N < 3) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot form a polygon with less than 3 vertices.\n"
         "Polygon initialization failed.\n");
       return;
@@ -153,7 +153,7 @@ Purpose:
       point, then all points are in a line, and the last trio will also be
       aligned and we don't have a polygon*/
     if (direction_sign == 0) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Vertices do not form a polygon.\n"
         "The vertices are all aligned.\n"
         "Polygon initialization failed.\n");
@@ -182,7 +182,7 @@ Purpose:
          ( MathUtils::sign( r_to_next[N-1][0] * r_to_next[0][1] -
                             r_to_next[N-1][1] * r_to_next[0][0])
            == -direction_sign)) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Vertices do not form a convex polygon.\n"
         "The algorithm used to verify inclusion within the defined polygon\n"
         "will not work if any vertex generates a concave perimeter.\n"
@@ -243,7 +243,7 @@ Purpose:
   void set_xy(double (&vals)[N][2])
   {
     if (initialized) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Cannot define xy data after the polygon has been initialized.\n"
         "Check configuration.\n");
     } else {

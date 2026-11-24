@@ -49,7 +49,7 @@ Vector3IntegrableObject::Vector3IntegrableObject () // DO NOT USE THIS
 
   // Current implementation requires a jeod::DynBody, making the default constructor
   // invalid.
-  CMLMessage::fail (
+  message::fail (
     __FILE__, __LINE__, "Invalid Integration configuration\n",
     "Do not use the default constructor for Vector3IntegrableObject.\n"
     "It is provided for template satisfaction only.\n"
@@ -127,7 +127,7 @@ Vector3IntegrableObject::initialize()
   }
 
   if (deriv_ptr == nullptr) {
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, "Invalid Integration configuration\n",
       "The pointer to the derivatives has not been set.\n"
       "Integration of this type cannot proceed.\n");
@@ -147,7 +147,7 @@ Vector3IntegrableObject::activate()
     // This is unreachable code in current implementation; dyn_body is a
     // protected pointer settable only at construction time, and there it is set
     // to the address of a passed-in reference.
-    CMLMessage::error (
+    message::error (
       __FILE__, __LINE__, "Invalid Integration configuration\n",
       "The pointer to the dyn_body has not been set.\n"
       "Integration of this type cannot proceed,\n"
@@ -169,7 +169,7 @@ Vector3IntegrableObject::activate()
       // in JEOD functionality.  A dyn-body should always have an integration
       // group.  But we must check a returned pointer from an external source
       // for the possibility that it is NULL.
-      CMLMessage::error (
+      message::error (
         __FILE__, __LINE__, "Invalid Integration configuration\n",
         "The pointer to the dyn-body's integration-group is invalid.\n"
         "Unknown error.\n"
@@ -205,7 +205,7 @@ Vector3IntegrableObject::deactivate()
     // protected pointer settable only at construction time.  It was
     // checked at model activation, and there is no mechanism by which it could
     // have been unset.
-    CMLMessage::error (
+    message::error (
       __FILE__, __LINE__, "Invalid Integration configuration\n",
       "The pointer to the dyn_body has not been set.\n"
       "This configuration should be impossible to reach, suggesting that\n"
@@ -228,7 +228,7 @@ Vector3IntegrableObject::deactivate()
       // in JEOD functionality.  A dyn-body should always have an integration
       // group.  But we must check a returned pointer from an external source
       // for the possibility that it is NULL.
-      CMLMessage::error (
+      message::error (
         __FILE__, __LINE__, "Invalid Integration configuration\n",
         "The pointer to the dyn-body's integration-group is invalid.\n"
         "Unknown error.\n"

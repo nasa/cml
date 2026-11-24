@@ -4,7 +4,7 @@ two_trigger_log()
 events_manager_verif.framework.data_file_name = "../data/events_manager_ut_data.txt"
 events_manager_verif.framework.vars_file_name = "../data/events_manager_ut_variables.txt"
 
-trick.cml.CMLMessage.set_publish_level( trick.cml.CMLMessage.Inform)
+trick.cml.message.set_publish_level( trick.cml.message.Inform)
 events_manager_verif.manager.two_variable_check_or.multi_shot = True
 
 

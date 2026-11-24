@@ -51,7 +51,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
                                       double T_inrtl_lvlh[3][3])
 {
   if (T_inrtl_lvlh == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Output\n",
       "The argument for the output matrix is NULL.\n"
       "Cannot populate a NULL destination.\n"
@@ -61,7 +61,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
 
   if (position == nullptr ||
       velocity == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid arguments\n",
       "The inertial-to-LVLH method cannot function when\n"
       "the input arguments are NULL.\n"
@@ -73,7 +73,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
   const double pos_mag = jeod::Vector3::vmag(position);
 
   if ( pos_mag < std::numeric_limits<double>::min() ) {
-    CMLMessage::error (
+    message::error (
       __FILE__, __LINE__, "Illegal values, LVLH frame undefined:\n",
       "Failed to generate transformation to LVLH for zero state:\n"
       "Aligning LVLH with inertial instead.\n");
@@ -111,7 +111,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
 
     if (std::fabs(position[1]) >= std::numeric_limits<double>::min() ||
         std::fabs(position[2]) >= std::numeric_limits<double>::min()) {
-      CMLMessage::warn (
+      message::warn (
         __FILE__, __LINE__, "LVLH frame undefined:\n",
         "Failed to generate transformation to LVLH for state with\n"
         "zero angular-momentum.\n"
@@ -126,7 +126,7 @@ MathUtils::generate_inertial_to_lvlh( const double position[3],
       jeod::Vector3::cross( y_unit, z_unit, x_unit );
     }
     else {
-      CMLMessage::warn (
+      message::warn (
         __FILE__, __LINE__, "LVLH frame undefined:\n",
         "Failed to generate transformation to LVLH for state with\n"
         "zero angular-momentum.\n"
@@ -162,7 +162,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
                                      double T_inrtl_uvw[3][3])
 {
   if (T_inrtl_uvw == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Output\n",
       "The argument for the output matrix is NULL.\n"
       "Cannot populate a NULL destination.\n"
@@ -172,7 +172,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
 
   if (position == nullptr ||
       velocity == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid arguments\n",
       "The inertial-to-UVW method cannot function when\n"
       "the input arguments are NULL.\n"
@@ -184,7 +184,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
   const double pos_mag = jeod::Vector3::vmag(position);
 
   if ( pos_mag < std::numeric_limits<double>::min() ) {
-    CMLMessage::error (
+    message::error (
       __FILE__, __LINE__, "Illegal values, UVW frame undefined:\n",
       "Failed to generate transformation to UVW for zero state:\n"
       "Aligning UVW with inertial instead.\n");
@@ -218,7 +218,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
     if (std::fabs(position[0]) >= std::numeric_limits<double>::min() ||
         std::fabs(position[1]) >= std::numeric_limits<double>::min() ) {
         // i.e. not on z-axis
-      CMLMessage::warn (
+      message::warn (
         __FILE__, __LINE__, "UVW frame undefined:\n",
         "Failed to generate transformation to UVW for state with\n"
         "zero angular-momentum.\n"
@@ -233,7 +233,7 @@ MathUtils::generate_inertial_to_uvw( const double position[3],
       jeod::Vector3::cross( u_unit, v_unit, w_unit );
     }
     else { // i.e. velocity is radial AND along z-axis
-      CMLMessage::warn (
+      message::warn (
         __FILE__, __LINE__, "UVW frame undefined:\n",
         "Failed to generate transformation to UVW for state with\n"
         "zero angular-momentum.\n"
@@ -279,7 +279,7 @@ MathUtils::generate_inrtl_to_reference( const double x_axis_inrtl[3],
                                         double T_inrtl_reference[3][3])
 {
   if (T_inrtl_reference == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Output\n",
       "The argument for the output matrix is NULL.\n"
       "Cannot populate a NULL destination.\n"
@@ -289,7 +289,7 @@ MathUtils::generate_inrtl_to_reference( const double x_axis_inrtl[3],
 
   if (x_axis_inrtl == nullptr ||
       position == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid arguments\n",
       "The inertial-to-reference method cannot function when\n"
       "the input arguments are NULL.\n"
@@ -301,7 +301,7 @@ MathUtils::generate_inrtl_to_reference( const double x_axis_inrtl[3],
   const double x_mag = jeod::Vector3::vmag(x_axis_inrtl);
   if (jeod::Vector3::vmag(position) < std::numeric_limits<double>::min() ||
       x_mag < std::numeric_limits<double>::min() ) {
-    CMLMessage::error (
+    message::error (
       __FILE__, __LINE__,
       "Illegal values, reference ref-frame not definable:\n",
       "Tried to create a position--x-axis frame\n"
@@ -387,7 +387,7 @@ MathUtils::generate_inrtl_to_vnc( const double (&position)[3],
   const double vel_mag =  jeod::Vector3::vmag(velocity);
   if (jeod::Vector3::vmag(position) < std::numeric_limits<double>::min() ||
       vel_mag                 < std::numeric_limits<double>::min()) {
-    CMLMessage::error ( __FILE__, __LINE__,
+    message::error ( __FILE__, __LINE__,
       "Illegal values, reference ref-frame not definable:\n"
       "Tried to create a VNC frame\n"
       "but either the position or velocity is a zero vector\n"
@@ -408,7 +408,7 @@ MathUtils::generate_inrtl_to_vnc( const double (&position)[3],
 
   const double y_axis_mag = jeod::Vector3::vmag(y_unit);
   if ( y_axis_mag  < std::numeric_limits<double>::min()) {
-    CMLMessage::error ( __FILE__, __LINE__,
+    message::error ( __FILE__, __LINE__,
       "Illegal values, VNC ref-frame not definable:\n"
       "Tried to create a VNC frame\n"
       "but the position and velocity are aligned.\n"
@@ -463,7 +463,7 @@ MathUtils::generate_T_pfix_to_enu( const double position_pfix[3],
                                    double T_pfix_to_enu[3][3])
 {
   if (T_pfix_to_enu == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Output\n",
       "The argument for the output matrix is NULL.\n"
       "Cannot populate a NULL destination.\n"
@@ -472,7 +472,7 @@ MathUtils::generate_T_pfix_to_enu( const double position_pfix[3],
   }
 
   if( position_pfix == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Position\n",
       "Position vector is NULL.\n"
       "Cannot generate the ENU frame.\n"
@@ -492,7 +492,7 @@ MathUtils::generate_T_pfix_to_enu( const double position_pfix[3],
 
   // Check for polar positions -- east and north not defined:
   if (MathUtils::is_near_equal( std::abs(up_hat[2]), 1.0)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Position\n",
       "For polar positions, East and north are not defined.\n"
       "Aligning east with pfix +x\n"
@@ -551,7 +551,7 @@ MathUtils::generate_Q_enu_to_pfix( double longitude,
                                    jeod::Quaternion & Q_enu_to_pfix)
 {
   if (latitude > M_PI_2) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__, "Latitude too large\n",
         "Input latitude is greater than 90 Degrees, which would rotate you \n"
         "past the North Pole onto the other side of the planet. \n"
@@ -560,7 +560,7 @@ MathUtils::generate_Q_enu_to_pfix( double longitude,
       latitude = M_PI - latitude;
       longitude += M_PI;
   } else if (latitude < -M_PI_2) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__, "Latitude too small\n",
         "Input latitude is greater than -90 Degrees, which would rotate you \n"
         "past the South Pole onto the other side of the planet. \n"
@@ -620,13 +620,13 @@ MathUtils::polynomial( double x,
 
   if (std::isnan(result) || std::isinf(result)) {  //check invalid ops and overflow
     if (failed_flag) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__, __LINE__,"Overflow value detected.\n",
         "The polynomial sum is overflow.\n"
         "Terminating execution.\n");
     }
     else {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__,"Overflow value detected.\n",
         "The polynomial sum is overflow,"
         " and the result is set as ", failed_val, ".6e.\n");
@@ -657,7 +657,7 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
                                     size_t   sub_mx_size)
 {
   if (in_array == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid inputs\n",
       "The array containing the matrix to be decomposed is addressed with a "
       "NULL pointer.\nThere is no data to apply the method to.\n"
@@ -665,7 +665,7 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
     return false;
   }
   if (out_array == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid inputs\n",
       "The array to which the computed decomposition will be sent is "
       "addressed with a NULL pointer.\n"
@@ -706,7 +706,7 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
     sub_mx_size = dimension_in;
   }
   else if( sub_mx_size > dimension_in) { // in-data is too small!!
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid sub-matrix specification\n",
       "The input matrix is declared to be size ", dimension_in, ", and the request has been\n"
       "made to use a sub-matrix of this input, with size ", sub_mx_size, ".\n"
@@ -738,7 +738,7 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
                                       input_mx[jj][ii]) &&
            !MathUtils::is_near_equal( input_mx[ii][jj],
                                       0.0)) {
-        CMLMessage::error(
+        message::error(
           __FILE__, __LINE__, "Non-symmetric matrix\n",
           "Matrix input from ", caller_id, " is not a symmetric matrix.\n"
           "Decomposition will proceed as though it was, but will use only\n"
@@ -775,7 +775,7 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
     // If the sub-matrix of in_array is well-formed, this sum will be >= 0.0
     // Otherwise it cannot be used.
     if (sum_ < 0.0){
-      CMLMessage::error(
+      message::error(
         __FILE__, __LINE__, "Invalid Covariance\n",
         "Matrix input from ", caller_id, " is not positive semi-definite.\n"
         "A negative eigen-value exists, detected in processing col ", ii, "\n"
@@ -806,7 +806,7 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
           sum_ -= (sqrt_mx[jj][kk] * sqrt_mx[ii][kk]);
         }
         if (!MathUtils::is_near_equal( sum_, 0.0)) {
-          CMLMessage::error(
+          message::error(
             __FILE__, __LINE__, "Invalid Covariance\n",
             "Matrix input from ", caller_id, " is not positive semi-definite.\n"
             "A negative eigen-value exists\n"
@@ -819,7 +819,7 @@ MathUtils::cholesky_decomposition ( const std::string & caller_id,
       // appropriate value to generate an ambiguous solution.
       // Leave all the sqrt_mx values in that column at 0.0 (sqrt_mx was
       // constructed with 0.0 everywhere) and move on to the next column.
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__, "Ambiguous Decomposition\n",
         "Matrix input from ", caller_id, ":\n"
         "Consider the ", ii+1, "x", ii+1, " square sub-matrix taken from the upper left of "
@@ -890,7 +890,7 @@ double
 MathUtils::compute_backward_difference( const std::list<double> & history)
 {
   if (history.empty()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"invalid data support\n",
       "there is no history for this variable.\n"
       "Returning backward difference of 0.0.\n");
@@ -931,7 +931,7 @@ MathUtils::compute_unit_vector_derivative(
   const double vdotv = jeod::Vector3::dot(vector,
                                           vector);
   if (is_near_equal( vdotv, 0.0)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid inputs to method.\n",
       "A unit vector is not defined for a zero vector, and the derivative\n"
       "of an undefined vector is also undefined.\n"
@@ -999,7 +999,7 @@ template<>
 bool MathUtils::is_within_abs_tolerance<bool>( bool val1, bool val2, bool tol)
 {
   const bool ret = tol || (val1 == val2);
-  CMLMessage::error( __FILE__, __LINE__,
+  message::error( __FILE__, __LINE__,
     "Testing whether boolean ",val1, " is within boolean ",tol,", of boolean ",
     val2, " has an ambiguous interpretation.\n"
     "Evaluated to ",ret,"\n");

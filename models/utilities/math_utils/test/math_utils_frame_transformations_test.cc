@@ -53,7 +53,7 @@ TEST(MathUtils, GenerateInertialToLvlh) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Null pointer cases.
     {
@@ -62,11 +62,11 @@ TEST(MathUtils, GenerateInertialToLvlh) {
         double T_inrtl_lvlh[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("output matrix is NULL")));
+            publish(cml::message::Error, _, _, HasSubstr("output matrix is NULL")));
         cml::MathUtils::generate_inertial_to_lvlh(position, velocity, nullptr);
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("input arguments are NULL"))).Times(3);
+            publish(cml::message::Error, _, _, HasSubstr("input arguments are NULL"))).Times(3);
         cml::MathUtils::generate_inertial_to_lvlh(nullptr, velocity, T_inrtl_lvlh);
         test_matrices_equal(T_inrtl_lvlh, identity_matrix);
 
@@ -85,7 +85,7 @@ TEST(MathUtils, GenerateInertialToLvlh) {
         double T_inrtl_lvlh[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("Aligning LVLH with inertial instead")));
+            publish(cml::message::Error, _, _, HasSubstr("Aligning LVLH with inertial instead")));
         cml::MathUtils::generate_inertial_to_lvlh(position, velocity, T_inrtl_lvlh);
         test_matrices_equal(T_inrtl_lvlh, expected);
     }
@@ -102,7 +102,7 @@ TEST(MathUtils, GenerateInertialToLvlh) {
         double T_inrtl_lvlh[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Aligning LVLH-x close to inertial-x")));
+            publish(cml::message::Warning, _, _, HasSubstr("Aligning LVLH-x close to inertial-x")));
         cml::MathUtils::generate_inertial_to_lvlh(position, velocity, T_inrtl_lvlh);
         test_matrices_equal(T_inrtl_lvlh, expected);
     }
@@ -119,7 +119,7 @@ TEST(MathUtils, GenerateInertialToLvlh) {
         double T_inrtl_lvlh[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Aligning LVLH-y close to inertial-y")));
+            publish(cml::message::Warning, _, _, HasSubstr("Aligning LVLH-y close to inertial-y")));
         cml::MathUtils::generate_inertial_to_lvlh(position, velocity, T_inrtl_lvlh);
         test_matrices_equal(T_inrtl_lvlh, expected);
     }
@@ -136,7 +136,7 @@ TEST(MathUtils, GenerateInertialToLvlh) {
         double T_inrtl_lvlh[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Aligning LVLH-x close to inertial-x")));
+            publish(cml::message::Warning, _, _, HasSubstr("Aligning LVLH-x close to inertial-x")));
         cml::MathUtils::generate_inertial_to_lvlh(position, velocity, T_inrtl_lvlh);
         test_matrices_equal(T_inrtl_lvlh, expected);
     }
@@ -168,7 +168,7 @@ TEST(MathUtils, GenerateInertialToLvlh) {
         double T_inrtl_lvlh[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Aligning LVLH-x close to inertial-x")));
+            publish(cml::message::Warning, _, _, HasSubstr("Aligning LVLH-x close to inertial-x")));
         cml::MathUtils::generate_inertial_to_lvlh(position, velocity, T_inrtl_lvlh);
         test_matrices_equal(T_inrtl_lvlh, expected);
     }
@@ -185,7 +185,7 @@ TEST(MathUtils, GenerateInertialToLvlh) {
         double T_inrtl_lvlh[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Aligning LVLH-x close to inertial-x")));
+            publish(cml::message::Warning, _, _, HasSubstr("Aligning LVLH-x close to inertial-x")));
         cml::MathUtils::generate_inertial_to_lvlh(position, velocity, T_inrtl_lvlh);
         test_matrices_equal(T_inrtl_lvlh, expected);
     }
@@ -196,7 +196,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Null pointer cases.
     {
@@ -205,11 +205,11 @@ TEST(MathUtils, GenerateInertialToUvw) {
         double T_inrtl_uvw[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("output matrix is NULL")));
+            publish(cml::message::Error, _, _, HasSubstr("output matrix is NULL")));
         cml::MathUtils::generate_inertial_to_uvw(position, velocity, nullptr);
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("input arguments are NULL"))).Times(3);
+            publish(cml::message::Error, _, _, HasSubstr("input arguments are NULL"))).Times(3);
         cml::MathUtils::generate_inertial_to_uvw(nullptr, velocity, T_inrtl_uvw);
         test_matrices_equal(T_inrtl_uvw, identity_matrix);
 
@@ -228,7 +228,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
         double T_inrtl_uvw[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("Aligning UVW with inertial instead")));
+            publish(cml::message::Error, _, _, HasSubstr("Aligning UVW with inertial instead")));
         cml::MathUtils::generate_inertial_to_uvw(position, velocity, T_inrtl_uvw);
         test_matrices_equal(T_inrtl_uvw, expected);
     }
@@ -245,7 +245,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
         double T_inrtl_uvw[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Aligning UVW-w close to inertial-z")));
+            publish(cml::message::Warning, _, _, HasSubstr("Aligning UVW-w close to inertial-z")));
         cml::MathUtils::generate_inertial_to_uvw(position, velocity, T_inrtl_uvw);
         test_matrices_equal(T_inrtl_uvw, expected);
     }
@@ -258,7 +258,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
         double T_inrtl_uvw[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Aligning UVW-w close to inertial-z")));
+            publish(cml::message::Warning, _, _, HasSubstr("Aligning UVW-w close to inertial-z")));
         cml::MathUtils::generate_inertial_to_uvw(position, velocity, T_inrtl_uvw);
         test_matrices_equal(T_inrtl_uvw, expected);
     }
@@ -275,7 +275,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
         double T_inrtl_uvw[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Aligning UVW-w close to inertial-x")));
+            publish(cml::message::Warning, _, _, HasSubstr("Aligning UVW-w close to inertial-x")));
         cml::MathUtils::generate_inertial_to_uvw(position, velocity, T_inrtl_uvw);
         test_matrices_equal(T_inrtl_uvw, expected);
     }
@@ -307,7 +307,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
         double T_inrtl_uvw[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Aligning UVW-w close to inertial-z")));
+            publish(cml::message::Warning, _, _, HasSubstr("Aligning UVW-w close to inertial-z")));
         cml::MathUtils::generate_inertial_to_uvw(position, velocity, T_inrtl_uvw);
         test_matrices_equal(T_inrtl_uvw, expected);
     }
@@ -324,7 +324,7 @@ TEST(MathUtils, GenerateInertialToUvw) {
         double T_inrtl_uvw[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Aligning UVW-w close to inertial-x")));
+            publish(cml::message::Warning, _, _, HasSubstr("Aligning UVW-w close to inertial-x")));
         cml::MathUtils::generate_inertial_to_uvw(position, velocity, T_inrtl_uvw);
         test_matrices_equal(T_inrtl_uvw, expected);
     }
@@ -335,7 +335,7 @@ TEST(MathUtils, GenerateInertialToReference) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Null pointer cases.
     {
@@ -344,11 +344,11 @@ TEST(MathUtils, GenerateInertialToReference) {
         double T_inrtl_reference[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("output matrix is NULL")));
+            publish(cml::message::Error, _, _, HasSubstr("output matrix is NULL")));
         cml::MathUtils::generate_inrtl_to_reference(x_axis_inertial, position, nullptr);
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("input arguments are NULL"))).Times(3);
+            publish(cml::message::Error, _, _, HasSubstr("input arguments are NULL"))).Times(3);
         cml::MathUtils::generate_inrtl_to_reference(nullptr, position, T_inrtl_reference);
         test_matrices_equal(T_inrtl_reference, identity_matrix);
 
@@ -367,7 +367,7 @@ TEST(MathUtils, GenerateInertialToReference) {
         double T_inrtl_reference[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("Aligning reference ref-frame with inertial frame instead")));
+            publish(cml::message::Error, _, _, HasSubstr("Aligning reference ref-frame with inertial frame instead")));
         cml::MathUtils::generate_inrtl_to_reference(x_axis_inertial, position, T_inrtl_reference);
         test_matrices_equal(T_inrtl_reference, expected);
     }
@@ -380,7 +380,7 @@ TEST(MathUtils, GenerateInertialToReference) {
         double T_inrtl_reference[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("Aligning reference ref-frame with inertial frame instead")));
+            publish(cml::message::Error, _, _, HasSubstr("Aligning reference ref-frame with inertial frame instead")));
         cml::MathUtils::generate_inrtl_to_reference(x_axis_inertial, position, T_inrtl_reference);
         test_matrices_equal(T_inrtl_reference, expected);
     }
@@ -393,7 +393,7 @@ TEST(MathUtils, GenerateInertialToReference) {
         double T_inrtl_reference[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("Aligning reference ref-frame with inertial frame instead")));
+            publish(cml::message::Error, _, _, HasSubstr("Aligning reference ref-frame with inertial frame instead")));
         cml::MathUtils::generate_inrtl_to_reference(x_axis_inertial, position, T_inrtl_reference);
         test_matrices_equal(T_inrtl_reference, expected);
     }
@@ -406,7 +406,7 @@ TEST(MathUtils, GenerateInertialToReference) {
         double T_inrtl_reference[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("Aligning reference ref-frame with inertial frame instead")));
+            publish(cml::message::Error, _, _, HasSubstr("Aligning reference ref-frame with inertial frame instead")));
         cml::MathUtils::generate_inrtl_to_reference(x_axis_inertial, position, T_inrtl_reference);
         test_matrices_equal(T_inrtl_reference, expected);
     }
@@ -462,7 +462,7 @@ TEST(MathUtils, GenerateInertialToVnc) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Case 1
     {
@@ -472,7 +472,7 @@ TEST(MathUtils, GenerateInertialToVnc) {
         double T_inrtl_vnc[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("either the position or velocity is a zero vector")));
+            publish(cml::message::Error, _, _, HasSubstr("either the position or velocity is a zero vector")));
         cml::MathUtils::generate_inrtl_to_vnc(position, velocity, T_inrtl_vnc);
         test_matrices_equal(T_inrtl_vnc, expected);
     }
@@ -485,7 +485,7 @@ TEST(MathUtils, GenerateInertialToVnc) {
         double T_inrtl_vnc[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("either the position or velocity is a zero vector")));
+            publish(cml::message::Error, _, _, HasSubstr("either the position or velocity is a zero vector")));
         cml::MathUtils::generate_inrtl_to_vnc(position, velocity, T_inrtl_vnc);
         test_matrices_equal(T_inrtl_vnc, expected);
     }
@@ -498,7 +498,7 @@ TEST(MathUtils, GenerateInertialToVnc) {
         double T_inrtl_vnc[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("either the position or velocity is a zero vector")));
+            publish(cml::message::Error, _, _, HasSubstr("either the position or velocity is a zero vector")));
         cml::MathUtils::generate_inrtl_to_vnc(position, velocity, T_inrtl_vnc);
         test_matrices_equal(T_inrtl_vnc, expected);
     }
@@ -511,7 +511,7 @@ TEST(MathUtils, GenerateInertialToVnc) {
         double T_inrtl_vnc[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("either the position or velocity is a zero vector")));
+            publish(cml::message::Error, _, _, HasSubstr("either the position or velocity is a zero vector")));
         cml::MathUtils::generate_inrtl_to_vnc(position, velocity, T_inrtl_vnc);
         test_matrices_equal(T_inrtl_vnc, expected);
     }
@@ -539,7 +539,7 @@ TEST(MathUtils, GenerateInertialToVnc) {
         double T_inrtl_vnc[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("position and velocity are aligned")));
+            publish(cml::message::Error, _, _, HasSubstr("position and velocity are aligned")));
         cml::MathUtils::generate_inrtl_to_vnc(position, velocity, T_inrtl_vnc);
         test_matrices_equal(T_inrtl_vnc, expected);
     }
@@ -552,7 +552,7 @@ TEST(MathUtils, GenerateInertialToVnc) {
         double T_inrtl_vnc[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("position and velocity are aligned")));
+            publish(cml::message::Error, _, _, HasSubstr("position and velocity are aligned")));
         cml::MathUtils::generate_inrtl_to_vnc(position, velocity, T_inrtl_vnc);
         test_matrices_equal(T_inrtl_vnc, expected);
     }
@@ -563,7 +563,7 @@ TEST(MathUtils, GenerateTransPfixToEnu) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Null pointer cases.
     {
@@ -571,11 +571,11 @@ TEST(MathUtils, GenerateTransPfixToEnu) {
         double T_pfix_enu[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("output matrix is NULL")));
+            publish(cml::message::Error, _, _, HasSubstr("output matrix is NULL")));
         cml::MathUtils::generate_T_pfix_to_enu(position_pfix, nullptr);
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("Position vector is NULL")));
+            publish(cml::message::Error, _, _, HasSubstr("Position vector is NULL")));
         cml::MathUtils::generate_T_pfix_to_enu(nullptr, T_pfix_enu);
         test_matrices_equal(T_pfix_enu, identity_matrix);
     }
@@ -625,7 +625,7 @@ TEST(MathUtils, GenerateTransPfixToEnu) {
         double T_pfix_enu[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("Aligning east with pfix +x")));
+            publish(cml::message::Error, _, _, HasSubstr("Aligning east with pfix +x")));
         cml::MathUtils::generate_T_pfix_to_enu(position_pfix, T_pfix_enu);
         test_matrices_equal(T_pfix_enu, expected);
     }
@@ -665,7 +665,7 @@ TEST(MathUtils, GenerateTransPfixToEnu) {
         double T_pfix_enu[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("Aligning east with pfix +x")));
+            publish(cml::message::Error, _, _, HasSubstr("Aligning east with pfix +x")));
         cml::MathUtils::generate_T_pfix_to_enu(position_pfix, T_pfix_enu);
         test_matrices_equal(T_pfix_enu, expected);
     }
@@ -676,7 +676,7 @@ TEST(MathUtils, GenerateQuatEnuToPfix) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     jeod::Quaternion q_enu_to_pfix;
     const double sqrt2_2 = 0.5 * std::sqrt(2.0);
@@ -711,7 +711,7 @@ TEST(MathUtils, GenerateQuatEnuToPfix) {
 
     // Case 5
     EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Latitude too large")));
+            publish(cml::message::Warning, _, _, HasSubstr("Latitude too large")));
     cml::MathUtils::generate_Q_enu_to_pfix(M_PI_2, 1.570797, q_enu_to_pfix);
     EXPECT_NEAR(q_enu_to_pfix.scalar, -0.99999999999994338, tolerance);
     EXPECT_NEAR(q_enu_to_pfix.vector[0], -3.3660255174816628e-07, tolerance);
@@ -720,7 +720,7 @@ TEST(MathUtils, GenerateQuatEnuToPfix) {
 
     // Case 6
     EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Warning, _, _, HasSubstr("Latitude too small")));
+            publish(cml::message::Warning, _, _, HasSubstr("Latitude too small")));
     cml::MathUtils::generate_Q_enu_to_pfix(M_PI_2, -1.570797, q_enu_to_pfix);
     EXPECT_NEAR(q_enu_to_pfix.scalar, -3.3660255174816628e-07, tolerance);
     EXPECT_NEAR(q_enu_to_pfix.vector[0], -0.99999999999994338, tolerance);

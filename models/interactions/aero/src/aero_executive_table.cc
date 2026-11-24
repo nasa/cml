@@ -57,7 +57,7 @@ AeroExecutiveTable::change_table( unsigned int new_ix)
 {
   if (new_ix < data_tables_vector.size()) {
     if (current_table == data_tables_vector[new_ix]) {
-      CMLMessage::inform(
+      message::inform(
         __FILE__,__LINE__,"Redundant request.\n",
         "Request to change table to the one at index ", new_ix, " (named ", current_table->name, "),\n"
         "but already using that table. No action taken.\n");
@@ -70,13 +70,13 @@ AeroExecutiveTable::change_table( unsigned int new_ix)
   // if current_table == NULL, the model has not yet been initialized and will
   // fail at initialization if this is not corrected.
   else if (current_table == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Table request.\n",
       "Request to switch to table at index ", new_ix, ", but there are only ", data_tables_vector.size(), " tables "
       "available.\nRequest failed. No data table selected.\n");
   }
   else {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Table request.\n",
       "Request to switch to table at index ", new_ix, ", but there are only ", data_tables_vector.size(), " tables "
       "available.\nRequest failed. Continuing with existing table (", current_table->name, ").\n");
@@ -89,7 +89,7 @@ AeroExecutiveTable::change_table( const std::string & new_name)
   // Check trivial case - change commanded to current table.
   if (current_table != nullptr) {
     if (current_table->name == new_name) {
-      CMLMessage::inform(
+      message::inform(
         __FILE__,__LINE__,"Redundant request\n",
         "Request to change table to ", new_name, ", but already using that table.\n"
         "No action taken.\n");
@@ -105,13 +105,13 @@ AeroExecutiveTable::change_table( const std::string & new_name)
   // if current_table == NULL, the model has not yet been initialized and will
   // fail at initialization if this is not corrected.
   if (current_table == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Table request.\n",
       "Request to switch to table named ", new_name, ", but none was found.\n"
       "Request failed. No table specified.\n");
   }
   else {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Table request\n",
       "Request to switch to table named ", new_name, ", but none was found.\n"
       "Request failed. Will continue to use data table ", current_table->name, ".\n");
@@ -123,7 +123,7 @@ AeroExecutiveTable::change_table( AeroTableSetBase & new_table)
 {
   // Just use the specified table whether it has been recognized or not.
   if (current_table == &new_table) {
-    CMLMessage::inform(
+    message::inform(
       __FILE__,__LINE__,"Redundant request.\n",
       "Request to change table to ", new_table.name, ", but already using that table.\n"
       "No action taken.\n");
@@ -141,7 +141,7 @@ void
 AeroExecutiveTable::add_table( AeroTableSetBase * table)
 {
   if (table == nullptr) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid address.\n",
       "The table to be added is NULL.\n"
       "Aborting addition\n");
@@ -151,7 +151,7 @@ AeroExecutiveTable::add_table( AeroTableSetBase * table)
   for (auto & it : data_tables_vector) {
     // Check the addresses for duplicates.
     if (it == table) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Duplication of Aero table.\n",
         "An AeroTableSetBase with this address has previously been added.\n"
         "Name of instance is ", table->name, ".\n"
@@ -159,7 +159,7 @@ AeroExecutiveTable::add_table( AeroTableSetBase * table)
         "Continuing with the addition of this table.\n");
     }
     else if (it->name == table->name) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Duplication of Aero table.\n",
         "An AeroTableSetBase with this name (", it->name, ") has previously been added.\n"
         "Caution should be exercised when switching between tables based\n"
@@ -179,7 +179,7 @@ AeroExecutiveTable::initialize()
 {
   // enabled and initialized come from AeroExec from SubscriptionBase
   if (initialized) {
-    CMLMessage::inform(
+    message::inform(
       __FILE__,__LINE__, "Sequence configuration error.\n",
       "AeroExecutiveTable::initialize() was called after the instance was "
       "initialized.\nCheck your configuration.\n"
@@ -189,7 +189,7 @@ AeroExecutiveTable::initialize()
 
   if (current_table == nullptr) {
     if (data_tables_vector.empty()) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid Table initialization.\n",
         "No data tables have been loaded to provide data-lookup capabilities.\n"
         "This table-based Aero capability cannot be activated.\n");
@@ -200,7 +200,7 @@ AeroExecutiveTable::initialize()
       // data_tables_vector is protected, the only path to add a new table is
       // via add_table, which checks for NULL before pushing the new entry
       // onto the vector.
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid Table initialization\n",
         "Error of unknown source.\n"
         "A NULL data table was somehow loaded for data-lookup capabilities.\n"
@@ -208,7 +208,7 @@ AeroExecutiveTable::initialize()
       return; // Do not continue to initialize
     }
     else {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid Table initialization\n",
         "No data table has been selected to provide data-lookup capabilities.\n"
         "Using the first-loaded data table (", data_tables_vector[0]->name, ") by default.\n");
@@ -284,7 +284,7 @@ AeroExecutiveTable::activate()
     // current_table cannot be reassigned to NULL post-initialization.
     // Because this is such a low-impact method, it is prudent to include this
     // completely redundant check here to safeguard future modifications.
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Activation error.\n",
       "No table has been selected for the AeroExecutive table-lookup."
       "Cannot activate.\n");
@@ -309,7 +309,7 @@ AeroExecutiveTable::configure_new_table( AeroTableSetBase * new_table)
     // the new entry onto the vector.
     // So data_tables_vector cannot hold NULL, so configure_new_table cannot be
     // called with a NULL argument.
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid call; impossible scenario\n",
       "Attempt to configure a new table but the new_table argument is NULL.\n"
       "This should not be possible; configure_new_table is a protected method\n"
@@ -453,7 +453,7 @@ AeroExecutiveTable::post_process_table_data()
   case AeroTableSetBase::Unspecified:
   default:
     // UNREACHABLE CODE, sanity check.
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Illegal operation mode\n",
       "AeroTable data mode not found.\n");
   }

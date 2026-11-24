@@ -40,7 +40,7 @@ bool
 GenericSingleInputTable::initialize()
 {
   if (independents.size() > 1) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Invalid configuration: the GenericSingleInputTable has been configured"
       "with ",independents.size(), " independent variables.\n"
       "To use a multi-input interpolation, use the GenericMultiInputTable "
@@ -130,7 +130,7 @@ GenericSingleInputTable::generate_base_values()
     // part of the add_independent method, which requires a valid
     // enumeration (or assuumes one if none is provided).  THereafter, that
     // value is protected.  This is a fail-safe.
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,
       "Specification of LookupMethod is invalid.\n");
   }

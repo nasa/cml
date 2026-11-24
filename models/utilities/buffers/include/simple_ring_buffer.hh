@@ -89,13 +89,13 @@ Purpose:
       return;
     }
     if (new_buffer_size == 0) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot set the buffer size to zero.\n"
         "Instruction ignored for simple ring buffer ",name,".\n");
       return;
     }
     if (new_buffer_size > max_buffer_size) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot set the buffer size to > ",max_buffer_size,".\n"
         "Buffer size being reset to ",max_buffer_size,
         " for simple ring buffer ",name,".\n");
@@ -177,7 +177,7 @@ Purpose:
   size_t identify_previous_index( size_t n) const
   {
     if (n > data.size()) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot step backward ",n," steps because the buffer only contains ",
         data.size(),"entries.\n Returning current buffer index.\n");
       return buffer_ix;

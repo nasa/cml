@@ -128,7 +128,7 @@ class ColorStringSimObject : public Trick::SimObject {
         fail_test = 1;
       }
       if (fail_test == 1) {
-        cml::CMLMessage::fail(
+        cml::message::fail(
           __FILE__,__LINE__,"color_test::check_error\n",
           "The given color does not match the expected ascii characters. "
           "Failing test. \n");

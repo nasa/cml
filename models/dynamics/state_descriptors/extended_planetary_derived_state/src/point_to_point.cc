@@ -52,7 +52,7 @@ void add_point(
   // pt_pos is checked for NULL on the passthrough when creating the new
   // element.
   if (pt_name.empty()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid name specified.\n",
       "Specified name is empty.\n"
       "Cannot have an un-named point.\n",
@@ -63,7 +63,7 @@ void add_point(
   const auto existing_point = std::find_if(element_list.begin(), element_list.end(),
     [&pt_name](const PointToPointElement& element) {return pt_name == element.name;});
   if (existing_point != element_list.end()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid name specified.\n",
       "Specified name (", pt_name, ") is already registered as a ", list_type, "-point.\n"
       "Cannot duplicate point names.\n");
@@ -85,7 +85,7 @@ PointToPointElement::PointToPointElement(
   name(std::move(name_))
 {
   if (position_ == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid position specified.\n",
       "Specified position vector is NULL for point called ", name, ".\n"
       "Cannot construct a PointToPointElement with a NULL position.\n");
@@ -239,7 +239,7 @@ PointToPointManager::add_relative_position(
       return position.check_names(v_pt_name, p_pt_name);
     });
   if (match != relative_positions.end()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid name specified.\n",
       "Relative Position instance between ", v_pt_name, " and ", p_pt_name, " is already registered.\n"
       "Will not add a second instance of the same.\n");
@@ -253,7 +253,7 @@ PointToPointManager::add_relative_position(
     [&p_pt_name](const PointToPointElement& point){return point.name == p_pt_name;});
 
   if (vehicle_point == vehicle_points.end() || planet_point == planet_points.end()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid name specified.\n",
       "Could not match the specified names (", v_pt_name, ", ", p_pt_name, ") with a registered\n"
       "vehicle-point-name and planet-point-name respectively.\n"
@@ -297,7 +297,7 @@ PointToPointManager::remove_relative_position(
     return;
   }
 
-  CMLMessage::warn(
+  message::warn(
     __FILE__,__LINE__,"Invalid name specified.\n",
     "Could not match the specified names (", v_pt_name, ", ", p_pt_name, ") to a registered\n"
     "instance of a PointToPointPosition.\n"
@@ -323,7 +323,7 @@ PointToPointManager::get_relative_position(
   if (item != relative_positions.end()) {
     return item->position;
   }
-  CMLMessage::error(
+  message::error(
     __FILE__,__LINE__,"Invalid names specified.\n",
     "Could not find a relative-position instance with point names ", v_pt_name, " and ", p_pt_name, ".\n"
     "No relative position available.\n");

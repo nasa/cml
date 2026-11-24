@@ -36,7 +36,7 @@ TargetRelative_StateParameter_Alt::initialize(
   /* Compute unit target position vector */
   if (!Target_Reference_frame.compute_frame( target_point,
                                              R_Ref)) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Target and Reference position vectors are nearly aligned.\n",
       "This is an invalid configuration.\n"
       "Pick a different reference vector.\n"
@@ -48,7 +48,7 @@ TargetRelative_StateParameter_Alt::initialize(
 
   omega_mag = jeod::Vector3::vmag(omega_planet);
   if ( MathUtils::is_near_equal( omega_mag, 0) ) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Planetary rotation is zero.  Setting unit planetary rotation\n"
       "vector to [0,0,1].  Check configuration.\n");
     omega_planet[2] = 1.0;
@@ -56,7 +56,7 @@ TargetRelative_StateParameter_Alt::initialize(
   // construct Omega_Target_frame basis vectors
   if (!Omega_Target_frame.compute_frame( omega_planet,
                                          target_point)) {
-    CMLMessage::warn( __FILE__,__LINE__,
+    message::warn( __FILE__,__LINE__,
       "Target position vector and planetary rotation vector are nearly aligned."
       "\nThis is unusual but manageable.  Check configuration.\n");
     sin_phi_omega = 0.0;

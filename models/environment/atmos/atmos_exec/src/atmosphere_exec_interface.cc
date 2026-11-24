@@ -108,7 +108,7 @@ AtmosphereExecInterface::initialize()
 {
   if (current_atmos == nullptr ||
       current_winds == nullptr) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Error in initialization sequence.\n",
       "Pointers to current wind or atmosphere model were set to NULL\n"
       "after construction time.\n"
@@ -120,7 +120,7 @@ AtmosphereExecInterface::initialize()
   // specification
   if (  current_atmos != &atmos_none &&
        !current_atmos->initialize_atmos() ){
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Atmosphere initialization failed.\n",
       "The initialization of the specified atmosphere failed.\n"
       "Atmosphere removed.\n");
@@ -131,7 +131,7 @@ AtmosphereExecInterface::initialize()
   // specification
   if (  current_winds != &atmos_none &&
        !current_winds->initialize_winds()) {
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__,"Atmosphere initialization failed.\n",
     "The initialization of the specified atmosphere failed.\n"
     "Atmosphere removed.\n");

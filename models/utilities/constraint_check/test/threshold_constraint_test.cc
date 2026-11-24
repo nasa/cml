@@ -63,7 +63,7 @@ TEST(ThresholdInstantConstraint, ConstructWithConstraintSet) {
 // Test a nominal update of the ThresholdInstantConstraint.
 TEST(ThresholdInstantConstraint, Update) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     double var = -1.0;
@@ -87,7 +87,7 @@ TEST(ThresholdInstantConstraint, Update) {
 // Test that an inactive constraint doesn't report any violations.
 TEST(ThresholdInstantConstraint, Inactive) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     double var = -1.0;
@@ -116,7 +116,7 @@ TEST(ThresholdTimedConstraint, ConstructWithConstraintSet) {
 // Test a nominal update of the ThresholdTimedConstraint.
 TEST(ThresholdTimedConstraint, Update) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     double var = -1.0;
@@ -145,7 +145,7 @@ TEST(ThresholdTimedConstraint, Update) {
 // Test that an inactive constraint doesn't report any violations.
 TEST(ThresholdTimedConstraint, Inactive) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     const double var = 2.0;
@@ -176,7 +176,7 @@ TEST(ThresholdTimedConstraintSpecData, SetNumSpecs) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     double var {};
     const double dt = 1.0;
@@ -189,14 +189,14 @@ TEST(ThresholdTimedConstraintSpecData, SetNumSpecs) {
 
     // Invalid call. The number of specs is too large.
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("Error in attempting to set the number of specification values")));
+        publish(cml::message::Error, _, _, HasSubstr("Error in attempting to set the number of specification values")));
     article.set_num_specs(2000);
 
     // Invalid call. The model has already been initialized.
     article.initialize();
     EXPECT_TRUE(article.is_initialized());
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _, HasSubstr("Error in attempting to set the number of specification values")));
+        publish(cml::message::Error, _, _, HasSubstr("Error in attempting to set the number of specification values")));
     article.set_num_specs(1);
 }
 
@@ -205,7 +205,7 @@ TEST(ThresholdTimedConstraintSpecData, InitializationFailures) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     double var {};
     const double dt = 1.0;
@@ -215,7 +215,7 @@ TEST(ThresholdTimedConstraintSpecData, InitializationFailures) {
     // 0 specs.
     article.set_num_specs(0);
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _,
+        publish(cml::message::Error, _, _,
             HasSubstr("Cannot initialize a constraint with number of specifications\nassigned to 0")));
     article.initialize();
     EXPECT_FALSE(article.is_initialized());
@@ -223,7 +223,7 @@ TEST(ThresholdTimedConstraintSpecData, InitializationFailures) {
     // 1 spec with more than 1 test.
     article.set_num_specs(1);
     EXPECT_CALL(cml_message_mock,
-        publish(cml::CMLMessage::Error, _, _,
+        publish(cml::message::Error, _, _,
             HasSubstr("Cannot create multiple test points (bins) for a constraint defined\nwith a single specification")));
     article.initialize();
     EXPECT_FALSE(article.is_initialized());
@@ -232,7 +232,7 @@ TEST(ThresholdTimedConstraintSpecData, InitializationFailures) {
 // Configure the model to populate tests from arrays with an equal number of tests and specs (2).
 TEST(ThresholdTimedConstraintSpecData, EqualNumberOfBinsAndSpecs) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     double var {};
@@ -284,7 +284,7 @@ TEST(ThresholdTimedConstraintSpecData, InterpolationFailures) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Threshold specs are non-monotonic.
     {
@@ -299,7 +299,7 @@ TEST(ThresholdTimedConstraintSpecData, InterpolationFailures) {
         article.threshold_spec[3] = 0.5;
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("specification values are not monotonic")));
+            publish(cml::message::Error, _, _, HasSubstr("specification values are not monotonic")));
         article.initialize();
         EXPECT_FALSE(article.is_initialized());
     }
@@ -319,7 +319,7 @@ TEST(ThresholdTimedConstraintSpecData, InterpolationFailures) {
         article.threshold_spec[2] = 2.0;
         article.threshold_spec[3] = 10.0;
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _,
+            publish(cml::message::Error, _, _,
                 HasSubstr("Logarithmic interpolation requires that the specification values have a consistent sign")));
         article.initialize();
         EXPECT_FALSE(article.is_initialized());
@@ -334,7 +334,7 @@ TEST(ThresholdTimedConstraintSpecData, InterpolationFailures) {
         article.time_spec[2] = 2.0;
         article.time_spec[3] = 3.0;
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _,
+            publish(cml::message::Error, _, _,
                 HasSubstr("Logarithmic interpolation requires that the specification values have a consistent sign")));
         article.initialize();
         EXPECT_FALSE(article.is_initialized());
@@ -344,7 +344,7 @@ TEST(ThresholdTimedConstraintSpecData, InterpolationFailures) {
 // Test initialization with linearly interpolating the test values
 TEST(ThresholdTimedConstraintSpecData, LinearInterpolation) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     // Floating point comparison tolerance.
@@ -389,7 +389,7 @@ TEST(ThresholdTimedConstraintSpecData, LinearInterpolation) {
 // Test initialization with logarithmically interpolating the test values
 TEST(ThresholdTimedConstraintSpecData, LogarithmicInterpolation) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
     // Floating point comparison tolerance.

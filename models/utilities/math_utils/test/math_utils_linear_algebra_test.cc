@@ -194,7 +194,7 @@ TEST(MathUtils, ConvertBetweenOneDimensionalVectorAndMatrix) {
 TEST(MathUtils, MatrixCopyOperations) {
     using testing::_;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     constexpr double input[3][4] {
         {1.0, 2.0, 3.0, 4.0},
@@ -225,7 +225,7 @@ TEST(MathUtils, MatrixCopyOperations) {
             {8.0, 0.0},
             {12.0, 0.0}
         };
-        EXPECT_CALL(cml_message_mock, publish(cml::CMLMessage::Error, _, _, _));
+        EXPECT_CALL(cml_message_mock, publish(cml::message::Error, _, _, _));
         cml::MathUtils::matrix_copy_submatrix_out(input, output, 1, 3);
         test_matrices_equal(output, expected2);
     }
@@ -261,7 +261,7 @@ TEST(MathUtils, MatrixCopyOperations) {
             {1100.0, 1200.0, 1300.0, 1.0, 2.0},
             {1600.0, 1700.0, 1800.0, 5.0, 6.0}
         };
-        EXPECT_CALL(cml_message_mock, publish(cml::CMLMessage::Error, _, _, _));
+        EXPECT_CALL(cml_message_mock, publish(cml::message::Error, _, _, _));
         cml::MathUtils::matrix_copy_submatrix_in(input, output2, 2, 3);
         test_matrices_equal(output2, expected2);
     }
@@ -525,7 +525,7 @@ TEST(MathUtils, CorrelationMatrix) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<cml::CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Ordinary covariance matrix.
     {
@@ -576,7 +576,7 @@ TEST(MathUtils, CorrelationMatrix) {
         constexpr double expected[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("a diagonal element is negative")));
+            publish(cml::message::Error, _, _, HasSubstr("a diagonal element is negative")));
         const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         ASSERT_FALSE(success);
         test_matrices_equal(output, expected);
@@ -612,7 +612,7 @@ TEST(MathUtils, CorrelationMatrix) {
         constexpr double expected[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
+            publish(cml::message::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
         const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_FALSE(success);
         test_matrices_equal(output, expected);
@@ -629,7 +629,7 @@ TEST(MathUtils, CorrelationMatrix) {
         constexpr double expected[3][3] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
+            publish(cml::message::Error, _, _, HasSubstr("a diagonal element is zero\nwith non-zero off-diagonals")));
         const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_FALSE(success);
         test_matrices_equal(output, expected);
@@ -650,7 +650,7 @@ TEST(MathUtils, CorrelationMatrix) {
         };
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals")));
+            publish(cml::message::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals")));
         const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_TRUE(success);
         test_matrices_equal(output, expected);
@@ -671,7 +671,7 @@ TEST(MathUtils, CorrelationMatrix) {
         };
 
         EXPECT_CALL(cml_message_mock,
-            publish(cml::CMLMessage::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals"))).Times(3);
+            publish(cml::message::Inform, _, _, HasSubstr("diagonal element that is zero\nwith zero off-diagonals"))).Times(3);
         const bool success = cml::MathUtils::extract_correlation_coefficients(covariance, output);
         EXPECT_TRUE(success);
         test_matrices_equal(output, expected);

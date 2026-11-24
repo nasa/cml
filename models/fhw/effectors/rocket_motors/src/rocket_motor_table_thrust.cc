@@ -129,13 +129,13 @@ RocketMotor_TableThrust::load_thrust_data(
     size_t num_elements)
 {
   if (num_elements == 0) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Attempted to load invalid thrust data. "
       "Cannot load thrust data of size 0!");
     return;
   }
   if (data == nullptr) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Attempted to load invalid thrust data. "
       "Thrust data pointer cannot be null!");
     return;
@@ -150,7 +150,7 @@ RocketMotor_TableThrust::load_thrust_data(
     const std::vector<double> & data)
 {
   if (data.empty()) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__, __LINE__, "Attempted to load invalid thrust data. "
       "Cannot load thrust data of size 0!");
     return;
@@ -179,7 +179,7 @@ RocketMotor_TableThrust::load_isp_data(
       min_value = std::min( min_value, data[ii]);
     }
     if (min_value <= 0.0) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid entry in Isp table.\n",
         "An invalid entry with value ", min_value, " was found in the Isp table.\n"
         "This could cause problems if it gets used.\n"
@@ -200,7 +200,7 @@ RocketMotor_TableThrust::load_isp_data(
       min_value = std::min( min_value, data[ii]);
     }
     if (min_value <= 0.0) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid entry in Isp table.\n",
         "An invalid entry with value ", min_value, " was found in the Isp table.\n"
         "This could cause problems if it gets used.\n"
@@ -349,7 +349,7 @@ RocketMotor_TableThrust::set_consumption_type( ConsumptionType type_in)
           !table_set.is_a_dependent_variable(mass_flow_rate)) ||
          (type_in == PropConsumptionMburn &&
           !table_set.is_a_dependent_variable(mburn))) {
-      CMLMessage::error(
+      message::error(
       __FILE__,__LINE__,"Invalid initialization sequence\n",
       "Attempt to switch consumption type to ", type_in, " from ",
       consumption_type, " after initialization\n"
@@ -438,7 +438,7 @@ RocketMotor_TableThrust::update_table()
   }
 
   if (thrust_magnitude < 0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid Thrust Configuration \n",
       "The thrust magnitude value obtained from the thrust profile data \n "
       "is < 0, this should be an impossible value to hit. Check the thrust \n"

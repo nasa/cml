@@ -82,7 +82,7 @@ MassBodyCompositeDispersions::update()
 
   // Check that the adjustable-body has been assigned:
   if (adjustable_body == nullptr) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid Configuration.\n",
       "The adjustable-body pointer has not been set.\n"
       "Modifying composite-properties of the target body by adjusting its own "
@@ -143,7 +143,7 @@ MassBodyCompositeDispersions::update_internal()
      target-body so the detach process will take the adjustable-body with
      it, drop an error message and just apply the modifier.*/
   if ( adjustable_body->is_progeny_of( *detach_sub_tree)) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Invalid configuration.\n"
       "The adjustable-body is a component of the sub-tree being detached.\n"
       "That would make it inaccessible to the target-body.\n"
@@ -167,7 +167,7 @@ MassBodyCompositeDispersions::update_internal()
      target-body, so the parent must exist,
      However, parent_body is a pointer so lets check:*/
   if (parent_mass_body == nullptr) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "The detach-sub-tree body does not have a parent body.\n"
       "There is nothing to detach it from.\n");
     comp_to_core_updates();
@@ -192,7 +192,7 @@ MassBodyCompositeDispersions::update_internal()
     // If it failed, drop an error message and apply the modifier anyway.
     // Probably unreachable; it is not clear how a simple detach could fail,
     // so this is a safety net; don't want to be attaching if detach failed.
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "The process to detach the detach-sub-tree from the main tree "
       "failed.\n"
       "Composite-to-core modifier being applied to the main tree without\n"
@@ -223,7 +223,7 @@ MassBodyCompositeDispersions::update_internal()
                                            *parent_mass_body);
   }
   if (!attached) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "The sub-tree ",detach_sub_tree->name.get_name()," was detached from ",
       parent_mass_body->name.get_name(), "\n"
       "to set the core-mass-properties of ",target_body.name.get_name(),"\n"
@@ -294,7 +294,7 @@ MassBodyCompositeDispersions::comp_to_core_updates()
   comp_to_core.fail_if_mass_invalid = fail_if_mass_invalid;
 
   if ( !comp_to_core.update( target_properties)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid configuration.\n",
       "Failure to initialize the composite-to-core method means that\n"
       "mass properties cannot be derived from composite-properties.\n"
