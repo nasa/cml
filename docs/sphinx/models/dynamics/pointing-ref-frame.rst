@@ -101,25 +101,33 @@ Model Specifications
 Architectural Considerations
 ----------------------------
 
-The model consists of the primary :cpp:class:`PointingRefFrame` class and the specialized extension of it,
-:cpp:class:`EphemBasedPointingRefFrame`. The :cpp:class:`PointingRefFrame` class includes access to a reference frame
+The model consists of the primary :cpp:class:`cml::PointingRefFrame` class and the specialized extension of it,
+:cpp:class:`cml::EphemBasedPointingRefFrame`. The :cpp:class:`cml::PointingRefFrame` class includes access to a reference frame
 instance as a class member, instead of directly inheriting from *RefFrame* to allow inheritance from
-:cpp:class:`SubscriptionBase` for standard activation and deactivation of the model. The
-:cpp:class:`EphemBasedPointingRefFrame` class inherits from :cpp:class:`PointingRefFrame` for scenarios where at least one
+:cpp:class:`cml::SubscriptionBase` for standard activation and deactivation of the model. The
+:cpp:class:`cml::EphemBasedPointingRefFrame` class inherits from :cpp:class:`cml::PointingRefFrame` for scenarios where at least one
 of the *Originating-Frame* or *Target-Frame* are frames managed by the ``jeod::EphemeridesManager``. This
 extended class provides a reference to the ``jeod::EphemeridesManager`` to update the ephemerides alongside
-the :cpp:class:`PointingRefFrame` behavior.
+the :cpp:class:`cml::PointingRefFrame` behavior.
 
 .. _model-structure:
 
 Model Structure
 ---------------
 
-.. doxygenfile:: pointing_ref_frame.hh
+.. doxygenclass:: cml::PointingRefFrame
+    :members:
+    :protected-members:
+    :private-members:
+    :undoc-members:
 
 ________________________________________________________
 
-.. doxygenfile:: ephem_based_pointing_ref_frame.hh
+.. doxygenclass:: cml::EphemBasedPointingRefFrame
+    :members:
+    :protected-members:
+    :private-members:
+    :undoc-members:
 
 ________________________________________________________
 
@@ -377,21 +385,21 @@ User's Guide
 Implementation
 --------------
 
-See the :ref:`Model Structure <model-structure>` section for include paths for the :cpp:class:`PointingRefFrame`
-and :cpp:class:`EphemBasedPointingRefFrame` classes.
+See the :ref:`Model Structure <model-structure>` section for include paths for the :cpp:class:`cml::PointingRefFrame`
+and :cpp:class:`cml::EphemBasedPointingRefFrame` classes.
 
 Initialization
 --------------
 
-The non-ephemerides :cpp:class:`PointingRefFrame` has a default constructor that
+The non-ephemerides :cpp:class:`cml::PointingRefFrame` has a default constructor that
 takes no arguments. The ephemerides Pointing Reference Frame constructor takes a reference to the Ephemerides Manager.
 This is often provided as a reference to the ``jeod::DynManager``, which is a derivative of the
 Ephemerides Manager:
 
 .. code-block:: cpp
 
-   PointingRefFrame non_ephem_rotating_frame;
-   EphemBasedPointingRefFrame ephem_rotating_frame(dyn_manager);
+   cml::PointingRefFrame non_ephem_rotating_frame;
+   cml::EphemBasedPointingRefFrame ephem_rotating_frame(dyn_manager);
 
 For both Pointing Reference Frames, set the *Originating-Frame* and *Target-Frame,* and a name for
 the Pointing Reference Frame like:
@@ -446,7 +454,7 @@ The method to schedule for updates to the model:
 Configuration
 -------------
 
-The model is inactive by default. To activate it, you could call the :cpp:func:`~SubscriptionBase::subscribe`
+The model is inactive by default. To activate it, you could call the :cpp:func:`~cml::SubscriptionBase::subscribe`
 method:
 
 .. code-block:: cpp
@@ -852,7 +860,7 @@ model will broadcast a respective error.
 Changing Configuration after Model Activation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If the Pointing Reference Frame model is already activated through its :cpp:func:`~SubscriptionBase::subscribe`
+If the Pointing Reference Frame model is already activated through its :cpp:func:`~cml::SubscriptionBase::subscribe`
 method, any attempt to change the *Originating-Frame* or *Target-Frame* will result in the model broadcasting
 a respective error.
 
@@ -998,10 +1006,10 @@ ________________________________________________________
 SIM_Ephem
 ~~~~~~~~~
 
-This verification simulation tests the functionality of the :cpp:class:`EphemBasedPointingRefFrame` class and
-is limited to the very small differences between this class and its base class, :cpp:class:`PointingRefFrame`.
-It illustrates the potential pitfalls of using a :cpp:class:`PointingRefFrame` instance rather than an
-:cpp:class:`EphemBasedPointingRefFrame` instance when either the *Target-Frame* and/or *Originating-Frame* are
+This verification simulation tests the functionality of the :cpp:class:`cml::EphemBasedPointingRefFrame` class and
+is limited to the very small differences between this class and its base class, :cpp:class:`cml::PointingRefFrame`.
+It illustrates the potential pitfalls of using a :cpp:class:`cml::PointingRefFrame` instance rather than an
+:cpp:class:`cml::EphemBasedPointingRefFrame` instance when either the *Target-Frame* and/or *Originating-Frame* are
 managed by the Ephemerides Manager. See :ref:`FAIL_noephem_only <fail-noephem_only>` and :ref:`FAIL_noephem_with_subscriptions <fail_noephem_with_subscriptions>`
 for easy mistakes to avoid.
 
@@ -1010,9 +1018,9 @@ relative positions and motion, with an individual subject vehicle fixed on the E
 enable verification of the relative state of the vehicle with respect to the pointing reference
 frame.
 
-Since the :cpp:class:`PointingRefFrame` was already geometrically verified in :ref:`SIM_verif <sim-verif>`, the purpose of
-logging data in this simulation is to determine which frame, :cpp:class:`EphemBasedPointingRefFrame` or
-:cpp:class:`PointingRefFrame` is actively driving the relative state updates, and whether the inertial
+Since the :cpp:class:`cml::PointingRefFrame` was already geometrically verified in :ref:`SIM_verif <sim-verif>`, the purpose of
+logging data in this simulation is to determine which frame, :cpp:class:`cml::EphemBasedPointingRefFrame` or
+:cpp:class:`cml::PointingRefFrame` is actively driving the relative state updates, and whether the inertial
 positions of the Earth and Sun are being updated via the EphemeridesManager.
 
 ________________________________________________________
@@ -1025,11 +1033,11 @@ RUN_01_ephem_only
 This test demonstrates the recommended implementation for a Pointing Reference Frame that depends on
 frames managed by the Ephemerides Manager.
 
-**Setup**: Run only the :cpp:class:`EphemBasedPointingRefFrame` and its associated relative state.
+**Setup**: Run only the :cpp:class:`cml::EphemBasedPointingRefFrame` and its associated relative state.
 
-**Expected Results**: Only the :cpp:class:`EphemBasedPointingRefFrame` instance and its relative vehicle state are
-updated, not the :cpp:class:`PointingRefFrame` instance. The inertial positions of the Earth and Sun are also
-updated through the :cpp:class:`EphemBasedPointingRefFrame` connection to the Ephemerides Manager.
+**Expected Results**: Only the :cpp:class:`cml::EphemBasedPointingRefFrame` instance and its relative vehicle state are
+updated, not the :cpp:class:`cml::PointingRefFrame` instance. The inertial positions of the Earth and Sun are also
+updated through the :cpp:class:`cml::EphemBasedPointingRefFrame` connection to the Ephemerides Manager.
 
 **Results**: Results match expected.
 
@@ -1038,19 +1046,19 @@ ________________________________________________________
 RUN_02_both
 ###########
 
-This test demontrates that since :cpp:class:`EphemBasedPointingRefFrame` can add its Ephemeris-based frames to
-the Ephemeris tree through the Ephemerides Manager, :cpp:class:`PointingRefFrame` can indirectly track those
+This test demontrates that since :cpp:class:`cml::EphemBasedPointingRefFrame` can add its Ephemeris-based frames to
+the Ephemeris tree through the Ephemerides Manager, :cpp:class:`cml::PointingRefFrame` can indirectly track those
 same frames despite not having a connection to the Ephemerides Manager. The effect of this hidden
 dependency becomes evident in the :ref:`FAIL_noephem_only <fail-noephem_only>` test, where removing the
-:cpp:class:`EphemBasedPointingRefFrame` causes the base :cpp:class:`PointingRefFrame` to lose access to the
+:cpp:class:`cml::EphemBasedPointingRefFrame` causes the base :cpp:class:`cml::PointingRefFrame` to lose access to the
 Ephemeris-based frames.
 
-**Setup**: Runs both the :cpp:class:`EphemBasedPointingRefFrame`, the base :cpp:class:`PointingRefFrame`, and their associated
+**Setup**: Runs both the :cpp:class:`cml::EphemBasedPointingRefFrame`, the base :cpp:class:`cml::PointingRefFrame`, and their associated
 relative states.
 
-**Expected Results**: Both the :cpp:class:`EphemBasedPointingRefFrame` and the :cpp:class:`PointingRefFrame` instances are
+**Expected Results**: Both the :cpp:class:`cml::EphemBasedPointingRefFrame` and the :cpp:class:`cml::PointingRefFrame` instances are
 updated with their associated relative vehicle states. The inertial positions of the Earth and Sun
-are also updated through the :cpp:class:`EphemBasedPointingRefFrame` connection to the Ephemerides Manager.
+are also updated through the :cpp:class:`cml::EphemBasedPointingRefFrame` connection to the Ephemerides Manager.
 
 **Results**: Results match expected.
 
@@ -1060,20 +1068,20 @@ ________________________________________________________
 RUN_03_ephem_only_resubscribe
 #############################
 
-This test is similar to :ref:`RUN_01_ephem_only <run_01_ephem_only>`, in that only the :cpp:class:`EphemBasedPointingRefFrame` and its
+This test is similar to :ref:`RUN_01_ephem_only <run_01_ephem_only>`, in that only the :cpp:class:`cml::EphemBasedPointingRefFrame` and its
 associated relative-state are computed. However, this test highlights the expected behavior when the
 model is initially deactivated and later reactivated successfully, in constrast with
 :ref:`FAIL_noephem_with_subscriptions <fail_noephem_with_subscriptions>`, where reactivation fails. It serves to verify that the
-:cpp:class:`EphemBasedPointingRefFrame` can correctly resume updating relative states and ephemeris-driven
+:cpp:class:`cml::EphemBasedPointingRefFrame` can correctly resume updating relative states and ephemeris-driven
 positions after being re-subscribed mid-simulation.
 
-**Setup**: Run only the :cpp:class:`EphemBasedPointingRefFrame` and its associated relative state. Model is
+**Setup**: Run only the :cpp:class:`cml::EphemBasedPointingRefFrame` and its associated relative state. Model is
 initially deactivated and later reactivated during the simulation at t=300000.
 
-**Expected Results**: The :cpp:class:`EphemBasedPointingRefFrame` instance and its relative vehicle state are
+**Expected Results**: The :cpp:class:`cml::EphemBasedPointingRefFrame` instance and its relative vehicle state are
 initialized at t=0 and not updated anymore until after t=300000. Similarly, the Sun inertial
 reference frame state won't be updated until that point as it is deactivated through
-:cpp:class:`EphemBasedPointingRefFrame`'s *Target-Frame*. However, the Earth inertial reference frame state
+:cpp:class:`cml::EphemBasedPointingRefFrame`'s *Target-Frame*. However, the Earth inertial reference frame state
 continues updating as it is used as the integration frame for the subject vehicle.
 
 **Results**: Results match expected.
@@ -1085,10 +1093,10 @@ ________________________________________________________
 FAIL_noephem_only
 #################
 
-This test runs only the base :cpp:class:`PointingRefFrame` and its associated relative state while still using
+This test runs only the base :cpp:class:`cml::PointingRefFrame` and its associated relative state while still using
 Ephemeris-based frames like the Earth inertial and Sun inertial as the *Originating-Frame* and
-*Target-Frame*. The :cpp:class:`PointingRefFrame` doesn't have access to the Ephemerides Manager unlike
-:cpp:class:`EphemBasedPointingRefFrame`, which causes the test to fail as the Ephemeris reference frame tree
+*Target-Frame*. The :cpp:class:`cml::PointingRefFrame` doesn't have access to the Ephemerides Manager unlike
+:cpp:class:`cml::EphemBasedPointingRefFrame`, which causes the test to fail as the Ephemeris reference frame tree
 was not built.
 
 .. code-block:: text
@@ -1105,7 +1113,7 @@ ________________________________________________________
 FAIL_noephem_with_subscriptions
 ###############################
 
-This test is similar to :ref:`FAIL_noephem_only <fail-noephem_only>` in that only the base :cpp:class:`PointingRefFrame` and its
+This test is similar to :ref:`FAIL_noephem_only <fail-noephem_only>` in that only the base :cpp:class:`cml::PointingRefFrame` and its
 associated relative state are computed while still using Ephemeris-based frames. However, this test
 specifically highlights the behavior that happens when a separate model, one dependent on either the
 *Originating-Frame* or *Target-Frame*, activates and deactivates those same Ephemeris-based frames
@@ -1116,19 +1124,19 @@ initialization.
 In this test, the input file acts as a "lurking model" that also depends on the Sun inertial frame.
 At the start of the simulation, this lurking model adds the Sun inertial frame to the Ephemeris tree
 and activates the frame. Although this setup is intended for the lurking model's own functionality,
-it incidentally enables the :cpp:class:`PointingRefFrame` to initialize successfully, since the required frame
+it incidentally enables the :cpp:class:`cml::PointingRefFrame` to initialize successfully, since the required frame
 is present in the Ephemeris tree at that time. After initialization, the lurking model deactivates
 the Sun inertial frame, removing it from the Ephemeris tree. To avoid failure at this point, the
-:cpp:class:`PointingRefFrame` is also deactivated. Later in the simulation (at t=300000), the lurking model
-reactivates the Sun inertial frame, and the :cpp:class:`PointingRefFrame` is re-enabled to test its
+:cpp:class:`cml::PointingRefFrame` is also deactivated. Later in the simulation (at t=300000), the lurking model
+reactivates the Sun inertial frame, and the :cpp:class:`cml::PointingRefFrame` is re-enabled to test its
 functionality using that frame. However, the simulation fails at this point, because the Ephemeris
-tree is not automatically rebuilt upon reactivation of the Sun inertial frame or :cpp:class:`PointingRefFrame`,
-unlike the :cpp:class:`EphemBasedPointingRefFrame`. As a result, the Earth inertial and Sun inertial frame
+tree is not automatically rebuilt upon reactivation of the Sun inertial frame or :cpp:class:`cml::PointingRefFrame`,
+unlike the :cpp:class:`cml::EphemBasedPointingRefFrame`. As a result, the Earth inertial and Sun inertial frame
 remain disconnected in the Ephemeris tree, failing at the computation of the relative state between
 the two frames. In conclusion, when using Ephemeris-based frames without the
-:cpp:class:`EphemBasedPointingRefFrame`, the Ephemeris tree must be rebuilt everytime the model is
+:cpp:class:`cml::EphemBasedPointingRefFrame`, the Ephemeris tree must be rebuilt everytime the model is
 re-subscribed to ensure the *Originating-Frame* and *Target-Frame* are dynamically connected (though
-the recommended approach is to use :cpp:class:`EphemBasedPointingRefFrame`, which handles this automatically).
+the recommended approach is to use :cpp:class:`cml::EphemBasedPointingRefFrame`, which handles this automatically).
 
 .. code-block:: text
 
