@@ -8,6 +8,8 @@ PURPOSE: (The RcsJetGroup provides a convenient mechanism for grouping
 LIBRARY DEPENDENCY:
    ((../src/rcs_group.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation))

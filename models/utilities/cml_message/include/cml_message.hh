@@ -6,7 +6,7 @@ Purpose:
 Library Dependency:
  ((cml/models/utilities/cml_message/src/cml_message.cc))
 
-PYTHON_MODULE: (CMLMessage)
+PYTHON_MODULE: (cml.CMLMessage)
 
 Programmers:
   (((Gary Turner) (OSR) (March 2023) (ANTARES) (Initial version))

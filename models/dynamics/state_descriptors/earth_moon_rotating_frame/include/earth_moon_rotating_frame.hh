@@ -10,6 +10,8 @@ Purpose:
 Library dependencies:
   ((../src/earth_moon_rotating_frame.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   ( ((Gary Turner) (OSR) (Aug 2019) (Antares) (initial))
   )

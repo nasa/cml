@@ -16,6 +16,8 @@ Assumptions:
 Limitations:
   ((This model will not initialize mass properties, it will only modify them))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   (((Gary Turner) (OSR) (Sept 2018) (Antares) (Initial version))
   )

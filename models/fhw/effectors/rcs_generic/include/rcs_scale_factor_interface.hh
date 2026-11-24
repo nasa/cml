@@ -3,6 +3,8 @@ PURPOSE:
   (Structure for data shared between scale factor models and jet-specific
    scale-factor data)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (ANTARES) (Initial implementation)))
 ******************************************************************************/

@@ -6,6 +6,8 @@ Purpose:
 Library Dependency:
    (( ../src/range_computation.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
    (((Gary Turner) (OSR) (Sept 2014 (Initial version))
     ((Bingquan Wang) (OSR) (May 2017)

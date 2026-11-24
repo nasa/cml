@@ -5,6 +5,8 @@ compatibility with models using the legacy fault_arch sensor-faults.)
 LIBRARY DEPENDENCY:
   ((../src/sSensorFaults.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Mar 2022) (Antares) (Initial)))
 *******************************************************************************/

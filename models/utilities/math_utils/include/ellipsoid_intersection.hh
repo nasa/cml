@@ -7,6 +7,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2023) (ANTARES) (new)))
 
+PYTHON_MODULE: (cml)
+
 NOTES:
 - Ellipsoid defined by (x/a)^2 + (y/b)^2 + (z/c)^2 = 1
 - {a,b,c} stored as r[3]

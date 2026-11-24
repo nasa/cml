@@ -7,6 +7,8 @@ LIBRARY DEPENDENCY:
      (../src/atmosphere_exec.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Brian Hoelscher) (NASA-EG4) (June 2006) (ARES) (Initial version))

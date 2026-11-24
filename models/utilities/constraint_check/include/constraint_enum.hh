@@ -3,6 +3,8 @@
 PURPOSE:
    (Defines the enumerations used by multiple classes within this model.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
  (((Gary Turner) (OSR) (Jun 2023) (ANTARES)
    (New, based on GNC_PAR grok_duration_check and grok-violation models))

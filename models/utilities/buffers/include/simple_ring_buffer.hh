@@ -5,6 +5,8 @@ PURPOSE: (
   located.
   Buffer structure is tempalted to provide a vector of any struct or class.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2023) (ANTARES) (initial))
   )

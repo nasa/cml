@@ -15,6 +15,8 @@ LIMITATIONS:
     ((../src/single_input_table_for_quaternions.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (November 2017) (New implementation))
   )

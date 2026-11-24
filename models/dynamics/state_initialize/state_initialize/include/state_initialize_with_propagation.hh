@@ -35,6 +35,8 @@ LIBRARY DEPENDENCIES:
    ((../src/state_initialize_with_propagation.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2016) (New))
  ******************************************************************************/

@@ -8,6 +8,8 @@ PURPOSE: (Models the effect of a rapidly changing mass and inertia tensor.
 LIBRARY DEPENDENCY:
    ((../src/mass_derivative_dynamics.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2018) (Antares) (initial)))
 **********************************************************************/

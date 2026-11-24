@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/aero_executive_simple_lift_drag.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Jeremy Rea) (NASA) (March 2025) (Antares) (initial version, based on AeroExecutiveSimple)))
 *******************************************************************************/

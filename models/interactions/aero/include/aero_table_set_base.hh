@@ -10,6 +10,8 @@ PURPOSE: (Standalone front-end to the aerodynamics data tables.
 LIBRARY DEPENDENCY:
   ((../src/aero_table_set_base.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (Antares) (initial version))
    ((Gary Turner) (OSR) (June 2016) (Antares) (Refactor))

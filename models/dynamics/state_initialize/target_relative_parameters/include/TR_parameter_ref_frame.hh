@@ -8,6 +8,8 @@ LIBRARY DEPENDENCIES:
     (../src/TR_parameter_ref_frame.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))

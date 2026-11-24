@@ -17,6 +17,8 @@ LIMITATIONS:
     ((../src/single_input_table_for_angles.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2014) (New implementation for C++ models))
    ((Bingquan Wang) (OSR) (August 2014) (IV&V cleanup and refactored))

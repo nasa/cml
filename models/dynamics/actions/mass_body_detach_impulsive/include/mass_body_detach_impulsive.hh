@@ -10,6 +10,8 @@ Assumptions and Limitations:
 Library dependencies:
   ((../src/mass_body_detach_impulsive.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   (((Gary Turner) (OSR) (July 2011) (TS21 contribution) (Initial version)))
   (((Jeff Semrau) (Hon) (July 2017) (Updates per code review)))

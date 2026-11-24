@@ -5,6 +5,8 @@ PURPOSE: (Provides a set of EventTriggers, analagous to how a
 LIBRARY DEPENDENCY:
    ((../src/event_trigger_set.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2023) (ANTARES)
     (Merging concepts found in former grok-events and CML-events))

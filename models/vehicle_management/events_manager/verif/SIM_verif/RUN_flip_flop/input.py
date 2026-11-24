@@ -9,7 +9,7 @@ drg1.add_variable("events_manager_verif.xx1")
 events_manager_verif.framework.data_file_name = "../data/events_manager_ut_data.txt"
 events_manager_verif.framework.vars_file_name = "../data/events_manager_ut_variables.txt"
 
-trick.CMLMessage.set_publish_level( trick.CMLMessage.Inform)
+trick.cml.CMLMessage.set_publish_level( trick.cml.CMLMessage.Inform)
 
 
 trick.add_read(1.0,"events_manager_verif.base_bool = True")

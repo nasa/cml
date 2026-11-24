@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/rcs_jet.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation)))

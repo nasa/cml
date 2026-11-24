@@ -14,6 +14,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCIES:
    ((../src/dynamic_mass_string.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (July 2014)
                       (New implementation of dynamic mass for JEOD 2.x))

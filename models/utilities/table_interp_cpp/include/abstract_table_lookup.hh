@@ -12,6 +12,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   (../src/abstract_table_lookup.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Oct 2017) (New implementation))
   )

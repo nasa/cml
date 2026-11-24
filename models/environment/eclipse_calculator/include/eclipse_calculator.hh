@@ -9,6 +9,8 @@ ASSUMPTION: (The vehicle is not partially eclipsed by Earth and the Moon at
 LIBRARY DEPENDENCY:
    ((../src/eclipse_calculator.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2019) (Antares) (initial)))
 *****************************************************************************/

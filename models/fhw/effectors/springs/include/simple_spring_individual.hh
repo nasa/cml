@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/simple_spring_individual.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner)(OSR)(December 2014) (Antares) (new implementation))
    ((Brent Caughron) (OSR) (Jan 2021) (Antares) (Code Review and IV&V)))

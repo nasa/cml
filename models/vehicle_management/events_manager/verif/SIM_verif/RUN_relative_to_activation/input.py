@@ -2,7 +2,7 @@ exec(open("Log_data/log_events_manager_verif.py").read())
 events_manager_verif.framework.data_file_name = "../data/events_manager_ut_data.txt"
 events_manager_verif.framework.vars_file_name = "../data/events_manager_ut_variables.txt"
 
-trick.CMLMessage.set_publish_level( trick.CMLMessage.Inform)
+trick.cml.CMLMessage.set_publish_level( trick.cml.CMLMessage.Inform)
 # Subscribe to relative to activation event at t > 0s to show it triggers
 # one second (value of xx1) after activation/subscribing
 # NOTE -- this event stops the sim.

@@ -7,6 +7,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/lvlh_separation_state.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2020) (Antares) (new)))
 

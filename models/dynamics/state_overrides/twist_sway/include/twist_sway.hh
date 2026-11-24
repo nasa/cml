@@ -25,6 +25,8 @@ Assumptions:
 Library dependency:
   ((../src/twist_sway.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
    ((Michael Trevino) (Odyssey) (10/09) (Initial Implementation))

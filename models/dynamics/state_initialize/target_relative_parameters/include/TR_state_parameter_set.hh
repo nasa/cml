@@ -3,6 +3,8 @@ PURPOSE:
    (Define the 7 variables of the target-relative parameter set for use in
    either of the TargetRelativeStateParameter implementations.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))

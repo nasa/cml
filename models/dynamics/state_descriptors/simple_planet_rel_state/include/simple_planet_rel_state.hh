@@ -6,6 +6,8 @@ PURPOSE: (A really simple extension of relative derived state.
 LIBRARY DEPENDENCY:
    ((../src/simple_planet_rel_state.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2017) (Antares) (first cut)))
 **********************************************************************/

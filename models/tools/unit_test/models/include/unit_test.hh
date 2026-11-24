@@ -6,6 +6,8 @@ LIBRARY DEPENDENCY: (
    (../src/unit_test.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Jason Arnold) (Titan) (Jul 2005))
    ((Gary Turner) (OSR) (Oct 2016)

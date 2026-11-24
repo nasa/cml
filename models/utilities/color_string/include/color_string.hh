@@ -1,6 +1,8 @@
 /*******************************************************************************
 Purpose: (Apply ANSI color codes to strings in order to change the color of the
           text or the background of the text to a desired color.)
+
+PYTHON_MODULE: (cml)
 *******************************************************************************/
 
 #ifndef CML_COLOR_STRING_HH

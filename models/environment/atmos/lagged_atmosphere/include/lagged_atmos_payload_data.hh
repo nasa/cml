@@ -4,6 +4,8 @@ Purpose:
    vicinity of the payload.
    This class works with LaggedAtmosWind.
    For LaggedAtmosphere or LaggedWinds, use PayloadData.)
+
+PYTHON_MODULE: (cml)
 *******************************************************************************/
 #ifndef CML_LAGGED_ATMOS_PAYLOAD_DATA_HH
 #define CML_LAGGED_ATMOS_PAYLOAD_DATA_HH

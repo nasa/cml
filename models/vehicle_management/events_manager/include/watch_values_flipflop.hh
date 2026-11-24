@@ -25,6 +25,8 @@ NOTES:
 LIBRARY DEPENDENCY:
    ((../src/watch_values_flipflop.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2026/02) (ANTARES) (initial implementation)))
 *******************************************************************************/

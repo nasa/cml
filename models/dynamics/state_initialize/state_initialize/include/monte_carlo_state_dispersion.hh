@@ -9,6 +9,8 @@ PURPOSE: (Disperses the state directly.  Allows the application of dispersions
 LIBRARY DEPENDENCY:
     ((../src/monte_carlo_state_dispersion.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
     (((Gary Turner) (OSR) (Jan 2019) (Antares) (initial)))
     )

@@ -7,6 +7,8 @@ REFERENCES:
   ((U.S. STANDARD ATMOSPHERE 1976, N77-16482,
    https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539.pdf))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Bingquan Wang) (OSR) (May 2017) (ANTARES) (initial version)))
 

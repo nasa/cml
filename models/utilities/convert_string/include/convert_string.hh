@@ -2,6 +2,8 @@
 PURPOSE:
   (Utility to convert strings to various number formats.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Daniel Ghan)(OSR)(October 2021)(Antares)(Initial version)))
 *******************************************************************************/

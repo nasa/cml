@@ -2,6 +2,8 @@
 PURPOSE:
   (Individual trigger class)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Bingquan Wang) (OSR) (April 2017) (Antares) (Fixed the float-point number

@@ -7,6 +7,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   (../src/proximity_counter.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (
     ((Matthew Elmer, Gary Turner) (OSR) (Jun 2023)

@@ -8,6 +8,8 @@
     ((../src/generic_multi_input_table.cc)
     )
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (dec 2015) (Antares) (initial version))
     ((Bingquan Wang) (OSR) (Aug 2017) (Antares) (IVV code cleanup and refactored))

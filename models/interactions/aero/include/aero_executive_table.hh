@@ -12,6 +12,8 @@ LIBRARY DEPENDENCY:
   ((../src/aero_executive_table.cc)
    (../src/aero_executive_table_disperse.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2016) (Antares) (new))
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))

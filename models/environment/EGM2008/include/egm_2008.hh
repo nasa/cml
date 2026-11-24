@@ -11,6 +11,8 @@ LIBRARY DEPENDENCY:
  ((../src/egm_2008.cc)
   (../src/egm_2008_data.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Feb 2021) (Antares) (initial)))
 **********************************************************************/

@@ -6,6 +6,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/event_trigger.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (October 2023) (ANTARES)
    (Based on logic in DATA_COLLECTION_TRIGGER and DC_TRIGGER_PRIMAL,

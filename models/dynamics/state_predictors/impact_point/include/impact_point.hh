@@ -14,6 +14,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCIES:
    ((../src/impact_point.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (Oct 2014)
         (New implementation of ball_impact for Antares))

@@ -1,5 +1,5 @@
 exec(open("RUN_1a_simple_sequence/input.py").read())
-trick.CMLMessage.set_publish_level (trick.CMLMessage.Inform)
+trick.cml.CMLMessage.set_publish_level (trick.cml.CMLMessage.Inform)
 print ('\n'
 '************************************************************************\n'
 'INFORM messages (x4):\n'

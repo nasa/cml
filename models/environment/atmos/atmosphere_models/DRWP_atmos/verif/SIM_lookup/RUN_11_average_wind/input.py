@@ -4,7 +4,7 @@ exec(open( "input_common.py").read())
 for ii in range(3):
   drg.add_variable("luwinds.lookup_table_winds.average_wind[{0}]".format(ii))
 #exec(open( "Log_data/log_average_wind.py").read())
-trick.CMLMessage.set_publish_level( trick.CMLMessage.Inform)
+trick.cml.CMLMessage.set_publish_level( trick.cml.CMLMessage.Inform)
 luwinds.lookup_table_winds.subscribe()
 luwinds.lookup_table_winds.load_DRWP_file("Binaries/DRWP_w_comp.bin", True, 2)
 luwinds.lookup_table_winds.load_DRWP_file("Binaries/DRWP_no_w_comp.bin", False, 1771)

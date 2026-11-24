@@ -25,6 +25,8 @@ Library dependency:
   ((../src/commandable_action_set.cc)
   )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (
   ((Gary Turner) (OSR) (02/22) (Generic concept developed while

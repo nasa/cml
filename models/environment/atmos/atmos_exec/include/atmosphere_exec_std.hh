@@ -8,6 +8,8 @@ LIBRARY DEPENDENCY:
      (../src/atmosphere_exec_std.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (May 2016) (ANTARES)

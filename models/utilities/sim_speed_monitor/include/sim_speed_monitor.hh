@@ -2,6 +2,8 @@
  PURPOSE: (Computes the simulation speed at regular intervals during
            execution to support identification of problem areas.)
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (Sep 2022) (Antares) (initial)))
 ***********************************************************************/

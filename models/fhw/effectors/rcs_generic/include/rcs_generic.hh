@@ -10,6 +10,8 @@ REFERENCE:
 LIBRARY DEPENDENCY:
    ((../src/rcs_generic.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((David Strack) (Lincom) (Feb 1997) (v1.0) (Initial Implementation))
     ((Gavin Mendeck) (LinCom) (Mar 1998) (v1.1) (revision))

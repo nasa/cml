@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
     ((../src/gust.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Jon Berndt) (ESCG/Jacobs) (February 2008) (ANTARES) (Initial version))
     ((Brent Caughron) (Odyssey) (Sept. 2017) (Antares) (IV&V Code Review)))

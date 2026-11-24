@@ -2,6 +2,8 @@
 PURPOSE: (Wrap Trick DataRecordGroup functionality into a more convenient
           and easier to use set of functions.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2016) (Antares) (Move from CEV to CML)))
 ***********************************************************************/

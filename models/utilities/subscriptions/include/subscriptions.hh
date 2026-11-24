@@ -8,6 +8,8 @@
  LIBRARY DEPENDENCY:
     ((../src/subscriptions.cc))
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (Mar 2015) (Antares) (initial model))
     ((Bingquan Wang) (OSR) (May 2017) (Antares)

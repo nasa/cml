@@ -5,6 +5,8 @@ PURPOSE: (Class for manipulating sets of vents and aggregating forces and
 LIBRARY DEPENDENCY:
   (../src/vent_set.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (initial version)))
  ************************************************************************/

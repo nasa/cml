@@ -16,6 +16,8 @@ PURPOSE: (
 LIBRARY DEPENDENCY:
     ((../src/correlated_state_dispersion.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
     (((Lanoix) (OSR) (04/04) (Initial Implementation))
      ((Robert Gay) (Odyssey) (05/04) (removed first call))

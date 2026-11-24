@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/aero_interface_base.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2016) (Antares) (new))
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))

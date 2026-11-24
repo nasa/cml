@@ -38,6 +38,8 @@ PURPOSE: (
   extensions of WatchValuesBase.
   )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (date) (project) (comment)))
 **********************************************************************/

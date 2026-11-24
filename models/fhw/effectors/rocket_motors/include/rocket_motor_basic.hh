@@ -8,6 +8,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/rocket_motor_basic.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
  ******************************************************************************/

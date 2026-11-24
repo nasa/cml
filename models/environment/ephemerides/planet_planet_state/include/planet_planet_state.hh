@@ -16,6 +16,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/planet_planet_state.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (July 2015) (Antares) (initial version))
     ((Bingquan Wang) (OSR) (May 2017) (Antares)

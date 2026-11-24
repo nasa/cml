@@ -8,6 +8,8 @@ Purpose:
 Library dependencies:
   ((../src/pointing_ref_frame.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   ( ((Michael McCarthy, Gary Turner) (OSR) (June 2019) (Antares) (initial))
   )

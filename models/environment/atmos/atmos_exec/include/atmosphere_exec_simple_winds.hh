@@ -7,6 +7,8 @@ LIBRARY DEPENDENCY:
      (../src/atmosphere_exec_simple_winds.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (July 2018) (ANTARES)

@@ -4,6 +4,8 @@ Purpose:
 
 Library Dependency:
   ((../src/scalar_integrable_object.cc))
+
+PYTHON_MODULE: (cml)
 *******************************************************************************/
 
 #ifndef CML_SCALAR_INTEGRABLE_OBJECT_HH

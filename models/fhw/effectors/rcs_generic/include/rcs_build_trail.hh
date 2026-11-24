@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/rcs_build_trail.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Michael McCarthy) (OSR) (Jul 2019) (ANTARES) (CM RCS Refactor, removed C
                              interfacing, split scale factors model into

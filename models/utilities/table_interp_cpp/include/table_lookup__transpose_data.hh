@@ -20,6 +20,8 @@ PURPOSE: (
 LIBRARY DEPENDENCY:
    ((../src/table_lookup__transpose_data.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Nov 2017) (Antares) (initial)))
 **********************************************************************/

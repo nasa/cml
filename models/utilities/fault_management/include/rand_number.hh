@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/rand_number.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))

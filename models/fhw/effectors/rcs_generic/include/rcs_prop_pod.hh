@@ -8,6 +8,8 @@ PURPOSE: (iThe RcsPropPod provides a convenient mechanism for grouping
 LIBRARY DEPENDENCY:
    ((../src/rcs_prop_pod.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation))

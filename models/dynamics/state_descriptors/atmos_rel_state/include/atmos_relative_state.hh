@@ -11,6 +11,8 @@ REFERENCES:
 LIBRARY DEPENDENCY:
     ((../src/atmos_relative_state.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
     (((Gavin Mendeck) (NASA) (May 2005) (ARES) (Initial implementation as pom))
      ((Edgar Medina) (NASA) (June 2005) (ARES)

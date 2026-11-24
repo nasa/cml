@@ -21,6 +21,8 @@ Assumptions and Limitations:
 Library Dependency:
   ((../src/GRGM900C_lunar_gravity.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   (((Gary Turner) (OSR) (Oct 2015) (Antares)  (initial version)))
 *******************************************************************************/

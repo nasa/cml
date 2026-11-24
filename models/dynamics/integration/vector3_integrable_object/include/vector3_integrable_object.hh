@@ -8,6 +8,8 @@ REFERENCE:
 Library dependencies:
 ((../src/vector3_integrable_object.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
 (((Gary Turner) (OSR) (October, 2015) (initial version)))
 *******************************************************************************/

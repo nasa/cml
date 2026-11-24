@@ -5,6 +5,8 @@ PURPOSE: Provides the Python / SWIG-friendly interface for adding actions
 LIBRARY DEPENDENCY:
    ((../src/compound_event_python_interface.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2023/10) (ANTARES)
     (Comprehensive overhaul of event management)))

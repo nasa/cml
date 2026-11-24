@@ -13,6 +13,8 @@ PROGRAMMERS:
     ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))
    )
 
+PYTHON_MODULE: (cml)
+
 NOTES:
   ((This implementation was the first of the two implementations so it gets the
   "primary" naming. It relies on setting the target point by alt/lat/lon

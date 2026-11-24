@@ -11,6 +11,8 @@ LIBRARY DEPENDENCY:
     (../src/reverse_flow.cc)
     (../src/prf_model.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Mark McPherson) (NASA/DM42) (Apr 2012) (ANTARES) (Foundation))
    ((Gary Turner) (OSR) (Mar 2016) (Antares)

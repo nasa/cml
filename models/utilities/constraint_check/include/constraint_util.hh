@@ -7,6 +7,8 @@ LIBRARY DEPENDENCY:
      (cml/models/utilities/cml_message/src/cml_message.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
     (
      ((Nino Tarantino) (NASA) (October 2026) (Split out common logic))

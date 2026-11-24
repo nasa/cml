@@ -9,6 +9,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCY:
   (../src/piston_thruster.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Jeff Semrau) (Honeywell) (Oct-2011) (Initial Implementation))
    ((Mark McPherson) (NASA/DM42) (Oct-2011) (Integration into ANTARES))

@@ -2,6 +2,8 @@
  PURPOSE:
     (Common typedefs used in Table Interpolation classes.)
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Robert Phillips) (OSR) (May 2018) (Antares) (initial version))
    )

@@ -10,6 +10,8 @@
    LIBRARY DEPENDENCY:
     (../src/range_safety_data.cc)
 
+   PYTHON_MODULE: (cml)
+
    PROGRAMMERS:
    (((Gary Turner) (OSR) (June 2014)
                       (New implementation of PlanetaryDerivedState for Antares))

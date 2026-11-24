@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/xml_helper.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Split from fault_arch)))

@@ -9,6 +9,8 @@ ASSUMPTIONS:
 LIBRARY DEPENDENCIES:
    ((../src/rocket_motor_table_thrust.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
  ******************************************************************************/

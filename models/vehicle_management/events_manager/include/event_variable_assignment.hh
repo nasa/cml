@@ -3,6 +3,8 @@ PURPOSE:
    (Provides the mechanism by which variables can be queued for reassignment
     upon the action of an event.
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (January 2020) (Antares))

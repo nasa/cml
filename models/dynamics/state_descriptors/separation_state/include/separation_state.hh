@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/separation_state.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (April 2014) (Antares) (Replaces SEPKIN))
     ((Gary Turner) (OSR) (December 2014) (Antares)

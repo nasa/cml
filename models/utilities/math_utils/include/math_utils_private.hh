@@ -1,3 +1,12 @@
+/*******************************TRICK HEADER************************************
+ PURPOSE:
+   (To provide a common location for additional math utilities)
+
+ LIBRARY DEPENDENCY:
+   ()
+
+ PYTHON_MODULE: (cml)
+*******************************************************************************/
 #ifndef CML_MATH_UTILS_PRIVATE_HH
 #define CML_MATH_UTILS_PRIVATE_HH
 

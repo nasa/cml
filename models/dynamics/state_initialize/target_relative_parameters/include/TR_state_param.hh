@@ -8,6 +8,8 @@ LIBRARY DEPENDENCIES:
     (../src/TR_state_param.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (Nov 2023)

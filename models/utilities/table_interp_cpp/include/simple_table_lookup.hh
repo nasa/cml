@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   (../src/simple_table_lookup.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2014) (New implementation for C++ models))
    ((Bingquan Wang) (OSR) (August 2017) (IVV code cleanup and refactored))

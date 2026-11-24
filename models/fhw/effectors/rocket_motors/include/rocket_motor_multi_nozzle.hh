@@ -6,6 +6,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/rocket_motor_multi_nozzle.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares)
           (initial, providing features dictated by requirements for

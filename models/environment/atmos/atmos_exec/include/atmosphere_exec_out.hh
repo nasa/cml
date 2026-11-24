@@ -2,6 +2,8 @@
 PURPOSE:
    (Data structure for atmosphere executive output.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (Oct 2014) (Antares) (initial implementation))

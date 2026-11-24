@@ -9,6 +9,8 @@
     ((../src/generic_single_input_table.cc)
     )
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (May 2023) (Antares) (initial version))
    )

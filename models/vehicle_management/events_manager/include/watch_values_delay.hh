@@ -3,6 +3,8 @@ PURPOSE: (Provides an extension to  WatchValuesBase that allows a delay
           be added between the satsifaction of the trigger and the execution
           of the consequences.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (May 2023) (ANTARES) (enhancement)))
 **********************************************************************/

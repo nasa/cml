@@ -8,6 +8,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/constraint.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
  (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )

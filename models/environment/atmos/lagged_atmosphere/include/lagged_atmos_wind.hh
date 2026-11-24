@@ -6,6 +6,8 @@ Purpose:
 Library Dependency:
    ((../src/lagged_atmos_wind.cc))
 
+PYTHON_MODULE: (cml)
+
 Author:
  (((Gary Turner) (OSR) (Jan 2021) (Antares)
     (Based on LaggedAtmospehre and LaggedWinds by Jeff Semrau,

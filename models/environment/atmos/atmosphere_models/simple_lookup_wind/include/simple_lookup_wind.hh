@@ -4,6 +4,8 @@ PURPOSE: (Provide a simple table-lookup capability for winds)
 LIBRARY DEPENDENCY:
    ((../src/simple_lookup_wind.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2018) (Antares) (initial))
 **********************************************************************/

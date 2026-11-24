@@ -5,6 +5,8 @@ Purpose:
    reference to the Ephemerides Manager to ensure that the necessary
    frames are updated before updating the Pointing Frame.)
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   ( ((Gary Turner) (OSR) (July 2019) (Antares) (initial))
   )

@@ -13,6 +13,8 @@
     ((../src/single_input_table_var_with_deriv.cc)
     )
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (May 2023) (Antares) (initial version))
    )

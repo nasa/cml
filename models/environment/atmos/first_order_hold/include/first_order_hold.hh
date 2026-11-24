@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
     ((../src/first_order_hold.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (Oct 2014) (Antares))

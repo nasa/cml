@@ -25,6 +25,8 @@ ASSUMPTIONS: (
 LIBRARY DEPENDENCY:
    ((../src/accumulated_absolute_deltas.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2017) (Antares) (new)))
 **********************************************************************/

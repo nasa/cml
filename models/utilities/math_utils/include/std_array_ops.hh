@@ -2,6 +2,8 @@
 PURPOSE:
   (Header for std::array<double, N> overloads. Useful for quick vector math.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Matt Elmer) (OSR) (Jun 2023) (ANTARES V&V)))
 *******************************************************************************/

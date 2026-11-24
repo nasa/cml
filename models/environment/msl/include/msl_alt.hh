@@ -7,6 +7,8 @@ LIBRARY DEPENDENCY:
  ((../src/msl_alt_dd.cc)
   (../src/msl_alt.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Rachel Borland) (NASA) (Nov 2019) (Antares) (initial)))
 **********************************************************************/

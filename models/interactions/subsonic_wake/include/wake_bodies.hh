@@ -4,6 +4,8 @@ PURPOSE: (Definition of the bodies in the wake profile.)
 LIBRARY DEPENDENCY:
    ((../src/wake_bodies.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   ( ((Gary Turner) (OSR) (Mar 2016) (Antares)
                 (New adaptation to meet Antares coding standards))

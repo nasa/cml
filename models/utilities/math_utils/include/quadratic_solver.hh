@@ -4,6 +4,8 @@ PURPOSE: ( Setup and solution using the quadratic formula.)
 LIBRARY DEPENDENCY:
   (../src/quadratic_solver.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2023) (ANTARES) (new)))
 ***********************************************************************/

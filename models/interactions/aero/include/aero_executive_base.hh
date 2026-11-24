@@ -2,6 +2,8 @@
 PURPOSE:
   (Define baseline executive capability. Pure abstract class.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Jeremy Rea) (NASA) (May 2005) (ARES) (Initial implementation for ARES))
    ((Jeremy Rea) (NASA) (July 2005) (ARES) (Modified for ARES V5.1.1))

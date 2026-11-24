@@ -3,6 +3,8 @@ PURPOSE:
    (Specific implementations of the WatchValuesBase base-class; these have
     JEOD dependencies.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (August 2017) (Antares))
  ******************************************************************************/

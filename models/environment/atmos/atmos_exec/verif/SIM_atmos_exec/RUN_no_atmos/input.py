@@ -7,6 +7,6 @@ veh1.atmos_exec.subscribe()
 veh2.atmos_exec.subscribe()
 
 # See the Inform messages
-trick.CMLMessage.set_publish_level (trick.CMLMessage.Inform)
+trick.cml.CMLMessage.set_publish_level (trick.cml.CMLMessage.Inform)
 
 trick.stop(1000.0)

@@ -1,4 +1,4 @@
-trick.CMLMessage.set_publish_level( trick.CMLMessage.Inform)
+trick.cml.CMLMessage.set_publish_level( trick.cml.CMLMessage.Inform)
 exec(open("Log_data/log_events_manager_verif.py").read())
 events_manager_verif.framework.data_file_name = "../data/events_manager_ut_data.txt"
 events_manager_verif.framework.vars_file_name = "../data/events_manager_ut_variables.txt"

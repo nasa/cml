@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
    (../src/rocket_motor_nozzle.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (May 2015) (ANTARES) (C++ cleanup))
    ((Bingquan Wang) (OSR) (Oct 2016) (ANTARES) (Library dependency warning

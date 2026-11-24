@@ -7,6 +7,8 @@ PURPOSE: (
       normal implementation of a ring buffer.
   )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2023) (ANTARES) (initial))
    ((Dohyeung Kim) (OSR) (Apr 2026) (Update Proximity Case))

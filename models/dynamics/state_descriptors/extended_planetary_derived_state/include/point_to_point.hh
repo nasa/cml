@@ -16,6 +16,8 @@ ASSUMPTIONS / LIMITATIONS:
 LIBRARY DEPENDENCY:
    ((../src/point_to_point.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (May 2021) (Antares) (initial)))
 ***********************************************************************/

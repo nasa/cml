@@ -4,6 +4,8 @@ PURPOSE: (Generic vent model with mass depletion)
 LIBRARY DEPENDENCY:
   (../src/vent.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
 ************************************************************************/

@@ -16,6 +16,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCIES:
    (../src/vehicle_events_manager.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2014) (Antares))
    )

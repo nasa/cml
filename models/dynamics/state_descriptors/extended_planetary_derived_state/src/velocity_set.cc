@@ -8,7 +8,7 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
   ((cml/models/utilities/cml_message/src/cml_message.cc))
 
-ASSUMPTIONS AND LIMITATIONS
+ASSUMPTIONS AND LIMITATIONS:
    ((The velocity is intended to be expressed in the inertial reference frame.)
     (The model expects a reference to a transformation matrix from inertial to
       the reference frame in which the results will be expressed.

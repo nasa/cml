@@ -7,6 +7,8 @@ Purpose:
 Library dependencies:
   ((../src/spherical_harmonics_fast_gravity_controls.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
  (((Gary Turner) (OSR) (May 2014) (Antares) (Implementation of Blair Thompson's
                                algorithm originally written for earlier JEOD))

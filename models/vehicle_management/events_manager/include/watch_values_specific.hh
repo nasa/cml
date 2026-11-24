@@ -2,6 +2,8 @@
 PURPOSE:
    (Specific implementations of the WatchValuesBase base-class)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2014) (Antares))
  ******************************************************************************/

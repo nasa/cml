@@ -6,6 +6,8 @@ Purpose:
 Library Dependency:
    ((../src/range_to_pfix_reference.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
    (
     ((Gary Turner) (OSR)         (Sept 2014) (Initial version))

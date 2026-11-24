@@ -6,6 +6,8 @@ LIBRARY DEPENDENCIES:
      (../src/env_utils.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
     (
      ((Nino Tarantino) (NASA) (09/16/26) (Use C++ interfaces))

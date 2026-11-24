@@ -5,6 +5,8 @@ Purpose:
 Library Dependency:
    ((../src/pfix_reference_point.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
    (((Gary Turner)    (OSR)        (Sept 2014)  (Initial version))
     ((Debbie Merritt) (NASA)       (Nov 2014)   (Added units definition to reference parameters))

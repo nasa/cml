@@ -8,6 +8,8 @@ LIBRARY DEPENDENCIES:
    ((../src/topo_container.cc)
     (../src/velocity_set.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (February 2015)
                       (New implementation of PlanetaryDerivedState for Antares)))

@@ -2,6 +2,8 @@
 PURPOSE:
    (Base class of the event-classes, a.k.a. watch-value-* classes)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (October 2014) (Antares))

@@ -6,6 +6,8 @@ LIBRARY DEPENDENCY:
     ((../src/quaternion_spherical_interpolator.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (November 2017) (New implementation))
   )

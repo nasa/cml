@@ -11,6 +11,8 @@ LIBRARY DEPENDENCIES:
    ((../src/state_initialize.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (September 2014) (New))
  ******************************************************************************/

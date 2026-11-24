@@ -11,6 +11,8 @@ LIMITATION:
   (The polygon used to define the allowable space must be convex. At no
   point can a vertex produce a concave perimeter.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
     (
      ((Gary Turner) (OSR) (May 2023) (New))

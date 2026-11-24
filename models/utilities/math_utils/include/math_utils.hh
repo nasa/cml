@@ -5,6 +5,8 @@
  LIBRARY DEPENDENCY:
    ((../src/math_utils.cc))
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (Sep 2015) (initial version))
     ((Bingquan Wang) (OSR) (May 2017)

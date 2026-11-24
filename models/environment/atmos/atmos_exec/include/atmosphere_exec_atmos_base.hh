@@ -2,6 +2,8 @@
 PURPOSE:
    (Base-class interfaces for the different atmospheres.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (May 2016) (ANTARES)

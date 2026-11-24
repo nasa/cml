@@ -14,6 +14,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCIES:
    (../src/dummy_vehicle_launcher.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (August 2014) (New))
     ((Gary Turner) (OSR) (March 2015) (Modification to make more generic))

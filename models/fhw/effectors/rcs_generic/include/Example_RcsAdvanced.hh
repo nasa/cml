@@ -4,6 +4,8 @@ PURPOSE: (Example of a RCS system)
 LIBRARY DEPENDENCY:
    ((../src/Example_RcsAdvanced.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2017) (Antares) (initial)))
 **********************************************************************/

@@ -2,6 +2,8 @@
 PURPOSE:
   (Define baseline interface between AeroExec managers and executors.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2016) (Antares) (New))
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))

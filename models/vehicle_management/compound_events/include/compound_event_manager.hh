@@ -4,6 +4,8 @@ PURPOSE: (Manage the advanced compound-events)
 LIBRARY DEPENDENCY:
    ((../src/compound_event_manager.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2023) (ANTARES)
     (Merging concepts found in former grok-events and CML-events))

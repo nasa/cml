@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
    ((../src/range_default_data.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
 
     ((Gary Turner) (Odyssey) (January 2015) (Antares) (Initial version)))

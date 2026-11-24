@@ -8,6 +8,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
   (../src/mass_body_dispersed_init.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2015) (Antares) (Initial version))
    ((Brent Caughron) (OSR) (July 2017) (Antares) (IV&V model code cleanup))

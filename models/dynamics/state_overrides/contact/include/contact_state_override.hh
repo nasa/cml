@@ -33,6 +33,8 @@ LIMITATION:
 LIBRARY DEPENDENCIES:
    ((../src/contact_state_override.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
 

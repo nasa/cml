@@ -2,6 +2,8 @@
 PURPOSE: (Provides a 2-condition event structure.
           For more than 2 conditionals, use a WatchValuesSet)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (January 2020) (Antares) (enhancement)))
 **********************************************************************/

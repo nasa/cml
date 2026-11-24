@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    (../src/watch_values_base_core.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (October 2014) (Antares))

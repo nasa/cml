@@ -4,6 +4,8 @@ PURPOSE: (Provides a multi-conditional event structure.)
 LIBRARY DEPENDENCY:
   ((../src/watch_values_set.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (October 2023) (Antares) (enhancement)))
 **********************************************************************/
