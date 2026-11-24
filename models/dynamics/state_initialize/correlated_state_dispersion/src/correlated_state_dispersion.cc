@@ -178,6 +178,7 @@ CorrelatedStateDispersion::disperse_state(
    case CORRELATED_PV_ATT:
     dimension = 9;
     break;
+   case CORRELATED_SENSOR_ERROR:
    default:
     CMLMessage::fail(
       __FILE__, __LINE__, "Invalid corr_option\n",
@@ -213,12 +214,10 @@ disperse_state (1 arguments)
 Purpose:(
  -  Generates the state dispersions.
    -  If corr_option == CORRELATED_SENSOR_ERROR, generates sensor error dispersions
-
-Note:    NULL checks performed in apply_sensor_dispersions.
 *****************************************************************************/
 bool
 CorrelatedStateDispersion::disperse_state(
-     double sensor_error_state[3])
+     double (&sensor_error_state)[3])
 {
   if (!initialize()) { return false; }
   dimension = 3;
@@ -349,18 +348,9 @@ Purpose:(Applies sensor error dispersions to sensor error state.)
 *****************************************************************************/
 void
 CorrelatedStateDispersion::apply_sensor_dispersions(
-     double sensor_error_state[3])
+     double (&sensor_error_state)[3])
 {
-  if (sensor_error_state == nullptr) {
-    CMLMessage::error(
-      __FILE__,__LINE__,"Invalid input\n.",
-      "Input sensor_error_state vector passed in is NULL.\n"
-      "Aborting state dispersion.\n");
-    return;
-  }
-
   jeod::Vector3::incr(sensor_error_state_error, sensor_error_state);
-
 }
 
 /*****************************************************************************

@@ -319,11 +319,11 @@ class CorrelatedStateDispersion {
   bool disperse_state( double position[3],
                        double velocity[3]);
   void disperse_state( double (&trans_mx)[3][3]);
-  bool disperse_state( double sensor_error_state[3]);
+  bool disperse_state( double (&sensor_error_state)[3]);
   void apply_translational_dispersions( double position[3],
                                         double velocity[3]);
   void apply_attitude_dispersions( double (&trans_mx)[3][3]);
-  void apply_sensor_dispersions( double sensor_error_state[3]);
+  void apply_sensor_dispersions( double (&sensor_error_state)[3]);
 
  protected:
   bool initialize(); /* returns a flag indicating whether the model
