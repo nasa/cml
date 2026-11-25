@@ -49,6 +49,7 @@ PROGRAMMERS:
 #include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameters.hh"
 #include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_param.hh"
 #include "cml/models/dynamics/state_overrides/contact/include/contact_state_override.hh"
+#include "cml/models/dynamics/state_overrides/shadow_trajectory/include/shadow_trajectory.hh"
 #include "cml/models/dynamics/state_overrides/twist_sway/include/twist_sway.hh"
 #include "cml/models/dynamics/state_predictors/apsides_predictor/include/apsides_predictor.hh"
 #include "cml/models/dynamics/state_predictors/impact_point/include/impact_point.hh"
