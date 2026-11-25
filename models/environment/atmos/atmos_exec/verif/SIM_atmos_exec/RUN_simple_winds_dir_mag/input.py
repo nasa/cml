@@ -1,10 +1,10 @@
 exec(open("RUN_no_atmos/input.py").read())
 
-veh1.atmos_exec.atmos_model = trick.AtmosphereExec.ATMOS_STD76
-veh2.atmos_exec.atmos_model = trick.AtmosphereExec.ATMOS_STD76
+veh1.atmos_exec.atmos_model = trick.cml.AtmosphereExec.ATMOS_STD76
+veh2.atmos_exec.atmos_model = trick.cml.AtmosphereExec.ATMOS_STD76
 
-veh1.atmos_exec.winds_model = trick.AtmosphereExec.WINDS_SIMPLE
-veh2.atmos_exec.winds_model = trick.AtmosphereExec.WINDS_SIMPLE
+veh1.atmos_exec.winds_model = trick.cml.AtmosphereExec.WINDS_SIMPLE
+veh2.atmos_exec.winds_model = trick.cml.AtmosphereExec.WINDS_SIMPLE
 
 
 test_data = [ # altitude:

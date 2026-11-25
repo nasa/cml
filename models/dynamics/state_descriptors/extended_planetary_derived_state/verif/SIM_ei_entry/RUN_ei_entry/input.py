@@ -43,8 +43,8 @@ prs_verif.earth_rel.landing_range.reference_data.latitude  = 0.571595330028143
 prs_verif.earth_rel.landing_range.reference_data.longitude = -2.1074850717831533
 prs_verif.earth_rel.landing_range.reference_data.azimuth   = -1.5612270544216182
 prs_verif.earth_rel.landing_range.reference_data.altitude = 0.0
-prs_verif.earth_rel.landing_range.reference_data.position_type  = trick.PfixReferencePoint.topodetic
-prs_verif.earth_rel.landing_range.reference_data.direction_type = trick.PfixReferencePoint.topodetic
+prs_verif.earth_rel.landing_range.reference_data.position_type  = trick.cml.PfixReferencePoint.topodetic
+prs_verif.earth_rel.landing_range.reference_data.direction_type = trick.cml.PfixReferencePoint.topodetic
 
 # Set the Boost-reference frame, not sure this is used:
 prs_verif.earth_rel.br_ref_longitude = -0.838712736058119

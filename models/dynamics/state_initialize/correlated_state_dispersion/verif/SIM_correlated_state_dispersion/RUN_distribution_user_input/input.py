@@ -1,5 +1,5 @@
 exec(open("RUN_distribution_Gaussian/input.py").read())
-verif.corr_state.dispersion_distribution = trick.CorrelatedStateDispersion.UserInput
+verif.corr_state.dispersion_distribution = trick.cml.CorrelatedStateDispersion.UserInput
 verif.corr_state.user_specified_distribution[0] = 0.1
 verif.corr_state.user_specified_distribution[1] = 0.2
 verif.corr_state.user_specified_distribution[2] = 0.3

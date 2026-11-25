@@ -33,10 +33,10 @@ vehicle.state_initialize.set_subject_body( vehicle.body )
 vehicle.state_initialize.body_frame_id = "composite_body"
 vehicle.state_initialize.planet_name = "Earth"
 
-vehicle.state_initialize.position_input_data_type = trick.StateInitialize.Inertial
-vehicle.state_initialize.velocity_input_data_type = trick.StateInitialize.Inertial
-vehicle.state_initialize.attitude_input_data_type = trick.StateInitialize.ICOPT_EUL_YPR_INERT_BODY
-vehicle.state_initialize.att_rate_input_data_type = trick.StateInitialize.BodyInertialRate
+vehicle.state_initialize.position_input_data_type = trick.cml.StateInitialize.Inertial
+vehicle.state_initialize.velocity_input_data_type = trick.cml.StateInitialize.Inertial
+vehicle.state_initialize.attitude_input_data_type = trick.cml.StateInitialize.ICOPT_EUL_YPR_INERT_BODY
+vehicle.state_initialize.att_rate_input_data_type = trick.cml.StateInitialize.BodyInertialRate
 vehicle.state_initialize.yaw = 0.0
 vehicle.state_initialize.pitch = 0.0
 vehicle.state_initialize.roll = 0.0

@@ -9,7 +9,7 @@ exec(open("Modified_data/common_input.py").read())
 # The lateral angle input is not physically realizable.
 # This input will result in simulation termination.
 
-vehicle.state_initialize.velocity_input_data_type        = trick.StateInitialize.TR_InertialSpeedGammaLatang
+vehicle.state_initialize.velocity_input_data_type        = trick.cml.StateInitialize.TR_InertialSpeedGammaLatang
 
 vehicle.state_initialize.TR_param.target_point_altitude  = 0.0
 vehicle.state_initialize.TR_param.target_point_latitude  = 0.0

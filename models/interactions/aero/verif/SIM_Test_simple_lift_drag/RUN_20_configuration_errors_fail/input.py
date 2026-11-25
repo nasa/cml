@@ -5,14 +5,14 @@ trick.add_read(
     """
 print('*******************  type CD: CD   = 0 warning: ***************')
 print('*******************     and   Aref = 0 warning: ***************')
-aero.interface.executive.set_aero_type( trick.AeroExecutiveSimpleLiftDrag.lift_drag_coeff)
+aero.interface.executive.set_aero_type( trick.cml.AeroExecutiveSimpleLiftDrag.lift_drag_coeff)
 
 print('********** type constant-drag: mag = 0 warning:***************')
-aero.interface.executive.set_aero_type( trick.AeroExecutiveSimpleLiftDrag.constant_mag)
+aero.interface.executive.set_aero_type( trick.cml.AeroExecutiveSimpleLiftDrag.constant_mag)
 
 print('*********** type BC: BC small warning:**************')
 aero.interface.executive.BC = 1.0E-12
-aero.interface.executive.set_aero_type( trick.AeroExecutiveSimpleLiftDrag.ballistic_coeff_and_LoD)
+aero.interface.executive.set_aero_type( trick.cml.AeroExecutiveSimpleLiftDrag.ballistic_coeff_and_LoD)
 
 """,
 )
@@ -24,11 +24,11 @@ trick.add_read(
     1,
     """
 aero.interface.executive.drag_mag = 1.0
-aero.interface.executive.set_aero_type( trick.AeroExecutiveSimpleLiftDrag.constant_mag)
+aero.interface.executive.set_aero_type( trick.cml.AeroExecutiveSimpleLiftDrag.constant_mag)
 
 print('*********** type BC: BC =0 failure:**************')
 aero.interface.executive.BC = 0.0
-aero.interface.executive.set_aero_type( trick.AeroExecutiveSimpleLiftDrag.ballistic_coeff_and_LoD)
+aero.interface.executive.set_aero_type( trick.cml.AeroExecutiveSimpleLiftDrag.ballistic_coeff_and_LoD)
 """,
 )
 

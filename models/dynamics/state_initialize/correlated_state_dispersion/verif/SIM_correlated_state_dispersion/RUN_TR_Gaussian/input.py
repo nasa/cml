@@ -1,2 +1,2 @@
 exec(open("RUN_TR/input.py").read())
-verif.corr_state.dispersion_distribution = trick.CorrelatedStateDispersion.Gaussian
+verif.corr_state.dispersion_distribution = trick.cml.CorrelatedStateDispersion.Gaussian

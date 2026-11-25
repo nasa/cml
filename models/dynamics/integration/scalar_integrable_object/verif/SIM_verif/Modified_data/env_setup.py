@@ -31,10 +31,10 @@ scalar_integ.state_initialize.set_subject_body( scalar_integ.body )
 scalar_integ.state_initialize.body_frame_id = "composite_body"
 scalar_integ.state_initialize.planet_name = "Earth"
 
-scalar_integ.state_initialize.position_input_data_type = trick.StateInitialize.Inertial
-scalar_integ.state_initialize.velocity_input_data_type = trick.StateInitialize.Inertial
-scalar_integ.state_initialize.attitude_input_data_type = trick.StateInitialize.EulerInertial_YPR
-scalar_integ.state_initialize.att_rate_input_data_type = trick.StateInitialize.BodyInertialRate
+scalar_integ.state_initialize.position_input_data_type = trick.cml.StateInitialize.Inertial
+scalar_integ.state_initialize.velocity_input_data_type = trick.cml.StateInitialize.Inertial
+scalar_integ.state_initialize.attitude_input_data_type = trick.cml.StateInitialize.EulerInertial_YPR
+scalar_integ.state_initialize.att_rate_input_data_type = trick.cml.StateInitialize.BodyInertialRate
 scalar_integ.state_initialize.yaw = 0.0
 scalar_integ.state_initialize.pitch = 0.0
 scalar_integ.state_initialize.roll = 0.0

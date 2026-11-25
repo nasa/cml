@@ -1,6 +1,6 @@
 exec(open("Modified_data/common_input.py").read())
 
-vehicle.state_initialize.position_input_data_type = trick.StateInitialize.OrbitalElements
+vehicle.state_initialize.position_input_data_type = trick.cml.StateInitialize.OrbitalElements
 
 vehicle.state_initialize.orb_elem_init.set = trick.DynBodyInitOrbit.SmaEccIncAscnodeArgperTimeperi
 vehicle.state_initialize.orb_elem_init.semi_major_axis = 6600000

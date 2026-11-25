@@ -4,6 +4,6 @@
 # The results should be compared with those from RUN_inertial_pva_PVA, on which
 # this is based.
 exec(open("RUN_inertial_pva_PVA/input.py").read())
-verif.corr_state.att_rot_defined = trick.CorrelatedStateDispersion.PerturbedToTrue
-verif.corr_state.corr_att_frame = trick.CorrelatedStateDispersion.REFERENCE_FRM
+verif.corr_state.att_rot_defined = trick.cml.CorrelatedStateDispersion.PerturbedToTrue
+verif.corr_state.corr_att_frame = trick.cml.CorrelatedStateDispersion.REFERENCE_FRM
 trick.stop(1)

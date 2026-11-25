@@ -1,6 +1,6 @@
 exec(open( "Log_data/log_data.py").read())
 
-gust_unit.gust.gust_frame = trick.GustModel.TD_FRAME
+gust_unit.gust.gust_frame = trick.cml.GustModel.TD_FRAME
 gust_unit.gust.direction = [1,0,0]
 gust_unit.gust.maximum_magnitude = 100.0
 gust_unit.gust.period   = 10.0

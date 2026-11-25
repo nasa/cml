@@ -40,10 +40,10 @@ test.state_initialize.set_subject_body(test.body)
 test.state_initialize.body_frame_id = "composite_body"
 test.state_initialize.planet_name = "Earth"
 
-test.state_initialize.position_input_data_type = trick.StateInitialize.Inertial
-test.state_initialize.velocity_input_data_type = trick.StateInitialize.Inertial
-test.state_initialize.attitude_input_data_type = trick.StateInitialize.EulerInertial_YPR
-test.state_initialize.att_rate_input_data_type = trick.StateInitialize.BodyInertialRate
+test.state_initialize.position_input_data_type = trick.cml.StateInitialize.Inertial
+test.state_initialize.velocity_input_data_type = trick.cml.StateInitialize.Inertial
+test.state_initialize.attitude_input_data_type = trick.cml.StateInitialize.EulerInertial_YPR
+test.state_initialize.att_rate_input_data_type = trick.cml.StateInitialize.BodyInertialRate
 test.state_initialize.yaw = 0.0
 test.state_initialize.pitch = 0.0
 test.state_initialize.roll = 0.0

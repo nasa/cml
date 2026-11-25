@@ -1,7 +1,7 @@
 exec(open('RUN_linear/input.py').read())
 
 # Switch the fault to a sinewave
-test_object.fault_function.type = trick.FaultFunctionBase.Sinewave
+test_object.fault_function.type = trick.cml.FaultFunctionBase.Sinewave
 test_object.trigger.value = 0.0
 
 test_object.fault_function.set_param("nominal", 1)

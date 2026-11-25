@@ -4,6 +4,6 @@
 
 exec(open("Modified_data/common_input.py").read())
 
-verif.corr_state.corr_option = trick.CorrelatedStateDispersion.CORRELATED_PV_ATT
+verif.corr_state.corr_option = trick.cml.CorrelatedStateDispersion.CORRELATED_PV_ATT
 verif.disperse_pv = True
 log_att()

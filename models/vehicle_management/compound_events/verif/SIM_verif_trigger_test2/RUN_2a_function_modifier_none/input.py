@@ -15,5 +15,5 @@ trick.cml.message.set_publish_level( trick.cml.message.Debug)
 verif.manager.event.subscribe();
 
 verif.manager.trigger.set_reference(0.8)
-verif.manager.trigger.comparison_logic = trick.EventTriggerBase.GT
+verif.manager.trigger.comparison_logic = trick.cml.EventTriggerBase.GT
 trick.stop(10)

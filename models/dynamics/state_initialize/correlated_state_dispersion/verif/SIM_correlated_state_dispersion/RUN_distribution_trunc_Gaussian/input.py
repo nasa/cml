@@ -1,6 +1,6 @@
 exec(open("RUN_distribution_Gaussian/input.py").read())
 # Test the TruncatedGaussian method and whether the alternate name TruncatedNormal will have the same behaviour
-verif.corr_state.dispersion_distribution = trick.CorrelatedStateDispersion.TruncatedNormal
+verif.corr_state.dispersion_distribution = trick.cml.CorrelatedStateDispersion.TruncatedNormal
 # Test the "Invalid limit" warning in CorrelatedStateDispersion::generate_dispersions
 verif.corr_state.sigma_limit = 0.0
 print(\

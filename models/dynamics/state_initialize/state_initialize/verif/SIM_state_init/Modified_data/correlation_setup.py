@@ -1,4 +1,4 @@
-vehicle.state_initialize.correlation.dispersion_distribution = trick.CorrelatedStateDispersion.Constant
+vehicle.state_initialize.correlation.dispersion_distribution = trick.cml.CorrelatedStateDispersion.Constant
 vehicle.state_initialize.correlation.sigma_limit = 2.0
 vehicle.state_initialize.correlation.covariance[0][0] = 100
 vehicle.state_initialize.correlation.covariance[1][1] = 1

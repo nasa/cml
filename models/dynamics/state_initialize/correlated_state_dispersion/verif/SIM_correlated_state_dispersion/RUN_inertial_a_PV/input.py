@@ -6,6 +6,6 @@
 #         A dispersion should still be generated and applied.
 exec(open("Modified_data/common_input.py").read())
 
-verif.corr_state.corr_option = trick.CorrelatedStateDispersion.CORRELATED_PV
+verif.corr_state.corr_option = trick.cml.CorrelatedStateDispersion.CORRELATED_PV
 verif.disperse_a = True
 log_att()

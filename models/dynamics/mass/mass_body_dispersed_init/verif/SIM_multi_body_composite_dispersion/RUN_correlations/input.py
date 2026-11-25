@@ -54,9 +54,9 @@ reset_values()
 so.adjust_0.disperse.position_match_sf = 2
 so.adjust_0.disperse.moi_match_sf = 2
 so.adjust_0.disperse.poi_match_sf = 2
-so.adjust_0.disperse.position_match = trick.MassPropertiesDispersions.DispMatchYX
-so.adjust_0.disperse.moi_match = trick.MassPropertiesDispersions.DispMatchYX
-so.adjust_0.disperse.poi_match = trick.MassPropertiesDispersions.DispMatchYX
+so.adjust_0.disperse.position_match = trick.cml.MassPropertiesDispersions.DispMatchYX
+so.adjust_0.disperse.moi_match = trick.cml.MassPropertiesDispersions.DispMatchYX
+so.adjust_0.disperse.poi_match = trick.cml.MassPropertiesDispersions.DispMatchYX
 so.adjust_0.disperse.apply_correlations()
 so.adjust_0.update( so.body[2])
 """)
@@ -68,9 +68,9 @@ reset_values()
 so.adjust_0.disperse.position_match_sf = 3
 so.adjust_0.disperse.moi_match_sf = 3
 so.adjust_0.disperse.poi_match_sf = 3
-so.adjust_0.disperse.position_match = trick.MassPropertiesDispersions.DispMatchZX
-so.adjust_0.disperse.moi_match = trick.MassPropertiesDispersions.DispMatchZX
-so.adjust_0.disperse.poi_match = trick.MassPropertiesDispersions.DispMatchZX
+so.adjust_0.disperse.position_match = trick.cml.MassPropertiesDispersions.DispMatchZX
+so.adjust_0.disperse.moi_match = trick.cml.MassPropertiesDispersions.DispMatchZX
+so.adjust_0.disperse.poi_match = trick.cml.MassPropertiesDispersions.DispMatchZX
 so.adjust_0.disperse.apply_correlations()
 so.adjust_0.update( so.body[2])
 """)
@@ -82,9 +82,9 @@ reset_values()
 so.adjust_0.disperse.position_match_sf = 4
 so.adjust_0.disperse.moi_match_sf = 4
 so.adjust_0.disperse.poi_match_sf = 4
-so.adjust_0.disperse.position_match = trick.MassPropertiesDispersions.DispMatchZY
-so.adjust_0.disperse.moi_match = trick.MassPropertiesDispersions.DispMatchZY
-so.adjust_0.disperse.poi_match = trick.MassPropertiesDispersions.DispMatchZY
+so.adjust_0.disperse.position_match = trick.cml.MassPropertiesDispersions.DispMatchZY
+so.adjust_0.disperse.moi_match = trick.cml.MassPropertiesDispersions.DispMatchZY
+so.adjust_0.disperse.poi_match = trick.cml.MassPropertiesDispersions.DispMatchZY
 so.adjust_0.disperse.apply_correlations()
 so.adjust_0.update( so.body[2])
 """)
@@ -96,9 +96,9 @@ reset_values()
 so.adjust_0.disperse.position_match_sf = 5
 so.adjust_0.disperse.moi_match_sf = 5
 so.adjust_0.disperse.poi_match_sf = 5
-so.adjust_0.disperse.position_match = trick.MassPropertiesDispersions.DispMatchZYX
-so.adjust_0.disperse.moi_match = trick.MassPropertiesDispersions.DispMatchZYX
-so.adjust_0.disperse.poi_match = trick.MassPropertiesDispersions.DispMatchZYX
+so.adjust_0.disperse.position_match = trick.cml.MassPropertiesDispersions.DispMatchZYX
+so.adjust_0.disperse.moi_match = trick.cml.MassPropertiesDispersions.DispMatchZYX
+so.adjust_0.disperse.poi_match = trick.cml.MassPropertiesDispersions.DispMatchZYX
 so.adjust_0.disperse.apply_correlations()
 so.adjust_0.update( so.body[2])
 """)
@@ -113,9 +113,9 @@ reset_values()
 so.adjust_0.disperse.position_match_sf = 2
 so.adjust_0.disperse.moi_match_sf = 3 
 so.adjust_0.disperse.poi_match_sf = 4
-so.adjust_0.disperse.position_match = trick.MassPropertiesDispersions.DispMatchZX
-so.adjust_0.disperse.moi_match = trick.MassPropertiesDispersions.DispMatchZY
-so.adjust_0.disperse.poi_match = trick.MassPropertiesDispersions.DispMatchZYX
+so.adjust_0.disperse.position_match = trick.cml.MassPropertiesDispersions.DispMatchZX
+so.adjust_0.disperse.moi_match = trick.cml.MassPropertiesDispersions.DispMatchZY
+so.adjust_0.disperse.poi_match = trick.cml.MassPropertiesDispersions.DispMatchZYX
 so.adjust_0.disperse.apply_correlations()
 so.adjust_0.update( so.body[2])
 """)
@@ -130,8 +130,8 @@ reset_values()
 so.adjust_0.disperse.position_match_sf = 3
 so.adjust_0.disperse.moi_match_sf = 4
 so.adjust_0.disperse.poi_match_sf = 5
-so.adjust_0.disperse.position_match = trick.MassPropertiesDispersions.DispMatchZY
-so.adjust_0.disperse.moi_match = trick.MassPropertiesDispersions.DispMatchNone
+so.adjust_0.disperse.position_match = trick.cml.MassPropertiesDispersions.DispMatchZY
+so.adjust_0.disperse.moi_match = trick.cml.MassPropertiesDispersions.DispMatchNone
 so.adjust_0.disperse.poi_match = 500
 so.adjust_0.disperse.apply_correlations()
 so.adjust_0.update( so.body[2])
