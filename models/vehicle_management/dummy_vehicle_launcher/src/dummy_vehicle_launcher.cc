@@ -30,6 +30,8 @@ ASSUMPTIONS AND LIMITATIONS:
 
 #include "../include/dummy_vehicle_launcher.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -107,7 +109,7 @@ DummyVehicleLauncher::initialize_integ_group_actions()
   // already specified a particular target for the future integration group.
   if (intended_integ_group == nullptr && intended_integ_body == nullptr) {
     if (current_integ_group == nullptr) {
-      CMLMessage::warn (
+      message::warn (
         __FILE__, __LINE__, "VehicleLauncher::InitializationError\n",
         "The initialization of the dummy-vehicle-launcher for vehicle ", body.name.get_name(), ""
         "\ndoes not have a specified integ group. If you're not setting "
@@ -209,7 +211,7 @@ DummyVehicleLauncher::set_intended_integ_group(
       jeod::DynamicsIntegrationGroup * tgt)
 {
   if (tgt == nullptr) {
-    CMLMessage::warn (
+    message::warn (
       __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
       "The intended integration group was not specified, default behavior \n"
       "will be executed. This behavior may not be what the user intends, \n"
@@ -232,7 +234,7 @@ DummyVehicleLauncher::set_intended_integ_body(
       jeod::DynBody * tgt)
 {
   if (tgt == nullptr) {
-    CMLMessage::warn (
+    message::warn (
       __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
       "The intended integration body was not specified, default behavior \n"
       "will be executed. This behavior may not be what the user intends, \n"
@@ -256,7 +258,7 @@ DummyVehicleLauncher::set_intended_integ_body_state_body()
   integ_group_specified = true;
   intended_integ_body = const_cast<jeod::DynBody *>(&real_state_body);
   if (intended_integ_body == nullptr) {
-    CMLMessage::warn (
+    message::warn (
       __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
       "The intended integration body was not specified, default behavior \n"
       "will be executed. This behavior may not be what the user intends, \n"
@@ -288,7 +290,7 @@ DummyVehicleLauncher::add_to_integ_group()
        const_cast<jeod::DynBody &>(real_state_body).get_dynamics_integration_group();
     // Last resort failed:
     if ( intended_integ_group == nullptr) {
-      CMLMessage::error (
+      message::error (
         __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
         "The intended integration group was not specified.\n"
         "Unable to add vehicle ", body.name.get_name(), " to any integration group.\n"
@@ -297,7 +299,7 @@ DummyVehicleLauncher::add_to_integ_group()
     }
     // Last resort succeeded.  Send a warning, shouldn't rely on this.
     else {
-      CMLMessage::warn (
+      message::warn (
         __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
         "The intended integration group was not specified.\n"
         "Adding the vehicle to the same integration group as the body from\n"
@@ -318,7 +320,7 @@ DummyVehicleLauncher::process_inconsistent_setup()
   jeod::DynamicsIntegrationGroup * current_integ_group =
                    body.get_dynamics_integration_group();
   if (current_integ_group == nullptr) {
-    CMLMessage::warn (
+    message::warn (
       __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
       "An intended integration group was specified, but the jeod::DynBody ", body.name.get_name(), "\n"
       "cannot be removed from its existing integration group.\n"
@@ -327,7 +329,7 @@ DummyVehicleLauncher::process_inconsistent_setup()
   }
   // else
 
-  CMLMessage::warn (
+  message::warn (
     __FILE__, __LINE__, "VehicleLauncher::StartupError\n",
     "The automated integration group switching was not activated,\n"
     "but an intended integration group was specified.\n"
@@ -336,3 +338,5 @@ DummyVehicleLauncher::process_inconsistent_setup()
   current_integ_group->delete_dyn_body( body );
   add_to_integ_group_at_launch = true;
 }
+
+} // namespace cml

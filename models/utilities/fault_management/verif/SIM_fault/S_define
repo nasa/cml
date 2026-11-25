@@ -7,16 +7,16 @@
 class FaultArchitectureTestSimObject: public Trick::SimObject {
 
   public:
-    Trigger<double> trigger;
-    TriggerGroup trigger_group;
+    cml::Trigger<double> trigger;
+    cml::TriggerGroup trigger_group;
 
-    Trigger<std::string> trigger_str;
-    TriggerGroup trigger_str_group;
+    cml::Trigger<std::string> trigger_str;
+    cml::TriggerGroup trigger_str_group;
 
-    FaultFunction<double> fault_function_int;
-    FaultFunction<double> fault_function;
-    FaultWhiteNoise<double> fault_noise;
-    FaultStale<double> fault_stale;
+    cml::FaultFunction<double> fault_function_int;
+    cml::FaultFunction<double> fault_function;
+    cml::FaultWhiteNoise<double> fault_noise;
+    cml::FaultStale<double> fault_stale;
 
     bool         advance_var; /* (--) should var advance or hold static.*/
     bool         error_init;  /* (--) introduce an initialization error*/

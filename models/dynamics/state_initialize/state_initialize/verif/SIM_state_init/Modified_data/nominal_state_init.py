@@ -1,7 +1,7 @@
-vehicle.state_initialize.position_input_data_type = trick.StateInitialize.Inertial
-vehicle.state_initialize.velocity_input_data_type = trick.StateInitialize.Inertial
-vehicle.state_initialize.attitude_input_data_type = trick.StateInitialize.EulerInertial_YPR
-vehicle.state_initialize.att_rate_input_data_type = trick.StateInitialize.BodyInertialRate
+vehicle.state_initialize.position_input_data_type = trick.cml.StateInitialize.Inertial
+vehicle.state_initialize.velocity_input_data_type = trick.cml.StateInitialize.Inertial
+vehicle.state_initialize.attitude_input_data_type = trick.cml.StateInitialize.EulerInertial_YPR
+vehicle.state_initialize.att_rate_input_data_type = trick.cml.StateInitialize.BodyInertialRate
 
 import math
 vehicle.state_initialize.yaw = math.pi/2

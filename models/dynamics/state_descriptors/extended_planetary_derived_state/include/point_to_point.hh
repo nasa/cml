@@ -16,6 +16,8 @@ ASSUMPTIONS / LIMITATIONS:
 LIBRARY DEPENDENCY:
    ((../src/point_to_point.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (May 2021) (Antares) (initial)))
 ***********************************************************************/
@@ -29,6 +31,7 @@ PROGRAMMERS:
 #include <list>
 #include <string>
 
+namespace cml {
 
 /*****************************************************************************
 PointToPointElement
@@ -149,4 +152,7 @@ class PointToPointManager
   PointToPointManager ( const PointToPointManager &) = delete;
   PointToPointManager & operator = ( const PointToPointManager &) = delete;
 };
+
+} // namespace cml
+
 #endif

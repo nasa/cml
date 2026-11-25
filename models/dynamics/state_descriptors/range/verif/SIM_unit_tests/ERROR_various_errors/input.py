@@ -5,8 +5,8 @@ log_range_model("range_from_pfix")
 exec(open("env_setup.py").read())
 
 test.range_from_pfix.subscribe()
-test.range_from_pfix.reference_data.position_type = trick.PfixReferencePoint.inertial
-test.range_from_pfix.reference_data.direction_type = trick.PfixReferencePoint.inertial
+test.range_from_pfix.reference_data.position_type = trick.cml.PfixReferencePoint.inertial
+test.range_from_pfix.reference_data.direction_type = trick.cml.PfixReferencePoint.inertial
 # Call set_reference_data() before initialization, triggering the "Range Computation
 # initialization sequence" error in set_reference_data() (at t = 0.0)
 test.range_from_pfix.set_reference_data()
@@ -21,7 +21,7 @@ test.trans.velocity = [1.0, 0.0, 0.0]
 trick.add_read(0.1, "test.range_from_pfix.set_reference_data_from_inrtl_state(test.trans)")
 
 test.range_to_pfix_internal_ref.subscribe()
-test.range_to_pfix_internal_ref.reference_data.position_type = trick.PfixReferencePoint.topocentric
+test.range_to_pfix_internal_ref.reference_data.position_type = trick.cml.PfixReferencePoint.topocentric
 # "Forget" to set direction_type, triggering the error in PfixReferencePoint::set_direction
 # (at t = 0.2)
 trick.add_read(0.2, "test.range_to_pfix_internal_ref.set_reference_data()")

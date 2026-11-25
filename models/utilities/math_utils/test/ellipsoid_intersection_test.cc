@@ -19,7 +19,7 @@ TEST(EllipsoidIntersection, Update) {
         constexpr double source_point[3] {5.0, 0.0, 0.0};
         constexpr double target_point[3] {-5.0, 0.0, 0.0};
 
-        EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
+        cml::EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update();
         EXPECT_TRUE(intersection);
         EXPECT_THAT(article.root1, Pointwise(DoubleNear(tolerance), {2.0, 0.0, 0.0}));
@@ -33,7 +33,7 @@ TEST(EllipsoidIntersection, Update) {
         constexpr double source_point[3] {0.0, 5.0, 0.0};
         constexpr double target_point[3] {0.0, -5.0, 0.0};
 
-        EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
+        cml::EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update();
         EXPECT_TRUE(intersection);
         EXPECT_THAT(article.root1, Pointwise(DoubleNear(tolerance), {0.0, 3.0, 0.0}));
@@ -47,7 +47,7 @@ TEST(EllipsoidIntersection, Update) {
         constexpr double source_point[3] {0.0, 0.0, 5.0};
         constexpr double target_point[3] {0.0, 0.0, -5.0};
 
-        EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
+        cml::EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update();
         EXPECT_TRUE(intersection);
         EXPECT_THAT(article.root1, Pointwise(DoubleNear(tolerance), {0.0, 0.0, 4.0}));
@@ -61,7 +61,7 @@ TEST(EllipsoidIntersection, Update) {
         constexpr double source_point[3] {-1.0, 0.0, 4.0};
         constexpr double target_point[3] {1.0, 0.0, 4.0};
 
-        EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
+        cml::EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update();
         EXPECT_TRUE(intersection);
         EXPECT_THAT(article.root1, Pointwise(DoubleNear(tolerance), {0.0, 0.0, 4.0}));
@@ -75,7 +75,7 @@ TEST(EllipsoidIntersection, Update) {
         constexpr double source_point[3] {1.0, 1.0, 1.0};
         constexpr double target_point[3] {0.0, 0.0, 1.0};
 
-        EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
+        cml::EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update();
         EXPECT_TRUE(intersection);
         EXPECT_THAT(article.root1, Pointwise(DoubleNear(tolerance), {1.611258466588724, 1.611258466588724, 1.0}));
@@ -89,7 +89,7 @@ TEST(EllipsoidIntersection, Update) {
         constexpr double source_point[3] {1.5, 2.5, 0.0};
         constexpr double target_point[3] {1.5, 2.5, 1.0};
 
-        EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
+        cml::EllipsoidIntersection article(source_point, target_point, 2.0, 3.0, 4.0);
         const bool intersection = article.update(false);
         EXPECT_FALSE(intersection);
     }

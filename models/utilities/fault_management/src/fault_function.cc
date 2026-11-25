@@ -15,13 +15,15 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <string>
 
+namespace cml {
+
 /*******************************************************************************
 initialize
 Purpose:(Initializes the fault.)
 *******************************************************************************/
 void FaultFunctionBase::initialize() {
   if (!ind_variable.is_initialized()) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Fault Management Error\n",
       "The function fault <", name, "> has not been initialized with an independent "
       "variable.\n");
@@ -97,3 +99,5 @@ bool FaultFunctionBase::set_param( const std::string& param_name,
 
   return true;
 }
+
+} // namespace cml

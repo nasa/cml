@@ -3,6 +3,8 @@
 PURPOSE:
    (Defines the enumerations used by multiple classes within this model.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
  (((Gary Turner) (OSR) (Jun 2023) (ANTARES)
    (New, based on GNC_PAR grok_duration_check and grok-violation models))
@@ -10,6 +12,8 @@ PROGRAMMERS:
 *******************************************************************************/
 #ifndef CML_CONSTRAINT_ENUM_HH
 #define CML_CONSTRAINT_ENUM_HH
+
+namespace cml {
 
 /**
  * Enumerations used by the %Constraint Check model classes
@@ -45,4 +49,7 @@ struct ConstraintEnum
     OpenOpen /**< Neither the lower bound nor the upper bound are included in the interval */
   };
 };
+
+} // namespace cml
+
 #endif

@@ -13,6 +13,8 @@ PROGRAMMERS:
 #include "../include/aero_table_set_base.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*******************************************************************************
 process_prelim_uncertainties
 Purpose: (For the tables in which the uncertainties are specified and fixed,
@@ -86,7 +88,7 @@ AeroExecutiveTable::process_prelim_uncertainties()
       break;
     default:
       // UNREACHABLE CODE.  Switch cases are exhaustive.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid AeroDamping Type specification.\n",
         "Unrecognized AeroDamping type.\n"
         "This switch statement should be exhaustive.\n");
@@ -114,7 +116,7 @@ AeroExecutiveTable::process_prelim_uncertainties()
       break;
     default:
       // UNREACHABLE CODE.  Switch cases are exhaustive.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid AeroDamping Type specification.\n",
         "Unrecognized AeroDamping type.\n"
         "This switch statement should be exhaustive.\n");
@@ -152,7 +154,7 @@ AeroExecutiveTable::populate_uncertainties()
       // AeroTableSetBase::initialize() method on the table in question.
       // That method has a terminal fault on an unspecified data-type.
       // There is no path to change the data-type post-initialization.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid data table type specification.\n",
         "Data table type has not been specified.\n"
         "This error should have already been caught.\n"
@@ -195,7 +197,7 @@ AeroExecutiveTable::populate_uncertainties()
       break;
     default:
       // UNREACHABLE CODE.  Switch cases are exhaustive.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid data table type specification.\n",
         "Unrecognized data table type.\n"
         "This switch statement should be exhaustive.\n"
@@ -287,7 +289,7 @@ AeroExecutiveTable::modify_uncertainties()
       // AeroTableSetBase::initialize() method on the table in question.
       // That method has a terminal fault on an unspecified data-type.
       // There is no path to change the data-type post-initialization.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid data table type specification.\n",
         "Data table type has not been specified.\n"
         "This error should have already been caught.\n"
@@ -354,7 +356,7 @@ AeroExecutiveTable::modify_uncertainties()
       break;
     default:
       // UNREACHABLE CODE.  Switch cases are exhaustive.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid data table type specification.\n",
         "Unrecognized data table type.\n"
         "This switch statement should be exhaustive.\n"
@@ -506,13 +508,13 @@ AeroExecutiveTable::scale_bias()
       // UNREACHABLE CODE. Cannot get here with "Unspecified" as the type.
       // Would already have failed out during initialization, and data-type
       // cannot be changed post-initialization.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Illegal operation mode\n",
         "Cannot execute a table identified with Unspecified data type.\n");
         break;
     default:
       // UNREACHABLE CODE.  List is exhaustive.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Illegal operation mode\n",
         "AeroTable data mode not found.\n");
   }
@@ -625,13 +627,13 @@ AeroExecutiveTable::increment_coeffs_with_bias()
       // UNREACHABLE CODE. Cannot get here with "Unspecified" as the type.
       // Would already have failed out during initialization, and data-type
       // cannot be changed post-initialization.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Illegal operation mode\n",
         "Cannot execute a table identified with Unspecified data type.\n");
         break;
     default:
       // UNREACHABLE CODE.  List is exhaustive.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Illegal operation mode\n",
         "AeroTable data mode not found.\n");
   }
@@ -659,3 +661,5 @@ AeroExecutiveTable::increment_damping_coeffs_with_bias()
     coefficients.dCn_dq += bias.dCn_dq;
   }
 }
+
+} // namespace cml

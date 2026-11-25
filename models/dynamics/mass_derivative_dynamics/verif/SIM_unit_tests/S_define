@@ -25,7 +25,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
 
    public:
    // Framework (leave this alone)
-    UnitTestFramework framework;
+    cml::UnitTestFramework framework;
    // support variables:
     double time;
     double mass;
@@ -34,7 +34,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
     double R_propellant[3];
     jeod::DynBody body;
    // Model for testing:
-    MassDerivativeDynamics  test_dyn;
+    cml::MassDerivativeDynamics  test_dyn;
 
     AntaresUnitTestSimObject()
       :

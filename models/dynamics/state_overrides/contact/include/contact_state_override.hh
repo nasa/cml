@@ -33,6 +33,8 @@ LIMITATION:
 LIBRARY DEPENDENCIES:
    ((../src/contact_state_override.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
 
@@ -44,6 +46,8 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+
+namespace cml {
 
 class ContactStateOverride : public SubscriptionBase
 {
@@ -125,4 +129,7 @@ class ContactStateOverride : public SubscriptionBase
                             const jeod::Quaternion & Q_override_struc_to_integ_frame);
   void activate() override;
 };
+
+} // namespace cml
+
 #endif

@@ -42,17 +42,17 @@ protected:
 public:
    jeod::Planet               planet;
    jeod::SphericalHarmonicsGravitySource          gravity_source;
-   GramInterface      gram_i;   // (--) Only used to test improper usage of GramInterface
+   cml::GramInterface      gram_i;   // (--) Only used to test improper usage of GramInterface
 
    // Combined atmosphere/winds:
-   LookupAtmosWinds  DRWP_atmos;  /* (--) Binary atmosphere-winds data reader
+   cml::LookupAtmosWinds  DRWP_atmos;  /* (--) Binary atmosphere-winds data reader
                                           based on Doppler Radar Wind values*/
 
    // Atmosphere only:
-   STD1976      std76;       // (--) Standard 1976 atmosphere structure
+   cml::STD1976      std76;       // (--) Standard 1976 atmosphere structure
 
    // Simple winds
-   SimpleLookupWind simple_wind;
+   cml::SimpleLookupWind simple_wind;
 
    // Default data instances
    jeod::Planet_earth_default_data                          earth_planet_init;
@@ -114,12 +114,12 @@ class AtmosphericSubvehicleSimObject : public Trick::SimObject {
  public:
   jeod::DynBody          body;
   jeod::MassBodyInit     mass_init;
-  StateInitialize        state_init;
+  cml::StateInitialize        state_init;
   jeod::BodyAttachMatrix body_attach;
-  ExtendedPlanetaryDerivedState         planet_rel_state;
-  SphericalHarmonicsFastGravityControls grav_controls_earth;
+  cml::ExtendedPlanetaryDerivedState         planet_rel_state;
+  cml::SphericalHarmonicsFastGravityControls grav_controls_earth;
 
-  AtmosphereExec     atmos_exec;
+  cml::AtmosphereExec     atmos_exec;
 
   AtmosphericSubvehicleSimObject(
                   jeod::DynManager       & dynamics_in,

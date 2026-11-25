@@ -23,18 +23,18 @@ class TestingModelSimObject : public Trick::SimObject {
    std::vector<double> dependent_vec;
    std::vector<double> dependent_vec_s;
 
-   SimpleTableLookup table_single_array; // (--) 1 dependent, populated with array
-   SimpleTableLookup table_single_vec;   // (--) 1 dependent, populated with vector
-   SimpleTableLookup table_interp; // (--) 2 dependents, array-populated, interpolating
-   SimpleTableLookup table_prev;   // (--) 2 dependents, vector-populated, uses previous value
-   SimpleTableLookup table_next;   // (--) 2 dependents, vector-populated, uses next value
-   SimpleTableLookup table_floor;  // (--) 2 dependents, vector-populated, rounds down
-   SimpleTableLookup table_ceil;   // (--) 2 dependents, vector-populated, rounds up
-   SimpleTableLookup table_round;  // (--) 2 dependents, vector-populated, rounds nearest
-   SimpleTableLookup table_wrap;   // (--) 2 dependents, vector-populated, interpolates with wrap-around
-   SimpleTableLookup table_reverse;// (--) 2 dependents, array-populated, data in reverse order
-   SimpleTableLookup table_error;  // (--) used for testing errors
-   SimpleTableLookup table_1_indep_val; // (--) 1 independent var with 1 value
+   cml::SimpleTableLookup table_single_array; // (--) 1 dependent, populated with array
+   cml::SimpleTableLookup table_single_vec;   // (--) 1 dependent, populated with vector
+   cml::SimpleTableLookup table_interp; // (--) 2 dependents, array-populated, interpolating
+   cml::SimpleTableLookup table_prev;   // (--) 2 dependents, vector-populated, uses previous value
+   cml::SimpleTableLookup table_next;   // (--) 2 dependents, vector-populated, uses next value
+   cml::SimpleTableLookup table_floor;  // (--) 2 dependents, vector-populated, rounds down
+   cml::SimpleTableLookup table_ceil;   // (--) 2 dependents, vector-populated, rounds up
+   cml::SimpleTableLookup table_round;  // (--) 2 dependents, vector-populated, rounds nearest
+   cml::SimpleTableLookup table_wrap;   // (--) 2 dependents, vector-populated, interpolates with wrap-around
+   cml::SimpleTableLookup table_reverse;// (--) 2 dependents, array-populated, data in reverse order
+   cml::SimpleTableLookup table_error;  // (--) used for testing errors
+   cml::SimpleTableLookup table_1_indep_val; // (--) 1 independent var with 1 value
 
 
    TestingModelSimObject()
@@ -86,18 +86,18 @@ class TestingModelSimObject : public Trick::SimObject {
      table_single_vec.load_independent_data(   independent, independent_vec);
      table_interp.load_independent_data(independent, independent_vec);
      table_prev.load_independent_data(  independent, independent_vec,
-                                        TableIndependentVariable::Prev);
+                                        cml::TableIndependentVariable::Prev);
      table_next.load_independent_data(  independent, independent_vec,
-                                        TableIndependentVariable::Next);
+                                        cml::TableIndependentVariable::Next);
      table_floor.load_independent_data( independent, independent_vec,
-                                        TableIndependentVariable::Floor);
+                                        cml::TableIndependentVariable::Floor);
      table_ceil.load_independent_data(  independent, independent_vec,
-                                        TableIndependentVariable::Ceil);
+                                        cml::TableIndependentVariable::Ceil);
      table_round.load_independent_data( independent, independent_vec,
-                                        TableIndependentVariable::Round);
+                                        cml::TableIndependentVariable::Round);
      table_wrap.load_independent_data(  independent, independent_vec,
-                                        TableIndependentVariable::Interp,
-                                        TableIndependentVariable::WrapAround);
+                                        cml::TableIndependentVariable::Interp,
+                                        cml::TableIndependentVariable::WrapAround);
      table_reverse.load_independent_data(independent, scratch_indep_rev, 5);
 
 
@@ -228,7 +228,7 @@ class TestingModelSimObject : public Trick::SimObject {
    // creates a table but does not populate it.
    void create_dummy_table()
    {
-     table_error.create_table( dependent[0][0], AbstractTableLookup::Generic);
+     table_error.create_table( dependent[0][0], cml::AbstractTableLookup::Generic);
    }
 
 

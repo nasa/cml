@@ -55,7 +55,13 @@ that standard library function with a C++ API and performs error handling and en
 Model Structure
 ~~~~~~~~~~~~~~~
 
-.. doxygenfile:: env_utils.hh
+.. doxygenfunction:: cml::getenv_or_exit
+
+.. doxygenfunction:: cml::getenv_or_default
+
+.. doxygenfunction:: cml::getenv_or_throw
+
+.. doxygenfunction:: cml::expand_env_variables
 
 Mathematical Formulation
 ------------------------
@@ -78,7 +84,7 @@ requested value is not set:
 
 .. code-block:: cpp
 
-    const std::string var = getenv_or_exit("MY_ENV_VAR");
+    const std::string var = cml::getenv_or_exit("MY_ENV_VAR");
 
 Alternatively, a user-defined exit function may be provided. This function will be called
 with ``EXIT_FAILURE`` as its argument.
@@ -88,7 +94,7 @@ with ``EXIT_FAILURE`` as its argument.
     auto my_exit_function = [](int return_value) -> void {
         // Some user-defined logic goes here.
     };
-    const std::string var = getenv_or_exit("MY_ENV_VAR", my_exit_function);
+    const std::string var = cml::getenv_or_exit("MY_ENV_VAR", my_exit_function);
 
 
 Use a Default Value if the Variable is Not Set
@@ -98,7 +104,7 @@ Define a default value to use if the requested environment variable is not set:
 
 .. code-block:: cpp
 
-    const std::string var = getenv_or_default("MY_ENV_VAR", "fallback-value");
+    const std::string var = cml::getenv_or_default("MY_ENV_VAR", "fallback-value");
 
 
 Throw an Error if the Variable is Not Set
@@ -109,7 +115,7 @@ Retrieve an environment variable's value, or else throw a runtime error:
 .. code-block:: cpp
 
     try {
-        const std::string var = getenv_or_throw("MY_ENV_VAR");
+        const std::string var = cml::getenv_or_throw("MY_ENV_VAR");
     } catch (const std::runtime_error& err) {
         // Handle the missing variable.
     }
@@ -122,7 +128,7 @@ Expand all environment variables in a string:
 
 .. code-block:: cpp
 
-    const std::filesystem::path data_path = expand_env_variables("${DATA_DIR}/${SCENARIO_NAME}/data.csv");
+    const std::filesystem::path data_path = cml::expand_env_variables("${DATA_DIR}/${SCENARIO_NAME}/data.csv");
 
 Note that an ``std::runtime_error`` is always thrown if any environment variable in the
 provided string is not set.

@@ -22,6 +22,8 @@ PROGRAMMERS:
 #include "../include/aero_executive_simple.hh"
 #include "../include/aero_interface_output.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor:
 *******************************************************************************/
@@ -39,7 +41,7 @@ AeroExecutiveSimple::AeroExecutiveSimple(
   free_stream_vel_unit( free_stream_vel_unit_in)
 {
   if (free_stream_vel_unit == nullptr) {
-   CMLMessage::warn(
+   message::warn(
      __FILE__, __LINE__, "Simple Aerodynamics Construction limitation\n",
      "The free stream velocity is required for any computations of the\n"
      "aero forces and it is NULL.\n"
@@ -76,7 +78,7 @@ void AeroExecutiveSimple::update()
     // so it is most appropriate to check the ratio between the value of.
     // BC and the dynamic-pressure
     if (std::abs(dynamic_pressure * bc_epsilon) >= BC) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid settings\n",
         "The value for BC (", BC, ") is unusually small.\nGiven the current "
         "dynamic_pressure (", dynamic_pressure, "), the resulting acceleration (P / BC) would\n"
@@ -115,7 +117,7 @@ AeroExecutiveSimple::set_drag_type(DragType drag_type_in)
   }
 
   if (free_stream_vel_unit == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Simple Aerodynamics Construction error.\n",
       "The free stream velocity is required for computing the aero drag\n"
       "and it is NULL.\nRemaining with the constant-vector implementation.\n");
@@ -125,7 +127,7 @@ AeroExecutiveSimple::set_drag_type(DragType drag_type_in)
   switch (drag_type_in) {
   case ballistic_coeff:
     if (BC <= 0.0) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__, __LINE__, "Simple Aerodynamics Setup error.\n",
         "Selected Ballistic Coefficient as the method for computing the aero-"
         "drag\nforce but the value for BC (", BC, ") is illegal.\n");
@@ -133,13 +135,13 @@ AeroExecutiveSimple::set_drag_type(DragType drag_type_in)
     break;
   case drag_coeff:
     if (MathUtils::is_near_equal(CD, 0.0)) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__, "Simple Aerodynamics Setup error.\n",
         "Selected Coefficient of drag as the method for computing the aero-"
         "drag\nforce but CD = 0.0, which means there will be no drag force.\n");
     }
     if (MathUtils::is_near_equal(Aref, 0.0)) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__, "Simple Aerodynamics Setup error.\n",
         "Selected Coefficient of drag as the method for computing the aero-"
         "drag\nforce but Aref = 0.0, which means there will be no drag force.\n");
@@ -147,7 +149,7 @@ AeroExecutiveSimple::set_drag_type(DragType drag_type_in)
     break;
   case constant_mag:
     if (MathUtils::is_near_equal(drag_mag, 0.0)) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__, "Simple Aerodynamics Setup error.\n",
         "Selected constant-drag as the method for computing the aero-"
         "drag\nforce but specified 0.0 for the force magnitude (drag_mag).\n");
@@ -156,7 +158,7 @@ AeroExecutiveSimple::set_drag_type(DragType drag_type_in)
   case constant_vec:
     drag_mag = jeod::Vector3::vmag(output.force);
     if (MathUtils::is_near_equal(drag_mag, 0.0)) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__, "Simple Aerodynamics Setup error.\n",
         "Selected constant-drag-vector as the method for specifying the aero-"
         "drag\nforce but the magnitude of the specified force is 0.0.\n");
@@ -165,3 +167,5 @@ AeroExecutiveSimple::set_drag_type(DragType drag_type_in)
   }
   drag_type = drag_type_in;
 }
+
+} // namespace cml

@@ -12,4 +12,4 @@ pistons_unit_test.pistons.subscribe()
 pistons_unit_test.pistons.add_piston_thruster( pistons_unit_test.pistons.thrusterA)
 """)
 
-trick.add_read(3.0,"pistons_unit_test.pistons.set_mode(trick.PistonThrusterGroupParams.TimeTableLookup)")
+trick.add_read(3.0,"pistons_unit_test.pistons.set_mode(trick.cml.PistonThrusterGroupParams.TimeTableLookup)")

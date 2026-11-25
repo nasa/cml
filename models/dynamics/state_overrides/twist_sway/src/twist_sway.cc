@@ -28,6 +28,8 @@ Programmers:
 
 #include "../include/twist_sway.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -50,7 +52,7 @@ TwistSway::initialize(
   }
 
   if (params.RocketHeight <= 0.0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid parameters\n",
       "RocketHeight is set to an invalid value of ", params.RocketHeight, ".\n"
       "Aborting initialization of Twist-sway.\n");
@@ -65,7 +67,7 @@ TwistSway::initialize(
   //delta_T1_min and delta_T1_max.
   if (params.delta_T1_min < 0.0 || params.delta_T1_max < 0.0 ||
       params.delta_T2_min < 0.0 || params.delta_T2_max < 0.0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid configuration on timing limits\n",
       "The specification of the limits for the decay constants T_fast and "
       "T_slow include a negative value.\n"
@@ -88,14 +90,14 @@ TwistSway::initialize(
 
   if (MathUtils::is_near_equal( T_fast,0.0) ||
       MathUtils::is_near_equal( T_slow,0.0)) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Configuration_error\n",
       "One or both of the periods is close to zero.  Check configuration\n");
   }
 
   // high-frequency oscillation within the fast perturbation
   if (params.mode_freq_low < 0.0 || params.mode_freq_high < 0.0) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid configuration on timing limits\n",
       "The specification of the limits for the oscillation frequency "
       "include a negative value.\n"
@@ -130,7 +132,7 @@ TwistSway::update()
   // variable so it is adjustable so it needs to be checked again before
   // dividing by it later in this algorithm.
   if (params.RocketHeight <= 0.0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid parameters\n",
       "RocketHeight is set to an invalid value of ", params.RocketHeight, ".\n"
       "Aborting evaluation of Twist-sway.\n"
@@ -456,7 +458,7 @@ TwistSway::compute_twist_sway_enu()
   // If the stack has swayed by more than that, something is wrong.
   if (h2 > 0.2 * H*H) {
     if (!small_angle_warning_sent) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Excessive twist-sway detected\n",
         "The linear twist-sway settings have been configured such that the\n"
         "twist-sway motion exceeds the small angle limitation on which the\n"
@@ -470,7 +472,7 @@ TwistSway::compute_twist_sway_enu()
     // to take the square-root of u2. u2 cannot be negative; even if the stack
     // was laid down horizontally, the conceptual u2 would then be 0.0.
     if (u2 <= 0.0) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Excessive twist-sway detected\n",
         "The linear twist-sway settings have been configured such that the\n"
         "linear twist sway motion now exceeds the reference length.\n"
@@ -561,7 +563,7 @@ void
 TwistSway::set_end_time(double new_time)
 {
   if (new_time < external_clock)  {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Reconfiguration error.\n",
       "Attempt to define the end of the hold-time to ", new_time, ", which is in the past\n"
       "(current time is ", external_clock, ").\n"
@@ -609,3 +611,5 @@ TwistSway::deactivate()
   slow_list.clear();
   SubscriptionBase::deactivate();
 }
+
+} // namespace cml

@@ -4,6 +4,8 @@ PURPOSE: (Provides a multi-conditional event structure.)
 LIBRARY DEPENDENCY:
   ((../src/watch_values_set.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (October 2023) (Antares) (enhancement)))
 **********************************************************************/
@@ -16,6 +18,7 @@ PROGRAMMERS:
 #include <vector>
 #include "watch_values_base_core.hh"
 
+namespace cml {
 
 /*****************************************************************************
 WatchValuesSet
@@ -72,4 +75,7 @@ class WatchValuesSet : public WatchValuesBaseCore
   void activate() override;
   void deactivate() override;
 };
+
+} // namespace cml
+
 #endif

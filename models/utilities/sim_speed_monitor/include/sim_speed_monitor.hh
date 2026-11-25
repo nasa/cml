@@ -2,6 +2,8 @@
  PURPOSE: (Computes the simulation speed at regular intervals during
            execution to support identification of problem areas.)
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (Sep 2022) (Antares) (initial)))
 ***********************************************************************/
@@ -13,6 +15,8 @@
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+
+namespace cml {
 
 class SimSpeedMonitor : public SubscriptionBase {
  protected:
@@ -67,4 +71,7 @@ class SimSpeedMonitor : public SubscriptionBase {
   }
   #endif
 };
+
+} // namespace cml
+
 #endif

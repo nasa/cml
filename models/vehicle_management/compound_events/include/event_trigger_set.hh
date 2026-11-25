@@ -5,6 +5,8 @@ PURPOSE: (Provides a set of EventTriggers, analagous to how a
 LIBRARY DEPENDENCY:
    ((../src/event_trigger_set.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2023) (ANTARES)
     (Merging concepts found in former grok-events and CML-events))
@@ -17,6 +19,9 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/vehicle_management/events_manager/include/watch_values_set.hh"
 #include "event_trigger.hh"
+
+namespace cml {
+
 /*****************************************************************************
 EventTriggerSet
 Purpose:
@@ -52,4 +57,7 @@ class EventTriggerSet : public WatchValuesSet
   void force_multi_shot_for_managed_values();
   WatchValuesBaseCore * find_trigger( const std::string& trigger_name_in);
 };
+
+} // namespace cml
+
 #endif

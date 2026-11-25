@@ -7,6 +7,8 @@ Purpose:
 Library dependencies:
   ((../src/spherical_harmonics_fast_gravity_controls.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
  (((Gary Turner) (OSR) (May 2014) (Antares) (Implementation of Blair Thompson's
                                algorithm originally written for earlier JEOD))
@@ -21,6 +23,8 @@ Programmers:
 #include "jeod/models/dynamics/dyn_manager/include/base_dyn_manager.hh"
 #include "jeod/models/environment/gravity/include/gravity_integ_frame.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
+
+namespace cml {
 
 class SphericalHarmonicsFastGravityControls : public jeod::SphericalHarmonicsGravityControls {
 
@@ -96,5 +100,7 @@ class SphericalHarmonicsFastGravityControls : public jeod::SphericalHarmonicsGra
      }
    }
 };
+
+} // namespace cml
 
 #endif

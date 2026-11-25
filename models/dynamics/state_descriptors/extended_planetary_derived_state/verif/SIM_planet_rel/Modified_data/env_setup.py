@@ -32,10 +32,10 @@ vehicle.state_initialize.set_subject_body( vehicle.body )
 vehicle.state_initialize.body_frame_id = "composite_body"
 vehicle.state_initialize.planet_name = "Earth"
 
-vehicle.state_initialize.position_input_data_type = trick.StateInitialize.NED_Geocentric
-vehicle.state_initialize.velocity_input_data_type = trick.StateInitialize.NED_Geocentric
-vehicle.state_initialize.attitude_input_data_type = trick.StateInitialize.MatrixInertialBody
-vehicle.state_initialize.att_rate_input_data_type = trick.StateInitialize.BodyInertialRate
+vehicle.state_initialize.position_input_data_type = trick.cml.StateInitialize.NED_Geocentric
+vehicle.state_initialize.velocity_input_data_type = trick.cml.StateInitialize.NED_Geocentric
+vehicle.state_initialize.attitude_input_data_type = trick.cml.StateInitialize.MatrixInertialBody
+vehicle.state_initialize.att_rate_input_data_type = trick.cml.StateInitialize.BodyInertialRate
 vehicle.state_initialize.ref_point_altitude = 10000
 vehicle.state_initialize.ref_point_latitude = 0.55
 vehicle.state_initialize.ref_point_longitude = -1.5

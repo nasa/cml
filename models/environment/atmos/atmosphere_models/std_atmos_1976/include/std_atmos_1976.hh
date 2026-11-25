@@ -15,6 +15,8 @@ LIBRARY DEPENDENCY:
     (../src/std_atmos_1976_dd.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Joshua Gregg) (NASA) (June 2005) (ARES) (Initial implementation for ARES))
     ((Bingquan Wang) (OSR) (April 2017) (ANTARES) 
@@ -33,6 +35,9 @@ PROGRAMMERS:
 #define CML_STD_ATMOS_1976_HH
 
 #include <cstddef>
+
+namespace cml {
+
 /** The main class to implement the computation of standard atmosphere model 1976 */
 class STD1976 
 {
@@ -105,5 +110,6 @@ private:
    void initialize();
 } ;
 
+} // namespace cml
 
 #endif

@@ -4,6 +4,8 @@ PURPOSE: (Definition of the bodies in the wake profile.)
 LIBRARY DEPENDENCY:
    ((../src/wake_bodies.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   ( ((Gary Turner) (OSR) (Mar 2016) (Antares)
                 (New adaptation to meet Antares coding standards))
@@ -13,6 +15,8 @@ PROGRAMMERS:
 **********************************************************************/
 #ifndef CML_WAKE_BODIES_HH
 #define CML_WAKE_BODIES_HH
+
+namespace cml {
 
 /*****************************************************************************
 WakeGeneratingBody
@@ -172,4 +176,7 @@ class WakeFollowingBodyWithForce : public WakeFollowingBody
   void compute_force(double force_mag) override;
   double get_drag_area() const override {return Cd * area;}
 };
+
+} // namespace cml
+
 #endif

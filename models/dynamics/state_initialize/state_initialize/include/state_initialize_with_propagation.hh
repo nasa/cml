@@ -35,6 +35,8 @@ LIBRARY DEPENDENCIES:
    ((../src/state_initialize_with_propagation.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2016) (New))
  ******************************************************************************/
@@ -47,6 +49,8 @@ PROGRAMMERS:
 #include "jeod/models/environment/gravity/include/gravity_manager.hh"
 
 #include "state_initialize.hh"
+
+namespace cml {
 
 class StateInitializeWithPropagation : public StateInitialize
 {
@@ -90,4 +94,7 @@ class StateInitializeWithPropagation : public StateInitialize
   void rk4_integration();
   void compute_planet_orientation (double time);
 };
+
+} // namespace cml
+
 #endif

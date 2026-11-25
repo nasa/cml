@@ -5,6 +5,8 @@ PURPOSE: Provides the Python / SWIG-friendly interface for adding actions
 LIBRARY DEPENDENCY:
    ((../src/compound_event_python_interface.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2023/10) (ANTARES)
     (Comprehensive overhaul of event management)))
@@ -13,6 +15,8 @@ PROGRAMMERS:
 #define CML_COMPOUND_EVENT_PYTHON_INTERFACE_HH
 #include <string>
 #include <vector>
+
+namespace cml {
 
 /*****************************************************************************
 CompoundEventActionConfig
@@ -65,5 +69,7 @@ struct CompoundEventPythonInterface
   void add_action( std::string action_name, void* target_ptr);
   void add_action( std::string action_name);
 };
+
+} // namespace cml
 
 #endif

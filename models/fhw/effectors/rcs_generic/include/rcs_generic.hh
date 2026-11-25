@@ -10,6 +10,8 @@ REFERENCE:
 LIBRARY DEPENDENCY:
    ((../src/rcs_generic.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((David Strack) (Lincom) (Feb 1997) (v1.0) (Initial Implementation))
     ((Gavin Mendeck) (LinCom) (Mar 1998) (v1.1) (revision))
@@ -30,6 +32,8 @@ PROGRAMMERS:
 #include <vector>
 #include <random>
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+
+namespace cml {
 
 // Forward declaration
 class RcsPropPod;
@@ -151,4 +155,7 @@ class RcsGeneric : public SubscriptionBase {
   void update_part_II();
   void check_mult_jet_flag_init();
 };
+
+} // namespace cml
+
 #endif

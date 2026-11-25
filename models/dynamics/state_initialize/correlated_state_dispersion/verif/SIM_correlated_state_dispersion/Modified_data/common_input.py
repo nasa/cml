@@ -5,9 +5,9 @@ verif.true_position = [6800000.0, 0.0, 0.0]
 verif.true_velocity = [0.0, 8000.0, 0.0]
 verif.true_T_mx = [[0,1,0],[0,0,1],[1,0,0]]
 
-verif.corr_state.dispersion_distribution = trick.CorrelatedStateDispersion.Gaussian
+verif.corr_state.dispersion_distribution = trick.cml.CorrelatedStateDispersion.Gaussian
 verif.corr_state.sigma_limit = 3.0
-verif.corr_state.pv_covar_frame = trick.CorrelatedStateDispersion.PV_COVAR_INRTL
+verif.corr_state.pv_covar_frame = trick.cml.CorrelatedStateDispersion.PV_COVAR_INRTL
 
 verif.corr_state.covariance[0][0] = 100
 verif.corr_state.covariance[1][1] = 1

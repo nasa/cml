@@ -17,6 +17,9 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 #include "../include/simple_lookup_wind.hh"
+
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -98,7 +101,7 @@ SimpleLookupWind::update(double altitude)
     // atan2 can handle either argument equal 0.  Not both
     if (MathUtils::is_near_equal(wind_component[0], 0.0) && MathUtils::is_near_equal(wind_component[1], 0.0)) {
       if (!wind_blowing_from_warning) {
-        CMLMessage::warn(__FILE__, __LINE__, "Undefined arctan calculation\n", 
+        message::warn(__FILE__, __LINE__, "Undefined arctan calculation\n", 
           "Wind angle undefined with u & v components = 0. Setting wind_blowing_from = 0.0. Quieting Warnings...");
          wind_blowing_from_warning = true;
       }
@@ -144,7 +147,7 @@ SimpleLookupWind::assign_component_data(
                                              num_elem_per_component);
   if (num_components > 2) {
     if (num_components > 3) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid request\n",
         "Call made to assign component data to ", num_components, " dependent variables.\n"
         "This model can only handle 3 components -- the 3 axes of the\n"
@@ -207,3 +210,5 @@ SimpleLookupWind::assign_dir_mag_vert_data(
               data_array+3*num_elem_per_variable,
               dim_list);
 }
+
+} // namespace cml

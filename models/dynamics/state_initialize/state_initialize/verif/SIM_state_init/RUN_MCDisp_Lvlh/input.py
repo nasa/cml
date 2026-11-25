@@ -5,4 +5,4 @@ vehicle.state_initialize.monte_carlo_dispersion.disperse_pv = True
 vehicle.state_initialize.monte_carlo_dispersion.position_dispersion = [ 1, 2, 3]
 vehicle.state_initialize.monte_carlo_dispersion.velocity_dispersion = [-1,-2,-3]
 vehicle.state_initialize.monte_carlo_dispersion.frame = \
-                                            trick.MonteCarloStateDispersion.Lvlh
+                                            trick.cml.MonteCarloStateDispersion.Lvlh

@@ -20,31 +20,31 @@ struct SampleModel {
       int ii = 4;
       std::string part2 = "is a collection of ";
 
-      CMLMessage::publish(
-          CMLMessage::Error,
+      cml::message::publish(
+          cml::message::Error,
           __FILE__, __LINE__,
           "This ",part2, ii, " arguments");
 
-      CMLMessage::publish(
-          CMLMessage::Warning,
+      cml::message::publish(
+          cml::message::Warning,
           __FILE__, __LINE__,
           "This ",part2, ii," arguments");
 
-      CMLMessage::status(
+      cml::message::status(
           "This ",part2, ii," arguments");
 
-      CMLMessage::publish(
-          CMLMessage::Inform,
+      cml::message::publish(
+          cml::message::Inform,
           __FILE__, __LINE__,
           "This ",part2,ii," arguments");
 
-      CMLMessage::publish(
-          CMLMessage::Debug,
+      cml::message::publish(
+          cml::message::Debug,
           __FILE__, __LINE__,
           "This ",part2,ii," arguments");
 
       if (terminate) {
-        CMLMessage::fail(
+        cml::message::fail(
             __FILE__, __LINE__,
             "This is ","a ","terminal error");
       }

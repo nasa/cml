@@ -11,6 +11,8 @@ LIBRARY DEPENDENCY:
     (../src/reverse_flow.cc)
     (../src/prf_model.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Mark McPherson) (NASA/DM42) (Apr 2012) (ANTARES) (Foundation))
    ((Gary Turner) (OSR) (Mar 2016) (Antares)
@@ -32,6 +34,7 @@ NOTES:
 #include "wake_params.hh"
 #include "wake_effects.hh"
 
+namespace cml {
 
 /*****************************************************************************
 SubsonicWake
@@ -129,5 +132,7 @@ class SubsonicWakeWithForce : public SubsonicWake
  protected:
   void query_objB() override{} // just to make it instantiable
 };
+
+} // namespace cml
 
 #endif

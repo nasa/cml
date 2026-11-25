@@ -1,7 +1,7 @@
 exec(open("Modified_data/common_input.py").read())
 
-vehicle.state_initialize.attitude_input_data_type = trick.StateInitialize.RotInit_NED
-vehicle.state_initialize.att_rate_input_data_type = trick.StateInitialize.RotInit_NED
+vehicle.state_initialize.attitude_input_data_type = trick.cml.StateInitialize.RotInit_NED
+vehicle.state_initialize.att_rate_input_data_type = trick.cml.StateInitialize.RotInit_NED
 
 vehicle.state_initialize.ned_rot_init.ref_body_name = "test_vehicle"
 vehicle.state_initialize.ned_rot_init.orientation.data_source = trick.Orientation.InputEulerRotation

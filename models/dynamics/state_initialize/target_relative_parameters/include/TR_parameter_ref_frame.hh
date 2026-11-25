@@ -8,6 +8,8 @@ LIBRARY DEPENDENCIES:
     (../src/TR_parameter_ref_frame.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))
@@ -19,6 +21,8 @@ PROGRAMMERS:
 #define CML_TR_PARAMETER_REF_FRAME_HH
 
 #include <string>
+
+namespace cml {
 
 /*****************************************************************************
 TR_Parameter_RefFrame
@@ -51,4 +55,7 @@ class TR_Parameter_RefFrame {
     bool compute_frame( const double vec_A[3],
                         const double vec_B[3]);
 };
+
+} // namespace cml
+
 #endif

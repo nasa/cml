@@ -35,7 +35,7 @@ class VentSimObject : public Trick::SimObject {
   const double & dyn_time;
 
  public:
-  DynamicMassBody tank[2];
+  cml::DynamicMassBody tank[2];
   jeod::DynBody root_body;
   jeod::DynBody vent_body;
   jeod::MassBodyInit vent_massinit;
@@ -45,14 +45,14 @@ class VentSimObject : public Trick::SimObject {
   jeod::DynBodyInitTransState trans_init;
   jeod::DynBodyInitRotState rot_init;
 
-  Vent extra_vent;
-  SimpleVent extra_simple_vent;
-  SimpleVent uninitialized_vent;
+  cml::Vent extra_vent;
+  cml::SimpleVent extra_simple_vent;
+  cml::SimpleVent uninitialized_vent;
 
-  VentSet set_simple;
-  VentSet set_1_tank;  /* (--) used only to test 4-arg constructor with 4th arg
+  cml::VentSet set_simple;
+  cml::VentSet set_1_tank;  /* (--) used only to test 4-arg constructor with 4th arg
                                a single tank; not initialized / used in the sim. */
-  VentSet set_2_tanks;
+  cml::VentSet set_2_tanks;
 
 
   // A set of vent parameters representing those of some specified vent,
@@ -108,12 +108,12 @@ class VentSimObject : public Trick::SimObject {
   //***************************************************************************
   void tank_null_check()
   {
-    std::vector<DynamicMassBody*> null_vector {nullptr};
-    VentSet(vent_body, dyn_time, null_vector);
+    std::vector<cml::DynamicMassBody*> null_vector {nullptr};
+    cml::VentSet(vent_body, dyn_time, null_vector);
   }
 
   //***************************************************************************
-  void copy_parameters(Vent & vent)
+  void copy_parameters(cml::Vent & vent)
   {
     force_magnitude = vent.get_force_magnitude();
     impulse_magnitude = vent.get_impulse_magnitude();

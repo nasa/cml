@@ -1,3 +1,12 @@
+/*******************************TRICK HEADER************************************
+ PURPOSE:
+   (To provide a common location for additional math utilities)
+
+ LIBRARY DEPENDENCY:
+   ()
+
+ PYTHON_MODULE: (cml)
+*******************************************************************************/
 #ifndef CML_MATH_UTILS_PRIVATE_HH
 #define CML_MATH_UTILS_PRIVATE_HH
 
@@ -8,6 +17,8 @@
 #include <limits>
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+namespace cml {
 
 class MathUtilsPrivate {
 
@@ -83,19 +94,19 @@ class MathUtilsPrivate {
     //check div-0, invalid ops and overflow
     if (std::isnan(res) || std::isinf(res)) {
       if (failed_flag) {
-        CMLMessage::fail( __FILE__, __LINE__,
+        message::fail( __FILE__, __LINE__,
          "Divided by zero or overflow.\n"
           "The division of ",
-          CMLMessage::printf_fmt("%8.6e", dividend), " / ",
-          CMLMessage::printf_fmt("%8.6e", divisor), " is div-0 or overflow.\n"
+          message::printf_fmt("%8.6e", dividend), " / ",
+          message::printf_fmt("%8.6e", divisor), " is div-0 or overflow.\n"
           "Terminating execution.");
       }
       else {
-        CMLMessage::warn( __FILE__, __LINE__,
+        message::warn( __FILE__, __LINE__,
           "Divided by zero or overflow.\n"
           "The division of ",
-          CMLMessage::printf_fmt("%8.6e", dividend), " / ",
-          CMLMessage::printf_fmt("%8.6e", divisor), " is div-0 or overflow,\n"
+          message::printf_fmt("%8.6e", dividend), " / ",
+          message::printf_fmt("%8.6e", divisor), " is div-0 or overflow,\n"
           " and the result is set as ", failed_val, ".");
       }
       res = failed_val;
@@ -147,7 +158,7 @@ class MathUtilsPrivate {
   static T sqrt_fp( const T val)
   {
     if (val < 0.0) {
-     CMLMessage::error(__FILE__,__LINE__,
+     message::error(__FILE__,__LINE__,
       "Cannot take square root of a negative value.\n"
       "Returning 0.0.\n");
      return 0.0;
@@ -175,13 +186,13 @@ class MathUtilsPrivate {
 
     if (std::isnan(res) || std::isinf(res)) {
       if (failed_flag) {
-        CMLMessage::fail( __FILE__, __LINE__,
+        message::fail( __FILE__, __LINE__,
           "Log of negative number.\n"
           "The log of ", val, " is undefined.\n"
           "Terminating execution.");
        }
       else {
-        CMLMessage::warn( __FILE__, __LINE__,
+        message::warn( __FILE__, __LINE__,
           "Log of negative number.\n",
           "The log of ", val, " is undefined,\n"
           "and the result is set as ", failed_val, ".");
@@ -193,4 +204,7 @@ class MathUtilsPrivate {
     return res;
   }
 };
+
+} // namespace cml
+
 #endif

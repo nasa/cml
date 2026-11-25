@@ -7,6 +7,8 @@ REFERENCES:
   ((U.S. STANDARD ATMOSPHERE 1976, N77-16482,
    https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539.pdf))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Bingquan Wang) (OSR) (May 2017) (ANTARES) (initial version)))
 
@@ -19,6 +21,8 @@ PROGRAMMERS:
 #include <cmath>
 #include <algorithm>
 #include "../include/std_atmos_1976.hh"
+
+namespace cml {
 
 //to calculate the mass density
 static inline double cal_density(const double &press, //pressure, unit:N/m2
@@ -102,6 +106,7 @@ static inline double log_interp(const double x_vals[],  //the data set of x-axis
 
   return std::exp(log_y);
 }
-                                 
+
+} // namespace cml
 
 #endif

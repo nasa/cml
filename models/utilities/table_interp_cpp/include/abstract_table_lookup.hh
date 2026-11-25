@@ -12,6 +12,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   (../src/abstract_table_lookup.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Oct 2017) (New implementation))
   )
@@ -31,6 +33,8 @@ PROGRAMMERS:
 #include <cstddef>
 #include <vector>
 #include <string>
+
+namespace cml {
 
 class AbstractTableLookup : public SubscriptionBase
 {
@@ -109,4 +113,7 @@ protected:
   virtual TableIndependentVariable* lookup_independent(
                                                  const std::string &var_name);
 };
+
+} // namespace cml
+
 #endif

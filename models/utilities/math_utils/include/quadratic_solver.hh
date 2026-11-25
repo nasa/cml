@@ -4,12 +4,15 @@ PURPOSE: ( Setup and solution using the quadratic formula.)
 LIBRARY DEPENDENCY:
   (../src/quadratic_solver.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2023) (ANTARES) (new)))
 ***********************************************************************/
 #ifndef CML_QUADRATIC_SOLVER_HH
 #define CML_QUADRATIC_SOLVER_HH
 
+namespace cml {
 
 class QuadraticSolver {
  public:
@@ -29,4 +32,7 @@ class QuadraticSolver {
   bool solve( bool compute_roots = true);
 
 };
+
+} // namespace cml
+
 #endif

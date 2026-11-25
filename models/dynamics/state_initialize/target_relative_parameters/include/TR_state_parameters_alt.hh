@@ -8,6 +8,8 @@ LIBRARY DEPENDENCIES:
     (../src/TR_state_parameters_alt.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (Nov 2023) (Additional implementation))
@@ -26,6 +28,9 @@ NOTES:
 
 #include "TR_state_param.hh"
 #include "cml/models/dynamics/state_initialize/target_relative_parameters/include/TR_state_parameter_set.hh"
+
+namespace cml {
+
 /*****************************************************************************
 TargetRelative_StateParameter_Alt
 Purpose:
@@ -76,5 +81,7 @@ class TargetRelative_StateParameter_Alt : public TargetRelative_StateParam
                                      InputPosAngle input_theta_type,
                                      double        (&R)[3]);
 };
+
+} // namespace cml
 
 #endif

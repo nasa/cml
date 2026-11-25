@@ -25,6 +25,8 @@ ASSUMPTIONS: (
 LIBRARY DEPENDENCY:
    ((../src/accumulated_absolute_deltas.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2017) (Antares) (new)))
 **********************************************************************/
@@ -33,6 +35,8 @@ PROGRAMMERS:
 #define CML_ACCUMULATED_ABSOLUTE_DELTAS_HH
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+
+namespace cml {
 
 class AccumulatedAbsoluteDeltas : public SubscriptionBase
 {
@@ -58,4 +62,7 @@ class AccumulatedAbsoluteDeltas : public SubscriptionBase
  protected:
   void activate() override;
 };
+
+} // namespace cml
+
 #endif

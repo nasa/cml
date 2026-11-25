@@ -8,6 +8,8 @@ Purpose:
 Library dependencies:
   ((../src/pointing_ref_frame.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   ( ((Michael McCarthy, Gary Turner) (OSR) (June 2019) (Antares) (initial))
   )
@@ -19,6 +21,8 @@ Programmers:
 #include "jeod/models/utils/ref_frames/include/ref_frame.hh"
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+
+namespace cml {
 
 /**
  * Defines a reference frame (the Pointing Frame) based on two other reference
@@ -131,4 +135,7 @@ class PointingRefFrame : public SubscriptionBase {
    */
   void deactivate() override;
 };
+
+} // namespace cml
+
 #endif

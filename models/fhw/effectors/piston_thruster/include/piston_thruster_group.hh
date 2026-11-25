@@ -26,6 +26,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCY:
   (../src/piston_thruster_group.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Jeff Semrau) (Honeywell) (Oct-2011) (Initial Implementation))
    ((Mark McPherson) (NASA/DM42) (Oct-2011) (Integration into ANTARES))
@@ -48,6 +50,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
 #include "piston_thruster.hh"
+
+namespace cml {
 
 /*****************************************************************************
 PistonThrusterGroupInputs
@@ -140,4 +144,7 @@ protected:
   void activate() override;
   void deactivate() override;
 };
+
+} // namespace cml
+
 #endif

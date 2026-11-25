@@ -16,6 +16,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/planet_planet_state.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (July 2015) (Antares) (initial version))
     ((Bingquan Wang) (OSR) (May 2017) (Antares)
@@ -33,6 +35,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include <string>
 
+namespace cml {
 
 class PlanetPlanetState : public SubscriptionBase
 {
@@ -68,4 +71,7 @@ class PlanetPlanetState : public SubscriptionBase
   void activate() override;
   void deactivate() override;
 };
+
+} // namespace cml
+
 #endif

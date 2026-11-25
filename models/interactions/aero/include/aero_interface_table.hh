@@ -7,6 +7,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/aero_interface_table.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (May 2014) (Antares) (new))
    ((Gary Turner) (OSR) (June 2016) (Antares) (refactor))
@@ -18,6 +20,8 @@ PROGRAMMERS:
 
 #include "aero_interface_base_extended.hh"
 #include "aero_executive_table.hh"
+
+namespace cml {
 
 class AtmosRelativeState;
 
@@ -49,4 +53,7 @@ protected:
   void activate() override;
   void deactivate() override;
 };
+
+} // namespace cml
+
 #endif

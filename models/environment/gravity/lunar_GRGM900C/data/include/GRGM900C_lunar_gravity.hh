@@ -21,6 +21,8 @@ Assumptions and Limitations:
 Library Dependency:
   ((../src/GRGM900C_lunar_gravity.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   (((Gary Turner) (OSR) (Oct 2015) (Antares)  (initial version)))
 *******************************************************************************/
@@ -29,6 +31,8 @@ Programmers:
 #define CML_GRGM900C_LUNAR_GRAVITY_HH
 
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_source.hh"
+
+namespace cml {
 
 class GRGM900C_LunarGravity
 {
@@ -54,6 +58,6 @@ class GRGM900C_LunarGravity
   void populate_max_res_c() const; // sets coefficients 793-900
 };
 
-
+} // namespace cml
 
 #endif

@@ -10,13 +10,13 @@ exec(open("Modified_data/common_input.py").read())
 # Note: This is the same result as without planet rotation because the position and target position are both on the equator.
 #       Thus, when the target is rotated with the planet, it remains in the same plane relative to the position.
 
-vehicle.state_initialize.position_input_data_type = trick.StateInitialize.NED_Geodetic
+vehicle.state_initialize.position_input_data_type = trick.cml.StateInitialize.NED_Geodetic
 vehicle.state_initialize.ref_point_altitude  = 0.0
 vehicle.state_initialize.ref_point_latitude  = 0.0
 vehicle.state_initialize.ref_point_longitude = 0.0
 vehicle.state_initialize.position = [0.0, 0.0, 0.0]
 
-vehicle.state_initialize.velocity_input_data_type        = trick.StateInitialize.TR_InertialSpeedGammaLatang
+vehicle.state_initialize.velocity_input_data_type        = trick.cml.StateInitialize.TR_InertialSpeedGammaLatang
 vehicle.state_initialize.TR_param.target_point_altitude  = 0.0
 vehicle.state_initialize.TR_param.target_point_latitude  = 0.0
 vehicle.state_initialize.TR_param.target_point_longitude = trick.attach_units("degree", 45.0)

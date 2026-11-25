@@ -38,11 +38,15 @@ PURPOSE: (
   extensions of WatchValuesBase.
   )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (date) (project) (comment)))
 **********************************************************************/
 #ifndef CML_EVENT_ACTION_BASE_HH
 #define CML_EVENT_ACTION_BASE_HH
+
+namespace cml {
 
 /*****************************************************************************
 EventActionBase
@@ -55,4 +59,7 @@ class EventActionBase {
   virtual bool specific_execution() { return false;}
   virtual ~EventActionBase() = default;
 };
+
+} // namespace cml
+
 #endif

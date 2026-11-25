@@ -15,6 +15,8 @@ LIMITATIONS:
     ((../src/single_input_table_for_quaternions.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (November 2017) (New implementation))
   )
@@ -28,6 +30,8 @@ PROGRAMMERS:
 #include "generic_single_input_table.hh"
 #include "quaternion_spherical_interpolator.hh"
 #include <cstddef>
+
+namespace cml {
 
 class SingleInputTableForQuaternions : public GenericSingleInputTable
 {
@@ -61,4 +65,7 @@ class SingleInputTableForQuaternions : public GenericSingleInputTable
  protected:
   bool generate_output() override;
 };
+
+} // namespace cml
+
 #endif

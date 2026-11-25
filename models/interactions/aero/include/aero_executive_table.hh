@@ -12,6 +12,8 @@ LIBRARY DEPENDENCY:
   ((../src/aero_executive_table.cc)
    (../src/aero_executive_table_disperse.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2016) (Antares) (new))
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
@@ -25,6 +27,8 @@ PROGRAMMERS:
 #include "aero_table_set_base.hh"
 #include <vector>
 #include <string>
+
+namespace cml {
 
 class AeroInterfaceOutput;
 class AeroEnvironment;
@@ -202,4 +206,7 @@ protected:
   void increment_coeffs_with_bias();
   void increment_damping_coeffs_with_bias();
 };
+
+} // namespace cml
+
 #endif

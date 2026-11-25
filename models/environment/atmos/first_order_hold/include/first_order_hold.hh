@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
     ((../src/first_order_hold.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (Oct 2014) (Antares))
@@ -16,6 +18,8 @@ PROGRAMMERS:
 
 #include "cml/models/environment/atmos/atmos_exec/include/atmosphere_exec_out.hh"
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
+
+namespace cml {
 
 class FirstOrderHold {
  public:
@@ -51,4 +55,7 @@ class FirstOrderHold {
            reference to vehicle's planet-state.*/
   AtmosExecOutput & out;   /* (--) reference to atmos-exec output struct */
 };
+
+} // namespace cml
+
 #endif

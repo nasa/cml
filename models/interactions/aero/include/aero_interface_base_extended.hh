@@ -2,6 +2,8 @@
 PURPOSE:
   (Define baseline interface between AeroExec managers and executors.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2016) (Antares) (New))
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
@@ -14,6 +16,8 @@ PROGRAMMERS:
 
 #include "aero_interface_base.hh"
 #include "aero_environment.hh"
+
+namespace cml {
 
 /*******************************************************************************
 AeroInterfaceExtended
@@ -50,4 +54,7 @@ public:
   AeroInterfaceBaseExtended (const AeroInterfaceBaseExtended &) = delete;
   AeroInterfaceBaseExtended & operator = (const AeroInterfaceBaseExtended &) = delete;
 };
+
+} // namespace cml
+
 #endif

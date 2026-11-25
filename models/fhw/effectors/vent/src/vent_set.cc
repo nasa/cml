@@ -26,6 +26,8 @@ PROGRAMMERS:
 #include "../include/vent.hh"
 #include "../include/vent_set.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 (a) baseline, do not create any vents
@@ -87,7 +89,7 @@ VentSet::VentSet(
 {
   for (auto* tank : tank_array) {
     if (tank == nullptr) {
-      CMLMessage::fail(
+      message::fail(
          __FILE__,__LINE__,"Construction error.\n",
          "Tank pointer cannot be null.\n");
       return;
@@ -139,7 +141,7 @@ void VentSet::initialize()
     SubscriptionBase::initialize();
   }
   else {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Initialization failure\n",
       "One or more vents in the vent-set have failed initialization.\n"
       "The vent-set cannot be initialized.\n");
@@ -172,14 +174,14 @@ Purpose:(Starts the specified vent, or all the vents, per their settings)
 void VentSet::start_vent(unsigned int ix)
 {
   if (!active) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Illegal instruction\n",
       "Instruction to start vent at index ", ix, " while the vent-set is inactive.\n"
       "Venting instruction not applied.\n");
     return;
   }
   if (ix >= vents.size()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Illegal instruction\n",
       "Instruction to start vent at index ", ix, " but there are only ", vents.size(), " vents "
       "registered.\nVenting not applied.\n");
@@ -191,7 +193,7 @@ void VentSet::start_vent(unsigned int ix)
 void VentSet::start_vents()
 {
   if (!active) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Illegal instruction\n",
       "Instruction to start all vents while the vent-set is inactive.\n"
       "Venting instruction not applied.\n");
@@ -210,7 +212,7 @@ Purpose:(Turns off the vents)
 void VentSet::stop_vent(unsigned int ix)
 {
   if (ix >= vents.size()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Illegal instruction\n",
       "Instruction to stop vent at index ", ix, " but there are only ", vents.size(), " vents "
       "registered.\nInstruction ignored.\n");
@@ -248,7 +250,7 @@ SimpleVent * VentSet::get_vent(size_t ii)
     return vents[ii];
   }
   else {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid request\n",
       "Index ", ii, " does not exist in the vents vector.\n"
       "The vents vector has only ", vents_size, " elements\n");
@@ -327,7 +329,7 @@ void VentSet::apply_impulse()
       // JEOD is guaranteed to never return a NULL for a root_body because a
       // jeod::DynBody, at a minimum, points to itself as the root_body, unless a
       // parent body chain is built.
-      CMLMessage::error (
+      message::error (
         __FILE__, __LINE__, "Cannot find root body\n",
         "Could not find root body for body ", dyn_body.name.get_name(), ".\n"
         "Impulse must be applied to root body.\n"
@@ -420,7 +422,7 @@ void VentSet::apply_impulse_to_body(jeod::DynBody & root_body)
                          root_body.composite_body.state.rot.ang_vel_this);
   }
   else {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid inertia\n",
       "Cannot generate a delta-omega value from the angular impulse because\n"
       "the inversion of the inertia matrix failed.\n");
@@ -475,3 +477,5 @@ void VentSet::start_vent_internal(SimpleVent * vent)
     dynamic_vents.push_back(vent);
   }
 }
+
+} // namespace cml

@@ -9,7 +9,7 @@ exec(open("Modified_data/common_input.py").read())
 # From an off-line Matlab script, the position should be:
 #   position = [ +5.624567489958965e+06, +0.000000000000000e+00, +3.247345554403026e+06]
 
-vehicle.state_initialize.position_input_data_type        = trick.StateInitialize.TR_GeodAlt_RngAng_CrossAng_AbsRotAng_LT_90
+vehicle.state_initialize.position_input_data_type        = trick.cml.StateInitialize.TR_GeodAlt_RngAng_CrossAng_AbsRotAng_LT_90
 vehicle.state_initialize.ref_point_altitude              = 0.0
 vehicle.state_initialize.ref_point_latitude              = trick.attach_units("degree", 90.0)
 vehicle.state_initialize.ref_point_longitude             = 0.0

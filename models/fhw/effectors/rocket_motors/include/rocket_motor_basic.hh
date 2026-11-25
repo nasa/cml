@@ -8,6 +8,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/rocket_motor_basic.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
  ******************************************************************************/
@@ -24,6 +26,7 @@ PROGRAMMERS:
 
 #include "rocket_motor_dispersions.hh"
 
+namespace cml {
 
 /*****************************************************************************
 RocketMotor_Basic
@@ -180,4 +183,7 @@ protected:
   virtual void start_motor();
   void activate() override;
 };
+
+} // namespace cml
+
 #endif

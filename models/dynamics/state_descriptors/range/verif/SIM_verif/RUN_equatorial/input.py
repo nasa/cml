@@ -8,10 +8,10 @@ vehicle.state_initialize.set_subject_body(vehicle.body)
 vehicle.state_initialize.body_frame_id = "composite_body"
 vehicle.state_initialize.planet_name = "Earth"
 
-vehicle.state_initialize.position_input_data_type = trick.StateInitialize.NED_Geocentric
-vehicle.state_initialize.velocity_input_data_type = trick.StateInitialize.NED_Geocentric
-vehicle.state_initialize.attitude_input_data_type = trick.StateInitialize.MatrixInertialBody
-vehicle.state_initialize.att_rate_input_data_type = trick.StateInitialize.BodyInertialRate
+vehicle.state_initialize.position_input_data_type = trick.cml.StateInitialize.NED_Geocentric
+vehicle.state_initialize.velocity_input_data_type = trick.cml.StateInitialize.NED_Geocentric
+vehicle.state_initialize.attitude_input_data_type = trick.cml.StateInitialize.MatrixInertialBody
+vehicle.state_initialize.att_rate_input_data_type = trick.cml.StateInitialize.BodyInertialRate
 vehicle.state_initialize.ref_point_altitude = 330000
 vehicle.state_initialize.ref_point_latitude = 0.0
 vehicle.state_initialize.ref_point_longitude = 0.0
@@ -36,12 +36,12 @@ exec(open("Modified_data/time.py").read())
 
 vehicle.range_to_pfix.subscribe();
 
-vehicle.range_to_pfix.reference_data.position_type = trick.PfixReferencePoint.topocentric
+vehicle.range_to_pfix.reference_data.position_type = trick.cml.PfixReferencePoint.topocentric
 vehicle.range_to_pfix.reference_data.latitude  = 0.0
 vehicle.range_to_pfix.reference_data.longitude = 0.0
 vehicle.range_to_pfix.reference_data.altitude  = 0.0
 
-vehicle.range_to_pfix.reference_data.direction_type = trick.PfixReferencePoint.pfix
+vehicle.range_to_pfix.reference_data.direction_type = trick.cml.PfixReferencePoint.pfix
 
 ########################################################################
 # Set up a RangeFromPfixReference which will describe the position (Range) of
@@ -50,12 +50,12 @@ vehicle.range_to_pfix.reference_data.direction_type = trick.PfixReferencePoint.p
 
 vehicle.range_from_pfix.subscribe();
 
-vehicle.range_from_pfix.reference_data.position_type = trick.PfixReferencePoint.topocentric
+vehicle.range_from_pfix.reference_data.position_type = trick.cml.PfixReferencePoint.topocentric
 vehicle.range_from_pfix.reference_data.latitude  = 0.0
 vehicle.range_from_pfix.reference_data.longitude = 0.0
 vehicle.range_from_pfix.reference_data.altitude  = 0.0
 
-vehicle.range_from_pfix.reference_data.direction_type = trick.PfixReferencePoint.topocentric
+vehicle.range_from_pfix.reference_data.direction_type = trick.cml.PfixReferencePoint.topocentric
 # Set the direction to be pointing in the same direction the vehicle will be traveling, due east
 vehicle.range_from_pfix.reference_data.azimuth   = 90.0 / 180.0 * 3.14159265358979
 

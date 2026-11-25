@@ -30,14 +30,14 @@ Purpose:(The sim)
 class AntaresUnitTestSimObject: public Trick::SimObject {
  public:
   // Framework
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   // support of support:
   double                        time;
   jeod::DynBody                 body;
-  ExtendedPlanetaryDerivedState planet_rel;
-  AtmosphereExecInterface       atmos_exec;
+  cml::ExtendedPlanetaryDerivedState planet_rel;
+  cml::AtmosphereExecInterface       atmos_exec;
   // support
-  AtmosRelativeState  atmos_rel;
+  cml::AtmosRelativeState  atmos_rel;
   double geodetic_altitude;
   double cg[3];
   double body_rates[3];
@@ -48,7 +48,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
   unsigned int table_select;
 
   // Model for testing:
-  AeroInterfaceTable             interface;
+  cml::AeroInterfaceTable             interface;
   SimpleAeroTableSet_SYM_LDm     table_SYM_LDm;
   SimpleAeroTableSet_SYM_ANm     table_SYM_ANm;
   SimpleAeroTableSet_XYZ         table_XYZ;
@@ -59,9 +59,9 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
 
   // Semi-populated instances of a AeroExecutiveTable and AeroTableSetBase
   // for testing configuration error-checking:
-  AeroExecutiveTable            empty_executive;
+  cml::AeroExecutiveTable            empty_executive;
   SimpleAeroTableSet_Incomplete incomplete_table;
-  AeroTableSetBase              empty_table;
+  cml::AeroTableSetBase              empty_table;
 
 
   //Constructor
@@ -128,7 +128,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
 
   // Methods used for testing purposes, called from input files
   void null_cg_fail() {
-    AeroEnvironment junk( atmos_rel.dynamic_pressure,
+    cml::AeroEnvironment junk( atmos_rel.dynamic_pressure,
                           atmos_rel.mach_number,
                           atmos_rel.total_angle_of_attack,
                           atmos_rel.angle_of_attack,
@@ -139,7 +139,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
                           body_rates);
   }
   void null_rates_fail() {
-    AeroEnvironment junk( atmos_rel.dynamic_pressure,
+    cml::AeroEnvironment junk( atmos_rel.dynamic_pressure,
                           atmos_rel.mach_number,
                           atmos_rel.total_angle_of_attack,
                           atmos_rel.angle_of_attack,

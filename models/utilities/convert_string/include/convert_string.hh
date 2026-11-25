@@ -2,6 +2,8 @@
 PURPOSE:
   (Utility to convert strings to various number formats.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Daniel Ghan)(OSR)(October 2021)(Antares)(Initial version)))
 *******************************************************************************/
@@ -14,6 +16,8 @@ PROGRAMMERS:
 #include <string>
 #include <type_traits>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+namespace cml {
 
 /*******************************************************************************
 ConvertString
@@ -39,7 +43,7 @@ template<typename T> T ConvertString::convert(const char* str) {
   static_assert(std::is_arithmetic_v<T>, "String conversion only valid for numeric types");
 
   if (str == nullptr) {
-    CMLMessage::error(__FILE__, __LINE__, "Bad Pointer\n",
+    message::error(__FILE__, __LINE__, "Bad Pointer\n",
       "A null pointer was passed into ConvertString::convert.\n");
     return 0;
   }
@@ -90,7 +94,7 @@ bool ConvertString::convert_numeric<bool>(const char* str) {
   else if (std::strcmp(str, "false") != 0 && std::strcmp(str, "False") != 0 &&
            std::strcmp(str, "FALSE") != 0)
   {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Unrecognized Boolean String\n",
       "The string ", str, " did not match \"true\" or \"false\" or equivalent.\n"
       "Conversion defaulting to false.\n");
@@ -98,5 +102,7 @@ bool ConvertString::convert_numeric<bool>(const char* str) {
 
   return false;
 }
+
+} // namespace cml
 
 #endif

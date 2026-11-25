@@ -6,6 +6,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   (../src/table_independent_variable.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (New implementation))
    ((Bingquan Wang) (OSR)(Aug 2017) (IVV code cleanup and refactored))
@@ -22,6 +24,7 @@ PROGRAMMERS:
 
 #include "table_type_defs.hh"
 
+namespace cml {
 
 /*****************************************************************************
 TableIndependentVariable
@@ -243,5 +246,7 @@ private:
    using IndepPair = std::pair<TableIndependentVariable*,
                      TableIndependentVariable::LookupMethod>;
    using IndepPairVec = std::vector<IndepPair>;
+
+} // namespace cml
 
 #endif

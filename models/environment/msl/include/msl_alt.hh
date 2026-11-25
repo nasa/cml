@@ -7,6 +7,8 @@ LIBRARY DEPENDENCY:
  ((../src/msl_alt_dd.cc)
   (../src/msl_alt.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Rachel Borland) (NASA) (Nov 2019) (Antares) (initial)))
 **********************************************************************/
@@ -18,6 +20,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/table_interp_cpp/include/generic_multi_input_table.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
+
+namespace cml {
 
 /*****************************************************************************
 MslAlt
@@ -60,5 +64,7 @@ class MslAlt : public SubscriptionBase
    void initialize() override;
    void update();
 };
+
+} // namespace cml
 
 #endif /*CML_MSL_ALT_HH*/

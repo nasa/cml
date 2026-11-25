@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
     ((../src/lookup_winds.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
     (((Scott Schuh)  (NASA) (Jan 2015) (Initial model implementation and verif))
      ((Edgar Medina) (NASA) (Feb 2015) (Integration into SIM_em1))
@@ -21,6 +23,7 @@ PROGRAMMERS:
 #include <cstddef>
 #include <string>
 
+namespace cml {
 
 /*****************************************************************************
 DRWPTableLookup
@@ -220,4 +223,7 @@ protected:
   void calculate_wind_mag_dir();
   void stream_error(int line, const std::string& drwpFileName_);
 };
+
+} // namespace cml
+
 #endif

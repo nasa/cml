@@ -4,6 +4,6 @@
 # leave A at nominal.
 
 exec(open("Modified_data/common_input.py").read())
-verif.corr_state.corr_option = trick.CorrelatedStateDispersion.CORRELATED_PV
+verif.corr_state.corr_option = trick.cml.CorrelatedStateDispersion.CORRELATED_PV
 verif.disperse_pva = True
 log_att()

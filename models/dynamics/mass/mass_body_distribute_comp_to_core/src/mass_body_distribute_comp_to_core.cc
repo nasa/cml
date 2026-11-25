@@ -22,6 +22,7 @@ Programmers:
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
 
 /*****************************************************************************
 Constructor
@@ -45,7 +46,7 @@ MassBodyDistributeCompToCore::check_configuration()
   // adjustable-body, abort.
   // Note - where the two bodies are identical, is_progeny_of returns true.
   if ( !adjustable_body.is_progeny_of(target_body)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid adjustments in Mass Tree\n",
       "The adjustable-body (", adjustable_body.name.get_name(), ") is not a progeny of\n"
       "the target body (", target_body.name.get_name(), ").\n"
@@ -57,7 +58,7 @@ MassBodyDistributeCompToCore::check_configuration()
 
   if ( !adjustable_body.get_mass_properties_initialized() ||
        !target_body.get_mass_properties_initialized()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid adjustments in Mass Tree\n",
       "Bodies in the mass tree must be initialized before their properties\n"
       "can be modified.\n");
@@ -122,7 +123,7 @@ MassBodyDistributeCompToCore::update(
     root_body->update_mass_properties();
   }
   else {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid mass tree configuration.\n",
       "Failed to find the root of the tree.\n"
       "Updating the mass tree only as far as the target-body\n");
@@ -338,15 +339,17 @@ MassBodyDistributeCompToCore::check_for_valid_mass_properties() const
   }
   if (mass_invalid) {
     if (fail_if_mass_invalid) {
-      CMLMessage::fail(__FILE__, __LINE__,
+      message::fail(__FILE__, __LINE__,
         "Invalid mass properties resulting from MassBodyDistributeCompToCore\n",
          err_msg.str(), "Terminating simulation.\n");
     }
     else {
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "Invalid mass properties resulting from MassBodyDistributeCompToCore\n",
          err_msg.str(), "Because the fail_if_mass_invalid flag has been set to false, the\n"
         "simulation will continue with impossible mass properties for ", adjustable_body.name.get_name(), ".\n");
     }
   }
 }
+
+} // namespace cml

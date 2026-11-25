@@ -24,6 +24,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include <cstddef>
 
+namespace cml {
 
 /*****************************************************************************
 Constructor
@@ -65,7 +66,7 @@ MassDerivativeDynamics::MassDerivativeDynamics(
   if (R_nozzle == nullptr ||
       R_propellant == nullptr) {
     // NOTE -- this block is not covered in regression testing.
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid construction\n",
       "The position vectors are NULL.\n");
   }
@@ -130,7 +131,7 @@ MassDerivativeDynamics::set_include_velocity_effect( bool flag)
       // NOTE -- this block is not covered in regression verifs, it has been
       // executed manually by modifying the return value of is_root_body() in
       // gdb.
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid application of pseudo_dv\n",
         "The pseudo_dv term can only be applied to a root body.\n"
         "This not a root-body so pseudo_dv will not be applied.\n");
@@ -414,3 +415,5 @@ MassDerivativeDynamics::modify_velocity()
                      body.composite_body);
   body.propagate_state();
 }
+
+} // namespace cml

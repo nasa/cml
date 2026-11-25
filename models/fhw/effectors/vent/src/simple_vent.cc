@@ -15,6 +15,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*************************************************************************
 Constructor
 *************************************************************************/
@@ -48,7 +50,7 @@ void SimpleVent::use_impulse_mode(bool mode)
 
     // Test 1: Make sure the vent has an impulse available to use.
     else if (!impulse_set) {
-      CMLMessage::error(__FILE__, __LINE__, "Unable to change modes\n",
+      message::error(__FILE__, __LINE__, "Unable to change modes\n",
         "Vent '", name, "': Cannot transition to impulsive mode because\n"
         "the impulse vector has not been set.\n");
     }
@@ -61,7 +63,7 @@ void SimpleVent::use_impulse_mode(bool mode)
       // setting.
       if ( MathUtils::has_changed_from( impulse_mag,
                                         user_set_impulse)) {
-        CMLMessage::warn(__FILE__, __LINE__, "Impulse magnitude changed\n",
+        message::warn(__FILE__, __LINE__, "Impulse magnitude changed\n",
           "The impulse magnitude was overwritten while vent '", name, "' was in\n"
           "dynamic mode.\nUser-set value: ", user_set_impulse, " N*s\nCurrent value: ", impulse_mag, " N*s\n");
       }
@@ -76,7 +78,7 @@ void SimpleVent::use_impulse_mode(bool mode)
       apply_as_impulse = false;
     }
     else if (!force_set) {
-      CMLMessage::error(__FILE__, __LINE__, "Unable to change modes\n",
+      message::error(__FILE__, __LINE__, "Unable to change modes\n",
         "Vent '", name, "': Cannot transition to dynamic (force) mode because\n"
         "the force vector has not been set.\n");
     }
@@ -85,7 +87,7 @@ void SimpleVent::use_impulse_mode(bool mode)
 
       if (MathUtils::has_changed_from( duration,
                                        user_set_duration)) {
-        CMLMessage::warn(__FILE__, __LINE__, "Duration changed\n",
+        message::warn(__FILE__, __LINE__, "Duration changed\n",
           "The duration was overwritten while vent '", name, "' was in impulse mode.\n"
           "User-set value: ", user_set_duration, " s\nCurrent value: ", duration, " s\n");
       }
@@ -208,7 +210,7 @@ void SimpleVent::set_force_vector(double force_[3], bool hold_impulse)
     force_mag_set = true;
 
     if (force_mag <= 0.0) {
-      CMLMessage::warn(__FILE__, __LINE__, "No direction change\n",
+      message::warn(__FILE__, __LINE__, "No direction change\n",
         "Vent '", name, "': Zero vector passed to set_force_vector.\n"
         "Force magnitude has been set to 0 but direction will not change.\n");
     } else {
@@ -269,7 +271,7 @@ void SimpleVent::set_impulse_magnitude(double impulse_, bool hold_force)
       // If operating in dynamic mode, we need to translate the new
       // impulse value into a new force, but without a duration,
       // that is not possible.
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Invalid specification\n",
         "Setting the impulse while operating in dynamic-mode with no\n"
         "specified duration cannot be translated into a force effect.\n"
@@ -298,7 +300,7 @@ void SimpleVent::set_impulse_vector(double impulse_[3], bool hold_force_mag)
     impulse_mag_set = true;
 
     if (impulse_mag <= 0.0) {
-      CMLMessage::warn(__FILE__, __LINE__, "No direction change\n",
+      message::warn(__FILE__, __LINE__, "No direction change\n",
         "Vent '", name, "': Zero vector passed to set_impulse_vector.\n"
         "Impulse magnitude has been set to 0 but direction will not change.\n");
     } else {
@@ -320,7 +322,7 @@ void SimpleVent::set_impulse_vector(double impulse_[3], bool hold_force_mag)
       set_force_internal();
     }
     else if (!apply_as_impulse) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Invalid specification\n",
         "Setting the impulse while operating in dynamic-mode with no\n"
         "specified duration cannot be translated into a force effect.\n"
@@ -337,7 +339,7 @@ void SimpleVent::set_flowrate( double val, bool hold_exhaust_speed)
 {
   (void) val;
   (void) hold_exhaust_speed;
-  CMLMessage::error(
+  message::error(
     __FILE__,__LINE__,"Invalid setting\n",
     "A simple vent '", name, "' does not model mass flow; it has no flowrate");
 }
@@ -350,7 +352,7 @@ void SimpleVent::set_exhaust_speed( double val, bool hold_flowrate)
 {
   (void) val;
   (void) hold_flowrate;
-  CMLMessage::error(
+  message::error(
     __FILE__,__LINE__,"Invalid setting\n",
     "A simple vent '", name, "' does not model mass flow; it has no exhaust speed");
 }
@@ -361,7 +363,7 @@ Purpose:(Placeholder for Vent class)
 *****************************************************************************/
 double SimpleVent::get_flowrate() const
 {
-  CMLMessage::error(
+  message::error(
     __FILE__,__LINE__,"Invalid request\n",
     "A simple vent '", name, "' does not model mass flow; it has no flowrate");
   return 0.0;
@@ -373,7 +375,7 @@ Purpose:(Placeholder for Vent class)
 *****************************************************************************/
 double SimpleVent::get_exhaust_speed() const
 {
-  CMLMessage::error(
+  message::error(
     __FILE__,__LINE__,"Invalid request\n",
     "A simple vent '", name, "' does not model massflow; it has no exhaust speed.");
   return 0.0;
@@ -422,7 +424,7 @@ bool SimpleVent::start_venting()
 {
   if (!active) {
     if (!quiet_message_start_inactive) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid request\n",
         "Cannot start inactive vent '", name, "'.\n");
       }
@@ -430,7 +432,7 @@ bool SimpleVent::start_venting()
   }
 
   if (!initialized) { // all initialization checks have passed.
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Incomplete initialization\n",
       "Vent '", name, "' was instructed to start venting but has not completed its "
       "initialization sequence.\nVenting failed.");
@@ -441,7 +443,7 @@ bool SimpleVent::start_venting()
   // and the reconfiguration insufficiently complete.
   if (apply_as_impulse) {
     if (!impulse_set) {
-      CMLMessage::error(
+      message::error(
       __FILE__,__LINE__,"Incomplete initialization\n",
       "Vent '", name, "' was instructed to start impulsive venting but has not been "
       "completely configured.\nConfiguration flags are:\n"
@@ -454,7 +456,7 @@ bool SimpleVent::start_venting()
 
   else{ // Dynamic-mode, check that force vector has been set.
     if ( !force_set) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Incomplete initialization\n",
         "Vent '", name, "' was instructed to start dynamic venting but has not been "
         "completely configured.\nConfiguration flags are:\n"
@@ -470,7 +472,7 @@ bool SimpleVent::start_venting()
     // send a warning that the setting is being applied.
     if (!duration_set && !indefinite_duration) {
       if (!indefinite_duration_warning_sent) {
-        CMLMessage::warn(
+        message::warn(
           __FILE__,__LINE__,"Incomplete configuration\n",
           "Vent starting in dynamic (force) mode without a duration.\n"
           "Vent '", name, "' will be opened indefinitely (until the\n"
@@ -506,7 +508,7 @@ bool SimpleVent::check_configuration()
 {
   if (direction_set) {
     if (force_set || impulse_set) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Overconstrained configuration\n",
         "Vent '", name, "' has multiple directions specified, caused by specifying\n"
         "the direction and either (or both) the force-vector and "
@@ -519,7 +521,7 @@ bool SimpleVent::check_configuration()
   else if (force_set) {
     set_direction(force);
     if ( impulse_set) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Overconstrained configuration\n",
         "Vent '", name, "' has two directions specified, caused by specifying\n"
         "the force vector nd the impulse vector.\n"
@@ -531,7 +533,7 @@ bool SimpleVent::check_configuration()
     set_direction(impulse);
   }
   else {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Incomplete configuration\n",
       "Vent '", name, "' has no direction information.\n"
       "Initialization failed.\nVent is not usable.\n");
@@ -541,7 +543,7 @@ bool SimpleVent::check_configuration()
   // Extract magnitudes from vectors if necessary
   if (force_set) {
     if (force_mag_set) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Overconstrained configuration\n",
         "Vent '", name, "' has two force specifications, caused by specifying the\n"
         "force-vector and the combination (force-magnitude and direction).\n"
@@ -556,7 +558,7 @@ bool SimpleVent::check_configuration()
   }
   if (impulse_set) {
     if (impulse_mag_set) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Overconstrained configuration\n",
         "Vent '", name, "' has two impulse specifications; using the combined values\n"
         "of the impulse-magnitude (as specified) and the direction to \n"
@@ -579,7 +581,7 @@ bool SimpleVent::check_configuration()
         }
         else {
           const double impulse_mag_ = force_mag * duration;
-          CMLMessage::warn(
+          message::warn(
             __FILE__,__LINE__,"Overconstrained configuration\n",
             "Vent '", name, "' has force-magnitude, impulse-magnitude, and\n"
             "duration all specified.\n"
@@ -615,7 +617,7 @@ bool SimpleVent::check_configuration()
     force_set = true;
   }
   else if (!apply_as_impulse) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Incomplete configuration\n",
       "Vent '", name, "' configured to apply a force but the force has not been\n"
       "defined and cannot be determined.\n"
@@ -629,7 +631,7 @@ bool SimpleVent::check_configuration()
     impulse_set = true;
   }
   else if (apply_as_impulse) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Incomplete configuration\n",
       "Vent '", name, "' was configured to apply an impulse but the impulse\n"
       "has not been defined and cannot be determined.\n"
@@ -654,7 +656,7 @@ void SimpleVent::set_impulse_internal()
 {
   if (!duration_set || !force_mag_set) {
     if (apply_as_impulse) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid impulse reset.\n",
         "Vent '", name, "': In order to change the applied impulse by adjusting\n"
         "either force or duration, the other component must be known.\n"
@@ -700,14 +702,14 @@ void SimpleVent::set_duration_internal()
       }
     }
     else if (duration_set) { // impulse-mag not set, duration is invalid.
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot determine vent duration\n",
         "Vent '", name, "': Tried to find duration but impulse is unknown.\n"
         "Duration is no longer valid.\n");
       duration_set = false;
     }
     else { // duration and impulse unset; cannot compute duration
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot determine vent duration\n",
         "Vent '", name, "': Tried to find duration but impulse is unknown.\n"
         "Duration remains unset.\n");
@@ -715,7 +717,7 @@ void SimpleVent::set_duration_internal()
   }
   else if (impulse_mag_set) { // force not set (to valid value) but impulse is
     if (!apply_as_impulse) {
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "Cannot determine vent duration\n",
         "Vent '", name, "': Tried to find duration from finite impulse and zero "
         "or unassigned force.\nDuration is no longer valid.\n");
@@ -727,7 +729,7 @@ void SimpleVent::set_duration_internal()
     duration_set = false;
   }
   else { // Neither force nor impulse set correctly.
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Cannot determine vent duration\n",
       "Vent '", name, "': Tried to find duration with zero or unassigned force\n"
       "and unassigned impulse.\nUnsetting duration.\n");
@@ -762,3 +764,5 @@ void SimpleVent::set_force_internal()
   force_mag_set = true;
   force_set = true;
 }
+
+} // namespace cml

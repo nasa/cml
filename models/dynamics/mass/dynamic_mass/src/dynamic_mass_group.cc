@@ -23,6 +23,8 @@ PROGRAMMERS:
 #include "../include/dynamic_mass_group.hh"
 #include "../include/dynamic_mass_string.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Method: DynamicMassGroup
 Purpose: (Constructor)
@@ -50,7 +52,7 @@ void DynamicMassGroup::add_string_to_group(
     DynamicMassString * new_mass_string)
 {
   if (new_mass_string == nullptr) {
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, "Setup error.\n",
       "A NULL pointer was given to the add_string_to_group (", name, ") function.\n"
       "This is not allowed.\n"
@@ -59,7 +61,7 @@ void DynamicMassGroup::add_string_to_group(
 
   // check uniqueness to avoid inadvertent double-counting
   if (std::find(mass_strings.begin(), mass_strings.end(), new_mass_string) != mass_strings.end()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid object addition\n",
       "Attempt to add a DynamicMassString that is already assigned\n"
       "to this group (", name, "). \n"
@@ -98,7 +100,7 @@ void DynamicMassGroup::initialize()
 {
   if (!is_enabled()) {
     num_dyn_masses = 0;
-    CMLMessage::inform (
+    message::inform (
       __FILE__, __LINE__, "initialize error.\n",
       "The DynamicMassGroup (", name, ") is not enabled, so cannot be initialized\n.");
     return;
@@ -106,7 +108,7 @@ void DynamicMassGroup::initialize()
   // check that the group has contents:
   num_dyn_masses = dyn_masses.size();
   if (num_dyn_masses == 0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Initialization error.\n",
       "There have been no masses added to group with name ", name, ".\n"
       "It cannot be initialized.\n");
@@ -280,7 +282,7 @@ DynamicMassGroup::series_flow(
   // Do nothing if not activated.
   if (!active) {
      if (!flow_warn_msg_shown) {
-       CMLMessage::warn(
+       message::warn(
          __FILE__, __LINE__, "series_flow warning.\n",
          "The DynamicMassGroup (", name, ") is not active so cannot support\n"
          "series-flow calculations.\n");
@@ -379,7 +381,7 @@ DynamicMassGroup::revert_dry_mass_config()
     }
   }
   if (num_error_bodies > 0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid function call\n",
       "Call made to revert the changes made in obtaining a dry-mass "
       "configuration\n"
@@ -445,7 +447,7 @@ DynamicMassGroup::test_root_body()
       // Fail if the two bodies do not have the same root
       // NOTE - the root of the root-body is itself.
       if (first_root != second_root) {
-        CMLMessage::fail (
+        message::fail (
           __FILE__, __LINE__, "Grouping error.\n",
           "A DynamicMassGroup (", name, ") has split.\n"
           "There are multiple root bodies branching from the same Group.\n"
@@ -461,7 +463,7 @@ DynamicMassGroup::test_root_body()
   }
   // This should be impossible to hit:
   else {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Unknown configuration.\n",
       "The DynamicMassGroup has no dynamic masses to manage.");
   }
@@ -482,7 +484,7 @@ DynamicMassGroup::add_mass_to_group_internal(
     bool              send_err_msg)
 {
   if (mass == nullptr) {
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, "Setup error.\n",
       "A NULL pointer was given to the add_mass_to_group (", name, ") function.\n"
       "This is not allowed.\n"
@@ -491,7 +493,7 @@ DynamicMassGroup::add_mass_to_group_internal(
   // check uniqueness to avoid inadvertent double-counting
   if (std::find(dyn_masses.begin(), dyn_masses.end(), mass) != dyn_masses.end()) {
     if (send_err_msg) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid object addition\n",
         "Attempt to add a new DynamicMassBody (", mass->name.get_name(), ") that is already assigned\n"
         "to this group. \n"
@@ -505,7 +507,7 @@ DynamicMassGroup::add_mass_to_group_internal(
   // If group has already been initialized, check for common root, and send a
   // warning about late-additions invalidating the initial-mass.
   if (initialized) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Late body addition.\n",
       "Added a Mass-body to a group after initialization.  Values output as\n"
       "total_initial_mass and total_consumed_mass (the difference between\n"
@@ -519,3 +521,5 @@ DynamicMassGroup::add_mass_to_group_internal(
     }
   }
 }
+
+} // namespace cml

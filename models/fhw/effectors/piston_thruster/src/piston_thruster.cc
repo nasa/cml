@@ -28,6 +28,8 @@ PROGRAMMERS:
 
 #include "../include/piston_thruster.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructors
 *******************************************************************************/
@@ -67,7 +69,7 @@ void
 PistonThrusterVehicleSide::loadCoM( const double * pos_CoM)
 {
   if (pos_CoM == nullptr) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid argument for center-of-mass \n",
       "Cannot generate the torque without the center-of-mass location\n");
   }
@@ -87,7 +89,7 @@ PistonThruster::initialize()
   }
 
   if (!construction_complete) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid construction \n",
       "Construction omitted the center-of-mass location.\n"
       "Cannot generate the torque without the center-of-mass location\n");
@@ -156,3 +158,5 @@ PistonThruster::deactivate()
   jeod::Vector3::initialize( sideB.out.moment);
   active = false;
 }
+
+} // namespace cml

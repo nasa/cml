@@ -13,6 +13,8 @@
     ((../src/single_input_table_var_with_deriv.cc)
     )
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (May 2023) (Antares) (initial version))
    )
@@ -24,6 +26,8 @@
 #include "cml/models/utilities/table_interp_cpp/include/table_type_defs.hh"
 #include "generic_single_input_table.hh"
 #include <cstddef>
+
+namespace cml {
 
 class SingleInputTableVarDeriv : public GenericSingleInputTable
 {
@@ -73,4 +77,7 @@ class SingleInputTableVarDeriv : public GenericSingleInputTable
   protected:
   bool generate_output() override;
 };
+
+} // namespace cml
+
 #endif

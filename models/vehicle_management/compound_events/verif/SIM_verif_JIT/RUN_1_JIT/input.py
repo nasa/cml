@@ -31,6 +31,6 @@ verif.framework.data_file_name = "Unit_test_data/data.txt"
 verif.jit_input_replacement()
 
 verif.manager.enabled = True
-trick.CMLMessage.set_publish_level( trick.CMLMessage.Debug)
+trick.cml.message.set_publish_level( trick.cml.message.Debug)
 
 trick.stop(10)

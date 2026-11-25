@@ -9,6 +9,8 @@
     ((../src/generic_single_input_table.cc)
     )
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (May 2023) (Antares) (initial version))
    )
@@ -19,6 +21,8 @@
 
 
 #include "generic_multi_input_table.hh"
+
+namespace cml {
 
 class GenericSingleInputTable : public GenericMultiInputTable
 {
@@ -33,4 +37,7 @@ class GenericSingleInputTable : public GenericMultiInputTable
   void generate_base_values() override;
   bool generate_output() override;
 };
+
+} // namespace cml
+
 #endif

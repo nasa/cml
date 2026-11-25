@@ -25,6 +25,8 @@ NOTES:
 LIBRARY DEPENDENCY:
    ((../src/watch_values_flipflop.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2026/02) (ANTARES) (initial implementation)))
 *******************************************************************************/
@@ -37,6 +39,8 @@ PROGRAMMERS:
 #include "cml/models/vehicle_management/events_manager/include/event_variable_assignment.hh"
 #include "cml/models/vehicle_management/events_manager/include/event_action_base.hh"
 #include "watch_values_base_core.hh"
+
+namespace cml {
 
 /*****************************************************************************
 Name: WatchValuesFlipFlop
@@ -147,4 +151,7 @@ class WatchValuesFlipFlopDelayed : public WatchValuesFlipFlop
  protected:
   bool evaluate_delay() const;
 };
+
+} // namespace cml
+
 #endif

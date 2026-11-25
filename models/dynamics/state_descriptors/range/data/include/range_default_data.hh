@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
    ((../src/range_default_data.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
 
     ((Gary Turner) (Odyssey) (January 2015) (Antares) (Initial version)))
@@ -15,6 +17,8 @@ PROGRAMMERS:
 #define CML_RANGE_DEFAULT_DATA_HH
 
 #include "../../include/range_from_pfix_reference.hh"
+
+namespace cml {
 
 // TODO Nino Tarantino: this needs to be a single free function, not a class.
 class RangeDefaultData
@@ -27,4 +31,7 @@ class RangeDefaultData
 
   void launch_pad_KSC_39B(RangeFromPfixReference & pad) const;
 };
+
+} // namespace cml
+
 #endif

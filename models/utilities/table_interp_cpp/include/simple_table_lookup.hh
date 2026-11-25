@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   (../src/simple_table_lookup.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2014) (New implementation for C++ models))
    ((Bingquan Wang) (OSR) (August 2017) (IVV code cleanup and refactored))
@@ -22,6 +24,7 @@ PROGRAMMERS:
 #include "table_type_defs.hh"
 #include <cstddef>
 
+namespace cml {
 
 // This class provides the simple, most used lookup case where one independent
 // variable is used as the basis for one-to-many dependent variables.
@@ -126,4 +129,7 @@ public:
   void initialize() override;
   GenericMultiInputTable * get_table();
 };
+
+} // namespace cml
+
 #endif

@@ -8,6 +8,8 @@ PURPOSE: (The RcsJetGroup provides a convenient mechanism for grouping
 LIBRARY DEPENDENCY:
    ((../src/rcs_group.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation))
@@ -18,6 +20,8 @@ PROGRAMMERS:
 #define CML_RCS_GROUP_HH
 
 #include <vector>
+
+namespace cml {
 
 /*****************************************************************************
 RcsGenericModel
@@ -100,5 +104,7 @@ class RcsJetGroup {
   bool get_blow_down() const {return blow_down;}
   unsigned int get_num_prop_components() const {return num_prop_components;}
 };
+
+} // namespace cml
 
 #endif

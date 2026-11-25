@@ -4,6 +4,8 @@ PURPOSE: (Definition of the bodies in the wake profile.)
 LIBRARY DEPENDENCY:
    ((../src/wake_bodies.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   ( ((Gary Turner) (OSR) (Mar 2016) (Antares)
                 (New adaptation to meet Antares coding standards))
@@ -12,6 +14,8 @@ PROGRAMMERS:
 **********************************************************************/
 #ifndef CML_WAKE_PARAMS_HH
 #define CML_WAKE_PARAMS_HH
+
+namespace cml {
 
 /*****************************************************************************
 WakeParamsSub
@@ -54,4 +58,7 @@ class WakeParams
 
   WakeParams() = default;
 };
+
+} // namespace cml
+
 #endif

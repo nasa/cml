@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
    (../src/rocket_motor_nozzle.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (May 2015) (ANTARES) (C++ cleanup))
    ((Bingquan Wang) (OSR) (Oct 2016) (ANTARES) (Library dependency warning
@@ -19,6 +21,8 @@ PROGRAMMERS:
 
 #ifndef CML_ROCKET_MOTOR_NOZZLE_HH
 #define CML_ROCKET_MOTOR_NOZZLE_HH
+
+namespace cml {
 
 class RocketMotorNozzle {
 friend class RocketMotor_MultiNozzle;
@@ -89,4 +93,7 @@ protected:
   void modify_thrust_mag_atmos (double atm_pressure);
   void compute_thrust_vec();
 };
+
+} // namespace cml
+
 #endif

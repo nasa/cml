@@ -5,6 +5,8 @@ PURPOSE: (Simple vent force model - calculates force and torque from a vent
 LIBRARY DEPENDENCY:
   ((../src/simple_vent.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version))
    ((Tony Varesic) (OSR) (Nov 2020) (Antares) (added getters for:
@@ -16,6 +18,8 @@ PROGRAMMERS:
 
 #include <string>
 #include "jeod/models/utils/math/include/vector3.hh"
+
+namespace cml {
 
 class SimpleVent {
   friend class VentSet;
@@ -181,4 +185,7 @@ class SimpleVent {
   void set_duration_internal();
   virtual void set_force_internal();
 };
+
+} // namespace cml
+
 #endif

@@ -104,7 +104,11 @@ No dependencies.
 Model Structure
 ~~~~~~~~~~~~~~~
 
-.. doxygenfile:: subscriptions.hh
+.. doxygenclass:: cml::SubscriptionBase
+   :members:
+   :protected-members:
+   :private-members:
+   :undoc-members:
 
 Mathematical Formulation
 ------------------------
@@ -129,11 +133,11 @@ The design decision as to how disabling the model affects the
 subscription-count and pending-subscription-count is complicated. There
 are two possible results for each count - being that they are left
 untouched, or set to zero. Identifying the best default behavior
-requires consideration of how to process :cpp:func:`~SubscriptionBase::initialize`, ``YourModel::update()``,
-:cpp:func:`~SubscriptionBase::subscribe` and :cpp:func:`~SubscriptionBase::unsubscribe` calls while the model is disabled.
+requires consideration of how to process :cpp:func:`~cml::SubscriptionBase::initialize`, ``YourModel::update()``,
+:cpp:func:`~cml::SubscriptionBase::subscribe` and :cpp:func:`~cml::SubscriptionBase::unsubscribe` calls while the model is disabled.
 
 It is generally desirable that a disabled model cannot be initialized.
-Calls to :cpp:func:`~SubscriptionBase::initialize` while disabled should be blocked. This is an
+Calls to :cpp:func:`~cml::SubscriptionBase::initialize` while disabled should be blocked. This is an
 important features that supports blocking of expensive and
 time-consuming initialization routines in models inheriting this
 capability when said models are not necessary for a particular scenario.
@@ -141,49 +145,49 @@ capability when said models are not necessary for a particular scenario.
 Similarly, it is a required feature that calls to ``YourModel::update()``
 should not be processed while a model is *inactive*; this is the main
 purpose of the model. The activity flag can be set by a call to
-:cpp:func:`~SubscriptionBase::subscribe` if the model is initialized. Therefore, to support cases
-where a model is disabled post-initialization, calls to :cpp:func:`~SubscriptionBase::subscribe`
+:cpp:func:`~cml::SubscriptionBase::subscribe` if the model is initialized. Therefore, to support cases
+where a model is disabled post-initialization, calls to :cpp:func:`~cml::SubscriptionBase::subscribe`
 must not set the active flag when the model is disabled, thereby
-preventing a disabled model from executing. Any calls to :cpp:func:`~SubscriptionBase::subscribe()`
+preventing a disabled model from executing. Any calls to :cpp:func:`~cml::SubscriptionBase::subscribe()`
 while the model is disabled **should be interpreted as user-error and
 therefore flagged with a message**; a model should not be simultaneously
-required (as suggested by the :cpp:func:`~SubscriptionBase::subscribe` call) and not available (as
+required (as suggested by the :cpp:func:`~cml::SubscriptionBase::subscribe` call) and not available (as
 suggested by being disabled).
 
 Because of the inherent design associated with blocking ``YourModel::update()`` calls
-for inactive models (previous paragraph), calls to :cpp:func:`~SubscriptionBase::subscribe` while
+for inactive models (previous paragraph), calls to :cpp:func:`~cml::SubscriptionBase::subscribe` while
 a model is disabled are immediately flagged as errors and no further
 action is taken. This decision has implications on how to handle the
 subscription-count and pending-subscription-count, discussed below.
 
-By symmetry, calls to :cpp:func:`~SubscriptionBase::unsubscribe` while disabled should also
+By symmetry, calls to :cpp:func:`~cml::SubscriptionBase::unsubscribe` while disabled should also
 result in no further action being taken. This is less significant than
-calls to :cpp:func:`~SubscriptionBase::subscribe` because the model is not executing anyway while
+calls to :cpp:func:`~cml::SubscriptionBase::subscribe` because the model is not executing anyway while
 it is disabled; failing to turn it off while it is already off has no
-executable consequence. However, when an :cpp:func:`~SubscriptionBase::unsubscribe` call is made,
+executable consequence. However, when an :cpp:func:`~cml::SubscriptionBase::unsubscribe` call is made,
 the conceptual design calls for the subscriptions-count (or
 pending-subscriptions-count) to be decremented. This count should never
-go below zero because :cpp:func:`~SubscriptionBase::unsubscribe` calls should always follow
-:cpp:func:`~SubscriptionBase::subscribe` calls. Internal sanity checking requires that an error
-message be posted if the an :cpp:func:`~SubscriptionBase::unsubscribe` is received while the
+go below zero because :cpp:func:`~cml::SubscriptionBase::unsubscribe` calls should always follow
+:cpp:func:`~cml::SubscriptionBase::subscribe` calls. Internal sanity checking requires that an error
+message be posted if the an :cpp:func:`~cml::SubscriptionBase::unsubscribe` is received while the
 respective count is equal to zero because that implies a
 misconfiguration. This is where the logical paths start to conflict. If
-commanding :cpp:func:`~SubscriptionBase::unsubscribe` while disabled results in no operation, then
+commanding :cpp:func:`~cml::SubscriptionBase::unsubscribe` while disabled results in no operation, then
 subscriptions posted before the model was disabled could still be
-included in the count. Conversely, if commanding :cpp:func:`~SubscriptionBase::unsubscribe` while
+included in the count. Conversely, if commanding :cpp:func:`~cml::SubscriptionBase::unsubscribe` while
 disabled results in decrementing the counts, then subscriptions posted
 after the model was disabled (or circumvented in sim-configuration in
 anticipation of the model being disabled) would result in a confusing
 error message when attempting to decrement the respective counts from
 zero. The latter option is the more objectionable outcome, so the design
-decision follows the path of symmetry, that calls to :cpp:func:`~SubscriptionBase::unsubscribe` are
+decision follows the path of symmetry, that calls to :cpp:func:`~cml::SubscriptionBase::unsubscribe` are
 not processed (exiting silently) while the model is disabled.
 
 However, this raises a problem of its own in the unlikely scenario that
 a model is only temporarily disabled - a possibility that is not
 supported in this core capability, but feasibly implementable in a
 derived class. If a model is re-enabled, its count of subscriptions is
-unreliable given that any :cpp:func:`~SubscriptionBase::subscribe` commands and :cpp:func:`~SubscriptionBase::unsubscribe`
+unreliable given that any :cpp:func:`~cml::SubscriptionBase::subscribe` commands and :cpp:func:`~cml::SubscriptionBase::unsubscribe`
 commands have exited without affecting the count while the model was
 disabled. This makes the value of the counts at this point largely
 arbitrary. The two most obvious values would be zero, or the value the
@@ -200,7 +204,7 @@ Control Flags
 
 The model provides three optional control flags:
 
--  :cpp:member:`~SubscriptionBase::initialize_on_failed_activation` controls the consequences when
+-  :cpp:member:`~cml::SubscriptionBase::initialize_on_failed_activation` controls the consequences when
    the model is initialized with pending subscriptions and the
    consequential activation fails, while the initialization would
    otherwise have been successful without pending subscriptions. Note:
@@ -212,9 +216,9 @@ The model provides three optional control flags:
       of the model; both processes are necessary and sufficient for
       activation to be attempted.
    -  Note that while failing activation is not a plausible scenario in
-      this base model (where the :cpp:func:`~SubscriptionBase::activate` method simply sets the
-      :cpp:member:`~SubscriptionBase::active` flag to true), it is a very real possibility in a derived
-      model where the :cpp:func:`~SubscriptionBase::activate` method might check availability or
+      this base model (where the :cpp:func:`~cml::SubscriptionBase::activate` method simply sets the
+      :cpp:member:`~cml::SubscriptionBase::active` flag to true), it is a very real possibility in a derived
+      model where the :cpp:func:`~cml::SubscriptionBase::activate` method might check availability or
       compatibility of some data set, or check for null pointers, or
       other pre-executive verification activities.
    -  Initialization and activation are independent processes with
@@ -226,26 +230,26 @@ The model provides three optional control flags:
    If the activation fails, then one of the two pillars must also be
    failed. This flag identifies which to fail:
 
-   -  :cpp:member:`initialize_on_failed_activation = false <SubscriptionBase::initialize_on_failed_activation>`
+   -  :cpp:member:`initialize_on_failed_activation = false <cml::SubscriptionBase::initialize_on_failed_activation>`
       results in
       setting the model's *initialized* flag to false (indicating that
       initialization failed), but it retains its pending subscriptions.
-   -  :cpp:member:`initialize_on_failed_activation = true <SubscriptionBase::initialize_on_failed_activation>` results in the model being
+   -  :cpp:member:`initialize_on_failed_activation = true <cml::SubscriptionBase::initialize_on_failed_activation>` results in the model being
       marked as successfully initialized but the pending subscriptions
       are removed.
 
    Specific error messages are produced to alert the user to the outcome
    of the failed activation.
 
--  :cpp:member:`~SubscriptionBase::quiet_unsubscribe_warning` provides a means of
+-  :cpp:member:`~cml::SubscriptionBase::quiet_unsubscribe_warning` provides a means of
    suppressing warnings that would typically be generated when
    attempting to unsubscribe from a model that has no subscriptions.
 
-   -  The underlying design assumption has :cpp:func:`~SubscriptionBase::unsubscribe` only being
+   -  The underlying design assumption has :cpp:func:`~cml::SubscriptionBase::unsubscribe` only being
       called from the same unit that previously generated the
-      :cpp:func:`~SubscriptionBase::subscribe` call, so these calls should always occur in pairs
-      and the situation in which :cpp:func:`~SubscriptionBase::unsubscribe` is called without a
-      previous :cpp:func:`~SubscriptionBase::subscribe` should not arise. If an unsubscribed model
+      :cpp:func:`~cml::SubscriptionBase::subscribe` call, so these calls should always occur in pairs
+      and the situation in which :cpp:func:`~cml::SubscriptionBase::unsubscribe` is called without a
+      previous :cpp:func:`~cml::SubscriptionBase::subscribe` should not arise. If an unsubscribed model
       receives instruction to remove a subscription, this is usually
       indicative of a problem in the model's architecture and a warning
       message is generated.
@@ -257,10 +261,10 @@ The model provides three optional control flags:
 
    -  However, when a model has only one dedicated subscriber, this
       architecture can be onerous on the object making the
-      :cpp:func:`~SubscriptionBase::subscribe`/:cpp:func:`~SubscriptionBase::unsubscribe` calls. There are going to be cases in
+      :cpp:func:`~cml::SubscriptionBase::subscribe`/:cpp:func:`~cml::SubscriptionBase::unsubscribe` calls. There are going to be cases in
       which a subscription is conditional upon some configuration
       setting, and for which that setting is no longer testable at the
-      point of decision over whether to call :cpp:func:`~SubscriptionBase::unsubscribe`. For these
+      point of decision over whether to call :cpp:func:`~cml::SubscriptionBase::unsubscribe`. For these
       situations, it would be necessary to do one of:
 
       -  Add an internal flag, effectively confirming that the sub-model
@@ -276,37 +280,37 @@ The model provides three optional control flags:
          acceptable option and less onerous than maintaining an internal
          flag, but still requires an additional logic step that may be
          difficult to inject in some situations.
-      -  Issue :cpp:func:`~SubscriptionBase::unsubscribe` unconditionally and accept (and ignore)
+      -  Issue :cpp:func:`~cml::SubscriptionBase::unsubscribe` unconditionally and accept (and ignore)
          the warning message generated when the sub-model was not
          previously subscribed. Particularly for large projects, having
          an architecture in which some warning and error messages are
          “standard operating procedure” can get very difficult to
          manage, and easily leads to obfuscation of messages that should
          be addressed. This is bad practice and not a viable solution.
-      -  Issue :cpp:func:`~SubscriptionBase::unsubscribe` unconditionally and bypass the generation
+      -  Issue :cpp:func:`~cml::SubscriptionBase::unsubscribe` unconditionally and bypass the generation
          of the warning message. This is fundamentally risky and should
          **never** be used when the sub-model may be subscribed from
          multiple locations (for reasons that should be apparent); for
          maintaining the activity of a dedicated sub-model it is an
          acceptable and simple option.
 
-   The :cpp:member:`~SubscriptionBase::quiet_unsubscribe_warning` flag supports the last of these
+   The :cpp:member:`~cml::SubscriptionBase::quiet_unsubscribe_warning` flag supports the last of these
    options by allowing the higher-level object to unconditionally
    unsubscribe from the sub-model. If the subscription had previously
-   been applied, :cpp:func:`~SubscriptionBase::unsubscribe` removes it. If it had not been applied
-   (and this flag is set to *true*), :cpp:func:`~SubscriptionBase::unsubscribe` has no effect.
+   been applied, :cpp:func:`~cml::SubscriptionBase::unsubscribe` removes it. If it had not been applied
+   (and this flag is set to *true*), :cpp:func:`~cml::SubscriptionBase::unsubscribe` has no effect.
 
    Note that the use of this flag is inherently dangerous and should
    only be used when there is no possibility that some other model may
    have subscribed to the sub-model in question.
 
--  :cpp:member:`~SubscriptionBase::quiet_disabled_warning` is similar in intent to the
-   :cpp:member:`~SubscriptionBase::quiet_unsubscribe_warning` flag; in this case we consider the error
+-  :cpp:member:`~cml::SubscriptionBase::quiet_disabled_warning` is similar in intent to the
+   :cpp:member:`~cml::SubscriptionBase::quiet_unsubscribe_warning` flag; in this case we consider the error
    message that is posted when a subscription is made to a model that
    has been disabled. This sequence is a more serious problem then that
    of unsubscribing from an inactive model:
 
-   -  With :cpp:member:`~SubscriptionBase::quiet_unsubscribe_warning` the situation is that some
+   -  With :cpp:member:`~cml::SubscriptionBase::quiet_unsubscribe_warning` the situation is that some
       entity is communicating that one of the models on which it depends
       is no longer required, but that dependency was not active anyway.
       The effect is typically negligible, the model was inactive before,
@@ -315,7 +319,7 @@ The model provides three optional control flags:
       affected data upstream, but the downstream effect of not having a
       model available that isn't needed anyway is not significant.
       Blocking this warning message is quite reasonable.
-   -  The :cpp:member:`~SubscriptionBase::quiet_disabled_warning` flag is more significant. With this
+   -  The :cpp:member:`~cml::SubscriptionBase::quiet_disabled_warning` flag is more significant. With this
       flag, we are removing an error message that may otherwise be used
       to alert the user to significant downstream data effects. In this
       situation, some entity may be communicating that it requires
@@ -342,8 +346,8 @@ The model provides three optional control flags:
 
    Because blocking this message can have serious consequences, **this
    flag has been implemented as a single-use flag**. It can be set to
-   true to block the error message from a specific :cpp:func:`~SubscriptionBase::subscribe` call,
-   but **it resets to false** and any subsequent :cpp:func:`~SubscriptionBase::subscribe` calls
+   true to block the error message from a specific :cpp:func:`~cml::SubscriptionBase::subscribe` call,
+   but **it resets to false** and any subsequent :cpp:func:`~cml::SubscriptionBase::subscribe` calls
    will trigger the error message again (unless the flag is set back to
    true before each subsequent call).
 
@@ -357,7 +361,7 @@ Initialize
 
 This new method should perform all initialization steps required of the
 new model. The final step should be a call to
-:cpp:func:`SubscriptionBase::initialize` where the initialized flag gets
+:cpp:func:`cml::SubscriptionBase::initialize` where the initialized flag gets
 set.
 
 Disable
@@ -377,17 +381,17 @@ not included in the base implementation.
 It may also be necessary to subscribe to additional model dependencies.
 
 The base model rejects subscriptions when activation fails in response
-to a :cpp:func:`~SubscriptionBase::subscribe` call on a pre-initialized instance. In this case, the
+to a :cpp:func:`~cml::SubscriptionBase::subscribe` call on a pre-initialized instance. In this case, the
 model will remain inactive and the number of subscriptions will not be
-incremented. Any :cpp:func:`~SubscriptionBase::unsubscribe` calls that come after the failed
-activation will generate a warning (unless :cpp:member:`~SubscriptionBase::quiet_unsubscribe_warning`
+incremented. Any :cpp:func:`~cml::SubscriptionBase::unsubscribe` calls that come after the failed
+activation will generate a warning (unless :cpp:member:`~cml::SubscriptionBase::quiet_unsubscribe_warning`
 is set to true).
 
 Deactivate
 ~~~~~~~~~~
 
-If the :cpp:func:`~SubscriptionBase::activate` call resulted in subscription to other models,
-these should be unsubscribed at :cpp:func:`~SubscriptionBase::deactivate`.
+If the :cpp:func:`~cml::SubscriptionBase::activate` call resulted in subscription to other models,
+these should be unsubscribed at :cpp:func:`~cml::SubscriptionBase::deactivate`.
 
 ________________________________________________________
 
@@ -432,18 +436,18 @@ non-dynamically allocated case is tested.
    :linenos:
    :lineno-start: 85
 
-The :cpp:func:`SubscriptionBase::activate` and :cpp:func:`SubscriptionBase::deactivate` functions
+The :cpp:func:`cml::SubscriptionBase::activate` and :cpp:func:`cml::SubscriptionBase::deactivate` functions
 are not tested.
 
 .. literalinclude:: /../../models/utilities/subscriptions/include/subscriptions.hh
    :language: cpp
-   :lines: 157
+   :lines: 159
    :linenos:
    :lineno-start: 158
 
 .. literalinclude:: /../../models/utilities/subscriptions/include/subscriptions.hh
    :language: cpp
-   :lines: 165
+   :lines: 167
    :linenos:
    :lineno-start: 166
 
@@ -469,13 +473,13 @@ RUN_01_multiple_subscriptions
 
 This run executes a sequence of subscribe and unsubscribe calls:
 
--  t=0: :cpp:func:`~SubscriptionBase::subscribe` (number of subscriptions = 1, model activates)
--  t=1: :cpp:func:`~SubscriptionBase::subscribe` (number of subscriptions = 2)
--  t=2: :cpp:func:`~SubscriptionBase::unsubscribe` (number of subscriptions = 1)
--  t=3: :cpp:func:`~SubscriptionBase::subscribe` (number of subscriptions = 2)
--  t=4: :cpp:func:`~SubscriptionBase::unsubscribe` (number of subscriptions = 1)
--  t=5: :cpp:func:`~SubscriptionBase::unsubscribe` (number of subscriptions = 0, model deactivates)
--  t=6: :cpp:func:`~SubscriptionBase::unsubscribe` (results in a message about unsubscribing from an unsubscribed model)
+-  t=0: :cpp:func:`~cml::SubscriptionBase::subscribe` (number of subscriptions = 1, model activates)
+-  t=1: :cpp:func:`~cml::SubscriptionBase::subscribe` (number of subscriptions = 2)
+-  t=2: :cpp:func:`~cml::SubscriptionBase::unsubscribe` (number of subscriptions = 1)
+-  t=3: :cpp:func:`~cml::SubscriptionBase::subscribe` (number of subscriptions = 2)
+-  t=4: :cpp:func:`~cml::SubscriptionBase::unsubscribe` (number of subscriptions = 1)
+-  t=5: :cpp:func:`~cml::SubscriptionBase::unsubscribe` (number of subscriptions = 0, model deactivates)
+-  t=6: :cpp:func:`~cml::SubscriptionBase::unsubscribe` (results in a message about unsubscribing from an unsubscribed model)
    
    .. code-block:: text
 
@@ -487,7 +491,7 @@ This run executes a sequence of subscribe and unsubscribe calls:
       Command failed.
       Model remains unsubscribed.
 
--  t=7: :cpp:func:`~SubscriptionBase::unsubscribe` with :cpp:member:`~SubscriptionBase::quiet_unsubscribe_warning` flag set (no effect)
+-  t=7: :cpp:func:`~cml::SubscriptionBase::unsubscribe` with :cpp:member:`~cml::SubscriptionBase::quiet_unsubscribe_warning` flag set (no effect)
 
 .. list-table:: Logged Data
    :widths: 20 20 20 20 20
@@ -544,17 +548,17 @@ RUN_02_not_initialized
 ~~~~~~~~~~~~~~~~~~~~~~
 
 This run repeats the same sequence as :ref:`verif-test-1`, but without the model
-being initialized. This run verifies that :cpp:func:`~SubscriptionBase::subscribe` / :cpp:func:`~SubscriptionBase::unsubscribe` calls affect only the
+being initialized. This run verifies that :cpp:func:`~cml::SubscriptionBase::subscribe` / :cpp:func:`~cml::SubscriptionBase::unsubscribe` calls affect only the
 pending subscriptions count, and not the actual active status of the model. Throughout this run, the
 model remains inactive.
 
--  t=0: :cpp:func:`~SubscriptionBase::subscribe` (number of pending subscriptions = 1)
--  t=1: :cpp:func:`~SubscriptionBase::subscribe` (number of pending subscriptions = 2)
--  t=2: :cpp:func:`~SubscriptionBase::unsubscribe` (number of pending subscriptions = 1)
--  t=3: :cpp:func:`~SubscriptionBase::subscribe` (number of pending subscriptions = 2)
--  t=4: :cpp:func:`~SubscriptionBase::unsubscribe` (number of pending subscriptions = 1)
--  t=5: :cpp:func:`~SubscriptionBase::unsubscribe` (number of pending subscriptions = 0)
--  t=6: :cpp:func:`~SubscriptionBase::unsubscribe` (results in a message about unsubscribing from a model with no pending
+-  t=0: :cpp:func:`~cml::SubscriptionBase::subscribe` (number of pending subscriptions = 1)
+-  t=1: :cpp:func:`~cml::SubscriptionBase::subscribe` (number of pending subscriptions = 2)
+-  t=2: :cpp:func:`~cml::SubscriptionBase::unsubscribe` (number of pending subscriptions = 1)
+-  t=3: :cpp:func:`~cml::SubscriptionBase::subscribe` (number of pending subscriptions = 2)
+-  t=4: :cpp:func:`~cml::SubscriptionBase::unsubscribe` (number of pending subscriptions = 1)
+-  t=5: :cpp:func:`~cml::SubscriptionBase::unsubscribe` (number of pending subscriptions = 0)
+-  t=6: :cpp:func:`~cml::SubscriptionBase::unsubscribe` (results in a message about unsubscribing from a model with no pending
    subscriptions)
 
    .. code-block:: text
@@ -567,7 +571,7 @@ model remains inactive.
       Command failed.
       Model remains unsubscribed.
 
--  t=7: :cpp:func:`~SubscriptionBase::unsubscribe` with :cpp:member:`~SubscriptionBase::quiet_unsubscribe_warning` flag set (no effect)
+-  t=7: :cpp:func:`~cml::SubscriptionBase::unsubscribe` with :cpp:member:`~cml::SubscriptionBase::quiet_unsubscribe_warning` flag set (no effect)
 
 
 RUN_03_initialize_with_pending
@@ -576,13 +580,13 @@ RUN_03_initialize_with_pending
 This run tests the ability of the model to transfer pending subscriptions to active subscriptions at
 model initialization.
 
--  t=1: :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+-  t=1: :cpp:func:`~cml::SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
    to 1)
--  t=2: :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+-  t=2: :cpp:func:`~cml::SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
    to 2)
--  t=3: :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+-  t=3: :cpp:func:`~cml::SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
    to 3)
--  t=4: :cpp:func:`~SubscriptionBase::initialize` (model activates; 3 pending subscriptions are moved to active subscriptions)
+-  t=4: :cpp:func:`~cml::SubscriptionBase::initialize` (model activates; 3 pending subscriptions are moved to active subscriptions)
 
 .. list-table:: Logged Data
    :widths: 20 20 20 20 20
@@ -626,14 +630,14 @@ This run tests the sequence of subscription - disable - initialize. With this se
 
 -  t=0:
 
-   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+   -  :cpp:func:`~cml::SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
       to 1)
-   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+   -  :cpp:func:`~cml::SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
       to 2)
 
--  t=1: :cpp:func:`~SubscriptionBase::disable` (sets the enabled flag to false)
+-  t=1: :cpp:func:`~cml::SubscriptionBase::disable` (sets the enabled flag to false)
 
--  t=2: :cpp:func:`~SubscriptionBase::initialize` (has no effect on a disabled model)
+-  t=2: :cpp:func:`~cml::SubscriptionBase::initialize` (has no effect on a disabled model)
 
 .. note::
 
@@ -672,14 +676,14 @@ This run tests the sequence of subscription - initialize - disable. With this se
 
 -  t=0:
 
-   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+   -  :cpp:func:`~cml::SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
       to 1)
-   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+   -  :cpp:func:`~cml::SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
       to 2)
 
--  t=1: :cpp:func:`~SubscriptionBase::initialize` (the pending subscriptions are applied, model activates, subscription count =
+-  t=1: :cpp:func:`~cml::SubscriptionBase::initialize` (the pending subscriptions are applied, model activates, subscription count =
    2)
--  t=2: :cpp:func:`~SubscriptionBase::disable` (sets the enabled flag and active flag to false, leaving the subscriptions count
+-  t=2: :cpp:func:`~cml::SubscriptionBase::disable` (sets the enabled flag and active flag to false, leaving the subscriptions count
    at 2)
 
 .. note::
@@ -719,8 +723,8 @@ This run tests the effect of issuing subscriptions while disabled:
 
 -  t=0:
 
-   -  :cpp:func:`~SubscriptionBase::disable`
-   -  :cpp:func:`~SubscriptionBase::subscribe` (results in an error message, the model cannot be subscribed while disabled)
+   -  :cpp:func:`~cml::SubscriptionBase::disable`
+   -  :cpp:func:`~cml::SubscriptionBase::subscribe` (results in an error message, the model cannot be subscribed while disabled)
 
    .. code-block:: text
 
@@ -728,12 +732,12 @@ This run tests the effect of issuing subscriptions while disabled:
       Model (unnamed-instance) has been disabled for this scenario.
       Cannot subscribe to a disabled model.
 
--  t=1: :cpp:func:`~SubscriptionBase::unsubscribe` (no effect)
+-  t=1: :cpp:func:`~cml::SubscriptionBase::unsubscribe` (no effect)
 
 -  t=2:
 
-   -  :cpp:func:`~SubscriptionBase::initialize` (no effect)
-   -  :cpp:func:`~SubscriptionBase::subscribe` (repeat of previous error message)
+   -  :cpp:func:`~cml::SubscriptionBase::initialize` (no effect)
+   -  :cpp:func:`~cml::SubscriptionBase::subscribe` (repeat of previous error message)
 
    .. code-block:: text
 
@@ -741,8 +745,8 @@ This run tests the effect of issuing subscriptions while disabled:
       Model (unnamed-instance) has been disabled for this scenario.
       Cannot subscribe to a disabled model.
 
-   -  set :cpp:member:`quiet_disabled_warning = True <SubscriptionBase::quiet_disabled_warning>`
-   -  :cpp:func:`~SubscriptionBase::subscribe` (no error message posted, :cpp:member:`~SubscriptionBase::quiet_disabled_warning` resets)
+   -  set :cpp:member:`quiet_disabled_warning = True <cml::SubscriptionBase::quiet_disabled_warning>`
+   -  :cpp:func:`~cml::SubscriptionBase::subscribe` (no error message posted, :cpp:member:`~cml::SubscriptionBase::quiet_disabled_warning` resets)
 
    .. code-block:: text
 
@@ -751,7 +755,7 @@ This run tests the effect of issuing subscriptions while disabled:
       No error message during subscribe()
       After  subscribe:  0
 
--  t=3: :cpp:func:`~SubscriptionBase::unsubscribe` (no effect)
+-  t=3: :cpp:func:`~cml::SubscriptionBase::unsubscribe` (no effect)
 
 .. list-table:: Logged Data
    :widths: 20 20 20 20 20
@@ -791,14 +795,14 @@ subscriptions:
 
 -  t=0:
 
-   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+   -  :cpp:func:`~cml::SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
       to 1)
-   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+   -  :cpp:func:`~cml::SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
       to 2)
-   -  :cpp:func:`~SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
+   -  :cpp:func:`~cml::SubscriptionBase::subscribe` (being prior to initialization, this increments the pending subscription count
       to 3)
 
--  t=1: :cpp:func:`~SubscriptionBase::initialize` called with initialize_on_failed_activation at default false (error message,
+-  t=1: :cpp:func:`~cml::SubscriptionBase::initialize` called with initialize_on_failed_activation at default false (error message,
    pending subscriptions retained but initialization failed)
 
    .. code-block:: text
@@ -812,7 +816,7 @@ subscriptions:
       configuration flag initialize_on_failed_activation.
       Rerun <model>.initialize() to apply pending subscriptions and activate the model.
 
--  t=2: :cpp:func:`~SubscriptionBase::initialize` called with :cpp:member:`~SubscriptionBase::initialize_on_failed_activation` set to true (error message, model
+-  t=2: :cpp:func:`~cml::SubscriptionBase::initialize` called with :cpp:member:`~cml::SubscriptionBase::initialize_on_failed_activation` set to true (error message, model
    flagged as initialized but pending subscriptions are stripped)
 
    .. code-block:: text
@@ -826,7 +830,7 @@ subscriptions:
       configuration flag initialize_on_failed_activation.
       Re-subscribe to the model to activate it. 
 
--  t=3: :cpp:func:`~SubscriptionBase::subscribe` called (forwards to :cpp:func:`~SubscriptionBase::activate`, which fails again; model remains inactive and
+-  t=3: :cpp:func:`~cml::SubscriptionBase::subscribe` called (forwards to :cpp:func:`~cml::SubscriptionBase::activate`, which fails again; model remains inactive and
    rejects the subscription)
 
 .. list-table:: Logged Data
@@ -869,10 +873,10 @@ RUN_08_getters
 
 This run tests the model's getter methods:
 
--  :cpp:func:`~SubscriptionBase::is_enabled`, :cpp:func:`~SubscriptionBase::is_initialized`, and :cpp:func:`~SubscriptionBase::is_active`
+-  :cpp:func:`~cml::SubscriptionBase::is_enabled`, :cpp:func:`~cml::SubscriptionBase::is_initialized`, and :cpp:func:`~cml::SubscriptionBase::is_active`
    are called and their results printed to the console
--  The model is :cpp:func:`~SubscriptionBase::initialize`\ d and :cpp:func:`~SubscriptionBase::subscribe`\ d to
--  :cpp:func:`~SubscriptionBase::is_enabled`, :cpp:func:`~SubscriptionBase::is_initialized`, and :cpp:func:`~SubscriptionBase::is_active`
+-  The model is :cpp:func:`~cml::SubscriptionBase::initialize`\ d and :cpp:func:`~cml::SubscriptionBase::subscribe`\ d to
+-  :cpp:func:`~cml::SubscriptionBase::is_enabled`, :cpp:func:`~cml::SubscriptionBase::is_initialized`, and :cpp:func:`~cml::SubscriptionBase::is_active`
    are called and their results printed to the console
 
 .. code-block:: text

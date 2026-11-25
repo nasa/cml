@@ -8,6 +8,8 @@
     ((../src/generic_multi_input_table.cc)
     )
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (dec 2015) (Antares) (initial version))
     ((Bingquan Wang) (OSR) (Aug 2017) (Antares) (IVV code cleanup and refactored))
@@ -22,6 +24,7 @@
 #include "table_independent_variable.hh"
 #include "table_type_defs.hh"
 
+namespace cml {
 
 /*****************************************************************************
 GenericMultiInputTable
@@ -134,4 +137,7 @@ class GenericMultiInputTable
   GenericMultiInputTable (const GenericMultiInputTable&);
   GenericMultiInputTable& operator = (const GenericMultiInputTable&);
 };
+
+} // namespace cml
+
 #endif

@@ -18,7 +18,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 #include "../include/wake_bodies.hh"
 
-
+namespace cml {
 
 /*****************************************************************************
 Constructors
@@ -46,7 +46,7 @@ WakeGeneratingBody::WakeGeneratingBody(
 {
   if (inertial_pos == nullptr || inertial_vel == nullptr || freestream_vel == nullptr ||
       CoM_wrt_struc_in == nullptr) {
-    CMLMessage::fail(
+    message::fail(
      __FILE__,__LINE__,"Invalid construction\n",
      "Null pointers passed in at construction time.\n");
   }
@@ -66,7 +66,7 @@ WakeFollowingBody::WakeFollowingBody(
    objectA( objectA_in)
 {
   if (inertial_pos == nullptr || inertial_vel == nullptr || grid_origin == nullptr) {
-    CMLMessage::fail(
+    message::fail(
      __FILE__,__LINE__,"Invalid construction\n",
      "Null pointers passed in at construction time.\n");
   }
@@ -113,7 +113,7 @@ WakeGeneratingBody::compute_freestream_vel_mag()
 {
   freestream_vel_mag = jeod::Vector3::vmag( freestream_vel);
   if (MathUtils::is_near_equal(freestream_vel_mag, 0.0)) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid external connecctions\n",
       "The magnitude of the freestream velocity vector (", freestream_vel_mag, ") is very small.\n"
       "This should be protected against by evaluating the freestream mach "
@@ -196,7 +196,7 @@ void
 WakeFollowingBodyNoForce::set_generate_force(bool target)
 {
   if (target) {
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__,"Invalid configuration request \n",
     "This object is not configured for computing forces acting on it.\n"
     "Request failed.\n");
@@ -242,3 +242,5 @@ WakeFollowingBodyWithForce::compute_force(double force_mag)
                   -force_mag, // switch direction
                   force);     // in B structural frame.
 }
+
+} // namespace cml

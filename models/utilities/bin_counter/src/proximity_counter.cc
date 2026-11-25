@@ -25,17 +25,19 @@ PROGRAMMERS:
 #include <limits>
 #include <algorithm>
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
-CML_ProximityCounter::CML_ProximityCounter() = default;
+ProximityCounter::ProximityCounter() = default;
 /****************************************************************************/
-CML_ProximityCounter::CML_ProximityCounter(
+ProximityCounter::ProximityCounter(
   const std::vector<double> & targets_)
   :
-  CML_ProximityCounter()
+  ProximityCounter()
 {
-  CML_ProximityCounter::set_data(targets_);
+  ProximityCounter::set_data(targets_);
 }
 
 /*****************************************************************************
@@ -50,7 +52,7 @@ Options:
    these n values with bins spaced at the midpoint of consecutive target
 *****************************************************************************/
 void
-CML_ProximityCounter::set_data(const std::vector<double> & targets_)
+ProximityCounter::set_data(const std::vector<double> & targets_)
 {
   bins.clear();
   bins_ready = false;
@@ -58,7 +60,7 @@ CML_ProximityCounter::set_data(const std::vector<double> & targets_)
   const size_t n_targets_ = targets_.size();
   // Sanity check for number of targets:
   if (n_targets_ < 1) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot count onto fewer than 1 targets.\n"
       "Group (",name,") cannot be used.\n");
     return;
@@ -86,3 +88,5 @@ CML_ProximityCounter::set_data(const std::vector<double> & targets_)
   bins[nbin - 1].count = 0;
   bins[nbin - 1].bin_ceil = std::numeric_limits<double>::max();
 }
+
+} // namespace cml

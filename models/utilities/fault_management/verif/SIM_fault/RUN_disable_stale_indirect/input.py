@@ -2,7 +2,7 @@ from Log_data.logging import log_default
 log_default(0.1)
 
 # Trigger set-up
-test_object.trigger.Operator = trick.TriggerBase.GE
+test_object.trigger.Operator = trick.cml.TriggerBase.GE
 test_object.trigger.value = 1.0
 
 # Fault set-up

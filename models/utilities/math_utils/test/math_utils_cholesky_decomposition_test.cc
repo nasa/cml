@@ -26,7 +26,7 @@ TEST(MathUtils, CholeskyDecompositionNullPointers) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     constexpr unsigned int dimension = 10;
     constexpr double in_array[dimension][dimension] {};
@@ -34,19 +34,19 @@ TEST(MathUtils, CholeskyDecompositionNullPointers) {
 
     // Null input array.
     EXPECT_CALL(cml_message_mock,
-        publish(CMLMessage::Error, _, _, HasSubstr("the matrix to be decomposed is addressed with a NULL pointer")));
-    EXPECT_FALSE(MathUtils::cholesky_decomposition("Test", nullptr, &out_array[0][0], dimension));
+        publish(cml::message::Error, _, _, HasSubstr("the matrix to be decomposed is addressed with a NULL pointer")));
+    EXPECT_FALSE(cml::MathUtils::cholesky_decomposition("Test", nullptr, &out_array[0][0], dimension));
 
     // Null output array.
     EXPECT_CALL(cml_message_mock,
-        publish(CMLMessage::Error, _, _,
+        publish(cml::message::Error, _, _,
             HasSubstr("array to which the computed decomposition will be sent is addressed with a NULL pointer")));
-    EXPECT_FALSE(MathUtils::cholesky_decomposition("Test", &in_array[0][0], nullptr, dimension));
+    EXPECT_FALSE(cml::MathUtils::cholesky_decomposition("Test", &in_array[0][0], nullptr, dimension));
 }
 
 // Test calculation of Cholesky decomposition of a 3x3 matrix.
 TEST(MathUtils, CholeskyDecomposition3x3) {
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     constexpr unsigned int dimension = 3;
     constexpr double in_array[dimension][dimension] {
@@ -62,7 +62,7 @@ TEST(MathUtils, CholeskyDecomposition3x3) {
     };
 
     EXPECT_CALL(cml_message_mock, publish).Times(0);
-    const bool success = MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
+    const bool success = cml::MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
     EXPECT_TRUE(success);
     test_matrices_equal(out_array, expected);
 }
@@ -72,7 +72,7 @@ TEST(MathUtils, CholeskyDecompositionSubmatrix) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Decompose a 3x3 submatrix within a 10x10 matrix.
     {
@@ -92,7 +92,7 @@ TEST(MathUtils, CholeskyDecompositionSubmatrix) {
         };
 
         EXPECT_CALL(cml_message_mock, publish).Times(0);
-        const bool success = MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension, 3);
+        const bool success = cml::MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension, 3);
         EXPECT_TRUE(success);
         test_matrices_equal(out_array, expected);
     }
@@ -104,8 +104,8 @@ TEST(MathUtils, CholeskyDecompositionSubmatrix) {
         double out_array[dimension][dimension] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("A sub-matrix must be smaller than the original matrix")));
-        const bool success = MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension, dimension + 1);
+            publish(cml::message::Error, _, _, HasSubstr("A sub-matrix must be smaller than the original matrix")));
+        const bool success = cml::MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension, dimension + 1);
         EXPECT_FALSE(success);
     }
 }
@@ -115,7 +115,7 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Asymmetric matrix.
     {
@@ -136,8 +136,8 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
         };
 
         EXPECT_CALL(cml_message_mock,
-                publish(CMLMessage::Error, _, _, HasSubstr("not a symmetric matrix")));
-        const bool success = MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
+                publish(cml::message::Error, _, _, HasSubstr("not a symmetric matrix")));
+        const bool success = cml::MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
         EXPECT_TRUE(success);
         test_matrices_equal(out_array, expected);
     }
@@ -153,9 +153,9 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
         double out_array[dimension][dimension] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Error, _, _,
+            publish(cml::message::Error, _, _,
                 HasSubstr("A negative eigen-value exists, detected in processing col 2")));
-        const bool success = MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
+        const bool success = cml::MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
         EXPECT_FALSE(success);
     }
 
@@ -170,8 +170,8 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
         double out_array[dimension][dimension] {};
 
         EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("A negative eigen-value exists\n")));
-        const bool success = MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
+            publish(cml::message::Error, _, _, HasSubstr("A negative eigen-value exists\n")));
+        const bool success = cml::MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
         EXPECT_FALSE(success);
     }
 
@@ -205,9 +205,9 @@ TEST(MathUtils, CholeskyDecompositionErrorConditions) {
         };
 
         EXPECT_CALL(cml_message_mock,
-            publish(CMLMessage::Warning, _, _,
+            publish(cml::message::Warning, _, _,
                 HasSubstr("There are multiple solutions for the decomposition of this matrix")));
-        const bool success = MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
+        const bool success = cml::MathUtils::cholesky_decomposition("Test", &in_array[0][0], &out_array[0][0], dimension);
         EXPECT_TRUE(success);
         test_matrices_equal(out_array, expected);
     }
@@ -218,7 +218,7 @@ TEST(MathUtils, MatrixInversionUsingCholeskyDecomp) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
     // Valid case.
     {
@@ -234,7 +234,7 @@ TEST(MathUtils, MatrixInversionUsingCholeskyDecomp) {
         };
         double output[3][3] {};
 
-        const bool success = MathUtils::matrix_inv_using_cholesky(input, output);
+        const bool success = cml::MathUtils::matrix_inv_using_cholesky(input, output);
         EXPECT_TRUE(success);
         test_matrices_equal(output, expected);
     }
@@ -257,16 +257,16 @@ TEST(MathUtils, MatrixInversionUsingCholeskyDecomp) {
         };
 
         // Fail on error. Original output location remains unchanged.
-        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, HasSubstr("Decomposition failed")));
-        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Fail, _, _, HasSubstr("Matrix Inverse failed")));
-        EXPECT_FALSE(MathUtils::matrix_inv_using_cholesky(input, output));
+        EXPECT_CALL(cml_message_mock, publish(cml::message::Error, _, _, HasSubstr("Decomposition failed")));
+        EXPECT_CALL(cml_message_mock, publish(cml::message::Fail, _, _, HasSubstr("Matrix Inverse failed")));
+        EXPECT_FALSE(cml::MathUtils::matrix_inv_using_cholesky(input, output));
         test_matrices_equal(output, original_output);
 
         // Warn on error. Output location is filled with zeros.
         constexpr double zeros[2][2] {};
-        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, HasSubstr("Decomposition failed")));
-        EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, HasSubstr("Matrix Inverse failed")));
-        EXPECT_FALSE(MathUtils::matrix_inv_using_cholesky(input, output, false));
+        EXPECT_CALL(cml_message_mock, publish(cml::message::Error, _, _, HasSubstr("Decomposition failed")));
+        EXPECT_CALL(cml_message_mock, publish(cml::message::Error, _, _, HasSubstr("Matrix Inverse failed")));
+        EXPECT_FALSE(cml::MathUtils::matrix_inv_using_cholesky(input, output, false));
         test_matrices_equal(output, zeros);
     }
 }

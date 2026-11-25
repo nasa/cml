@@ -17,6 +17,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -30,12 +32,12 @@ AccumulatedAbsoluteDeltas::AccumulatedAbsoluteDeltas(
   subscribe_name = "AccumulatedAbsoluteDeltas:";
 
   if (variable == nullptr) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid construction\n",
     "The variable being accumulated in NULL.\n");
   }
   if (size == 0) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid construction\n",
     "The size of the array must be positive.\n"
     "For a scalar, use size = 1.\n");
@@ -110,3 +112,5 @@ AccumulatedAbsoluteDeltas::update()
     old_variable[ii] = variable[ii];
   }
 }
+
+} // namespace cml

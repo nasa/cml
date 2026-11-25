@@ -11,15 +11,15 @@ PROGRAMMERS:
 #include "sample_sim_data.hh"
 
 
-class VerifCompoundEventsManager : public CompoundEventsManager
+class VerifCompoundEventsManager : public cml::CompoundEventsManager
 {
  public:
-  EventTrigger<double> trigger;
-  CompoundEvent event;
+  cml::EventTrigger<double> trigger;
+  cml::CompoundEvent event;
 
   VerifCompoundEventsManager (SampleSimData & sim_data)
     :
-    CompoundEventsManager(sim_data.time),
+    cml::CompoundEventsManager(sim_data.time),
     trigger( sim_data.time),
     event( sim_data.time)
 

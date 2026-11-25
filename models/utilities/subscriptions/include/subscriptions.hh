@@ -8,6 +8,8 @@
  LIBRARY DEPENDENCY:
     ((../src/subscriptions.cc))
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (Mar 2015) (Antares) (initial model))
     ((Bingquan Wang) (OSR) (May 2017) (Antares)
@@ -19,6 +21,8 @@
 #define CML_SUBSCRIPTIONS_HH
 
 #include <string>
+
+namespace cml {
 
 /**
  * Provides a subscription baseline for all models
@@ -164,4 +168,7 @@ class SubscriptionBase {
    */
   virtual void deactivate(){active = false;}
 };
+
+} // namespace cml
+
 #endif

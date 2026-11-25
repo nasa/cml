@@ -5,6 +5,8 @@ PURPOSE: (Manages the desired fidelity of the gravity model for one
 LIBRARY DEPENDENCY:
    ((../src/gravity_fidelity_manager.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2019) (Antares) (initial))
    ((Daniel Ghan) (OSR) (April 2020) (Antares) (Made the table internal)))
@@ -20,6 +22,8 @@ namespace jeod {
 class RefFrame;
 class SphericalHarmonicsGravityControls;
 }
+
+namespace cml {
 
 class GravityFidelityManager : public SubscriptionBase
 {
@@ -68,4 +72,7 @@ class GravityFidelityManager : public SubscriptionBase
   void initialize() override;
   void update();
 };
+
+} // namespace cml
+
 #endif

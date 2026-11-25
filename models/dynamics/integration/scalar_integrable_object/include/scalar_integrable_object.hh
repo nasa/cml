@@ -4,6 +4,8 @@ Purpose:
 
 Library Dependency:
   ((../src/scalar_integrable_object.cc))
+
+PYTHON_MODULE: (cml)
 *******************************************************************************/
 
 #ifndef CML_SCALAR_INTEGRABLE_OBJECT_HH
@@ -11,6 +13,8 @@ Library Dependency:
 
 #include "jeod/models/utils/integration/include/restartable_state_integrator.hh"
 #include "er7_utils/integration/core/include/integrable_object.hh"
+
+namespace cml {
 
 // These objects will automatically update the value of the variable you
 // connect it to.
@@ -48,4 +52,7 @@ private:
   double &value;      /* (--) Input value to be integrated. */
   double &derivative; /* (--) Time derivative of the value to be integrated. */
 };
+
+} // namespace cml
+
 #endif

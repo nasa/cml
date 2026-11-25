@@ -7,11 +7,11 @@ namespace {
 
 // Test that no violation is reported if the model is inactive.
 TEST(ConstraintTestThresholdTimed, Inactive) {
-    ConstraintTest_ThresholdTimed<int> article;
+    cml::ConstraintTest_ThresholdTimed<int> article;
     article.enabled = false;
     article.recover_quiet_violation = true;
     article.threshold = 1;
-    article.set_violation_condition(ConstraintEnum::EQ);
+    article.set_violation_condition(cml::ConstraintEnum::EQ);
 
     // Initialization should proceed even when disabled.
     article.initialize();
@@ -31,22 +31,22 @@ TEST(ConstraintTestThresholdTimed, Inactive) {
 // timing feature disabled.
 TEST(ConstraintTestThresholdTimed, TestViolationNoTimer) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
-    ConstraintTest_ThresholdTimed<int> int_test;
-    ConstraintTest_ThresholdTimed<double> double_test;
-    ConstraintTest_ThresholdTimed<float> float_test;
+    cml::ConstraintTest_ThresholdTimed<int> int_test;
+    cml::ConstraintTest_ThresholdTimed<double> double_test;
+    cml::ConstraintTest_ThresholdTimed<float> float_test;
 
     // Initialize all test articles.
     int_test.threshold = 3;
-    int_test.set_violation_condition(ConstraintEnum::EQ);
+    int_test.set_violation_condition(cml::ConstraintEnum::EQ);
     int_test.use_timer = false;
     double_test.threshold = 3.0;
-    double_test.set_violation_condition(ConstraintEnum::EQ);
+    double_test.set_violation_condition(cml::ConstraintEnum::EQ);
     double_test.use_timer = false;
     float_test.threshold = 3.0f;
-    float_test.set_violation_condition(ConstraintEnum::EQ);
+    float_test.set_violation_condition(cml::ConstraintEnum::EQ);
     float_test.use_timer = false;
 
     EXPECT_EQ(int_test.get_threshold(), 3);
@@ -61,9 +61,9 @@ TEST(ConstraintTestThresholdTimed, TestViolationNoTimer) {
     float_test.activate();
 
     // Equality
-    int_test.set_violation_condition(ConstraintEnum::EQ);
-    double_test.set_violation_condition(ConstraintEnum::EQ);
-    float_test.set_violation_condition(ConstraintEnum::EQ);
+    int_test.set_violation_condition(cml::ConstraintEnum::EQ);
+    double_test.set_violation_condition(cml::ConstraintEnum::EQ);
+    float_test.set_violation_condition(cml::ConstraintEnum::EQ);
     EXPECT_TRUE(int_test.test_violation(3, 1.0));
     EXPECT_TRUE(double_test.test_violation(3.0, 1.0));
     EXPECT_TRUE(float_test.test_violation(3.0f, 1.0));
@@ -72,9 +72,9 @@ TEST(ConstraintTestThresholdTimed, TestViolationNoTimer) {
     EXPECT_FALSE(float_test.test_violation(-2.0f, 1.0));
 
     // Inequality
-    int_test.set_violation_condition(ConstraintEnum::NEQ);
-    double_test.set_violation_condition(ConstraintEnum::NEQ);
-    float_test.set_violation_condition(ConstraintEnum::NEQ);
+    int_test.set_violation_condition(cml::ConstraintEnum::NEQ);
+    double_test.set_violation_condition(cml::ConstraintEnum::NEQ);
+    float_test.set_violation_condition(cml::ConstraintEnum::NEQ);
     EXPECT_FALSE(int_test.test_violation(3, 1.0));
     EXPECT_FALSE(double_test.test_violation(3.0, 1.0));
     EXPECT_FALSE(float_test.test_violation(3.0f, 1.0));
@@ -83,9 +83,9 @@ TEST(ConstraintTestThresholdTimed, TestViolationNoTimer) {
     EXPECT_TRUE(float_test.test_violation(-2.0f, 1.0));
 
     // Greater-than
-    int_test.set_violation_condition(ConstraintEnum::GT);
-    double_test.set_violation_condition(ConstraintEnum::GT);
-    float_test.set_violation_condition(ConstraintEnum::GT);
+    int_test.set_violation_condition(cml::ConstraintEnum::GT);
+    double_test.set_violation_condition(cml::ConstraintEnum::GT);
+    float_test.set_violation_condition(cml::ConstraintEnum::GT);
     EXPECT_TRUE(int_test.test_violation(4, 1.0));
     EXPECT_TRUE(double_test.test_violation(4.0, 1.0));
     EXPECT_TRUE(float_test.test_violation(4.0f, 1.0));
@@ -94,9 +94,9 @@ TEST(ConstraintTestThresholdTimed, TestViolationNoTimer) {
     EXPECT_FALSE(float_test.test_violation(-2.0f, 1.0));
 
     // Greater-than or equal-to
-    int_test.set_violation_condition(ConstraintEnum::GE);
-    double_test.set_violation_condition(ConstraintEnum::GE);
-    float_test.set_violation_condition(ConstraintEnum::GE);
+    int_test.set_violation_condition(cml::ConstraintEnum::GE);
+    double_test.set_violation_condition(cml::ConstraintEnum::GE);
+    float_test.set_violation_condition(cml::ConstraintEnum::GE);
     EXPECT_TRUE(int_test.test_violation(4, 1.0));
     EXPECT_TRUE(double_test.test_violation(4.0, 1.0));
     EXPECT_TRUE(float_test.test_violation(4.0f, 1.0));
@@ -108,9 +108,9 @@ TEST(ConstraintTestThresholdTimed, TestViolationNoTimer) {
     EXPECT_FALSE(float_test.test_violation(-2.0f, 1.0));
 
     // Less-than
-    int_test.set_violation_condition(ConstraintEnum::LT);
-    double_test.set_violation_condition(ConstraintEnum::LT);
-    float_test.set_violation_condition(ConstraintEnum::LT);
+    int_test.set_violation_condition(cml::ConstraintEnum::LT);
+    double_test.set_violation_condition(cml::ConstraintEnum::LT);
+    float_test.set_violation_condition(cml::ConstraintEnum::LT);
     EXPECT_FALSE(int_test.test_violation(4, 1.0));
     EXPECT_FALSE(double_test.test_violation(4.0, 1.0));
     EXPECT_FALSE(float_test.test_violation(4.0f, 1.0));
@@ -119,9 +119,9 @@ TEST(ConstraintTestThresholdTimed, TestViolationNoTimer) {
     EXPECT_TRUE(float_test.test_violation(-2.0f, 1.0));
 
     // Less-than or equal-to
-    int_test.set_violation_condition(ConstraintEnum::LE);
-    double_test.set_violation_condition(ConstraintEnum::LE);
-    float_test.set_violation_condition(ConstraintEnum::LE);
+    int_test.set_violation_condition(cml::ConstraintEnum::LE);
+    double_test.set_violation_condition(cml::ConstraintEnum::LE);
+    float_test.set_violation_condition(cml::ConstraintEnum::LE);
     EXPECT_FALSE(int_test.test_violation(4, 1.0));
     EXPECT_FALSE(double_test.test_violation(4.0, 1.0));
     EXPECT_FALSE(float_test.test_violation(4.0f, 1.0));
@@ -137,24 +137,24 @@ TEST(ConstraintTestThresholdTimed, TestViolationNoTimer) {
 // timing feature enabled.
 TEST(ConstraintTestThresholdTimed, TestViolationWithTimer) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
-    ConstraintTest_ThresholdTimed<int> int_test;
-    ConstraintTest_ThresholdTimed<double> double_test;
-    ConstraintTest_ThresholdTimed<float> float_test;
+    cml::ConstraintTest_ThresholdTimed<int> int_test;
+    cml::ConstraintTest_ThresholdTimed<double> double_test;
+    cml::ConstraintTest_ThresholdTimed<float> float_test;
 
     // Initialize all test articles.
     int_test.threshold = 3;
-    int_test.set_violation_condition(ConstraintEnum::NEQ);
+    int_test.set_violation_condition(cml::ConstraintEnum::NEQ);
     int_test.use_timer = true;
     int_test.time_limit = 2.0;
     double_test.threshold = 3.0;
-    double_test.set_violation_condition(ConstraintEnum::NEQ);
+    double_test.set_violation_condition(cml::ConstraintEnum::NEQ);
     double_test.use_timer = true;
     double_test.time_limit = 2.0;
     float_test.threshold = 3.0f;
-    float_test.set_violation_condition(ConstraintEnum::NEQ);
+    float_test.set_violation_condition(cml::ConstraintEnum::NEQ);
     float_test.use_timer = true;
     float_test.time_limit = 2.0;
 
@@ -196,12 +196,12 @@ TEST(ConstraintTestThresholdTimed, TestViolationWithTimer) {
 // is long enough to reset the timer.
 TEST(ConstraintTestThresholdTimed, TestGapTimer) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
-    ConstraintTest_ThresholdTimed<int> article;
+    cml::ConstraintTest_ThresholdTimed<int> article;
     article.threshold = 1;
-    article.set_violation_condition(ConstraintEnum::NEQ);
+    article.set_violation_condition(cml::ConstraintEnum::NEQ);
     article.use_timer = true;
     article.time_limit = 1.1;
     article.gap_time_limit = 3.0;
@@ -233,30 +233,30 @@ TEST(ConstraintTestThresholdTimed, InvalidConfiguration) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
-    ConstraintTest_ThresholdTimed<int> article;
+    cml::ConstraintTest_ThresholdTimed<int> article;
     article.threshold = 1;
-    article.set_violation_condition(ConstraintEnum::LT);
+    article.set_violation_condition(cml::ConstraintEnum::LT);
     article.initialize();
     article.activate();
 
     // The inside/outside violation condition is for intervals and sets, not thresholds.
     // The model will reset its violation condition to greater-than.
     EXPECT_CALL(cml_message_mock,
-        publish(CMLMessage::Error, _, _,
+        publish(cml::message::Error, _, _,
             HasSubstr("Cannot initialize a threshold constraint-test without a valid violation-condition")));
-    article.set_violation_condition(ConstraintEnum::In);
-    EXPECT_EQ(article.get_violation_condition(), ConstraintEnum::GT);
+    article.set_violation_condition(cml::ConstraintEnum::In);
+    EXPECT_EQ(article.get_violation_condition(), cml::ConstraintEnum::GT);
 }
 
 // Test that no violation is reported if the model is inactive.
 TEST(ConstraintTestIntervalTimed, Inactive) {
-    ConstraintTest_IntervalTimed<int> article;
+    cml::ConstraintTest_IntervalTimed<int> article;
     article.enabled = false;
     article.lower_bound = 1;
     article.upper_bound = 10;
-    article.set_violation_condition(ConstraintEnum::In);
+    article.set_violation_condition(cml::ConstraintEnum::In);
 
     // Initialization should proceed even when disabled.
     article.initialize();
@@ -276,21 +276,21 @@ TEST(ConstraintTestIntervalTimed, Inactive) {
 // the timing feature disabled.
 TEST(ConstraintTestIntervalTimed, TestViolationNoTimer) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
-    ConstraintTest_IntervalTimed<int> inside_interval_test;
-    ConstraintTest_IntervalTimed<int> outside_interval_test;
+    cml::ConstraintTest_IntervalTimed<int> inside_interval_test;
+    cml::ConstraintTest_IntervalTimed<int> outside_interval_test;
 
     // Initialize all test articles.
     inside_interval_test.lower_bound = -3;
     inside_interval_test.upper_bound = 2;
-    inside_interval_test.set_violation_condition(ConstraintEnum::In);
+    inside_interval_test.set_violation_condition(cml::ConstraintEnum::In);
     inside_interval_test.use_timer = false;
 
     outside_interval_test.lower_bound = -3;
     outside_interval_test.upper_bound = 2;
-    outside_interval_test.set_violation_condition(ConstraintEnum::Out);
+    outside_interval_test.set_violation_condition(cml::ConstraintEnum::Out);
     outside_interval_test.use_timer = false;
 
     inside_interval_test.initialize();
@@ -302,8 +302,8 @@ TEST(ConstraintTestIntervalTimed, TestViolationNoTimer) {
     constexpr double dt = 1.0;
 
     // Closed-closed interval.
-    inside_interval_test.interval_bounds = ConstraintEnum::ClosedClosed;
-    outside_interval_test.interval_bounds = ConstraintEnum::ClosedClosed;
+    inside_interval_test.interval_bounds = cml::ConstraintEnum::ClosedClosed;
+    outside_interval_test.interval_bounds = cml::ConstraintEnum::ClosedClosed;
     EXPECT_FALSE(inside_interval_test.test_violation(-5, dt));
     EXPECT_TRUE(outside_interval_test.test_violation(-5, dt));
 
@@ -320,8 +320,8 @@ TEST(ConstraintTestIntervalTimed, TestViolationNoTimer) {
     EXPECT_TRUE(outside_interval_test.test_violation(5, dt));
 
     // Open-open interval.
-    inside_interval_test.interval_bounds = ConstraintEnum::OpenOpen;
-    outside_interval_test.interval_bounds = ConstraintEnum::OpenOpen;
+    inside_interval_test.interval_bounds = cml::ConstraintEnum::OpenOpen;
+    outside_interval_test.interval_bounds = cml::ConstraintEnum::OpenOpen;
     EXPECT_FALSE(inside_interval_test.test_violation(-5, dt));
     EXPECT_TRUE(outside_interval_test.test_violation(-5, dt));
 
@@ -338,8 +338,8 @@ TEST(ConstraintTestIntervalTimed, TestViolationNoTimer) {
     EXPECT_TRUE(outside_interval_test.test_violation(5, dt));
 
     // Closed-open interval.
-    inside_interval_test.interval_bounds = ConstraintEnum::ClosedOpen;
-    outside_interval_test.interval_bounds = ConstraintEnum::ClosedOpen;
+    inside_interval_test.interval_bounds = cml::ConstraintEnum::ClosedOpen;
+    outside_interval_test.interval_bounds = cml::ConstraintEnum::ClosedOpen;
     EXPECT_FALSE(inside_interval_test.test_violation(-5, dt));
     EXPECT_TRUE(outside_interval_test.test_violation(-5, dt));
 
@@ -356,8 +356,8 @@ TEST(ConstraintTestIntervalTimed, TestViolationNoTimer) {
     EXPECT_TRUE(outside_interval_test.test_violation(5, dt));
 
     // Open-closed interval.
-    inside_interval_test.interval_bounds = ConstraintEnum::OpenClosed;
-    outside_interval_test.interval_bounds = ConstraintEnum::OpenClosed;
+    inside_interval_test.interval_bounds = cml::ConstraintEnum::OpenClosed;
+    outside_interval_test.interval_bounds = cml::ConstraintEnum::OpenClosed;
     EXPECT_FALSE(inside_interval_test.test_violation(-5, dt));
     EXPECT_TRUE(outside_interval_test.test_violation(-5, dt));
 
@@ -378,18 +378,18 @@ TEST(ConstraintTestIntervalTimed, TestViolationNoTimer) {
 // the timing feature enabled.
 TEST(ConstraintTestIntervalTimed, TestViolationWithTimer) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
-    ConstraintTest_IntervalTimed<int> article;
+    cml::ConstraintTest_IntervalTimed<int> article;
 
     // Initialize all test articles.
     article.lower_bound = -3;
     article.upper_bound = 2;
-    article.set_violation_condition(ConstraintEnum::In);
+    article.set_violation_condition(cml::ConstraintEnum::In);
     article.use_timer = true;
     article.time_limit = 2.0;
-    article.interval_bounds = ConstraintEnum::OpenOpen;
+    article.interval_bounds = cml::ConstraintEnum::OpenOpen;
 
     article.initialize();
     article.activate();
@@ -414,12 +414,12 @@ TEST(ConstraintTestIntervalTimed, InvalidConfiguration) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
-    ConstraintTest_IntervalTimed<int> article;
+    cml::ConstraintTest_IntervalTimed<int> article;
     article.lower_bound = 1;
     article.upper_bound = 10;
-    article.set_violation_condition(ConstraintEnum::In);
+    article.set_violation_condition(cml::ConstraintEnum::In);
     article.initialize();
     article.activate();
 
@@ -431,24 +431,24 @@ TEST(ConstraintTestIntervalTimed, InvalidConfiguration) {
 
     // The violation condition must be inside or outside, not a comparison function.
     EXPECT_CALL(cml_message_mock,
-        publish(CMLMessage::Error, _, _,
+        publish(cml::message::Error, _, _,
             HasSubstr("Cannot initialize an interval constraint-test")));
-    article.set_violation_condition(ConstraintEnum::EQ);
+    article.set_violation_condition(cml::ConstraintEnum::EQ);
 
     // The upper and lower bounds can't be too close together.
     article.upper_bound = 5;
     article.lower_bound = 5;
     EXPECT_CALL(cml_message_mock,
-        publish(CMLMessage::Error, _, _, HasSubstr("zero-width interval")));
+        publish(cml::message::Error, _, _, HasSubstr("zero-width interval")));
     EXPECT_FALSE(article.initialize());
 }
 
 // Test that no violation is reported if the model is inactive.
 TEST(ConstraintTestValSetTimed, Inactive) {
-    ConstraintTest_ValSetTimed<int> article;
+    cml::ConstraintTest_ValSetTimed<int> article;
     article.enabled = false;
     article.values = {1, 2, 3};
-    article.set_violation_condition(ConstraintEnum::In);
+    article.set_violation_condition(cml::ConstraintEnum::In);
 
     // Initialization should proceed even when disabled.
     article.initialize();
@@ -468,19 +468,19 @@ TEST(ConstraintTestValSetTimed, Inactive) {
 // the timing feature disabled.
 TEST(ConstraintTestValSet, TestViolationNoTimer) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
-    ConstraintTest_ValSetTimed<int> inside_valset_test;
-    ConstraintTest_ValSetTimed<int> outside_valset_test;
+    cml::ConstraintTest_ValSetTimed<int> inside_valset_test;
+    cml::ConstraintTest_ValSetTimed<int> outside_valset_test;
 
     // Initialize all test articles.
     inside_valset_test.values = {1, -2, 3};
-    inside_valset_test.set_violation_condition(ConstraintEnum::In);
+    inside_valset_test.set_violation_condition(cml::ConstraintEnum::In);
     inside_valset_test.use_timer = false;
 
     outside_valset_test.values = {1, -2, 3};
-    outside_valset_test.set_violation_condition(ConstraintEnum::Out);
+    outside_valset_test.set_violation_condition(cml::ConstraintEnum::Out);
     outside_valset_test.use_timer = false;
 
     inside_valset_test.initialize();
@@ -504,14 +504,14 @@ TEST(ConstraintTestValSet, TestViolationNoTimer) {
 // the timing feature enabled.
 TEST(ConstraintTestValSet, TestViolationWithTimer) {
     // Testing nominal behavior only. No messages should be emitted.
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
     EXPECT_CALL(cml_message_mock, publish).Times(0);
 
-    ConstraintTest_ValSetTimed<int> article;
+    cml::ConstraintTest_ValSetTimed<int> article;
 
     // Initialize all test articles.
     article.values = {1, -2, 3};
-    article.set_violation_condition(ConstraintEnum::In);
+    article.set_violation_condition(cml::ConstraintEnum::In);
     article.use_timer = true;
     article.time_limit = 2.0;
 
@@ -538,22 +538,22 @@ TEST(ConstraintTestValSetTimed, InvalidConfiguration) {
     using testing::_;
     using testing::HasSubstr;
 
-    testing::StrictMock<CMLMessage::Mock> cml_message_mock;
+    testing::StrictMock<cml::message::Mock> cml_message_mock;
 
-    ConstraintTest_ValSetTimed<int> article;
+    cml::ConstraintTest_ValSetTimed<int> article;
     article.values = {1, -2, 3};
-    article.set_violation_condition(ConstraintEnum::In);
+    article.set_violation_condition(cml::ConstraintEnum::In);
     article.initialize();
     article.activate();
 
     // The violation condition must be inside or outside, not a comparison function.
-    EXPECT_CALL(cml_message_mock, publish(CMLMessage::Error, _, _, _));
-    article.set_violation_condition(ConstraintEnum::EQ);
-    EXPECT_EQ(article.get_violation_condition(), ConstraintEnum::In);
+    EXPECT_CALL(cml_message_mock, publish(cml::message::Error, _, _, _));
+    article.set_violation_condition(cml::ConstraintEnum::EQ);
+    EXPECT_EQ(article.get_violation_condition(), cml::ConstraintEnum::In);
 
     // There must be at least one value to test against.
     EXPECT_CALL(cml_message_mock,
-        publish(CMLMessage::Error, _, _,
+        publish(cml::message::Error, _, _,
             HasSubstr("Cannot initialize a value-set constraint-test with an empty\nset of values")));
     article.values.clear();
     EXPECT_FALSE(article.initialize());

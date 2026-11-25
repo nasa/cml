@@ -1,12 +1,16 @@
 /*******************************************************************************
 Purpose: (Apply ANSI color codes to strings in order to change the color of the
           text or the background of the text to a desired color.)
+
+PYTHON_MODULE: (cml)
 *******************************************************************************/
 
 #ifndef CML_COLOR_STRING_HH
 #define CML_COLOR_STRING_HH
 
 #include <string>
+
+namespace cml {
 
 class ColorString {
   public:
@@ -86,5 +90,7 @@ class ColorString {
       return "\033[47m" + input + "\033[0m";
     }
 };
+
+} // namespace cml
 
 #endif

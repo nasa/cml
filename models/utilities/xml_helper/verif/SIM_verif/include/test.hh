@@ -39,7 +39,7 @@ struct XmlHelperTester {
     std::cout << "\n******************** name_match **************************\n";
 
     // Use XmlHelper::xml_name_match to verify root-node's name
-    if (XmlHelper::xml_name_match( root_node, "SampleRoot")) {
+    if (cml::XmlHelper::xml_name_match( root_node, "SampleRoot")) {
       std::cout << "Name match with SampleRoot.\n";
     } else {
       std::cout << "ERROR: Name mismatch with expected root name, SampleRoot.\n";
@@ -49,14 +49,14 @@ struct XmlHelperTester {
     std::cout << "**********************************************************\n";
     std::cout << "\n**************** xml_find_value **************************\n";
     std::cout << "Purpose of root-node is: "<<
-                 XmlHelper::xml_find_value( root_node, "purpose") << "\n***\n";
+                 cml::XmlHelper::xml_find_value( root_node, "purpose") << "\n***\n";
 
     size_t node_count = 0;
     for (xmlNodePtr branch_node = root_node->children;
          branch_node != nullptr;
          branch_node = branch_node->next) {
       // Note - the first child might be a dummy text-node with no purpose.
-      const char* purpose = XmlHelper::xml_find_value( branch_node, "purpose",true);
+      const char* purpose = cml::XmlHelper::xml_find_value( branch_node, "purpose",true);
       if (purpose) {
         node_count++;
         std::cout << "Purpose of node "<< node_count <<" is: "<<
@@ -68,23 +68,23 @@ struct XmlHelperTester {
       error_report();
     }
     xmlNodePtr node2 = root_node->children->next->next->next;
-    const char* purpose = XmlHelper::xml_find_value( node2, "purpose",true);
+    const char* purpose = cml::XmlHelper::xml_find_value( node2, "purpose",true);
     std::cout << "Verifying node2: " << purpose << "\n";
 
     xmlNodePtr node3 = node2->next->next;
-    purpose = XmlHelper::xml_find_value( node3, "purpose");
+    purpose = cml::XmlHelper::xml_find_value( node3, "purpose");
     std::cout << "Verifying node3: " << purpose << "\n";
 
     xmlNodePtr node4 = node3->next->next;
-    purpose = XmlHelper::xml_find_value( node4, "purpose");
+    purpose = cml::XmlHelper::xml_find_value( node4, "purpose");
     std::cout << "Verifying node4: " << purpose << "\n";
 
     xmlNodePtr node5 = node2->children->next;
-    purpose = XmlHelper::xml_find_value( node5, "purpose");
+    purpose = cml::XmlHelper::xml_find_value( node5, "purpose");
     std::cout << "Verifying node5: " << purpose << "\n";
 
     xmlNodePtr node11 = node5->next->next->children->next->next->next->next->next;
-    purpose = XmlHelper::xml_find_value( node11, "purpose");
+    purpose = cml::XmlHelper::xml_find_value( node11, "purpose");
     std::cout << "Verifying node11: " << purpose << "\n";
 
 
@@ -96,11 +96,11 @@ struct XmlHelperTester {
     std::cout << "\n******************** xml_find ****************************\n";
     xmlNodePtr start_node = root_node->children->next;
     std::cout << "Starting with node "<<
-                  XmlHelper::xml_find_value( start_node, "purpose") << "\n";
-    xmlNodePtr node = XmlHelper::xml_find( start_node, "TargetNode");
+                  cml::XmlHelper::xml_find_value( start_node, "purpose") << "\n";
+    xmlNodePtr node = cml::XmlHelper::xml_find( start_node, "TargetNode");
     if (node==node2) {
       std::cout << "found TargetNode at " <<
-                    XmlHelper::xml_find_value( node, "purpose",true) << "\n***\n";
+                    cml::XmlHelper::xml_find_value( node, "purpose",true) << "\n***\n";
     } else {
       std::cout << "ERROR: did not find correct TargetNode.\n";
       error_report();
@@ -108,11 +108,11 @@ struct XmlHelperTester {
 
     start_node = node3;
     std::cout << "Starting with node "<<
-                  XmlHelper::xml_find_value( start_node, "purpose") << "\n";
-    node = XmlHelper::xml_find( start_node, "TargetNode");
+                  cml::XmlHelper::xml_find_value( start_node, "purpose") << "\n";
+    node = cml::XmlHelper::xml_find( start_node, "TargetNode");
     if (node==node4) {
       std::cout << "found TargetNode at " <<
-                    XmlHelper::xml_find_value( node, "purpose") << "\n***\n";
+                    cml::XmlHelper::xml_find_value( node, "purpose") << "\n***\n";
     } else {
       std::cout << "ERROR: did not find TargetNode.\n";
       error_report();
@@ -120,11 +120,11 @@ struct XmlHelperTester {
 
     start_node = node5;
     std::cout << "Starting with node "<<
-                  XmlHelper::xml_find_value( start_node, "purpose") << "\n";
-    node = XmlHelper::xml_find( start_node, "TargetNode");
+                  cml::XmlHelper::xml_find_value( start_node, "purpose") << "\n";
+    node = cml::XmlHelper::xml_find( start_node, "TargetNode");
     if (node) {
       std::cout << "ERROR: found TargetNode.\n" <<
-                    XmlHelper::xml_find_value( node, "purpose") << "\n";
+                    cml::XmlHelper::xml_find_value( node, "purpose") << "\n";
       error_report();
     } else {
       std::cout << "Did not find a TargetNode.\n";
@@ -137,11 +137,11 @@ struct XmlHelperTester {
     // There is a child-node of root-node called TargetNode (1st child)
     start_node = root_node;
     std::cout << "Starting with node "<<
-                  XmlHelper::xml_find_value( start_node, "purpose") << "\n";
-    node = XmlHelper::xml_find_child( start_node, "TargetNode");
+                  cml::XmlHelper::xml_find_value( start_node, "purpose") << "\n";
+    node = cml::XmlHelper::xml_find_child( start_node, "TargetNode");
     if (node == node2) {
       std::cout << "found TargetNode at " <<
-                    XmlHelper::xml_find_value( node, "purpose",true) << "\n***\n";
+                    cml::XmlHelper::xml_find_value( node, "purpose",true) << "\n***\n";
     } else {
       std::cout << "ERROR: did not find correct TargetNode.\n";
       error_report();
@@ -150,11 +150,11 @@ struct XmlHelperTester {
 
     start_node = node2;
     std::cout << "Starting with node "<<
-                  XmlHelper::xml_find_value( start_node, "purpose",true) << "\n";
-    node = XmlHelper::xml_find_child( start_node, "TargetNode");
+                  cml::XmlHelper::xml_find_value( start_node, "purpose",true) << "\n";
+    node = cml::XmlHelper::xml_find_child( start_node, "TargetNode");
     if (node) {
       std::cout << "ERROR: found TargetNode.\n" <<
-                    XmlHelper::xml_find_value( node, "purpose") << "\n";
+                    cml::XmlHelper::xml_find_value( node, "purpose") << "\n";
       error_report();
     } else {
       std::cout << "Did not find a TargetNode.\n***\n";
@@ -163,11 +163,11 @@ struct XmlHelperTester {
 
     start_node = node3;
     std::cout << "Starting with node "<<
-                  XmlHelper::xml_find_value( start_node, "purpose") << "\n";
-    node = XmlHelper::xml_find_child( start_node, "TargetNode");
+                  cml::XmlHelper::xml_find_value( start_node, "purpose") << "\n";
+    node = cml::XmlHelper::xml_find_child( start_node, "TargetNode");
     if (node) {
       std::cout << "found TargetNode at " <<
-                    XmlHelper::xml_find_value( node, "purpose") << "\n***\n";
+                    cml::XmlHelper::xml_find_value( node, "purpose") << "\n***\n";
     } else {
       std::cout << "ERROR: did not find TargetNode.\n";
       error_report();
@@ -182,11 +182,11 @@ struct XmlHelperTester {
 
     start_node = root_node;
     std::cout << "Starting with node "<<
-                  XmlHelper::xml_find_value( start_node, "purpose") << "\n";
-    node = XmlHelper::xml_find_progeny( start_node, "TargetNode");
+                  cml::XmlHelper::xml_find_value( start_node, "purpose") << "\n";
+    node = cml::XmlHelper::xml_find_progeny( start_node, "TargetNode");
     if (node==node2) {
       std::cout << "found TargetNode at " <<
-                    XmlHelper::xml_find_value( node, "purpose",true) << "\n***\n";
+                    cml::XmlHelper::xml_find_value( node, "purpose",true) << "\n***\n";
     } else {
       std::cout << "ERROR: did not find correct TargetNode.\n";
       error_report();
@@ -194,11 +194,11 @@ struct XmlHelperTester {
 
     start_node = node2;
     std::cout << "Starting with node "<<
-                  XmlHelper::xml_find_value( start_node, "purpose",true) << "\n";
-    node = XmlHelper::xml_find_progeny( start_node, "TargetNode");
+                  cml::XmlHelper::xml_find_value( start_node, "purpose",true) << "\n";
+    node = cml::XmlHelper::xml_find_progeny( start_node, "TargetNode");
     if (node==node11) {
       std::cout << "found TargetNode at " <<
-                    XmlHelper::xml_find_value( node, "purpose") << "\n***\n";
+                    cml::XmlHelper::xml_find_value( node, "purpose") << "\n***\n";
     } else {
       std::cout << "ERROR: did not find correct TargetNode.\n";
       error_report();
@@ -212,7 +212,7 @@ struct XmlHelperTester {
 
   void error_report() {
     std::cout << "**********************************************************\n";
-    CMLMessage::fail(
+    cml::message::fail(
       __FILE__,__LINE__,"Error\n",
       "Error encountered. Terminating.\n");
   }
@@ -221,9 +221,9 @@ struct XmlHelperTester {
   void code_coverage() {
     double x = 1.0;
     char c[2] = "a";
-    const char * ptr = XmlHelper::xml_convert_ptr( &x);
+    const char * ptr = cml::XmlHelper::xml_convert_ptr( &x);
     if (ptr != nullptr) error_report();
-    ptr = XmlHelper::xml_convert_ptr( c);
+    ptr = cml::XmlHelper::xml_convert_ptr( c);
     if (strcmp(ptr,c) !=0)  error_report();
   }
 

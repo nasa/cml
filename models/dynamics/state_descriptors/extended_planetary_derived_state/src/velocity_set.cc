@@ -8,7 +8,7 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
   ((cml/models/utilities/cml_message/src/cml_message.cc))
 
-ASSUMPTIONS AND LIMITATIONS
+ASSUMPTIONS AND LIMITATIONS:
    ((The velocity is intended to be expressed in the inertial reference frame.)
     (The model expects a reference to a transformation matrix from inertial to
       the reference frame in which the results will be expressed.
@@ -28,6 +28,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "../include/velocity_set.hh"
+
+namespace cml {
 
 /*****************************************************************************
 VelocitySet
@@ -52,7 +54,7 @@ VelocitySet::initialize(
     return;
   }
   if (vel_in == nullptr) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__, __LINE__, "Invalid initialization\n",
     "Attempted to set the inrtl_velocity pointer to NULL.\n");
   }
@@ -87,3 +89,5 @@ VelocitySet::update()
                              vel_xy );
   altitude_rate = -velocity[2];
 }
+
+} // namespace cml

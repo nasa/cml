@@ -7,6 +7,8 @@ LIBRARY DEPENDENCY:
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2023) (ANTARES) (new)))
 
+PYTHON_MODULE: (cml)
+
 NOTES:
 - Ellipsoid defined by (x/a)^2 + (y/b)^2 + (z/c)^2 = 1
 - {a,b,c} stored as r[3]
@@ -24,6 +26,8 @@ NOTES:
 #include "math_utils.hh"
 #include "quadratic_solver.hh"
 #include "std_array_ops.hh"
+
+namespace cml {
 
 class EllipsoidIntersection{
  private:
@@ -106,4 +110,7 @@ Algorithm:
   double get_scaled_root1() const {return quadratic.root1;}
   double get_scaled_root2() const {return quadratic.root2;}
 };
+
+} // namespace cml
+
 #endif

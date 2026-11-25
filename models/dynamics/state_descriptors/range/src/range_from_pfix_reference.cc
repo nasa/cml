@@ -18,6 +18,8 @@ Programmers:
 #include "../include/range_computation.hh"
 #include "../include/range_from_pfix_reference.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -76,7 +78,7 @@ RangeFromPfixReference::set_reference_data()
        in the downrange angle evaluating to be equal to the total range
        angle.*/
     if (MathUtils::is_near_equal(jeod::Vector3::vmag(dir_x_pos_unit_pfix), 0.0)) {
-      CMLMessage::warn(__FILE__, __LINE__, "Invalid reference direction\n",
+      message::warn(__FILE__, __LINE__, "Invalid reference direction\n",
         "The reference direction is the topocentric zenith or nadir at the "
         "reference position.\n"
         "\"Downrange\" and \"crossrange\" are undefined.\n"
@@ -115,3 +117,5 @@ RangeFromPfixReference::update_using_cartesian()
 
   RangeComputation::update_using_cartesian();
 }
+
+} // namespace cml

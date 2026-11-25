@@ -6,6 +6,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/fault_function_parameter.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
@@ -14,6 +16,8 @@ PROGRAMMERS:
 #define CML_FAULT_FUNCTION_PARAMETER_HH
 
 #include "independent_variable.hh"
+
+namespace cml {
 
 /*******************************************************************************
 FaultFunctionParameter
@@ -40,4 +44,7 @@ class FaultFunctionParameter {
       independent variable is relative, this is the initial value of the
       parameter. */
 };
+
+} // namespace cml
+
 #endif

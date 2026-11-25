@@ -6,6 +6,8 @@ LIBRARY DEPENDENCY:
      (../src/prf_model.cc)
      (../src/wake_effects_base.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Mar 2016) (Antares)
                 (New adaptation to meet Antares coding standards))
@@ -29,6 +31,8 @@ NOTES:
 
 #include "wake_params.hh"
 #include "wake_bodies.hh"
+
+namespace cml {
 
 /*****************************************************************************
 WakeEffectsBase
@@ -213,4 +217,7 @@ class WakeEffectsOut {
   WakePrfOut prf_model; /* (--) Output from PRF model */
   WakeRevFlowOut rev_flow; /* (--) Output from reverse-flow model */
 };
+
+} // namespace cml
+
 #endif

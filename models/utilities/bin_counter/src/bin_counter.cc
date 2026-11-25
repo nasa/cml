@@ -22,32 +22,34 @@ PROGRAMMERS:
 #include "../include/bin_counter.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
-CML_BinCounter::CML_BinCounter()
+BinCounter::BinCounter()
   :
   bins_ready(false),
   nbin(),
   bin_data(nullptr)
 {}
 /****************************************************************************/
-CML_BinCounter::CML_BinCounter(
+BinCounter::BinCounter(
   const std::vector<double> & edges,
   bool closed_ends)
   :
-  CML_BinCounter()
+  BinCounter()
 {
   set_data(edges, closed_ends);
 }
 /****************************************************************************/
-CML_BinCounter::CML_BinCounter(
+BinCounter::BinCounter(
   double limit_a,
   double limit_b,
   unsigned int num_bins,
   bool closed_ends)
   :
-  CML_BinCounter()
+  BinCounter()
 {
   set_data( limit_a, limit_b, num_bins, closed_ends);
 }
@@ -66,7 +68,7 @@ Options:
    bins will be equally spaced ebtween the two limits.
 *****************************************************************************/
 void
-CML_BinCounter::set_data(const std::vector<double> & edges,
+BinCounter::set_data(const std::vector<double> & edges,
                          bool closed_ends)
 {
   bins.clear();
@@ -75,7 +77,7 @@ CML_BinCounter::set_data(const std::vector<double> & edges,
   const size_t n_edges = edges.size();
   // Sanity check for number of bins:
   if (n_edges <= 1 && closed_ends) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot count into fewer than 1 bin.\n"
       "Bin group (",name,") cannot be used.\n");
     return;
@@ -84,7 +86,7 @@ CML_BinCounter::set_data(const std::vector<double> & edges,
   // Sanity check for monotonicity of edges:
   for (size_t ii = 1; ii < n_edges; ii++) {
     if (edges[ii] <= edges[ii-1]) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Bin edges (bin-group name : ",name,") are malformed,\n"
         "they are not monotonically increasing.\n"
         "  edge(",ii-1,") = ",edges[ii-1],"\n"
@@ -125,7 +127,7 @@ CML_BinCounter::set_data(const std::vector<double> & edges,
 }
 /*****************************************************************************/
 void
-CML_BinCounter::set_data( double limit_a,
+BinCounter::set_data( double limit_a,
                           double limit_b,
                           unsigned int num_bins,
                           bool closed_ends)
@@ -135,7 +137,7 @@ CML_BinCounter::set_data( double limit_a,
 
   // Sanity check for number of bins:
   if (num_bins == 0) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot count into fewer than 1 bin.\n"
       "Bin group (",name,") cannot be used.\n");
     return;
@@ -155,7 +157,7 @@ CML_BinCounter::set_data( double limit_a,
     upper_limit = limit_a;
   }
   else {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot count into an infinitesimal domain.\n"
       "Bin group (",name,") cannot be used.\n");
     bins_ready = false;
@@ -205,7 +207,7 @@ Note:
   closed) so we do that.
 *****************************************************************************/
 void
-CML_BinCounter::insert(double value)
+BinCounter::insert(double value)
 {
   // Consider only values below upper edge and only if model passed sanity
   // check.
@@ -233,10 +235,10 @@ Purpose:
   the bin edge to accommodate that desired allowance.
 *****************************************************************************/
 void
-CML_BinCounter::apply_tolerance(double tol)
+BinCounter::apply_tolerance(double tol)
 {
   if (!bins_ready) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot apply bin tolerance, bins not ready\n");
     return;
   }
@@ -251,3 +253,5 @@ CML_BinCounter::apply_tolerance(double tol)
     bins[0].bin_floor -= tol;
   }
 }
+
+} // namespace cml

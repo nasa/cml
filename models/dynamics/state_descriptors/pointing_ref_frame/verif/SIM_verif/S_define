@@ -29,9 +29,9 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
   jeod::DynManager    & dyn_manager;
  public:
   // Framework
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   // Model for testing:
-  PointingRefFrame  pointing_ref_frame;
+  cml::PointingRefFrame  pointing_ref_frame;
   // Reference Frames
   jeod::RefFrame frame_a;
   jeod::RefFrame frame_b;

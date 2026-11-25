@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/aero_interface_simple_lift_drag.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Jeremy Rea) (NASA) (March 2025) (Antares) (initial version, based on AeroInterfaceSimple)))
 *******************************************************************************/
@@ -14,6 +16,8 @@ PROGRAMMERS:
 
 #include "aero_interface_base.hh"
 #include "aero_executive_simple_lift_drag.hh"
+
+namespace cml {
 
 class AtmosRelativeState;
 
@@ -38,4 +42,7 @@ public:
   void initialize() override;
   void update() override;
 };
+
+} // namespace cml
+
 #endif

@@ -24,13 +24,13 @@ Purpose:(The sim)
 class AntaresUnitTestSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   double longitude_deg; /* (degree) populated by unit-test framework*/
   double longitude_rad; /* (rad) used by egm model. */
   double latitude_deg;  /* (degree) populated by unit-test framework*/
   double latitude_rad;  /* (rad) used by egm model. */
 
-  EGM2008_WGS84 egm;
+  cml::EGM2008_WGS84 egm;
 
   AntaresUnitTestSimObject()
     :

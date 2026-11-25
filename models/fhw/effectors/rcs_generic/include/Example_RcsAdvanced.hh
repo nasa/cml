@@ -4,6 +4,8 @@ PURPOSE: (Example of a RCS system)
 LIBRARY DEPENDENCY:
    ((../src/Example_RcsAdvanced.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (2017) (Antares) (initial)))
 **********************************************************************/
@@ -15,6 +17,8 @@ PROGRAMMERS:
 #include "rcs_prop_pod.hh"
 #include "rcs_group.hh"
 #include "rcs_jet.hh"
+
+namespace cml {
 
 class RcsAdvancedExample : public RcsGeneric
 {
@@ -56,4 +60,7 @@ class RcsAdvancedExample : public RcsGeneric
    RcsAdvancedExample (const RcsAdvancedExample& rhs);
    RcsAdvancedExample & operator = (const RcsAdvancedExample& rhs);;
 };
+
+} // namespace cml
+
 #endif

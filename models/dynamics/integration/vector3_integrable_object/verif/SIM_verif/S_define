@@ -36,16 +36,16 @@ class VehicleSimObject : public Trick::SimObject {
  public:
   jeod::DynBody  body;
   jeod::MassBodyInit mass_init;
-  StateInitialize    state_initialize;
-  SphericalHarmonicsFastGravityControls  grav_controls_earth;
+  cml::StateInitialize    state_initialize;
+  cml::SphericalHarmonicsFastGravityControls  grav_controls_earth;
 
   double   external_deriv[3];
   bool     update_external_deriv;
 
-  Vector3IntegrableObject test_vel;
-  Vector3IntegrableObject test_external_deriv;
-  Vector3IntegrableObject test_internal_deriv;
-  Vector3IntegrableObject test_null;
+  cml::Vector3IntegrableObject test_vel;
+  cml::Vector3IntegrableObject test_external_deriv;
+  cml::Vector3IntegrableObject test_internal_deriv;
+  cml::Vector3IntegrableObject test_null;
 
   // Constructor:
   VehicleSimObject( const double & time_in,
@@ -76,7 +76,7 @@ class VehicleSimObject : public Trick::SimObject {
 
   void try_default_constructor()
   {
-    Vector3IntegrableObject fail;
+    cml::Vector3IntegrableObject fail;
   }
 
  private:

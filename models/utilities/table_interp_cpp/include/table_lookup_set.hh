@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   (../src/table_lookup_set.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (New implementation))
    ((Bingquan Wang) (OSR) (Aug 2017) (IVV code cleanup and refactored))
@@ -19,6 +21,8 @@ PROGRAMMERS:
 #include "abstract_table_lookup.hh"
 #include "generic_multi_input_table.hh"
 #include "table_independent_variable.hh"
+
+namespace cml {
 
 class TableLookupSet : public AbstractTableLookup
 {
@@ -90,4 +94,7 @@ public:
   TableIndependentVariable* lookup_independent(
                                           const std::string &var_name) override;
 };
+
+} // namespace cml
+
 #endif

@@ -8,6 +8,8 @@ PURPOSE: (Models the effect of a rapidly changing mass and inertia tensor.
 LIBRARY DEPENDENCY:
    ((../src/mass_derivative_dynamics.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2018) (Antares) (initial)))
 **********************************************************************/
@@ -24,6 +26,8 @@ namespace jeod {
 class DynBody;
 class MassProperties;
 }
+
+namespace cml {
 
 /*****************************************************************************
 MassDerivativeDynamics
@@ -151,4 +155,7 @@ class MassDerivativeDynamics : public SubscriptionBase
   void compute_J_dot();
   void modify_velocity();
 };
+
+} // namespace cml
+
 #endif

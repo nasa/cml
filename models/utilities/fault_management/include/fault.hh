@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/fault.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
@@ -19,6 +21,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
 #include "trigger_group.hh"
+
+namespace cml {
 
 /*******************************************************************************
 Fault
@@ -76,5 +80,7 @@ friend class FaultManager;
     unsigned long fire_count{0}; /* (--)
       The number of times a fire-limited trigger has been triggered. */
 };
+
+} // namespace cml
 
 #endif

@@ -31,10 +31,10 @@ def root_veh_config( veh, name) :
   veh.state_init.body_frame_id = "composite_body"
   veh.state_init.planet_name = "Earth"
   
-  veh.state_init.position_input_data_type = trick.StateInitialize.Inertial
-  veh.state_init.velocity_input_data_type = trick.StateInitialize.Inertial
-  veh.state_init.attitude_input_data_type = trick.StateInitialize.EulerInertial_YPR
-  veh.state_init.att_rate_input_data_type = trick.StateInitialize.BodyInertialRate
+  veh.state_init.position_input_data_type = trick.cml.StateInitialize.Inertial
+  veh.state_init.velocity_input_data_type = trick.cml.StateInitialize.Inertial
+  veh.state_init.attitude_input_data_type = trick.cml.StateInitialize.EulerInertial_YPR
+  veh.state_init.att_rate_input_data_type = trick.cml.StateInitialize.BodyInertialRate
   veh.state_init.yaw = 0.0
   veh.state_init.pitch = 0.0
   veh.state_init.roll = 0.0

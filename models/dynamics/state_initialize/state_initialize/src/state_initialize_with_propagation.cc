@@ -53,6 +53,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/math/include/matrix3x3.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*****************************************************************************
 constructor
 *****************************************************************************/
@@ -73,7 +75,7 @@ StateInitializeWithPropagation::initialize( jeod::DynManager & dyn_manager)
                                              // non-null or fails.
   body = get_subject_dyn_body();
   if (body == nullptr) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid subject specification\n",
     "The subject of this body action, is NULL\n");
   }
@@ -93,7 +95,7 @@ void
 StateInitializeWithPropagation::apply( jeod::DynManager & dyn_manager)
 {
   if (!initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Premature application of Body Action.\n"
       "This body-action ('", action_identifier, "') must be initialized before it can be applied.\n"
       "Application failed.\n");
@@ -111,7 +113,7 @@ StateInitializeWithPropagation::apply( jeod::DynManager & dyn_manager)
       propagate_state();
     }
     else {
-      CMLMessage::warn(
+      message::warn(
       __FILE__,__LINE__,
       "Redundant use of class StateInitializeWithPropagation\n",
       "There is nothing wrong per se, but the use of the\n"
@@ -122,7 +124,7 @@ StateInitializeWithPropagation::apply( jeod::DynManager & dyn_manager)
     }
   }
   else {
-    CMLMessage::warn(
+    message::warn(
     __FILE__,__LINE__,
     "Redundant use of class StateInitializeWithPropagation\n",
     "There is nothing wrong per se, but the use of the\n"
@@ -318,3 +320,5 @@ StateInitializeWithPropagation::compute_planet_orientation(
                       T_inrtl_to_initial_pfix,
                       planet->pfix.state.rot.T_parent_this);
 }
+
+} // namespace cml

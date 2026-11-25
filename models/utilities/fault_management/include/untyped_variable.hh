@@ -2,12 +2,16 @@
 PURPOSE:
   (A variable whose type is determined at runtime.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer) (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor)))
 ############################################################################*/
 #ifndef CML_UNTYPED_VARIABLE_HH
 #define CML_UNTYPED_VARIABLE_HH
+
+namespace cml {
 
 /*******************************************************************************
 UntypedVariableBase
@@ -38,5 +42,7 @@ template<typename T> class UntypedVariable : public UntypedVariableBase {
 
     T& variable; /* (--) A variable of any type. */
 };
+
+} // namespace cml
 
 #endif

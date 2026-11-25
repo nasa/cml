@@ -1,6 +1,6 @@
 exec(open("Modified_data/common_input.py").read())
 
-vehicle.state_initialize.att_rate_input_data_type = trick.StateInitialize.RotInit
+vehicle.state_initialize.att_rate_input_data_type = trick.cml.StateInitialize.RotInit
 
 vehicle.state_initialize.rot_init.set_subject_body( vehicle.body )
 vehicle.state_initialize.rot_init.reference_ref_frame_name = "Earth.inertial"

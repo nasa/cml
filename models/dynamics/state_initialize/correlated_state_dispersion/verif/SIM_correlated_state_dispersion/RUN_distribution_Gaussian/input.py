@@ -1,6 +1,6 @@
 exec(open("RUN_inertial_pva_PVA/input.py").read())
 
-verif.corr_state.dispersion_distribution = trick.CorrelatedStateDispersion.Normal
+verif.corr_state.dispersion_distribution = trick.cml.CorrelatedStateDispersion.Normal
 verif.corr_state.covariance[0][1] = 0
 verif.corr_state.covariance[1][0] = 0
 

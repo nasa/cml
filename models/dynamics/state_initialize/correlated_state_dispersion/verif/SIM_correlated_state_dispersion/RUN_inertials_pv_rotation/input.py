@@ -5,8 +5,8 @@ verif.framework.enabled = True
 verif.framework.data_file_name = "Unit_test_data/data.txt"
 verif.framework.vars_file_name = "Unit_test_data/pv_rotation_variables.txt"
 
-verif.corr_state.pv_covar_frame = trick.CorrelatedStateDispersion.PV_COVAR_LVLH
-verif.corr_state.corr_option = trick.CorrelatedStateDispersion.CORRELATED_PV_ATT
+verif.corr_state.pv_covar_frame = trick.cml.CorrelatedStateDispersion.PV_COVAR_LVLH
+verif.corr_state.corr_option = trick.cml.CorrelatedStateDispersion.CORRELATED_PV_ATT
 verif.disperse_pva_diff_ref = True
 
 trick.stop(3)

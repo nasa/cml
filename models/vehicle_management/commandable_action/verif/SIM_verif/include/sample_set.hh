@@ -36,14 +36,14 @@ IndirectCommandableActionSet
 Purpose:
   test implementation of CommandableActionSet
 *****************************************************************************/
-class IndirectCommandableActionSet : public CommandableActionSet
+class IndirectCommandableActionSet : public cml::CommandableActionSet
 {
  public:
-  CommandableAction act1;
-  CommandableAction act2;
-  CommandableAction act3;
-  CommandableAction act4;
-  CommandableAction error;
+  cml::CommandableAction act1;
+  cml::CommandableAction act2;
+  cml::CommandableAction act3;
+  cml::CommandableAction act4;
+  cml::CommandableAction error;
 
   enum CommandType{
     NoOp = 0,
@@ -57,7 +57,7 @@ class IndirectCommandableActionSet : public CommandableActionSet
 
   IndirectCommandableActionSet()
     :
-    CommandableActionSet("indirect"),
+    cml::CommandableActionSet("indirect"),
     act1( "act1", *this),
     act2( *this),
     act3( "act3", *this),
@@ -89,20 +89,20 @@ DirectCommandableActionSet
 Purpose:
   test implementation of CommandableActionSet
 *****************************************************************************/
-class DirectCommandableActionSet : public CommandableActionSet
+class DirectCommandableActionSet : public cml::CommandableActionSet
 {
  protected:
   FswBus & fsw_bus;
  public:
-  CommandableAction act1;
-  CommandableAction act2;
-  CommandableAction act3;
-  CommandableAction act4;
-  CommandableAction error;
+  cml::CommandableAction act1;
+  cml::CommandableAction act2;
+  cml::CommandableAction act3;
+  cml::CommandableAction act4;
+  cml::CommandableAction error;
 
   DirectCommandableActionSet(FswBus & bus)
     :
-    CommandableActionSet(),
+    cml::CommandableActionSet(),
     fsw_bus(bus),
     act1( "act1", *this),
     act2( *this),

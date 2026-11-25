@@ -14,6 +14,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCIES:
    (../src/dummy_vehicle_launcher.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (August 2014) (New))
     ((Gary Turner) (OSR) (March 2015) (Modification to make more generic))
@@ -26,6 +28,8 @@ PROGRAMMERS:
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/mass/include/mass.hh"
 #include "jeod/models/dynamics/dyn_manager/include/dynamics_integration_group.hh"
+
+namespace cml {
 
 class DummyVehicleLauncher
 {
@@ -78,4 +82,7 @@ class DummyVehicleLauncher
   void add_to_integ_group();
   void process_inconsistent_setup();
 };
+
+} // namespace cml
+
 #endif

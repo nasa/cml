@@ -2,6 +2,8 @@
 PURPOSE:
   (Manages injection of a scale-factor fault.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
@@ -10,6 +12,8 @@ PROGRAMMERS:
 #define CML_FAULT_SCALE_HH
 
 #include "fault.hh"
+
+namespace cml {
 
 /*******************************************************************************
 FaultScale
@@ -66,5 +70,7 @@ bool FaultScale<T>::set_param(const std::string& param_name, double value, bool 
 
   return true;
 }
+
+} // namespace cml
 
 #endif

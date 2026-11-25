@@ -10,6 +10,8 @@ Assumptions and Limitations:
 Library dependencies:
   ((../src/mass_body_detach_impulsive.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   (((Gary Turner) (OSR) (July 2011) (TS21 contribution) (Initial version)))
   (((Jeff Semrau) (Hon) (July 2017) (Updates per code review)))
@@ -28,6 +30,8 @@ class DynBody;
 class DynManager;
 class MassPoint;
 }
+
+namespace cml {
 
 // Causes the subject body to detach from its parent with a specified impulse.
 class MassBodyDetachImpulsive : public jeod::BodyAction {
@@ -73,5 +77,7 @@ class MassBodyDetachImpulsive : public jeod::BodyAction {
     virtual void apply_impulse( jeod::DynBody     & dyn_body,
                                 const std::string & mass_point_name);
 };
+
+} // namespace cml
 
 #endif

@@ -18,12 +18,12 @@ AUTHOR:
 class UnitSimObject: public Trick::SimObject {
 
  public:
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   double point_of_interest[2];
 
-  PolygonEnclosure<4> rectangle;
-  PolygonEnclosure<6> irreg_hex;
-  PolygonEnclosure<4> invalid;
+  cml::PolygonEnclosure<4> rectangle;
+  cml::PolygonEnclosure<6> irreg_hex;
+  cml::PolygonEnclosure<4> invalid;
 
   bool in_rectangle;
   bool in_hex;

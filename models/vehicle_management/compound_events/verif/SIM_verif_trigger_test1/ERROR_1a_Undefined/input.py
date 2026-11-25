@@ -1,7 +1,7 @@
 exec(open("Log_data/log_data.py").read())
 verif.framework.vars_file_name = "Unit_test_data/vars.txt"
 verif.framework.data_file_name = "Unit_test_data/data_1.txt"
-trick.CMLMessage.set_publish_level( trick.CMLMessage.Debug)
+trick.cml.message.set_publish_level( trick.cml.message.Debug)
 verif.manager.enabled = True
 verif.manager.event.subscribe()
 

@@ -9,6 +9,8 @@ LIBRARY DEPENDENCY:
   ((../src/simple_spring_group.cc)
    (../src/simple_spring_individual.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner)(OSR)(December 2014) (Antares) (new implementation))
    ((Brent Caughron) (OSR) (Jan 2021) (Antares) (Code review and IV&V)))
@@ -22,6 +24,8 @@ PROGRAMMERS:
 #include "cml/models/dynamics/state_descriptors/separation_state/include/separation_state.hh"
 
 #include "simple_spring_individual.hh"
+
+namespace cml {
 
 /*******************************************************************************
 SpringGroup
@@ -98,5 +102,7 @@ public:
   void deactivate();
   void update();
 };
+
+} // namespace cml
 
 #endif

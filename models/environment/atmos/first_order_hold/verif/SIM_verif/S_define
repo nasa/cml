@@ -23,9 +23,9 @@ class WindFirstOrderHoldTestSimObject : public Trick::SimObject {
     const double                 & my_time;
 
   public:
-    ExtendedPlanetaryDerivedState  state;
-    AtmosExecOutput                atmos_out;
-    FirstOrderHold                 hold;
+    cml::ExtendedPlanetaryDerivedState  state;
+    cml::AtmosExecOutput                atmos_out;
+    cml::FirstOrderHold                 hold;
     double                         test_wind;
 
     WindFirstOrderHoldTestSimObject( const double & time_in )

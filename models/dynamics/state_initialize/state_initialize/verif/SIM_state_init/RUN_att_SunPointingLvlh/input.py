@@ -6,7 +6,7 @@ exec(open("Modified_data/common_input.py").read())
 # into sun-inertial, allowing 
 vehicle.body.integ_frame_name = "Sun.inertial"
 
-vehicle.state_initialize.attitude_input_data_type = trick.StateInitialize.Off
+vehicle.state_initialize.attitude_input_data_type = trick.cml.StateInitialize.Off
 
 
 vehicle.rot_init_slvlh.set_subject_body( vehicle.body )

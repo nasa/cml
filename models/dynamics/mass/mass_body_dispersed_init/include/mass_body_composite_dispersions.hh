@@ -16,6 +16,8 @@ ASSUMPTIONS:
 LIMITATIONS:
   ((This model will not initialize mass properties, it will only modify them.))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2018) (Antares) (Initial version))
    ((Gary Turner) (OSR) (Sept 2018) (Antares)
@@ -38,6 +40,8 @@ PROGRAMMERS:
 namespace jeod {
 class DynManager;
 }
+
+namespace cml {
 
 /*******************************************************************************
 MassBodyCompositeDispersions
@@ -114,4 +118,7 @@ private:
   void comp_to_core_updates();
   void process_dispersions();
 };
+
+} // namespace cml
+
 #endif

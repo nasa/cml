@@ -19,18 +19,18 @@ class CodeCoverageSimObject : public Trick::SimObject {
     double               independent_variable;
     double        second_independent_variable;
     double              dependent_variable[2];
-    SimpleTableLookup                     stl;
-    GenericMultiInputTable               gmit;
-    TableIndependentVariable              tiv;
-    TableIndependentVariable              tiv2;
-    QuaternionSphericalInterpolator        qsi;
+    cml::SimpleTableLookup                     stl;
+    cml::GenericMultiInputTable               gmit;
+    cml::TableIndependentVariable              tiv;
+    cml::TableIndependentVariable              tiv2;
+    cml::QuaternionSphericalInterpolator        qsi;
     jeod::Quaternion                     quat_0;
     jeod::Quaternion                     quat_1;
-    SingleInputTableForAngles             sitfa;
-    SingleInputTableForQuaternions        sitfq;
+    cml::SingleInputTableForAngles             sitfa;
+    cml::SingleInputTableForQuaternions        sitfq;
 
-    TableLookupTransposeDataSet            tltd;
-    TableLookupTransposeDataSet_TableConfig tltd_tc;
+    cml::TableLookupTransposeDataSet            tltd;
+    cml::TableLookupTransposeDataSet_TableConfig tltd_tc;
 
 
     int number_of_independent_data_points = 5;
@@ -41,8 +41,8 @@ class CodeCoverageSimObject : public Trick::SimObject {
    CodeCoverageSimObject() :  independent_variable(2.5),
                               stl(),
                               gmit(dependent_variable, 2),
-                              tiv(independent_variable, TableIndependentVariable::Linear),
-                              tiv2(second_independent_variable, TableIndependentVariable::Linear),
+                              tiv(independent_variable, cml::TableIndependentVariable::Linear),
+                              tiv2(second_independent_variable, cml::TableIndependentVariable::Linear),
                               qsi(),
                               quat_0(),
                               quat_1(),
@@ -95,9 +95,9 @@ class CodeCoverageSimObject : public Trick::SimObject {
      //  Arrives at check for fraction > 1 in
      //      TableIndependentVariable::generate_fraction()
      //      must use debugger to set fraction > 1
-     TableIndependentVariable tiv_new(independent_variable);
+     cml::TableIndependentVariable tiv_new(independent_variable);
      tiv_new.perform_full_search=true;
-     DoubleVec dvec{2,3};
+     cml::DoubleVec dvec{2,3};
      tiv_new.load_data(dvec);
      tiv_new.initialize();
      tiv_new.update();
@@ -106,8 +106,8 @@ class CodeCoverageSimObject : public Trick::SimObject {
      //  Covers data_in size < 1 check in
      //     TableIndependentVariable::load_data(...)
      //  loads empty vector
-     TableIndependentVariable tiv_new(independent_variable);
-     DoubleVec dvec;
+     cml::TableIndependentVariable tiv_new(independent_variable);
+     cml::DoubleVec dvec;
      tiv_new.load_data(dvec);
    }
 
@@ -163,7 +163,7 @@ class CodeCoverageSimObject : public Trick::SimObject {
      //      must use a debugger to set this to false
      gmit.add_independent(tiv);
      tiv.load_data( independent_data, 5);
-     SizeVec dim_list;
+     cml::SizeVec dim_list;
      dim_list.push_back(2);  //  number of dependent variables
      dim_list.push_back(5);  //  first independent has 1 value
      gmit.load_data(dependent_data, dim_list);
@@ -178,7 +178,7 @@ class CodeCoverageSimObject : public Trick::SimObject {
      //    use a debugger to set output_ptrs_set = False
      gmit.add_independent(tiv);
      tiv.load_data( independent_data, 1);
-     SizeVec dim_list;
+     cml::SizeVec dim_list;
      dim_list.push_back(2);  //  number of dependent variables
      dim_list.push_back(1);  //  first independent has 1 value
      gmit.load_data(dependent_data, dim_list);
@@ -187,7 +187,7 @@ class CodeCoverageSimObject : public Trick::SimObject {
    void independent_nullptr() {
      //  Covers null input pointer check in GenericMultiInputTable::add_independent(...)
      //  sends in a NULL address
-     TableIndependentVariable * hope[2] = {NULL, NULL};
+     cml::TableIndependentVariable * hope[2] = {NULL, NULL};
      gmit.add_independent(**hope);
    }
 
@@ -197,12 +197,12 @@ class CodeCoverageSimObject : public Trick::SimObject {
         stl.subscribe();
         // Covers the default switch case in AbstractTableLookup::create_table(...)
         // chooses an illegal table type = 4
-        stl.create_table(dependent_data[0], static_cast<AbstractTableLookup::TableType>(14));
+        stl.create_table(dependent_data[0], static_cast<cml::AbstractTableLookup::TableType>(14));
    }
    void table_failed_update() {
         stl.initialize();
         stl.subscribe();
-        stl.create_table(dependent_data[0],  AbstractTableLookup::Generic);
+        stl.create_table(dependent_data[0],  cml::AbstractTableLookup::Generic);
         // Covers table update in AbstractTableLookup::update()
         // returns !(*it_tab).first->update() as false (output table not initialized in GMIT::update())
         stl.update();
@@ -225,7 +225,7 @@ class CodeCoverageSimObject : public Trick::SimObject {
         stl.update();
    }
    void destructor_coverage() {
-        SimpleTableLookup *stl_temp = new SimpleTableLookup();
+        cml::SimpleTableLookup *stl_temp = new cml::SimpleTableLookup();
         stl_temp->load_independent_data(independent_variable, independent_data, number_of_independent_data_points);
         stl_temp->load_dependent_data(dependent_variable, number_of_dependent_variables, dependent_data, number_of_independent_data_points);
         // Covers the destructor in AbstractTableLookup::~AbstractTableLookup()

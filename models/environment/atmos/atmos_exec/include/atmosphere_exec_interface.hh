@@ -7,6 +7,8 @@ LIBRARY DEPENDENCY:
      (../src/atmosphere_exec_interface.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (May 2016) (ANTARES)
@@ -26,6 +28,7 @@ PROGRAMMERS:
 #include "atmosphere_exec_atmos_base.hh"
 #include <string>
 
+namespace cml {
 
 /*****************************************************************************
 AtmosphereExecInterface
@@ -79,5 +82,7 @@ class AtmosphereExecInterface : public SubscriptionBase
     void activate() override;
     void deactivate() override;
 };
+
+} // namespace cml
 
 #endif

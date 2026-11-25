@@ -11,6 +11,8 @@ REFERENCES:
 LIBRARY DEPENDENCY:
     ((../src/atmos_relative_state.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
     (((Gavin Mendeck) (NASA) (May 2005) (ARES) (Initial implementation as pom))
      ((Edgar Medina) (NASA) (June 2005) (ARES)
@@ -36,6 +38,9 @@ PROGRAMMERS:
 namespace jeod {
 class DynBody;
 }
+
+namespace cml {
+
 class AtmosphereExecInterface;
 class AtmosExecOutput;
 class ExtendedPlanetaryDerivedState;
@@ -173,5 +178,6 @@ class AtmosRelativeState : public SubscriptionBase
   virtual void normalize_T_traj_body();
 };
 
+} // namespace cml
 
 #endif

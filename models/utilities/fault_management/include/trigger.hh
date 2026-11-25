@@ -2,6 +2,8 @@
 PURPOSE:
   (Individual trigger class)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Bingquan Wang) (OSR) (April 2017) (Antares) (Fixed the float-point number
@@ -18,6 +20,8 @@ PROGRAMMERS:
 #include <utility>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+
+namespace cml {
 
 /*******************************************************************************
 TestEqual_Trait
@@ -224,7 +228,7 @@ template<> class Trigger<std::string> : public TriggerBase {
     void set_value( double unused) override
       {
         (void)unused;
-        CMLMessage::error(
+        message::error(
           __FILE__, __LINE__, "Fault Management Error in Trigger configuration.\n",
           "Arithmetic value assigned to trigger-value in Trigger <", name, ">.\n"
           "Cannot process an arithmetic value into a string.\n"
@@ -249,7 +253,7 @@ template<> class Trigger<bool> : public TriggerBase {
 
     void set_value( double val) override
     {
-      CMLMessage::warn(
+      message::warn(
         __FILE__, __LINE__,
         "Fault Management Error in Trigger configuration.\n",
         "Arithmetic value assigned to trigger-value in Trigger \"%s\".\n"
@@ -356,7 +360,7 @@ Purpose:(Makes the trigger periodic.)
 template<typename T> void Trigger<T>::set_periodic(T length, T period)
 {
   if (period <= 0.0) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Fault-Management Trigger invalid periodicity setting.\n",
       "Attempted to assign invalid period of ", period, " to trigger <", name, ">.\n"
       "Period cannot be negative.\n");
@@ -364,7 +368,7 @@ template<typename T> void Trigger<T>::set_periodic(T length, T period)
     return;
   }
   if (length >= period) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Fault-Management Trigger invalid periodicity setting.\n",
       "Attempted to assign invalid length of ", length, " to trigger <", name, ">.\n"
       "Length cannot be greater than period (", period, ").\n");
@@ -377,4 +381,7 @@ template<typename T> void Trigger<T>::set_periodic(T length, T period)
   periodic_length = length;
   periodic_period = period;
 }
+
+} // namespace cml
+
 #endif

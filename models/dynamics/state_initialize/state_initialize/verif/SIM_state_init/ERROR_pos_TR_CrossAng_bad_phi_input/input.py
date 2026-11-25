@@ -8,7 +8,7 @@ exec(open("Modified_data/common_input.py").read())
 # The range and cross angle inputs result in a physically unrealizable position.
 # This will generate an error message.
 
-vehicle.state_initialize.position_input_data_type        = trick.StateInitialize.TR_GeodAlt_RngAng_CrossAng_AbsRotAng_LT_90
+vehicle.state_initialize.position_input_data_type        = trick.cml.StateInitialize.TR_GeodAlt_RngAng_CrossAng_AbsRotAng_LT_90
 vehicle.state_initialize.ref_point_altitude              = 0.0
 vehicle.state_initialize.ref_point_latitude              = trick.attach_units("degree", 90.0)
 vehicle.state_initialize.ref_point_longitude             = 0.0

@@ -2,6 +2,8 @@
 PURPOSE:
    (Data structure for atmosphere executive output.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (Oct 2014) (Antares) (initial implementation))
@@ -10,6 +12,8 @@ PROGRAMMERS:
 
 #ifndef CML_ATMOSPHERE_EXEC_OUT_HH
 #define CML_ATMOSPHERE_EXEC_OUT_HH
+
+namespace cml {
 
 class AtmosExecOutput {
   public:
@@ -41,5 +45,7 @@ class AtmosExecOutput {
       }
     }
 };
+
+} // namespace cml
 
 #endif

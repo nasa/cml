@@ -36,8 +36,8 @@ public:
   jeod::MassBodyInit            mass_init[3];
   jeod::BodyAttachMatrix        attach[2];
 
-  MassBodyCompositeDispersions  adjust_0;
-  MassBodyCompositeDispersions  adjust_1;
+  cml::MassBodyCompositeDispersions  adjust_0;
+  cml::MassBodyCompositeDispersions  adjust_1;
 
   MassBodyDispSimObject()
     :

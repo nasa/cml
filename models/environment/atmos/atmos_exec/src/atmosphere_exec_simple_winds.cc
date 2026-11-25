@@ -22,6 +22,7 @@ PROGRAMMERS:
 #include "../include/atmosphere_exec_out.hh"
 #include "../include/atmosphere_exec_simple_winds.hh"
 
+namespace cml {
 
 /*****************************************************************************
 Constructor
@@ -133,7 +134,7 @@ AtmosphereExec_SimpleLookupWind::set_altitude_type(
     altitude_ptr = &planet_state.state.sphere_coords.altitude;
     break;
   default:
-    CMLMessage::error(__FILE__, __LINE__, "Invalid altitude type\n",
+    message::error(__FILE__, __LINE__, "Invalid altitude type\n",
       "set_altitude_type() called with invalid type. altitude_type will\n"
       "remain at its previous value.");
     return;
@@ -151,3 +152,5 @@ AtmosphereExec_SimpleLookupWind::set_altitude_type(
     }
   }
 }
+
+} // namespace cml

@@ -8,6 +8,8 @@ LIBRARY DEPENDENCY:
     (cml/models/utilities/cml_message/src/cml_message.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
  (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )
@@ -24,6 +26,8 @@ PROGRAMMERS:
 #include "constraint_set.hh"
 
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+namespace cml {
 
 /**
  * Uses the threshold constraint tests, which are violated when the variable
@@ -373,7 +377,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
       num_specs = val;
     }
     else {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Error in attempting to set the number of specification values\n"
         "to use in generating the testing parameters.\n"
         "There are 2 requirements:\n"
@@ -392,14 +396,14 @@ class ThresholdTimedConstraintSpecData : public Constraint
   void initialize() override
   {
     if (num_specs == 0) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot initialize a constraint with number of specifications\n"
         "assigned to 0.\nInitialization failed.\n");
       return;
     }
     if constexpr (NumTests == 1) {
       if (num_specs > 1) {
-        CMLMessage::warn( __FILE__,__LINE__,
+        message::warn( __FILE__,__LINE__,
           "A constraint was configured to use a single test point\n"
           "(NumTests = 1) but with multiple specification points.\n"
           "Only the first specification point will be used as the single "
@@ -407,7 +411,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
       }
     } else {
       if (num_specs == 1) {
-        CMLMessage::error( __FILE__,__LINE__,
+        message::error( __FILE__,__LINE__,
           "Cannot create multiple test points (bins) for a constraint defined\n"
           "with a single specification. Re-configure to require only a single\n"
           "test point, or provide at least one more specification value to\n"
@@ -482,7 +486,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
     for (std::size_t ii = 1; ii < num_specs; ++ii) {
       if (parameter_direction * (threshold_spec[ii] - threshold_spec[ii-1])
                                                                      <= 0.0) {
-        CMLMessage::error( __FILE__,__LINE__,
+        message::error( __FILE__,__LINE__,
           "Initialization failed.\n"
           "Cannot reliably interpolate between specification points when the\n"
           "specification values are not monotonic.\n"
@@ -590,7 +594,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
        *       (lg(x) - lg(y) = lg(x/y))*/
       if ( (threshold_spec[0] * threshold_spec[num_specs-1]) <= 0.0 ||
            (time_spec[0]  * time_spec[num_specs-1])  <= 0.0) {
-        CMLMessage::error( __FILE__,__LINE__,
+        message::error( __FILE__,__LINE__,
           "Initialization failed.\n"
           "Constraint is configured to generate the values of the test\n"
           "points based on logarithmic interpolation of the specification "
@@ -637,4 +641,7 @@ class ThresholdTimedConstraintSpecData : public Constraint
     post_update(); // inherited.
   }
 };
+
+} // namespace cml
+
 #endif

@@ -6,6 +6,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/event_trigger.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (October 2023) (ANTARES)
    (Based on logic in DATA_COLLECTION_TRIGGER and DC_TRIGGER_PRIMAL,
@@ -26,9 +28,11 @@ PROGRAMMERS:
 #ifdef SWIG
 #ifndef CML_EVENT_TRIGGERS_SWIG_TEMPLATES
 #define CML_EVENT_TRIGGERS_SWIG_TEMPLATES
-%template(WatchValuesDelay_double) WatchValuesDelay<double>;
+%template(WatchValuesDelay_double) cml::WatchValuesDelay<double>;
 #endif
 #endif
+
+namespace cml {
 
 /*****************************************************************************
 EventTriggeBaser
@@ -249,7 +253,7 @@ Notes:
      * comparison of variable-value against threshold.*/
     switch (comparison_logic) {
     default:
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Invalid comparator specified : ", comparison_logic,".\n"
         "Disabling trigger.\n");
         this->event_triggered = false;
@@ -419,7 +423,7 @@ Notes:
  ******************************************************************************/
   void activate() override {
     if (this->variable == nullptr) {
-      CMLMessage::error ( __FILE__, __LINE__,
+      message::error ( __FILE__, __LINE__,
         "Invalid Event/Watch activation: nullptr variable:\n",
         "An attempt was made to activate an EventTrigger instance with a\n "
         "nullptr variable to watch.\n  Attempt failed.\n");
@@ -427,7 +431,7 @@ Notes:
     }
 
     if (comparison_logic == Undefined) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Invalid comparator. Comparator remains on the default 'Undefined'.\n"
         "There is no comparison available to result in a triggering.\n"
         "Trigger activation failed.\n");
@@ -452,7 +456,7 @@ Notes:
          (comparison_logic == MIN_CONDITIONAL_LAST) ||
          (comparison_logic == ABS_MAX_CONDITIONAL_LAST) ||
          (comparison_logic == ABS_MIN_CONDITIONAL_LAST))) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Invalid configuration. The reference-management flags:\n"
         "         reference_is_variable:  ",this->reference_is_variable,"\n"
         "         relative_to_activation: ",this->relative_to_activation,"\n"
@@ -529,4 +533,7 @@ Notes:
     this->active = true;
   }
 };
+
+} // namespace cml
+
 #endif

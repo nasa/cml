@@ -5,7 +5,7 @@
 # terminal failure to error.
 exec(open( "input_common.py").read())
 luwinds.lookup_table_winds.load_DRWP_file("Binaries/DRWP_no_w_comp.bin", False, 1771)
-trick.CMLMessage.set_publish_level( trick.CMLMessage.Error)
+trick.cml.message.set_publish_level( trick.cml.message.Error)
 
 trick.add_read(0,"""
 luwinds.lookup_table_winds.load_DRWP_file("Binaries/corrupt_binaries/short_altitude_array.bin", True, 11)

@@ -6,6 +6,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/rocket_motor_multi_nozzle.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares)
           (initial, providing features dictated by requirements for
@@ -24,6 +26,8 @@ PROGRAMMERS:
 
 #include <cstddef>
 #include <vector>
+
+namespace cml {
 
 class RocketMotor_MultiNozzle : public RocketMotor_TableThrust {
 protected:
@@ -133,4 +137,7 @@ public:
 
   size_t get_num_noz() const { return num_noz; }
 };
+
+} // namespace cml
+
 #endif

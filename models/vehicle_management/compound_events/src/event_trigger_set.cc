@@ -18,6 +18,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Destructor
 *****************************************************************************/
@@ -123,7 +125,9 @@ EventTriggerSet::find_trigger( const std::string& trigger_name_in)
                         );
   if (it != allocated_triggers.end()) { return *it;}
 
-  CMLMessage::error( __FILE__,__LINE__,
+  message::error( __FILE__,__LINE__,
     "Could not find a trigger named ", name,".\nReturning NULL.\n");
   return nullptr;
 }
+
+} // namespace cml

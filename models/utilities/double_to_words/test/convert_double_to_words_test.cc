@@ -19,9 +19,9 @@ void test_double_to_words(
     uint32_t word_array[word_count];
     std::vector<uint32_t> word_vector(word_count);
 
-    convert_double_to_uint_words(value, resolution, word_vector, bit_size);
-    convert_double_to_uint_words(value, resolution, word_array, std::size(word_array), bit_size);
-    ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
+    cml::convert_double_to_uint_words(value, resolution, word_vector, bit_size);
+    cml::convert_double_to_uint_words(value, resolution, word_array, std::size(word_array), bit_size);
+    cml::ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
     article.update();
 
     EXPECT_THAT(word_vector, Pointwise(Eq(), expected));
@@ -35,13 +35,13 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
     using testing::_;
     using testing::HasSubstr;
 
-    CMLMessage::Mock cml_message_mock;
+    cml::message::Mock cml_message_mock;
 
     // Passing an invalid pointer to the free function interface.
     EXPECT_CALL(
         cml_message_mock,
-        publish(CMLMessage::Error, _, _, HasSubstr("words array was passed in as NULL")));
-    convert_double_to_uint_words(1.0, 1e-3, nullptr, 2, 8);
+        publish(cml::message::Error, _, _, HasSubstr("words array was passed in as NULL")));
+    cml::convert_double_to_uint_words(1.0, 1e-3, nullptr, 2, 8);
 
     // Invalid word count.
     {
@@ -51,8 +51,8 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         constexpr unsigned int bit_size = 16U;
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("will generate 0 words")));
-        const ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
+            publish(cml::message::Error, _, _, HasSubstr("will generate 0 words")));
+        const cml::ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
         EXPECT_EQ(article.words.size(), 0);
     }
 
@@ -64,8 +64,8 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         constexpr unsigned int bit_size = 64U;
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("bit_size cannot be > 32")));
-        ConvertDoubleToUintWords(value, resolution, word_count, bit_size);
+            publish(cml::message::Error, _, _, HasSubstr("bit_size cannot be > 32")));
+        cml::ConvertDoubleToUintWords(value, resolution, word_count, bit_size);
     }
 
     // Value to convert is too large.
@@ -74,10 +74,10 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         constexpr double resolution = 1e-200;
         constexpr unsigned int word_count = 2U;
         constexpr unsigned int bit_size = 16U;
-        ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
+        cml::ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Inform, _, _, HasSubstr("too large to be represented")));
+            publish(cml::message::Inform, _, _, HasSubstr("too large to be represented")));
         article.update();
 
         // All bits should be set to 1. With 16 bits, expecting 2^16 - 1 = 65535.
@@ -92,7 +92,7 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         constexpr double resolution = 1.0;
         constexpr unsigned int word_count = 2U;
         constexpr unsigned int bit_size = 16U;
-        ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
+        cml::ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
         EXPECT_FALSE(article.check_values());
         ASSERT_EQ(article.words[0], 0);
         ASSERT_EQ(article.words[1], 0);
@@ -104,10 +104,10 @@ TEST(ConvertDoubleToUintWords, InvalidConfiguration) {
         constexpr double resolution = 1.0;
         constexpr unsigned int word_count = 4U;
         constexpr unsigned int bit_size = 16U;
-        ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
+        cml::ConvertDoubleToUintWords article(value, resolution, word_count, bit_size);
         EXPECT_CALL(
             cml_message_mock,
-            publish(CMLMessage::Error, _, _, HasSubstr("Resolution of words is lower than the resolution of double")));
+            publish(cml::message::Error, _, _, HasSubstr("Resolution of words is lower than the resolution of double")));
         article.check_values();
     }
 }

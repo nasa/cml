@@ -1,6 +1,6 @@
 exec(open("RUN_distribution_Gaussian/input.py").read())
 # Test the "Limit too small for TruncatedGaussian" error in CorrelatedStateDispersion::generate_dispersions
-verif.corr_state.dispersion_distribution = trick.CorrelatedStateDispersion.TruncatedGaussian
+verif.corr_state.dispersion_distribution = trick.cml.CorrelatedStateDispersion.TruncatedGaussian
 verif.corr_state.sigma_limit = 0.01
 
 print(\

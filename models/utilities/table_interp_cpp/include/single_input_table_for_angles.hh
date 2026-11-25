@@ -17,6 +17,8 @@ LIMITATIONS:
     ((../src/single_input_table_for_angles.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2014) (New implementation for C++ models))
    ((Bingquan Wang) (OSR) (August 2014) (IV&V cleanup and refactored))
@@ -29,6 +31,8 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/table_interp_cpp/include/table_type_defs.hh"
 #include "generic_single_input_table.hh"
+
+namespace cml {
 
 class SingleInputTableForAngles : public GenericSingleInputTable
 {
@@ -58,4 +62,7 @@ class SingleInputTableForAngles : public GenericSingleInputTable
   bool generate_output() override;
   void bound_to_half_circle( double & angle) const;
 };
+
+} // namespace cml
+
 #endif

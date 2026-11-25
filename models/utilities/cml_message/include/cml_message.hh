@@ -6,7 +6,7 @@ Purpose:
 Library Dependency:
  ((cml/models/utilities/cml_message/src/cml_message.cc))
 
-PYTHON_MODULE: (CMLMessage)
+PYTHON_MODULE: (cml.message)
 
 Programmers:
   (((Gary Turner) (OSR) (March 2023) (ANTARES) (Initial version))
@@ -24,7 +24,7 @@ Programmers:
 
 #include "cml/models/utilities/color_string/include/color_string.hh"
 
-namespace CMLMessage {
+namespace cml::message {
 
 enum PublishLevel {
   Fail = 0,

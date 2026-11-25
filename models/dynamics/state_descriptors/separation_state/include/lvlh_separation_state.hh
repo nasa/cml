@@ -7,6 +7,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/lvlh_separation_state.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2020) (Antares) (new)))
 
@@ -26,6 +28,8 @@ class DynBody;
 class DynManager;
 class RefFrame;
 }
+
+namespace cml {
 
 class LvlhSeparationState : public SeparationState
 {
@@ -82,5 +86,7 @@ class LvlhSeparationState : public SeparationState
   void activate() override;
   void deactivate() override;
 };
+
+} // namespace cml
 
 #endif

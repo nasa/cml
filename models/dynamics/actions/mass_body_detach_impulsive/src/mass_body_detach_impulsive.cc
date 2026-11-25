@@ -28,6 +28,8 @@ Programmers:
 
 #include <string>
 
+namespace cml {
+
 /*******************************************************************************
 Function: MassBodyDetachImpulsive::initialize
 Purpose: (Initialize a MassBodyDetach)
@@ -54,13 +56,13 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   }
 
   if (subject == nullptr) {
-    CMLMessage::error (
+    message::error (
       __FILE__,__LINE__, jeod::BodyActionMessages::not_performed,
       "\nSubject body is identified as NULL for impulsive detach action ", action_identifier, ".\n"
       "You forgot to specify a subject body.\n");
 
     if (terminate_on_error) {
-      CMLMessage::fail (
+      message::fail (
         __FILE__, __LINE__, jeod::BodyActionMessages::fatal_error,
         "\nBody-detach error is terminal.\n");
     }
@@ -73,13 +75,13 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   // to the parent.
   auto * parent = const_cast<jeod::MassBody *>(subject->get_parent_body());
   if (parent == nullptr) {
-    CMLMessage::error (
+    message::error (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
        "\n", action_identifier, " failed to detach ", subject->name.get_name(), " because no parent body was found to\n"
       "which ", subject->name.get_name(), " is currently attached.");
 
     if (terminate_on_error) {
-      CMLMessage::fail (
+      message::fail (
         __FILE__, __LINE__, jeod::BodyActionMessages::fatal_error,
         "\nBody-detach error is terminal.\n");
     }
@@ -89,13 +91,13 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   // Detach the bodies.
   if (!subject->detach()) {
     // Detachment failed: Terminate the sim if terminate_on_error is set.
-    CMLMessage::error (
+    message::error (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
       "\n", action_identifier, " failed to detach ", subject->name.get_name(), ".");
 
 
     if (terminate_on_error) {
-      CMLMessage::fail (
+      message::fail (
         __FILE__, __LINE__, jeod::BodyActionMessages::fatal_error,
         "\nBody-detach error is terminal.\n");
     }
@@ -107,7 +109,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   // NOTE - The detach process includes recalculation of the mass properties of
   // what was root all the way down to parent. Mass properties of child on
   // down are unaffected.
-  CMLMessage::debug (
+  message::debug (
     __FILE__, __LINE__, jeod::BodyActionMessages::trace,
      "\n", action_identifier, ": ", subject->name.get_name(), " detached.");
 
@@ -118,7 +120,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
   // parent-body is not a jeod::DynBody, then the subject-body cannot be a jeod::DynBody
   // (cannot attach a Dynbody to a jeod::MassBody). However, for completeness:
   if ( parent_body == nullptr && subject_body == nullptr) {
-    CMLMessage::warn (
+    message::warn (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
       "\nNeither of the two mass-body objects specified in ", action_identifier, " are dyn-body "
       "objects.\nBodies smoothly detached instead without impulse applied.");
@@ -162,13 +164,13 @@ MassBodyDetachImpulsive::apply_impulse( jeod::DynBody     & dyn_body,
 {
   const jeod::MassPoint * mass_point = dyn_body.mass.find_mass_point(mass_point_name);
   if (mass_point == nullptr) {
-    CMLMessage::error (
+    message::error (
       __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
        "\n", action_identifier, " could not find mass point named ", mass_point_name, " on body ", dyn_body.name.get_name(), " to apply impulse to."
       "\nNo impulse applied to this body.");
 
     if (terminate_on_error) {
-      CMLMessage::fail (
+      message::fail (
         __FILE__, __LINE__, jeod::BodyActionMessages::fatal_error,
         "\nBody-detach error is terminal.\n");
     }
@@ -230,13 +232,13 @@ MassBodyDetachImpulsive::apply_impulse( jeod::DynBody     & dyn_body,
     root_body = const_cast<jeod::DynBody *>(dyn_body.get_root_body());
     // sanity check -- root body pointer must be non-NULL to continue.
     if (root_body == nullptr) {
-      CMLMessage::error (
+      message::error (
         __FILE__, __LINE__, jeod::BodyActionMessages::not_performed,
          "\n", action_identifier, " could not find root body for body ", dyn_body.name.get_name(), ".\n"
         "Impulse must be applied to root body.\n"
         "No impulse applied to this body.");
       if (terminate_on_error) {
-        CMLMessage::fail (
+        message::fail (
           __FILE__, __LINE__, jeod::BodyActionMessages::fatal_error,
           "\nBody-detach error is terminal.\n");
       }
@@ -291,3 +293,5 @@ MassBodyDetachImpulsive::apply_impulse( jeod::DynBody     & dyn_body,
                                 root_body->composite_body);
   root_body->propagate_state();
 }
+
+} // namespace cml

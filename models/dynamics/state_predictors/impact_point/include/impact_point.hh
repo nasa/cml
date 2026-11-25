@@ -14,6 +14,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCIES:
    ((../src/impact_point.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (Oct 2014)
         (New implementation of ball_impact for Antares))
@@ -34,6 +36,8 @@ namespace jeod {
 class Planet;
 class RefFrameTrans;
 }
+
+namespace cml {
 
 class ImpactPoint : public jeod::PlanetFixedPosition, 
                     public SubscriptionBase 
@@ -100,5 +104,7 @@ class ImpactPoint : public jeod::PlanetFixedPosition,
   void update_time();
   void activate() override;
 };
- 
+
+} // namespace cml
+
 #endif

@@ -17,17 +17,17 @@ PROGRAMMERS:
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_group.hh"
 #include "cml/models/fhw/effectors/rcs_generic/include/rcs_jet.hh"
 
-class RcsTestMultigroup : public RcsGeneric
+class RcsTestMultigroup : public cml::RcsGeneric
 {
  public:
-  RcsPropPod  rcs_pod_1;
-  RcsPropPod  rcs_pod_2;
-  RcsJetGroup group_1;
-  RcsJetGroup group_2;
-  RcsJet      jet_01;
-  RcsJet      jet_02;
-  RcsJet      jet_03;
-  RcsJet      jet_04;
+  cml::RcsPropPod  rcs_pod_1;
+  cml::RcsPropPod  rcs_pod_2;
+  cml::RcsJetGroup group_1;
+  cml::RcsJetGroup group_2;
+  cml::RcsJet      jet_01;
+  cml::RcsJet      jet_02;
+  cml::RcsJet      jet_03;
+  cml::RcsJet      jet_04;
 
   void default_data();
  protected:

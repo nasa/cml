@@ -9,6 +9,8 @@ ASSUMPTIONS:
 LIBRARY DEPENDENCY:
   (../src/bin_counter.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (
     ((Matthew Elmer, Gary Turner) (OSR) (Jun 2023)
@@ -22,12 +24,13 @@ PROGRAMMERS:
 #include <string>
 #include <vector>
 
+namespace cml {
 
 /*****************************************************************************
-CML_BinCounterElement
+BinCounterElement
 Purpose: Contents of each element of the working vector
 *****************************************************************************/
-struct CML_BinCounterElement {
+struct BinCounterElement {
   double value; /* (--)
   Target value to be counted, used by proximity counter */
   double bin_floor; /* (--)
@@ -37,39 +40,39 @@ struct CML_BinCounterElement {
   unsigned int count; /* (1)
     Counter. Incremented when falling in this specific bin.
     For Proximity element, incremented when value is the closest one among
-    CML_BinCounterElement vector to the variable. */
+    BinCounterElement vector to the variable. */
 };
 
 /*****************************************************************************
-CML_BinCounter
+BinCounter
 Purpose:
   Receives a value via the insert() command and bins it into one of
   a set of bins, each covering a finite domain.
 *****************************************************************************/
-class CML_BinCounter {
+class BinCounter {
  protected:
-  std::vector<CML_BinCounterElement> bins;  /* (--)
+  std::vector<BinCounterElement> bins;  /* (--)
     The edges that separate each bin. */
   bool bins_ready; /* (--)
     Check on internal consistency of the edges in the bins array.*/
   size_t nbin;  /* (--)
     Number of bins. For logging compatibility only. */
-  const CML_BinCounterElement* bin_data;  /* (--)
+  const BinCounterElement* bin_data;  /* (--)
     Array of bins data. For logging compatibility only.*/
 
  public:
   std::string name; /* (--)
     Name of bin group (for debugging purposes)*/
-  CML_BinCounter();
-  explicit CML_BinCounter(const std::vector<double> & edges,
+  BinCounter();
+  explicit BinCounter(const std::vector<double> & edges,
                           bool closed_ends = true);
-  CML_BinCounter( double limit_a,
+  BinCounter( double limit_a,
                   double limit_b,
                   unsigned int num_bins,
                   bool closed_ends = true);
-  virtual ~CML_BinCounter() = default;
-  CML_BinCounter(const CML_BinCounter&) = delete;
-  CML_BinCounter& operator=(const CML_BinCounter&) = delete;
+  virtual ~BinCounter() = default;
+  BinCounter(const BinCounter&) = delete;
+  BinCounter& operator=(const BinCounter&) = delete;
 
   void insert(double value);
   void set_data( const std::vector<double> & edges,
@@ -88,4 +91,7 @@ class CML_BinCounter {
   }
   size_t get_nbin() const {return nbin;}
 };
+
+} // namespace cml
+
 #endif

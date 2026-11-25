@@ -25,6 +25,8 @@ Library dependency:
   ((../src/commandable_action_set.cc)
   )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (
   ((Gary Turner) (OSR) (02/22) (Generic concept developed while
@@ -37,6 +39,7 @@ PROGRAMMERS:
 #include <string>
 #include <list>
 
+namespace cml {
 
 // forward declaration
 class CommandableAction;
@@ -115,4 +118,7 @@ class CommandableActionSet
  protected:
   virtual void generate_fsw_command() = 0;
 };
+
+} // namespace cml
+
 #endif

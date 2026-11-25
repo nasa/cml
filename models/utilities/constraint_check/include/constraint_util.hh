@@ -7,6 +7,8 @@ LIBRARY DEPENDENCY:
      (cml/models/utilities/cml_message/src/cml_message.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
     (
      ((Nino Tarantino) (NASA) (October 2026) (Split out common logic))
@@ -17,6 +19,8 @@ PROGRAMMERS:
 #include "constraint_enum.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+
+namespace cml {
 
 #ifndef SWIG
 /**
@@ -101,7 +105,7 @@ bool test_threshold_violation(
         case ConstraintEnum::Out:
         case ConstraintEnum::Undefined:
         default:
-            CMLMessage::error( __FILE__,__LINE__,
+            message::error( __FILE__,__LINE__,
               "Invalid setting of numerical_violation_condition: ",
               violation_condition,"\nMust be ==, !=, >, >=, <, or <=.\n");
     }
@@ -147,5 +151,7 @@ bool test_interval_violation(
 
     return in_interval;
 }
+
+} // namespace cml
 
 #endif

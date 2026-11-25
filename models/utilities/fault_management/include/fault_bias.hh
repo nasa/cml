@@ -2,6 +2,8 @@
 PURPOSE:
   (Manages injection of a bias fault.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
@@ -10,6 +12,8 @@ PROGRAMMERS:
 #define CML_FAULT_BIAS_HH
 
 #include "fault.hh"
+
+namespace cml {
 
 /*******************************************************************************
 FaultBias
@@ -65,5 +69,7 @@ bool FaultBias<T>::set_param(const std::string& param_name, double value, bool r
 
   return true;
 }
+
+} // namespace cml
 
 #endif

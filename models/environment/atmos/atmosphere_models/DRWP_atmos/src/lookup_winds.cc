@@ -28,6 +28,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
 
+namespace cml {
+
 /*****************************************************************************
 verify
 Purpose:
@@ -46,7 +48,7 @@ DRWPTableLookup::verify( bool leave_active)
   if (!is_initialized()) {
     // Not obviously reachable, testable in gdb by setting enabled = false
     // in initialize() above.
-    CMLMessage::fail( __FILE__, __LINE__,
+    message::fail( __FILE__, __LINE__,
       "Data profile defined by:\n"
       "  file: ", drwpFileName,
       "\n  profile: ", profile_number,
@@ -58,7 +60,7 @@ DRWPTableLookup::verify( bool leave_active)
   if (!is_active()) {
     // Not obviously reachable, testable in gdb by setting enabled = false
     // in subscribe() above.
-    CMLMessage::fail( __FILE__, __LINE__,
+    message::fail( __FILE__, __LINE__,
       "Data profile defined by:\n"
       "  file: ", drwpFileName,
       "\n  profile: ", profile_number,
@@ -111,12 +113,12 @@ LookupAtmosWinds::activate()
   // If there are no profiles available, abort.
   if (drwpFileName.empty()) {
     if (number_of_datasets == 0) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Activation of LookupAtmosWinds failed because there are no data\n"
         "tables loaded and no filename specified to load a new table.\n");
         return;
     } else if (!block_warnings) {
-      CMLMessage::inform( __FILE__,__LINE__,
+      message::inform( __FILE__,__LINE__,
         "Unspecified filename for DRWP binary file.\n"
         "Using the profile (pre)selected at index ",current_index,".\n");
     }
@@ -130,7 +132,7 @@ LookupAtmosWinds::activate()
   // Use the change_profile() method to search for a pre-loaded profile or, if
   // not found, search for the file and load a new profile.
   else if( !change_profile()) {
-    CMLMessage::fail( __FILE__, __LINE__,
+    message::fail( __FILE__, __LINE__,
       "Failed to initialize DRWP Table Lookup with specifications:"
       "\n  filename: ", drwpFileName,
       "\n  profile: ", wind_number,
@@ -170,7 +172,7 @@ LookupAtmosWinds::update(double altitude_in)
   if (!block_warnings &&
       !warning_issued &&
       table_.independent->is_off_table()) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__,
       "Current altitude ",altitude_in, " (modified to ", altitude, ") "
       "is outside tabulated domain.\n"
@@ -194,7 +196,7 @@ Note:
 void LookupAtmosWinds::change_datafile_index(size_t index)
 {
   if (index >= number_of_datasets ){
-    CMLMessage::fail( __FILE__, __LINE__,
+    message::fail( __FILE__, __LINE__,
       "Cannot change to data profile at index ", index,
       "\nThere are only ",number_of_datasets, " profiles available.");
     return;
@@ -226,7 +228,7 @@ void LookupAtmosWinds::change_datafile_index(size_t index)
     table_.verify(true);
   }
 
-  CMLMessage::inform(
+  message::inform(
     __FILE__, __LINE__,
     "Change in DRWP atmosphere profile to"
     "\n  index:          ", current_index,
@@ -255,7 +257,7 @@ bool LookupAtmosWinds::change_profile()
     }
   }
 
-  CMLMessage::inform( __FILE__,__LINE__,
+  message::inform( __FILE__,__LINE__,
     "Could not identify a pre-loaded profile with specified filename: ",
     drwpFileName, "\nand profile: ", wind_number, ".\n"
     "Attempting to find and load one.");
@@ -268,7 +270,7 @@ bool LookupAtmosWinds::change_profile()
     return true;
   }
 
-  CMLMessage::error( __FILE__, __LINE__,
+  message::error( __FILE__, __LINE__,
     "Could not identify a pre-loaded profile with specified filename: ",
     drwpFileName, "\nand profile number: ", wind_number, ".\n"
     "The attempt to find and load a profile with those specifications also "
@@ -305,7 +307,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   }
 
   if (initialized && !block_warnings) {
-    CMLMessage::inform( __FILE__,__LINE__,
+    message::inform( __FILE__,__LINE__,
       "It is recommended practice to load all data files before initialization"
       "\nFiles are all checked for errors at initialization, avoiding terminal"
       "\nfaults from data-loading errors mid-sim.\n");
@@ -359,7 +361,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   if ((LookupAtmosWinds::size_of_source_integer != sizeof(data_int)) ||
       (LookupAtmosWinds::size_of_source_float   != sizeof(data_float))) {
     // unreachable sanity check. Tested in gdb by setting size_of_source_float.
-    CMLMessage::fail( __FILE__, __LINE__,
+    message::fail( __FILE__, __LINE__,
       "DRWP load_file data type mismatch:\n",
       "Need to typedef data_int and data_float to be consistent with the "
       "expected data sizes."
@@ -374,7 +376,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   // number_of_datasets -- if we already have 3 datasets, we will be
   // populating the 4th, at index 3.
   if (number_of_datasets == MaxDatasets) {
-    CMLMessage::fail(__FILE__, __LINE__,
+    message::fail(__FILE__, __LINE__,
         "Maximum number of binary data files reached");
   }
 
@@ -412,7 +414,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
     return false;
   }
   if (number_of_profiles_ < 1 || number_of_profiles_ > 1e6) {
-    CMLMessage::fail(__FILE__, __LINE__,
+    message::fail(__FILE__, __LINE__,
       "DRWP file read produced bad number of profiles : ", number_of_profiles_,
       "\nNumber must be positive and not excessively large.");
   }
@@ -424,7 +426,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
     return false;
   }
   if (number_of_altitudes_ < 1 || number_of_altitudes_ > 1e6) {
-    CMLMessage::fail(__FILE__, __LINE__,
+    message::fail(__FILE__, __LINE__,
       "DRWP file read produced bad number of altitude calibration points : ",
       number_of_altitudes_,
       "\nNumber must be positive and not excessively large.");
@@ -457,7 +459,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   // Now try loading the independent data onto the table.
   if (!table_.load_independent_data( altitude,
                                      altitude_data_)) {
-    CMLMessage::fail(__FILE__, __LINE__,
+    message::fail(__FILE__, __LINE__,
       "Independent data failed to load\n",
       "See Table Interpolation error code");
   } /******   Independent variable data is loaded  ************/
@@ -493,7 +495,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   }
   // if no match was found, exit.
   if (profile_ix_ == number_of_profiles_) {
-    CMLMessage::fail(__FILE__, __LINE__,
+    message::fail(__FILE__, __LINE__,
       "Could not find selected atmos/wind profile ", wind_number_,
       "\nin data file ", drwpFileName_, ".");
   }
@@ -523,7 +525,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
       return false;
     }
     if (profile_number_ != wind_profiles_[ii]) {
-      CMLMessage::fail(__FILE__, __LINE__,
+      message::fail(__FILE__, __LINE__,
          "Profile number mismatch at index ", ii, " in data file.\n"
          "Expected value for profile number of ", wind_profiles_[ii], " but\n"
          "read value for profile number of ", profile_number_, "\n",
@@ -543,7 +545,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
   BinFile.seekg (0, std::ios::end);
   const auto file_end_ = BinFile.tellg();
   if (file_pos_ != file_end_) {
-    CMLMessage::fail(__FILE__, __LINE__,
+    message::fail(__FILE__, __LINE__,
       "DRWP binary file size does not match size of all data read");
   }
 
@@ -605,7 +607,7 @@ LookupAtmosWinds::load_DRWP_file( const std::string& drwpFileName_,
                                    number_of_altitudes_)) {
     // Possibly unreachable. The data has been confirmed to be all intact.
     // Tested in gdb by manually overriding number_of_altitudes_.
-    CMLMessage::fail(__FILE__, __LINE__,
+    message::fail(__FILE__, __LINE__,
       "Dependent data failed to load\n",
       "See Table Interpolation error code");
   }
@@ -664,7 +666,7 @@ LookupAtmosWinds::compute_average_wind(
     double max_alt)
 {
   if (table_index >= number_of_datasets) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Error computing average wind velocity for profile at index ",
       table_index, ".\nThis index has not been populated with data.\n"
       "Aborting computation.\n");
@@ -708,7 +710,7 @@ LookupAtmosWinds::compute_average_wind(
   }
 
   if (num_alts == 0) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Error computing average wind velocity within specified bounds\n",
       "No altitude breakpoints found in between 'min_alt' (", min_alt,
       ")\nand 'max_alt' (", max_alt, ") for given DRWP Binary file.");
@@ -791,13 +793,13 @@ LookupAtmosWinds::stream_error( int line,
   // If initialized and the number of available datasets is greater than 0,
   // then failing to add the new file is just an error.
   if (initialized && (number_of_datasets > 0)) {
-    CMLMessage::error( __FILE__,line,
+    message::error( __FILE__,line,
       "DRWP Binary file reader failed to read from data file ", drwpFileName_,
       ".\nNew data is not available.\n");
   }
   // otherwise it's terminal
   else {
-    CMLMessage::fail( __FILE__,line,
+    message::fail( __FILE__,line,
       "DRWP Binary file reader failed to read from data file ", drwpFileName_,
       ".\nNew data is not available.");
   }
@@ -818,7 +820,7 @@ Note:
 *****************************************************************************/
 void LookupAtmosWinds::set_include_vertical_component([[maybe_unused]] bool deprecated)
 {
-  CMLMessage::error(
+  message::error(
     __FILE__,__LINE__,"Call made to "
     "LookupAtmosWinds::set_include_vertical_component( bool )\n"
     "but this method is deprecated.\n"
@@ -840,9 +842,11 @@ Purpose:  (Legacy method for calling for a data reload)
 *****************************************************************************/
 void LookupAtmosWinds::test_for_reinitialize()
 {
-  CMLMessage::error(
+  message::error(
     __FILE__,__LINE__,"Call made to LookupAtmosWinds::test_for_reinitialize() "
     "is invalid. This method is obsolete and has been deprecated.\n"
     "Check intent on why this method was called, and review documentation for "
     "alternative approach.\n");
 }
+
+} // namespace cml

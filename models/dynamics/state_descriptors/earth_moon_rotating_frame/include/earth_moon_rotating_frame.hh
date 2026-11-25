@@ -10,6 +10,8 @@ Purpose:
 Library dependencies:
   ((../src/earth_moon_rotating_frame.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   ( ((Gary Turner) (OSR) (Aug 2019) (Antares) (initial))
   )
@@ -20,6 +22,8 @@ Programmers:
 
 #include "cml/models/dynamics/state_descriptors/pointing_ref_frame/include/ephem_based_pointing_ref_frame.hh"
 #include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
+
+namespace cml {
 
 /*****************************************************************************
 EarthMoonRotatingFrame
@@ -56,4 +60,7 @@ class EarthMoonRotatingFrame : public EphemBasedPointingRefFrame {
   void update() override;
   void set_orientation(FrameOrientation new_orientation);
 };
+
+} // namespace cml
+
 #endif

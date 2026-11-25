@@ -17,58 +17,58 @@ PROGRAMMERS:
 #include "../../include/event_action.hh"
 #include "cml/models/utilities/trick_logging/include/trick_logging.hh"
 
-class VerifVehicleEventsManager : public VehicleEventsManager
+class VerifVehicleEventsManager : public cml::VehicleEventsManager
 {
  public:
 
-  EventActionSimStopNow action_sim_stop_now;
-  WatchValuesBase<double> sim_stop_var_verif; /* (--)
+  cml::EventActionSimStopNow action_sim_stop_now;
+  cml::WatchValuesBase<double> sim_stop_var_verif; /* (--)
       stop the sim on variable */
 
-  EventActionSimStopDyn action_sim_stop_dyn;
-  WatchValuesBase<bool> sim_stop_verif; /* (--)
+  cml::EventActionSimStopDyn action_sim_stop_dyn;
+  cml::WatchValuesBase<bool> sim_stop_verif; /* (--)
       stop the sim */
 
-  WatchValuesBase<double> relative_to_activation_double_verif; /* (--)
+  cml::WatchValuesBase<double> relative_to_activation_double_verif; /* (--)
       stop the sim on double variable relative to activation */
 
-  EventActionDeactivateSimObject action_deact_sim_obj;
-  WatchValuesBase<double> deact_sim_obj_verif; /* (--)
+  cml::EventActionDeactivateSimObject action_deact_sim_obj;
+  cml::WatchValuesBase<double> deact_sim_obj_verif; /* (--)
       turn off the sim object */
 
-  EventActionAdjustLogging action_adjust_logging;
-  WatchValuesBase<double> adjust_log_verif; /* (--)
+  cml::EventActionAdjustLogging action_adjust_logging;
+  cml::WatchValuesBase<double> adjust_log_verif; /* (--)
       adjust the logging rates */
 
-  EventActionAdjustLoggingGroup action_adjust_logging_group;
-  WatchValuesBase<double> adjust_log_group1; /* (--) Adjust logging frequency*/
-  WatchValuesBase<double> adjust_log_group2; /* (--) disable the group*/
-  WatchValuesBase<double> adjust_log_group3; /* (--) enable to group */
+  cml::EventActionAdjustLoggingGroup action_adjust_logging_group;
+  cml::WatchValuesBase<double> adjust_log_group1; /* (--) Adjust logging frequency*/
+  cml::WatchValuesBase<double> adjust_log_group2; /* (--) disable the group*/
+  cml::WatchValuesBase<double> adjust_log_group3; /* (--) enable to group */
 
-  EventActionLogNow action_log_now;
-  WatchValuesBase<double> log_now_verif; /* (--)
+  cml::EventActionLogNow action_log_now;
+  cml::WatchValuesBase<double> log_now_verif; /* (--)
       Log content immediately regardless of schedule */
 
-  WatchValuesBase2<double, bool> two_variable_check_and; /* (--)
+  cml::WatchValuesBase2<double, bool> two_variable_check_and; /* (--)
       Test 2-conditionals event, where conditionals are combined with "and"*/
-  WatchValuesBase2<double, bool> two_variable_check_or; /* (--)
+  cml::WatchValuesBase2<double, bool> two_variable_check_or; /* (--)
       Test 2-conditionals event, where conditionals are combined with "or" */
-  WatchValuesDelay<int> delayed_check; /* (--)
+  cml::WatchValuesDelay<int> delayed_check; /* (--)
       Test a delayed response to a trigger */
 
-  WatchValuesBase<bool>   trigger_set_bool;
-  WatchValuesBase<int>    trigger_set_int;
-  WatchValuesBase<double> trigger_set_double;
-  WatchValuesSet  trigger_set_all; /* (--)
+  cml::WatchValuesBase<bool>   trigger_set_bool;
+  cml::WatchValuesBase<int>    trigger_set_int;
+  cml::WatchValuesBase<double> trigger_set_double;
+  cml::WatchValuesSet  trigger_set_all; /* (--)
       A set of 3 triggers.*/
-  WatchValuesSet  trigger_set_any; /* (--)
+  cml::WatchValuesSet  trigger_set_any; /* (--)
       A set of 3 triggers.*/
-  WatchValuesSet  trigger_set_none; /* (--)
+  cml::WatchValuesSet  trigger_set_none; /* (--)
       A set of 0 triggers (error).*/
 
-  WatchValuesBase<bool> base_bool_ff; /* (--)
+  cml::WatchValuesBase<bool> base_bool_ff; /* (--)
       A version of base_bool_verif dedicated to testing flip_flop.*/
-  WatchValuesFlipFlop flip_flop; /* (--)
+  cml::WatchValuesFlipFlop flip_flop; /* (--)
     Utilizes base_bool_ff to flip-flop between outputs tates based on
     the input state.*/
 
@@ -76,10 +76,10 @@ class VerifVehicleEventsManager : public VehicleEventsManager
 
  public:
   void execution_follow_up() override{};
-  VerifVehicleEventsManager(TrickLogging & trick_logging,
+  VerifVehicleEventsManager(cml::TrickLogging & trick_logging,
                             const double  & time)
       :
-      VehicleEventsManager(),
+      cml::VehicleEventsManager(),
       action_adjust_logging(trick_logging),
       action_adjust_logging_group(trick_logging),
       action_log_now(trick_logging),

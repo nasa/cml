@@ -4,6 +4,8 @@ PURPOSE: (Generic vent model with mass depletion)
 LIBRARY DEPENDENCY:
   (../src/vent.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))
 ************************************************************************/
@@ -14,6 +16,8 @@ PROGRAMMERS:
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body.hh"
 
 #include "simple_vent.hh"
+
+namespace cml {
 
 class Vent : public SimpleVent {
   friend class VentSet;
@@ -67,4 +71,7 @@ class Vent : public SimpleVent {
   void update_mass_demand() override;
   void stop_venting() override;
 };
+
+} // namespace cml
+
 #endif

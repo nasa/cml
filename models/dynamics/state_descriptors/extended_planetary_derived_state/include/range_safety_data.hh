@@ -10,6 +10,8 @@
    LIBRARY DEPENDENCY:
     (../src/range_safety_data.cc)
 
+   PYTHON_MODULE: (cml)
+
    PROGRAMMERS:
    (((Gary Turner) (OSR) (June 2014)
                       (New implementation of PlanetaryDerivedState for Antares))
@@ -21,6 +23,7 @@
 #ifndef CML_RANGE_SAFETY_DATA_HH
 #define CML_RANGE_SAFETY_DATA_HH
 
+namespace cml {
 
 /*
    PURPOSE:
@@ -73,4 +76,7 @@ class RangeSafetyData
                               to the South Impact Limit Line (ILL).  */
     double ZVRT{0.0};           /* (m)   Altitude in pad frame */
 };
+
+} // namespace cml
+
 #endif

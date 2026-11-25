@@ -19,6 +19,8 @@ PROGRAMMERS:
 #include <algorithm>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
                                         RcsBuildUpTrailOffJetData * const jet_,
                                         const double& time)
@@ -30,7 +32,7 @@ RcsBuildUpTrailOff::RcsBuildUpTrailOff( RcsScaleFactorInterface& interface_,
   // NULL check
   if (jet == nullptr)
   {
-    CMLMessage::fail(__FILE__, __LINE__, "Invalid pointer\n",
+    message::fail(__FILE__, __LINE__, "Invalid pointer\n",
       "Pointer to jet data is NULL! Cannot initialize RcsBuildUpTrailOff.\n");
   }
 }
@@ -57,3 +59,5 @@ void RcsBuildUpTrailOff::build_up_trail_off_effects()
     }
   }
 }
+
+} // namespace cml

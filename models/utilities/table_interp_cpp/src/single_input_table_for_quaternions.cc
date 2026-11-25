@@ -27,6 +27,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/quaternion/include/quat.hh"
 #include <cstddef>
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -60,7 +62,7 @@ bool
 SingleInputTableForQuaternions::initialize()
 {
   if (output.size() != 4) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Initialization error:\n",
       "This type of table can only populate a quaternion but there are ",
       output.size()," outputs specified.\nThere must be 4 outputs.\n");
@@ -124,3 +126,5 @@ SingleInputTableForQuaternions::generate_output()
 
   return true;
 }
+
+} // namespace cml

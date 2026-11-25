@@ -37,6 +37,8 @@ PROGRAMMERS:
 #include "../include/table_type_defs.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*****************************************************************************
 initialize
 Purpose:
@@ -54,7 +56,7 @@ TableLookupTransposeDataSet_TableConfig::initialize( size_t num_lines)
   num_variables = indices.size();
   // check that num_variables matches dependent_variables.size()
   if (num_variables != table_ptr->get_num_dep_vars()) {
-    CMLMessage::fail( __FILE__,__LINE__,
+    message::fail( __FILE__,__LINE__,
       "Invalid configuration\n",
       "Table is configured to extract data for ",num_variables,
       " dependent variables from the data file.\n"
@@ -131,7 +133,7 @@ TableLookupTransposeDataSet_TableConfig::populate_table()
   // checked here to safeguard against the risk that future changes,
   // especially in create_table(...) may allow a nullptr assignment.
   if (table_ptr == nullptr) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid table management sequence\n",
     "Allocation for a GenericMultiInputTable failed.\n");
     return;
@@ -161,7 +163,7 @@ TableLookupTransposeDataSet::process_data(
     const DoubleVecList & data_file)
 {
   if (!enabled) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Configuration error.\n",
       "Instruction received to process data but the model has been disabled.\n"
       "Data-processing skipped.\n");
@@ -169,7 +171,7 @@ TableLookupTransposeDataSet::process_data(
   }
 
   if (initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Execution sequence error.\n",
       "Processing the data after the tables have been initialized\n"
       "with a different data set.\n"
@@ -200,7 +202,7 @@ TableLookupTransposeDataSet::process_data(
 
   // Verify that the data file is adequately sized
   if ( max_index >= min_length) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid independent data\n",
     "At line ",min_length_line,", there are ",min_length," data elements.\n"
     "The highest specified index for data extraction is ",max_index,
@@ -241,7 +243,7 @@ TableLookupTransposeDataSet::process_data(
   //***************************************************************************
   // Verify that no tables have already been assigned to this manager:
   if (!tables.empty()) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Unexpected configuration.\n",
       "Found data tables already added to this manager.\n"
       "Having externally-added tables is unexpected, but not critical.\n"
@@ -337,7 +339,7 @@ TableLookupTransposeDataSet::convert_txt_to_list_vec(
   std::ifstream file_in( filename);
   /* Check to make sure file is readable */
   if ( !file_in.is_open() ) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
     "Invalid file selection\n"
     "Filename ",filename," could not be opened.\n"
     "Disabling model.\n");
@@ -377,7 +379,7 @@ TableLookupTransposeDataSet::convert_txt_to_list_vec(
     // Test for file truncation:
     ++line_num;
     if (line_num > terminate_on_line) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Data read: file length exceeded specifications.\n",
         "WARNING: Maximum number of data sets (",terminate_on_line,
         ") reached while reading '",filename,"'.\n"
@@ -396,7 +398,7 @@ TableLookupTransposeDataSet::convert_txt_to_list_vec(
     // Error checking:
     // Irregular line length:
     if (line_vals.size() != prev_num_data) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Inconsistent data file\n",
         "Previously found ",prev_num_data," values per line in file '",
         filename,"'.\n"
@@ -434,13 +436,13 @@ TableLookupTransposeDataSet::get_config( const std::string & name_in)
     }
   }
   if (num_matches == 0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Failed search.\n",
       "No table config with name ",name_in," was found.\n"
       "Returning NULL (nullptr).\n");
   }
   else if (num_matches > 1) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Failed search.\n",
       "Found ",num_matches," table config instances with name ", name_in,".\n"
       "Returning the first one.\n");
@@ -459,7 +461,7 @@ TableLookupTransposeDataSet::check_independent()
   // The manager can handle only one independent.  If there are more than one
   // already added, that's a problem.
   if (independents.size() > 1) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid independent data\n",
       "This type of table-manager can only use one independent variable.\n"
       "For multiple independents, use a TableLookupSet.\n"
@@ -472,7 +474,7 @@ TableLookupTransposeDataSet::check_independent()
   if (independents.empty() || independents.at(0) == nullptr) {
     // Must have knowledge of the independent variable
     if (independent_var == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid independent data\n",
         "The table-manager has no record of a TableIndependentVariable,\n"
         "and no specification of which variable to use to create one.\n"
@@ -503,7 +505,7 @@ TableLookupTransposeDataSet::remove_config(
    TableLookupTransposeDataSet_TableConfig & config_remove)
 {
   if (data_processed) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Redundant call.\n",
       "Call made to remove a configuration, but the configuration has\n"
       "already been processed.  There is nothing to do here.\n");
@@ -534,7 +536,7 @@ TableLookupTransposeDataSet::remove_config(
     ix++;
   }
   if (num_matches == 0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Failed search.\n",
       "Call made to remove a configuration, but no table config with\n"
       "matching parameters was found.\n"
@@ -542,7 +544,7 @@ TableLookupTransposeDataSet::remove_config(
       return false;
   }
   else if (num_matches > 1) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Failed search.\n",
       "Call made to remove a configuration, but found ",num_matches,
       "\ntable config instances with matching parameters.\n"
@@ -554,3 +556,5 @@ TableLookupTransposeDataSet::remove_config(
   }
   return true;
 }
+
+} // namespace cml

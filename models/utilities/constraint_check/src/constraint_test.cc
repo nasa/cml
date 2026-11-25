@@ -16,6 +16,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+namespace cml {
+
 /**
  * @note If the model has already been initialized, it will be re-initialized.
  */
@@ -47,7 +49,7 @@ ConstraintTest::initialize_threshold()
   if (violation_condition == ConstraintEnum::Undefined ||
       violation_condition == ConstraintEnum::In ||
       violation_condition == ConstraintEnum::Out) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot initialize a threshold constraint-test without a valid "
       "violation-condition.\n"
       "Defaulting to GT (greater than):\n"
@@ -63,7 +65,7 @@ ConstraintTest::initialize_interval()
 {
   if (violation_condition != ConstraintEnum::In &&
       violation_condition != ConstraintEnum::Out) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot initialize an interval constraint-test with a\n"
       "violation-condition of ",violation_condition,".\n"
       "Defaulting to In:\n"
@@ -79,7 +81,7 @@ ConstraintTest::initialize_val_set()
 {
   if (violation_condition != ConstraintEnum::In &&
       violation_condition != ConstraintEnum::Out) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Cannot initialize a value-set constraint-test with a\n"
       "violation-condition of ",violation_condition,".\n"
       "Defaulting to In:\n"
@@ -187,3 +189,5 @@ ConstraintTestTimed::update_timer( double delta_time)
     }
   }
 }
+
+} // namespace cml

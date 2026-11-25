@@ -15,6 +15,8 @@ PROGRAMMERS:
 
 #include "../include/vent.hh"
 
+namespace cml {
+
 /************************************************************************
 Constructor
 ************************************************************************/
@@ -41,7 +43,7 @@ bool Vent::check_configuration()
   // combination:
   if (flowrate_set && exhaust_set) {
     if (force_mag_set || force_set) {
-      CMLMessage::warn(__FILE__, __LINE__,
+      message::warn(__FILE__, __LINE__,
         "Overconstrained configuration\n",
         "Vent '", name, "': Flowrate, exhaust speed, and force-magnitude (either\n"
         "directly or indirectly via force-vector) have all been\n"
@@ -67,7 +69,7 @@ bool Vent::check_configuration()
     // Impulse is set; otherwise SimpleVent::check_configuration would have
     // failed.
     if (!exhaust_set) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Incomplete configuration\n",
         "Vent '", name, "' was configured to apply an impulse but the exhaust speed\n"
         "has not been defined and cannot be determined.\n"
@@ -77,7 +79,7 @@ bool Vent::check_configuration()
   }
   else if (!flowrate_set) { // and !apply_as_impulse
     // Force is set; otherwise SimpleVent:check_configuration would have failed.
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Incomplete configuration\n",
         "Vent '", name, "' configured to apply a force but the flowrate\n"
         "has not been defined and cannot be determined.\n"
@@ -154,7 +156,7 @@ void Vent::use_impulse_mode(bool mode)
   SimpleVent::use_impulse_mode( mode);
   if ( mode) {
     if (initialized && !exhaust_set) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Incomplete configuration\n",
         "Vent '", name, "': Cannot transition to impulsive mode because the\n"
         "exhaust speed has not been set.\n");
@@ -163,7 +165,7 @@ void Vent::use_impulse_mode(bool mode)
   }
   else {
     if (initialized && !flowrate_set) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Incomplete configuration\n",
         "Vent '", name, "': Cannot transition to dynamic (force) mode because the\n"
         "flowrate has not been set.\n");
@@ -210,7 +212,7 @@ void Vent::set_flowrate( double flowrate_, bool hold_exhaust)
   // Use an invalid setting as a proxy for unsetting the flowrate.
   if (flowrate_ <= 0.0) {
     if (initialized && !apply_as_impulse) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid setting\n",
         "Vent '", name, "' is set to dynamic mode, which requires a valid flowrate\n"
         "to compute the mass depletion.\nCannot unset the flowrate while "
@@ -256,7 +258,7 @@ void Vent::set_exhaust_speed(double exhaust_speed_, bool hold_flowrate)
   // Use an invalid setting as a proxy for unsetting the exhaust speed.
   if (exhaust_speed_ <= 0.0) {
     if (initialized && apply_as_impulse) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid setting\n",
         "Vent '", name, "' is set to impulsive mode, which requires a valid \n"
         "exhaust-speed to compute the mass-loss.\n"
@@ -315,7 +317,7 @@ Purpose:(If in dynamic mode, marks the vent as venting and computes the
 bool Vent::start_venting()
 {
   if (tank.dynamic_properties.consumable_mass <= 0.0) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, "Empty tank\n",
       "Vent '", name, "': Cannot start venting because tank '",
       tank.name.get_name(), "' is empty!\n");
@@ -328,7 +330,7 @@ bool Vent::start_venting()
   //                     mass-flow, like a simple-vent.
   if ( ( apply_as_impulse && !exhaust_set) ||
        (!apply_as_impulse && !flowrate_set)  ) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Incomplete initialization\n",
       "Vent '", name, "' was instructed to start venting but mass depletion\n"
       "has not been completely configured.\nConfiguration flags are:\n"
@@ -355,7 +357,7 @@ void Vent::check_status()
       // Scale the impulse magnitude and the mass consumption such that all the
       // mass is used.
       set_impulse_magnitude( available_mass * exhaust_speed);
-      CMLMessage::warn(__FILE__, __LINE__,
+      message::warn(__FILE__, __LINE__,
         "Not enough mass in tank for requested impulse.\n",
         "Tank '", tank.name.get_name(), "' has been emptied and the appropriate impulse of\n",
          impulse_mag, " N*s has been applied.\n");
@@ -427,3 +429,5 @@ void Vent::update_mass_demand()
                                                       (dyn_time - prev_time);
   prev_time = dyn_time;
 }
+
+} // namespace cml

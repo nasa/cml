@@ -4,6 +4,8 @@ PURPOSE: (Manage the advanced compound-events)
 LIBRARY DEPENDENCY:
    ((../src/compound_event_manager.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2023) (ANTARES)
     (Merging concepts found in former grok-events and CML-events))
@@ -18,6 +20,8 @@ PROGRAMMERS:
 #include "event_trigger.hh"
 #include "trick/memorymanager_c_intf.h"
 #include <utility>
+
+namespace cml {
 
 class CompoundEventsManager : public VehicleEventsManager
 {
@@ -204,7 +208,7 @@ class CompoundEventsManager : public VehicleEventsManager
     if ((var_name_ref          == nullptr) ||
         (var_name_ref->attr    == nullptr) ||
         (var_name_ref->address == nullptr)) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Unable to find simulation variable ",var_name,
         ".\n Cannot create a trigger based on this name.\n");
 
@@ -225,7 +229,7 @@ class CompoundEventsManager : public VehicleEventsManager
           ref_type==typeid(int) ||
           ref_type==typeid(unsigned int))
         && trick_type != TRICK_ENUMERATED)) {
-        CMLMessage::warn(__FILE__,__LINE__,
+        message::warn(__FILE__,__LINE__,
           var_name," has type ", type, " (TRICK_TYPE ", std::to_string(trick_type), ") and ref has type ",ref_type.name()
           // , ".\nThese need to be the same type; otherwise the trigger will be wrong."
           );
@@ -237,4 +241,7 @@ class CompoundEventsManager : public VehicleEventsManager
     return reinterpret_cast<T*>(var_name_ref->address);
   }
 };
+
+} // namespace cml
+
 #endif

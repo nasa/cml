@@ -2,6 +2,8 @@
 PURPOSE:
   (Manages injection of a random-walk fault.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
@@ -11,6 +13,8 @@ PROGRAMMERS:
 
 #include "fault.hh"
 #include "rand_number.hh"
+
+namespace cml {
 
 /*******************************************************************************
 FaultRandomWalk
@@ -82,5 +86,7 @@ bool FaultRandomWalk<T>::set_param(const std::string& param_name, double value, 
 
   return true;
 }
+
+} // namespace cml
 
 #endif

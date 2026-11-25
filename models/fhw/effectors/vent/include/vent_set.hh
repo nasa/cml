@@ -5,6 +5,8 @@ PURPOSE: (Class for manipulating sets of vents and aggregating forces and
 LIBRARY DEPENDENCY:
   (../src/vent_set.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (initial version)))
  ************************************************************************/
@@ -20,6 +22,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "simple_vent.hh"
+
+namespace cml {
 
 class VentSet : public SubscriptionBase {
  protected: // external references
@@ -99,4 +103,7 @@ class VentSet : public SubscriptionBase {
  private:
   void start_vent_internal( SimpleVent * vent);
 };
+
+} // namespace cml
+
 #endif

@@ -3,6 +3,8 @@ PURPOSE:
    (Define the 7 variables of the target-relative parameter set for use in
    either of the TargetRelativeStateParameter implementations.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))
@@ -11,6 +13,8 @@ PROGRAMMERS:
 *******************************************************************************/
 #ifndef CML_TR_STATE_PARAMETER_SET_HH
 #define CML_TR_STATE_PARAMETER_SET_HH
+
+namespace cml {
 
 /*****************************************************************************
 TR_ParameterSet
@@ -33,4 +37,7 @@ class TR_ParameterSet {
   }
 
 };
+
+} // namespace cml
+
 #endif

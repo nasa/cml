@@ -25,6 +25,8 @@ Assumptions:
 Library dependency:
   ((../src/twist_sway.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
    ((Michael Trevino) (Odyssey) (10/09) (Initial Implementation))
@@ -50,6 +52,7 @@ PROGRAMMERS:
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
 
 /*****************************************************************************
 TwistSwayParams
@@ -257,5 +260,7 @@ public:
   void accumulate_perturbations();
   void compute_twist_sway_enu();
 };
+
+} // namespace cml
 
 #endif

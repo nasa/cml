@@ -27,6 +27,8 @@ Library dependency:
   ((../src/commandable_action.cc)
   )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (
   ((Gary Turner) (OSR) (02/22) (Generic concept developed while
@@ -40,6 +42,8 @@ PROGRAMMERS:
 
 
 #include "commandable_action_set.hh"
+
+namespace cml {
 
 /*****************************************************************************
 CommandableAction
@@ -101,4 +105,7 @@ class CommandableAction
   void disable() {enabled = false;}
   std::string & get_name() {return name;}
 };
+
+} // namespace cml
+
 #endif

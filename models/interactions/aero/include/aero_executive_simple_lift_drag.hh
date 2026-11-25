@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/aero_executive_simple_lift_drag.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Jeremy Rea) (NASA) (March 2025) (Antares) (initial version, based on AeroExecutiveSimple)))
 *******************************************************************************/
@@ -13,6 +15,8 @@ PROGRAMMERS:
 #define CML_AERO_EXECUTIVE_SIMPLE_LIFT_DRAG_HH
 
 #include "aero_executive_base.hh"
+
+namespace cml {
 
 class AeroInterfaceOutput;
 
@@ -78,4 +82,7 @@ public:
   void initialize() override;
   void update() override;
 };
+
+} // namespace cml
+
 #endif

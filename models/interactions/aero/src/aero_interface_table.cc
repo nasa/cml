@@ -21,6 +21,8 @@ PROGRAMMERS:
 #include "cml/models/dynamics/state_descriptors/atmos_rel_state/include/atmos_relative_state.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructors
 *******************************************************************************/
@@ -107,7 +109,7 @@ AeroInterfaceTable::activate()
     if (atmos_rel_state.get_angles_subscription_count() !=
                                                   atmos_rel_angles_sub_count) {
       // UNREACHABLE CODE.
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Failed activation\n",
         "The activation of the AeroInterfaceTable failed in the base class.\n"
         "The subscription count to the atmos-rel-state angles calculation has\n"
@@ -130,3 +132,5 @@ AeroInterfaceTable::deactivate()
     AeroInterfaceBaseExtended::deactivate();
   }
 }
+
+} // namespace cml

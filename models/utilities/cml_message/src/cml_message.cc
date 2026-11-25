@@ -22,9 +22,11 @@ Programmers:
 #include <iostream>
 #include <string>
 
+namespace cml {
+
 namespace {
 
-CMLMessage::PublishLevel publish_level = CMLMessage::Warning;
+message::PublishLevel publish_level = message::Warning;
 
 void terminate([[maybe_unused]] const std::string & file,
                [[maybe_unused]] int                 line,
@@ -40,7 +42,7 @@ void terminate([[maybe_unused]] const std::string & file,
 
 }
 
-namespace CMLMessage {
+namespace message {
 
 void set_publish_level(const PublishLevel new_level)
 {
@@ -116,3 +118,5 @@ void publish(PublishLevel msg_level,
 }
 
 }
+
+} // namespace cml

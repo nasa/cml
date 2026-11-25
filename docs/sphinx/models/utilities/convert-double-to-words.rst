@@ -257,10 +257,24 @@ Model Structure
 This model is usable as:
 
 - Free functions, useful for one-off conversions.
-- An instantiated class, :cpp:class:`ConvertDoubleToUintWords`. Useful for when a conversion is needed as a simulation
+- An instantiated class, :cpp:class:`cml::ConvertDoubleToUintWords`. Useful for when a conversion is needed as a simulation
   scheduled job.
 
-.. doxygenfile:: convert_double_to_words.hh
+Free Functions
+--------------
+
+.. doxygenfunction:: cml::convert_double_to_uint_words(double, double, std::vector<uint32_t> &, unsigned int)
+
+.. doxygenfunction:: cml::convert_double_to_uint_words(double, double, uint32_t *, const unsigned int, unsigned int)
+
+Class API
+---------
+
+.. doxygenclass:: cml::ConvertDoubleToUintWords
+    :members:
+    :protected-members:
+    :private-members:
+    :undoc-members:
 
 Mathematical Formulation
 ------------------------
@@ -295,21 +309,21 @@ The following demonstrates how to convert the value 5.001 to a 4-word register w
 
     /* Vector version */
     std::vector<uint32_t> words(num_words);
-    convert_double_to_uint_words(value, resolution, words, bits_per_word);
+    cml::convert_double_to_uint_words(value, resolution, words, bits_per_word);
     // words stores [9 8 3 1]
 
     /* C-style array version */
     uint32_t words[num_words];
-    convert_double_to_uint_words(value, resolution, words, std::size(words), bits_per_word);
+    cml::convert_double_to_uint_words(value, resolution, words, std::size(words), bits_per_word);
     // words stores [9 8 3 1]
 
 
 Class-Based API
 ~~~~~~~~~~~~~~~
 
-For repeated conversions, it is recommended to create a long-lived instance of the :cpp:class:`ConvertDoubleToUintWords`
-class and repeatedly use its :cpp:func:`~ConvertDoubleToUintWords::update` method. The resulting words are stored in its
-:cpp:member:`~ConvertDoubleToUintWords::words` member.
+For repeated conversions, it is recommended to create a long-lived instance of the :cpp:class:`cml::ConvertDoubleToUintWords`
+class and repeatedly use its :cpp:func:`~cml::ConvertDoubleToUintWords::update` method. The resulting words are stored in its
+:cpp:member:`~cml::ConvertDoubleToUintWords::words` member.
 
 The same example shown for the free function APIs is repeated below with the class API.
 
@@ -320,7 +334,7 @@ The same example shown for the free function APIs is repeated below with the cla
     const unsigned int bits_per_word = 4U;
     const double resolution = 0.001;
 
-    ConvertDoubleToUintWords converter(value, resolution, num_words, bits_per_word);
+    cml::ConvertDoubleToUintWords converter(value, resolution, num_words, bits_per_word);
 
     // converter.words stores [9 8 3 1].
     converter.update();
@@ -382,7 +396,7 @@ following cases are checked:
    * - Case
      - Expected Resolution
      - Result
-   * - ``nullptr`` passed to :cpp:func:`convert_double_to_uint_words`
+   * - ``nullptr`` passed to :cpp:func:`cml::convert_double_to_uint_words`
      - Error message emitted
      - Pass
    * - A word count of 0 is specified

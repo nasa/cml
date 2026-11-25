@@ -22,6 +22,7 @@
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <cstddef>
 
+namespace cml {
 
 /*****************************************************************************
 Constructor
@@ -82,7 +83,7 @@ SingleInputTableVarDeriv::initialize()
     derivs.add_independent( *independents[0].first,
                             independents[0].second);
   } else if (derivs.independents[0].first != independents[0].first) {
-    CMLMessage::error(__FILE__,__LINE__,
+    message::error(__FILE__,__LINE__,
       "Initialization error: The variable+derivative coupled\n"
       "table-interpolation routine requires that the variable and its\n"
       "derivative-variable use the same Independent Variable.\n"
@@ -98,7 +99,7 @@ SingleInputTableVarDeriv::initialize()
   // Now initialize the derivs table.
   derivs.initialize();
   if (!derivs.initialized) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Unable to initialize the GenericSingleInputTable representing the "
       "first-derivative values.\nInitialization failed.\n"
       "Table is not usable.\n");
@@ -107,7 +108,7 @@ SingleInputTableVarDeriv::initialize()
 
   // Check that there is a derivative variable for each regular variable
   if (output.size() != derivs.output.size()) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "Initialization error: Table is configured to populate:\n",
       output.size(), " zeroth-derivative variables, and\n",
       derivs.output.size(), " first-derivative variables.\n"
@@ -198,3 +199,5 @@ SingleInputTableVarDeriv::generate_output()
   }
   return true;
 }
+
+} // namespace cml

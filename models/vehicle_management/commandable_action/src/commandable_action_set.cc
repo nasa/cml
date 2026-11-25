@@ -37,6 +37,8 @@ Programmers:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include <utility>
 
+namespace cml {
+
 /*****************************************************************************
 Constructors
 *****************************************************************************/
@@ -135,7 +137,7 @@ CommandableActionSet::generate_command (
       // so there is no guarantee that this pattern will be retained
       // indefinitely.  The following check is currently unreachable.
       if (current_commandable == nullptr) {
-        CMLMessage::fail(
+        message::fail(
           __FILE__,__LINE__,"Unknown error\n",
           "current_commandable is NULL but status is Send.\n"
           "This is not a legal combination.\n");
@@ -145,7 +147,7 @@ CommandableActionSet::generate_command (
       // and back to the real code:
       const std::string & new_name = command.get_name();
       const std::string & old_name = current_commandable->get_name();
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Sequencing error\n",
         "[", new_name, "] command ready for issuing from [", name, "]\n"
         "but another command ([", old_name, "]) is already processing.\n"
@@ -165,7 +167,7 @@ CommandableActionSet::generate_command (
   message_status = Send;
 
   const std::string & command_name = command.get_name();
-  CMLMessage::inform(
+  message::inform(
     __FILE__,__LINE__,"Command Issued from\n",
     "[", name, "] issued command [", command_name, "].\n");
 
@@ -219,7 +221,7 @@ CommandableActionSet::generate_fsw_command_safety_net()
 {
   if (current_commandable == nullptr) {
     // Unreachable code, except by invalid extension.
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"NULL command.\n",
       "Current-commandable is NULL which should never be achievable.\n"
       "See CommandableActionSet::generate_command():\n"
@@ -228,9 +230,11 @@ CommandableActionSet::generate_fsw_command_safety_net()
   }
   else {
     // Unreachable code, except by invalid extension.
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid command type.\n",
       "Current-commandable is identified as [", current_commandable->get_name(), "], but this command has no\n"
       "disposition in generate_fsw_commands().\n");
   }
 }
+
+} // namespace cml

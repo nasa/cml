@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/simple_spring_individual.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner)(OSR)(December 2014) (Antares) (new implementation))
    ((Brent Caughron) (OSR) (Jan 2021) (Antares) (Code Review and IV&V)))
@@ -12,6 +14,8 @@ PROGRAMMERS:
 
 #ifndef CML_SIMPLE_SPRING_INDIVIDUAL_HH
 #define CML_SIMPLE_SPRING_INDIVIDUAL_HH
+
+namespace cml {
 
 /* Spring specific info for each spring */
 class SimpleSpringIndividual{
@@ -53,5 +57,7 @@ public:
   double calculate_force( double separation_distance,
                           double separation_speed);
 };
+
+} // namespace cml
 
 #endif

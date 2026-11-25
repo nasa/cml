@@ -30,6 +30,8 @@
 #include <algorithm>
 #include <numeric>
 
+namespace cml {
+
 /*****************************************************************************
 initialize
 Purpose:(Copies the body_collection to available_bodies)
@@ -80,7 +82,7 @@ DynamicMassString::distribute_mass_consumption()
     //         method from running at all.  This check is to identify when
     //         the last body was removed.
     if (available_bodies.empty()) {
-      CMLMessage::warn (
+      message::warn (
         __FILE__, __LINE__, "String depletion\n",
         " Dynamic Mass string exhausted all consumable mass while demand "
         "still existed.\nUnsatisfied demand is ", mass_to_distribute, " kg.\n"
@@ -174,7 +176,7 @@ void DynamicMassString::add_mass_to_string( // Return: -- void
     DynamicMassBody * new_mass_body)  /* In: -- DynamicMassBody to be added */
 {
   if (new_mass_body == nullptr) {
-    CMLMessage::fail (
+    message::fail (
       __FILE__, __LINE__, "Setup error.\n",
       "A NULL pointer was given to the add_mass_to_string function. "
       "This is not allowed.\n"
@@ -183,7 +185,7 @@ void DynamicMassString::add_mass_to_string( // Return: -- void
 
   // check uniqueness to avoid inadvertent double-counting
   if (std::find(body_collection.begin(), body_collection.end(), new_mass_body) != body_collection.end()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid object addition\n",
       "Attempt to add a new DynamicMassBody (", new_mass_body->name.get_name(), ") that is already assigned\n"
       "to this string. \n"
@@ -194,7 +196,7 @@ void DynamicMassString::add_mass_to_string( // Return: -- void
   body_collection.push_back(new_mass_body);
 
   if (string_in_group) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Verify configuration sequence\n",
       "A body has been added to the string after the string had been added\n"
       "to the group.  It is imperative to confirm that the body has also\n"
@@ -216,3 +218,5 @@ DynamicMassString::update()
   consumable_mass = std::accumulate(available_bodies.begin(), available_bodies.end(), 0.0, add_consumable_mass);
   mass_consumed += mass_consumed_step;
 }
+
+} // namespace cml

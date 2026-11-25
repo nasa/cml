@@ -27,6 +27,8 @@ Programmers:
 
 #include "../include/range_computation.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -121,7 +123,7 @@ void
 RangeComputation::set_reference_data()
 {
   if (!initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Range Computation initialization sequence error:\n",
       "Call made to set_reference_data() without the model having been "
       "initialized.\nThis method should only be called externally "
@@ -293,3 +295,5 @@ RangeComputation::update_using_cartesian()
     downrange_angle *= -1.0;
   }
 }
+
+} // namespace cml

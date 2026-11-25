@@ -4,6 +4,8 @@ PURPOSE: (Provide a simple table-lookup capability for winds)
 LIBRARY DEPENDENCY:
    ((../src/simple_lookup_wind.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (July 2018) (Antares) (initial))
 **********************************************************************/
@@ -18,6 +20,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/table_interp_cpp/include/simple_table_lookup.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include <cstddef>
+
+namespace cml {
 
 // NOTES - the table-lookup capabilities assume that the driving independent
 //         variable is altitude;
@@ -108,4 +112,7 @@ class SimpleLookupWind : public SubscriptionBase
   void assign_dir_mag_vert_data( const double * data_array,
                                  size_t         num_elem_per_variable);
 };
+
+} // namespace cml
+
 #endif

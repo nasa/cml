@@ -39,13 +39,13 @@ public:
   bool invalid_construct1;
   bool invalid_construct2;
 
-  UnitTestFramework        framework;
+  cml::UnitTestFramework        framework;
 
-  WakeParams               params;
-  WakeEffectsOut           output;
-  WakeGeneratingBody       objectA;
-  SubsonicWakeNoForce      wake_no_force;
-  SubsonicWakeWithForce    wake_with_force;
+  cml::WakeParams               params;
+  cml::WakeEffectsOut           output;
+  cml::WakeGeneratingBody       objectA;
+  cml::SubsonicWakeNoForce      wake_no_force;
+  cml::SubsonicWakeWithForce    wake_with_force;
 
   WakeEffectsSimObject()
      :
@@ -192,7 +192,7 @@ private:
     wake_with_force.objectB.set_generate_force( true);
   }
 
-  void populate_tables( SubsonicWake & wake_effects)
+  void populate_tables( cml::SubsonicWake & wake_effects)
   {
     // Vehicle X-axis Offset b/w Wake Origin and Rev Flow Origin
     wake_effects.rev_flow.grid_offset = 2.0;
@@ -307,13 +307,13 @@ private:
   void invalid_constructs()
   {
     if (invalid_construct1) {
-      WakeGeneratingBody fault( NULL, NULL, NULL,
+      cml::WakeGeneratingBody fault( NULL, NULL, NULL,
                                 bodyB_T_inrtl_to_body, bodyB_T_inrtl_to_body,
                                 NULL,
                                 total_alpha, total_alpha, total_alpha);
     }
     if (invalid_construct2) {
-      WakeFollowingBodyNoForce fault( total_alpha,
+      cml::WakeFollowingBodyNoForce fault( total_alpha,
                                       NULL, NULL,
                                       objectA,
                                       NULL);

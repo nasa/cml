@@ -24,6 +24,7 @@ These models are comprised of:
     :titlesonly:
     :hidden:
 
+    models/cml-namespace
     models/dynamics/index
     models/environment/index
     models/fhw/index

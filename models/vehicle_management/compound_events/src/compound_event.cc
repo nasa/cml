@@ -25,6 +25,8 @@ PROGRAMMERS:
 #include "cml/models/vehicle_management/events_manager/include/watch_values_delay.hh"
 #include <list>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -61,7 +63,7 @@ CompoundEvent::initialize(std::list<WatchValuesBaseCore *> * active_watches_in)
 
   if ((arming_triggers.get_num_triggers() == 0) &&
       (action_triggers.get_num_triggers() == 0)) {
-    CMLMessage::error( __FILE__,__LINE__,
+    message::error( __FILE__,__LINE__,
       "No triggers were assigned to compound-event ",name,
       ".\n Event will not be initialized.\n");
     return;
@@ -164,7 +166,7 @@ CompoundEvent::test_crossing_iterative()
       disarming_triggers.subscribe();
       arming_triggers.apply_complementary_changes();
       number_of_times_armed++;
-      CMLMessage::debug(__FILE__,__LINE__,
+      message::debug(__FILE__,__LINE__,
         "CompoundEvent \"",name,"\" armed.\n");
       /* If we are allowing immediate follow-on actions -- such as
        * immediately disarming, or immediately evaluating the action-triggers
@@ -189,7 +191,7 @@ CompoundEvent::test_crossing_iterative()
       action_triggers.unsubscribe();
       disarming_triggers.unsubscribe();
       status = Unarmed;
-      CMLMessage::debug(__FILE__,__LINE__,
+      message::debug(__FILE__,__LINE__,
         "CompoundEvent \"",name,"\" unarmed.\n");
       break;
     }
@@ -219,7 +221,7 @@ CompoundEvent::test_crossing_iterative()
           status = Unarmed;
         }
         event_triggered = false;
-        CMLMessage::debug(__FILE__,__LINE__,
+        message::debug(__FILE__,__LINE__,
           "CompoundEvent \"",name,"\" disarmed.\n");
         break;
       }
@@ -251,7 +253,7 @@ CompoundEvent::test_crossing_iterative()
         // record the time at which the event was triggered, without including
         // the delay, and post the debug message.:
         time_triggered = time;
-        CMLMessage::debug(__FILE__,__LINE__,
+        message::debug(__FILE__,__LINE__,
           "CompoundEvent \"",name,"\" action-trigger satisfied.\n");
 
         // Now mode to the next status.
@@ -282,7 +284,7 @@ CompoundEvent::test_crossing_iterative()
     if (!arming_triggers.event_triggered) {
       disarming_triggers.unsubscribe();
       status = Unarmed;
-      CMLMessage::debug(__FILE__,__LINE__,
+      message::debug(__FILE__,__LINE__,
         "CompoundEvent \"",name,"\" unarmed.\n");
       break;
     }
@@ -290,7 +292,7 @@ CompoundEvent::test_crossing_iterative()
        (time >= next_disarming_check)) {
       next_disarming_check = time + disarm_trigger_check_period;
       if (disarming_triggers.test_crossing()) {
-        CMLMessage::debug(__FILE__,__LINE__,
+        message::debug(__FILE__,__LINE__,
           "CompoundEvent \"",name,"\" disarmed.\n");
         event_triggered = false;
         /* If event is disarmed set event_triggered to be false, since it
@@ -300,7 +302,7 @@ CompoundEvent::test_crossing_iterative()
          * If neither flag is set, set status to PostAction. */
         if (deactivate_at_disarm) {
           if (multi_shot) {
-            CMLMessage::warn(__FILE__,__LINE__,
+            message::warn(__FILE__,__LINE__,
               "CompoundEvent \"",name,"\" deactivate_at_disarm and multi_shot\n"
               "have been set true, deactivate_at_disarm trumps multi_shot, so\n"
               "the event has been deactivated.\n");
@@ -393,3 +395,5 @@ CompoundEvent::activate()
   // Identify which of the triggers has a conditional reference value.
   action_triggers.populate_conditional_reference_trigger_list();
 }
+
+} // namespace cml

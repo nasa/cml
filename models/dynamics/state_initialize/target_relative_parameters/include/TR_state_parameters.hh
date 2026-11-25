@@ -13,6 +13,8 @@ PROGRAMMERS:
     ((Jeremy Rea) (NASA) (May 2017) (Initial implementation))
    )
 
+PYTHON_MODULE: (cml)
+
 NOTES:
   ((This implementation was the first of the two implementations so it gets the
   "primary" naming. It relies on setting the target point by alt/lat/lon
@@ -28,6 +30,8 @@ NOTES:
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
 
 #include "TR_state_param.hh"
+
+namespace cml {
 
 /*****************************************************************************
 TargetRelative_StateParameter
@@ -109,4 +113,7 @@ class TargetRelative_StateParameter  : public TargetRelative_StateParam
   void initialize_internal(const double R_Ref_PCPF[3]);
   double compute_position_magnitude();
 };
+
+} // namespace cml
+
 #endif

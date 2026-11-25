@@ -2,6 +2,8 @@
 PURPOSE:
   (Define function prototype for aero_disperse)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Ryan Whitley) (NASA) (April 2006) (ARES) (Initial implementation))
    ((Jeremy Rea) (NASA) (July 2006) (ARES) (RDLaa08984))
@@ -20,6 +22,8 @@ PROGRAMMERS:
 
 #ifndef CML_AERO_COEFFICIENTS_HH
 #define CML_AERO_COEFFICIENTS_HH
+
+namespace cml {
 
 /*******************************************************************************
 AeroCoefficientsCoreBase
@@ -125,4 +129,7 @@ public:
 
   AeroCoefficientsDisp() = default;
 };
+
+} // namespace cml
+
 #endif

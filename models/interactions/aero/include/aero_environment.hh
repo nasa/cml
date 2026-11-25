@@ -2,6 +2,8 @@
 PURPOSE:
   (Define interface between AeroExec and environment.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2016) (Antares) (New))
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
@@ -12,6 +14,8 @@ PROGRAMMERS:
 
 #include <cstring>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+namespace cml {
 
 /*******************************************************************************
 AeroEnvironment
@@ -56,13 +60,13 @@ public:
     true_body_rates( true_body_rates_in)
   {
     if (cg_position == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid construction of Table/API interface\n",
         "The cg_position pointer was not specified.\n"
         "It is required.\n");
     }
     if (true_body_rates == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid construction of Table/API interface\n",
         "The true_body_rates pointer was not specified.\n"
         "It is required.\n");
@@ -81,4 +85,7 @@ public:
   const double * get_cg_position() const { return cg_position;}
   const double * get_true_body_rates() const { return true_body_rates;}
 };
+
+} // namespace cml
+
 #endif

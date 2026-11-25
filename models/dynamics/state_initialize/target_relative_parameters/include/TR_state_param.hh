@@ -8,6 +8,8 @@ LIBRARY DEPENDENCIES:
     (../src/TR_state_param.cc)
    )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (Nov 2023)
@@ -23,6 +25,7 @@ PROGRAMMERS:
 #include "TR_parameter_ref_frame.hh"
 #include "TR_state_parameter_set.hh"
 
+namespace cml {
 
 /*****************************************************************************
 TargetRelative_StateParam
@@ -157,5 +160,7 @@ class TargetRelative_StateParam : public TR_ParameterSet
 
   bool compute_biased_target();
 };
+
+} // namespace cml
 
 #endif

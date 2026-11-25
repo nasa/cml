@@ -2,6 +2,8 @@
 PURPOSE:
   (Manages injection of a stale-value fault.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
@@ -10,6 +12,8 @@ PROGRAMMERS:
 #define CML_FAULT_STALE_HH
 
 #include "fault.hh"
+
+namespace cml {
 
 /*******************************************************************************
 FaultStale
@@ -48,5 +52,7 @@ Purpose:(Injects the fault.)
 template<typename T> void FaultStale<T>::overwrite_value() {
   variable = stale_value;
 }
+
+} // namespace cml
 
 #endif

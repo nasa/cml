@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/rcs_jet.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation)))
@@ -20,6 +22,8 @@ PROGRAMMERS:
 #include "rcs_prop_pod.hh"
 #include "rcs_group.hh"
 #include "rcs_generic.hh"
+
+namespace cml {
 
 /*****************************************************************************
 RcsJet
@@ -247,4 +251,7 @@ class RcsJet {
   void apply_direction_dispersion();
   void switch_status( RcsJetStatus new_status);
 };
+
+} // namespace cml
+
 #endif

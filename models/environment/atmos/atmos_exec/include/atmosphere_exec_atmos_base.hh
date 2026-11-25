@@ -2,6 +2,8 @@
 PURPOSE:
    (Base-class interfaces for the different atmospheres.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (May 2016) (ANTARES)
@@ -17,6 +19,8 @@ PROGRAMMERS:
 
 #include "cml/models/dynamics/state_descriptors/extended_planetary_derived_state/include/extended_planetary_derived_state.hh"
 #include "jeod/models/utils/math/include/vector3.hh"
+
+namespace cml {
 
 /*******************************************************************************
 AtmosphereExec_AtmosBase
@@ -109,4 +113,7 @@ class AtmosphereExec_AtmosWindsBase : public AtmosphereExec_AtmosBase
                                 out.wind_velocity_tc);
     }
 };
+
+} // namespace cml
+
 #endif

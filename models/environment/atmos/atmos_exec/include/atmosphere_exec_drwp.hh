@@ -7,6 +7,8 @@ LIBRARY DEPENDENCY:
      (../src/atmosphere_exec_drwp.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (May 2016) (ANTARES)
@@ -18,6 +20,8 @@ PROGRAMMERS:
 #define CML_ATMOSPHERE_EXEC_DRWP_HH
 
 #include "atmosphere_exec_atmos_base.hh"
+
+namespace cml {
 
 class AtmosExecOutput;
 class ExtendedPlanetaryDerivedState;
@@ -51,4 +55,7 @@ class AtmosphereExec_Drwp : public AtmosphereExec_AtmosWindsBase
   protected:
     bool initialize();
 };
+
+} // namespace cml
+
 #endif

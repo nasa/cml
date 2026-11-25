@@ -3,12 +3,16 @@ PURPOSE:
   (Structure for data shared between scale factor models and jet-specific
    scale-factor data)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (ANTARES) (Initial implementation)))
 ******************************************************************************/
 
 #ifndef CML_RCS_SCALE_FACTOR_INTERFACE_HH
 #define CML_RCS_SCALE_FACTOR_INTERFACE_HH
+
+namespace cml {
 
 /*****************************************************************************
 RcsScaleFactorInterfaceJet
@@ -56,4 +60,7 @@ class RcsScaleFactorInterface
   RcsScaleFactorInterface(const RcsScaleFactorInterface&) = delete;
   RcsScaleFactorInterface & operator= (const RcsScaleFactorInterface&) = delete;
 };
+
+} // namespace cml
+
 #endif

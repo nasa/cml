@@ -38,6 +38,8 @@ PURPOSE: (
   extensions of WatchValuesBase.
   )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (date) (project) (comment)))
 **********************************************************************/
@@ -51,6 +53,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/trick_logging/include/trick_logging.hh"
 
 #include "event_action_base.hh"
+
+namespace cml {
 
 /*****************************************************************************
 EventActionSimStopNow
@@ -203,4 +207,7 @@ class EventActionLogNow : public EventActionBase {
     return false;
   }
 };
+
+} // namespace cml
+
 #endif

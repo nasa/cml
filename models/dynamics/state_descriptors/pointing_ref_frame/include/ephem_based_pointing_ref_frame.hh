@@ -5,6 +5,8 @@ Purpose:
    reference to the Ephemerides Manager to ensure that the necessary
    frames are updated before updating the Pointing Frame.)
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   ( ((Gary Turner) (OSR) (July 2019) (Antares) (initial))
   )
@@ -16,6 +18,8 @@ Programmers:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/environment/ephemerides/ephem_manager/include/ephem_manager.hh"
 #include "pointing_ref_frame.hh"
+
+namespace cml {
 
 /**
  * Extension of the @ref PointingRefFrame for cases where the Originating Frame
@@ -77,4 +81,7 @@ class EphemBasedPointingRefFrame : public PointingRefFrame
     SubscriptionBase::initialize();
   }
 };
+
+} // namespace cml
+
 #endif

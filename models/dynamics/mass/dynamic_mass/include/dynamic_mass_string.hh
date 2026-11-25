@@ -14,6 +14,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCIES:
    ((../src/dynamic_mass_string.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (July 2014)
                       (New implementation of dynamic mass for JEOD 2.x))
@@ -29,6 +31,8 @@ PROGRAMMERS:
 #include "dynamic_mass_body_properties.hh"
 #include <list>
 #include <cstddef>
+
+namespace cml {
 
 class DynamicMassString  : public DynamicMassBodyPropertiesInterface
 {
@@ -82,4 +86,7 @@ public:
 
    void set_string_in_group() {string_in_group = true;}
 };
+
+} // namespace cml
+
 #endif

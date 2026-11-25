@@ -3,6 +3,8 @@ PURPOSE:
    (Specific implementations of the WatchValuesBase base-class; these have
     JEOD dependencies.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (August 2017) (Antares))
  ******************************************************************************/
@@ -16,6 +18,7 @@ PROGRAMMERS:
 #include "watch_values_base.hh"
 #include "jeod/models/environment/gravity/include/spherical_harmonics_gravity_controls.hh"
 
+namespace cml {
 
 /*****************************************************************************
 WatchValuesGravityAdjust
@@ -83,4 +86,7 @@ class WatchValuesGravityAdjust : public WatchValuesBase<varT> {
      return false;
   }
 };
+
+} // namespace cml
+
 #endif

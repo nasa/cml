@@ -18,6 +18,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -46,7 +48,7 @@ EGM2008_WGS84::initialize()
   table_set.initialize();
 
   if (!table_set.is_active()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Table-initialization error.\n",
       "Error in initializing the lookup table.\n"
       "EGM2008 Geoid cannot be constructed.\n"
@@ -71,3 +73,5 @@ EGM2008_WGS84::update()
 
   table_set.update();
 }
+
+} // namespace cml

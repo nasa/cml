@@ -22,6 +22,7 @@ PROGRAMMERS:
 #include "../include/table_lookup_set.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
 
 /*****************************************************************************
 Constructor
@@ -47,7 +48,7 @@ void
 TableLookupSet::add_table( GenericMultiInputTable &new_table)
 {
   if (initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Invalid sequence\n",
       "Attempt to add new table.\n"
       "It is not possible to add tables after the manager\n"
@@ -71,7 +72,7 @@ TableLookupSet::add_table( GenericMultiInputTable &new_table)
   // as well.
   for (const auto& [table, enabled_flag] : tables) {
     if (&new_table == table) {
-      CMLMessage::warn(
+      message::warn(
         __FILE__,__LINE__,"Initialization duplication detected.\n",
         "The same table was added to the table-manager twice.\n"
         "Omitting the second instance of this table, but including\n"
@@ -93,7 +94,7 @@ TableLookupSet::add_independent_variable(
       TableIndependentVariable &var_in)
 {
   if (initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Invalid sequence\n",
       "Attempt to add independent variable ",var_in.get_name(),"\n"
       "It is not possible to add an independent variable after the model\n"
@@ -103,7 +104,7 @@ TableLookupSet::add_independent_variable(
 
   // Check that it has not already been added:
   if (std::find(independents.begin(), independents.end(), &var_in) != independents.end()) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, "Duplicate variable addition\n",
       "Attempted to add variable ",var_in.get_name(),
       " but it has already been added.\n"
@@ -279,7 +280,7 @@ TableLookupSet::lookup_independent(
     const std::string &var_name)
 {
   if (var_name.empty()) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Invalid variable lookup\n",
       "Cannot identify an independent variable without a name.\n"
       "Specified name is empty.\n"
@@ -289,10 +290,12 @@ TableLookupSet::lookup_independent(
 
   TableIndependentVariable *ret = AbstractTableLookup::lookup_independent(var_name);
   if (ret == nullptr) {
-    CMLMessage::error(
+    message::error(
       __FILE__, __LINE__, "Invalid variable lookup\n",
       "No independent variable named ",var_name," was found in the "
       "table-set.\n");
   }
   return ret;
 }
+
+} // namespace cml

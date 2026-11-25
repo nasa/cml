@@ -18,6 +18,8 @@ Programmers:
 
 #include "../include/pfix_reference_point.hh"
 
+namespace cml {
+
 /*****************************************************************************
 set_point
 Purpose:(sets the reference-point position based on the input values.)
@@ -60,7 +62,7 @@ PfixReferencePoint::set_point(
     update_from_cart( cart_coords);
     break;
   case undefined:
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"PfixReferencePoint initialization error:\n",
       "PfixReferencePoint::position_type has not been defined prior to a call\n"
       " to set the position.\n  Insufficient information to determine how to "
@@ -82,7 +84,7 @@ PfixReferencePoint::set_point(
   }
   else {
     ref_point_set = false;
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"PfixReferencePoint initialization error:\n",
       "The reference position was set to zero in the call to set_point(...).\n"
       "This was probably unintentional.\n");
@@ -127,7 +129,7 @@ PfixReferencePoint::set_direction(
     use_polar_direction = false;
     if (MathUtils::is_near_equal(jeod::Vector3::vmag(direction), 0.0)) {
       ref_point_set = false;
-      CMLMessage::error(__FILE__, __LINE__,
+      message::error(__FILE__, __LINE__,
         "PfixReferencePoint initialization error:\n",
         "The reference direction was set to zero when set_direction(...).\n"
         "was called. This was probably unintentional.\n");
@@ -135,7 +137,7 @@ PfixReferencePoint::set_direction(
     break;
   case undefined:
     ref_point_set = false;
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"PfixReferencePoint initialization error:\n",
       "PfixReferencePoint::direction_type has not been defined prior to a call\n"
       "to set the direction.\n  Insufficient information to determine how to "
@@ -143,3 +145,5 @@ PfixReferencePoint::set_direction(
     break;
   }
 }
+
+} // namespace cml

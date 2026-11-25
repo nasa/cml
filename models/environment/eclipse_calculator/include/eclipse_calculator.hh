@@ -9,6 +9,8 @@ ASSUMPTION: (The vehicle is not partially eclipsed by Earth and the Moon at
 LIBRARY DEPENDENCY:
    ((../src/eclipse_calculator.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2019) (Antares) (initial)))
 *****************************************************************************/
@@ -24,6 +26,8 @@ namespace jeod {
 class DynManager;
 class RefFrame;
 }
+
+namespace cml {
 
 class EclipseCalculator : public SubscriptionBase
 {
@@ -67,4 +71,7 @@ class EclipseCalculator : public SubscriptionBase
   void activate() override;
   void deactivate() override;
 };
+
+} // namespace cml
+
 #endif

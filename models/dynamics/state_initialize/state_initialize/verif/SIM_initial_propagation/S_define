@@ -38,13 +38,13 @@ class AntaresUnitTestSimObject: public Trick::SimObject
   jeod::DynManager & dyn_manager;
  public:
   // Model for testing:
-  StateInitializeWithPropagation  state_init;
+  cml::StateInitializeWithPropagation  state_init;
   // support variables:
   jeod::MassBodyInit       mass_init;
   jeod::DynBody  body;
-  SphericalHarmonicsFastGravityControls   grav_controls_earth;
-  SphericalHarmonicsFastGravityControls   grav_controls_sun;
-  SphericalHarmonicsFastGravityControls   grav_controls_moon;
+  cml::SphericalHarmonicsFastGravityControls   grav_controls_earth;
+  cml::SphericalHarmonicsFastGravityControls   grav_controls_sun;
+  cml::SphericalHarmonicsFastGravityControls   grav_controls_moon;
   double prop_time;
 
   AntaresUnitTestSimObject( jeod::DynManager & dyn_manager_in,

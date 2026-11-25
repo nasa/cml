@@ -83,6 +83,8 @@ PROGRAMMERS:
 
 #include <vector>
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 Purpose:()
@@ -127,14 +129,14 @@ RcsGeneric::initialize(
 
   cm = center_of_mass;
   if (cm == nullptr) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid array.\n",
     "The center of mass must be specified.\n");
   }
 
   time_step = time_step_in;
   if (time_step <= 0) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid time-step.\n",
     "Time step must be > 0.0.\n");
   }
@@ -143,7 +145,7 @@ RcsGeneric::initialize(
 
   for (const auto * jet : jets) {
     if (jet == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "One of the jets pointers is NULL.\n"
         "This vector must be populated with valid pointers.\n");
@@ -151,7 +153,7 @@ RcsGeneric::initialize(
   }
   for (const auto * prop_pod : prop_pods) {
     if (prop_pod == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "One of the prop-pod pointers is NULL.\n"
         "This vector must be populated with valid pointers.\n");
@@ -159,7 +161,7 @@ RcsGeneric::initialize(
   }
   for (const auto * group : groups) {
     if (group == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "One of the group pointers is NULL.\n"
         "This vector must be populated with valid pointers.\n");
@@ -189,7 +191,7 @@ RcsGeneric::initialize(
   //*************************************************************************
   if (calc_flow_rate && num_propellant_components > 2) {
     /* Protect against excessive # of propellant components */
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"Invalid configuration.\n",
     "'calc_flow_rate = true' assumes 1 or 2 prop components,\n"
     "but num_propellant_components = ", num_propellant_components, "\n");
@@ -225,13 +227,13 @@ RcsGeneric::check_mult_jet_flag_init()
     // make sure at least first thrust factor is on (non-zero)
     if ( MathUtils::is_near_equal( prop_pods.at(ii)->thrust_factor.at(0),
                                    0.0)) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "User has selected effects of multiple jets on thrust,\nbut no "
         "thrust factor was defined in thrust_factor[] array for pod ", ii, ".\n");
     }
     if ( MathUtils::is_near_equal( prop_pods.at(ii)->nominal_thrust, 0.0)) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "User has selected effects of multiple jets on thrust,\n"
         "but no nominal thrust value was defined for pod ", ii, ".\n");
@@ -285,7 +287,7 @@ RcsGeneric::update_part_I(
    const void * rcs_command)
 {
   if (rcs_command == nullptr) {
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__,"Invalid arguments.\n",
     "RcsGeneric model was fed with a NULL command set.\n"
     "Model will not run.\nDisabling model.\n");
@@ -423,7 +425,7 @@ RcsGeneric::set_prop_loss_on(
     double value)
 {
   if (ix >= num_propellant_components) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid index error.\n",
       "The index passed in (", ix, ") to change the value of set_prop_loss_on is "
       "out of bounds\n.  Ignoring setting.\n");
@@ -442,7 +444,7 @@ RcsGeneric::set_prop_loss_off(
     double value)
 {
   if (ix >= num_propellant_components) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid index error.\n",
       "The index passed in (", ix, ") to change the value of set_prop_loss_off is "
       "out of bounds\n.  Ignoring setting.\n");
@@ -474,7 +476,7 @@ void
 RcsGeneric::set_calc_flow_rate(bool new_value)
 {
   if (initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid mid-sim adjustment.\n",
       "Because the calc_flow_value parameter is passed through to the jets\n"
       "at initialization, it cannot be adjusted mid-simulation.\n"
@@ -484,3 +486,5 @@ RcsGeneric::set_calc_flow_rate(bool new_value)
     calc_flow_rate = new_value;
   }
 }
+
+} // namespace cml

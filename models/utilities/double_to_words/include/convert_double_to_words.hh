@@ -9,6 +9,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/convert_double_to_uint_words.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2016) (ANTARES) (Initial version, uint only))
    ((Brent Caughron) (OSR) (June 2017) (Antares) (IV&V code review clean up)))
@@ -18,6 +20,8 @@ PROGRAMMERS:
 
 #include <cstdint>
 #include <vector>
+
+namespace cml {
 
 /**
  * Convert a `double` into n-bit unsigned integer words
@@ -148,5 +152,7 @@ public:
    */
   bool check_values();
 };
+
+} // namespace cml
 
 #endif

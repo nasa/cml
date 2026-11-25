@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/fault_function.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
@@ -16,6 +18,8 @@ PROGRAMMERS:
 #include "fault.hh"
 #include "fault_function_parameter.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+namespace cml {
 
 /*******************************************************************************
 FaultFunctionBase
@@ -136,7 +140,7 @@ template<typename T> void FaultFunction<T>::overwrite_value() {
         // Impossible to get here since we already handled this above, but included
         // for completeness.
       default:
-        CMLMessage::error(__FILE__, __LINE__,
+        message::error(__FILE__, __LINE__,
           "Fault Management Error\n",
           "Invalid FunctionType enumeration in fault <", name, "> \n"
           "Disabling the fault.\n");
@@ -144,4 +148,7 @@ template<typename T> void FaultFunction<T>::overwrite_value() {
     }
   }
 }
+
+} // namespace cml
+
 #endif

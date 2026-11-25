@@ -7,6 +7,8 @@ PURPOSE: (Standalone front-end to the aerodynamics data tables.
           inherited into AeroTableSet to provide the interface with the
           AeroExecutiveTable.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (Antares) (initial version))
    ((Gary Turner) (OSR) (June 2016) (Antares) (Refactor))
@@ -19,6 +21,8 @@ PROGRAMMERS:
 
 #include "aero_table_set_base.hh"
 #include "aero_executive_table.hh"
+
+namespace cml {
 
 class AeroTableSet: public AeroTableSetBase
 {
@@ -39,4 +43,7 @@ public:
   AeroTableSet (const AeroTableSet &) = delete;
   AeroTableSet & operator = (const AeroTableSet &) = delete;
 };
+
+} // namespace cml
+
 #endif

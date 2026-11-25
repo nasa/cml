@@ -67,7 +67,7 @@ Existing External Capabilities
 Inheritance
 ^^^^^^^^^^^
 
-The top-level base-class, :cpp:class:`ConstraintSet`, inherits from the :cpp:class:`SubscriptionBase` model to handle
+The top-level base-class, :cpp:class:`cml::ConstraintSet`, inherits from the :cpp:class:`cml::SubscriptionBase` model to handle
 activity within a linked set of constraints.
 
 Support
@@ -91,9 +91,9 @@ using some specified logical comparison. e.g. :math:`x < y`, :math:`x \ge y`, :m
 Constraint-tests are combined together to form a constraint; a constraint is conceptually violated
 when its constraint-tests are violated. There are two underlying concepts to constraint-tests:
 
-1. An instant-violation constraint-test (:cpp:class:`ConstraintTest`) has a simple Boolean :cpp:member:`~ConstraintTest::violation`
+1. An instant-violation constraint-test (:cpp:class:`cml::ConstraintTest`) has a simple Boolean :cpp:member:`~cml::ConstraintTest::violation`
    flag that is set according to whether the variable meets the required test.
-2. A timed-violation constraint-test (:cpp:class:`ConstraintTestTimed`) extends the simpler instant-violation
+2. A timed-violation constraint-test (:cpp:class:`cml::ConstraintTestTimed`) extends the simpler instant-violation
    constraint-test, adding support for monitoring the duration over which the constraint-test has
    been returning success and failure. This type of test is marked as violated only when the
    numerical test has been consistently failing for a specified period of time.
@@ -102,47 +102,93 @@ ________________________________________________________
 
 .. dropdown:: Constraint Test Base Classes
 
-   .. doxygenfile:: constraint_test.hh
+   .. doxygenclass:: cml::ConstraintTest
+       :members:
+       :protected-members:
+       :private-members:
+       :undoc-members:
+
+   .. doxygenclass:: cml::ConstraintTestTimed
+       :members:
+       :protected-members:
+       :private-members:
+       :undoc-members:
 
 ________________________________________________________
 
-.. doxygenfile:: constraint_enum.hh
+.. doxygenstruct:: cml::ConstraintEnum
+    :members:
+    :protected-members:
+    :private-members:
+    :undoc-members:
 
 ________________________________________________________
 
-The two classes :cpp:class:`ConstraintTest` and :cpp:class:`ConstraintTestTimed` are then inherited into the following
+The two classes :cpp:class:`cml::ConstraintTest` and :cpp:class:`cml::ConstraintTestTimed` are then inherited into the following
 class-templates, which provide the actual constraint-tests. The class-templates use the data-type of
 the variable as the template parameter.
 
 **Instantaneous constraint-tests**:
 
-1. :cpp:class:`ConstraintTest_Threshold` compares the value of the variable against a single threshold value;
+1. :cpp:class:`cml::ConstraintTest_Threshold` compares the value of the variable against a single threshold value;
    this template does not have timer support.
-2. :cpp:class:`ConstraintTest_Interval` checks for inclusion of the variable within (or without) an interval
+2. :cpp:class:`cml::ConstraintTest_Interval` checks for inclusion of the variable within (or without) an interval
    specified by an upper and lower bound; this template does not have timer support.
-3. :cpp:class:`ConstraintTest_ValSet` checks for the variable matching (or not-matching) with one of a
+3. :cpp:class:`cml::ConstraintTest_ValSet` checks for the variable matching (or not-matching) with one of a
    discrete set of values; this template does not have timer support.
 
 **Timed constraint-tests**:
 
-1. :cpp:class:`ConstraintTest_ThresholdTimed` compares the value of the variable against a single
+1. :cpp:class:`cml::ConstraintTest_ThresholdTimed` compares the value of the variable against a single
    threshold value; this template does have timer support.
-2. :cpp:class:`ConstraintTest_IntervalTimed` checks for inclusion of the variable within (or without) an
+2. :cpp:class:`cml::ConstraintTest_IntervalTimed` checks for inclusion of the variable within (or without) an
    interval specified by an upper and lower bound; this template does have timer support.
-3. :cpp:class:`ConstraintTest_ValSetTimed` checks for the variable matching (or not-matching) with one of a
+3. :cpp:class:`cml::ConstraintTest_ValSetTimed` checks for the variable matching (or not-matching) with one of a
    discrete set of values; this template does have timer support.
 
 ________________________________________________________
 
 .. dropdown:: Instantaneous Constraint Test Classes
 
-   .. doxygenfile:: constraint_test_templates.hh
+   .. doxygenclass:: cml::ConstraintTest_Threshold
+       :members:
+       :protected-members:
+       :private-members:
+       :undoc-members:
+
+   .. doxygenclass:: cml::ConstraintTest_Interval
+       :members:
+       :protected-members:
+       :private-members:
+       :undoc-members:
+
+   .. doxygenclass:: cml::ConstraintTest_ValSet
+       :members:
+       :protected-members:
+       :private-members:
+       :undoc-members:
 
 ________________________________________________________
 
 .. dropdown:: Timed Constraint Test Classes
 
-   .. doxygenfile:: constraint_test_timed_templates.hh
+   .. doxygenclass:: cml::ConstraintTest_ThresholdTimed
+       :members:
+       :protected-members:
+       :private-members:
+       :undoc-members:
+
+   .. doxygenclass:: cml::ConstraintTest_IntervalTimed
+       :members:
+       :protected-members:
+       :private-members:
+       :undoc-members:
+
+   .. doxygenclass:: cml::ConstraintTest_ValSetTimed
+       :members:
+       :protected-members:
+       :private-members:
+       :undoc-members:
 
 ________________________________________________________
 
@@ -151,7 +197,7 @@ ________________________________________________________
 Constraint
 ~~~~~~~~~~
 
-A constraint comprises some number (at least 1) of constraint-tests. The :cpp:class:`Constraint` class is an
+A constraint comprises some number (at least 1) of constraint-tests. The :cpp:class:`cml::Constraint` class is an
 abstract class, providing a common foundation on which the specifically-configured instantiable
 constraints are defined. The instantiable constraints are all represented as class-templates, taking
 two template parameters:
@@ -161,19 +207,23 @@ two template parameters:
 
 ________________________________________________________
 
-.. doxygenfile:: constraint.hh
+.. doxygenclass:: cml::Constraint
+   :members:
+   :protected-members:
+   :private-members:
+   :undoc-members:
 
 ________________________________________________________
 
 A constraint may utilize any number of any combination of the constraint-tests outlined above. There
 are seven pre-packaged class-templates for easy use, as follows:
 
-1. :cpp:class:`ThresholdInstantConstraint` uses the specified number of :cpp:class:`ConstraintTest_Threshold` tests.
-2. :cpp:class:`IntervalInstantConstraint` uses the specified number of :cpp:class:`ConstraintTest_Interval` tests.
-3. :cpp:class:`ValSetInstantConstraint` uses the specified number of :cpp:class:`ConstraintTest_ValSet` tests.
-4. :cpp:class:`ThresholdTimedConstraint` uses the specified number of :cpp:class:`ConstraintTest_ThresholdTimed` tests.
-5. :cpp:class:`IntervalTimedConstraint` uses the specified number of :cpp:class:`ConstraintTest_IntervalTimed` tests.
-6. :cpp:class:`ValSetTimedConstraint` uses the specified number of :cpp:class:`ConstraintTest_ValSetTimed` tests.
+1. :cpp:class:`ThresholdInstantConstraint` uses the specified number of :cpp:class:`cml::ConstraintTest_Threshold` tests.
+2. :cpp:class:`IntervalInstantConstraint` uses the specified number of :cpp:class:`cml::ConstraintTest_Interval` tests.
+3. :cpp:class:`ValSetInstantConstraint` uses the specified number of :cpp:class:`cml::ConstraintTest_ValSet` tests.
+4. :cpp:class:`ThresholdTimedConstraint` uses the specified number of :cpp:class:`cml::ConstraintTest_ThresholdTimed` tests.
+5. :cpp:class:`IntervalTimedConstraint` uses the specified number of :cpp:class:`cml::ConstraintTest_IntervalTimed` tests.
+6. :cpp:class:`ValSetTimedConstraint` uses the specified number of :cpp:class:`cml::ConstraintTest_ValSetTimed` tests.
 7. :cpp:class:`ThresholdTimedConstraintSpecData` provides an example of utilizing specified thresholds to
    define tests internally. This template takes three parameters:
 
@@ -191,19 +241,55 @@ ________________________________________________________
 
 .. dropdown:: Threshold Constraint Classes
 
-   .. doxygenfile:: threshold_constraint.hh
+   .. doxygenclass:: cml::ThresholdInstantConstraint
+      :members:
+      :protected-members:
+      :private-members:
+      :undoc-members:
+
+   .. doxygenclass:: cml::ThresholdTimedConstraint
+      :members:
+      :protected-members:
+      :private-members:
+      :undoc-members:
+
+   .. doxygenclass:: cml::ThresholdTimedConstraintSpecData
+      :members:
+      :protected-members:
+      :private-members:
+      :undoc-members:
 
 ________________________________________________________
 
 .. dropdown:: Interval Constraint Classes
 
-   .. doxygenfile:: interval_constraint.hh
+   .. doxygenclass:: cml::IntervalInstantConstraint
+      :members:
+      :protected-members:
+      :private-members:
+      :undoc-members:
+
+  .. doxygenclass:: cml::IntervalTimedConstraint
+     :members:
+     :protected-members:
+     :private-members:
+     :undoc-members:
 
 ________________________________________________________
 
 .. dropdown:: Value-Set Constraint Classes
 
-   .. doxygenfile:: valset_constraint.hh
+   .. doxygenclass:: cml::ValSetInstantConstraint
+      :members:
+      :protected-members:
+      :private-members:
+      :undoc-members:
+
+   .. doxygenclass:: cml::ValSetTimedConstraint
+      :members:
+      :protected-members:
+      :private-members:
+      :undoc-members:
 
 ________________________________________________________
 
@@ -218,7 +304,11 @@ together. A constraint-set cannot be “violated”, such a concept is meaningle
 
 ________________________________________________________
 
-.. doxygenfile:: constraint_set.hh
+.. doxygenclass:: cml::ConstraintSet
+    :members:
+    :protected-members:
+    :private-members:
+    :undoc-members:
 
 ________________________________________________________
 
@@ -228,11 +318,11 @@ Example
 Consider a situation in which a condition should be flagged if any of a set of tests fails to pass: for example:
 ((:math:`x > 0` for more than 3 seconds) or (:math:`x > 2` for more than 1 second)).
 
-- Each of those tests will be represented as a :cpp:class:`ConstraintTest`, specifically as a
-  :cpp:class:`ConstraintTest_ThresholdTimed` because both tests evaluate a variable against a threshold-value,
+- Each of those tests will be represented as a :cpp:class:`cml::ConstraintTest`, specifically as a
+  :cpp:class:`cml::ConstraintTest_ThresholdTimed` because both tests evaluate a variable against a threshold-value,
   with an associated timing constraint.
 
-- While each of those tests could be represented as a :cpp:class:`Constraint` containing one :cpp:class:`ConstraintTest`,
+- While each of those tests could be represented as a :cpp:class:`cml::Constraint` containing one :cpp:class:`cml::ConstraintTest`,
   doing so would not be optimal in this configuration.
 
   - Because the condition should be flagged when either test fails, if each test is represented as a
@@ -246,7 +336,7 @@ Consider a situation in which a condition should be flagged if any of a set of t
   tests – in this case an instance of :cpp:class:`ThresholdTimedConstraint`.
 
 - Even though this example includes a set of evaluative tests, the overall configuration CANNOT be a
-  :cpp:class:`ConstraintSet` because a :cpp:class:`ConstraintSet` has no concept of pass/fail. The :cpp:class:`ConstraintSet` concept
+  :cpp:class:`cml::ConstraintSet` because a :cpp:class:`cml::ConstraintSet` has no concept of pass/fail. The :cpp:class:`cml::ConstraintSet` concept
   is to manage the simultaneous evaluation of multiple constraints. The constraint (comprising
   multiple constraint-tests) may be managed by a constraint-set, but it cannot be conceptually
   represented by one.
@@ -457,13 +547,13 @@ ThresholdTimedConstraintSpecData
 The :cpp:class:`ThresholdTimedConstraintSpecData` has two important configuration settings not used by other
 constraints:
 
-- :cpp:member:`~ThresholdTimedConstraintSpecData::use_linear_interpolation`
-- :cpp:member:`~ThresholdTimedConstraintSpecData::num_specs`
+- :cpp:member:`~cml::ThresholdTimedConstraintSpecData::use_linear_interpolation`
+- :cpp:member:`~cml::ThresholdTimedConstraintSpecData::num_specs`
 
-The :cpp:member:`~ThresholdTimedConstraintSpecData::use_linear_interpolation` setting switches the computation of the time-limit between using linear
+The :cpp:member:`~cml::ThresholdTimedConstraintSpecData::use_linear_interpolation` setting switches the computation of the time-limit between using linear
 and logarithmic interpolation between the specified data points.
 
-The :cpp:member:`~ThresholdTimedConstraintSpecData::num_specs` variable is constructed to be equal to the number of specifications identified in
+The :cpp:member:`~cml::ThresholdTimedConstraintSpecData::num_specs` variable is constructed to be equal to the number of specifications identified in
 the template parameter. However, particularly for cases where the setting of those specification
 values is not known at the time of construction, it may be necessary to adjust the number of
 specifications post-construction.
@@ -473,7 +563,7 @@ which contains 3 specific data points, and the other contains 4. The instance mu
 be capable of holding 4 in case the latter is used, but must be configurable to hold only 3 in case
 the former is used.
 
-The :cpp:func:`~ThresholdTimedConstraintSpecData::set_num_specs` method adjusts the number of specification values to actually use. It
+The :cpp:func:`~cml::ThresholdTimedConstraintSpecData::set_num_specs` method adjusts the number of specification values to actually use. It
 cannot be adjusted to more than the instance was constructed to hold because the array has already
 been sized accordingly. It cannot be adjusted after initialization because the interpolation is
 conducted at initialization so there is no point in adjusting the number of data points to use for

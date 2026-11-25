@@ -7,12 +7,16 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/rocket_motor_dispersions.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
  ******************************************************************************/
 
 #ifndef CML_ROCKET_MOTOR_DISPERSIONS_HH
 #define CML_ROCKET_MOTOR_DISPERSIONS_HH
+
+namespace cml {
 
 class RocketMotorDispersions {
 public:
@@ -34,4 +38,7 @@ public:
   void apply_dispersions( double position[3],
                           double T_parent_to_motor[3][3]);
 };
+
+} // namespace cml
+
 #endif

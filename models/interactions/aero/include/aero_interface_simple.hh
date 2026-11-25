@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/aero_interface_simple.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (March 2015) (Antares) (initial version))
    ((Gary Turner) (OSR) (June 2016)  (Antares) (refactor))
@@ -16,6 +18,8 @@ PROGRAMMERS:
 
 #include "aero_interface_base.hh"
 #include "aero_executive_simple.hh"
+
+namespace cml {
 
 class AtmosRelativeState;
 
@@ -40,4 +44,7 @@ public:
   void initialize() override;
   void update() override;
 };
+
+} // namespace cml
+
 #endif

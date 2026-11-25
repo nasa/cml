@@ -6,6 +6,8 @@ Purpose:
 Library Dependency:
    ((../src/range_to_pfix_reference.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
    (
     ((Gary Turner) (OSR)         (Sept 2014) (Initial version))
@@ -22,6 +24,8 @@ Programmers:
 namespace jeod {
 class PlanetFixedPosition;
 }
+
+namespace cml {
 
 class RangeToPfixReference : public RangeComputation
 {
@@ -49,5 +53,7 @@ class RangeToPfixReference : public RangeComputation
   void is_abstract() override {} // Makes this class instantiable
 
 };
+
+} // namespace cml
 
 #endif

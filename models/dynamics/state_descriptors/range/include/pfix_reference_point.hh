@@ -5,6 +5,8 @@ Purpose:
 Library Dependency:
    ((../src/pfix_reference_point.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
    (((Gary Turner)    (OSR)        (Sept 2014)  (Initial version))
     ((Debbie Merritt) (NASA)       (Nov 2014)   (Added units definition to reference parameters))
@@ -15,6 +17,8 @@ Programmers:
 #define CML_PFIX_REFERENCE_POINT_HH
 
 #include "jeod/models/utils/planet_fixed/planet_fixed_posn/include/planet_fixed_posn.hh"
+
+namespace cml {
 
 class PfixReferencePoint : public jeod::PlanetFixedPosition
 {
@@ -65,5 +69,7 @@ class PfixReferencePoint : public jeod::PlanetFixedPosition
   void set_point (double & reference_radius, bool & ref_point_set);
   void set_direction (bool & use_polar_direction, bool & ref_point_set);
 };
+
+} // namespace cml
 
 #endif

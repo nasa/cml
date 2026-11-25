@@ -3,6 +3,8 @@ PURPOSE:
    (Provides the mechanism by which variables can be queued for reassignment
     upon the action of an event.
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (
     ((Gary Turner) (OSR) (January 2020) (Antares))
@@ -10,6 +12,8 @@ PROGRAMMERS:
  ******************************************************************************/
 #ifndef CML_EVENT_VARIABLE_ASSIGNMENT_HH
 #define CML_EVENT_VARIABLE_ASSIGNMENT_HH
+
+namespace cml {
 
 /*****************************************************************************
 EventVariableAssignmentBase
@@ -67,4 +71,7 @@ class EventVariableAssignmentRef : public EventVariableAssignmentBase
   {}
   void make_assignment() override {variable = value;}
 };
+
+} // namespace cml
+
 #endif

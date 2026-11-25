@@ -5,6 +5,8 @@
  LIBRARY DEPENDENCY:
    ((../src/math_utils.cc))
 
+ PYTHON_MODULE: (cml)
+
  PROGRAMMERS:
    (((Gary Turner) (OSR) (Sep 2015) (initial version))
     ((Bingquan Wang) (OSR) (May 2017)
@@ -31,6 +33,7 @@
 
 #include "cml/models/utilities/math_utils/include/math_utils_private.hh"
 
+namespace cml {
 
 class MathUtils : private MathUtilsPrivate {
 
@@ -214,7 +217,7 @@ public:
                                T arg2,
                                T range)
   {
-    CMLMessage::inform(__FILE__,__LINE__,
+    message::inform(__FILE__,__LINE__,
       "Deprecated method used: is_within_range.\n"
       "This method name was found to be confusing.\n"
       "Use is_within_abs_tolerance instead.");
@@ -232,7 +235,7 @@ public:
     // wrapping on an unsigned type.
     if constexpr (std::is_signed_v<T>) {
       if (tol < 0) {
-        CMLMessage::error(
+        message::error(
           __FILE__,__LINE__,"Invalid arguments\n",
           "Testing whether two values are within an absolute tolerance\n"
           "is not well-defined when the tolerance is negative.\n"
@@ -253,7 +256,7 @@ public:
     // evaluate a positive tolerance about a negative value.
     if constexpr (std::is_signed_v<T>) {
       if (tol < 0) {
-        CMLMessage::error(
+        message::error(
           __FILE__,__LINE__,"Invalid arguments\n",
           "Testing whether two values are within a relative tolerance\n"
           "is not well-defined when the tolerance is negative.\n"
@@ -322,7 +325,7 @@ public:
   * DEPRECATED CONTENT. Remove after reasonable timeframe.*/
   static float sqrt( float val) 
   { 
-    CMLMessage::inform(__FILE__,__LINE__,
+    message::inform(__FILE__,__LINE__,
       "Deprecated method used: sqrt.\n"
       "This method name was not sufficiently descriptive.\n"
       "Use sqrt_protected instead.");
@@ -330,7 +333,7 @@ public:
   }
   static double sqrt( double val)
   { 
-    CMLMessage::inform(__FILE__,__LINE__,
+    message::inform(__FILE__,__LINE__,
       "Deprecated method used: sqrt.\n"
       "This method name was not sufficiently descriptive.\n"
       "Use sqrt_protected instead.");
@@ -477,7 +480,7 @@ Linear Algebra Section
   template <size_t N>
   static std::array<double, N> piecewise_sqrt(
                                          const std::array<double, N>& vec) {
-    CMLMessage::inform(__FILE__,__LINE__,
+    message::inform(__FILE__,__LINE__,
       "Deprecated method used: piecewise_sqrt.\n"
       "This method name was found to be confusing.\n"
       "Use vector_elementwise_sqrt instead.");
@@ -487,7 +490,7 @@ Linear Algebra Section
   template <size_t N>
   static std::array<double, N> piecewise_sqrt(
                                          const std::array<double, N>&& vec) {
-    CMLMessage::inform(__FILE__,__LINE__,
+    message::inform(__FILE__,__LINE__,
       "Deprecated method used: piecewise_sqrt.\n"
       "This method name was found to be confusing.\n"
       "Use vector_elementwise_sqrt instead.");
@@ -496,7 +499,7 @@ Linear Algebra Section
 
   template <size_t N>
   static std::array<double, N> piecewise_sqrt(const double (&vec)[N]) {
-    CMLMessage::inform(__FILE__,__LINE__,
+    message::inform(__FILE__,__LINE__,
       "Deprecated method used: piecewise_sqrt.\n"
       "This method name was found to be confusing.\n"
       "Use vector_elementwise_sqrt instead.");
@@ -506,7 +509,7 @@ Linear Algebra Section
   template <size_t N>
   static void piecewise_sqrt(const double (&vec)[N],
                              double (&result)[N]) {
-    CMLMessage::inform(__FILE__,__LINE__,
+    message::inform(__FILE__,__LINE__,
       "Deprecated method used: piecewise_sqrt.\n"
       "This method name was found to be confusing.\n"
       "Use vector_elementwise_sqrt instead.");
@@ -674,7 +677,7 @@ Linear Algebra Section
     size_t right_col_out  = left_col_ix + col2;
     if (bottom_row_out > row1 ||
         right_col_out  > col1) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Cannot extract a [",row2,"]x[",col2,"] matrix from a "
         "[",row1,"]x[",col1,"] matrix\n"
         "starting at indices [",top_row_ix,",",left_col_ix,"].\n"
@@ -706,7 +709,7 @@ Linear Algebra Section
     size_t right_col_out  = left_col_ix + col1;
     if (bottom_row_out > row2 ||
         right_col_out  > col2) {
-      CMLMessage::error(__FILE__,__LINE__,
+      message::error(__FILE__,__LINE__,
         "Cannot push a [",row1,"]x[",col1,"] matrix onto a"
         "[",row2,"]x[",col2,"] matrix\n"
         "starting at indices [",top_row_ix,",",left_col_ix,"].\n"
@@ -876,7 +879,7 @@ Assumption: Covariance is populated on the lower diagonal.
     double sqrt_diag[N];
     for (size_t i_row = 0; i_row < N; ++i_row) {
       if (cov[i_row][i_row] < 0) {
-        CMLMessage::error(__FILE__,__LINE__,
+        message::error(__FILE__,__LINE__,
           "Invalid covariance matrix, a diagonal element is negative.\n"
           "Correlation coefficients not defined.\n Aborting.\n");
         return false;
@@ -884,7 +887,7 @@ Assumption: Covariance is populated on the lower diagonal.
       if (cov[i_row][i_row] <= 0.0) { // i.e. == 0.0
         for (size_t i_lower_col = 0; i_lower_col < i_row; ++i_lower_col) {
           if ( !is_equal( cov[i_row][i_lower_col], 0.0)) {
-            CMLMessage::error(__FILE__,__LINE__,
+            message::error(__FILE__,__LINE__,
               "Invalid covariance matrix, a diagonal element is zero\n"
               "with non-zero off-diagonals.\n"
               "Correlation coefficients not defined.\n Aborting.\n");
@@ -893,7 +896,7 @@ Assumption: Covariance is populated on the lower diagonal.
         }
         for (size_t i_lower_row = i_row+1; i_lower_row < N; ++i_lower_row) {
           if ( !is_equal( cov[i_lower_row][i_row], 0.0)) {
-            CMLMessage::error(__FILE__,__LINE__,
+            message::error(__FILE__,__LINE__,
               "Invalid covariance matrix, a diagonal element is zero\n"
               "with non-zero off-diagonals.\n"
               "Correlation coefficients not defined.\n Aborting.\n");
@@ -902,7 +905,7 @@ Assumption: Covariance is populated on the lower diagonal.
         }
         // Avoid blowing up on 0/0:
         sqrt_diag[i_row] = 1.0;
-        CMLMessage::inform(__FILE__,__LINE__,
+        message::inform(__FILE__,__LINE__,
           "Covariance matrix contains a diagonal element that is zero\n"
           "with zero off-diagonals.\n"
           "Correlation coefficients not defined.\n"
@@ -952,14 +955,14 @@ Purpose:
     // method to find the inverse of the matrix.
     if (!success) {
       if (fail_on_error) {
-        CMLMessage::fail(
+        message::fail(
           __FILE__,__LINE__,"Matrix Inverse failed\n",
           "Cholesky decomposition of the provided matrix failed,\n"
           "causing the matrix-inversion to fail.\n"
           "Check that the provided matrix is positive semi-definite.\n");
       }
       else {
-        CMLMessage::error(
+        message::error(
           __FILE__,__LINE__,"Matrix Inverse failed\n",
           "Cholesky decomposition of the provided matrix failed,\n"
           "causing the matrix-inversion to fail.\n"
@@ -1003,5 +1006,7 @@ template<> bool MathUtils::is_equal<double>( double val1, double val2);
 // TODO: these don't make sense to support. Remove them in the future.
 template<> bool MathUtils::is_within_abs_tolerance<bool>( bool val1, bool val2, bool tol);
 template<> bool MathUtils::is_within_rel_tolerance<bool>( bool value, bool expected, double tol);
+
+} // namespace cml
 
 #endif

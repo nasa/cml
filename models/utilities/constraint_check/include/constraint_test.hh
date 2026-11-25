@@ -7,6 +7,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/constraint_test.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
  (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )
@@ -15,6 +17,8 @@ PROGRAMMERS:
 #define CML_CONSTRAINT_TEST_HH
 
 #include "constraint_enum.hh"
+
+namespace cml {
 
 /**
  * Provides the mechanism for testing some value against some threshold using some
@@ -219,4 +223,7 @@ class ConstraintTestTimed : public ConstraintTest
    */
   void update_timer(double delta_time);
 };
+
+} // namespace cml
+
 #endif

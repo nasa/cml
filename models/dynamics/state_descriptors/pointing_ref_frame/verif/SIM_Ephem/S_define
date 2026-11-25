@@ -40,12 +40,12 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
    jeod::DynManager    & dyn_manager;
  public:
   // Model for testing:
-  EphemBasedPointingRefFrame  ephem_rotating_frame;
-  PointingRefFrame            non_ephem_rotating_frame;
+  cml::EphemBasedPointingRefFrame  ephem_rotating_frame;
+  cml::PointingRefFrame            non_ephem_rotating_frame;
    // support variables
   jeod::DynBody              body;
   jeod::MassBodyInit         mass_init;
-  StateInitialize            state_initialize;
+  cml::StateInitialize            state_initialize;
   jeod::RelativeDerivedState ephem_rel_state;
   jeod::RelativeDerivedState non_ephem_rel_state;
   bool use_ephem;

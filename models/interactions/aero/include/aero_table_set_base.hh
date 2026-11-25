@@ -10,6 +10,8 @@ PURPOSE: (Standalone front-end to the aerodynamics data tables.
 LIBRARY DEPENDENCY:
   ((../src/aero_table_set_base.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Dec 2015) (Antares) (initial version))
    ((Gary Turner) (OSR) (June 2016) (Antares) (Refactor))
@@ -22,6 +24,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/table_interp_cpp/include/table_lookup_set.hh"
 
 #include "aero_coefficients.hh"
+
+namespace cml {
 
 class AeroTableSetBase: public TableLookupSet
 {
@@ -154,4 +158,7 @@ protected:
   void query_off_diag_aero_damping();
   AeroDampingType verify_aero_damping(const std::string & type) const;
 };
+
+} // namespace cml
+
 #endif

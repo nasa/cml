@@ -20,6 +20,7 @@ PROGRAMMERS:
 
 #include "../include/rocket_motor_basic.hh"
 
+namespace cml {
 
 /*****************************************************************************
 constructor
@@ -113,7 +114,7 @@ void
 RocketMotor_Basic::initialize()
 {
   if (veh_cm == nullptr) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid construction\n",
       "The vehicle-CM pointer has not been set, and is required for\n"
       "generation of the moment.\n");
@@ -128,7 +129,7 @@ RocketMotor_Basic::initialize()
     if (prop_mass_string == nullptr) {
       // If using a mass-string, prop_mass_string should have been set in the
       // constructor.  This case should be impossible to hit.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Unknown configuration\n",
         "The prop_mass_string pointer has not been set, but the "
         "use_mass_string\nswitch has been set to True\n"
@@ -136,7 +137,7 @@ RocketMotor_Basic::initialize()
       return;
     }
     if (prop_mass_string->get_body_collection_size() == 0) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "The specified prop_mass_string has no bodies associated with it.\n"
         "This configuration is not supported.\n");
@@ -150,7 +151,7 @@ RocketMotor_Basic::initialize()
     if (prop_mass_body == nullptr) {
       // If not using a mass-string, prop_mass_body should have been set in the
       // constructor.  This case should be impossible to hit.
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Unknown configuration\n",
         "The prop_mass_body pointer has not been set, but the use_mass_string\n"
         "switch has been set to False, indicating that the model is using a\n"
@@ -158,7 +159,7 @@ RocketMotor_Basic::initialize()
       return;
     }
     if (!mass_group.is_body_in_group( prop_mass_body)) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid configuration\n",
         "The specified prop_mass_body is not managed by the specified "
         "mass-group.\nThis configuration is not supported.\n");
@@ -170,7 +171,7 @@ RocketMotor_Basic::initialize()
   mass_group.subscribe();
 
   if (dyn_mass_properties.consumable_mass < 0) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid Initialization\n",
       "The consumable mass cannot be < 0.\n"
       "Verify the specification of residual mass and core-mass.\n");
@@ -182,7 +183,7 @@ RocketMotor_Basic::initialize()
   // Calculate thrust direction in structural frame
   const double unit_vec_mag_sq = jeod::Vector3::vmagsq(thrust_unit_motor);
   if (MathUtils::is_near_equal( unit_vec_mag_sq, 0.0)) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid unit vector specification\n",
       "The required directional unit-vector is still at the default [0,0,0]\n"
       "Setting the unit-vector to [1,0,0] instead.\n");
@@ -191,7 +192,7 @@ RocketMotor_Basic::initialize()
   else if (!MathUtils::is_near_equal( unit_vec_mag_sq, 1.0)) {
     double scratch[3];
     jeod::Vector3::normalize( thrust_unit_motor, scratch);
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid unit vector specification\n",
       "The specified unit-vector  [", thrust_unit_motor[0], ", ", thrust_unit_motor[1], ", ", thrust_unit_motor[2], "] is not a unit vector.\n"
       "Normalizing this vector to [", scratch[0], ", ", scratch[1], ", ", scratch[2], "]\n");
@@ -306,7 +307,7 @@ RocketMotor_Basic::update_status()
     }
     break;
   default:
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid motor status\n",
       "Motor status has been set to an invalid setting.\n"
       "Don't know how to handle this setting, ", status, ".\n");
@@ -364,3 +365,5 @@ RocketMotor_Basic::activate()
   }
   SubscriptionBase::activate();
 }
+
+} // namespace cml

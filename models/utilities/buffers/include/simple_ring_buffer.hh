@@ -5,6 +5,8 @@ PURPOSE: (
   located.
   Buffer structure is tempalted to provide a vector of any struct or class.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Sep 2023) (ANTARES) (initial))
   )
@@ -24,8 +26,10 @@ ASSUMPTIONS:
 #include <string>
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 template <typename T>
-class CMLSimpleRingBuffer {
+class SimpleRingBuffer {
  public:
   std::string name; /* (--)
     Name of buffer, used for error reporting.*/
@@ -41,14 +45,14 @@ class CMLSimpleRingBuffer {
 /*****************************************************************************
 Constructor/ destructor
 *****************************************************************************/
-  explicit CMLSimpleRingBuffer(std::string name_)
+  explicit SimpleRingBuffer(std::string name_)
     :
-    name(std::move(std::move(name_))),
+    name(std::move(name_)),
     max_buffer_size( data.max_size())
   {
     data.resize(1);
   }
-  virtual ~CMLSimpleRingBuffer() = default;
+  virtual ~SimpleRingBuffer() = default;
 
 /*****************************************************************************
 advance_index
@@ -85,13 +89,13 @@ Purpose:
       return;
     }
     if (new_buffer_size == 0) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot set the buffer size to zero.\n"
         "Instruction ignored for simple ring buffer ",name,".\n");
       return;
     }
     if (new_buffer_size > max_buffer_size) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot set the buffer size to > ",max_buffer_size,".\n"
         "Buffer size being reset to ",max_buffer_size,
         " for simple ring buffer ",name,".\n");
@@ -173,7 +177,7 @@ Purpose:
   size_t identify_previous_index( size_t n) const
   {
     if (n > data.size()) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot step backward ",n," steps because the buffer only contains ",
         data.size(),"entries.\n Returning current buffer index.\n");
       return buffer_ix;
@@ -183,4 +187,7 @@ Purpose:
   }
 
 };
+
+} // namespace cml
+
 #endif

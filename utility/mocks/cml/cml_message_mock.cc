@@ -7,15 +7,15 @@
 
 namespace {
 
-CMLMessage::Mock* global_mock_ptr = nullptr;
+cml::message::Mock* global_mock_ptr = nullptr;
 
 } // namespace
 
-namespace CMLMessage {
+namespace cml::message {
 
 Mock::Mock() {
     if (global_mock_ptr != nullptr) {
-        throw std::runtime_error("Multiple CMLMessage::Mock instances created for a single test!");
+        throw std::runtime_error("Multiple cml::message::Mock instances created for a single test!");
     }
     global_mock_ptr = this;
 }
@@ -35,4 +35,4 @@ void publish(
     }
 }
 
-} // namespace CMLMessage
+} // namespace cml::message

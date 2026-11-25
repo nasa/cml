@@ -16,5 +16,5 @@
 # 2nd row should map to the 1st column
 # 3rd row should map to the 2nd column
 exec(open("RUN_direction_P_to_T_ref/input.py").read())
-verif.corr_state.att_rot_defined = trick.CorrelatedStateDispersion.PerturbedToTrue
-verif.corr_state.corr_att_frame = trick.CorrelatedStateDispersion.BODY_FRM
+verif.corr_state.att_rot_defined = trick.cml.CorrelatedStateDispersion.PerturbedToTrue
+verif.corr_state.corr_att_frame = trick.cml.CorrelatedStateDispersion.BODY_FRM

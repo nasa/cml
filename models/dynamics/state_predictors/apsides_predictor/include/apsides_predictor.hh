@@ -7,6 +7,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/apsides_predictor.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (Oct 2014) (New implementation for Antares))
     ((Bingquan Wang) (OSR) (May 2017) (cleaned up the code per its IV&V code review))
@@ -24,6 +26,8 @@ namespace jeod {
 class RefFrameTrans;
 class Planet;
 }
+
+namespace cml {
 
 class ApsidesPredictor : public SubscriptionBase {
 
@@ -69,5 +73,7 @@ class ApsidesPredictor : public SubscriptionBase {
  private:
   void compute_next_apsis();
 };
- 
+
+} // namespace cml
+
 #endif

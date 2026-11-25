@@ -2,6 +2,8 @@
 PURPOSE:
   (Header file for AeroInterfaceOutput C++ class)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2016) (Antares) (new))
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
@@ -11,6 +13,8 @@ PROGRAMMERS:
 #define CML_AERO_INTERFACE_OUTPUT_HH
 
 #include "jeod/models/utils/math/include/vector3.hh"
+
+namespace cml {
 
 /*******************************************************************************
 AeroInterfaceOutput
@@ -59,4 +63,7 @@ public:
     zero_torque();
   }
 };
+
+} // namespace cml
+
 #endif

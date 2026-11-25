@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/trigger_group.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
@@ -15,6 +17,8 @@ PROGRAMMERS:
 #include "trigger.hh"
 #include <list>
 #include <string>
+
+namespace cml {
 
 /*******************************************************************************
 TriggerGroup
@@ -44,5 +48,7 @@ class TriggerGroup {
    std::list<std::pair<bool, TriggerBase*> > triggers; /* (--)
      List of triggers and whether they are enabled for this group. */
 };
+
+} // namespace cml
 
 #endif

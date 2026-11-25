@@ -24,6 +24,8 @@ PROGRAMMERS:
 
 #include "../include/separation_state.hh"
 
+namespace cml {
+
 /********************************************************************************
 Method: SeparationState
 Purpose: (Constructor)
@@ -138,7 +140,7 @@ SeparationState::initialize_find_frame(
                            body.find_vehicle_point(frame_name));
   }
   if (frame == nullptr) {
-    CMLMessage::fail (
+    message::fail (
      __FILE__, __LINE__, "separation_state INVALID NAME\n",
      "Could not find a vehicle point named ", frame_name, " on the ", body_type, " vehicle");
   }
@@ -210,3 +212,5 @@ void SeparationState::deactivate()
   }
   active = false;
 }
+
+} // namespace cml

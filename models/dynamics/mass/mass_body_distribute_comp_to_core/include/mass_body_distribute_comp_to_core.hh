@@ -16,6 +16,8 @@ Assumptions:
 Limitations:
   ((This model will not initialize mass properties, it will only modify them))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
   (((Gary Turner) (OSR) (Sept 2018) (Antares) (Initial version))
   )
@@ -28,7 +30,7 @@ Programmers:
 #include "jeod/models/dynamics/mass/include/mass_properties.hh"
 #include "jeod/models/dynamics/mass/include/mass_point_state.hh"
 
-
+namespace cml {
 
 /*****************************************************************************
 MassBodyDistributeCompToCore
@@ -77,4 +79,7 @@ class MassBodyDistributeCompToCore
   MassBodyDistributeCompToCore & operator = (
                                const MassBodyDistributeCompToCore&);
 };
+
+} // namespace cml
+
 #endif

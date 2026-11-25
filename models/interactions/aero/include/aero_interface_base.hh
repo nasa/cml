@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/aero_interface_base.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (June 2016) (Antares) (new))
    ((Brent Caughron) (OSR) (Dec 2020) (Antares) (Code Review and IV&V)))
@@ -18,6 +20,8 @@ PROGRAMMERS:
 
 #include "aero_interface_output.hh"
 #include "aero_executive_base.hh"
+
+namespace cml {
 
 /*******************************************************************************
 AeroInterfaceBase
@@ -68,4 +72,7 @@ protected:
   void activate() override;
   void deactivate() override;
 };
+
+} // namespace cml
+
 #endif

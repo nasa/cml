@@ -8,6 +8,8 @@ PURPOSE: (iThe RcsPropPod provides a convenient mechanism for grouping
 LIBRARY DEPENDENCY:
    ((../src/rcs_prop_pod.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (April 2017) (Antares)
        (initial object-oriented implementation))
@@ -20,6 +22,8 @@ PROGRAMMERS:
 
 #include <vector>
 #include "cml/models/dynamics/mass/dynamic_mass/include/dynamic_mass_body_properties.hh"
+
+namespace cml {
 
 /*****************************************************************************
 RcsPodComponent
@@ -179,4 +183,7 @@ class RcsPropPod{
   bool is_healthy() const { return health != HealthFail;}
 
 };
+
+} // namespace cml
+
 #endif

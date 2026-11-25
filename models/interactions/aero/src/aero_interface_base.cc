@@ -16,6 +16,8 @@ PROGRAMMERS:
 
 #include "../include/aero_interface_base.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor
 *******************************************************************************/
@@ -40,7 +42,7 @@ AeroInterfaceBase::activate()
     // a subscribe() call. But the SubscriptionBase model (to which the
     // subscribe() call is directed) will only call activate() if !active.
     // There should be no other mechanism for calling this method.
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, "Aero Executive activation stopped\n",
       "Model is already active. Should never see this message.\n");
     return;
@@ -50,7 +52,7 @@ AeroInterfaceBase::activate()
     // UNREACHABLE CODE. This base-class is abstract and the only 2
     // instantiable derivatives of it both set executive_ptr in their
     // constructors to be the address of a specific class instance.
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Failure to activate the aerodynamics.\n",
       "The aerodynamics executive has not been selected from the interface.\n"
       "Failed to start aerodynamics.\n");
@@ -65,7 +67,7 @@ AeroInterfaceBase::activate()
   atmos_rel_state.subscribe();
   if (!atmos_rel_state.is_active()) {
     if (sub_pending > 0) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Activation failed in Atmos-rel-state dependency.\n",
         "Aero Interface activation stopped because the atmosphere-relative-state"
         "\nfailed to activate, apparently during interface initialization.\n"
@@ -76,7 +78,7 @@ AeroInterfaceBase::activate()
       initialized = false;
     }
     else {
-      CMLMessage::error(
+      message::error(
         __FILE__, __LINE__, "Activation failed in Atmos-rel-state dependency.\n",
         "Aero Interface activation stopped because the atmosphere-relative-state"
         "\nfailed to activate, apparently while trying to subscribe to a\n"
@@ -92,7 +94,7 @@ AeroInterfaceBase::activate()
   // Subscribe to the associated Aero-executive:
   executive_ptr->subscribe();
   if (!executive_ptr->is_active()) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, "Environment out of domain.\n",
       "Aero Interface activation stopped because the Aero executive "
       "failed to activate.\n"
@@ -117,7 +119,7 @@ AeroInterfaceBase::activate()
   // If the vehicle is at an altitude beyond the valid range of the
   // atmospheric model provides, then stop the subscription.
   if (geodetic_altitude > max_atmos_altitude) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__, __LINE__, "Environment out of domain.\n",
       "Aero Interface activation stopped because of altitude out of domain.\n"
       "current altitude: ", geodetic_altitude, " m\n"
@@ -148,3 +150,5 @@ AeroInterfaceBase::deactivate()
 
   SubscriptionBase::deactivate();
 }
+
+} // namespace cml

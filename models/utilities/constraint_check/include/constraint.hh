@@ -8,6 +8,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/constraint.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
  (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )
@@ -23,6 +25,8 @@ PROGRAMMERS:
 
 #include "constraint_enum.hh"
 #include "constraint_test.hh"
+
+namespace cml {
 
 /**
  * An abstract class which holds an arbitrary number of constraint tests
@@ -160,4 +164,7 @@ class Constraint
    */
   void post_update();
 };
+
+} // namespace cml
+
 #endif

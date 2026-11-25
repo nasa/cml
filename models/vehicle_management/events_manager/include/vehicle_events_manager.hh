@@ -16,6 +16,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCIES:
    (../src/vehicle_events_manager.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2014) (Antares))
    )
@@ -27,6 +29,8 @@ PROGRAMMERS:
 #include<list>
 
 #include "cml/models/vehicle_management/events_manager/include/watch_values_base_core.hh"
+
+namespace cml {
 
 /*****************************************************************************
 VehicleEventsManager
@@ -55,5 +59,7 @@ class VehicleEventsManager
 
   void register_watch(WatchValuesBaseCore & watch) {all_watches.push_back(&watch);}
 };
+
+} // namespace cml
 
 #endif

@@ -7,6 +7,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/constraint_set.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
  (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )
@@ -20,6 +22,8 @@ PROGRAMMERS:
 #include <string>
 
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
+
+namespace cml {
 
 /**
  * Manages a set of constraints
@@ -100,4 +104,7 @@ class ConstraintSet : public SubscriptionBase
    */
   const std::string & get_violated_constraints() const { return violated_constraints;}
 };
+
+} // namespace cml
+
 #endif

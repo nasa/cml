@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   (../src/fault_overwrite.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
@@ -13,6 +15,8 @@ PROGRAMMERS:
 #define CML_FAULT_OVERWRITE_HH
 
 #include "fault.hh"
+
+namespace cml {
 
 /*******************************************************************************
 FaultOverwrite
@@ -63,4 +67,7 @@ template<>
 bool FaultOverwrite<bool>::set_param( const std::string& param_name,
                                       double val_,
                                       bool reset_nominal);
+
+} // namespace cml
+
 #endif

@@ -10,6 +10,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
    ((../src/orb_elem_subset.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (Oct 2014) (New implementation for Antares))
     ((Bingquan Wang) (OSR) (May 2017) (changed the way to declare LIBRARY DEPENDENCY 
@@ -26,6 +28,8 @@ PROGRAMMERS:
 namespace jeod {
    class Planet;
 }
+
+namespace cml {
 
 class OrbElemSubset{
 
@@ -117,5 +121,7 @@ class OrbElemSubset{
   OrbElemSubset(const OrbElemSubset& rhs) = delete;
   OrbElemSubset & operator = (const OrbElemSubset&) = delete;
 };
+
+} // namespace cml
 
 #endif

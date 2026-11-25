@@ -31,6 +31,8 @@ PROGRAMMERS:
 #include "../include/rocket_motor_nozzle.hh"
 #include "../include/rocket_motor_table_thrust.hh"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -135,7 +137,7 @@ RocketMotor_MultiNozzle::add_nozzle(
     RocketMotorNozzle &nozzle)
 {
   if (std::find(nozzles_ptr_vec.begin(), nozzles_ptr_vec.end(), &nozzle) != nozzles_ptr_vec.end()) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Configuration error\n",
       "Instruction received to add a nozzle that is already in the vector\n"
       "of nozzles.\nInstruction ignored.\n");
@@ -157,7 +159,7 @@ RocketMotor_MultiNozzle::initialize(
           const double * motor_rot_flex_in)
 {
   if (initialized) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Invalid Initialization\n",
       "This is a solid rocket motor and shouldn't be re-initialized, \n"
       "if for some reason you need to initialize the model again you should \n"
@@ -168,21 +170,21 @@ RocketMotor_MultiNozzle::initialize(
   num_flex_elements = num_flex_elements_in;
   if (using_flex) {
     if (motor_lin_flex_in == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid construction\n",
         "The motor linear displacement flex pointer has not been set, \n"
         "and is required for generation of the flex moment. \n");
     }
 
     if (motor_rot_flex_in == nullptr) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid initialization\n",
         "The motor rotational displacement flex pointer has not been set, \n"
         "and is required for generation of the motor's force and moment.\n");
     }
 
     if (num_flex_elements != 3* num_noz) {
-      CMLMessage::fail(
+      message::fail(
         __FILE__,__LINE__,"Invalid construction \n",
         "For a system with ", num_noz, " nozzles, the flex structure must be sized with\n",
          num_noz * 3 , " elements.  It has ", num_flex_elements, " elements.\n");
@@ -192,7 +194,7 @@ RocketMotor_MultiNozzle::initialize(
   motor_rot_flex = motor_rot_flex_in;
 
   if (num_noz == 0) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Invalid construction \n",
      "The number of nozzles on a rocket motor cannot be = 0, ensure the \n"
      "number of nozzles for the rocket motor was set to a value > 0. \n");
@@ -248,7 +250,7 @@ RocketMotor_MultiNozzle::initialize_nozzles()
     if (compute_cosine_losses) {
       // Protect against invalid total_scale_factor:
       if (total_scale_factor <= 0.0) {
-        CMLMessage::error(
+        message::error(
          __FILE__,__LINE__,"Invalid scale-factor values.\n",
          "The provided scale-factors sum to something not greater than 0.0.\n"
          "Cannot compute cosine losses with this configuration.\n"
@@ -280,7 +282,7 @@ RocketMotor_MultiNozzle::initialize_nozzles()
       }
     }
     if (cosine_loss_scale_factor > 1.0) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid cosine-loss value.\n",
         "The cosine-loss scale factor, ", cosine_loss_scale_factor, " > 1.0, which suggests that cosine\n"
         "losses would become cosine gains.\n"
@@ -291,7 +293,7 @@ RocketMotor_MultiNozzle::initialize_nozzles()
       cosine_loss_scale_factor = 1.0;
     }
     else if (cosine_loss_scale_factor <= 0.0) {
-      CMLMessage::error(
+      message::error(
         __FILE__,__LINE__,"Invalid cosine-loss value.\n",
         "The cosine-loss scale factor, ", cosine_loss_scale_factor, " <= 0.0.\n"
         "It must be > 0 in order to convert net-thrust to raw-thrust.\n"
@@ -313,7 +315,7 @@ RocketMotor_MultiNozzle::initialize_nozzles()
   // Protect against invalid total_scale_factor:
   double sf_scale = 0.0;
   if (total_dispersed_scale_factor <= 0.0) {
-    CMLMessage::error(
+    message::error(
      __FILE__,__LINE__,"Invalid scale-factor values.\n",
      "The provided scale-factors sum to something not greater than 0.0.\n"
      "Zeroing the scale-factor on all nozzles.\n");
@@ -495,7 +497,7 @@ RocketMotor_MultiNozzle::enable_flex()
     using_flex = true;
   }
   else {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid configuration\n",
       "Instruction received to enable flex but the flex arrays are NULL.\n"
       "Flex remains disabled.\n");
@@ -510,9 +512,11 @@ void
 RocketMotor_MultiNozzle::set_flex_threshold(double new_threshold)
 {
   if (new_threshold < 0.0 || MathUtils::is_near_equal(new_threshold, 0.0)) {
-    CMLMessage::error(__FILE__, __LINE__, "Invalid flex threshold\n",
+    message::error(__FILE__, __LINE__, "Invalid flex threshold\n",
       "Attempted to set an invalid flex threshold of ", new_threshold, ".\n"
       "Threshold will remain at ", flex_threshold, ".\n");
   }
   else { flex_threshold = new_threshold; }
 }
+
+} // namespace cml

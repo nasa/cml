@@ -1,6 +1,6 @@
 exec(open("Modified_data/common_input.py").read())
 
-vehicle.state_initialize.attitude_input_data_type = trick.StateInitialize.EulerFreestream_RYP;
+vehicle.state_initialize.attitude_input_data_type = trick.cml.StateInitialize.EulerFreestream_RYP;
 
 vehicle.state_initialize.angle_of_bank = 0.0
 vehicle.state_initialize.angle_of_sideslip =0.0

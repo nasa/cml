@@ -22,6 +22,7 @@ if (TARGET Doxygen::doxygen AND Sphinx_FOUND)
             contributing/coding-standards.rst
             contributing/contributing.rst
             contributing/getting-started.rst
+            models/cml-namespace.rst
             models/dynamics/index.rst
             models/dynamics/pointing-ref-frame.rst
             models/environment/index.rst

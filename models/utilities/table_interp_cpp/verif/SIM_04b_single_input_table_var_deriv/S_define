@@ -20,26 +20,26 @@ class TestingModelSimObject : public Trick::SimObject {
     std::vector<double*> x_vec;
     std::vector<double*> xdot_vec;
 
-    SimpleTableLookup simple_table;
+    cml::SimpleTableLookup simple_table;
 
-    TableLookupSet                  tab_set;
-    TableIndependentVariable        tiv;
+    cml::TableLookupSet                  tab_set;
+    cml::TableIndependentVariable        tiv;
 
     // Several test-tables to test the different methods of construction:
-    SingleInputTableVarDeriv  interpolation_table_default;
+    cml::SingleInputTableVarDeriv  interpolation_table_default;
 
-    SingleInputTableVarDeriv  interpolation_table_1array;
-    SingleInputTableVarDeriv  interpolation_table_2array;
+    cml::SingleInputTableVarDeriv  interpolation_table_1array;
+    cml::SingleInputTableVarDeriv  interpolation_table_2array;
 
-    SingleInputTableVarDeriv  interpolation_table_1vec;
-    SingleInputTableVarDeriv  interpolation_table_2vec;
+    cml::SingleInputTableVarDeriv  interpolation_table_1vec;
+    cml::SingleInputTableVarDeriv  interpolation_table_2vec;
 
-    SingleInputTableVarDeriv  interpolation_table_1elem;
-    SingleInputTableVarDeriv  interpolation_table_2elem;
+    cml::SingleInputTableVarDeriv  interpolation_table_1elem;
+    cml::SingleInputTableVarDeriv  interpolation_table_2elem;
 
 
     // A test-table for error checking
-    SingleInputTableVarDeriv  interpolation_table_error;
+    cml::SingleInputTableVarDeriv  interpolation_table_error;
 
 
     bool use_simple_table;
@@ -54,7 +54,7 @@ class TestingModelSimObject : public Trick::SimObject {
 
       simple_table(),
       tab_set(),
-      tiv(independent, TableIndependentVariable::Linear),
+      tiv(independent, cml::TableIndependentVariable::Linear),
 
       interpolation_table_default(),
       interpolation_table_1array(x, 5),
@@ -133,9 +133,9 @@ class TestingModelSimObject : public Trick::SimObject {
                                         5,
                                         &x_data[0][0],
                                         6,
-                                        AbstractTableLookup::VarDeriv);
-      SingleInputTableVarDeriv * table =
-           dynamic_cast<SingleInputTableVarDeriv*>(simple_table.get_table());
+                                        cml::AbstractTableLookup::VarDeriv);
+      cml::SingleInputTableVarDeriv * table =
+           dynamic_cast<cml::SingleInputTableVarDeriv*>(simple_table.get_table());
       if (table) {
         for (int ii = 0; ii<5; ++ii) {
           table->derivs.add_dependent(xdot[ii]);

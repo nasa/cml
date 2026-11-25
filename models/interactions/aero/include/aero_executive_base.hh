@@ -2,6 +2,8 @@
 PURPOSE:
   (Define baseline executive capability. Pure abstract class.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Jeremy Rea) (NASA) (May 2005) (ARES) (Initial implementation for ARES))
    ((Jeremy Rea) (NASA) (July 2005) (ARES) (Modified for ARES V5.1.1))
@@ -33,6 +35,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 
 #include "aero_interface_output.hh"
+
+namespace cml {
 
 /*****************************************************************************
 AeroExecutiveBase
@@ -73,4 +77,7 @@ public:
 
   virtual void update() = 0;
 };
+
+} // namespace cml
+
 #endif

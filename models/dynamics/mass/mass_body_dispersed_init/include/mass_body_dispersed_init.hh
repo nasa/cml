@@ -8,6 +8,8 @@ PURPOSE:
 LIBRARY DEPENDENCIES:
   (../src/mass_body_dispersed_init.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2015) (Antares) (Initial version))
    ((Brent Caughron) (OSR) (July 2017) (Antares) (IV&V model code cleanup))
@@ -26,6 +28,8 @@ namespace jeod {
 class DynManager;
 }
 
+namespace cml {
+
 /*******************************************************************************
 The instantiable replacement for MassBodyInit. The apply(...) method in this
 class can be used as a direct replacement for the
@@ -42,4 +46,7 @@ public:
 
   void apply( jeod::DynManager & dyn_manager) override;
 };
+
+} // namespace cml
+
 #endif

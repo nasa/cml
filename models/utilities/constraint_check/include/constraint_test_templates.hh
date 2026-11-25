@@ -9,6 +9,8 @@ LIBRARY DEPENDENCY:
    (cml/models/utilities/cml_message/src/cml_message.cc)
   )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
  (((Gary Turner) (OSR) (Jun 2023) (ANTARES) (Initial version))
  )
@@ -24,6 +26,8 @@ PROGRAMMERS:
 #include "constraint_util.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
+
+namespace cml {
 
 /*****************************************************************************
 Notes:
@@ -142,7 +146,7 @@ class ConstraintTest_Interval : public ConstraintTest
     }
 
     if (MathUtils::is_within_abs_tolerance(upper_bound, lower_bound, static_cast<DataType>(equality_threshold))) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot initialize an interval constraint-test with a\n"
         "zero-width interval. Bounds are set to:\n",
         lower_bound," and ",upper_bound," with equality threshold\n",
@@ -209,7 +213,7 @@ class ConstraintTest_ValSet : public ConstraintTest
   bool initialize() override
   {
     if (values.empty()) {
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "Cannot initialize a value-set constraint-test with an empty\n"
         "set of values to test against.\nInitialization failed.\n");
       return false;
@@ -246,4 +250,7 @@ class ConstraintTest_ValSet : public ConstraintTest
     return violation;
   }
 };
+
+} // namespace cml
+
 #endif

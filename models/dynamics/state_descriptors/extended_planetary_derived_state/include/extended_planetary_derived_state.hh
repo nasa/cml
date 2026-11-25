@@ -12,6 +12,8 @@ LIBRARY DEPENDENCIES:
      (../src/topo_container.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (June 2014)
                    (New implementation of PlanetaryDerivedState for Antares))
@@ -38,6 +40,8 @@ namespace jeod {
 class DynBody;
 class DynManager;
 }
+
+namespace cml {
 
 /*****************************************************************************
 ExtendedPlanetaryDerivedState
@@ -240,5 +244,6 @@ protected:
    void analyze_range_safety();
 };
 
+} // namespace cml
 
 #endif

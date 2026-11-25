@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
     ((../src/gust.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Jon Berndt) (ESCG/Jacobs) (February 2008) (ANTARES) (Initial version))
     ((Brent Caughron) (Odyssey) (Sept. 2017) (Antares) (IV&V Code Review)))
@@ -12,7 +14,7 @@ PROGRAMMERS:
 #ifndef CML_GUST_HH
 #define CML_GUST_HH
 
-
+namespace cml {
 
 class GustModel
 {
@@ -65,4 +67,7 @@ class GustModel
   void   deactivate();
   bool   is_active() const {return active;}
 };
+
+} // namespace cml
+
 #endif

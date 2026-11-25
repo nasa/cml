@@ -30,6 +30,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCIES:
    ((../src/dynamic_mass_body.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (March 2014)
                       (New implementation of dynamic mass for JEOD 2.x))
@@ -45,6 +47,8 @@ PROGRAMMERS:
 
 #include "dynamic_mass_body_properties.hh"
 #include "dynamic_mass_body_nominal_properties.hh"
+
+namespace cml {
 
 // Inherit directly from JEOD Mass Body
 class DynamicMassBody : public jeod::MassBody
@@ -97,5 +101,6 @@ class DynamicMassBody : public jeod::MassBody
   bool interpolate_properties();
 };
 
+} // namespace cml
 
 #endif

@@ -4,7 +4,7 @@
 class FaultArchTestSimObject: public Trick::SimObject {
 
 public:
-  sSensorFaults faults;
+  cml::sSensorFaults faults;
 
   double constant_value;           /* (--) constant value */
   double constant_value_replaced;  /* (--) constant value replaced */
@@ -29,17 +29,17 @@ public:
     ("initialization") initialize();
 
     (1, "scheduled") update_internals();
-    (1, "scheduled") faults.Injection(sSFault::UPSTREAM);
-    (1, "scheduled") faults.Injection(sSFault::INTERMEDIATE_1);
-    (1, "scheduled") faults.Injection(sSFault::INTERMEDIATE_2);
-    (1, "scheduled") faults.Injection(sSFault::DOWNSTREAM);
+    (1, "scheduled") faults.Injection(cml::sSFault::UPSTREAM);
+    (1, "scheduled") faults.Injection(cml::sSFault::INTERMEDIATE_1);
+    (1, "scheduled") faults.Injection(cml::sSFault::INTERMEDIATE_2);
+    (1, "scheduled") faults.Injection(cml::sSFault::DOWNSTREAM);
 
   }
 
   void initialize() {
     faults.enabled = true;
     faults.Init();
-    faults.Injection(sSFault::INIT);
+    faults.Injection(cml::sSFault::INIT);
   }
 
   void update_internals() {

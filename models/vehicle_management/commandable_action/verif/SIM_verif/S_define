@@ -22,7 +22,7 @@ class AntaresUnitTestSimObject: public Trick::SimObject {
 
  public:
   // Framework (leave this alone)
-  UnitTestFramework framework;
+  cml::UnitTestFramework framework;
   // support variables:
   // input:
   bool trigger1;

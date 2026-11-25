@@ -1,5 +1,5 @@
 exec(open("input_common.py").read())
-trick.CMLMessage.set_publish_level (trick.CMLMessage.Inform)
+trick.cml.message.set_publish_level (trick.cml.message.Inform)
 print("******** Initialize empty-executive without any tables *******")
 aero.empty_executive.initialize()
 

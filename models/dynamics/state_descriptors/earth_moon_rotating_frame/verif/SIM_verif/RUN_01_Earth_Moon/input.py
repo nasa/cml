@@ -7,7 +7,7 @@ exec(open("Modified_data/env_setup.py").read())
 exec(open("Log_data/log_data.py").read())
 
 test.em_rotating_frame.subscribe()
-test.em_rotating_frame.set_orientation(trick.EarthMoonRotatingFrame.Earth_Moon)
+test.em_rotating_frame.set_orientation(trick.cml.EarthMoonRotatingFrame.Earth_Moon)
 vehicle.rel_state.target_frame_name = "Earth.em_rot"
 
 test.framework.data_file_name = "Unit_test_data/ephem_data.txt"

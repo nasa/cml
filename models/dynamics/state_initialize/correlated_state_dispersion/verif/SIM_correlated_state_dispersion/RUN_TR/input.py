@@ -6,8 +6,8 @@ verif.disperse_pv = True
 log_prm()
 
 # Use target relative dispersions with 3-sigma values applied from defined covariance
-verif.corr_state.pv_covar_frame = trick.CorrelatedStateDispersion.PV_COVAR_TR_PARAM
-verif.corr_state.dispersion_distribution = trick.CorrelatedStateDispersion.Constant
+verif.corr_state.pv_covar_frame = trick.cml.CorrelatedStateDispersion.PV_COVAR_TR_PARAM
+verif.corr_state.dispersion_distribution = trick.cml.CorrelatedStateDispersion.Constant
 verif.corr_state.sigma_limit = 3.0
 
 # Target position is on equator at 90 deg longitude

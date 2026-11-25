@@ -6,6 +6,8 @@ LIBRARY DEPENDENCY:
     ((../src/quaternion_spherical_interpolator.cc)
     )
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (November 2017) (New implementation))
   )
@@ -14,6 +16,8 @@ PROGRAMMERS:
 #define CML_QUATERNION_SPHERICAL_INTERPOLATOR_HH
 
 #include "jeod/models/utils/quaternion/include/quat.hh"
+
+namespace cml {
 
 // NOTE - this does not attempt to get any values or put any values anywhere.
 //        It is the responsibility of the table to populate and extract data
@@ -62,4 +66,7 @@ class QuaternionSphericalInterpolator
   void set_epsilon_interp( double new_epsilon);
   void set_epsilon_delta( double new_epsilon);
 };
+
+} // namespace cml
+
 #endif

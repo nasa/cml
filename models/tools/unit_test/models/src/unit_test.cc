@@ -31,6 +31,8 @@ PROGRAMMERS:
 
 #include "trick/input_processor_proto.h"
 
+namespace cml {
+
 /*****************************************************************************
 Constructor
 *****************************************************************************/
@@ -69,7 +71,7 @@ SweepSet::SweepSet(
     if (end < start) {
       increment *= -1.0;
     }
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid inputs\n",
       "The specified value of increment is too small for numerical precision."
       "\nResetting the value to ", increment, ".\n");
@@ -77,7 +79,7 @@ SweepSet::SweepSet(
 
   // Check the sign of increment to make sure it is going the correct way:
   if ((end - start) * increment < 0.0) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Invalid inputs\n",
       "Sweep increment is going the wrong direction.\n"
       "Switching sign; results may be unexpected.\n");
@@ -90,7 +92,7 @@ SweepSet::SweepSet(
   // end=start (due to previous checks); in that case, the if test will return
   // false and the "/increment" will not be executed.
   if (std::abs(increment) * 1000.0 < std::abs(end - start)) {
-    CMLMessage::warn(
+    message::warn(
       __FILE__,__LINE__,"Excessive data\n",
       "Sweep will require %u data points.\n"
       "This could take a while.  Verify intent.\nContinuing.\n",
@@ -146,7 +148,7 @@ void UnitTestFramework::add_sweep(
         double incr)
 {
   if (initialized) {
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__," Invalid input sequence.\n",
     "Sweeps must be added before initialization.\n");
   }
@@ -213,7 +215,7 @@ UnitTestFramework::configure_sweeps()
   //sweeps and data-files are incompatible.  If both are defined, fail
   if (!vars_file_name.empty() || !data_file_name.empty() ||
       !linked_vars_file_name.empty()) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"invalid configuration\n",
       "Specified a sweep-based input and filenames.\n"
       "Incompatible methods.  Cannot distinguish which to use."
@@ -234,7 +236,7 @@ void
 UnitTestFramework::configure_file_combinations()
 {
   if (!vars_file_name.empty() || !data_file_name.empty()) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"invalid configuration\n",
       "Specified a linked variable file name and independent variable or\n"
       "data file names.\n"
@@ -255,7 +257,7 @@ void
 UnitTestFramework::configure_from_definition_file()
 {
   if (vars_file_name.empty() || data_file_name.empty()) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"invalid filename\n",
     "Check that vars_file_name AND data_file_name have been specified\n"
     "vars_file_name: ", vars_file_name, "\n"
@@ -268,7 +270,7 @@ UnitTestFramework::configure_from_definition_file()
   // parse the data file
   std::ifstream data_file(data_file_name);
   if (!data_file) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"invalid filename\n",
     "Could not open data file, filename ", data_file_name, "\n");
   }
@@ -323,7 +325,7 @@ UnitTestFramework::configure_from_definition_file()
       // Fail if the number of data points on this line exceeds the number of
       // variables
       if (variable_ix >= num_vars) {
-        CMLMessage::fail(
+        message::fail(
         __FILE__,__LINE__,"Invalid data\n",
         "Data file ", data_file_name, " at line ", line_num,
         " contains more than ", num_vars, " data elements\n"
@@ -340,7 +342,7 @@ UnitTestFramework::configure_from_definition_file()
     // Fail if got the wrong number of data points (not including blank lines)
     // (already failed if too many, this fails if too few)
     if (variable_ix > 0 && variable_ix != num_vars) {
-      CMLMessage::fail(
+      message::fail(
       __FILE__,__LINE__,"Invalid data\n",
       "Data file ", data_file_name, " at line ", line_num,
       " contains ", variable_ix, " data elements\n"
@@ -366,7 +368,7 @@ UnitTestFramework::populate_linked_variables()
   // parse the variables file
   std::ifstream vars_file(linked_vars_file_name);
   if (!vars_file) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"invalid filename\n",
     "Could not open variables file, filename ", linked_vars_file_name, "\n");
   }
@@ -398,7 +400,7 @@ UnitTestFramework::populate_linked_variables()
         count = 2;
       }
       else {
-        CMLMessage::fail(
+        message::fail(
         __FILE__,__LINE__,"invalid file format\n",
         "More than 2 entries were detected on a line in file ", linked_vars_file_name, "\n",
          line, "\n");
@@ -406,7 +408,7 @@ UnitTestFramework::populate_linked_variables()
     } while (stream);
 
     if (count ==1) {
-      CMLMessage::fail(
+      message::fail(
       __FILE__,__LINE__,"invalid file format\n",
       "Only 1 entry was detected on a line in file ", linked_vars_file_name, "\n",
        line, "\n");
@@ -427,7 +429,7 @@ UnitTestFramework::process_linked_variables()
   for(auto & linked_variable : linked_variables) {
     std::ifstream data_file( linked_variable.filename);
     if (!data_file) {
-      CMLMessage::fail(
+      message::fail(
       __FILE__,__LINE__,"error opening file\n",
       "Error encountered opening file ", linked_variable.filename, "\n");
     }
@@ -444,7 +446,7 @@ UnitTestFramework::process_linked_variables()
       }
       // if the line begins with a !, consider it as a legacy title and skip it
       if (line.at(0) == '!') {
-        CMLMessage::warn(
+        message::warn(
         __FILE__,__LINE__,"illegal character\n",
         "Skipping entry ", line, "; titles not suppoted in this format\n");
         continue;
@@ -475,7 +477,7 @@ UnitTestFramework::process_linked_variables()
 
         // Fail if the number of data points on this line exceeds 1
         if (word_count >= 1) {
-          CMLMessage::fail(
+          message::fail(
           __FILE__,__LINE__,"Invalid data\n",
           "Data file ", linked_variable.filename, " has multiple words on one line:\n", line, "\n");
         }
@@ -521,7 +523,7 @@ UnitTestFramework::populate_variable_names()
   // parse the variables file
   std::ifstream vars_file(vars_file_name);
   if (!vars_file) {
-    CMLMessage::fail(
+    message::fail(
     __FILE__,__LINE__,"invalid filename\n",
     "Could not open variables file, filename ", vars_file_name, "\n");
   }
@@ -558,7 +560,7 @@ UnitTestFramework::update_sweeps()
       cycle_overruns++;
       if (cycle_overruns > cycle_overruns_limit-1) {// -1 because first overrun
                                                     // is not counted
-        CMLMessage::warn(
+        message::warn(
         __FILE__,__LINE__,"\nInvalid sim-stop specification\n",
         "Completed sweep of all variables before sim shut down.\n"
         "Cycling redundantly until sim ends.\n");
@@ -596,7 +598,7 @@ UnitTestFramework::update_file()
     if (warning_on_sim_end) {
       cycle_overruns++;
       if (cycle_overruns > cycle_overruns_limit) {
-        CMLMessage::warn(
+        message::warn(
         __FILE__,__LINE__,"\nInvalid sim-stop specification\n",
         "Ran out of lines of data before sim shut down.\n"
         "Cycling redundantly until sim ends.\n");
@@ -626,3 +628,5 @@ UnitTestFramework::update_file()
   }
   commands.pop_front();
 }
+
+} // namespace cml

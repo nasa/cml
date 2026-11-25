@@ -6,4 +6,4 @@ and trigger 2 s after that.
 '''
 
 exec(open("RUN_2a_function_modifier_none/input.py").read())
-verif.manager.trigger.function_modifier = trick.EventTriggerBase.AbsCosine
+verif.manager.trigger.function_modifier = trick.cml.EventTriggerBase.AbsCosine

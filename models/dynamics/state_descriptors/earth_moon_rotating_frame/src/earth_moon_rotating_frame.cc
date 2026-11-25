@@ -21,6 +21,8 @@ Programmers:
 
 #include "../include/earth_moon_rotating_frame.hh"
 
+namespace cml {
+
 /*******************************************************************************
 Constructor
 Purpose:  (Construct a EarthMoonRotatingFrame object.)
@@ -80,7 +82,7 @@ EarthMoonRotatingFrame::initialize ()
 
   // check that necessary frames are registered with the ref-frame manager
   if ((origin == nullptr) || (target == nullptr)) {
-    CMLMessage::fail(
+    message::fail(
       __FILE__,__LINE__,"Incomplete specification",
       "The origin and/or target of the Earth-Moon-Rotating-Frame were not\n"
       "found by the Ephemerides Manager.\n"
@@ -105,7 +107,7 @@ EarthMoonRotatingFrame::set_orientation(
      FrameOrientation new_orientation)
 {
   if (initialized) {
-    CMLMessage::error(
+    message::error(
       __FILE__,__LINE__,"Reconfiguration error",
       "Once activated, the EarthMoonRotatingFrame cannot change its preferred "
       "configuration.\nModel remains at its current setting.");
@@ -133,3 +135,5 @@ EarthMoonRotatingFrame::update()
     pointing_frame.state.rot.compute_quaternion();
   }
 }
+
+} // namespace cml

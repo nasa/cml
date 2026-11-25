@@ -2,6 +2,8 @@
 PURPOSE: (Wrap Trick DataRecordGroup functionality into a more convenient
           and easier to use set of functions.)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2016) (Antares) (Move from CEV to CML)))
 ***********************************************************************/
@@ -16,6 +18,8 @@ PROGRAMMERS:
 #include "trick/exec_proto.h"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 
+namespace cml {
+
 class TrickLogging {
   public:
     std::list<Trick::DataRecordGroup *> group_list;
@@ -29,7 +33,7 @@ class TrickLogging {
     /***************************************************************************/
     void add_to_list(Trick::DataRecordGroup * add_me) {
       if (add_me == nullptr) {
-        CMLMessage::error (
+        message::error (
           __FILE__, __LINE__, "TrickLogging::SetupError\n",
           "The intended data record group to add is NULL."
           "\nPlease specify a valid data record group.\n");
@@ -207,7 +211,7 @@ class TrickLogging {
     Trick::DataRecordGroup * get_group( const char * name)
     {
       if (name == nullptr) {
-        CMLMessage::error ( __FILE__, __LINE__,
+        message::error ( __FILE__, __LINE__,
           "No name specified for the intended data record group."
           "\nPlease specify a valid data record group name.\n");
         return nullptr;
@@ -222,10 +226,13 @@ class TrickLogging {
       if (group != group_list.end()) {
         return *group;
       }
-      CMLMessage::error( __FILE__,__LINE__,
+      message::error( __FILE__,__LINE__,
         "No DataRecordGroup found with name ",name,".\n"
         "Returning nullptr.\n");
       return nullptr;
     }
 };
+
+} // namespace cml
+
 #endif

@@ -8,6 +8,8 @@ LIBRARY DEPENDENCIES:
    ((../src/topo_container.cc)
     (../src/velocity_set.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (February 2015)
                       (New implementation of PlanetaryDerivedState for Antares)))
@@ -20,6 +22,8 @@ PROGRAMMERS:
 #include "jeod/models/utils/ref_frames/include/ref_frame_state.hh"
 
 #include "velocity_set.hh"
+
+namespace cml {
 
 /*****************************************************************************
 TopoContainer
@@ -59,5 +63,7 @@ class TopoContainer {
                    const double * inrtl_rel_vel_in);
   void update();
 };
+
+} // namespace cml
 
 #endif

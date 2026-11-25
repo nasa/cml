@@ -9,6 +9,8 @@ ASSUMPTIONS:
 LIBRARY DEPENDENCIES:
    ((../src/rocket_motor_table_thrust.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Brenton Caughron, Gary Turner) (OSR) (May 2018) (Antares) (initial)))
  ******************************************************************************/
@@ -26,6 +28,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/table_interp_cpp/include/table_independent_variable.hh"
 
 #include "rocket_motor_basic.hh"
+
+namespace cml {
 
 class RocketMotor_TableThrust : public RocketMotor_Basic {
 public:
@@ -126,4 +130,7 @@ protected:
   void update_table();
   void compute_flow_rate_and_isp();
 };
+
+} // namespace cml
+
 #endif

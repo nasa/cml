@@ -15,6 +15,8 @@ ASSUMPTIONS:
 LIBRARY DEPENDENCIES:
   (../src/mass_properties_dispersions.cc)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (August 2015) (Antares) (Initial version))
    ((Brent Caughron) (OSR) (July 2017) (Antares) (IV&V model code cleanup))
@@ -24,6 +26,8 @@ PROGRAMMERS:
 
 #ifndef CML_MASS_PROPERTIES_DISPERSIONS_HH
 #define CML_MASS_PROPERTIES_DISPERSIONS_HH
+
+namespace cml {
 
 /*******************************************************************************
 MassPropertiesDispersions
@@ -133,4 +137,7 @@ public:
   MassPropertiesDispersionsFlags & operator = (
                                   const MassPropertiesDispersionsFlags& rhs) = delete;
 };
+
+} // namespace cml
+
 #endif

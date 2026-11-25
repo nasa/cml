@@ -2,6 +2,8 @@
 PURPOSE:
    (Specific implementations of the WatchValuesBase base-class)
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (October 2014) (Antares))
  ******************************************************************************/
@@ -41,12 +43,14 @@ class WatchValues  : public WatchValuesBase {
 #ifdef SWIG
 #ifndef CML_WATCH_VALUES_SWIG_TEMPLATES
 #define CML_WATCH_VALUES_SWIG_TEMPLATES
-%template(WatchValuesBase_bool) WatchValuesBase<bool>;
-%template(WatchValuesBase_int) WatchValuesBase<int>;
-%template(WatchValuesBase_double) WatchValuesBase<double>;
-%template(WatchValuesBase_unsigned_int) WatchValuesBase<unsigned int>;
+%template(WatchValuesBase_bool) cml::WatchValuesBase<bool>;
+%template(WatchValuesBase_int) cml::WatchValuesBase<int>;
+%template(WatchValuesBase_double) cml::WatchValuesBase<double>;
+%template(WatchValuesBase_unsigned_int) cml::WatchValuesBase<unsigned int>;
 #endif
 #endif
+
+namespace cml {
 
 /***************************************************************************/
 // Stops the sim when a particular variable condition is satisfied
@@ -183,4 +187,7 @@ class WatchValuesLogNowPost : public WatchValuesBase<varT> {
   WatchValuesLogNowPost (const WatchValuesLogNowPost& rhs) = delete;
   WatchValuesLogNowPost& operator = (const WatchValuesLogNowPost& rhs) = delete;
 };
+
+} // namespace cml
+
 #endif

@@ -34,6 +34,8 @@ ASSUMPTIONS AND LIMITATIONS:
 LIBRARY DEPENDENCIES:
    ((../src/dynamic_mass_group.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
    (((Gary Turner) (OSR) (March 2014)
                       (New implementation of dynamic mass for JEOD 2.x))
@@ -56,6 +58,8 @@ PROGRAMMERS:
 namespace jeod {
 class MassBody;
 }
+
+namespace cml {
 
 class DynamicMassGroup : public SubscriptionBase {
  public:
@@ -133,4 +137,7 @@ class DynamicMassGroup : public SubscriptionBase {
   void add_mass_to_group_internal( DynamicMassBody *mass,
                                    bool send_err_msg);
 };
+
+} // namespace cml
+
 #endif

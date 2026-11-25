@@ -6,6 +6,8 @@ PURPOSE: (A really simple extension of relative derived state.
 LIBRARY DEPENDENCY:
    ((../src/simple_planet_rel_state.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Gary Turner) (OSR) (Apr 2017) (Antares) (first cut)))
 **********************************************************************/
@@ -18,6 +20,8 @@ PROGRAMMERS:
 #include "cml/models/utilities/subscriptions/include/subscriptions.hh"
 #include "jeod/models/dynamics/dyn_body/include/dyn_body.hh"
 #include "jeod/models/dynamics/dyn_manager/include/class_declarations.hh"
+
+namespace cml {
 
 class SimplePlanetRelState : public SubscriptionBase,
                              public jeod::RelativeDerivedState
@@ -43,4 +47,7 @@ class SimplePlanetRelState : public SubscriptionBase,
                           jeod::DynManager & dyn_manager) override;
   void update() override;
 };
+
+} // namespace cml
+
 #endif

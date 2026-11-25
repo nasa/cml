@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/independent_variable.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Refactor for V&V)))
@@ -14,6 +16,8 @@ PROGRAMMERS:
 
 #include "untyped_variable.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+namespace cml {
 
 /*******************************************************************************
 FaultFunctionIndependentVariable
@@ -54,7 +58,7 @@ Purpose:(Provides the variable to be evaluated.)
 *******************************************************************************/
 template<typename T> void FaultFunctionIndependentVariable::initialize(T& var) {
   if (initialized) {
-    CMLMessage::error(__FILE__, __LINE__,
+    message::error(__FILE__, __LINE__,
       "Fault Management Error\n",
       "Tried to initialize a FaultFunctionIndependentVariable twice!");
       return;
@@ -62,4 +66,7 @@ template<typename T> void FaultFunctionIndependentVariable::initialize(T& var) {
   variable = new UntypedVariable<T>(var);
   initialized = true;
 }
+
+} // namespace cml
+
 #endif

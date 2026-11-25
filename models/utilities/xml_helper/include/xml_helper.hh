@@ -5,6 +5,8 @@ PURPOSE:
 LIBRARY DEPENDENCY:
   ((../src/xml_helper.cc))
 
+PYTHON_MODULE: (cml)
+
 PROGRAMMERS:
   (((Andrew Spencer)  (OSR) (June 2015) (CR3333) (Initial version))
    ((Daniel Ghan) (OSR) (October 2021) (Antares) (Split from fault_arch)))
@@ -15,6 +17,8 @@ PROGRAMMERS:
 #define CML_XML_HELPER_HH
 
 #include <libxml/parser.h>
+
+namespace cml {
 
 class XmlHelper {
  public:
@@ -30,5 +34,7 @@ class XmlHelper {
   static const char * xml_convert_ptr (const char * ptr);
   static const char * xml_convert_ptr (const unsigned char * ptr);
 };
+
+} // namespace cml
 
 #endif

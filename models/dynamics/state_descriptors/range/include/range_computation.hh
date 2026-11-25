@@ -6,6 +6,8 @@ Purpose:
 Library Dependency:
    (( ../src/range_computation.cc))
 
+PYTHON_MODULE: (cml)
+
 Programmers:
    (((Gary Turner) (OSR) (Sept 2014 (Initial version))
     ((Bingquan Wang) (OSR) (May 2017)
@@ -26,6 +28,8 @@ class RefFrameTrans;
 class Planet;
 class PlanetFixedPosition;
 }
+
+namespace cml {
 
 /*****************************************************************************
 RangeValues
@@ -150,5 +154,7 @@ class RangeComputation : public RangeValues,
   virtual void update_using_polar();
   virtual void is_abstract() = 0; // Makes this class non-instantiable
 };
+
+} // namespace cml
 
 #endif

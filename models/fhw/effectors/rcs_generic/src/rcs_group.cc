@@ -21,6 +21,7 @@ PROGRAMMERS:
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
 #include "cml/models/utilities/math_utils/include/math_utils.hh"
 
+namespace cml {
 
 /*****************************************************************************
 Constructor
@@ -84,14 +85,14 @@ RcsJetGroup::initialize(
 
       // Protection against missing isp_prop_comp_ratio setting
       if( MathUtils::is_near_equal( sum_comp_ratio_, 0.0)){
-        CMLMessage::fail(
+        message::fail(
         __FILE__,__LINE__,"Incomplete configuration.\n",
         "Each model's 'isp_prop_comp_ratio' vector must be populated when\n"
         "using ISP for propellant consumption calculations.\n");
       }
 
       if (!MathUtils::is_near_equal( sum_comp_ratio_, 1.0) ) {
-        CMLMessage::warn(
+        message::warn(
         __FILE__,__LINE__,"Incorrect Configuration.\n",
         "When using isp for computing prop comsumption, the sum of the ratios\n"
         "of the propulsion components (isp_prop_comp_ratio) should equal 1.0\n"
@@ -119,7 +120,7 @@ RcsJetGroup::set_blow_down(
 {
 
   if (blow_down_ && num_prop_components != 1) {
-    CMLMessage::error(
+    message::error(
     __FILE__,__LINE__,"Invalid setting.\n",
     "Cannot use blowdown on other than a mono-propellant\n"
     "There are ", num_prop_components, " propulsion components\n");
@@ -127,3 +128,5 @@ RcsJetGroup::set_blow_down(
   }
   blow_down = blow_down_;
 }
+
+} // namespace cml

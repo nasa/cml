@@ -1,7 +1,7 @@
 exec(open("RUN_01_nominal/input.py").read())
 
 #Set suppression level high enough to see Inform() messages
-trick.CMLMessage.set_publish_level (trick.CMLMessage.Inform)
+trick.cml.message.set_publish_level (trick.cml.message.Inform)
 
 # pick up error at dynamic_mass_group.cc:117
 vehicle.group_alt.initialize()
