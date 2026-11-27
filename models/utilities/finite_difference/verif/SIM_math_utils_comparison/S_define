@@ -1,0 +1,219 @@
+/*******************************************************************
+Purpose: Compare the outputs and errors from the model against
+the output and errors from the MathUtils::compute_backwards_difference
+method
+*******************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+#include "jeod_sys.sm"
+
+//////////////////////////////////////////////////////////////
+// TestSim Objects
+//////////////////////////////////////////////////////////////
+
+##include "../../include/finite_difference.hh"
+##include "cml/models/utilities/math_utils/include/math_utils.hh"
+
+class TestSimObject : public Trick::SimObject {
+
+ public:
+  // input data
+  double time;
+  double in_scalar;
+  double in_vec3[3];
+  double in_mat3x3[3][3];
+  // output data
+  double out_scalar_deriv1;
+  double out_vec3_deriv1[3];
+  double out_mat3x3_deriv1[3][3];
+  double out_scalar_deriv2;
+  double out_vec3_deriv2[3];
+
+  double out_math_utils;
+  double out_math_utils2;
+  double dt;
+  int    dt_mult;
+
+  double error_deriv1;
+  double error_mu;
+  double error_mu2;
+  double error_deriv2;
+  double error_deriv1_vec[3];
+  double error_deriv2_vec[3];
+  double error_deriv1_mx[3][3];
+
+  bool   use_polynomials;
+  bool   nice_polynomial;
+  bool   vary_dt;
+
+  std::vector< std::vector < double > > poly_coeffs;
+  std::vector< std::vector < double > > fd_poly_coeffs;
+  std::vector< std::vector < double > > sd_poly_coeffs;
+
+  ScalarFirstDerivative    scalar_deriv1;
+  Vector3FirstDerivative   vec3_deriv1;
+  Matrix3x3FirstDerivative mat3x3_deriv1;
+  ScalarSecondDerivative   scalar_deriv2;
+  Vector3SecondDerivative  vec3_deriv2;
+
+ private:
+  std::list<double>  math_utils_list;
+  std::list<double>  math_utils_list2;
+
+ public:
+  TestSimObject()
+    :
+    dt(1),
+    nice_polynomial(true)
+  {
+    ("initialization") populate_coeffs();
+    ("initialization") generate_inputs_fd();
+    ("initialization") generate_inputs_fd();
+
+    (1.0, "scheduled") generate_inputs_fd();
+    (1.0, "scheduled") compute_mu();
+    (1.0, "scheduled") error_analysis();
+  }
+
+  void populate_coeffs()
+  {
+    for (int ii = 1; ii < 4; ++ii) {
+      for (int jj = 1; jj < 4; ++jj) {
+        if (nice_polynomial) {
+          std::vector< double> temp {1.0, 1.0, ii*1.0, jj*1.0, (ii+jj)*1.0};
+          poly_coeffs.push_back(temp);
+        } else {
+          std::vector< double> temp {-20.0, 210.0, ii*0.02, jj*100.0, (ii+jj)*(-1234.0)};
+          poly_coeffs.push_back(temp);
+        }
+      }
+    }
+    // derivative coeffs for verification come from poly_coeffs
+    // for checking first derivative, need matrix so all 9 sets
+    for (int jj = 0; jj < 9; ++jj) {
+      std::vector< double> temp;
+      for (int ii = 1; ii < 5; ++ii) {
+        temp.push_back (ii * poly_coeffs[jj][ii]);
+      }
+      fd_poly_coeffs.push_back (temp);
+    }
+    // for checking second derivative, don't need matrix so just 3 sets
+    for (int jj = 0; jj < 3; ++jj) {
+      std::vector< double> temp;
+      temp.clear();
+      for (int ii = 2; ii < 5; ++ii) {
+        temp.push_back (ii * (ii-1) * poly_coeffs[jj][ii]);
+      }
+      sd_poly_coeffs.push_back (temp);
+    }
+  }
+
+
+  void generate_inputs_fd()
+  {
+    if (vary_dt) {
+      dt_mult = (dt_mult+1)%5;
+      time += (dt_mult+1) * dt;
+    }
+    else {
+      time += dt;
+    }
+
+    if (use_polynomials) {
+      for (int ii = 0; ii < 3; ++ii) {
+        for (int jj = 0; jj < 3; ++jj) {
+          in_mat3x3[ii][jj] = MathUtils::polynomial( time,
+                                                     poly_coeffs[ii*3+jj]);
+        }
+      }
+    }
+    else {
+      for (int ii = 0; ii < 3; ++ii) {
+        for (int jj = 0; jj < 3; ++jj) {
+          in_mat3x3[ii][jj] = std::sin( (ii*3+jj+1)* time);
+        }
+      }
+    }
+    for (int ii = 0; ii < 3; ++ii) {
+      in_vec3[ii] = in_mat3x3[0][ii];
+    }
+    in_scalar = in_mat3x3[0][0];
+
+    math_utils_list.push_front( in_scalar);
+    // truncate the math_utils_list2 list to 3 elements to match the
+    // finite-difference order.
+    math_utils_list2.push_front( in_scalar);
+    while (math_utils_list2.size() > 3) {
+      math_utils_list2.pop_back();
+    }
+
+    // Note: vector and matrix derivatives only computed here for completion;
+    //       they are not meant to be compared to MathUtils output
+    scalar_deriv1.compute( in_scalar, time, out_scalar_deriv1);
+    vec3_deriv1.compute(   in_vec3,   time, out_vec3_deriv1);
+    mat3x3_deriv1.compute( in_mat3x3, time, out_mat3x3_deriv1);
+    scalar_deriv2.compute( in_scalar, time, out_scalar_deriv2);
+    vec3_deriv2.compute(   in_vec3,   time, out_vec3_deriv2);
+  }
+
+  void compute_mu()
+  {
+    // only do MathUtils comparisons on scalar.  One set is sufficient.
+    out_math_utils = MathUtils::compute_backward_difference( math_utils_list) /
+                     dt;
+    out_math_utils2 = MathUtils::compute_backward_difference(math_utils_list2)/
+                      dt;
+  }
+
+  void error_analysis()
+  {
+    double analytic_deriv1[3][3];
+    double analytic_deriv2[3];
+
+    for (int ii = 0; ii < 3; ++ii) {
+      for (int jj = 0; jj < 3; ++jj) {
+        if (use_polynomials) {
+          int kk = ii*3 + jj;
+          analytic_deriv1[ii][jj] = MathUtils::polynomial( time, fd_poly_coeffs[kk]);
+        }
+        else {
+          int kk = ii*3 + jj + 1;
+          analytic_deriv1[ii][jj] =  kk * std::cos( kk*time);
+        }
+        error_deriv1_mx[ii][jj]  = (out_mat3x3_deriv1[ii][jj] -
+                                    analytic_deriv1[ii][jj]) /
+                                   analytic_deriv1[ii][jj];
+      }
+      // second derivative only has 3 components to check:
+      if (use_polynomials) {
+        analytic_deriv2[ii] = MathUtils::polynomial( time, sd_poly_coeffs[ii]);
+      }
+      else {
+        int kk = ii+1;
+        analytic_deriv2[ii] = -kk * kk * std::sin( kk*time);
+      }
+      error_deriv1_vec[ii] = (out_vec3_deriv1[ii] -  analytic_deriv1[0][ii]) /
+                             analytic_deriv1[0][ii];
+      error_deriv2_vec[ii] = (out_vec3_deriv2[ii] -  analytic_deriv2[ii]) /
+                             analytic_deriv2[ii];
+    }
+    // and scalar only has 1, but also want to generate the comparison agaisnst
+    // the MathUtils method for scalar values.
+    error_deriv1  = (out_scalar_deriv1   - analytic_deriv1[0][0]) /
+                    analytic_deriv1[0][0];
+    error_deriv2  = (out_scalar_deriv2   - analytic_deriv2[0]) /
+                    analytic_deriv2[0];
+    error_mu  = (out_math_utils  - analytic_deriv1[0][0]) /
+                analytic_deriv1[0][0];
+    error_mu2 = (out_math_utils2 - analytic_deriv1[0][0]) /
+                analytic_deriv1[0][0];
+  }
+
+
+ private:
+  // private and unimplemented.
+  TestSimObject (const TestSimObject&);
+  TestSimObject & operator = (const TestSimObject&);
+};
+
+TestSimObject fd_obj;
