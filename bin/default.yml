@@ -3276,6 +3276,10 @@ SIM_verif_mass_body_detach_impulsive:
       compare:
       - models/dynamics/actions/mass_body_detach_impulsive/verif/SIM_verif/RUN_parent_and_subject_null/log_test_data.csv
         vs. models/dynamics/actions/mass_body_detach_impulsive/verif/SIM_verif/verif_data/RUN_parent_and_subject_null/log_test_data.csv
+    RUN_rot_axial_impulse/input.py:
+      compare:
+      - models/dynamics/actions/mass_body_detach_impulsive/verif/SIM_verif/RUN_rot_axial_impulse/log_test_data.csv
+        vs. models/dynamics/actions/mass_body_detach_impulsive/verif/SIM_verif/verif_data/RUN_rot_axial_impulse/log_test_data.csv
     RUN_user_spec_velocity/input.py:
       compare:
       - models/dynamics/actions/mass_body_detach_impulsive/verif/SIM_verif/RUN_user_spec_velocity/log_test_data.csv
