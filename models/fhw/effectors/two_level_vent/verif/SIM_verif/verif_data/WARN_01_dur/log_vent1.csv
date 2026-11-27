@@ -1,0 +1,2 @@
+sys.exec.out.time {s},two_level_vent_model_obj.vent1.high_duration_randFlag {--},two_level_vent_model_obj.vent1.high_duration_max {s},two_level_vent_model_obj.vent1.high_duration_min {s},two_level_vent_model_obj.vent1.high_duration {s}
+                   0,0,                   1,                   1,                   1

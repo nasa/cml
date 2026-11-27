@@ -20,6 +20,8 @@ add_cml_library(
         effectors/springs/include/mass_body_detach_with_springs.hh
         effectors/springs/include/simple_spring_group.hh
         effectors/springs/include/simple_spring_individual.hh
+        effectors/two_level_vent/include/two_level_vent.hh
+        effectors/two_level_vent/include/two_level_vent_set.hh
         effectors/vent/include/simple_vent.hh
         effectors/vent/include/vent.hh
         effectors/vent/include/vent_set.hh
@@ -39,6 +41,8 @@ add_cml_library(
         effectors/rocket_motors/src/rocket_motor_table_thrust.cc
         effectors/springs/src/simple_spring_group.cc
         effectors/springs/src/simple_spring_individual.cc
+        effectors/two_level_vent/src/two_level_vent.cc
+        effectors/two_level_vent/src/two_level_vent_set.cc
         effectors/vent/src/simple_vent.cc
         effectors/vent/src/vent.cc
         effectors/vent/src/vent_set.cc

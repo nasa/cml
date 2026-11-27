@@ -1966,6 +1966,50 @@ SIM_simple_spring_springs:
       compare:
       - models/fhw/effectors/springs/verif/SIM_simple_spring/RUN_spring_single_verif/log_test_data_base.csv
         vs. models/fhw/effectors/springs/verif/SIM_simple_spring/verif_data/RUN_spring_single_verif/log_test_data_base.csv
+SIM_verif_two_level_vent:
+  model_dir: models/fhw/effectors/two_level_vent
+  path: models/fhw/effectors/two_level_vent/verif/SIM_verif
+  runs:
+    ERROR_rand_config/input.py: null
+    ERROR_rand_duration/input.py: null
+    ERROR_rand_wait_time/input.py: null
+    ERROR_time_config/input.py: null
+    FAIL_invalid_index/input.py:
+      returns: 1
+    RUN_01_nominal/input.py:
+      compare:
+      - models/fhw/effectors/two_level_vent/verif/SIM_verif/RUN_01_nominal/log_two_level_vent_set1.csv
+        vs. models/fhw/effectors/two_level_vent/verif/SIM_verif/verif_data/RUN_01_nominal/log_two_level_vent_set1.csv
+      - models/fhw/effectors/two_level_vent/verif/SIM_verif/RUN_01_nominal/log_two_level_vent_set2.csv
+        vs. models/fhw/effectors/two_level_vent/verif/SIM_verif/verif_data/RUN_01_nominal/log_two_level_vent_set2.csv
+      - models/fhw/effectors/two_level_vent/verif/SIM_verif/RUN_01_nominal/log_vent1.csv
+        vs. models/fhw/effectors/two_level_vent/verif/SIM_verif/verif_data/RUN_01_nominal/log_vent1.csv
+      - models/fhw/effectors/two_level_vent/verif/SIM_verif/RUN_01_nominal/log_vent2.csv
+        vs. models/fhw/effectors/two_level_vent/verif/SIM_verif/verif_data/RUN_01_nominal/log_vent2.csv
+    RUN_02_fixedDur/input.py:
+      compare:
+      - models/fhw/effectors/two_level_vent/verif/SIM_verif/RUN_02_fixedDur/log_vent1.csv
+        vs. models/fhw/effectors/two_level_vent/verif/SIM_verif/verif_data/RUN_02_fixedDur/log_vent1.csv
+    RUN_03_fixedWaitTime/input.py:
+      compare:
+      - models/fhw/effectors/two_level_vent/verif/SIM_verif/RUN_03_fixedWaitTime/log_vent1.csv
+        vs. models/fhw/effectors/two_level_vent/verif/SIM_verif/verif_data/RUN_03_fixedWaitTime/log_vent1.csv
+    RUN_04_reset_event_action/input.py:
+      compare:
+      - models/fhw/effectors/two_level_vent/verif/SIM_verif/RUN_04_reset_event_action/log_vent1.csv
+        vs. models/fhw/effectors/two_level_vent/verif/SIM_verif/verif_data/RUN_04_reset_event_action/log_vent1.csv
+    WARN_01_dur/input.py:
+      compare:
+      - models/fhw/effectors/two_level_vent/verif/SIM_verif/WARN_01_dur/log_vent1.csv
+        vs. models/fhw/effectors/two_level_vent/verif/SIM_verif/verif_data/WARN_01_dur/log_vent1.csv
+    WARN_02_wait_time/input.py:
+      compare:
+      - models/fhw/effectors/two_level_vent/verif/SIM_verif/WARN_02_wait_time/log_vent1.csv
+        vs. models/fhw/effectors/two_level_vent/verif/SIM_verif/verif_data/WARN_02_wait_time/log_vent1.csv
+    WARN_03_maxDV/input.py:
+      compare:
+      - models/fhw/effectors/two_level_vent/verif/SIM_verif/WARN_03_maxDV/log_vent2.csv
+        vs. models/fhw/effectors/two_level_vent/verif/SIM_verif/verif_data/WARN_03_maxDV/log_vent2.csv
 SIM_single_body_core_dispersion_mass_body_dispersed_init:
   model_dir: models/dynamics/mass/mass_body_dispersed_init
   path: models/dynamics/mass/mass_body_dispersed_init/verif/SIM_single_body_core_dispersion

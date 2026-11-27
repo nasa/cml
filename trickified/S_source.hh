@@ -91,6 +91,8 @@ PROGRAMMERS:
 #include "cml/models/fhw/effectors/springs/include/mass_body_detach_with_springs.hh"
 #include "cml/models/fhw/effectors/springs/include/simple_spring_group.hh"
 #include "cml/models/fhw/effectors/springs/include/simple_spring_individual.hh"
+#include "cml/models/fhw/effectors/two_level_vent/include/two_level_vent.hh"
+#include "cml/models/fhw/effectors/two_level_vent/include/two_level_vent_set.hh"
 #include "cml/models/fhw/effectors/vent/include/simple_vent.hh"
 #include "cml/models/fhw/effectors/vent/include/vent.hh"
 #include "cml/models/fhw/effectors/vent/include/vent_set.hh"
