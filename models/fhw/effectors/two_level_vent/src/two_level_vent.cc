@@ -7,42 +7,29 @@ PROGRAMMERS:
 
 #include "../include/two_level_vent.hh"
 #include "../include/two_level_vent_set.hh"
+#include "cml/models/fhw/effectors/vent/include/simple_vent.hh"
 #include "cml/models/utilities/cml_message/include/cml_message.hh"
+
+#include <random> /* need for std::mt19937 */
 
 /***************************************************************************************************
 Constructors
 ***************************************************************************************************/
 TwoLevelVent::TwoLevelVent(
      const double& dyn_time_,
-     TwoLevelVentSet& vent_set)
+     TwoLevelVentSet& vent_set_)
   :
   SimpleVent( dyn_time_),
 
-  wait_time_min(0.0),
-  wait_time_max(0.0),
-  high_duration_min(0.0),
-  high_duration_max(0.0),
-  wait_time_randFlag(true),
-  high_duration_randFlag(true),
-
-  accel_mag_high(0.0),
-  accel_mag_low(0.0),
-  high_duration(0.0),
-  high_wait_time(0.0),
-  dv_max(0.0),
   action_reset(this),
 
-  vehicle_mass(vent_set.vehicle_mass),
-  gen(vent_set.gen),
-  dv_mag(0.0),
-  sched_onTime(0.0),
-  high_venting(false),
-  start_time_high(0.0)
+  vehicle_mass(vent_set_.vehicle_mass),
+  gen(vent_set_.gen)
 {
     // The vent adds itself to the referenced vent set
     // Note that this means the vent cannot be part of multiple vent sets.
     quiet_message_start_inactive = true;
-    vent_set.add_vent(*this);
+    vent_set_.add_vent(*this);
 }
 
 /***************************************************************************************************

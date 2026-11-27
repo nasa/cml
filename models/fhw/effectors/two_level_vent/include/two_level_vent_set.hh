@@ -45,14 +45,13 @@ class TwoLevelVentSet : public VentSet
     /* Methods */
     void initialize() override;
     TwoLevelVent * get_two_level_vent(size_t ii);
+    
+    /* Copy constructor, operator= deleted; class is not copyable. */
+    TwoLevelVentSet(const TwoLevelVentSet&) = delete;
+    TwoLevelVentSet& operator = (const TwoLevelVentSet&) = delete;
 
     protected:
     void deactivate() override;
 
-    private:
-
-    /* Copy constructor, operator= declared private and not implemented; class is not copyable. */
-    TwoLevelVentSet(const TwoLevelVentSet&);
-    TwoLevelVentSet& operator = (const TwoLevelVentSet&);
 };
 #endif

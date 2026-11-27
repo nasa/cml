@@ -34,9 +34,10 @@ class TwoLevelVentReset : public EventActionBase {
   explicit TwoLevelVentReset(TwoLevelVent * two_level_vent_) :
   two_level_vent(two_level_vent_) {}
   bool specific_execution() override;
- private:
-  TwoLevelVentReset (const TwoLevelVentReset& rhs);
-  TwoLevelVentReset& operator = (const TwoLevelVentReset& rhs);
+
+  TwoLevelVentReset (const TwoLevelVentReset& rhs) = delete;
+  TwoLevelVentReset& operator = (const TwoLevelVentReset& rhs) = delete;
+  
 };
 
 
@@ -53,29 +54,29 @@ class TwoLevelVent : public SimpleVent
     public:
 
     /* MC Parameters */
-    double     wait_time_min;               /* (s) 
+    double     wait_time_min{0.0};               /* (s) 
         parameter setting for minimum wait time between start of vent high mode firings */
-    double     wait_time_max;               /* (s) 
+    double     wait_time_max{0.0};               /* (s) 
         parameter setting for maximum wait time between start of vent high mode firings */
-    double     high_duration_min;         /* (s) 
+    double     high_duration_min{0.0};         /* (s) 
         parameter setting for minimum duration of each vent high mode firing */
-    double     high_duration_max;         /* (s) 
+    double     high_duration_max{0.0};         /* (s) 
         parameter setting for maximum duration of each vent high mode firing */
-    bool       wait_time_randFlag;          /* (s) 
+    bool       wait_time_randFlag{true};          /* (s) 
         parameter flag where TRUE sets high mode wait time to a random number */
-    bool       high_duration_randFlag;    /* (--) 
+    bool       high_duration_randFlag{true};    /* (--) 
         parameter flag where TRUE sets high mode duration time to a random number */
 
     /* Two-Level Vent Components */
-    double     accel_mag_high;    /* (m/s2) 
+    double     accel_mag_high{0.0};    /* (m/s2) 
         magnitude of high vent firing acceleration */
-    double     accel_mag_low;   /* (m/s^2) 
+    double     accel_mag_low{0.0};   /* (m/s^2) 
         magnitude of low vent firing acceleration */
-    double     high_duration;     /* (s) 
+    double     high_duration{0.0};     /* (s) 
         parameter setting for high mode duration when dur_randFlag is set FALSE */
-    double     high_wait_time;    /* (s) 
+    double     high_wait_time{0.0};    /* (s) 
         parameter setting for high mode wait time when wait_time_randFlag is set FALSE */
-    double     dv_max;              /* (m/s) 
+    double     dv_max{0.0};              /* (m/s) 
         parameter for maximum DV allowed for each vent high mode firing */
     TwoLevelVentReset action_reset; /* (--) 
         Event-action to reset the vent configuration on call */
@@ -86,18 +87,22 @@ class TwoLevelVent : public SimpleVent
         Reference to vehicle mass */ 
     std::mt19937 & gen; /* (--)
         Reference to random number generator */
-    double     dv_mag;            /* (m/s) 
+    double     dv_mag{0.0};            /* (m/s) 
         logged DV from each vent high mode firing */
-    double     sched_onTime;      /* (s) 
+    double     sched_onTime{0.0};      /* (s) 
         logged scheduled on-time for each vent high mode firing */
-    bool       high_venting;    /* (--) 
+    bool       high_venting{false};    /* (--) 
         logged type of vent firing */
-    double     start_time_high; /* (s) 
+    double     start_time_high{0.0}; /* (s) 
         time when the vent started high mode firing */
 
     public:
     /* Constructor */
     TwoLevelVent( const double& dyn_time_, TwoLevelVentSet& vent_set_);
+
+    /* Copy constructor, operator= deleted; class is not copyable. */
+    TwoLevelVent(const TwoLevelVent&) = delete;
+    TwoLevelVent& operator = (const TwoLevelVent&) = delete;
 
     protected:
     bool check_configuration() override;
@@ -107,10 +112,6 @@ class TwoLevelVent : public SimpleVent
     void high_venting_mode();
     void low_venting_mode();
 
-    private:
-    /* Copy constructor, operator= declared private and not implemented; class is not copyable. */
-    TwoLevelVent(const TwoLevelVent&);
-    TwoLevelVent& operator = (const TwoLevelVent&);
 };
 
 #endif
