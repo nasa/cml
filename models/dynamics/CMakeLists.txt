@@ -49,6 +49,9 @@ add_cml_library(
         state_initialize/target_relative_parameters/include/TR_state_parameter_set.hh
         state_initialize/target_relative_parameters/include/TR_state_parameters.hh
         state_initialize/target_relative_parameters/include/TR_state_parameters_alt.hh
+        state_overrides/attitude_manager/include/attitude_manager.hh
+        state_overrides/attitude_manager/include/maneuver_model.hh
+        state_overrides/attitude_manager/include/perturb_model.hh
         state_overrides/contact/include/contact_state_override.hh
         state_overrides/twist_sway/include/twist_sway.hh
         state_predictors/apsides_predictor/include/apsides_predictor.hh
@@ -93,6 +96,9 @@ add_cml_library(
         state_initialize/target_relative_parameters/src/TR_state_param.cc
         state_initialize/target_relative_parameters/src/TR_state_parameters.cc
         state_initialize/target_relative_parameters/src/TR_state_parameters_alt.cc
+        state_overrides/attitude_manager/src/attitude_manager.cc
+        state_overrides/attitude_manager/src/maneuver_model.cc
+        state_overrides/attitude_manager/src/perturb_model.cc
         state_overrides/contact/src/contact_state_override.cc
         state_overrides/twist_sway/src/twist_sway.cc
         state_predictors/apsides_predictor/src/apsides_predictor.cc
