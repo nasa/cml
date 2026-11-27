@@ -3,8 +3,11 @@ PURPOSE: (Class for manipulating sets of vents and aggregating forces and
           moments)
 
 LIBRARY DEPENDENCY:
-  ((../src/vent_set.cc)
+  ((../src/vent.cc)
+   (../src/simple_vent.cc)
    (cml/models/utilities/cml_message/src/cml_message.cc))
+   (jeod/models/dynamics/dyn_body/src/dyn_body_propagate_state.cc)
+  )
 
 PROGRAMMERS:
   (((Daniel Ghan) (OSR) (Mar 2020) (Antares) (Initial version)))

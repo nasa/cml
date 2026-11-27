@@ -62,11 +62,11 @@ class LvlhSeparationState : public SeparationState
   LvlhSeparationState& operator = (const LvlhSeparationState&) = delete;
 
   void initialize ( jeod::DynManager  & dyn_manager,
-                    const std::string & planet_name,
+                    std::string planet_name,
                     jeod::DynBody     & subject_body,
                     jeod::DynBody     & source_body,
-                    const std::string & subject_name = "",
-                    const std::string & source_name = "");
+                    std::string subject_name = "",
+                    std::string source_name = "");
 
   void initialize ( jeod::DynManager   & dyn_manager,
                     jeod::BasePlanet   & planet,

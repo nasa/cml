@@ -73,11 +73,11 @@ NOTE - in SeparationState, the source-body identification was provided first.
 *****************************************************************************/
 void
 LvlhSeparationState::initialize( jeod::DynManager  & dyn_manager,
-                                 const std::string & planet_name,
+                                 std::string planet_name,
                                  jeod::DynBody     & subject_body,
                                  jeod::DynBody     & source_body,
-                                 const std::string & subject_name,
-                                 const std::string & source_name)
+                                 std::string subject_name,
+                                 std::string source_name)
 
 {
   if (!enabled) {
