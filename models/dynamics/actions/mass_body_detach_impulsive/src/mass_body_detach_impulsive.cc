@@ -28,6 +28,7 @@ Programmers:
 #include "../include/mass_body_detach_impulsive.hh"
 
 #include <string>
+#include <cmath>
 
 /*******************************************************************************
 Function: MassBodyDetachImpulsive::initialize
@@ -62,7 +63,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
 
   // Identify the specified MassBody; this could be null if dyn_subject has
   // been specified. or DynBody as a MassBody.
-  if (!mass_subject) {mass_subject = &dyn_subject->mass;}
+  if (mass_subject == nullptr) {mass_subject = &dyn_subject->mass;}
 
   /* Identify the parent before it gets detached.
      Have to cast away the const-ness because we will be accessing dyn_parent
@@ -130,7 +131,7 @@ MassBodyDetachImpulsive::apply( jeod::DynManager & dyn_manager)
 
     impulse_magnitude = (combined_mass <= 0.0) ?
                           0.0 :
-                          ((mass_of_subject * mass_of_parent) / (combined_mass))
+                          ((mass_of_subject * mass_of_parent) / combined_mass)
                                                              * separation_speed;
   }
 

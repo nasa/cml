@@ -98,14 +98,14 @@ class MassBodyDetachImpulsive : public jeod::BodyAction {
     is set by the user and the impulse should be calculated instead. */
 
  private:
-  double linear_impulse_inrtl[3]; /* (N*s)
+  double linear_impulse_inrtl[3]{}; /* (N*s)
     The linear impulse vector applied to the parent body, expressed in the
     inertial reference frame.*/
 
  public:
 
   MassBodyDetachImpulsive () = default;
-  virtual ~MassBodyDetachImpulsive() override = default;
+  ~MassBodyDetachImpulsive() override = default;
   MassBodyDetachImpulsive( const MassBodyDetachImpulsive& rhs) = delete;
   MassBodyDetachImpulsive & operator = ( const MassBodyDetachImpulsive&) = delete;
 
@@ -113,7 +113,7 @@ class MassBodyDetachImpulsive : public jeod::BodyAction {
   void apply (jeod::DynManager & dyn_manager) override;
 
  protected:
-  bool compute_impulse(jeod::DynBody &);
+  bool compute_impulse(jeod::DynBody & dyn_parent);
   virtual void apply_impulse( jeod::DynBody     & dyn_body,
                               const std::string & mass_point_name);
 };
