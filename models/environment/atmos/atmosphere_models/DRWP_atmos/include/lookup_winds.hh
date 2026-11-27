@@ -205,9 +205,9 @@ public:
   void compute_average_wind( size_t table_index,
                              double min_alt,
                              double max_alt);
-  void compute_average_wind_interp( double min_altitude,
-                             double max_altitude,
-                             double altitude_incr);
+  void compute_average_wind_interp( double min_alt,
+                             double max_alt,
+                             double step_alt);
 
   // Legacy capability, deprecated.
   void test_for_reinitialize();
@@ -220,9 +220,9 @@ protected:
                              double min_alt=0,
                              double max_alt=0);
   void compute_average_wind_interp( size_t table_index,
-                             double min_altitude=0,
-                             double max_altitude=0,
-                             double altitude_incr=0);
+                             double min_alt=0,
+                             double max_alt=0,
+                             double step_alt=0);
   void calculate_speed_of_sound();
   void calculate_wind_mag_dir();
   void stream_error(int line, const std::string& drwpFileName_);
